@@ -8,6 +8,7 @@ import { unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 import FullPageLoading from './component/loading/FullPageLoading';
 import HomeMain from './component/home/HomeMain';
 import OrderConfirmMain from './component/order_confirm/OrderConfirmMain';
+import WaybillMain from './component/waybill/WaybillMain';
 
 const theme = unstable_createMuiStrictModeTheme();
 
@@ -62,6 +63,7 @@ function App() {
                 <Route exact path='/' component={HomeMain}></Route>
                 {/* OrderManage */}
                 <Route exact path='/order-confirm' component={OrderConfirmMain}></Route>
+                <Route exact path='/waybill' component={WaybillMain}></Route>
               </Switch>
             </AppContainer>
           </Suspense>

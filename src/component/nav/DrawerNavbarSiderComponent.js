@@ -31,6 +31,9 @@ const DrawerNavbarSiderComponent = (props) => {
                     <LinkContainer>
                         <LinkEl to='/order-confirm'>발주확인건</LinkEl>
                     </LinkContainer>
+                    <LinkContainer>
+                        <LinkEl to='/waybill'>중복운송장취합</LinkEl>
+                    </LinkContainer>
                 </ContentContainer>
             </Drawer>
         </>

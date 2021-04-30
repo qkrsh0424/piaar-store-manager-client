@@ -3,25 +3,39 @@ import { useEffect, useState } from 'react';
 
 // component
 import DrawerNavbarMain from '../nav/DrawerNavbarMain';
-import OrderConfirmBodyComponent from './OrderConfirmBodyComponent';
+import WaybillBodyComponent from './WaybillBodyComponent';
 
-const OrderConfirmMain = () => {
+const WayBillMain = () => {
     const [fileFormData, setFileFormData] = useState(null);
-    const [orderConfirmData, setOrderConfirmData] = useState(null);
+    const [waybillData, setWaybillData] = useState(null);
 
     const __handleDataConnect = () => {
         return {
             postReadExcel: async function () {
-                await axios.post(`${process.env.REACT_APP_API_HOST}/api/excel/order-confirm/read`, fileFormData)
+                await axios.post(`${process.env.REACT_APP_API_HOST}/api/excel/waybill/read`, fileFormData)
                     .then(res => {
                         console.log(res);
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            setOrderConfirmData(res.data.data);
+                            setWaybillData(res.data.data);
                         }
                     })
                     .catch(err => {
                         console.log(err);
                     })
+            },
+            postWriteExcel: async function (data) {
+                await axios.post(`${process.env.REACT_APP_API_HOST}/api/excel/waybill/logen/write`, data)
+                    .then(res => {
+                        const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', 'test.xlsx');
+                        document.body.appendChild(link);
+                        link.click();
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    });
             }
         }
     }
@@ -36,6 +50,12 @@ const OrderConfirmMain = () => {
                 let formData = new FormData();
                 formData.append("file", e.target.files[0])
                 setFileFormData(formData);
+            },
+            logenExcelDownload: async function (uuid) {
+                // console.log(uuid);
+                let data = waybillData.filter(r => r.uuid == uuid)[0];
+                console.log(data);
+                await __handleDataConnect().postWriteExcel(data);
             }
         }
     }
@@ -54,18 +74,18 @@ const OrderConfirmMain = () => {
                     </div>
                 </form>
             </div>
-            {orderConfirmData ?
-                <OrderConfirmBodyComponent
-                    orderConfirmData={orderConfirmData}
+            {waybillData ?
+                <WaybillBodyComponent
+                    waybillData={waybillData}
 
                     __handleEventControl={__handleEventControl}
-                ></OrderConfirmBodyComponent>
+                ></WaybillBodyComponent>
                 :
                 <></>
             }
-            {process.env.REACT_APP_API_HOST}
+
         </>
     );
 }
 
-export default OrderConfirmMain;
+export default WayBillMain;
