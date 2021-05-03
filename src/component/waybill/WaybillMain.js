@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
+// handler
+import {dateToYYYYMMDDhhmmssFile} from '../../handler/dateHandler';
 // component
 import DrawerNavbarMain from '../nav/DrawerNavbarMain';
 import WaybillBodyComponent from './WaybillBodyComponent';
@@ -24,12 +26,15 @@ const WayBillMain = () => {
                     })
             },
             postWriteExcel: async function (data) {
-                await axios.post(`${process.env.REACT_APP_API_HOST}/api/excel/waybill/logen/write`, data)
+                await axios.post(`${process.env.REACT_APP_API_HOST}/api/excel/waybill/logen/write`, data,{
+                    responseType:'blob'
+                })
                     .then(res => {
                         const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
                         const link = document.createElement('a');
                         link.href = url;
-                        link.setAttribute('download', 'test.xlsx');
+                        // link.setAttribute('download', 'test.xlsx');
+                        link.setAttribute('download', `${dateToYYYYMMDDhhmmssFile(new Date())}${data.prodName}.xlsx`);
                         document.body.appendChild(link);
                         link.click();
                     })
@@ -54,7 +59,8 @@ const WayBillMain = () => {
             logenExcelDownload: async function (uuid) {
                 // console.log(uuid);
                 let data = waybillData.filter(r => r.uuid == uuid)[0];
-                console.log(data);
+                // console.log(data);
+                // console.log(dateToYYYYMMDDhhmmssFile(new Date()));
                 await __handleDataConnect().postWriteExcel(data);
             }
         }

@@ -36,9 +36,15 @@ function dateToYYYYMMDDhhmmss(idate) {
     var date = new Date(idate);
     return moment(date).format("YYYY-MM-DD HH:mm:ss");
 }
+
+function dateToYYYYMMDDhhmmssFile(idate){
+    var date = new Date(idate);
+    return moment(date).format("YYYYMMDDHHmmss");
+}
 export {
     getStartDate,
     getEndDate,
     dateToYYYYMMDD,
-    dateToYYYYMMDDhhmmss
+    dateToYYYYMMDDhhmmss,
+    dateToYYYYMMDDhhmmssFile
 }
