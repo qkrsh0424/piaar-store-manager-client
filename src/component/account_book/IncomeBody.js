@@ -1,0 +1,250 @@
+import { withRouter } from 'react-router';
+import styled from 'styled-components';
+
+// handler
+import { numberWithCommas } from '../../handler/numberHandler';
+const BackBtn = styled.button`
+    position: fixed;
+    top:10px;
+    left:10px;
+    background: #4682B4;
+    border:none;
+    width:52px;
+    height: 52px;
+    border-radius: 50%;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    transition: 0.4s;
+    z-index: 999;
+    & .back-button-img{
+        width:32px;
+        filter: invert(100%) sepia(1%) saturate(3%) hue-rotate(90deg) brightness(113%) contrast(89%);
+    }
+
+    &:hover{
+        transform: scale(1.1);
+    }
+
+    &:active{
+        transition: 0s;
+        transform: scale(1.05);
+
+        background:#4662B4;
+    }
+`;
+
+const RegBtn = styled.button`
+    position: fixed;
+    bottom:30px;
+    right:30px;
+    background: #4682B4;
+    border:none;
+    width:70px;
+    height: 70px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    z-index: 999;
+    transition: 0.4s;
+    & .back-button-img{
+        width:32px;
+        filter: invert(100%) sepia(1%) saturate(3%) hue-rotate(90deg) brightness(113%) contrast(89%);
+    }
+
+    &:hover{
+        transform: scale(1.1);
+    }
+
+    &:active{
+        transition: 0s;
+        transform: scale(1.05);
+
+        background:#4662B4;
+    }
+`;
+
+const Container = styled.div`
+    margin-top: 80px;
+`;
+
+const ItemContainer = styled.div`
+    margin: 10px 0;
+
+    animation: fadein 0.8s;
+    -moz-animation: fadein 0.8s; /* Firefox */
+    -webkit-animation: fadein 0.8s; /* Safari and Chrome */
+    -o-animation: fadein 0.8s; /* Opera */
+    @keyframes fadein {
+        from {
+            opacity: 0;
+            transform:scale(0);
+        }
+        to {
+            opacity: 1;
+            transform:scale(1);
+        }
+    }
+    @-moz-keyframes fadein { /* Firefox */
+        from {
+            opacity: 0;
+            transform:scale(0);
+        }
+        to {
+            opacity: 1;
+            transform:scale(1);
+        }
+    }
+    @-webkit-keyframes fadein { /* Safari and Chrome */
+        from {
+            opacity: 0;
+            transform:scale(0);
+        }
+        to {
+            opacity: 1;
+            transform:scale(1);
+        }
+    }
+    @-o-keyframes fadein { /* Opera */
+        from {
+            opacity: 0;
+            transform:scale(0);
+        }
+        to {
+            opacity: 1;
+            transform:scale(1);
+        }
+    }
+`;
+
+const ItemWrapper = styled.div`
+    background:white;
+    border: 1px solid #4682B488;
+    border-radius: 5px;
+`;
+
+const ItemHeaderWrapper = styled.div`
+    border-bottom: 1px solid #4682B488;
+    padding:10px;
+    overflow: auto;
+    
+`;
+const IdentifyBtn = styled.button`
+    width:140px;
+    margin:5px;
+    padding:5px;
+    background: white;
+    border: none;
+    border-left:5px solid #4682B4;
+    color:#4682B4;
+    font-weight: 600;
+    float: left;
+`;
+
+const DeleteBtn = styled.button`
+    width:70px;
+    margin:5px;
+    padding:5px;
+    background: white;
+    border:1px solid #dc3545;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px #f1f1f1;
+    color:#dc3545;
+    font-weight: 600;
+    float: right;
+`;
+
+const ItemBodyWrapper = styled.div`
+    padding:10px;
+    & .bank-btn-active{
+        background: #4682B4;
+        color:white;
+    }
+`;
+
+const BankBtnEl = styled.button`
+    width:100px;
+    margin:5px;
+    padding:5px;
+    background: white;
+    border:1px solid #4682B4;
+    border-radius: 3px;
+    box-shadow: 2px 2px 2px 2px #f1f1f1;
+    color:#333;
+    font-weight: 600;
+`;
+
+const FormAddContainer = styled.div`
+    padding:10px;
+    margin:10px;
+    text-align: center;
+`;
+const FormAddBtnEl = styled.button`
+    width:52px;
+    height: 52px;
+    border-radius: 50%;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    border:1px solid #f1f1f100;
+    background: #4682B4;
+    color:white;
+    transition: 0.4s;
+    & .button-img{
+        width:32px;
+        filter: invert(100%) sepia(1%) saturate(3%) hue-rotate(90deg) brightness(113%) contrast(89%);
+    }
+
+    &:hover{
+        transform: scale(1.1);
+    }
+
+    &:active{
+        transition: 0s;
+        transform: scale(1.05);
+
+        background:#4662B4;
+    }
+`;
+const IncomeBody = (props) => {
+    return (
+        <>
+            <BackBtn type='button' onClick={() => props.history.goBack()}>
+                <img className='back-button-img' src='/images/icon/back-button.png'></img>
+            </BackBtn>
+            <RegBtn type='button'>
+                <img className='back-button-img' src='/images/icon/add.png'></img>
+            </RegBtn>
+            <Container className='container'>
+                {props.itemData && props.itemData.map(r => {
+                    return (
+                        <ItemContainer key={r.id}>
+                            <ItemWrapper>
+                                <ItemHeaderWrapper>
+                                    <IdentifyBtn disabled>{r.id.split('-')[0]}</IdentifyBtn>
+                                    <DeleteBtn type='button' onClick={() => { props.__handleEventControl().itemDataChange().delete(r.id) }}>삭제</DeleteBtn>
+                                </ItemHeaderWrapper>
+                                <ItemBodyWrapper>
+                                    <div className='mb-2'>
+                                        <BankBtnEl type='button' className={r.bankType == '우리은행' ? `bank-btn-active` : ''} onClick={() => { props.__handleEventControl().itemDataChange().backType(r.id, '우리은행') }}>우리은행</BankBtnEl>
+                                        <BankBtnEl type='button' className={r.bankType == '농협' ? `bank-btn-active` : ''} onClick={() => { props.__handleEventControl().itemDataChange().backType(r.id, '농협') }}>농협</BankBtnEl>
+                                        <BankBtnEl type='button' className={r.bankType == '카카오뱅크' ? `bank-btn-active` : ''} onClick={() => { props.__handleEventControl().itemDataChange().backType(r.id, '카카오뱅크') }}>카카오뱅크</BankBtnEl>
+                                    </div>
+                                    <div className="input-group mb-3">
+                                        <input type="text" className="form-control" value={numberWithCommas(r.money)} onChange={(e) => props.__handleEventControl().itemDataChange().money(r.id, e)} />
+                                        <div className="input-group-append">
+                                            <span className="input-group-text">원(₩)</span>
+                                        </div>
+                                    </div>
+                                </ItemBodyWrapper>
+                            </ItemWrapper>
+                        </ItemContainer>
+                    );
+                })}
+                <FormAddContainer>
+                    <FormAddBtnEl type='button' onClick={() => props.__handleEventControl().itemDataChange().add()}>
+                        <img className='button-img' src='/images/icon/plus.png'></img>
+                    </FormAddBtnEl>
+                </FormAddContainer>
+
+            </Container>
+        </>
+    );
+}
+
+export default withRouter(IncomeBody);
