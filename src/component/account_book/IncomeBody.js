@@ -159,8 +159,17 @@ const ItemBodyWrapper = styled.div`
     }
 `;
 
+const BankTypeGroup = styled.div`
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 1rem;
+    @media only screen and (max-width:425px){
+        font-size: 12px;
+    }
+`;
+
 const BankBtnEl = styled.button`
-    width:100px;
+    /* width:100px; */
     margin:5px;
     padding:5px;
     background: white;
@@ -201,6 +210,27 @@ const FormAddBtnEl = styled.button`
         background:#4662B4;
     }
 `;
+const CommonInputEl = styled.input`
+    font-size: 1.3rem;
+    border: 1px solid #ced4da;
+    background: #fffde2;
+    &:focus{
+        outline: none;
+        border: 1px solid #4662B4;
+        background: white;
+    }
+`;
+const MoneyInputEl = styled.input`
+    font-size: 1.3rem;
+    border: 1px solid #ced4da;
+    background: #fffde2;
+    text-align: right;
+    &:focus{
+        outline: none;
+        border: 1px solid #4662B4;
+        background: white;
+    }
+`;
 const IncomeBody = (props) => {
     return (
         <>
@@ -220,13 +250,23 @@ const IncomeBody = (props) => {
                                     <DeleteBtn type='button' onClick={() => { props.__handleEventControl().itemDataChange().delete(r.id) }}>삭제</DeleteBtn>
                                 </ItemHeaderWrapper>
                                 <ItemBodyWrapper>
-                                    <div className='mb-2'>
+                                    <BankTypeGroup className='mb-2'>
                                         <BankBtnEl type='button' className={r.bankType == '우리은행' ? `bank-btn-active` : ''} onClick={() => { props.__handleEventControl().itemDataChange().backType(r.id, '우리은행') }}>우리은행</BankBtnEl>
                                         <BankBtnEl type='button' className={r.bankType == '농협' ? `bank-btn-active` : ''} onClick={() => { props.__handleEventControl().itemDataChange().backType(r.id, '농협') }}>농협</BankBtnEl>
                                         <BankBtnEl type='button' className={r.bankType == '카카오뱅크' ? `bank-btn-active` : ''} onClick={() => { props.__handleEventControl().itemDataChange().backType(r.id, '카카오뱅크') }}>카카오뱅크</BankBtnEl>
+                                    </BankTypeGroup>
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text">내용</span>
+                                        </div>
+                                        <CommonInputEl type="text" className='form-control' value={r.desc} onChange={(e) => props.__handleEventControl().itemDataChange().desc(r.id, e)} />
+
                                     </div>
                                     <div className="input-group mb-3">
-                                        <input type="text" className="form-control" value={numberWithCommas(r.money)} onChange={(e) => props.__handleEventControl().itemDataChange().money(r.id, e)} />
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text">금액</span>
+                                        </div>
+                                        <MoneyInputEl type="text" className='form-control' value={numberWithCommas(r.money)} onChange={(e) => props.__handleEventControl().itemDataChange().money(r.id, e)} placeholder='0'/>
                                         <div className="input-group-append">
                                             <span className="input-group-text">원(₩)</span>
                                         </div>

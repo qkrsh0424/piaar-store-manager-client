@@ -9,7 +9,8 @@ const IncomeMain = () => {
         {
             id: uuidv4(),
             bankType: '우리은행',
-            money: 0
+            desc:'',
+            money: ''
         }
     ])
 
@@ -42,9 +43,21 @@ const IncomeMain = () => {
                             )
                         }))
                     },
+                    desc: function(id, e){
+                        setItemData(itemData.map(r => {
+                            return (
+                                r.id == id ?
+                                    {
+                                        ...r,
+                                        desc: e.target.value
+                                    }
+                                    :
+                                    r
+                            )
+                        }))
+                    },
                     money: function (id, e) {
                         const result = (e.target.value).replace(/\D/g, "");
-                        console.log(result);
                         setItemData(itemData.map(r => {
                             return (
                                 r.id == id ?
