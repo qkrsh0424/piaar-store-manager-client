@@ -1,10 +1,10 @@
-
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-// components
-import IncomeBody from './IncomeBody';
 
-const IncomeMain = () => {
+// component
+import ExpenditureBody from './ExpenditureBody';
+
+const ExpenditureMain = () => {
     const [bankTypes, setBankTypes] = useState([
         {
             id: uuidv4(),
@@ -27,7 +27,7 @@ const IncomeMain = () => {
             money: 0,
             date: new Date()
         }
-    ])
+    ]);
 
     const __handleEventControl = () => {
         return {
@@ -80,7 +80,7 @@ const IncomeMain = () => {
                                 r.id == id ?
                                     {
                                         ...r,
-                                        money: Number(result)
+                                        money: Number(-result)
                                     }
                                     :
                                     r
@@ -97,15 +97,14 @@ const IncomeMain = () => {
     return (
         <>
             {(itemData && bankTypes) &&
-                <IncomeBody
+                <ExpenditureBody
                     bankTypes={bankTypes}
                     itemData={itemData}
 
                     __handleEventControl={__handleEventControl}
-                ></IncomeBody>}
-
+                ></ExpenditureBody>}
         </>
     );
 }
 
-export default IncomeMain;
+export default ExpenditureMain;

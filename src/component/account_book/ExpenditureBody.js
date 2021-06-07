@@ -3,11 +3,12 @@ import styled from 'styled-components';
 
 // handler
 import { numberWithCommas } from '../../handler/numberHandler';
+
 const BackBtn = styled.button`
     position: fixed;
     top:10px;
     left:10px;
-    background: #4682B4;
+    background: #FF6347;
     border:none;
     width:52px;
     height: 52px;
@@ -28,7 +29,7 @@ const BackBtn = styled.button`
         transition: 0s;
         transform: scale(1.05);
 
-        background:#4662B4;
+        background:#FF4347;
     }
 `;
 
@@ -36,7 +37,7 @@ const RegBtn = styled.button`
     position: fixed;
     bottom:30px;
     right:30px;
-    background: #4682B4;
+    background: #FF6347;
     border:none;
     width:70px;
     height: 70px;
@@ -72,7 +73,6 @@ const ItemContainer = styled.div`
     -moz-animation: scaleOutToIn 0.8s; /* Firefox */
     -webkit-animation: scaleOutToIn 0.8s; /* Safari and Chrome */
     -o-animation: scaleOutToIn 0.8s; /* Opera */
-    
 `;
 
 const ItemWrapper = styled.div`
@@ -93,8 +93,8 @@ const IdentifyBtn = styled.button`
     padding:5px;
     background: white;
     border: none;
-    border-left:5px solid #4682B4;
-    color:#4682B4;
+    border-left:5px solid #FF6347;
+    color:#FF6347;
     font-weight: 600;
     float: left;
 `;
@@ -115,7 +115,7 @@ const DeleteBtn = styled.button`
 const ItemBodyWrapper = styled.div`
     padding:10px;
     & .bank-btn-active{
-        background: #4682B4;
+        background: #FF6347;
         color:white;
     }
 `;
@@ -134,7 +134,7 @@ const BankBtnEl = styled.button`
     margin:5px;
     padding:5px;
     background: white;
-    border:1px solid #4682B4;
+    border:1px solid #FF6347;
     border-radius: 3px;
     box-shadow: 2px 2px 2px 2px #f1f1f1;
     color:#333;
@@ -152,7 +152,7 @@ const FormAddBtnEl = styled.button`
     border-radius: 50%;
     box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
     border:1px solid #f1f1f100;
-    background: #4682B4;
+    background: #FF6347;
     color:white;
     transition: 0.4s;
     & .button-img{
@@ -192,13 +192,14 @@ const MoneyInputEl = styled.input`
         background: white;
     }
 `;
-const IncomeBody = (props) => {
+
+const ExpenditureBody = (props) => {
     return (
         <>
             <BackBtn type='button' onClick={() => props.history.goBack()}>
                 <img className='back-button-img' src='/images/icon/back-button.png'></img>
             </BackBtn>
-            <RegBtn type='button' onClick={()=>props.__handleEventControl().submitItemDatas()}>
+            <RegBtn type='button' onClick={() => props.__handleEventControl().submitItemDatas()}>
                 <img className='button-img' src='/images/icon/add.png'></img>
             </RegBtn>
             <Container className='container'>
@@ -212,24 +213,24 @@ const IncomeBody = (props) => {
                                 </ItemHeaderWrapper>
                                 <ItemBodyWrapper>
                                     <BankTypeGroup className='mb-2'>
-                                        {props.bankTypes && props.bankTypes.map(r2=>{
-                                            return(
+                                        {props.bankTypes && props.bankTypes.map(r2 => {
+                                            return (
                                                 <BankBtnEl key={r2.id} type='button' className={r.bankType == r2.bankType ? `bank-btn-active` : ''} onClick={() => { props.__handleEventControl().itemDataChange().backType(r.id, r2.bankType) }}>{r2.bankType}</BankBtnEl>
                                             )
                                         })}
                                     </BankTypeGroup>
                                     <div className="input-group mb-3">
                                         <div className="input-group-prepend">
-                                            <span className="input-group-text">수입내용</span>
+                                            <span className="input-group-text">지출내용</span>
                                         </div>
                                         <CommonInputEl type="text" className='form-control' value={r.desc} onChange={(e) => props.__handleEventControl().itemDataChange().desc(r.id, e)} />
 
                                     </div>
                                     <div className="input-group mb-3">
                                         <div className="input-group-prepend">
-                                            <span className="input-group-text">수입금액</span>
+                                            <span className="input-group-text">지출금액</span>
                                         </div>
-                                        <MoneyInputEl type="text" className='form-control' value={numberWithCommas(r.money)} onChange={(e) => props.__handleEventControl().itemDataChange().money(r.id, e)} placeholder='0'/>
+                                        <MoneyInputEl type="text" className='form-control' value={numberWithCommas(r.money)} onChange={(e) => props.__handleEventControl().itemDataChange().money(r.id, e)} placeholder='0' />
                                         <div className="input-group-append">
                                             <span className="input-group-text">원(₩)</span>
                                         </div>
@@ -250,4 +251,4 @@ const IncomeBody = (props) => {
     );
 }
 
-export default withRouter(IncomeBody);
+export default withRouter(ExpenditureBody);

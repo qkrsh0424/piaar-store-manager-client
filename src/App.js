@@ -17,6 +17,7 @@ import LoginMain from './component/login/LoginMain';
 // component : account book
 import AccountBookMain from './component/account_book/AccountBookMain';
 import IncomeMain from './component/account_book/IncomeMain';
+import ExpenditureMain from './component/account_book/ExpenditureMain';
 
 // data connect
 import { userDataConnect } from './data_connect/userDataConnect';
@@ -29,38 +30,7 @@ const AppContainer = styled.div`
     -moz-animation: fadein 1.5s; /* Firefox */
     -webkit-animation: fadein 1.5s; /* Safari and Chrome */
     -o-animation: fadein 1.5s; /* Opera */
-    @keyframes fadein {
-        from {
-            opacity:0;
-        }
-        to {
-            opacity:1;
-        }
-    }
-    @-moz-keyframes fadein { /* Firefox */
-        from {
-            opacity:0;
-        }
-        to {
-            opacity:1;
-        }
-    }
-    @-webkit-keyframes fadein { /* Safari and Chrome */
-        from {
-            opacity:0;
-        }
-        to {
-            opacity:1;
-        }
-    }
-    @-o-keyframes fadein { /* Opera */
-        from {
-            opacity:0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
+    
 `;
 
 function App(props) {
@@ -111,6 +81,9 @@ function App(props) {
                                 </Route>
                                 <Route exact path='/account-book/income'>
                                     {userRdx.userInfo ? <IncomeMain></IncomeMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                <Route exact path='/account-book/expenditure'>
+                                    {userRdx.userInfo ? <ExpenditureMain></ExpenditureMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                             </Switch>
                         )
