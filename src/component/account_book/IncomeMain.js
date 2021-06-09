@@ -1,33 +1,62 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { withRouter } from 'react-router';
 import { v4 as uuidv4 } from 'uuid';
+
+// data connect
+import { bankTypeDataConnect } from '../../data_connect/bankTypeDataConnect';
+import { accountBookDataConnect } from '../../data_connect/accountBookDataConnect';
 // components
 import IncomeBody from './IncomeBody';
 
-const IncomeMain = () => {
-    const [bankTypes, setBankTypes] = useState([
-        {
-            id: uuidv4(),
-            bankType: '우리은행'
-        },
-        {
-            id: uuidv4(),
-            bankType: '농협'
-        },
-        {
-            id: uuidv4(),
-            bankType: '카카오뱅크'
-        }
-    ]);
+const IncomeMain = (props) => {
+    const [bankTypes, setBankTypes] = useState(null);
     const [itemData, setItemData] = useState([
         {
             id: uuidv4(),
+            accountBookType:'income',
             bankType: '우리은행',
             desc: '',
             money: 0,
-            date: new Date()
+            regDate: new Date()
         }
     ])
+
+    useEffect(() => {
+        async function fetchInit() {
+            await __handleDataConnect().searchBankTypeList();
+        }
+        fetchInit();
+    }, [])
+
+    const __handleDataConnect = () => {
+        return {
+            searchBankTypeList: async function () {
+                await bankTypeDataConnect().getBankTypeList()
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            setBankTypes(res.data.data);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        alert('undefined error');
+                    })
+            },
+            insertAccountBookList: async function () {
+                await accountBookDataConnect().postAccountBookList(itemData)
+                    .then(res=>{
+                        if(res.status == 200 && res.data && res.data.message == 'success'){
+                            props.history.push('/account-book');
+                        }
+                    })
+                    .catch(err=>{
+                        console.log(err);
+                        alert('undefined error');
+                    })
+            }
+        }
+    }
 
     const __handleEventControl = () => {
         return {
@@ -36,10 +65,11 @@ const IncomeMain = () => {
                     add: function () {
                         const newItemData = {
                             id: uuidv4(),
+                            accountBookType:'income',
                             bankType: '우리은행',
                             desc: '',
                             money: 0,
-                            date: new Date()
+                            regDate: new Date()
                         }
                         setItemData(itemData.concat(newItemData))
                     },
@@ -89,8 +119,12 @@ const IncomeMain = () => {
                     }
                 }
             },
-            submitItemDatas: async function () {
-                console.log(itemData)
+            submitItemDatas: async function (e) {
+                e.preventDefault();
+                if (window.confirm('수입내용을 등록하시겠습니까?')) {
+                    await __handleDataConnect().insertAccountBookList();
+                }
+
             }
         }
     }
@@ -108,4 +142,4 @@ const IncomeMain = () => {
     );
 }
 
-export default IncomeMain;
+export default withRouter(IncomeMain); 

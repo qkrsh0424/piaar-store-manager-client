@@ -10,6 +10,7 @@ const CommonLinkGroupContainer = styled.div`
     bottom:0;
     width:100%;
     overflow: hidden;
+    z-index: 999;
 `;
 
 const CommonLinkGroupWrapper = styled.div`
@@ -33,7 +34,7 @@ const CommonLinkEl = styled(Link)`
         text-decoration: none;
     }
 `;
-const IncomeComponent = () => {
+const AccountBookNav = () => {
     return (
         <>
             <Container>
@@ -42,13 +43,13 @@ const IncomeComponent = () => {
                         <div className='col-6 mb-2'>
                             <CommonLinkEl
                                 to={'/account-book/income'}
-                                color={'#4682B4'}
+                                color={'#4682B4e0'}
                             >수입작성</CommonLinkEl>
                         </div>
                         <div className='col-6 mb-2'>
                             <CommonLinkEl
                                 to={'/account-book/expenditure'}
-                                color={'#FF6347'}
+                                color={'#FF6347e0'}
                             >지출작성</CommonLinkEl>
                         </div>
                     </CommonLinkGroupWrapper>
@@ -58,4 +59,4 @@ const IncomeComponent = () => {
     );
 }
 
-export default IncomeComponent;
+export default AccountBookNav;

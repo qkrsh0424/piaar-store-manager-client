@@ -41,10 +41,16 @@ function dateToYYYYMMDDhhmmssFile(idate){
     var date = new Date(idate);
     return moment(date).format("YYYYMMDDHHmmss");
 }
+
+function dateToYYMMDDhhmmss(idate) {
+    var date = new Date(idate);
+    return moment(date).format("YY/MM/DD HH:mm");
+}
 export {
     getStartDate,
     getEndDate,
     dateToYYYYMMDD,
     dateToYYYYMMDDhhmmss,
-    dateToYYYYMMDDhhmmssFile
+    dateToYYYYMMDDhhmmssFile,
+    dateToYYMMDDhhmmss
 }

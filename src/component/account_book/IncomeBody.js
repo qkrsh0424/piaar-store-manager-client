@@ -195,56 +195,58 @@ const MoneyInputEl = styled.input`
 const IncomeBody = (props) => {
     return (
         <>
-            <BackBtn type='button' onClick={() => props.history.goBack()}>
+            <BackBtn type='button' onClick={() => props.history.push('/account-book')}>
                 <img className='back-button-img' src='/images/icon/back-button.png'></img>
             </BackBtn>
-            <RegBtn type='button' onClick={()=>props.__handleEventControl().submitItemDatas()}>
-                <img className='button-img' src='/images/icon/add.png'></img>
-            </RegBtn>
             <Container className='container'>
-                {props.itemData && props.itemData.map(r => {
-                    return (
-                        <ItemContainer key={r.id}>
-                            <ItemWrapper>
-                                <ItemHeaderWrapper>
-                                    <IdentifyBtn disabled>{r.id.split('-')[0]}</IdentifyBtn>
-                                    <DeleteBtn type='button' onClick={() => { props.__handleEventControl().itemDataChange().delete(r.id) }}>삭제</DeleteBtn>
-                                </ItemHeaderWrapper>
-                                <ItemBodyWrapper>
-                                    <BankTypeGroup className='mb-2'>
-                                        {props.bankTypes && props.bankTypes.map(r2=>{
-                                            return(
-                                                <BankBtnEl key={r2.id} type='button' className={r.bankType == r2.bankType ? `bank-btn-active` : ''} onClick={() => { props.__handleEventControl().itemDataChange().backType(r.id, r2.bankType) }}>{r2.bankType}</BankBtnEl>
-                                            )
-                                        })}
-                                    </BankTypeGroup>
-                                    <div className="input-group mb-3">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text">수입내용</span>
-                                        </div>
-                                        <CommonInputEl type="text" className='form-control' value={r.desc} onChange={(e) => props.__handleEventControl().itemDataChange().desc(r.id, e)} />
+                <form onSubmit={(e) => props.__handleEventControl().submitItemDatas(e)}>
 
-                                    </div>
-                                    <div className="input-group mb-3">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text">수입금액</span>
-                                        </div>
-                                        <MoneyInputEl type="text" className='form-control' value={numberWithCommas(r.money)} onChange={(e) => props.__handleEventControl().itemDataChange().money(r.id, e)} placeholder='0'/>
-                                        <div className="input-group-append">
-                                            <span className="input-group-text">원(₩)</span>
-                                        </div>
-                                    </div>
-                                </ItemBodyWrapper>
-                            </ItemWrapper>
-                        </ItemContainer>
-                    );
-                })}
-                <FormAddContainer>
-                    <FormAddBtnEl type='button' onClick={() => props.__handleEventControl().itemDataChange().add()}>
-                        <img className='button-img' src='/images/icon/plus.png'></img>
-                    </FormAddBtnEl>
-                </FormAddContainer>
+                    <RegBtn type='submit'>
+                        <img className='button-img' src='/images/icon/add.png'></img>
+                    </RegBtn>
+                    {props.itemData && props.itemData.map(r => {
+                        return (
+                            <ItemContainer key={r.id}>
+                                <ItemWrapper>
+                                    <ItemHeaderWrapper>
+                                        <IdentifyBtn disabled>{r.id.split('-')[0]}</IdentifyBtn>
+                                        <DeleteBtn type='button' onClick={() => { props.__handleEventControl().itemDataChange().delete(r.id) }}>삭제</DeleteBtn>
+                                    </ItemHeaderWrapper>
+                                    <ItemBodyWrapper>
+                                        <BankTypeGroup className='mb-2'>
+                                            {props.bankTypes && props.bankTypes.map(r2 => {
+                                                return (
+                                                    <BankBtnEl key={r2.bankTypeId} type='button' className={r.bankType == r2.bankType ? `bank-btn-active` : ''} onClick={() => { props.__handleEventControl().itemDataChange().backType(r.id, r2.bankType) }}>{r2.bankType}</BankBtnEl>
+                                                )
+                                            })}
+                                        </BankTypeGroup>
+                                        <div className="input-group mb-3">
+                                            <div className="input-group-prepend">
+                                                <span className="input-group-text">수입내용</span>
+                                            </div>
+                                            <CommonInputEl type="text" className='form-control' value={r.desc} onChange={(e) => props.__handleEventControl().itemDataChange().desc(r.id, e)} />
 
+                                        </div>
+                                        <div className="input-group mb-3">
+                                            <div className="input-group-prepend">
+                                                <span className="input-group-text">수입금액</span>
+                                            </div>
+                                            <MoneyInputEl type="text" className='form-control' value={numberWithCommas(r.money)} onChange={(e) => props.__handleEventControl().itemDataChange().money(r.id, e)} placeholder='0' />
+                                            <div className="input-group-append">
+                                                <span className="input-group-text">원(₩)</span>
+                                            </div>
+                                        </div>
+                                    </ItemBodyWrapper>
+                                </ItemWrapper>
+                            </ItemContainer>
+                        );
+                    })}
+                    <FormAddContainer>
+                        <FormAddBtnEl type='button' onClick={() => props.__handleEventControl().itemDataChange().add()}>
+                            <img className='button-img' src='/images/icon/plus.png'></img>
+                        </FormAddBtnEl>
+                    </FormAddContainer>
+                </form>
             </Container>
         </>
     );
