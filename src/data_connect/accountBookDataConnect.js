@@ -4,11 +4,14 @@ const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 
 const accountBookDataConnect = () =>{
     return{
-        getAccountBookList: async function(accountBookType,bankType){
+        getAccountBookList: async function(accountBookType,bankType, startDate, endDate, currPage){
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/account-book/list`,{
                 params:{
                     accountBookType:accountBookType,
-                    bankType:bankType
+                    bankType:bankType,
+                    startDate:startDate,
+                    endDate:endDate,
+                    currPage:currPage
                 },
                 withCredentials:true
             })
@@ -17,7 +20,29 @@ const accountBookDataConnect = () =>{
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/account-book/list`,accountBookList,{
                 withCredentials:true
             })
-        }
+        },
+        getSumOfIncome: async function(accountBookType,bankType, startDate, endDate){
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/account-book/sum/income`,{
+                params:{
+                    accountBookType:accountBookType,
+                    bankType:bankType,
+                    startDate:startDate,
+                    endDate:endDate
+                },
+                withCredentials:true
+            })
+        },
+        getSumOfExpenditure: async function(accountBookType,bankType, startDate, endDate){
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/account-book/sum/expenditure`,{
+                params:{
+                    accountBookType:accountBookType,
+                    bankType:bankType,
+                    startDate:startDate,
+                    endDate:endDate
+                },
+                withCredentials:true
+            })
+        },
     }
 }
 

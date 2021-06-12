@@ -1,34 +1,70 @@
 import { useState } from 'react';
-
+import queryString from 'query-string';
+import styled from 'styled-components';
 import Dialog from '@material-ui/core/Dialog';
 
 import { DateRange } from 'react-date-range';
 
-const DateRangePickerModal = () => {
+const Container = styled.div`
+    & .rdrCalendarWrapper{
+        width:100%;
+    }
+
+    & .rdrMonth{
+        width:100%;
+    }
+`;
+
+const AdaptBtn = styled.button`
+    width:50%;
+    border:none;
+    padding:5px;
+    background:#17a2b8;
+    color:white;
+`;
+
+const SearchAllBtn = styled.button`
+    width:50%;
+    border:none;
+    padding:5px;
+    background:#fd7e14;
+    color:white;
+`;
+const DateRangePickerModal = (props) => {
+    const query = queryString.parse(window.location.search);
+
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('sm');
-    const [state, setState] = useState([
+    const [dateRangeData, setDateRangeData] = useState([
         {
-            startDate: new Date(),
-            endDate: null,
+            startDate: query.startDate ? new Date(query.startDate) : new Date(),
+            endDate: query.endDate ? new Date(query.endDate) : new Date(),
             key: 'selection'
         }
     ]);
+
+    const dateRangeDataChange = (item) => {
+        setDateRangeData([item.selection])
+    }
     return (
         <>
             <Dialog
                 fullWidth={fullWidth}
                 maxWidth={maxWidth}
-                open={true}
+                open={props.open}
+                onClose={() => props.__handleEventControl().dateRangePicker().close()}
             >
-                <div>
+                <Container>
                     <DateRange
                         editableDateInputs={true}
-                        onChange={item => setState([item.selection])}
+                        onChange={(item) => dateRangeDataChange(item)}
                         moveRangeOnFirstSelection={false}
-                        ranges={state}
+                        ranges={dateRangeData}
                     ></DateRange>
-                </div>
+                    <SearchAllBtn type='button' onClick={() => props.__handleEventControl().dateRangePicker().searchAll()}>전체조회</SearchAllBtn>
+                    <AdaptBtn type='button' onClick={() => props.__handleEventControl().dateRangePicker().adapt(dateRangeData[0])}>적용하기</AdaptBtn>
+
+                </Container>
 
             </Dialog>
         </>

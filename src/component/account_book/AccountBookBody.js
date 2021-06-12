@@ -3,11 +3,14 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 // handler
-import { dateToYYMMDDhhmmss } from '../../handler/dateHandler';
+import { dateToYYMMDDhhmmss, dateToYYMMDD } from '../../handler/dateHandler';
 import { numberWithCommas2 } from '../../handler/numberHandler';
 
+// component
+import PagenationComponent1 from '../pagenation/PagenationComponent1';
+
 const Container = styled.div`
-    margin-bottom: 100px;
+    margin-bottom: 200px;
 `;
 
 const ItemGroupContainer = styled.div`
@@ -94,7 +97,6 @@ const SearchOptionCommonBtn = styled.button`
     padding:5px;
 `;
 
-
 const AccountBookBody = (props) => {
     let query = queryString.parse(window.location.search);
 
@@ -148,7 +150,7 @@ const AccountBookBody = (props) => {
                         <SearchOptionGroup className='row'>
                             <div className='col-12 p-1'>
                                 <small>기간</small>
-                                <SearchOptionDateRangeBtn>21.06.01 ~ 21.06.09</SearchOptionDateRangeBtn>
+                                <SearchOptionDateRangeBtn type='button' onClick={() => props.__handleEventControl().dateRangePicker().open()}>{query.startDate ? dateToYYMMDD(query.startDate) : '전체'} ~ {query.endDate ? dateToYYMMDD(query.endDate) : '전체'}</SearchOptionDateRangeBtn>
                             </div>
                             <div className='col-4 p-1'>
                                 <small>수입/지출</small>
@@ -176,9 +178,9 @@ const AccountBookBody = (props) => {
                 </SearchOptionContainer>
                 <div className='row'>
                     <div className='col-lg-6 p-0'>
-                        <div>총 수입 : </div>
-                        <div>총 지출 : </div>
-                        <div>남은금액 : </div>
+                        <div>총 수입 : {props.sumIncomeData ? props.sumIncomeData.sum : '계산중...'}</div>
+                        <div>총 지출 : {props.sumExpenditureData ? props.sumExpenditureData.sum : '계산중...'}</div>
+                        <div>남은금액 : {props.sumIncomeData && props.sumExpenditureData ? props.sumIncomeData.sum + props.sumExpenditureData.sum : '계산중...'}</div>
                     </div>
                     <div className='col-lg-6 p-0'>
                         <ItemGroupContainer>
@@ -209,6 +211,11 @@ const AccountBookBody = (props) => {
                         </ItemGroupContainer>
                     </div>
                 </div>
+                {props.pagenation &&
+                    <PagenationComponent1
+                        pagenation={props.pagenation}
+                    ></PagenationComponent1>
+                }
 
             </Container>
         </>

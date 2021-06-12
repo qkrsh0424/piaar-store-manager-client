@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
 import queryString from 'query-string';
 
+// handler
+import { getStartDate, getEndDate, dateToYYMMDD } from '../../handler/dateHandler';
+
 // data connect
 import { accountBookDataConnect } from '../../data_connect/accountBookDataConnect';
 import { bankTypeDataConnect } from '../../data_connect/bankTypeDataConnect';
@@ -19,11 +22,17 @@ const AccountBookMain = (props) => {
 
     const [itemDataList, setItemDataList] = useState(null);
     const [bankTypeList, setBankTypeList] = useState(null);
+    const [dateRangePickerModalOpen, setDateRangePickerModalOpen] = useState(false);
+    const [sumIncomeData, setSumIncomeData] = useState(null);
+    const [sumExpenditureData, setSumExpenditureData] = useState(null);
+    const [pagenation, setPagenation] = useState(null);
 
     useEffect(() => {
         async function fetchInit() {
             await __handleDataConnect().searchAccountBookList();
             __handleDataConnect().searchBankTypeList();
+            __handleDataConnect().searchSumOfIncome();
+            __handleDataConnect().searchSumOfExpenditure();
         }
         fetchInit();
     }, [props.location])
@@ -33,11 +42,18 @@ const AccountBookMain = (props) => {
             searchAccountBookList: async function () {
                 let accountBookType = query.accbType ? query.accbType : '';
                 let bankType = query.bankType ? query.bankType : '';
+                let startDate = query.startDate ? new Date(query.startDate).toUTCString() : null;
+                let endDate = query.endDate ? new Date(query.endDate).toUTCString() : null;
+                let currPage = query.currPage ? query.currPage : 1;
 
-                await accountBookDataConnect().getAccountBookList(accountBookType, bankType)
+                await accountBookDataConnect().getAccountBookList(accountBookType, bankType, startDate, endDate, currPage)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setItemDataList(res.data.data);
+                        }
+
+                        if(res.status == 200 && res.data && res.data.pagenation){
+                            setPagenation(res.data.pagenation);
                         }
                     })
                     .catch(err => {
@@ -53,6 +69,38 @@ const AccountBookMain = (props) => {
                     })
                     .catch(err => {
                         alert('undefined error')
+                    })
+            },
+            searchSumOfIncome: async function () {
+                let accountBookType = query.accbType ? query.accbType : '';
+                let bankType = query.bankType ? query.bankType : '';
+                let startDate = query.startDate ? new Date(query.startDate).toUTCString() : null;
+                let endDate = query.endDate ? new Date(query.endDate).toUTCString() : null;
+
+                await accountBookDataConnect().getSumOfIncome(accountBookType, bankType, startDate, endDate)
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            setSumIncomeData(res.data.data);
+                        }
+                    })
+                    .catch(err => {
+                        alert('undefined error. : getAccountBookList');
+                    })
+            },
+            searchSumOfExpenditure: async function () {
+                let accountBookType = query.accbType ? query.accbType : '';
+                let bankType = query.bankType ? query.bankType : '';
+                let startDate = query.startDate ? new Date(query.startDate).toUTCString() : null;
+                let endDate = query.endDate ? new Date(query.endDate).toUTCString() : null;
+
+                await accountBookDataConnect().getSumOfExpenditure(accountBookType, bankType, startDate, endDate)
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            setSumExpenditureData(res.data.data);
+                        }
+                    })
+                    .catch(err => {
+                        alert('undefined error. : getAccountBookList');
                     })
             }
         }
@@ -72,7 +120,7 @@ const AccountBookMain = (props) => {
                                 break;
                             case '지출':
                                 delete query.accbType
-                                props.history.push(`${pathname}?${queryString.stringify({...query})}`)
+                                props.history.push(`${pathname}?${queryString.stringify({ ...query })}`)
                                 break;
 
                         }
@@ -90,14 +138,34 @@ const AccountBookMain = (props) => {
                                 break;
                             case '카카오뱅크':
                                 delete query.bankType
-                                props.history.push(`${pathname}?${queryString.stringify({...query})}`)
+                                props.history.push(`${pathname}?${queryString.stringify({ ...query })}`)
                                 break;
                             default:
                                 delete query.bankType
-                                props.history.push(`${pathname}?${queryString.stringify({...query})}`)
+                                props.history.push(`${pathname}?${queryString.stringify({ ...query })}`)
                                 break;
 
                         }
+                    }
+                }
+            },
+            dateRangePicker: function () {
+                return {
+                    open: function () {
+                        setDateRangePickerModalOpen(true);
+                    },
+                    close: function () {
+                        setDateRangePickerModalOpen(false);
+                    },
+                    adapt: function (data) {
+                        this.close();
+                        props.history.push(`${pathname}?${queryString.stringify({ ...query, startDate: getStartDate(data.startDate), endDate: getEndDate(data.endDate) })}`)
+                    },
+                    searchAll: function () {
+                        this.close();
+                        delete query.startDate
+                        delete query.endDate
+                        props.history.push(`${pathname}?${queryString.stringify({ ...query })}`)
                     }
                 }
             }
@@ -111,12 +179,18 @@ const AccountBookMain = (props) => {
                 <AccountBookBody
                     bankTypeList={bankTypeList}
                     itemDataList={itemDataList}
-
+                    sumIncomeData = {sumIncomeData}
+                    sumExpenditureData={sumExpenditureData}
+                    pagenation={pagenation}
 
                     __handleEventControl={__handleEventControl}
                 ></AccountBookBody>
             }
-            <DateRangePickerModal></DateRangePickerModal>
+            <DateRangePickerModal
+                open={dateRangePickerModalOpen}
+
+                __handleEventControl={__handleEventControl}
+            ></DateRangePickerModal>
 
         </>
     );

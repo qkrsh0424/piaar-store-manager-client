@@ -46,11 +46,17 @@ function dateToYYMMDDhhmmss(idate) {
     var date = new Date(idate);
     return moment(date).format("YY/MM/DD HH:mm");
 }
+
+function dateToYYMMDD(idate){
+    var date = new Date(idate);
+    return moment(date).format("YY.MM.DD");
+}
 export {
     getStartDate,
     getEndDate,
     dateToYYYYMMDD,
     dateToYYYYMMDDhhmmss,
     dateToYYYYMMDDhhmmssFile,
-    dateToYYMMDDhhmmss
+    dateToYYMMDDhhmmss,
+    dateToYYMMDD
 }
