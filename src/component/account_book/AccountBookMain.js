@@ -52,7 +52,7 @@ const AccountBookMain = (props) => {
                             setItemDataList(res.data.data);
                         }
 
-                        if(res.status == 200 && res.data && res.data.pagenation){
+                        if (res.status == 200 && res.data && res.data.pagenation) {
                             setPagenation(res.data.pagenation);
                         }
                     })
@@ -102,6 +102,24 @@ const AccountBookMain = (props) => {
                     .catch(err => {
                         alert('undefined error. : getAccountBookList');
                     })
+            },
+            removeAccountBookOne: async function (id) {
+                await accountBookDataConnect().deleteAccountBookOne(id)
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            __handleDataConnect().searchAccountBookList();
+                            __handleDataConnect().searchSumOfIncome();
+                            __handleDataConnect().searchSumOfExpenditure();
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else {
+                            alert('undefined error. : deleteAccountBookOne')
+                        }
+                    })
             }
         }
     }
@@ -137,8 +155,11 @@ const AccountBookMain = (props) => {
                                 props.history.push(`${pathname}?${queryString.stringify({ ...query, bankType: '카카오뱅크' })}`)
                                 break;
                             case '카카오뱅크':
+                                props.history.push(`${pathname}?${queryString.stringify({ ...query, bankType: '오프라인' })}`)
+                                break;
+                            case '오프라인':
                                 delete query.bankType
-                                props.history.push(`${pathname}?${queryString.stringify({ ...query })}`)
+                                props.history.push(`${pathname}?${queryString.stringify({ ...query})}`)
                                 break;
                             default:
                                 delete query.bankType
@@ -168,6 +189,11 @@ const AccountBookMain = (props) => {
                         props.history.push(`${pathname}?${queryString.stringify({ ...query })}`)
                     }
                 }
+            },
+            removeItemOne: async function (id) {
+                if (window.confirm('정말로 삭제하시겠습니까?')) {
+                    await __handleDataConnect().removeAccountBookOne(id);
+                }
             }
         }
     }
@@ -179,7 +205,7 @@ const AccountBookMain = (props) => {
                 <AccountBookBody
                     bankTypeList={bankTypeList}
                     itemDataList={itemDataList}
-                    sumIncomeData = {sumIncomeData}
+                    sumIncomeData={sumIncomeData}
                     sumExpenditureData={sumExpenditureData}
                     pagenation={pagenation}
 

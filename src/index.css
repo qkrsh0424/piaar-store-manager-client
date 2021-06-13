@@ -12,6 +12,15 @@ code {
         monospace;
 }
 
+.MySideDrawer .MuiPaper-root{
+    width:30%;
+}
+
+@media only screen and (max-width:992px){
+    .MySideDrawer .MuiPaper-root{
+        width:70%;
+    }   
+}
 @keyframes fadein {
     from {
         opacity: 0;

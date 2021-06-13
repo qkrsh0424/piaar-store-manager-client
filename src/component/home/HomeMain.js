@@ -1,10 +1,13 @@
 import DrawerNavbarMain from '../nav/DrawerNavbarMain';
 
+// Component
+import HomeBody from './HomeBody';
+
 const HomeMain = () =>{
     return(
         <>
             <DrawerNavbarMain></DrawerNavbarMain>
-            Home
+            <HomeBody></HomeBody>
         </>
     );
 }

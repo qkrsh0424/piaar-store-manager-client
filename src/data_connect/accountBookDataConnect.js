@@ -43,6 +43,14 @@ const accountBookDataConnect = () =>{
                 withCredentials:true
             })
         },
+        deleteAccountBookOne: async function(id){
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/account-book/one`,{
+                params:{
+                    id:id
+                },
+                withCredentials:true
+            })
+        }
     }
 }
 

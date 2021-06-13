@@ -14,7 +14,7 @@ const Container = styled.div`
 `;
 
 const ItemGroupContainer = styled.div`
-    padding:5px;
+    /* padding:5px; */
 `;
 
 
@@ -33,18 +33,31 @@ const ItemWrapper = styled.div`
 const ItemHeaderWrapper = styled.div`
     display: grid;
     /* grid-template-columns: repeat(auto-fit, minmax(45%,1fr)); */
-    grid-template-columns: 75% 25%;
+    grid-template-columns: 55% 30% 15%;
     padding:3px 8px;
     align-items: center;
     grid-gap: 2px;
     border-bottom: 1px solid #f1f1f1;
+
+    & .delete-btn{
+        cursor: pointer;
+        border:1px solid #dc3545;
+        border-radius: 3px;
+        font-size: 12px;
+        color:#dc3545;
+        &:hover{
+            background: #dc3545;
+            border: 1px solid white;
+            color:white;
+        }
+    }
 `;
 
 const ItemHeaderEl = styled.div`
     /* text-align: center; */
     font-weight: 700;
     color:#333;
-    font-size: 17px;
+    font-size: 1rem;
 `;
 
 const ItemBodyWrapper = styled.div`
@@ -53,6 +66,7 @@ const ItemBodyWrapper = styled.div`
     grid-template-columns: 15% 60% 25%;
     padding:3px 8px;
     grid-gap: 2px;
+    border-bottom: 1px solid #f1f1f1;
 `;
 
 const ItemFooterWrapper = styled.div`
@@ -132,6 +146,9 @@ const AccountBookBody = (props) => {
             case '카카오뱅크':
                 type = '카카오뱅크';
                 break;
+            case '오프라인':
+                type = '오프라인'
+                break;
             default:
                 type = '전체';
                 break;
@@ -171,18 +188,18 @@ const AccountBookBody = (props) => {
                             </div>
                             <div className='col-4 p-1'>
                                 <small>작성자</small>
-                                <SearchOptionCommonBtn>박세훈</SearchOptionCommonBtn>
+                                <SearchOptionCommonBtn>All</SearchOptionCommonBtn>
                             </div>
                         </SearchOptionGroup>
                     </SearchOptionWrapper>
                 </SearchOptionContainer>
                 <div className='row'>
-                    <div className='col-lg-6 p-0'>
-                        <div>총 수입 : {props.sumIncomeData ? props.sumIncomeData.sum : '계산중...'}</div>
-                        <div>총 지출 : {props.sumExpenditureData ? props.sumExpenditureData.sum : '계산중...'}</div>
-                        <div>남은금액 : {props.sumIncomeData && props.sumExpenditureData ? props.sumIncomeData.sum + props.sumExpenditureData.sum : '계산중...'}</div>
+                    <div className='col-lg-6 p-1'>
+                        <div style={{border:'1px solid #f1f1f1', padding:'5px', margin: '5px 0', fontWeight:'800', borderRadius:'5px'}}>총 수입 : {props.sumIncomeData ? numberWithCommas2(props.sumIncomeData.sum) : '계산중...'} 원</div>
+                        <div style={{border:'1px solid #f1f1f1', padding:'5px', margin: '5px 0', fontWeight:'800', borderRadius:'5px'}}>총 지출 : {props.sumExpenditureData ? numberWithCommas2(props.sumExpenditureData.sum) : '계산중...'} 원</div>
+                        <div style={{border:'1px solid #f1f1f1', padding:'5px', margin: '5px 0', fontWeight:'800', borderRadius:'5px'}}>남은금액 : {props.sumIncomeData && props.sumExpenditureData ? numberWithCommas2(props.sumIncomeData.sum + props.sumExpenditureData.sum) : '계산중...'} 원</div>
                     </div>
-                    <div className='col-lg-6 p-0'>
+                    <div className='col-lg-6 p-1'>
                         <ItemGroupContainer>
                             {props.itemDataList && props.itemDataList.map(r => {
                                 return (
@@ -193,6 +210,7 @@ const AccountBookBody = (props) => {
                                             <ItemHeaderWrapper>
                                                 <ItemHeaderEl>{dateToYYMMDDhhmmss(r.regDate)}</ItemHeaderEl>
                                                 <ItemHeaderEl className='text-center'>{r.bankType}</ItemHeaderEl>
+                                                <ItemHeaderEl type='button' className='text-center delete-btn' onClick={() => props.__handleEventControl().removeItemOne(r.id)}>삭제</ItemHeaderEl>
 
                                             </ItemHeaderWrapper>
                                             <ItemBodyWrapper>
@@ -201,7 +219,7 @@ const AccountBookBody = (props) => {
                                                 <ItemBodyEl className='text-center'>{r.name}</ItemBodyEl>
                                             </ItemBodyWrapper>
                                             <ItemFooterWrapper>
-                                                <ItemBodyEl>{r.desc}</ItemBodyEl>
+                                                <ItemBodyEl style={{fontWeight:800, color:'#444', fontSize:'13px'}}>{r.desc}</ItemBodyEl>
                                             </ItemFooterWrapper>
                                         </ItemWrapper>
                                     </ItemContainer>
@@ -211,10 +229,16 @@ const AccountBookBody = (props) => {
                         </ItemGroupContainer>
                     </div>
                 </div>
+
                 {props.pagenation &&
-                    <PagenationComponent1
-                        pagenation={props.pagenation}
-                    ></PagenationComponent1>
+                    <>
+                        <div className='text-right' style={{fontSize:'14px', fontWeight:700}}>
+                            총 개수 : {props.pagenation.itemSize}
+                        </div>
+                        <PagenationComponent1
+                            pagenation={props.pagenation}
+                        ></PagenationComponent1>
+                    </>
                 }
 
             </Container>
