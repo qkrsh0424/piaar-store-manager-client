@@ -48,6 +48,7 @@ const AccountBookMain = (props) => {
 
                 await accountBookDataConnect().getAccountBookList(accountBookType, bankType, startDate, endDate, currPage)
                     .then(res => {
+                        // console.log(res);
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setItemDataList(res.data.data);
                         }
@@ -131,41 +132,38 @@ const AccountBookMain = (props) => {
                     accountBookType: function (type) {
                         switch (type) {
                             case '전체':
-                                props.history.push(`${pathname}?${queryString.stringify({ ...query, accbType: 'income' })}`)
+                                props.history.replace(`${pathname}?${queryString.stringify({ ...query, accbType: 'income' })}`)
                                 break;
                             case '수입':
-                                props.history.push(`${pathname}?${queryString.stringify({ ...query, accbType: 'expenditure' })}`)
+                                props.history.replace(`${pathname}?${queryString.stringify({ ...query, accbType: 'expenditure' })}`)
                                 break;
                             case '지출':
                                 delete query.accbType
-                                props.history.push(`${pathname}?${queryString.stringify({ ...query })}`)
+                                props.history.replace(`${pathname}?${queryString.stringify({ ...query })}`)
                                 break;
 
                         }
                     },
                     bankType: function (type) {
-                        switch (type) {
-                            case '전체':
-                                props.history.push(`${pathname}?${queryString.stringify({ ...query, bankType: '우리은행' })}`)
-                                break;
-                            case '우리은행':
-                                props.history.push(`${pathname}?${queryString.stringify({ ...query, bankType: '농협은행' })}`)
-                                break;
-                            case '농협은행':
-                                props.history.push(`${pathname}?${queryString.stringify({ ...query, bankType: '카카오뱅크' })}`)
-                                break;
-                            case '카카오뱅크':
-                                props.history.push(`${pathname}?${queryString.stringify({ ...query, bankType: '오프라인' })}`)
-                                break;
-                            case '오프라인':
-                                delete query.bankType
-                                props.history.push(`${pathname}?${queryString.stringify({ ...query})}`)
-                                break;
-                            default:
-                                delete query.bankType
-                                props.history.push(`${pathname}?${queryString.stringify({ ...query })}`)
-                                break;
+                        let index = 0;
+                        if (type == '전체') {
+                            props.history.replace(`${pathname}?${queryString.stringify({ ...query, bankType: bankTypeList[index].bankType })}`)
+                            return;
+                        }
+                        for (let i = 0; i < bankTypeList.length; i++) {
+                            if (bankTypeList[i].bankType == type) {
+                                index = i;
+                            }
+                        }
 
+                        let next = bankTypeList[index + 1];
+                        if (next) {
+                            props.history.replace(`${pathname}?${queryString.stringify({ ...query, bankType: next.bankType })}`)
+                            return;
+                        } else {
+                            delete query.bankType
+                            props.history.replace(`${pathname}?${queryString.stringify({ ...query })}`)
+                            return;
                         }
                     }
                 }
@@ -180,13 +178,13 @@ const AccountBookMain = (props) => {
                     },
                     adapt: function (data) {
                         this.close();
-                        props.history.push(`${pathname}?${queryString.stringify({ ...query, startDate: getStartDate(data.startDate), endDate: getEndDate(data.endDate) })}`)
+                        props.history.replace(`${pathname}?${queryString.stringify({ ...query, startDate: getStartDate(data.startDate), endDate: getEndDate(data.endDate) })}`)
                     },
                     searchAll: function () {
                         this.close();
                         delete query.startDate
                         delete query.endDate
-                        props.history.push(`${pathname}?${queryString.stringify({ ...query })}`)
+                        props.history.replace(`${pathname}?${queryString.stringify({ ...query })}`)
                     }
                 }
             },

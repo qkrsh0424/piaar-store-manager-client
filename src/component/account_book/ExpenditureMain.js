@@ -46,7 +46,7 @@ const ExpenditureMain = (props) => {
                 await accountBookDataConnect().postAccountBookList(itemData)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            props.history.push('/account-book');
+                            props.history.replace('/account-book');
                         }
                     })
                     .catch(err => {

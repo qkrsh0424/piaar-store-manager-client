@@ -134,27 +134,9 @@ const AccountBookBody = (props) => {
     }
 
     const SearchOptionBankTypeBtn = (props) => {
-        let bankType = query.bankType;
-        let type = '';
-        switch (bankType) {
-            case '우리은행':
-                type = '우리은행';
-                break;
-            case '농협은행':
-                type = '농협은행';
-                break;
-            case '카카오뱅크':
-                type = '카카오뱅크';
-                break;
-            case '오프라인':
-                type = '오프라인'
-                break;
-            default:
-                type = '전체';
-                break;
-        }
+        let bankType = query.bankType ? query.bankType : '전체';
         return (
-            <SearchOptionCommonBtn type='button' onClick={() => props.__handleEventControl().searchOptionChange().bankType(type)}>{type}</SearchOptionCommonBtn>
+            <SearchOptionCommonBtn type='button' onClick={() => props.__handleEventControl().searchOptionChange().bankType(bankType)}>{bankType}</SearchOptionCommonBtn>
         );
     }
 

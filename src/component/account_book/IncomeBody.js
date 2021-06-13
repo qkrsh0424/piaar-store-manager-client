@@ -195,7 +195,7 @@ const MoneyInputEl = styled.input`
 const IncomeBody = (props) => {
     return (
         <>
-            <BackBtn type='button' onClick={() => props.history.push('/account-book')}>
+            <BackBtn type='button' onClick={() => props.history.replace('/account-book')}>
                 <img className='back-button-img' src='/images/icon/back-button.png'></img>
             </BackBtn>
             <Container className='container'>
@@ -231,7 +231,7 @@ const IncomeBody = (props) => {
                                             <div className="input-group-prepend">
                                                 <span className="input-group-text">수입금액</span>
                                             </div>
-                                            <MoneyInputEl type="text" className='form-control' value={numberWithCommas(r.money)} onChange={(e) => props.__handleEventControl().itemDataChange().money(r.id, e)} placeholder='0' />
+                                            <MoneyInputEl type="text" className='form-control' value={r.money==0 ? '' : numberWithCommas(r.money)} onChange={(e) => props.__handleEventControl().itemDataChange().money(r.id, e)} placeholder='0' />
                                             <div className="input-group-append">
                                                 <span className="input-group-text">원(₩)</span>
                                             </div>
