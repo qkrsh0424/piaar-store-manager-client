@@ -172,7 +172,7 @@ const FormAddBtnEl = styled.button`
     }
 `;
 const CommonInputEl = styled.input`
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     border: 1px solid #ced4da;
     background: #fffde2;
     &:focus{
@@ -182,7 +182,7 @@ const CommonInputEl = styled.input`
     }
 `;
 const MoneyInputEl = styled.input`
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     border: 1px solid #ced4da;
     background: #fffde2;
     text-align: right;
@@ -231,11 +231,15 @@ const IncomeBody = (props) => {
                                             <div className="input-group-prepend">
                                                 <span className="input-group-text">수입금액</span>
                                             </div>
-                                            <MoneyInputEl type="text" className='form-control' value={r.money==0 ? '' : numberWithCommas(r.money)} onChange={(e) => props.__handleEventControl().itemDataChange().money(r.id, e)} placeholder='0' />
+                                            <MoneyInputEl type="text" className='form-control' value={r.money == 0 ? '' : numberWithCommas(r.money)} onChange={(e) => props.__handleEventControl().itemDataChange().money(r.id, e)} placeholder='0' />
                                             <div className="input-group-append">
                                                 <span className="input-group-text">원(₩)</span>
                                             </div>
                                         </div>
+                                        <div className="input-group mb-3">
+                                            <button type='button' className='btn btn-outline-info btn-block' onClick={(e) => props.__handleEventControl().itemDataChange().incomeMoneyOnPaste(r.id)}>금액 복/붙</button>
+                                        </div>
+
                                     </ItemBodyWrapper>
                                 </ItemWrapper>
                             </ItemContainer>

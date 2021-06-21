@@ -114,6 +114,31 @@ const ExpenditureMain = (props) => {
                                     r
                             )
                         }))
+                    },
+                    expenditureMoneyOnPaste: async function (id) {
+                        let targetValue = 0;
+                        targetValue = await navigator.clipboard.readText().then(r => {
+                            try {
+                                let processing1 = r.match(/(입금|출금)+[ 0-9,]+원/g)[0];
+                                let processing2 = processing1.match(/[0-9,]+/g)[0];
+                                return processing2;
+                            } catch {
+                                return '';
+                            }
+                        })
+                        let result = targetValue.replace(/\D/g, "");
+                        setItemData(itemData.map(r => {
+                            return (
+                                r.id == id ?
+                                    {
+                                        ...r,
+                                        money: Number(-result)
+                                    }
+                                    :
+                                    r
+                            )
+                        }))
+
                     }
                 }
             },

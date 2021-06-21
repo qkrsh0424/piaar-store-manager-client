@@ -14,7 +14,7 @@ const IncomeMain = (props) => {
     const [itemData, setItemData] = useState([
         {
             id: uuidv4(),
-            accountBookType:'income',
+            accountBookType: 'income',
             bankType: '우리은행',
             desc: '',
             money: 0,
@@ -45,12 +45,12 @@ const IncomeMain = (props) => {
             },
             insertAccountBookList: async function () {
                 await accountBookDataConnect().postAccountBookList(itemData)
-                    .then(res=>{
-                        if(res.status == 200 && res.data && res.data.message == 'success'){
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
                             props.history.replace('/account-book');
                         }
                     })
-                    .catch(err=>{
+                    .catch(err => {
                         console.log(err);
                         alert('undefined error');
                     })
@@ -65,7 +65,7 @@ const IncomeMain = (props) => {
                     add: function () {
                         const newItemData = {
                             id: uuidv4(),
-                            accountBookType:'income',
+                            accountBookType: 'income',
                             bankType: '우리은행',
                             desc: '',
                             money: 0,
@@ -103,8 +103,11 @@ const IncomeMain = (props) => {
                             )
                         }))
                     },
-                    money: function (id, e) {
-                        const result = (e.target.value).replace(/\D/g, "");
+                    money: async function (id, e) {
+                        let targetValue = (e.target.value);
+
+
+                        let result = targetValue.replace(/\D/g, "");
                         setItemData(itemData.map(r => {
                             return (
                                 r.id == id ?
@@ -116,6 +119,31 @@ const IncomeMain = (props) => {
                                     r
                             )
                         }))
+                    },
+                    incomeMoneyOnPaste: async function (id) {
+                        let targetValue = 0;
+                        targetValue = await navigator.clipboard.readText().then(r => {
+                            try {
+                                let processing1 = r.match(/(입금|출금)+[ 0-9,]+원/g)[0];
+                                let processing2 = processing1.match(/[0-9,]+/g)[0];
+                                return processing2;
+                            } catch {
+                                return '';
+                            }
+                        })
+                        let result = targetValue.replace(/\D/g, "");
+                        setItemData(itemData.map(r => {
+                            return (
+                                r.id == id ?
+                                    {
+                                        ...r,
+                                        money: Number(result)
+                                    }
+                                    :
+                                    r
+                            )
+                        }))
+
                     }
                 }
             },
@@ -125,7 +153,7 @@ const IncomeMain = (props) => {
                     await __handleDataConnect().insertAccountBookList();
                 }
 
-            }
+            },
         }
     }
     return (
@@ -142,4 +170,4 @@ const IncomeMain = (props) => {
     );
 }
 
-export default withRouter(IncomeMain); 
+export default withRouter(IncomeMain);

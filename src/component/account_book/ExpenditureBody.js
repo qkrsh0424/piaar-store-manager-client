@@ -237,6 +237,9 @@ const ExpenditureBody = (props) => {
                                                 <span className="input-group-text">원(₩)</span>
                                             </div>
                                         </div>
+                                        <div className="input-group mb-3">
+                                            <button type='button' className='btn btn-outline-info btn-block' onClick={(e) => props.__handleEventControl().itemDataChange().expenditureMoneyOnPaste(r.id)}>금액 복/붙</button>
+                                        </div>
                                     </ItemBodyWrapper>
                                 </ItemWrapper>
                             </ItemContainer>
