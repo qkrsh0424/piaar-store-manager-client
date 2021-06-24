@@ -70,7 +70,12 @@ const ItemBodyWrapper = styled.div`
 `;
 
 const ItemFooterWrapper = styled.div`
+    display: grid;
+    /* grid-template-columns: repeat(auto-fit, minmax(30%,1fr)); */
+    grid-template-columns: 85% 15%;
     padding:3px 8px;
+    grid-gap: 2px;
+    border-bottom: 1px solid #f1f1f1;
 `;
 
 const ItemBodyEl = styled.div`
@@ -177,31 +182,32 @@ const AccountBookBody = (props) => {
                 </SearchOptionContainer>
                 <div className='row'>
                     <div className='col-lg-6 p-1'>
-                        <div style={{border:'1px solid #f1f1f1', padding:'5px', margin: '5px 0', fontWeight:'800', borderRadius:'5px'}}>총 수입 : {props.sumIncomeData ? numberWithCommas2(props.sumIncomeData.sum) : '계산중...'} 원</div>
-                        <div style={{border:'1px solid #f1f1f1', padding:'5px', margin: '5px 0', fontWeight:'800', borderRadius:'5px'}}>총 지출 : {props.sumExpenditureData ? numberWithCommas2(props.sumExpenditureData.sum) : '계산중...'} 원</div>
-                        <div style={{border:'1px solid #f1f1f1', padding:'5px', margin: '5px 0', fontWeight:'800', borderRadius:'5px'}}>남은금액 : {props.sumIncomeData && props.sumExpenditureData ? numberWithCommas2(props.sumIncomeData.sum + props.sumExpenditureData.sum) : '계산중...'} 원</div>
+                        <div style={{ border: '1px solid #f1f1f1', padding: '5px', margin: '5px 0', fontWeight: '800', borderRadius: '5px' }}>총 수입 : {props.sumIncomeData ? numberWithCommas2(props.sumIncomeData.sum) : '계산중...'} 원</div>
+                        <div style={{ border: '1px solid #f1f1f1', padding: '5px', margin: '5px 0', fontWeight: '800', borderRadius: '5px' }}>총 지출 : {props.sumExpenditureData ? numberWithCommas2(props.sumExpenditureData.sum) : '계산중...'} 원</div>
+                        <div style={{ border: '1px solid #f1f1f1', padding: '5px', margin: '5px 0', fontWeight: '800', borderRadius: '5px' }}>남은금액 : {props.sumIncomeData && props.sumExpenditureData ? numberWithCommas2(props.sumIncomeData.sum + props.sumExpenditureData.sum) : '계산중...'} 원</div>
                     </div>
                     <div className='col-lg-6 p-1'>
                         <ItemGroupContainer>
                             {props.itemDataList && props.itemDataList.map(r => {
                                 return (
-                                    <ItemContainer key={r.id}>
+                                    <ItemContainer key={r.accountBook.id}>
                                         <ItemWrapper
-                                            accountbooktype={r.accountBookType}
+                                            accountbooktype={r.accountBook.accountBookType}
                                         >
                                             <ItemHeaderWrapper>
-                                                <ItemHeaderEl>{dateToYYMMDDhhmmss(r.regDate)}</ItemHeaderEl>
-                                                <ItemHeaderEl className='text-center'>{r.bankType}</ItemHeaderEl>
-                                                <ItemHeaderEl type='button' className='text-center delete-btn' onClick={() => props.__handleEventControl().removeItemOne(r.id)}>삭제</ItemHeaderEl>
+                                                <ItemHeaderEl>{dateToYYMMDDhhmmss(r.accountBook.regDate)}</ItemHeaderEl>
+                                                <ItemHeaderEl className='text-center'>{r.accountBook.bankType}</ItemHeaderEl>
+                                                <ItemHeaderEl type='button' className='text-center delete-btn' onClick={() => props.__handleEventControl().removeItemOne(r.accountBook.id)}>삭제</ItemHeaderEl>
 
                                             </ItemHeaderWrapper>
                                             <ItemBodyWrapper>
-                                                <ItemBodyEl>{r.accountBookType == 'income' ? '수입' : r.accountBookType == 'expenditure' ? '지출' : 'Null'}</ItemBodyEl>
-                                                <ItemBodyEl className='text-center'>{numberWithCommas2((r.money))} 원</ItemBodyEl>
-                                                <ItemBodyEl className='text-center'>{r.name}</ItemBodyEl>
+                                                <ItemBodyEl>{r.accountBook.accountBookType == 'income' ? '수입' : r.accountBook.accountBookType == 'expenditure' ? '지출' : 'Null'}</ItemBodyEl>
+                                                <ItemBodyEl className='text-center'>{numberWithCommas2((r.accountBook.money))} 원</ItemBodyEl>
+                                                <ItemBodyEl className='text-center'>{r.user.name}</ItemBodyEl>
                                             </ItemBodyWrapper>
                                             <ItemFooterWrapper>
-                                                <ItemBodyEl style={{fontWeight:800, color:'#444', fontSize:'13px'}}>{r.desc}</ItemBodyEl>
+                                                <ItemBodyEl style={{ fontWeight: 800, color: '#444', fontSize: '13px' }}>{r.accountBook.desc}</ItemBodyEl>
+                                                <ItemBodyEl type='button' className='text-center' onClick={()=>props.__handleEventControl().expenditureType().settingModalOpen(r.accountBook.id)} style={{ fontWeight: 800, color: '#1199dc', fontSize: '13px', textAlign:'right' }}>{r.expenditureType.expenditureType ? r.expenditureType.expenditureType : '미설정'}</ItemBodyEl>
                                             </ItemFooterWrapper>
                                         </ItemWrapper>
                                     </ItemContainer>
@@ -214,7 +220,7 @@ const AccountBookBody = (props) => {
 
                 {props.pagenation &&
                     <>
-                        <div className='text-right' style={{fontSize:'14px', fontWeight:700}}>
+                        <div className='text-right' style={{ fontSize: '14px', fontWeight: 700 }}>
                             총 개수 : {props.pagenation.itemSize}
                         </div>
                         <PagenationComponent1

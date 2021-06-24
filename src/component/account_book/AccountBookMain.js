@@ -8,12 +8,14 @@ import { getStartDate, getEndDate, dateToYYMMDD } from '../../handler/dateHandle
 // data connect
 import { accountBookDataConnect } from '../../data_connect/accountBookDataConnect';
 import { bankTypeDataConnect } from '../../data_connect/bankTypeDataConnect';
+import { expenditureTypeDataConnect } from '../../data_connect/expenditureTypeDataConnect';
 
 // components
 import DrawerNavbarMain from '../nav/DrawerNavbarMain';
 import AccountBookBody from './AccountBookBody';
 import AccountBookNav from './AccountBookNav';
 import DateRangePickerModal from './modal/DateRangePickerModal';
+import ExpenditureTypeSetModal from './modal/ExpenditureTypeSetModal';
 
 
 const AccountBookMain = (props) => {
@@ -22,15 +24,21 @@ const AccountBookMain = (props) => {
 
     const [itemDataList, setItemDataList] = useState(null);
     const [bankTypeList, setBankTypeList] = useState(null);
+    const [expenditureTypeList, setExpenditureTypeList] = useState(null);
     const [dateRangePickerModalOpen, setDateRangePickerModalOpen] = useState(false);
     const [sumIncomeData, setSumIncomeData] = useState(null);
     const [sumExpenditureData, setSumExpenditureData] = useState(null);
     const [pagenation, setPagenation] = useState(null);
+    const [expenditureTypeSetting, setExpenditureTypeSetting] = useState({
+        accountBookId: '',
+        modalOpen: false
+    });
 
     useEffect(() => {
         async function fetchInit() {
             await __handleDataConnect().searchAccountBookList();
             __handleDataConnect().searchBankTypeList();
+            __handleDataConnect().searchExpenditureTypeList();
             __handleDataConnect().searchSumOfIncome();
             __handleDataConnect().searchSumOfExpenditure();
         }
@@ -66,6 +74,18 @@ const AccountBookMain = (props) => {
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setBankTypeList(res.data.data);
+                        }
+                    })
+                    .catch(err => {
+                        alert('undefined error')
+                    })
+            },
+            searchExpenditureTypeList: async function () {
+                await expenditureTypeDataConnect().getExpenditureTypeList()
+                    .then(res => {
+                        console.log(res);
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            setExpenditureTypeList(res.data.data);
                         }
                     })
                     .catch(err => {
@@ -192,6 +212,29 @@ const AccountBookMain = (props) => {
                 if (window.confirm('정말로 삭제하시겠습니까?')) {
                     await __handleDataConnect().removeAccountBookOne(id);
                 }
+            },
+            expenditureType: function () {
+                return {
+                    settingModalOpen: function (accountBookId) {
+                        console.log(accountBookId);
+                        setExpenditureTypeSetting({
+                            accountBookId: accountBookId,
+                            modalOpen: true
+                        })
+                    },
+                    settingModalClose: function () {
+                        setExpenditureTypeSetting({
+                            accountBookId: '',
+                            modalOpen: false
+                        })
+                    },
+                    setType: async function(expenditureTypeId){
+                        let accountBookId = expenditureTypeSetting.accountBookId;
+                        console.log(expenditureTypeId);
+                        this.settingModalClose();
+                        console.log(accountBookId);
+                    }
+                }
             }
         }
     }
@@ -215,6 +258,12 @@ const AccountBookMain = (props) => {
 
                 __handleEventControl={__handleEventControl}
             ></DateRangePickerModal>
+            <ExpenditureTypeSetModal
+                open={expenditureTypeSetting.modalOpen}
+                expenditureTypeList = {expenditureTypeList}
+
+                __handleEventControl={__handleEventControl}
+            ></ExpenditureTypeSetModal>
 
         </>
     );

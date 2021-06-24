@@ -117,7 +117,7 @@ const ExpenditureMain = (props) => {
                     },
                     expenditureMoneyOnPaste: async function (id) {
                         let targetValue = 0;
-                        targetValue = await navigator.clipboard.readText().then(r => {
+                        targetValue = await window.navigator.clipboard.readText().then(r => {
                             try {
                                 let processing1 = r.match(/(입금|출금)+[ 0-9,]+원/g)[0];
                                 let processing2 = processing1.match(/[0-9,]+/g)[0];

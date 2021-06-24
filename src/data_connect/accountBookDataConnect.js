@@ -50,6 +50,9 @@ const accountBookDataConnect = () =>{
                 },
                 withCredentials:true
             })
+        },
+        patchExpenditureType: async function(id, expenditureTypeId){
+
         }
     }
 }
