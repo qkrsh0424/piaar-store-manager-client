@@ -45,7 +45,7 @@ const ExpenditureTypeSetModal = (props) => {
                     <ItemGroup>
                         {props.expenditureTypeList && props.expenditureTypeList.map(r => {
                             return (
-                                <ItemBtn type='button' onClick={()=>props.__handleEventControl().expenditureType().setType(r.expenditureTypeId)}>{r.expenditureType}</ItemBtn>
+                                <ItemBtn key={r.expenditureTypeId} type='button' onClick={()=>props.__handleEventControl().expenditureType().setType(r.expenditureTypeId)}>{r.expenditureType}</ItemBtn>
                             );
                         })}
                     </ItemGroup>

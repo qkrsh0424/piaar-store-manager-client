@@ -56,7 +56,6 @@ const AccountBookMain = (props) => {
 
                 await accountBookDataConnect().getAccountBookList(accountBookType, bankType, startDate, endDate, currPage)
                     .then(res => {
-                        // console.log(res);
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setItemDataList(res.data.data);
                         }
@@ -83,7 +82,6 @@ const AccountBookMain = (props) => {
             searchExpenditureTypeList: async function () {
                 await expenditureTypeDataConnect().getExpenditureTypeList()
                     .then(res => {
-                        console.log(res);
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setExpenditureTypeList(res.data.data);
                         }
@@ -140,6 +138,17 @@ const AccountBookMain = (props) => {
                         } else {
                             alert('undefined error. : deleteAccountBookOne')
                         }
+                    })
+            },
+            patchExpenditureTypeForAccountBook: async function (accountBookId, expenditureTypeId) {
+                await accountBookDataConnect().patchExpenditureType(accountBookId,expenditureTypeId)
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+
+                        }
+                    })
+                    .catch(err => {
+                        alert('undefined error. : patchExpenditureType');
                     })
             }
         }
@@ -216,7 +225,6 @@ const AccountBookMain = (props) => {
             expenditureType: function () {
                 return {
                     settingModalOpen: function (accountBookId) {
-                        console.log(accountBookId);
                         setExpenditureTypeSetting({
                             accountBookId: accountBookId,
                             modalOpen: true
@@ -228,11 +236,11 @@ const AccountBookMain = (props) => {
                             modalOpen: false
                         })
                     },
-                    setType: async function(expenditureTypeId){
+                    setType: async function (expenditureTypeId) {
                         let accountBookId = expenditureTypeSetting.accountBookId;
-                        console.log(expenditureTypeId);
+                        await __handleDataConnect().patchExpenditureTypeForAccountBook(accountBookId, expenditureTypeId);
+                        __handleDataConnect().searchAccountBookList();
                         this.settingModalClose();
-                        console.log(accountBookId);
                     }
                 }
             }
@@ -260,7 +268,7 @@ const AccountBookMain = (props) => {
             ></DateRangePickerModal>
             <ExpenditureTypeSetModal
                 open={expenditureTypeSetting.modalOpen}
-                expenditureTypeList = {expenditureTypeList}
+                expenditureTypeList={expenditureTypeList}
 
                 __handleEventControl={__handleEventControl}
             ></ExpenditureTypeSetModal>
