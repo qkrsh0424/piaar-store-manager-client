@@ -25,8 +25,42 @@ const WayBillMain = () => {
                         console.log(err);
                     })
             },
-            postWriteExcel: async function (data) {
+            postWriteLogenExcel: async function (data) {
                 await axios.post(`${process.env.REACT_APP_API_HOST}/api/excel/waybill/logen/write`, data,{
+                    responseType:'blob'
+                })
+                    .then(res => {
+                        const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        // link.setAttribute('download', 'test.xlsx');
+                        link.setAttribute('download', `${dateToYYYYMMDDhhmmssFile(new Date())}${data.prodName}.xlsx`);
+                        document.body.appendChild(link);
+                        link.click();
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    });
+            },
+            postWriteSendTodayExcel: async function(data){
+                await axios.post(`${process.env.REACT_APP_API_HOST}/api/excel/waybill/send-today/write`, data,{
+                    responseType:'blob'
+                })
+                    .then(res => {
+                        const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        // link.setAttribute('download', 'test.xlsx');
+                        link.setAttribute('download', `${dateToYYYYMMDDhhmmssFile(new Date())}${data.prodName}.xlsx`);
+                        document.body.appendChild(link);
+                        link.click();
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    });
+            },
+            postWriteLogenAllExcel: async function(data){
+                await axios.post(`${process.env.REACT_APP_API_HOST}/api/excel/waybill/logen-all/write`, data,{
                     responseType:'blob'
                 })
                     .then(res => {
@@ -61,7 +95,13 @@ const WayBillMain = () => {
                 let data = waybillData.filter(r => r.uuid == uuid)[0];
                 // console.log(data);
                 // console.log(dateToYYYYMMDDhhmmssFile(new Date()));
-                await __handleDataConnect().postWriteExcel(data);
+                await __handleDataConnect().postWriteLogenExcel(data);
+            },
+            sendTodayExcelDownload: async function(){
+                __handleDataConnect().postWriteSendTodayExcel(waybillData);
+            },
+            logenAllExcelDownload: async function(){
+                __handleDataConnect().postWriteLogenAllExcel(waybillData);
             }
         }
     }
@@ -80,6 +120,8 @@ const WayBillMain = () => {
                     </div>
                 </form>
             </div>
+            <button type='button' onClick={()=>__handleEventControl().sendTodayExcelDownload()}>오늘 보낼것 엑셀 다운</button>
+            <button type='button' onClick={()=>__handleEventControl().logenAllExcelDownload()}>모든 항목 로젠 엑셀 다운</button>
             {waybillData ?
                 <WaybillBodyComponent
                     waybillData={waybillData}

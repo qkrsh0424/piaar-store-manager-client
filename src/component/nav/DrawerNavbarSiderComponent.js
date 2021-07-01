@@ -59,7 +59,7 @@ const DrawerNavbarSiderComponent = (props) => {
                             <CustomLink to='/order-confirm'>발주확인건</CustomLink>
                         </LinkContainer>
                         <LinkContainer>
-                            <CustomLink to='/waybill'>중복운송장취합</CustomLink>
+                            <CustomLink to='/waybill'>오늘보낼것</CustomLink>
                         </LinkContainer>
                         <LinkContainer>
                             <form onSubmit={(e) => props.__handleEventControl().logoutSubmit(e)}>
