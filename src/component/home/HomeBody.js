@@ -18,7 +18,7 @@ const LinkBox = styled.div`
 `;
 
 const CustomLink = styled(Link)`
-    
+    margin-bottom: 30px;
     display: inline-block;
     width: 100%;
     border:3px double #7d7ada;
@@ -36,6 +36,14 @@ const CustomLink = styled(Link)`
         color:white;
     }
     
+    @media only screen and (max-width:992px){
+        font-size: 1.3rem;
+    }
+
+    @media only screen and (max-width:335px){
+        font-size: 1rem;
+    }
+    
 `;
 
 const HomeBody = () => {
@@ -45,6 +53,8 @@ const HomeBody = () => {
                 <LinkGroup>
                     <LinkBox>
                         <CustomLink to='/account-book'>부기관리</CustomLink>
+                        <CustomLink to='/sales-rate'>네이버 주문통합검색 판매량 추출기</CustomLink>
+                        
                     </LinkBox>
                 </LinkGroup>
 

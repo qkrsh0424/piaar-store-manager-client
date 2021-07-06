@@ -13,6 +13,7 @@ import HomeMain from './component/home/HomeMain';
 import OrderConfirmMain from './component/order_confirm/OrderConfirmMain';
 import WaybillMain from './component/waybill/WaybillMain';
 import LoginMain from './component/login/LoginMain';
+import SalesRateMain from './component/sales_rate/SalesRateMain';
 
 // component : account book
 import AccountBookMain from './component/account_book/AccountBookMain';
@@ -84,6 +85,10 @@ function App(props) {
                                 </Route>
                                 <Route exact path='/account-book/expenditure'>
                                     {userRdx.userInfo ? <ExpenditureMain></ExpenditureMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                {/* Sales Rate */}
+                                <Route exact path='/sales-rate'>
+                                    {userRdx.userInfo ? <SalesRateMain></SalesRateMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                             </Switch>
                         )

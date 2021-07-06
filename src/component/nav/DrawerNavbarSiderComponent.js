@@ -62,6 +62,9 @@ const DrawerNavbarSiderComponent = (props) => {
                             <CustomLink to='/waybill'>오늘보낼것</CustomLink>
                         </LinkContainer>
                         <LinkContainer>
+                            <CustomLink to='/sales-rate'>네이버 주문통합검색 판매량 추출기</CustomLink>
+                        </LinkContainer>
+                        <LinkContainer>
                             <form onSubmit={(e) => props.__handleEventControl().logoutSubmit(e)}>
                                 <button type='submit' className='btn btn-sm btn-outline-danger btn-block'>로그아웃</button>
                             </form>
