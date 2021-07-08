@@ -53,7 +53,7 @@ const HomeBody = () => {
                 <LinkGroup>
                     <LinkBox>
                         <CustomLink to='/account-book'>부기관리</CustomLink>
-                        <CustomLink to='/sales-rate'>네이버 주문통합검색 판매량 추출기</CustomLink>
+                        <CustomLink to='/sales-rate/naver'>네이버 주문통합검색 판매량 추출기</CustomLink>
                         
                     </LinkBox>
                 </LinkGroup>

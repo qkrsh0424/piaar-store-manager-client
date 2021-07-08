@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 // component
-import DrawerNavbarMain from '../nav/DrawerNavbarMain';
+import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
 
 const Container = styled.div`
     & .impact{
@@ -18,7 +18,7 @@ const ItemContainer = styled.div`
     margin-top: 20px;
     margin-bottom: 20px;
 `;
-const SalesRateMain = () => {
+const SalesRateNaverMain = () => {
     const [fileFormData, setFileFormData] = useState(null);
     const [salesRateDataList, setSalesRateDataList] = useState(null);
 
@@ -108,4 +108,4 @@ const SalesRateMain = () => {
     );
 }
 
-export default SalesRateMain;
+export default SalesRateNaverMain;

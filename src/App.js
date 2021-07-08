@@ -13,7 +13,12 @@ import HomeMain from './component/home/HomeMain';
 import OrderConfirmMain from './component/order_confirm/OrderConfirmMain';
 import WaybillMain from './component/waybill/WaybillMain';
 import LoginMain from './component/login/LoginMain';
-import SalesRateMain from './component/sales_rate/SalesRateMain';
+import SalesRateNaverMain from './component/sales_rate/naver/SalesRateNaverMain';
+import ProductManageMain from './component/product_manage/ProductManageMain';
+
+// component : shipment
+import SPackingListNaverMain from './component/shipment/packing-list/naver/SPackingListNaverMain';
+import SPackingListCoupangMain from './component/shipment/packing-list/coupang/SPackingListCoupangMain';
 
 // component : account book
 import AccountBookMain from './component/account_book/AccountBookMain';
@@ -87,8 +92,19 @@ function App(props) {
                                     {userRdx.userInfo ? <ExpenditureMain></ExpenditureMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                                 {/* Sales Rate */}
-                                <Route exact path='/sales-rate'>
-                                    {userRdx.userInfo ? <SalesRateMain></SalesRateMain> : <Redirect to={'/login'}></Redirect>}
+                                <Route exact path='/sales-rate/naver'>
+                                    {userRdx.userInfo ? <SalesRateNaverMain></SalesRateNaverMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                {/* Product Manage */}
+                                <Route exact path='/products'>
+                                    {userRdx.userInfo ? <ProductManageMain></ProductManageMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                {/* Shipment */}
+                                <Route exact path='/shipment/packing-list/naver'>
+                                    {userRdx.userInfo ? <SPackingListNaverMain></SPackingListNaverMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                <Route exact path='/shipment/packing-list/coupang'>
+                                    {userRdx.userInfo ? <SPackingListCoupangMain></SPackingListCoupangMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                             </Switch>
                         )
