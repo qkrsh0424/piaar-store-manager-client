@@ -20,7 +20,22 @@ const SPackingListCoupangMain = () => {
                         }
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res && res.status == 400) {
+                            switch (res.data.message) {
+                                case 'not_matched_file_error':
+                                    alert('파일 종류 에러, 업로드 대상 파일을 다시 확인해 주세요.');
+                                    break;
+                                case 'extension_error':
+                                    alert('파일 확장자를 다시 확인해주세요. xls or xlsx 파일만 읽기 가능.');
+                                    break;
+                                default:
+                                    alert('undefined error. inner')
+                                    break;
+                            }
+                        } else {
+                            alert('undefined error. outter')
+                        }
                     })
             },
         }
@@ -35,7 +50,9 @@ const SPackingListCoupangMain = () => {
             },
             readCoupangExcel: async function (e) {
                 e.preventDefault();
-                await __handleDataConnect().postReadCoupangExcel();
+                if (fileFormData) {
+                    await __handleDataConnect().postReadCoupangExcel();
+                }
             },
         }
     }
@@ -44,9 +61,9 @@ const SPackingListCoupangMain = () => {
         <>
             <DrawerNavbarMain></DrawerNavbarMain>
             <SPackingListCoupangBody
-                salesRateDataList = {salesRateDataList}
+                salesRateDataList={salesRateDataList}
 
-                __handleEventControl = {__handleEventControl}
+                __handleEventControl={__handleEventControl}
             ></SPackingListCoupangBody>
         </>
     );

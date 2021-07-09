@@ -62,13 +62,13 @@ const DrawerNavbarSiderComponent = (props) => {
                             <CustomLink to='/waybill'>오늘보낼것</CustomLink>
                         </LinkContainer>
                         <LinkContainer>
-                            <CustomLink to='/shipment/packing-list/naver'>네이버 배송준비 데이터 추출기</CustomLink>
+                            <CustomLink to='/shipment/packing-list/naver'>네이버 배송준비<br/>데이터 추출기</CustomLink>
                         </LinkContainer>
                         <LinkContainer>
-                            <CustomLink to='/shipment/packing-list/coupang'>쿠팡 배송준비 데이터 추출기</CustomLink>
+                            <CustomLink to='/shipment/packing-list/coupang'>쿠팡 배송준비<br/>데이터 추출기</CustomLink>
                         </LinkContainer>
                         <LinkContainer>
-                            <CustomLink to='/sales-rate/naver'>네이버 주문통합검색 판매량 추출기</CustomLink>
+                            <CustomLink to='/sales-rate/naver'>네이버 주문통합검색<br/>판매량 추출기</CustomLink>
                         </LinkContainer>
                         <LinkContainer>
                             <CustomLink to='/products'>OUR PRODUCT</CustomLink>
