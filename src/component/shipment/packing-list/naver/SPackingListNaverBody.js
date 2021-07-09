@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
-
-    
+    overflow:hidden;
+    margin-bottom: 200px;
 `;
 
 const TitleContainer = styled.div`

@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
 
 const Container = styled.div`
+    overflow:hidden;
+    margin-bottom: 200px;
     & .impact{
         color:red;
         font-weight: 600;
