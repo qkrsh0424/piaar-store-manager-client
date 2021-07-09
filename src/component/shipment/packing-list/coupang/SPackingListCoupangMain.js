@@ -62,6 +62,7 @@ const SPackingListCoupangMain = () => {
             <DrawerNavbarMain></DrawerNavbarMain>
             <SPackingListCoupangBody
                 salesRateDataList={salesRateDataList}
+                fileFormData={fileFormData}
 
                 __handleEventControl={__handleEventControl}
             ></SPackingListCoupangBody>

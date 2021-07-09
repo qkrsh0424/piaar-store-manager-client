@@ -63,6 +63,7 @@ const SPackingListNaverMain = () => {
             <DrawerNavbarMain></DrawerNavbarMain>
             <SPackingListNaverBody
                 salesRateDataList={salesRateDataList}
+                fileFormData={fileFormData}
 
                 __handleEventControl={__handleEventControl}
             ></SPackingListNaverBody>
