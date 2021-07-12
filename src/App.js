@@ -65,7 +65,9 @@ function App(props) {
                 <Suspense fallback={<FullPageLoading></FullPageLoading>}>
                     <AppContainer>
                         {userRdx.isLoading == false ? (
+
                             <Switch>
+                                {/* {console.log(userRdx.userInfo.roles.includes("ROLE_MANAGER"))} */}
                                 {/* Home */}
                                 <Route exact path='/'>
                                     {userRdx.userInfo ? <HomeMain></HomeMain> : <Redirect to={'/login'}></Redirect>}
@@ -83,13 +85,19 @@ function App(props) {
                                 </Route>
                                 {/* Account book */}
                                 <Route exact path='/account-book'>
-                                    {userRdx.userInfo ? <AccountBookMain></AccountBookMain> : <Redirect to={'/login'}></Redirect>}
+                                    {
+                                        userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER"))
+                                            ?
+                                            <AccountBookMain></AccountBookMain>
+                                            :
+                                            <Redirect to={'/login'}></Redirect>
+                                    }
                                 </Route>
                                 <Route exact path='/account-book/income'>
-                                    {userRdx.userInfo ? <IncomeMain></IncomeMain> : <Redirect to={'/login'}></Redirect>}
+                                    {userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ? <IncomeMain></IncomeMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                                 <Route exact path='/account-book/expenditure'>
-                                    {userRdx.userInfo ? <ExpenditureMain></ExpenditureMain> : <Redirect to={'/login'}></Redirect>}
+                                    {userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ? <ExpenditureMain></ExpenditureMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                                 {/* Sales Rate */}
                                 <Route exact path='/sales-rate/naver'>

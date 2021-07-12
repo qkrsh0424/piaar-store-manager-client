@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -47,16 +49,24 @@ const CustomLink = styled(Link)`
 `;
 
 const HomeBody = () => {
+    const userRdx = useSelector(state => state.user);
+
     return (
         <>
             <Container>
                 <LinkGroup>
                     <LinkBox>
-                        <CustomLink to='/account-book'>부기관리</CustomLink>
+                        {
+                            userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
+                                <CustomLink to='/account-book'>부기관리</CustomLink>
+                                :
+                                <></>
+                        }
+
                         <CustomLink to='/shipment/packing-list/naver'>네이버 배송준비 데이터 추출기</CustomLink>
                         <CustomLink to='/shipment/packing-list/coupang'>쿠팡 배송준비 데이터 추출기</CustomLink>
                         <CustomLink to='/sales-rate/naver'>네이버 주문통합검색 판매량 추출기</CustomLink>
-                        
+
                     </LinkBox>
                 </LinkGroup>
 
