@@ -55,9 +55,9 @@ const SPackingListNaverBody = (props) => {
                             </div>
                             <div style={{ lineHeight: '1.2' }}>
                                 <div style={{ color: 'red', fontWeight: '700', fontSize: '13px' }}>* 반드시 "네이버 배송준비" 엑셀만 업로드해주세요.</div>
-                                <div>
+                                {/* <div>
                                     <small style={{ color: 'red', fontWeight: '700', fontSize: '8px', textDecoration: 'line-through' }}> 어차피 다른건 안됨 해보셈</small>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <div className='form-group col-lg-6'>

@@ -185,6 +185,14 @@ const AccountBookBody = (props) => {
                         <div style={{ border: '1px solid #f1f1f1', padding: '5px', margin: '5px 0', fontWeight: '800', borderRadius: '5px' }}>총 수입 : {props.sumIncomeData ? numberWithCommas2(props.sumIncomeData.sum) : '계산중...'} 원</div>
                         <div style={{ border: '1px solid #f1f1f1', padding: '5px', margin: '5px 0', fontWeight: '800', borderRadius: '5px' }}>총 지출 : {props.sumExpenditureData ? numberWithCommas2(props.sumExpenditureData.sum) : '계산중...'} 원</div>
                         <div style={{ border: '1px solid #f1f1f1', padding: '5px', margin: '5px 0', fontWeight: '800', borderRadius: '5px' }}>남은금액 : {props.sumIncomeData && props.sumExpenditureData ? numberWithCommas2(props.sumIncomeData.sum + props.sumExpenditureData.sum) : '계산중...'} 원</div>
+                        <div style={{ border: '1px solid #f1f1f1', padding: '5px', margin: '5px 0', fontWeight: '800', borderRadius: '5px' }}>
+                            {query.accbType == 'income' ?  
+                                <button type='button' style={{ fontWeight: '700', color: 'white', border: '1px solid #FF634780', borderRadius: '5px', background: '#FF634750', width: '100%' }} onClick={() => props.__handleEventControl().expenditureType().viewModalOpen()} disabled>지출내역상세</button>
+                            :
+                                <button type='button' style={{ fontWeight: '700', color: 'white', border: '1px solid #FF6347', borderRadius: '5px', background: '#FF6347e0', width: '100%' }} onClick={() => props.__handleEventControl().expenditureType().viewModalOpen()}>지출내역상세</button>
+                            }
+
+                        </div>
                     </div>
                     <div className='col-lg-6 p-1'>
                         <ItemGroupContainer>

@@ -16,6 +16,7 @@ import AccountBookBody from './AccountBookBody';
 import AccountBookNav from './AccountBookNav';
 import DateRangePickerModal from './modal/DateRangePickerModal';
 import ExpenditureTypeSetModal from './modal/ExpenditureTypeSetModal';
+import ExpenditureTypeViewModal from './modal/ExpenditureTypeViewModal';
 
 
 const AccountBookMain = (props) => {
@@ -33,17 +34,27 @@ const AccountBookMain = (props) => {
         accountBookId: '',
         modalOpen: false
     });
+    const [expenditureTypeView, setExpenditureTypeView] = useState({
+        modalOpen: false
+    });
 
     useEffect(() => {
         async function fetchInit() {
-            await __handleDataConnect().searchAccountBookList();
             __handleDataConnect().searchBankTypeList();
-            __handleDataConnect().searchExpenditureTypeList();
-            __handleDataConnect().searchSumOfIncome();
-            __handleDataConnect().searchSumOfExpenditure();
         }
         fetchInit();
-    }, [props.location])
+    }, []);
+
+    useEffect(() => {
+        async function fetchInit() {
+            __handleDataConnect().searchAccountBookList();
+            __handleDataConnect().searchSumOfIncome();
+            __handleDataConnect().searchSumOfExpenditure();
+            __handleDataConnect().searchExpenditureTypeList();
+            window.scrollTo(0, 0);
+        }
+        fetchInit();
+    }, [props.location]);
 
     const __handleDataConnect = () => {
         return {
@@ -80,8 +91,12 @@ const AccountBookMain = (props) => {
                     })
             },
             searchExpenditureTypeList: async function () {
-                await expenditureTypeDataConnect().getExpenditureTypeList()
+                let startDate = query.startDate ? new Date(query.startDate).toUTCString() : null;
+                let endDate = query.endDate ? new Date(query.endDate).toUTCString() : null;
+
+                await expenditureTypeDataConnect().getExpenditureTypeList(startDate, endDate)
                     .then(res => {
+                        console.log(res);
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setExpenditureTypeList(res.data.data);
                         }
@@ -141,7 +156,7 @@ const AccountBookMain = (props) => {
                     })
             },
             patchExpenditureTypeForAccountBook: async function (accountBookId, expenditureTypeId) {
-                await accountBookDataConnect().patchExpenditureType(accountBookId,expenditureTypeId)
+                await accountBookDataConnect().patchExpenditureType(accountBookId, expenditureTypeId)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
 
@@ -161,7 +176,7 @@ const AccountBookMain = (props) => {
                     accountBookType: function (type) {
                         switch (type) {
                             case '전체':
-                                props.history.replace(`${pathname}?${queryString.stringify({ ...query, accbType: 'income' })}`)
+                                props.history.replace(`${pathname}?${queryString.stringify({ ...query, accbType: 'income' })}`);
                                 break;
                             case '수입':
                                 props.history.replace(`${pathname}?${queryString.stringify({ ...query, accbType: 'expenditure' })}`)
@@ -169,6 +184,9 @@ const AccountBookMain = (props) => {
                             case '지출':
                                 delete query.accbType
                                 props.history.replace(`${pathname}?${queryString.stringify({ ...query })}`)
+                                break;
+                            default:
+
                                 break;
 
                         }
@@ -241,6 +259,12 @@ const AccountBookMain = (props) => {
                         await __handleDataConnect().patchExpenditureTypeForAccountBook(accountBookId, expenditureTypeId);
                         __handleDataConnect().searchAccountBookList();
                         this.settingModalClose();
+                    },
+                    viewModalOpen: function(){
+                        setExpenditureTypeView({modalOpen:true});
+                    },
+                    viewModalClose: function(){
+                        setExpenditureTypeView({modalOpen:false});
                     }
                 }
             }
@@ -272,6 +296,13 @@ const AccountBookMain = (props) => {
 
                 __handleEventControl={__handleEventControl}
             ></ExpenditureTypeSetModal>
+            <ExpenditureTypeViewModal
+                open={expenditureTypeView.modalOpen}
+                expenditureTypeList={expenditureTypeList}
+                sumExpenditureData={sumExpenditureData}
+
+                __handleEventControl={__handleEventControl}
+            ></ExpenditureTypeViewModal>
 
         </>
     );
