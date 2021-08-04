@@ -14,7 +14,7 @@ import OrderConfirmMain from './component/order_confirm/OrderConfirmMain';
 import WaybillMain from './component/waybill/WaybillMain';
 import LoginMain from './component/login/LoginMain';
 import SalesRateNaverMain from './component/sales_rate/naver/SalesRateNaverMain';
-import ProductManageMain from './component/product_manage/ProductManageMain';
+
 
 // component : shipment
 import SPackingListNaverMain from './component/shipment/packing-list/naver/SPackingListNaverMain';
@@ -24,6 +24,10 @@ import SPackingListCoupangMain from './component/shipment/packing-list/coupang/S
 import AccountBookMain from './component/account_book/AccountBookMain';
 import IncomeMain from './component/account_book/IncomeMain';
 import ExpenditureMain from './component/account_book/ExpenditureMain';
+
+// component : product
+import ProductManageMain from './component/product_manage/ProductManageMain';
+import CreateMain from './component/product_manage/CreateMain';
 
 // data connect
 import { userDataConnect } from './data_connect/userDataConnect';
@@ -47,6 +51,7 @@ function App(props) {
         async function userCheckInit() {
             await userDataConnect().loginCheck()
                 .then(res => {
+                    console.log(res);
                     if (res.status == 200 && res.data.message == 'loged') {
                         dispatch(setUserInfo(res.data.data))
                     }
@@ -106,6 +111,9 @@ function App(props) {
                                 {/* Product Manage */}
                                 <Route exact path='/products'>
                                     {userRdx.userInfo ? <ProductManageMain></ProductManageMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                <Route exact path='/products/create'>
+                                    {userRdx.userInfo ? <CreateMain></CreateMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                                 {/* Shipment */}
                                 <Route exact path='/shipment/packing-list/naver'>

@@ -52,6 +52,7 @@ const DrawerNavbarSiderComponent = (props) => {
                             onClick={() => props.__handleEventControl().drawer().close()}
                             onKeyDown={() => props.__handleEventControl().drawer().close()}
                         >
+                            <div style={{textAlign:'center', fontWeight:'700'}}>{userRdx.userInfo && userRdx.userInfo.username} 님 안녕하세요.</div>
                             <LinkContainer>
                                 <CustomLink to='/'>메인페이지</CustomLink>
                             </LinkContainer>

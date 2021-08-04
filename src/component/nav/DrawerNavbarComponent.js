@@ -35,7 +35,7 @@ export default function DrawerNavbarComponent(props) {
     return (
         <div className={classes.root}>
             <AppBar position="static">
-                <Toolbar>
+                <Toolbar style={{backgroundColor:'#7a7bda'}}>
                     <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={() => props.__handleEventControl().drawer().open()}>
                         <MenuIcon />
                     </IconButton>
