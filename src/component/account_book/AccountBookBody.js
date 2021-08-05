@@ -186,9 +186,9 @@ const AccountBookBody = (props) => {
                         <div style={{ border: '1px solid #f1f1f1', padding: '5px', margin: '5px 0', fontWeight: '800', borderRadius: '5px' }}>총 지출 : {props.sumExpenditureData ? numberWithCommas2(props.sumExpenditureData.sum) : '계산중...'} 원</div>
                         <div style={{ border: '1px solid #f1f1f1', padding: '5px', margin: '5px 0', fontWeight: '800', borderRadius: '5px' }}>남은금액 : {props.sumIncomeData && props.sumExpenditureData ? numberWithCommas2(props.sumIncomeData.sum + props.sumExpenditureData.sum) : '계산중...'} 원</div>
                         <div style={{ border: '1px solid #f1f1f1', padding: '5px', margin: '5px 0', fontWeight: '800', borderRadius: '5px' }}>
-                            {query.accbType == 'income' ?  
+                            {query.accbType == 'income' ?
                                 <button type='button' style={{ fontWeight: '700', color: 'white', border: '1px solid #FF634780', borderRadius: '5px', background: '#FF634750', width: '100%' }} onClick={() => props.__handleEventControl().expenditureType().viewModalOpen()} disabled>지출내역상세</button>
-                            :
+                                :
                                 <button type='button' style={{ fontWeight: '700', color: 'white', border: '1px solid #FF6347', borderRadius: '5px', background: '#FF6347e0', width: '100%' }} onClick={() => props.__handleEventControl().expenditureType().viewModalOpen()}>지출내역상세</button>
                             }
 
@@ -240,6 +240,23 @@ const AccountBookBody = (props) => {
                         ></PagenationComponent1>
                     </>
                 }
+                <div className='pt-3 mt-3 pb-3 text-center' style={{fontWeight:'700', lineHeight:'2'}}>
+                    <div>
+                        [우리은행]
+                        <br/>
+                        1005-904-157972 양태영(삼마이)
+                    </div>
+                    <div>
+                        [농협은행]
+                        <br/>
+                        301-5003-6206-81 양태영(삼마이)
+                    </div>
+                    <div>
+                        [오프라인(시티은행)]
+                        <br/>
+                        252-30410-265-01 박세훈
+                    </div>
+                </div>
 
             </Container>
         </>

@@ -77,7 +77,6 @@ const SubmitBtn = styled.button`
 `;
 
 const ProductOptionModifyModal = (props) => {
-
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('lg');
     return (
@@ -138,7 +137,7 @@ const ProductOptionModifyModal = (props) => {
                                         type="text"
                                         className='form-control'
                                         name='code'
-                                        value={props.productOptionModifyData.code}
+                                        value={props.productOptionModifyData.code ? props.productOptionModifyData.code : ''}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                         required
                                     />

@@ -51,7 +51,7 @@ function App(props) {
         async function userCheckInit() {
             await userDataConnect().loginCheck()
                 .then(res => {
-                    console.log(res);
+                    // console.log(res);
                     if (res.status == 200 && res.data.message == 'loged') {
                         dispatch(setUserInfo(res.data.data))
                     }

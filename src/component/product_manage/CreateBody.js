@@ -405,7 +405,7 @@ const CreateBody = (props) => {
                                                                                     {optionIndex + 1}
                                                                                 </OptionTableTh>
                                                                                 <OptionTableTd>
-                                                                                    <button type='button' onClick={()=>props.__handleEventControl().productOptionListData().delete(r.id, optionData.id)}>삭제</button>
+                                                                                    <button type='button' className='btn btn-outline-danger btn-sm' onClick={()=>props.__handleEventControl().productOptionListData().delete(r.id, optionData.id)}>X</button>
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
                                                                                     <OptionInput type='text' value={optionData.defaultName} name='defaultName' onChange={(e)=>props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>

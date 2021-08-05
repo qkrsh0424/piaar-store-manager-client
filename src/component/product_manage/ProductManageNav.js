@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
 
@@ -20,12 +20,12 @@ const CommonLinkGroupWrapper = styled.div`
 
 const CommonLinkEl = styled(Link)`
     display: inline-block;
-    padding:1rem;
+    padding:0.7rem;
     border-radius: 5px;
     text-align: center;
-    background: ${props=>props.color ? props.color : 'skyblue'};
+    background: ${props => props.color ? props.color : 'skyblue'};
     width:100%;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color:white;
 
@@ -34,24 +34,53 @@ const CommonLinkEl = styled(Link)`
         text-decoration: none;
     }
 `;
-const AccountBookNav = (props) => {
+
+const ReceiveReleaseBtn = styled.button`
+    display: inline-block;
+    padding:0.7rem;
+    border:none;
+    border-radius: 5px;
+    text-align: center;
+    background: ${props => props.color ? props.color : 'skyblue'};
+    width:100%;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color:white;
+
+    &:hover{
+        color:#f1f1f1;
+        text-decoration: none;
+    }
+`;
+const ProductManageNav = (props) => {
 
     return (
         <>
             <Container>
                 <CommonLinkGroupContainer>
                     <CommonLinkGroupWrapper className='row'>
-                        <div className='col-6 mb-2'>
+                        <div className='col-4 mb-2'>
                             <CommonLinkEl
                                 to={'/products/create'}
-                                color={'#4682B4e0'}
+                                color={'#7a7bdae0'}
+                                // color={'#333333e0'}
                             >상품등록</CommonLinkEl>
                         </div>
-                        <div className='col-6 mb-2'>
-                            <CommonLinkEl
-                                to={'#'}
-                                color={'#FF6347e0'}
-                            >I'm a button</CommonLinkEl>
+                        <div className='col-4 mb-2'>
+                            <ReceiveReleaseBtn
+                                type='button'
+                                color={'#7a7bdae0'}
+                                // color={'#333333e0'}
+                                onClick={()=>props.__handleEventControl().release().addModalOpen()}
+                            >출고등록</ReceiveReleaseBtn>
+                        </div>
+                        <div className='col-4 mb-2'>
+                            <ReceiveReleaseBtn
+                                type='button'
+                                color={'#7a7bdae0'}
+                                // color={'#333333e0'}
+                                onClick={()=>props.__handleEventControl().receive().addModalOpen()}
+                            >입고등록</ReceiveReleaseBtn>
                         </div>
                     </CommonLinkGroupWrapper>
                 </CommonLinkGroupContainer>
@@ -60,4 +89,4 @@ const AccountBookNav = (props) => {
     );
 }
 
-export default AccountBookNav;
+export default ProductManageNav;

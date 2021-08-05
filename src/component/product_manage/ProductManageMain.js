@@ -6,6 +6,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { productCategoryDataConnect } from '../../data_connect/productCategoryDataConnect';
 import { productDataConnect } from '../../data_connect/productDataConnect';
 import { productOptionDataConnect } from '../../data_connect/productOptionDataConnect';
+import { productReleaseDataConnect } from '../../data_connect/productReleaseDataConnect';
+import { productReceiveDataConnect } from '../../data_connect/productReceiveDataConnect';
 
 // component
 import DrawerNavbarMain from '../nav/DrawerNavbarMain';
@@ -14,11 +16,13 @@ import ProductManageNav from './ProductManageNav';
 import ProductModifyModal from './modal/ProductModifyModal';
 import ProductOptionModifyModal from './modal/ProductOptionModifyModal';
 import ProductOptionAddModal from './modal/ProductOptionAddModal';
+import ReleaseAddModal from './modal/ReleaseAddModal';
+import ReceiveAddModal from './modal/ReceiveAddModal';
 
 class ProductOption {
     constructor(productId, optionDefaultName = '', optionManagementName = '') {
         this.id = uuidv4();
-        this.code=''
+        this.code = ''
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
         this.salesPrice = 0;
@@ -45,6 +49,42 @@ class ProductOption {
     }
 }
 
+class ProductRelease {
+    constructor(productCid) {
+        this.id = uuidv4();
+        this.releaseUnit = 0;
+        this.memo = '';
+        this.productOptionCid = productCid;
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            releaseUnit: this.releaseUnit,
+            memo: this.memo,
+            productOptionCid: this.productOptionCid
+        }
+    }
+}
+
+class ProductReceive {
+    constructor(productCid) {
+        this.id = uuidv4();
+        this.receiveUnit = 0;
+        this.memo = '';
+        this.productOptionCid = productCid;
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            receiveUnit: this.receiveUnit,
+            memo: this.memo,
+            productOptionCid: this.productOptionCid
+        }
+    }
+}
+
 const ProductManageMain = () => {
     const [productListData, setProductListData] = useState(null);
     const [optionListData, setOptionListData] = useState(null);
@@ -60,6 +100,14 @@ const ProductManageMain = () => {
 
     const [productOptionAddModalOpen, setProductOptionAddModalOpen] = useState(false);
     const [productOptionAddData, setProductOptionAddData] = useState(null);
+
+    const [releaseAddModalOpen, setReleaseAddModalOpen] = useState(false);
+    const [releaseAddData, setReleaseAddData] = useState(null);
+    const [releaseAddMemo, setReleaseAddMemo] = useState('');
+
+    const [receiveAddModalOpen, setReceiveAddModalOpen] = useState(false);
+    const [receiveAddData, setReceiveAddData] = useState(null);
+    const [receiveAddMemo, setReceiveAddMemo] = useState('');
 
     useEffect(() => {
         async function fetchInit() {
@@ -192,6 +240,42 @@ const ProductManageMain = () => {
                         }
                     })
                     ;
+            },
+            createProductReleaseList: async function (data) {
+                await productReleaseDataConnect().postList(data)
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            alert('출고등록 되었습니다.')
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+
+                        if (res.status === 401) {
+                            alert('접근 권한이 없습니다.')
+                        } else {
+                            alert('undefined error. : changeProductOne');
+                        }
+                    })
+                    ;
+            },
+            createProductReceiveList: async function (data) {
+                await productReceiveDataConnect().postList(data)
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            alert('입고등록 되었습니다.')
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+
+                        if (res.status === 401) {
+                            alert('접근 권한이 없습니다.')
+                        } else {
+                            alert('undefined error. : changeProductOne');
+                        }
+                    })
+                    ;
             }
         }
     }
@@ -204,8 +288,8 @@ const ProductManageMain = () => {
                         return productListData.filter(r => r.product.id === productId)[0].product;
                     },
                     deleteOne: async function (productId) {
-                        if(window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')){
-                            let product = productListData.filter(r=>r.product.id===productId)[0].product;
+                        if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
+                            let product = productListData.filter(r => r.product.id === productId)[0].product;
 
                             await __handleDataConnect().deleteProductOne(product.cid);
                             await __handleDataConnect().searchProductListFj();
@@ -400,6 +484,198 @@ const ProductManageMain = () => {
                     },
                     isChecked: function (optionId) {
                         return checkedOptionList.includes(optionId);
+                    },
+                    getCheckedData: function () {
+                        let dataList = []
+                        productListData.forEach(product => {
+                            product.options.forEach(option => {
+                                if (checkedOptionList.includes(option.id)) {
+                                    let json = {
+                                        product: product.product,
+                                        option: option,
+                                        productRelease: new ProductRelease(option.cid).toJSON()
+                                    }
+                                    dataList.push(json);
+                                }
+                            })
+                        })
+                        return dataList;
+                    }
+                }
+            },
+            release: function () {
+                return {
+                    getAddData: function () {
+                        let dataList = []
+                        productListData.forEach(product => {
+                            product.options.forEach(option => {
+                                if (checkedOptionList.includes(option.id)) {
+                                    let json = {
+                                        product: product.product,
+                                        option: option,
+                                        productRelease: new ProductRelease(option.cid).toJSON()
+                                    }
+                                    dataList.push(json);
+                                }
+                            })
+                        })
+                        return dataList;
+                    },
+                    addModalOpen: function () {
+                        let releaseAddData = this.getAddData();
+                        if (releaseAddData.length < 1) {
+                            return;
+                        }
+                        setReleaseAddModalOpen(true);
+                        setReleaseAddData(releaseAddData);
+                    },
+                    addModalClose: function () {
+                        setReleaseAddModalOpen(false);
+                        setReleaseAddData(null);
+                        setReleaseAddMemo('');
+                    },
+                    addDataOnChangeInputValue: function (e, releaseAddDataId) {
+                        setReleaseAddData(releaseAddData.map(data => {
+                            if (data.productRelease.id === releaseAddDataId) {
+
+                                return {
+                                    ...data,
+                                    productRelease: {
+                                        ...data.productRelease,
+                                        [e.target.name]: e.target.value
+                                    }
+                                }
+                            } else {
+                                return data;
+                            }
+                        }))
+                    },
+                    submitAddData: async function (e) {
+                        e.preventDefault();
+
+                        let releaseJsonList = []
+                        releaseAddData.forEach(data => {
+                            if (data.productRelease.releaseUnit < 1) {
+                                return;
+                            } else {
+                                releaseJsonList.push(
+                                    {
+                                        ...data.productRelease,
+                                        memo: releaseAddMemo
+                                    }
+                                )
+                            }
+                        });
+                        await __handleDataConnect().createProductReleaseList(releaseJsonList);
+                        this.addModalClose();
+                        await __handleDataConnect().searchProductListFj();
+
+
+                    },
+                    checkRequiredAddData: function (releaseDataList) {
+                        for (let i = 0; i < releaseDataList.length; i++) {
+                            if (
+                                releaseDataList[i].releaseUnit == null ||
+                                releaseDataList[i].releaseUnit == undefined ||
+                                releaseDataList[i].releaseUnit == '' ||
+                                releaseDataList[i].releaseUnit < 1
+                            ) {
+                                alert('출고수량을 확인해주세요. hint : 0 이하 값 입력불가');
+                                return false;
+                            }
+                        }
+                        return true;
+                    },
+                    addDataOnChangeMemoValue: function(e){
+                        setReleaseAddMemo(e.target.value);
+                    }
+                }
+            },
+            receive: function () {
+                return {
+                    getAddData: function () {
+                        let dataList = []
+                        productListData.forEach(product => {
+                            product.options.forEach(option => {
+                                if (checkedOptionList.includes(option.id)) {
+                                    let json = {
+                                        product: product.product,
+                                        option: option,
+                                        productReceive: new ProductReceive(option.cid).toJSON()
+                                    }
+                                    dataList.push(json);
+                                }
+                            })
+                        })
+                        return dataList;
+                    },
+                    addModalOpen: function () {
+                        let receiveAddData = this.getAddData();
+                        if (receiveAddData.length < 1) {
+                            return;
+                        }
+                        setReceiveAddModalOpen(true);
+                        setReceiveAddData(receiveAddData);
+                        
+                    },
+                    addModalClose: function () {
+                        setReceiveAddModalOpen(false);
+                        setReceiveAddData(null);
+                        setReceiveAddMemo('');
+                    },
+                    addDataOnChangeInputValue: function (e, receiveAddDataId) {
+                        setReceiveAddData(receiveAddData.map(data => {
+                            if (data.productReceive.id === receiveAddDataId) {
+
+                                return {
+                                    ...data,
+                                    productReceive: {
+                                        ...data.productReceive,
+                                        [e.target.name]: e.target.value
+                                    }
+                                }
+                            } else {
+                                return data;
+                            }
+                        }))
+                    },
+                    submitAddData: async function (e) {
+                        e.preventDefault();
+
+                        let receiveJsonList = []
+                        receiveAddData.forEach(data => {
+                            if (data.productReceive.receiveUnit < 1) {
+                                return;
+                            } else {
+                                receiveJsonList.push(
+                                    {
+                                        ...data.productReceive,
+                                        memo: receiveAddMemo
+                                    }
+                                );
+                            }
+                        });
+                        await __handleDataConnect().createProductReceiveList(receiveJsonList);
+                        this.addModalClose();
+                        await __handleDataConnect().searchProductListFj();
+                    },
+                    checkRequiredAddData: function (receiveDataList) {
+                        // console.log(receiveDataList);
+                        for (let i = 0; i < receiveDataList.length; i++) {
+                            if (
+                                receiveDataList[i].receiveUnit == null ||
+                                receiveDataList[i].receiveUnit == undefined ||
+                                receiveDataList[i].receiveUnit == '' ||
+                                receiveDataList[i].receiveUnit < 1
+                            ) {
+                                alert('입고수량을 확인해주세요. hint : 0 이하 값 입력불가');
+                                return false;
+                            }
+                        }
+                        return true;
+                    },
+                    addDataOnChangeMemoValue: function(e){
+                        setReceiveAddMemo(e.target.value);
                     }
                 }
             }
@@ -409,7 +685,9 @@ const ProductManageMain = () => {
     return (
         <>
             <DrawerNavbarMain></DrawerNavbarMain>
-            <ProductManageNav></ProductManageNav>
+            <ProductManageNav
+                __handleEventControl={__handleEventControl}
+            ></ProductManageNav>
             {productListData && optionListData &&
                 <ProductManageBody
                     productListData={productListData}
@@ -442,6 +720,24 @@ const ProductManageMain = () => {
 
                     __handleEventControl={__handleEventControl}
                 ></ProductOptionAddModal>
+            }
+            {releaseAddModalOpen && releaseAddData &&
+                <ReleaseAddModal
+                    open={releaseAddModalOpen}
+                    releaseAddData={releaseAddData}
+                    releaseAddMemo={releaseAddMemo}
+
+                    __handleEventControl={__handleEventControl}
+                ></ReleaseAddModal>
+            }
+            {receiveAddModalOpen && receiveAddData &&
+                <ReceiveAddModal
+                    open={receiveAddModalOpen}
+                    receiveAddData={receiveAddData}
+                    receiveAddMemo={receiveAddMemo}
+
+                    __handleEventControl={__handleEventControl}
+                ></ReceiveAddModal>
             }
         </>
     );
