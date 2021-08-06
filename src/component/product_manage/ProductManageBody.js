@@ -106,6 +106,9 @@ const CheckboxShape = styled.div`
     display:inline-block;
 `;
 
+const RowSpanTr = styled.tr`
+    
+`;
 const ProductManageBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
@@ -139,7 +142,7 @@ const ProductManageBody = (props) => {
                                 {props.productListData && props.productListData.map((product, productIdx) => {
                                     return (
                                         <React.Fragment key={productIdx}>
-                                            <tr style={{ background: productIdx % 2 === 1 ? '#f8f8f8' : '#ffffff' }}>
+                                            <RowSpanTr style={{ background: productIdx % 2 === 1 ? '#f8f8f8' : '#ffffff' }}>
                                                 {userRdx && userRdx.isLoading === false && userRdx.userInfo && ['ROLE_MANAGER', 'ROLE_ADMIN'].includes(userRdx.userInfo.roles) &&
                                                     <BodyTh rowSpan={product.options.length + 1}>
                                                         <div>
@@ -170,7 +173,10 @@ const ProductManageBody = (props) => {
                                                         <AddBtn type='button' onClick={() => props.__handleEventControl().productOption().addModalOpen(product.product.id)}>옵션추가</AddBtn>
                                                     </div>
                                                 </BodyTh>
-                                            </tr>
+                                                <BodyTh colSpan={9} style={{background:'#7a7bda20', color:'#888'}}>
+                                                    <div>{product.product.managementName}-{product.product.code}-{product.product.manufacturingCode}</div>
+                                                </BodyTh>
+                                            </RowSpanTr>
                                             {product.options && product.options.map((option, index2) => {
                                                 return (
                                                     <BodyTr
@@ -221,7 +227,33 @@ const ProductManageBody = (props) => {
 
                             </tbody>
                         </table>
+
                     </TableContainer>
+                    {/* <table style={{ border: '1px solid black' }}>
+                        <tr>
+                            <th style={{ border: '1px solid black' }}>Month</th>
+                            <th style={{ border: '1px solid black' }}>Savings</th>
+                            <th style={{ border: '1px solid black' }}>Savings for holiday!</th>
+                        </tr>
+                        <tr>
+                            <td style={{ border: '1px solid black' }} rowSpan="2">
+                                <div>hello</div>
+                                <div>hello</div>
+                                <div>hello</div>
+                                <div>hello</div>
+                                <div>hello</div>
+                                <div>hello</div>
+                                <div>hello</div>
+                            </td>
+                            <td style={{ border: '1px solid black' }}>January</td>
+                            <td style={{ border: '1px solid black' }}>$100</td>
+                        </tr>
+                        <tr>
+                            <td style={{ border: '1px solid black' }}>February</td>
+                            <td style={{ border: '1px solid black' }}>$80</td>
+                        </tr>
+                    </table> */}
+
                 </Container>
             }
 
