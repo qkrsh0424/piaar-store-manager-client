@@ -6,16 +6,22 @@ import { useSelector } from 'react-redux';
 const Container = styled.div`
     overflow:hidden;
     margin-bottom: 200px;
+
 `;
 
 const TableContainer = styled.div`
-    height: 500px;
+    height: 80vh;
 	overflow: auto;
+    font-size: 14px;
     & .fixedHeader {
         /* width:100%; */
         position: sticky;
         top: -1px;
         background: #f1f1f1;
+    }
+
+    @media only screen and (max-width:768px){
+        font-size: 10px;
     }
 `;
 
@@ -70,6 +76,16 @@ const DeleteBtn = styled.button`
 
 `;
 
+const DeleteProductBtn = styled.button`
+    padding:3px 8px;
+    background: #ff5555;
+    color:white;
+    border:1px solid #ff5555;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-top:5px;
+`;
+
 const AddBtn = styled.button`
     padding:0 8px;
     background: #4682B4e0;
@@ -79,6 +95,15 @@ const AddBtn = styled.button`
     font-weight: 600;
     margin-left: 5px;
 
+`;
+
+const CheckboxShape = styled.div`
+    width:14px;
+    height:14px;
+    border:1px solid gray;
+    border-radius:50%;
+    background:${props => props.checked ? '#007bff' : 'white'};
+    display:inline-block;
 `;
 
 const ProductManageBody = (props) => {
@@ -93,7 +118,7 @@ const ProductManageBody = (props) => {
                             <thead>
                                 <tr>
                                     {userRdx.userInfo && ['ROLE_MANAGER', 'ROLE_ADMIN'].includes(userRdx.userInfo.roles) &&
-                                        <HeaderTh className='fixedHeader' scope="col" width='200'>컨트롤</HeaderTh>
+                                        <HeaderTh className='fixedHeader' scope="col" width='100'>컨트롤</HeaderTh>
                                     }
                                     <HeaderTh className='fixedHeader' scope="col" width='250'>상품식별코드</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='200'>상품관리명</HeaderTh>
@@ -114,17 +139,22 @@ const ProductManageBody = (props) => {
                                 {props.productListData && props.productListData.map((product, productIdx) => {
                                     return (
                                         <React.Fragment key={productIdx}>
-                                            <tr style={{background: productIdx%2===1 ? '#f8f8f8' : '#ffffff'}}>
+                                            <tr style={{ background: productIdx % 2 === 1 ? '#f8f8f8' : '#ffffff' }}>
                                                 {userRdx && userRdx.isLoading === false && userRdx.userInfo && ['ROLE_MANAGER', 'ROLE_ADMIN'].includes(userRdx.userInfo.roles) &&
                                                     <BodyTh rowSpan={product.options.length + 1}>
-                                                        <ModifyBtn 
-                                                            type='button'
-                                                            onClick={() => props.__handleEventControl().product().modifyModalOpen(product.product.id)}
-                                                        >상품수정</ModifyBtn>
-                                                        <DeleteBtn 
-                                                            type='button'
-                                                            onClick={() => props.__handleEventControl().product().deleteOne(product.product.id)}
-                                                        >상품삭제</DeleteBtn>
+                                                        <div>
+                                                            <ModifyBtn
+                                                                type='button'
+                                                                onClick={() => props.__handleEventControl().product().modifyModalOpen(product.product.id)}
+                                                            >상품수정</ModifyBtn>
+                                                        </div>
+                                                        <div>
+
+                                                            <DeleteProductBtn
+                                                                type='button'
+                                                                onClick={() => props.__handleEventControl().product().deleteOne(product.product.id)}
+                                                            >상품삭제</DeleteProductBtn>
+                                                        </div>
                                                     </BodyTh>
                                                 }
 
@@ -137,7 +167,7 @@ const ProductManageBody = (props) => {
                                                     <div style={{ color: 'green' }}>[{product.category.name}]</div>
                                                     <div>{product.product.managementName}</div>
                                                     <div>
-                                                        <AddBtn type='button' onClick={()=>props.__handleEventControl().productOption().addModalOpen(product.product.id)}>옵션추가</AddBtn>
+                                                        <AddBtn type='button' onClick={() => props.__handleEventControl().productOption().addModalOpen(product.product.id)}>옵션추가</AddBtn>
                                                     </div>
                                                 </BodyTh>
                                             </tr>
@@ -145,14 +175,19 @@ const ProductManageBody = (props) => {
                                                 return (
                                                     <BodyTr
                                                         key={'subitem' + index2}
+                                                        onClick={() => props.__handleEventControl().checkedOptionList().checkOneTr(option.id)}
                                                         checked={props.__handleEventControl().checkedOptionList().isChecked(option.id)}
                                                     >
                                                         <BodyTd>
-                                                            <input
+                                                            <CheckboxShape
+                                                                checked={props.__handleEventControl().checkedOptionList().isChecked(option.id)}
+                                                            ></CheckboxShape>
+                                                            {/* 체크박스를 클릭해서 선택하게할때 사용가능 */}
+                                                            {/* <input
                                                                 type='checkbox'
                                                                 onChange={(e) => props.__handleEventControl().checkedOptionList().checkOne(e, option.id)}
                                                                 checked={props.__handleEventControl().checkedOptionList().isChecked(option.id)}
-                                                            ></input>
+                                                            ></input> */}
                                                         </BodyTd>
                                                         <BodyTd>{option.code}</BodyTd>
                                                         <BodyTd>{option.defaultName}</BodyTd>

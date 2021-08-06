@@ -462,6 +462,14 @@ const ProductManageMain = () => {
             },
             checkedOptionList: function () {
                 return {
+                    checkOneTr: function(optionId){
+                        if(checkedOptionList.includes(optionId)){
+                            setCheckedOptionList(checkedOptionList.filter(r => r !== optionId));
+                            
+                        }else{
+                            setCheckedOptionList(checkedOptionList.concat(optionId));
+                        }
+                    },
                     checkOne: function (e, optionId) {
                         if (e.target.checked) {
                             setCheckedOptionList(checkedOptionList.concat(optionId))

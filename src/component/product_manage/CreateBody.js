@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { browserName, CustomView, isMobile, isIOS, isSafari } from 'react-device-detect';
 
 import { numberWithCommas } from '../../handler/numberHandler';
 
@@ -21,9 +22,11 @@ const BackBtn = styled.button`
     box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
     transition: 0.4s;
     z-index: 999;
+    
     & .back-button-img{
         width:32px;
         filter: invert(100%) sepia(1%) saturate(3%) hue-rotate(90deg) brightness(113%) contrast(89%);
+        
     }
 
     &:hover{
@@ -405,28 +408,28 @@ const CreateBody = (props) => {
                                                                                     {optionIndex + 1}
                                                                                 </OptionTableTh>
                                                                                 <OptionTableTd>
-                                                                                    <button type='button' className='btn btn-outline-danger btn-sm' onClick={()=>props.__handleEventControl().productOptionListData().delete(r.id, optionData.id)}>X</button>
+                                                                                    <button type='button' className='btn btn-outline-danger btn-sm' onClick={() => props.__handleEventControl().productOptionListData().delete(r.id, optionData.id)}>X</button>
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
-                                                                                    <OptionInput type='text' value={optionData.defaultName} name='defaultName' onChange={(e)=>props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
+                                                                                    <OptionInput type='text' value={optionData.defaultName} name='defaultName' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
-                                                                                    <OptionInput type='text' value={optionData.managementName} name='managementName' onChange={(e)=>props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
+                                                                                    <OptionInput type='text' value={optionData.managementName} name='managementName' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
-                                                                                    <OptionInput type='text' value={optionData.code} name='code' onChange={(e)=>props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
+                                                                                    <OptionInput type='text' value={optionData.code} name='code' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
-                                                                                    <OptionInput type='number' value={optionData.salesPrice} name='salesPrice' onChange={(e)=>props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
+                                                                                    <OptionInput type='number' value={optionData.salesPrice} name='salesPrice' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
-                                                                                    <OptionInput type='number' value={optionData.stockUnit} name='stockUnit' onChange={(e)=>props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
+                                                                                    <OptionInput type='number' value={optionData.stockUnit} name='stockUnit' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
                                                                                     <OptionInput type='text' value={optionData.status} disabled></OptionInput>
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
-                                                                                    <OptionInput type='text' value={optionData.memo} name='memo' onChange={(e)=>props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
+                                                                                    <OptionInput type='text' value={optionData.memo} name='memo' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
                                                                                 </OptionTableTd>
                                                                             </tr>
                                                                         </React.Fragment>
