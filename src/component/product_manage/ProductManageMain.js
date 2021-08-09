@@ -17,7 +17,9 @@ import ProductModifyModal from './modal/ProductModifyModal';
 import ProductOptionModifyModal from './modal/ProductOptionModifyModal';
 import ProductOptionAddModal from './modal/ProductOptionAddModal';
 import ReleaseAddModal from './modal/ReleaseAddModal';
+import ReleaseStatusModal from './modal/ReleaseStatusModal';
 import ReceiveAddModal from './modal/ReceiveAddModal';
+import ReceiveStatusModal from './modal/ReceiveStatusModal';
 
 class ProductOption {
     constructor(productId, optionDefaultName = '', optionManagementName = '') {
@@ -104,10 +106,14 @@ const ProductManageMain = () => {
     const [releaseAddModalOpen, setReleaseAddModalOpen] = useState(false);
     const [releaseAddData, setReleaseAddData] = useState(null);
     const [releaseAddMemo, setReleaseAddMemo] = useState('');
+    const [releaseStatusModalOpen, setReleaseStatusModalOpen] = useState(false);
+    const [releaseStatusData, setReleaseStatusData] = useState(null);
 
     const [receiveAddModalOpen, setReceiveAddModalOpen] = useState(false);
     const [receiveAddData, setReceiveAddData] = useState(null);
     const [receiveAddMemo, setReceiveAddMemo] = useState('');
+    const [receiveStatusModalOpen, setReceiveStatusModalOpen] = useState(false);
+    const [receiveStatusData, setReceiveStatusData] = useState(null);
 
     useEffect(() => {
         async function fetchInit() {
@@ -153,6 +159,21 @@ const ProductManageMain = () => {
                     })
                     .catch(err => {
                         alert('undefined error. : searchCategoryList');
+                    })
+            },
+            searchReceiveStatusList: async function (productOptionCid) {
+                await productReceiveDataConnect().searchList(productOptionCid)
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            setReceiveStatusData(res.data.data);
+                        }
+                    })
+            },searchReleaseStatusList: async function (productOptionCid) {
+                await productReleaseDataConnect().searchList(productOptionCid)
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            setReleaseStatusData(res.data.data);
+                        }
                     })
             },
             changeProductOne: async function () {
@@ -596,6 +617,19 @@ const ProductManageMain = () => {
                     },
                     addDataOnChangeMemoValue: function(e){
                         setReleaseAddMemo(e.target.value);
+                    },
+                    releaseStatusModalOpen: async function (productId, optionId) {
+                        let product = productListData.filter(r => r.product.id === productId)[0];
+                        let option = product.options.filter(r => r.id === optionId)[0];
+                        let optionCid = option.cid;
+
+                        await __handleDataConnect().searchReleaseStatusList(optionCid);
+                            
+                        setReleaseStatusModalOpen(true);
+                    },
+                    releaseModalClose: function () {
+                        setReleaseStatusModalOpen(false);
+                        setReleaseAddData(null);
                     }
                 }
             },
@@ -634,7 +668,6 @@ const ProductManageMain = () => {
                     addDataOnChangeInputValue: function (e, receiveAddDataId) {
                         setReceiveAddData(receiveAddData.map(data => {
                             if (data.productReceive.id === receiveAddDataId) {
-
                                 return {
                                     ...data,
                                     productReceive: {
@@ -684,6 +717,19 @@ const ProductManageMain = () => {
                     },
                     addDataOnChangeMemoValue: function(e){
                         setReceiveAddMemo(e.target.value);
+                    },
+                    receiveStatusModalOpen: async function (productId, optionId) {
+                        let product = productListData.filter(r => r.product.id === productId)[0];
+                        let option = product.options.filter(r => r.id === optionId)[0];
+                        let optionCid = option.cid;
+
+                        await __handleDataConnect().searchReceiveStatusList(optionCid);
+                            
+                        setReceiveStatusModalOpen(true);
+                    },
+                    receiveModalClose: function () {
+                        setReceiveStatusModalOpen(false);
+                        setReceiveAddData(null);
                     }
                 }
             }
@@ -746,6 +792,22 @@ const ProductManageMain = () => {
 
                     __handleEventControl={__handleEventControl}
                 ></ReceiveAddModal>
+            }
+            {releaseStatusModalOpen && releaseStatusData &&
+                <ReleaseStatusModal
+                    open={releaseStatusModalOpen}
+                    releaseStatusData={releaseStatusData}
+
+                    __handleEventControl={__handleEventControl}
+                ></ReleaseStatusModal>
+            }
+            {receiveStatusModalOpen && receiveStatusData &&
+                <ReceiveStatusModal
+                    open={receiveStatusModalOpen}
+                    receiveStatusData={receiveStatusData}
+
+                    __handleEventControl={__handleEventControl}
+                ></ReceiveStatusModal>
             }
         </>
     );

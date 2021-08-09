@@ -8,6 +8,11 @@ const productReleaseDataConnect = () => {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-release/list`, data,{
                 withCredentials: true
             })
+        },
+        searchList: async function(productOptionCid) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-release/list/${productOptionCid}`,{
+                withCredentials: true
+            })
         }
     }
 }

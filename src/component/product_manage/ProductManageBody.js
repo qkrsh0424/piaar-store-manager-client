@@ -73,7 +73,26 @@ const DeleteBtn = styled.button`
     border-radius: 3px;
     font-weight: 600;
     margin-left: 5px;
+`;
 
+const ReceiveBtn = styled.button`
+    padding:3px 8px;
+    background: #99CCCC;
+    color:white;
+    border:1px solid #99CCCC;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-left: 5px;
+`;
+
+const ReleaseBtn = styled.button`
+    padding:3px 8px;
+    background: #FF9966;
+    color:white;
+    border:1px solid #FF9966;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-left: 5px;
 `;
 
 const DeleteProductBtn = styled.button`
@@ -135,7 +154,7 @@ const ProductManageBody = (props) => {
                                     <HeaderTh className='fixedHeader' scope="col" width='100'>현재상태</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='200'>가격</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='300'>비고</HeaderTh>
-                                    <HeaderTh className='fixedHeader' scope="col" width='200'>옵션컨트롤</HeaderTh>
+                                    <HeaderTh className='fixedHeader' scope="col" width='400'>옵션컨트롤</HeaderTh>
                                 </tr>
                             </thead>
                             <tbody>
@@ -211,6 +230,14 @@ const ProductManageBody = (props) => {
                                                                 type='button'
                                                                 onClick={() => props.__handleEventControl().productOption().deleteOne(product.product.id, option.id)}
                                                             >옵션삭제</DeleteBtn>
+                                                            <ReceiveBtn
+                                                                type='button'
+                                                                onClick={() => props.__handleEventControl().receive().receiveStatusModalOpen(product.product.id, option.id)}
+                                                            >입고현황</ReceiveBtn>
+                                                            <ReleaseBtn
+                                                                type='button'
+                                                                onClick={() => props.__handleEventControl().release().releaseStatusModalOpen(product.product.id, option.id)}
+                                                            >출고현황</ReleaseBtn>
                                                         </BodyTd>
                                                     </BodyTr>
                                                 )
