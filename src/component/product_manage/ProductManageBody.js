@@ -224,19 +224,19 @@ const ProductManageBody = (props) => {
                                                         <BodyTd style={{ fontWeight: '800' }}>
                                                             <ModifyBtn
                                                                 type='button'
-                                                                onClick={() => props.__handleEventControl().productOption().modifyModalOpen(product.product.id, option.id)}
+                                                                onClick={(e) => props.__handleEventControl().productOption().modifyModalOpen(e, product.product.id, option.id)}
                                                             >옵션수정</ModifyBtn>
                                                             <DeleteBtn
                                                                 type='button'
-                                                                onClick={() => props.__handleEventControl().productOption().deleteOne(product.product.id, option.id)}
+                                                                onClick={(e) => props.__handleEventControl().productOption().deleteOne(e, product.product.id, option.id)}
                                                             >옵션삭제</DeleteBtn>
                                                             <ReceiveBtn
                                                                 type='button'
-                                                                onClick={() => props.__handleEventControl().receive().receiveStatusModalOpen(product.product.id, option.id)}
+                                                                onClick={(e) => props.__handleEventControl().receive().receiveStatusModalOpen(e, product.product.id, option.id)}
                                                             >입고현황</ReceiveBtn>
                                                             <ReleaseBtn
                                                                 type='button'
-                                                                onClick={() => props.__handleEventControl().release().releaseStatusModalOpen(product.product.id, option.id)}
+                                                                onClick={(e) => props.__handleEventControl().release().releaseStatusModalOpen(e, product.product.id, option.id)}
                                                             >출고현황</ReleaseBtn>
                                                         </BodyTd>
                                                     </BodyTr>

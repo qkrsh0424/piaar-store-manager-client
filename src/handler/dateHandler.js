@@ -44,7 +44,7 @@ function dateToYYYYMMDDhhmmssFile(idate){
 
 function dateToYYMMDDhhmmss(idate) {
     var date = new Date(idate);
-    return moment(date).format("YY/MM/DD HH:mm");
+    return moment(date).format("YY/MM/DD HH:mm:ss");
 }
 
 function dateToYYMMDD(idate){

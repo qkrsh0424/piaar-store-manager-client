@@ -106,12 +106,14 @@ const ProductManageMain = () => {
     const [releaseAddModalOpen, setReleaseAddModalOpen] = useState(false);
     const [releaseAddData, setReleaseAddData] = useState(null);
     const [releaseAddMemo, setReleaseAddMemo] = useState('');
+
     const [releaseStatusModalOpen, setReleaseStatusModalOpen] = useState(false);
     const [releaseStatusData, setReleaseStatusData] = useState(null);
 
     const [receiveAddModalOpen, setReceiveAddModalOpen] = useState(false);
     const [receiveAddData, setReceiveAddData] = useState(null);
     const [receiveAddMemo, setReceiveAddMemo] = useState('');
+
     const [receiveStatusModalOpen, setReceiveStatusModalOpen] = useState(false);
     const [receiveStatusData, setReceiveStatusData] = useState(null);
 
@@ -168,12 +170,18 @@ const ProductManageMain = () => {
                             setReceiveStatusData(res.data.data);
                         }
                     })
+                    .catch(err=>{
+                        alert('undefined error.');
+                    })
             },searchReleaseStatusList: async function (productOptionCid) {
                 await productReleaseDataConnect().searchList(productOptionCid)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setReleaseStatusData(res.data.data);
                         }
+                    })
+                    .catch(err=>{
+                        alert('undefined error.')
                     })
             },
             changeProductOne: async function () {
@@ -411,7 +419,8 @@ const ProductManageMain = () => {
                         }
                         return true;
                     },
-                    modifyModalOpen: function (productId, optionId) {
+                    modifyModalOpen: function (e, productId, optionId) {
+                        e.stopPropagation();
                         let product = productListData.filter(r => r.product.id === productId)[0];
                         let option = product.options.filter(r => r.id === optionId)[0];
 
@@ -468,7 +477,8 @@ const ProductManageMain = () => {
                             options: productModifyData.options.filter(option => option.id !== optionId)
                         })
                     },
-                    deleteOne: async function (productId, productOptionId) {
+                    deleteOne: async function (e, productId, productOptionId) {
+                        e.stopPropagation();
                         if (window.confirm('정말로 삭제하시겠습니까?')) {
                             let product = productListData.filter(r => r.product.id === productId)[0];
                             let option = product.options.filter(r => r.id === productOptionId)[0];
@@ -618,7 +628,8 @@ const ProductManageMain = () => {
                     addDataOnChangeMemoValue: function(e){
                         setReleaseAddMemo(e.target.value);
                     },
-                    releaseStatusModalOpen: async function (productId, optionId) {
+                    releaseStatusModalOpen: async function (e, productId, optionId) {
+                        e.stopPropagation();
                         let product = productListData.filter(r => r.product.id === productId)[0];
                         let option = product.options.filter(r => r.id === optionId)[0];
                         let optionCid = option.cid;
@@ -718,7 +729,8 @@ const ProductManageMain = () => {
                     addDataOnChangeMemoValue: function(e){
                         setReceiveAddMemo(e.target.value);
                     },
-                    receiveStatusModalOpen: async function (productId, optionId) {
+                    receiveStatusModalOpen: async function (e, productId, optionId) {
+                        e.stopPropagation();
                         let product = productListData.filter(r => r.product.id === productId)[0];
                         let option = product.options.filter(r => r.id === optionId)[0];
                         let optionCid = option.cid;

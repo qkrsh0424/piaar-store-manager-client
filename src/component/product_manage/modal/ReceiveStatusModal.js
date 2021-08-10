@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 
+import { dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
 const Container = styled.div`
 `;
 
@@ -58,11 +59,7 @@ const ReceiveStatusModal = (props) => {
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('lg');
 
-    const onClose = () => {
-        props.__handleEventControl().receive().receiveModalClose();
-    }
-
-    return(
+    return (
         <>
             <Dialog
                 fullWidth={fullWidth}
@@ -73,7 +70,7 @@ const ReceiveStatusModal = (props) => {
                 <Container>
                     <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
                         <GroupTitle>입고현황
-                            <IconButton aria-label="close" className="closeButton" onClick={onClose}>
+                            <IconButton aria-label="close" className="closeButton" onClick={()=>props.__handleEventControl().receive().receiveModalClose()}>
                                 <CloseIcon />
                             </IconButton>
                         </GroupTitle>
@@ -89,12 +86,15 @@ const ReceiveStatusModal = (props) => {
                                     <span>메모</span>
                                 </div>
                             </ReceiveLi>
-                            {props && props.receiveStatusData.map((data) => {
+                            {props.receiveStatusData?.map((data) => {
                                 return (
-                                    <ReceiveLi className="input-group mb-3">
+                                    <ReceiveLi 
+                                        key={data.id}
+                                        className="input-group mb-3"
+                                    >
                                         <ModalText className="form-control">
                                             <span>
-                                                {(data.createdAt).substring(0, 10)}
+                                                {dateToYYMMDDhhmmss(data.createdAt)}
                                             </span>
                                         </ModalText>
                                         <ModalText className="form-control">
