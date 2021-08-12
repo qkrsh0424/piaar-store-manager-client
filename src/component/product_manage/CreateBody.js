@@ -323,10 +323,9 @@ const CreateBody = (props) => {
             </BackBtn>
             <Container className='container'>
                 <form onSubmit={(e) => props.__handleEventControl().productListData().submit(e)}>
-
-                    <CreateBtn type='submit'>
-                        <img className='button-img' src='/images/icon/add.png'></img>
-                    </CreateBtn>
+                <CreateBtn type='submit'>
+                    <img className='button-img' src='/images/icon/add.png'></img>
+                </CreateBtn>
                     {props.productListData && props.productListData.map(r => {
                         return (
                             <ItemContainer key={r.id}>
@@ -390,7 +389,8 @@ const CreateBody = (props) => {
                                                     <div className="input-group-prepend">
                                                         <label htmlFor="image-file-upload" className="input-group-text imageUploadFor">이미지 업로드</label>
                                                     </div>
-                                                    <UploadInputEl id="image-file-upload" type="file" accept="image/*" onClick={(e) => e.target.value=''} onChange={(e) => props.__handleEventControl().productListData().postUploadImageFile(r.id, e)} />
+                                                    <UploadInputEl id="image-file-upload" type="file" accept="image/*" onClick={(e) => e.target.value=''} onChange={(e) => props.__handleEventControl().productListData().postUploadImageFile(r.id, e)}/>
+                                                    <input type='file' id='i_uploader' hidden></input>
                                                     <CommonInputEl id="image-file-text" type="text" className='form-control' name='imageFile' value={r.imageFileName} disabled />
                                                     <div className="input-group-prepend">
                                                         <button className="btn btn-outline-secondary" type="button" onClick={() => props.__handleEventControl().productListData().deleteImageFile(r.id)}>삭제</button>

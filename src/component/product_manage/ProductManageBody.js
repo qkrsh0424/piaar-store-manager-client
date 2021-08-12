@@ -166,7 +166,7 @@ const ProductManageBody = (props) => {
                                         <HeaderTh className='fixedHeader' scope="col" width='100'>컨트롤</HeaderTh>
                                     }
                                     <HeaderTh className='fixedHeader' scope="col" width='250'>상품식별코드</HeaderTh>
-                                    <HeaderTh className='fixedHeader' scope="col" width='200'>상품이미지</HeaderTh>
+                                    <HeaderTh className='fixedHeader' scope="col" width='140'>상품이미지</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='200'>상품관리명</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='50'>
                                         <input type='checkbox' onChange={() => props.__handleEventControl().checkedOptionList().checkAll()} checked={props.__handleEventControl().checkedOptionList().isCheckedAll()}></input>
