@@ -155,6 +155,7 @@ const FormAddBtnEl = styled.button`
 
 const BodyWrapper = styled.div`
     padding:0 10px;
+    overflow: auto;
 
     .icon-dot, .icon-must {
         display: inline-block;
@@ -219,6 +220,10 @@ const CommonInputEl = styled.input`
         border: 1px solid #4662B4;
         background: white;
     }
+
+    & .imageUploadFor{
+        cursor: pointer;
+    }
 `;
 
 const NameGroup = styled.div`
@@ -275,6 +280,41 @@ const OptionInput = styled.input`
     width:100%;
     padding:5px;
 `;
+
+const UploadInputEl = styled.input`
+    display: none;
+`;
+
+const ImageWrapper = styled.div`
+   width:25%;
+   height:auto;
+   padding: 20px 15px;
+   margin-right: 20px;
+   float:right;
+
+   @media only screen and (max-width:992px){
+        width:35%;
+   }
+    @media only screen and (max-width:425px){
+        width:50%;
+    }
+`;
+
+const ImageBox = styled.div`
+   position: relative;
+   padding-bottom: 100%; // 1:1
+`;
+ 
+const ImageEl = styled.img`
+   position: absolute;
+   object-fit: cover;
+   width: 100%;
+   height: 100%;
+   transition: .5s;
+   border:1px solid #f1f1f1;
+   border-radius: 8px;
+`;
+
 const CreateBody = (props) => {
     return (
         <>
@@ -337,10 +377,37 @@ const CreateBody = (props) => {
                                                     </div>
                                                     <CommonInputEl type="text" className='form-control' name='memo' value={r.memo} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
 
+                                                
                                                 </div>
                                             </NameGroup>
 
                                         </BodyWrapper>
+
+                                        <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
+                                            <GroupTitle>상품 이미지</GroupTitle>
+                                            <KeyGroup>
+                                                <div className="input-group mb-3">
+                                                    <div className="input-group-prepend">
+                                                        <label htmlFor="image-file-upload" className="input-group-text imageUploadFor">이미지 업로드</label>
+                                                    </div>
+                                                    <UploadInputEl id="image-file-upload" type="file" accept="image/*" onClick={(e) => e.target.value=''} onChange={(e) => props.__handleEventControl().productListData().postUploadImageFile(r.id, e)} />
+                                                    <CommonInputEl id="image-file-text" type="text" className='form-control' name='imageFile' value={r.imageFileName} disabled />
+                                                    <div className="input-group-prepend">
+                                                        <button className="btn btn-outline-secondary" type="button" onClick={() => props.__handleEventControl().productListData().deleteImageFile(r.id)}>삭제</button>
+                                                    </div>
+                                                </div>
+                                                <ImageWrapper>
+                                                    <ImageBox>
+                                                        {r.imageUrl ?
+                                                            <ImageEl name='imageFile' src={r.imageUrl} title={r.imageFileName} />
+                                                            :
+                                                            <ImageEl name='imageFile' src='/images/icon/no-image.jpg' title='no-image' />
+                                                        }
+                                                    </ImageBox>
+                                                </ImageWrapper>
+                                            </KeyGroup>
+                                        </BodyWrapper>
+
                                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
                                             <GroupTitle>상품식별번호</GroupTitle>
                                             <KeyGroup>

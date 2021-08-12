@@ -305,6 +305,18 @@ const ProductManageMain = () => {
                         }
                     })
                     ;
+            },
+            postUploadImageFileToCloud: async function(e) {
+                await productDataConnect().postUploadImageFileToCloud(e)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            __handleEventControl().product().uploadImageInfo(res.data.data[0]);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        alert('undefined error. : uploadFilesToCloud');
+                    })
             }
         }
     }
@@ -369,6 +381,20 @@ const ProductManageMain = () => {
                         }
 
                         return true;
+                    },
+                    postUploadImageFile: async function (e) {
+                        e.preventDefault();
+                        
+                        // 파일을 선택하지 않은 경우
+                        if(e.target.files.length == 0) return;
+
+                        await __handleDataConnect().postUploadImageFileToCloud(e);
+                    },
+                    uploadImageInfo: function (data) {
+                        setProductModifyData({...productModifyData, imageFileName: data.fileName, imageUrl: data.fileUploadUri});
+                    },
+                    deleteImageFile: function () {
+                        setProductModifyData({...productModifyData, imageFileName: '', imageUrl: ''});
                     }
                 }
             },

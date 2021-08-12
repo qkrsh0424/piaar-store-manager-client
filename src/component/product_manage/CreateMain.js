@@ -76,6 +76,8 @@ const CreateMain = (props) => {
     const [productListData, setProductListData] = useState([
         new Product('단일상품', '단일상품').toJSON()
     ]);
+    const [fileData, setFileData] = useState(null);
+    const [productImageId, setProductImageId] = useState(null);
 
     useEffect(() => {
         async function fetchInit() {
@@ -99,17 +101,42 @@ const CreateMain = (props) => {
                     })
             },
             postCreateProductList: async function(){
-                await productDataConnect().postCreateList(productListData)
-                    .then(res=>{
-                        if (res.status == 200 && res.data && res.data.message == 'success') {
-                            props.history.replace('/products');
+                console.log(productListData);
+                // await productDataConnect().postCreateList(productListData)
+                //     .then(res=>{
+                //         if (res.status == 200 && res.data && res.data.message == 'success') {
+                //             props.history.replace('/products');
+                //         }
+                //     })
+                //     .catch(err=>{
+                //         console.log(err);
+                //         alert('undefined error. : postCreateProductList');
+                //     })
+                // ;
+            },
+            // postUploadImageFileToCloud: async function(productId, e) {
+            //     await productDataConnect().postUploadImageFileToCloud(e)
+            //         .then(res => {
+            //             if (res.status === 200 && res.data && res.data.message === 'success') {
+            //                 __handleEventControl().productListData().uploadImageInfo(productId, res.data.data[0]);
+            //             }
+            //         })
+            //         .catch(err => {
+            //             console.log(err);
+            //             alert('undefined error. : uploadFilesToCloud');
+            //         })
+            // }
+            postUploadImageFileToCloud: async function() {
+                return await productDataConnect().postUploadImageFileToCloud(fileData)
+                    .then((res) => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            __handleEventControl().productListData().uploadImage(res.data.data[0]);
                         }
                     })
-                    .catch(err=>{
+                    .catch(err => {
                         console.log(err);
-                        alert('undefined error. : postCreateProductList');
+                        alert('undefined error. : uploadFilesToCloud');
                     })
-                ;
             }
         }
     }
@@ -141,6 +168,7 @@ const CreateMain = (props) => {
                     },
                     onChangeInputValue: function (productId, e) {
                         setProductListData(productListData.map(r => {
+                            console.log(r);
                             return (
                                 r.id === productId ?
                                     {
@@ -154,8 +182,14 @@ const CreateMain = (props) => {
                     },
                     submit: async function (e) {
                         e.preventDefault();
+                        await __handleDataConnect().postUploadImageFileToCloud(productImageId, fileData)
+                            .then(res=>{
+                                console.log(res);
+                            })
+                        ;
+                        
                         if(this.checkFormData()){
-                            await __handleDataConnect().postCreateProductList();
+                            // await __handleDataConnect().postCreateProductList();
                         }
                     },
                     checkFormData: function () {
@@ -193,6 +227,65 @@ const CreateMain = (props) => {
                             }
                         }
                         return true;
+                    },
+                    postUploadImageFile: async function (productId, e) {
+                        e.preventDefault();
+                        
+                        // 파일을 선택하지 않은 경우
+                        if(e.target.files.length == 0) return;
+
+                        let reader = new FileReader();
+                        reader.onloadend = () => {
+                            setFileData(e)
+                            setProductImageId(productId);
+                            __handleEventControl().productListData().uploadImageInfo(productId, e.target.files[0], reader);
+                          };
+                          reader.readAsDataURL(e.target.files[0]);
+    
+                        // await __handleDataConnect().postUploadImageFileToCloud(productId, e);
+                    },
+                    uploadImageInfo: function (productId, data, reader) {
+                        setProductListData(productListData.map(r => {
+                            return (
+                                r.id === productId ?
+                                    {
+                                        ...r,
+                                        imageFileName: data.name,
+                                        imageUrl: reader.result
+                                    }
+                                    :
+                                    r
+                            )
+                        }))
+                    },
+                    uploadImage: async function (data) {
+                        await setProductListData(productListData.map(r => {
+                            return (
+                                r.id === productImageId ?
+                                    {
+                                        ...r,
+                                        imageFileName: data.fileName,
+                                        imageUrl: data.fileUploadUri
+                                    }
+                                    :
+                                    r
+                            )
+                        }))
+                        console.log(productListData);
+                    },
+                    deleteImageFile: function (productId) {
+                        setProductListData(productListData.map(r => {
+                            return (
+                                r.id === productId ?
+                                    {
+                                    ...r,
+                                    imageFileName: '',
+                                    imageUrl: ''
+                                    }
+                                    :
+                                    r
+                            )
+                        }))
                     }
                 }
             },

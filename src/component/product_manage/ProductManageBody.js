@@ -18,6 +18,7 @@ const TableContainer = styled.div`
         position: sticky;
         top: -1px;
         background: #f1f1f1;
+        z-index:10;
     }
 
     @media only screen and (max-width:768px){
@@ -128,6 +129,28 @@ const CheckboxShape = styled.div`
 const RowSpanTr = styled.tr`
     
 `;
+
+const ImageWrapper = styled.div`
+   width:100%;
+   height:auto;
+   padding: 10px 15px;
+`;
+
+const ImageBox = styled.div`
+   position: relative;
+   padding-bottom: 100%; // 1:1
+`;
+ 
+const ImageEl = styled.img`
+   position: absolute;
+   object-fit: cover;
+   width: 100%;
+   height: 100%;
+   transition: .5s;
+   border:1px solid #f1f1f1;
+   border-radius: 8px;
+`;
+
 const ProductManageBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
@@ -143,6 +166,7 @@ const ProductManageBody = (props) => {
                                         <HeaderTh className='fixedHeader' scope="col" width='100'>컨트롤</HeaderTh>
                                     }
                                     <HeaderTh className='fixedHeader' scope="col" width='250'>상품식별코드</HeaderTh>
+                                    <HeaderTh className='fixedHeader' scope="col" width='200'>상품이미지</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='200'>상품관리명</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='50'>
                                         <input type='checkbox' onChange={() => props.__handleEventControl().checkedOptionList().checkAll()} checked={props.__handleEventControl().checkedOptionList().isCheckedAll()}></input>
@@ -185,9 +209,20 @@ const ProductManageBody = (props) => {
                                                     <div>Code : {product.product.code}</div>
                                                     <div>M_Code : {product.product.manufacturingCode}</div>
                                                 </BodyTh>
+                                                <BodyTh style={{ textAlign: 'left' }} rowSpan={product.options.length + 1}>
+                                                    <ImageWrapper>
+                                                        <ImageBox>
+                                                            {product.product.imageUrl ? 
+                                                                <ImageEl src={product.product.imageUrl} title={product.product.imageFileName} />
+                                                                :
+                                                                <ImageEl src='/images/icon/no-image.jpg' title='no-image' />
+                                                            }
+                                                        </ImageBox>
+                                                    </ImageWrapper>
+                                                </BodyTh>
                                                 <BodyTh rowSpan={product.options.length + 1}>
                                                     <div style={{ color: 'green' }}>[{product.category.name}]</div>
-                                                    <div>{product.product.managementName}</div>
+                                                    <div>{product.product.imageFileUri}</div>
                                                     <div>
                                                         <AddBtn type='button' onClick={() => props.__handleEventControl().productOption().addModalOpen(product.product.id)}>옵션추가</AddBtn>
                                                     </div>
