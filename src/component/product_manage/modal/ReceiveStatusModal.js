@@ -46,6 +46,10 @@ const NameGroup = styled.ul`
 `;
 
 const ReceiveLi = styled.li`
+    & .form-title{
+        background-color: #ced4da;
+        border: 1px solid #bdbdbd;
+    }
 `;
 
 const ModalText = styled.div`
@@ -76,13 +80,13 @@ const ReceiveStatusModal = (props) => {
                         </GroupTitle>
                         <NameGroup>
                             <ReceiveLi className="input-group mb-3">
-                                <div className="form-control">
+                                <div className="form-control form-title">
                                     <span>입고 날짜</span>
                                 </div>
-                                <div className="form-control">
+                                <div className="form-control form-title">
                                     <span>입고 개수</span>
                                 </div>
-                                <div className="form-control">
+                                <div className="form-control form-title">
                                     <span>메모</span>
                                 </div>
                             </ReceiveLi>

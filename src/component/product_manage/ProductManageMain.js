@@ -20,6 +20,7 @@ import ReleaseAddModal from './modal/ReleaseAddModal';
 import ReleaseStatusModal from './modal/ReleaseStatusModal';
 import ReceiveAddModal from './modal/ReceiveAddModal';
 import ReceiveStatusModal from './modal/ReceiveStatusModal';
+import ImageUploadLoading from '../loading/ImageUploadLoading';
 
 class ProductOption {
     constructor(productId, optionDefaultName = '', optionManagementName = '') {
@@ -116,6 +117,8 @@ const ProductManageMain = () => {
 
     const [receiveStatusModalOpen, setReceiveStatusModalOpen] = useState(false);
     const [receiveStatusData, setReceiveStatusData] = useState(null);
+
+    const [imageLoading, setImageLoading] = useState(false);
 
     useEffect(() => {
         async function fetchInit() {
@@ -384,6 +387,8 @@ const ProductManageMain = () => {
                     },
                     postUploadImageFile: async function (e) {
                         e.preventDefault();
+
+                        setImageLoading(true);
                         
                         // 파일을 선택하지 않은 경우
                         if(e.target.files.length == 0) return;
@@ -392,9 +397,13 @@ const ProductManageMain = () => {
                     },
                     uploadImageInfo: function (data) {
                         setProductModifyData({...productModifyData, imageFileName: data.fileName, imageUrl: data.fileUploadUri});
+                        setImageLoading(false);
                     },
                     deleteImageFile: function () {
                         setProductModifyData({...productModifyData, imageFileName: '', imageUrl: ''});
+                    },
+                    onClickImageButton: function () {
+                        document.getElementById("image-file-upload").click();
                     }
                 }
             },
@@ -777,6 +786,7 @@ const ProductManageMain = () => {
     return (
         <>
             <DrawerNavbarMain></DrawerNavbarMain>
+            <ImageUploadLoading open={imageLoading} />
             <ProductManageNav
                 __handleEventControl={__handleEventControl}
             ></ProductManageNav>
@@ -795,7 +805,8 @@ const ProductManageMain = () => {
                     productModifyData={productModifyData}
 
                     __handleEventControl={__handleEventControl}
-                ></ProductModifyModal>
+                >
+                </ProductModifyModal>
             }
             {productOptionModifyModalOpen && productOptionModifyData &&
                 <ProductOptionModifyModal

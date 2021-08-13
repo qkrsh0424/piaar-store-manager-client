@@ -109,11 +109,6 @@ const CommonInputEl = styled.input`
         border: 1px solid #4662B4;
         background: white;
     }
-
-    & .imageUploadFor{
-        opacity: 0.8;
-        cursor: pointer;
-    }
 `;
 
 const KeyGroup = styled.div`
@@ -180,12 +175,15 @@ const UploadInputEl = styled.input`
     display: none;
 `;
 
+const ImageBox = styled.div`
+   position: relative;
+   padding-bottom: 100%; // 1:1
+`;
+
 const ImageWrapper = styled.div`
    width:25%;
    height:auto;
-   padding: 20px 15px;
-   margin-right: 20px;
-   float:right;
+   padding: 10px 10px;
 
    @media only screen and (max-width:992px){
         width:35%;
@@ -193,28 +191,34 @@ const ImageWrapper = styled.div`
     @media only screen and (max-width:425px){
         width:50%;
     }
+
+    &:hover {
+        ${ImageBox} {
+            opacity: 0.3;
+        }
+    }
 `;
 
-const ImageBox = styled.div`
-   position: relative;
-   padding-bottom: 100%; // 1:1
-`;
- 
 const ImageEl = styled.img`
    position: absolute;
    object-fit: cover;
-   width: 100%;
-   height: 100%;
+   width: 90%;
    transition: .5s;
    border:1px solid #f1f1f1;
    border-radius: 8px;
+   cursor: pointer;
+`;
+
+const ImageDeleteBtn = styled.button`
+    color: #dc3545;
+    border: 1px solid #ced4da;
 `;
 
 const ProductModifyModal = (props) => {
 
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('lg');
-    
+
     return (
         <>
             <Dialog
@@ -224,7 +228,7 @@ const ProductModifyModal = (props) => {
                 onClose={() => props.__handleEventControl().product().modifyModalClose()}
             >
                 <Container>
-                    <form onSubmit={(e)=>props.__handleEventControl().product().submitModifyData(e)}>
+                    <form onSubmit={(e) => props.__handleEventControl().product().submitModifyData(e)}>
                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
                             <GroupTitle>카테고리 <i className="icon-must" aria-label="필수항목"></i></GroupTitle>
                             <CategoryGroup className='mb-3'>
@@ -291,31 +295,6 @@ const ProductModifyModal = (props) => {
                         </BodyWrapper>
 
                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
-                            <GroupTitle>상품 이미지</GroupTitle>
-                            <KeyGroup>
-                                <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <label htmlFor="image-file-upload" className="input-group-text imageUploadFor">이미지 업로드</label>
-                                    </div>
-                                    <UploadInputEl id="image-file-upload" type="file" accept="image/*" onClick={(e) => e.target.value = ''} onChange={(e) => props.__handleEventControl().product().postUploadImageFile(e)} />
-                                    <CommonInputEl id="image-file-text" type="text" className='form-control' name='imageFile' value={props.productModifyData.imageFileName} disabled />
-                                    <div className="input-group-prepend">
-                                        <button className="btn btn-outline-secondary" type="button" onClick={() => props.__handleEventControl().product().deleteImageFile()}>삭제</button>
-                                    </div>
-                                </div>
-                                <ImageWrapper>
-                                    <ImageBox>
-                                        {props.productModifyData.imageUrl ?
-                                            <ImageEl name='imageFile' src={props.productModifyData.imageUrl} title={props.productModifyData.imageFileName} />
-                                            :
-                                            <ImageEl name='imageFile' src='/images/icon/no-image.jpg' title='no-image' />
-                                        }
-                                    </ImageBox>
-                                </ImageWrapper>
-                            </KeyGroup>
-                        </BodyWrapper>
-
-                        <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
                             <GroupTitle>상품식별번호</GroupTitle>
                             <KeyGroup>
                                 <div className="input-group mb-3">
@@ -339,6 +318,33 @@ const ProductModifyModal = (props) => {
                                 </div>
                             </KeyGroup>
                         </BodyWrapper>
+
+                        <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
+                            <GroupTitle>상품 이미지</GroupTitle>
+                            <KeyGroup>
+                                <div className="input-group mb-3">
+                                    <UploadInputEl id="image-file-upload" type="file" accept="image/*" onClick={(e) => e.target.value = ''} onChange={(e) => props.__handleEventControl().product().postUploadImageFile(e)} />
+                                    {props.productModifyData.imageUrl ?
+                                        <div className="input-group-prepend">
+                                            <ImageDeleteBtn className="btn btn-outline-secondary" type="button" onClick={() => props.__handleEventControl().product().deleteImageFile()}>삭제</ImageDeleteBtn>
+                                        </div>
+                                        :
+                                        <></>
+                                    }
+                                </div>
+                                <ImageWrapper>
+                                    <ImageBox>
+                                        {props.productModifyData.imageUrl ?
+                                            <ImageEl name='imageFile' src={props.productModifyData.imageUrl} title={props.productModifyData.imageFileName} onClick={() => props.__handleEventControl().product().onClickImageButton()} />
+                                            :
+                                            <ImageEl name='imageFile' src='/images/icon/no-image.jpg' title='no-image' onClick={() => props.__handleEventControl().product().onClickImageButton()} />
+                                        }
+                                    </ImageBox>
+                                </ImageWrapper>
+
+                            </KeyGroup>
+                        </BodyWrapper>
+
                         <BodyWrapper>
                             <SubmitBtnGroup className='clearfix'>
                                 <SubmitBtn type='submit'>수정하기</SubmitBtn>

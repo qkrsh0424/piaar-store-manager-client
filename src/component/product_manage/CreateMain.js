@@ -7,6 +7,7 @@ import { productCategoryDataConnect } from "../../data_connect/productCategoryDa
 import { productDataConnect } from '../../data_connect/productDataConnect';
 // component
 import CreateBody from "./CreateBody";
+import ImageUploadLoading from "../loading/ImageUploadLoading"
 
 class Product {
     constructor(optionDefaultName = '', optionManagementName = '') {
@@ -76,6 +77,7 @@ const CreateMain = (props) => {
     const [productListData, setProductListData] = useState([
         new Product('단일상품', '단일상품').toJSON()
     ]);
+    const [imageLoading, setImageLoading] = useState(false);
     
     useEffect(() => {
         async function fetchInit() {
@@ -84,7 +86,6 @@ const CreateMain = (props) => {
 
         fetchInit();
     }, []);
-
     
     const __handleDataConnect = () => {
         return {
@@ -215,6 +216,8 @@ const CreateMain = (props) => {
                         // 파일을 선택하지 않은 경우
                         if (e.target.files.length == 0) return;
 
+                        setImageLoading(true);
+                        
                         await __handleDataConnect().postUploadImageFileToCloud(productId, e);
                     },
                     uploadImageInfo: function (productId, data) {
@@ -230,6 +233,8 @@ const CreateMain = (props) => {
                                     r
                             )
                         }))
+
+                        setImageLoading(false);
                     },
                     deleteImageFile: function (productId) {
                         setProductListData(productListData.map(r => {
@@ -244,6 +249,9 @@ const CreateMain = (props) => {
                                     r
                             )
                         }))
+                    },
+                    onClickImageButton: function (productId) {
+                        document.getElementById("i_pm_cb_uploader_" + productId).click();
                     }
                 }
             },
@@ -307,6 +315,7 @@ const CreateMain = (props) => {
 
     return (
         <>
+            <ImageUploadLoading open={imageLoading} />
             <CreateBody
                 categoryList={categoryListSample}
                 productListData={productListData}

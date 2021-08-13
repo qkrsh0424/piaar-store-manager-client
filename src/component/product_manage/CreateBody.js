@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import { browserName, CustomView, isMobile, isIOS, isSafari } from 'react-device-detect';
 
 import { numberWithCommas } from '../../handler/numberHandler';
+import { ContactPhoneOutlined } from '@material-ui/icons';
 
 const Container = styled.div`
     margin-top: 80px;
@@ -155,7 +156,6 @@ const FormAddBtnEl = styled.button`
 
 const BodyWrapper = styled.div`
     padding:0 10px;
-    overflow: auto;
 
     .icon-dot, .icon-must {
         display: inline-block;
@@ -220,10 +220,6 @@ const CommonInputEl = styled.input`
         border: 1px solid #4662B4;
         background: white;
     }
-
-    & .imageUploadFor{
-        cursor: pointer;
-    }
 `;
 
 const NameGroup = styled.div`
@@ -285,12 +281,15 @@ const UploadInputEl = styled.input`
     display: none;
 `;
 
+const ImageBox = styled.div`
+   position: relative;
+   padding-bottom: 100%; // 1:1
+`;
+
 const ImageWrapper = styled.div`
    width:25%;
    height:auto;
-   padding: 20px 15px;
-   margin-right: 20px;
-   float:right;
+   padding: 10px 10px;
 
    @media only screen and (max-width:992px){
         width:35%;
@@ -298,21 +297,27 @@ const ImageWrapper = styled.div`
     @media only screen and (max-width:425px){
         width:50%;
     }
+
+    &:hover {
+        ${ImageBox} {
+            opacity: 0.3;
+        }
+    }
 `;
 
-const ImageBox = styled.div`
-   position: relative;
-   padding-bottom: 100%; // 1:1
-`;
- 
 const ImageEl = styled.img`
    position: absolute;
    object-fit: cover;
-   width: 100%;
-   height: 100%;
+   width: 90%;
    transition: .5s;
    border:1px solid #f1f1f1;
    border-radius: 8px;
+   cursor: pointer;
+`;
+
+const ImageDeleteBtn = styled.button`
+    color: #dc3545;
+    border: 1px solid #ced4da;
 `;
 
 const CreateBody = (props) => {
@@ -374,38 +379,11 @@ const CreateBody = (props) => {
                                                             메모
                                                         </span>
                                                     </div>
-                                                    <CommonInputEl type="text" className='form-control' name='memo' value={r.memo} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+                                                    <CommonInputEl type="text" className='form-control' name='memo' value={r.memo} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)}/>
 
                                                 
                                                 </div>
                                             </NameGroup>
-
-                                        </BodyWrapper>
-
-                                        <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
-                                            <GroupTitle>상품 이미지</GroupTitle>
-                                            <KeyGroup>
-                                                <div className="input-group mb-3">
-                                                    <div className="input-group-prepend">
-                                                        <label htmlFor="image-file-upload" className="input-group-text imageUploadFor">이미지 업로드</label>
-                                                    </div>
-                                                    <UploadInputEl id="image-file-upload" type="file" accept="image/*" onClick={(e) => e.target.value=''} onChange={(e) => props.__handleEventControl().productListData().postUploadImageFile(r.id, e)}/>
-                                                    <input type='file' id='i_uploader' hidden></input>
-                                                    <CommonInputEl id="image-file-text" type="text" className='form-control' name='imageFile' value={r.imageFileName} disabled />
-                                                    <div className="input-group-prepend">
-                                                        <button className="btn btn-outline-secondary" type="button" onClick={() => props.__handleEventControl().productListData().deleteImageFile(r.id)}>삭제</button>
-                                                    </div>
-                                                </div>
-                                                <ImageWrapper>
-                                                    <ImageBox>
-                                                        {r.imageUrl ?
-                                                            <ImageEl name='imageFile' src={r.imageUrl} title={r.imageFileName} />
-                                                            :
-                                                            <ImageEl name='imageFile' src='/images/icon/no-image.jpg' title='no-image' />
-                                                        }
-                                                    </ImageBox>
-                                                </ImageWrapper>
-                                            </KeyGroup>
                                         </BodyWrapper>
 
                                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
@@ -430,6 +408,37 @@ const CreateBody = (props) => {
                                                     </div>
                                                     <CommonInputEl type="text" className='form-control' name='naverProductCode' value={r.naverProductCode} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
                                                 </div>
+                                            </KeyGroup>
+                                        </BodyWrapper>
+
+                                        <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
+                                            <GroupTitle>상품 이미지</GroupTitle>
+                                            <KeyGroup>
+                                                <div className="input-group mb-3">
+                                                    <UploadInputEl 
+                                                        id={`i_pm_cb_uploader_${r.id}`}
+                                                        type="file" 
+                                                        accept="image/*" 
+                                                        onClick={(e) => e.target.value=''}
+                                                        onChange={(e) => props.__handleEventControl().productListData().postUploadImageFile(r.id, e)}
+                                                    />
+                                                    {r.imageUrl ?
+                                                        <div className="input-group-prepend">
+                                                            <ImageDeleteBtn className="btn btn-outline-secondary" type="button" onClick={() => props.__handleEventControl().productListData().deleteImageFile(r.id)}>삭제</ImageDeleteBtn>
+                                                        </div>
+                                                        :
+                                                        <></>
+                                                    }
+                                                </div>
+                                                <ImageWrapper>
+                                                    <ImageBox>
+                                                        {r.imageUrl ?
+                                                            <ImageEl name='imageFile' type="file" src={r.imageUrl} title={r.imageFileName} onClick={() => props.__handleEventControl().productListData().onClickImageButton(r.id)}/>
+                                                            :
+                                                            <ImageEl name='imageFile' src='/images/icon/no-image.jpg' title='no-image' onClick={() => props.__handleEventControl().productListData().onClickImageButton(r.id)}/>
+                                                        }
+                                                    </ImageBox>
+                                                </ImageWrapper>
                                             </KeyGroup>
                                         </BodyWrapper>
                                         {/* <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
