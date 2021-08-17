@@ -47,6 +47,7 @@ const WayBillMain = () => {
                     responseType:'blob'
                 })
                     .then(res => {
+                        
                         const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
                         const link = document.createElement('a');
                         link.href = url;
@@ -64,11 +65,12 @@ const WayBillMain = () => {
                     responseType:'blob'
                 })
                     .then(res => {
+                        console.log(res);
                         const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
                         const link = document.createElement('a');
                         link.href = url;
                         // link.setAttribute('download', 'test.xlsx');
-                        link.setAttribute('download', `${dateToYYYYMMDDhhmmssFile(new Date())}${data.prodName}.xlsx`);
+                        link.setAttribute('download', `${dateToYYYYMMDDhhmmssFile(new Date())}${'hello'}.xlsx`);
                         document.body.appendChild(link);
                         link.click();
                     })
