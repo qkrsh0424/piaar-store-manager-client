@@ -54,6 +54,8 @@ const ReleaseLi = styled.li`
 `;
 
 const ModalText = styled.div`
+    overflow: hidden;
+    height: auto;
     font-size: 1rem;
     border: 1px solid #ced4da;
     background: #fffde2;

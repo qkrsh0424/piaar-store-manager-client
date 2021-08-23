@@ -121,8 +121,15 @@ const CreateMain = (props) => {
                         }
                     })
                     .catch(err => {
-                        console.log(err);
-                        alert('undefined error. : uploadFilesToCloud');
+                        let res = err.response;
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else {
+                            console.log(err);
+                            alert('undefined error. : uploadFilesToCloud');
+                        }
+
+                        setImageLoading(false);
                     })
             }
         }

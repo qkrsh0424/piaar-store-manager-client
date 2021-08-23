@@ -309,6 +309,7 @@ const ImageEl = styled.img`
    position: absolute;
    object-fit: cover;
    width: 90%;
+   height: 90%;
    transition: .5s;
    border:1px solid #f1f1f1;
    border-radius: 8px;
