@@ -29,6 +29,10 @@ import ExpenditureMain from './component/account_book/ExpenditureMain';
 import ProductManageMain from './component/product_manage/ProductManageMain';
 import CreateMain from './component/product_manage/CreateMain';
 
+// component : delivery-ready
+import DeliveryReadyUploadMain from './component/delivery_ready/DeliveryReadyUploadMain';
+import DeliveryReadyViewMain from './component/delivery_ready/DeliveryReadyViewMain';
+
 // data connect
 import { userDataConnect } from './data_connect/userDataConnect';
 
@@ -121,6 +125,12 @@ function App(props) {
                                 </Route>
                                 <Route exact path='/shipment/packing-list/coupang'>
                                     {userRdx.userInfo ? <SPackingListCoupangMain></SPackingListCoupangMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                <Route exact path='/delivery-ready/naver'>
+                                    {userRdx.userInfo ? <DeliveryReadyUploadMain></DeliveryReadyUploadMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                <Route exact path='/delivery-ready/naver/view'>
+                                    {userRdx.userInfo ? <DeliveryReadyViewMain></DeliveryReadyViewMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                             </Switch>
                         )
