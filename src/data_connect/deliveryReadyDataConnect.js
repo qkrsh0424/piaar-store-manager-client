@@ -19,6 +19,26 @@ const deliveryReadyDataConnect = () => {
                 },
                 withCredentials: true
             })
+        },
+        getUnreleasedData: async function () {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/unreleased`, {
+                withCredentials: true
+            })
+        },
+        getSelectedReleasedData: async function (date1, date2) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/release/${date1}&&${date2}`, {
+                withCredentials: true
+            })
+        },
+        deleteUnreleasedData: async function (itemId) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/deleteOne/${itemId}`, {
+                withCredentials: true
+            })
+        },
+        updateReleasedData: async function (itemId) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOne/${itemId}`, {
+                withCredentials: true
+            })
         }
     }
 }
