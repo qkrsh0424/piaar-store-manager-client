@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import {useState} from 'react';
 import { useSelector } from 'react-redux';
 
 const Container = styled.div`
@@ -108,10 +107,9 @@ const DeliveryReadyUploadBody = (props) => {
                             <ControlBtn htmlFor="upload-file-input">배송준비 엑셀 파일 업로드</ControlBtn>
                             <Input id="upload-file-input" type="file" accept=".xls,.xlsx" onClick={(e) => e.target.value = ''} onChange={(e) => props.__handleEventControl().uploadExcelData().submit(e)} />
                         </Form>
-
                         <Form>
-                            <ControlBtn onClick={(e) => props.__handleEventControl().storeExcelData().submit(e)}>배송준비 엑셀 파일 저장</ControlBtn>
-                        </Form>
+                        <ControlBtn onClick={(e) => props.__handleEventControl().storeExcelData().submit(e)}>배송준비 엑셀 파일 저장</ControlBtn>
+                    </Form>
                     </UploadBar>
                     <TableContainer>
                         <table className="table table-sm" style={{tableLayout: 'fixed' }}>

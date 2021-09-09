@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {useState, useEffect} from 'react';
+import moment from 'moment';
 
 // data connect
 import { deliveryReadyDataConnect } from '../../data_connect/deliveryReadyDataConnect';
@@ -8,16 +9,16 @@ import { deliveryReadyDataConnect } from '../../data_connect/deliveryReadyDataCo
 import DrawerNavbarMain from '../nav/DrawerNavbarMain';
 import DeliveryReadyViewBody from './DeliveryReadyViewBody';
 import DeliveryReadyDateRangePickerModal from './modal/DeliveryReadyDateRangePickerModal';
-
-const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
+import DeliveryReadyOptionInfoModal from './modal/DeliveryReadyOptionInfoModal';
+import BackdropLoading from '../loading/BackdropLoading';
 
 const DeliveryReadyViewMain = () => {
     const [unreleasedData, setUnreleasedData] = useState(null);
     const [releasedData, setReleasedData] = useState(null);
     const [unreleaseCheckedOrderList, setUnreleaseCheckedOrderList] = useState([]);
     const [releaseCheckedOrderList, setReleaseCheckedOrderList] = useState([]);
-    // const [downloadOrderList, setDownloadOrderList] = useState([]);
-    // const [downloadLoading, setDownloadLoading] = useState(false);
+    const [downloadOrderList, setDownloadOrderList] = useState([]);
+    const [backdropLoading, setBackdropLoading] = useState(false);
     const [selectionRange, setSelectionRange] = useState(
         {
             startDate: new Date(),
@@ -26,16 +27,17 @@ const DeliveryReadyViewMain = () => {
         }
     );
     const [deliveryReadyDateRangePickerModalOpen, setDeliveryReadyDateRangePickerModalOpen] = useState(false);
-    // const [deliveryReadyOptionManagementModalOpen, setDeliveryReadyOptionManagementModalOpen] = useState(false);
+    const [deliveryReadyOptionInfoModalOpen, setDeliveryReadyOptionInfoModalOpen] = useState(false);
     const [selectedDateText, setSelectedDateText] = useState("날짜 선택");
-    // const [deliveryReadyOptionInfo, setDeliveryReadyOptionInfo] = useState(null);
-    // const [originOptionInfo, setOriginOptionInfo] = useState(null);
-    // const [originOptionManagementCode, setOriginOptionManagementCode] = useState(null);
-    // const [changedOptionManagementCode, setChangedOptionManagementCode] = useState(null);
+    const [deliveryReadyOptionInfo, setDeliveryReadyOptionInfo] = useState(null);
+    const [originOptionInfo, setOriginOptionInfo] = useState(null);
+    const [originOptionManagementCode, setOriginOptionManagementCode] = useState(null);
+    const [changedOptionManagementCode, setChangedOptionManagementCode] = useState(null);
 
     useEffect(() => {
         async function fetchInit() {
             await __handleDataConnect().getDeliveryReadyUnreleasedData();
+            await __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
         }
         fetchInit();
     }, []);
@@ -56,22 +58,10 @@ const DeliveryReadyViewMain = () => {
             },
             getDeliveryReadyReleasedData: async function (start, end) {
                 var date1 = new Date(start);
-                date1.setDate(date1.getDate() + 1);
-                date1.setHours(-15, 0, 0, 0);     // start date 00:00:00 설정
+                date1 = moment(date1).format('YYYY-MM-DD 00:00:00');        // start date 00:00:00 설정
 
                 var date2 = new Date(end);
-                date2.setDate(date2.getDate() + 1)
-                date2.setHours(8, 59, 59, 59);     // end date 23:59:59 설정
-
-                var originEndDate = new Date(end);
-                originEndDate.setDate(originEndDate.getDate() + 1);
-
-                date1 = JSON.stringify(date1);
-                date2 = JSON.stringify(date2);
-                originEndDate = JSON.stringify(originEndDate);
-
-                date1 = date1.substring(1, 11) + " " + date1.substring(12, 20);
-                date2 = date2.substring(1, 11) + " " + date2.substring(12, 20);
+                date2 = moment(date2).format('YYYY-MM-DD 23:59:59');        // end date 23:59:59 설정
 
                 setReleaseCheckedOrderList([]);
 
@@ -80,7 +70,7 @@ const DeliveryReadyViewMain = () => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setReleasedData(res.data.data);
                         }
-                        setSelectedDateText(date1.substring(0, 10) + " ~ " + originEndDate.substring(1, 11));
+                        setSelectedDateText(date1.substring(0, 10) + " ~ " + date2.substring(1, 11));
                     })
                     .catch(err => {
                         console.log(err);
@@ -89,8 +79,8 @@ const DeliveryReadyViewMain = () => {
 
                 setDeliveryReadyDateRangePickerModalOpen(false);
             },
-            deleteOrderData: async function (itemId) {
-                await deliveryReadyDataConnect().deleteUnreleasedData(itemId)
+            deleteOrderData: async function (itemCid) {
+                await deliveryReadyDataConnect().deleteUnreleasedData(itemCid)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
@@ -101,8 +91,8 @@ const DeliveryReadyViewMain = () => {
                         alert('undefined error. : deleteOrderData');
                     })
             },
-            changeToUnreleaseData: async function (itemId) {
-                await deliveryReadyDataConnect().updateReleasedData(itemId)
+            changeToUnreleaseData: async function (itemCid) {
+                await deliveryReadyDataConnect().updateReleasedData(itemCid)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
@@ -113,6 +103,65 @@ const DeliveryReadyViewMain = () => {
                         console.log(err);
                         alert('undefined error. : changeToUnreleasedData');
                     })
+            },
+            getOptionManagementCode: async function () {
+                await deliveryReadyDataConnect().searchOptionInfo()
+                    .then(res => {
+                        if(res.status === 200 && res.data && res.data.message === 'success') {
+                            setDeliveryReadyOptionInfo(res.data.data);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        alert('undefined error. : getOptionManagementCode');
+                    })
+            },
+            changeItemOptionManagementCode: async function (itemCid, optionCode) {
+                await deliveryReadyDataConnect().updateOptionInfo(itemCid, optionCode)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            setDeliveryReadyOptionInfoModalOpen(false);
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        alert('undefined error. : changeItemOptionManagementCode');
+                    })
+            },
+            changeItemsOptionManagementCode: async function (itemCid, optionCode) {
+                await deliveryReadyDataConnect().updateAllOptionInfo(itemCid, optionCode)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            setDeliveryReadyOptionInfoModalOpen(false);
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        alert('undefined error. : changeItemsOptionManagementCode');
+                    })
+            },
+            downloadOrderForm: async function (data) {
+                await deliveryReadyDataConnect().downloadOrderForm(data)
+                    .then(res => {
+                        console.log(res);
+                        const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', `발주서양식.xlsx`);
+                        document.body.appendChild(link);
+                        link.click();
+
+                        __handleDataConnect().getDeliveryReadyUnreleasedData();
+                        setBackdropLoading(false);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        setBackdropLoading(false);
+                    });
             }
         }
     }
@@ -166,10 +215,10 @@ const DeliveryReadyViewMain = () => {
                         }
                         return dataList;
                     },
-                    delete: async function (e, itemId) {
+                    delete: async function (e, itemCid) {
                         e.stopPropagation();
 
-                        await __handleDataConnect().deleteOrderData(itemId);
+                        await __handleDataConnect().deleteOrderData(itemCid);
                         setUnreleaseCheckedOrderList([]);
                     }
                 }
@@ -222,10 +271,10 @@ const DeliveryReadyViewMain = () => {
                         }
                         return dataList;
                     },
-                    changeToUnreleaseData: async function (e, itemId) {
+                    changeToUnreleaseData: async function (e, itemCid) {
                         e.stopPropagation();
 
-                        await __handleDataConnect().changeToUnreleaseData(itemId);
+                        await __handleDataConnect().changeToUnreleaseData(itemCid);
                     }
                 }
             },
@@ -244,6 +293,61 @@ const DeliveryReadyViewMain = () => {
                         setSelectionRange(date.selection);
                     }
                 }
+            },
+            deliveryReadyOptionInfo: function () {
+                return {
+                    open: function (e, optionInfo) {
+                        e.stopPropagation();
+
+                        setChangedOptionManagementCode(null);
+                        setDeliveryReadyOptionInfoModalOpen(true);
+                        __handleEventControl().deliveryReadyOptionInfo().getOptionManagementCode(optionInfo)
+                    },
+                    close: function () {
+                        setDeliveryReadyOptionInfoModalOpen(false);
+                    },
+                    changeOptionInfo: function () {
+                        setDeliveryReadyOptionInfo()
+                    },
+                    getOptionManagementCode: async function (optionInfo) {
+                        setOriginOptionInfo(optionInfo);
+                        setOriginOptionManagementCode(optionInfo.optionManagementCode);
+
+                        await __handleDataConnect().getOptionManagementCode();
+                    },
+                    checkOneLi: function (optionCode) {
+                        setChangedOptionManagementCode(optionCode);
+                    },
+                    isChecked: function (optionCode) {
+                        return releaseCheckedOrderList.includes(optionCode);
+                    },
+                    changeItemOption: async function () {
+                        await __handleDataConnect().changeItemOptionManagementCode(originOptionInfo.cid, changedOptionManagementCode);
+                    },
+                    changeItemsOption: async function () {
+                        await __handleDataConnect().changeItemsOptionManagementCode(originOptionInfo.cid, changedOptionManagementCode);
+                    }
+                }
+            },
+            downloadOrderFormData: function () {
+                return {
+                    submit: async function (e) {
+                        e.preventDefault();
+                        let unreleaseData = await __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
+                        let releaseData = await __handleEventControl().releaseCheckedOrderList().getCheckedData();
+
+                        let downloadData = downloadOrderList.concat(unreleaseData);
+                        downloadData = downloadData.concat(releaseData);
+
+                        if (downloadOrderList.length || downloadData.length) {
+                            setBackdropLoading(true);
+                            await __handleDataConnect().downloadOrderForm(downloadOrderList.concat(downloadData));
+                        }
+                        else {
+                            alert("no checked order data");
+                        }
+                    }
+                }
             }
         }
     }
@@ -257,6 +361,18 @@ const DeliveryReadyViewMain = () => {
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyDateRangePickerModal>
+
+            <DeliveryReadyOptionInfoModal
+                open={deliveryReadyOptionInfoModalOpen}
+                originOptionInfo={originOptionInfo}
+                originOptionManagementCode={originOptionManagementCode}
+                changedOptionManagementCode={changedOptionManagementCode}
+                deliveryReadyOptionInfo={deliveryReadyOptionInfo}
+
+                __handleEventControl={__handleEventControl}
+            ></DeliveryReadyOptionInfoModal>
+
+           <BackdropLoading open={backdropLoading} />
            <DrawerNavbarMain></DrawerNavbarMain>
            <DeliveryReadyViewBody
                 releasedData={releasedData}

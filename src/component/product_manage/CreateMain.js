@@ -7,7 +7,7 @@ import { productCategoryDataConnect } from "../../data_connect/productCategoryDa
 import { productDataConnect } from '../../data_connect/productDataConnect';
 // component
 import CreateBody from "./CreateBody";
-import ImageUploadLoading from "../loading/ImageUploadLoading"
+import BackdropLoading from "../loading/BackdropLoading";
 
 class Product {
     constructor(optionDefaultName = '', optionManagementName = '') {
@@ -77,7 +77,7 @@ const CreateMain = (props) => {
     const [productListData, setProductListData] = useState([
         new Product('단일상품', '단일상품').toJSON()
     ]);
-    const [imageLoading, setImageLoading] = useState(false);
+    const [backdropLoading, setBackdropLoading] = useState(false);
     
     useEffect(() => {
         async function fetchInit() {
@@ -129,7 +129,7 @@ const CreateMain = (props) => {
                             alert('undefined error. : uploadFilesToCloud');
                         }
 
-                        setImageLoading(false);
+                        setBackdropLoading(false);
                     })
             }
         }
@@ -223,7 +223,7 @@ const CreateMain = (props) => {
                         // 파일을 선택하지 않은 경우
                         if (e.target.files.length == 0) return;
 
-                        setImageLoading(true);
+                        setBackdropLoading(true);
                         
                         await __handleDataConnect().postUploadImageFileToCloud(productId, e);
                     },
@@ -241,7 +241,7 @@ const CreateMain = (props) => {
                             )
                         }))
 
-                        setImageLoading(false);
+                        setBackdropLoading(false);
                     },
                     deleteImageFile: function (productId) {
                         setProductListData(productListData.map(r => {
@@ -322,7 +322,7 @@ const CreateMain = (props) => {
 
     return (
         <>
-            <ImageUploadLoading open={imageLoading} />
+            <BackdropLoading open={backdropLoading} />
             <CreateBody
                 categoryList={categoryListSample}
                 productListData={productListData}

@@ -1,8 +1,7 @@
-import axios from 'axios';
 import styled from 'styled-components';
 import { DateRange } from "react-date-range";
 import Dialog from '@material-ui/core/Dialog';
-import React, { useState } from "react";
+import React from "react";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -17,8 +16,6 @@ const DatePickerButton = styled.div`
         cursor: pointer;
     }
 `;
-
-const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 
 const DeliveryReadyDatePickerModal = (props) => {
     return (
