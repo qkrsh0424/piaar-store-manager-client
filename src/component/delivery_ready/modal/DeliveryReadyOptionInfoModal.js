@@ -11,9 +11,10 @@ const OptionContainer = styled.div`
 const OptionHeader = styled.li`
     margin-bottom: 10px;
     display: flex;
-    border-radius: 10px;
 
-    background: rgb(147, 167, 194, 0.7);
+    .option-header {
+        background: rgba(147, 167, 194, 0.7);
+    }
 `;
 
 const OptionLi = styled.li`
@@ -158,10 +159,10 @@ const DeliveryReadyOptionInfoModal = (props) => {
                                 </ChangeBox>
                             </OptionInfoTitle>
                             <OptionHeader className="input-group">
-                                <ModalText><span>옵션관리코드</span></ModalText>
-                                <ModalText><span>상품명</span></ModalText>
-                                <ModalText><span>옵션명1</span></ModalText>
-                                <ModalText><span>옵션명2</span></ModalText>
+                                <ModalText className="option-header"><span>옵션관리코드</span></ModalText>
+                                <ModalText className="option-header"><span>상품명</span></ModalText>
+                                <ModalText className="option-header"><span>옵션명1</span></ModalText>
+                                <ModalText className="option-header"><span>옵션명2</span></ModalText>
                             </OptionHeader>
                             <OptionDataList>
                             {props.deliveryReadyOptionInfo?.map((data, index) => {
