@@ -31,7 +31,7 @@ const deliveryReadyDataConnect = () => {
             })
         },
         deleteUnreleasedData: async function (itemCid) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/deleteOne/${itemCid}`, {
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/deleteOne/${itemCid}`, {
                 withCredentials: true
             })
         },
