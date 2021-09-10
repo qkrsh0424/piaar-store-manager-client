@@ -51,7 +51,7 @@ const deliveryReadyDataConnect = () => {
             })
         },
         updateAllOptionInfo: async function (deliveryReadyItem, optionCode) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOptions/${optionCode}`, deliveryReadyItem, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOptions/${optionCode}`, deliveryReadyItem, {
                 withCredentials:true
             })
         },
