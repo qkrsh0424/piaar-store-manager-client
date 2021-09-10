@@ -478,7 +478,7 @@ const DeliveryReadyViewBody = (props) => {
                                                     <span>070-0000-0000</span>
                                                 </BodyTd>
                                                 <BodyTd>
-                                                    <CancelBtn className="col cancel-btn small-cell" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeToUnreleaseData(e, data.deliveryReadyItem.cid)}>
+                                                    <CancelBtn className="col cancel-btn small-cell" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeToUnreleaseData(e, data.deliveryReadyItem)}>
                                                         <CloseIcon></CloseIcon>
                                                     </CancelBtn>
                                                 </BodyTd>

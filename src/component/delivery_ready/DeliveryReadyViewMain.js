@@ -30,7 +30,7 @@ const DeliveryReadyViewMain = () => {
     const [deliveryReadyOptionInfoModalOpen, setDeliveryReadyOptionInfoModalOpen] = useState(false);
     const [selectedDateText, setSelectedDateText] = useState("날짜 선택");
     const [deliveryReadyOptionInfo, setDeliveryReadyOptionInfo] = useState(null);
-    const [originOptionInfo, setOriginOptionInfo] = useState(null);
+    const [deliveryReadyItem, setDeliveryReadyItem] = useState(null);
     const [originOptionManagementCode, setOriginOptionManagementCode] = useState(null);
     const [changedOptionManagementCode, setChangedOptionManagementCode] = useState(null);
 
@@ -70,7 +70,7 @@ const DeliveryReadyViewMain = () => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setReleasedData(res.data.data);
                         }
-                        setSelectedDateText(date1.substring(0, 10) + " ~ " + date2.substring(1, 11));
+                        setSelectedDateText(date1.substring(0, 10) + " ~ " + date2.substring(0, 10));
                     })
                     .catch(err => {
                         console.log(err);
@@ -91,8 +91,8 @@ const DeliveryReadyViewMain = () => {
                         alert('undefined error. : deleteOrderData');
                     })
             },
-            changeToUnreleaseData: async function (itemCid) {
-                await deliveryReadyDataConnect().updateReleasedData(itemCid)
+            changeToUnreleaseData: async function (deliveryReadyItem) {
+                await deliveryReadyDataConnect().updateReleasedData(deliveryReadyItem)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
@@ -116,8 +116,8 @@ const DeliveryReadyViewMain = () => {
                         alert('undefined error. : getOptionManagementCode');
                     })
             },
-            changeItemOptionManagementCode: async function (itemCid, optionCode) {
-                await deliveryReadyDataConnect().updateOptionInfo(itemCid, optionCode)
+            changeItemOptionManagementCode: async function (deliveryReadyItem, optionCode) {
+                await deliveryReadyDataConnect().updateOptionInfo(deliveryReadyItem, optionCode)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setDeliveryReadyOptionInfoModalOpen(false);
@@ -130,8 +130,8 @@ const DeliveryReadyViewMain = () => {
                         alert('undefined error. : changeItemOptionManagementCode');
                     })
             },
-            changeItemsOptionManagementCode: async function (itemCid, optionCode) {
-                await deliveryReadyDataConnect().updateAllOptionInfo(itemCid, optionCode)
+            changeItemsOptionManagementCode: async function (deliveryReadyItem, optionCode) {
+                await deliveryReadyDataConnect().updateAllOptionInfo(deliveryReadyItem, optionCode)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setDeliveryReadyOptionInfoModalOpen(false);
@@ -226,7 +226,6 @@ const DeliveryReadyViewMain = () => {
             releaseCheckedOrderList: function () {
                 return {
                     checkAll: function () {
-                        console.log(releasedData);
                         if (this.isCheckedAll()) {
                             setReleaseCheckedOrderList([]);
                         } else if (releasedData) {
@@ -271,10 +270,10 @@ const DeliveryReadyViewMain = () => {
                         }
                         return dataList;
                     },
-                    changeToUnreleaseData: async function (e, itemCid) {
+                    changeToUnreleaseData: async function (e, deliveryReadyItem) {
                         e.stopPropagation();
 
-                        await __handleDataConnect().changeToUnreleaseData(itemCid);
+                        await __handleDataConnect().changeToUnreleaseData(deliveryReadyItem);
                     }
                 }
             },
@@ -296,12 +295,12 @@ const DeliveryReadyViewMain = () => {
             },
             deliveryReadyOptionInfo: function () {
                 return {
-                    open: function (e, optionInfo) {
+                    open: function (e, deliveryReadyItem) {
                         e.stopPropagation();
 
                         setChangedOptionManagementCode(null);
                         setDeliveryReadyOptionInfoModalOpen(true);
-                        __handleEventControl().deliveryReadyOptionInfo().getOptionManagementCode(optionInfo)
+                        __handleEventControl().deliveryReadyOptionInfo().getOptionManagementCode(deliveryReadyItem)
                     },
                     close: function () {
                         setDeliveryReadyOptionInfoModalOpen(false);
@@ -309,9 +308,9 @@ const DeliveryReadyViewMain = () => {
                     changeOptionInfo: function () {
                         setDeliveryReadyOptionInfo()
                     },
-                    getOptionManagementCode: async function (optionInfo) {
-                        setOriginOptionInfo(optionInfo);
-                        setOriginOptionManagementCode(optionInfo.optionManagementCode);
+                    getOptionManagementCode: async function (deliveryReadyItem) {
+                        setDeliveryReadyItem(deliveryReadyItem);
+                        setOriginOptionManagementCode(deliveryReadyItem.optionManagementCode);
 
                         await __handleDataConnect().getOptionManagementCode();
                     },
@@ -322,10 +321,10 @@ const DeliveryReadyViewMain = () => {
                         return releaseCheckedOrderList.includes(optionCode);
                     },
                     changeItemOption: async function () {
-                        await __handleDataConnect().changeItemOptionManagementCode(originOptionInfo.cid, changedOptionManagementCode);
+                        await __handleDataConnect().changeItemOptionManagementCode(deliveryReadyItem, changedOptionManagementCode);
                     },
                     changeItemsOption: async function () {
-                        await __handleDataConnect().changeItemsOptionManagementCode(originOptionInfo.cid, changedOptionManagementCode);
+                        await __handleDataConnect().changeItemsOptionManagementCode(deliveryReadyItem, changedOptionManagementCode);
                     }
                 }
             },
@@ -342,6 +341,7 @@ const DeliveryReadyViewMain = () => {
                         if (downloadOrderList.length || downloadData.length) {
                             setBackdropLoading(true);
                             await __handleDataConnect().downloadOrderForm(downloadOrderList.concat(downloadData));
+                            await __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
                         }
                         else {
                             alert("no checked order data");
@@ -364,7 +364,7 @@ const DeliveryReadyViewMain = () => {
 
             <DeliveryReadyOptionInfoModal
                 open={deliveryReadyOptionInfoModalOpen}
-                originOptionInfo={originOptionInfo}
+                deliveryReadyItem={deliveryReadyItem}
                 originOptionManagementCode={originOptionManagementCode}
                 changedOptionManagementCode={changedOptionManagementCode}
                 deliveryReadyOptionInfo={deliveryReadyOptionInfo}

@@ -35,8 +35,8 @@ const deliveryReadyDataConnect = () => {
                 withCredentials: true
             })
         },
-        updateReleasedData: async function (itemCid) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOne/${itemCid}`, {
+        updateReleasedData: async function (deliveryReadyItem) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOne`, deliveryReadyItem, {
                 withCredentials: true
             })
         },
@@ -45,13 +45,13 @@ const deliveryReadyDataConnect = () => {
                 withCredentials: true
             })
         },
-        updateOptionInfo: async function (itemCid, optionCode) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOption/${itemCid}&&${optionCode}`, {
+        updateOptionInfo: async function (deliveryReadyItem, optionCode) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOption/${optionCode}`, deliveryReadyItem, {
                 withCredentials: true
             })
         },
-        updateAllOptionInfo: async function (itemCid, optionCode) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOptions/${itemCid}&&${optionCode}`, {
+        updateAllOptionInfo: async function (deliveryReadyItem, optionCode) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOptions/${optionCode}`, deliveryReadyItem, {
                 withCredentials:true
             })
         },

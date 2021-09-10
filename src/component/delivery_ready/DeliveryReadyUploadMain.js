@@ -20,12 +20,13 @@ const DeliveryReadyUploadMain = () => {
             uploadExcelFile: async function (e) {
                 // 파일을 선택하지 않은 경우
                 if(e.target.files.length === 0) return;
-                
+
                 let addFiles = e.target.files;
-                
+
                 for (let i = 0; i < addFiles.length; i++) {
-                    formData.append('file', addFiles[i]);
+                    formData.set('file', addFiles[i]);
                 }
+
                 setFormData(formData);
 
                 await deliveryReadyDataConnect().postFile(formData)
