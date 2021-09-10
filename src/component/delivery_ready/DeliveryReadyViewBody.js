@@ -85,10 +85,14 @@ const DateSelector = styled.button`
     border: 1px solid transparent;
     text-align: center;
     width: 230px;
-    height: 4vh;
+    height: 5vh;
     margin-right: 15px;
     transition: opacity 0.1s linear;
     font-size: 13px;
+
+    &:hover{
+        opacity: 0.6;
+    }
 `;
 
 const CheckBodyTd = styled.span`

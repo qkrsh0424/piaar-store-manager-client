@@ -14,6 +14,7 @@ const OptionHeader = styled.li`
 
     .option-header {
         background: rgba(147, 167, 194, 0.7);
+        font-weight: bold;
     }
 `;
 
@@ -44,7 +45,7 @@ const OptionInfoLi = styled.li`
 
     .info-title {
         background: rgb(255, 253, 226);
-        font-size: large;
+        height: auto;
     }
 `;
 
@@ -52,6 +53,7 @@ const OptionInfoTitle = styled.div`
     padding: 2px;
     margin-bottom: 15px;
     border-bottom: 2px solid rgb(241, 241, 241);
+    height: auto;
 `;
 
 const GroupTitle = styled.div`
@@ -90,17 +92,14 @@ const ChangeBtn = styled.button`
     vertical-align: middle;
     font-size: 15px;
     border-radius: 3px;
-    border: 1px solid #a7a7a7;
-    overflow: auto;
-    height: 4vh;
+    background-color: #a7a7a780;
+    border: 1px solid #a7a7a760;
+    overflow: hidden;
+    height: 5vh;
     transition: opacity 0.1s linear;
     &:hover {
         opacity: 0.6;
         cursor: pointer;
-    }
-
-    @media only screen and (max-width:400px){
-        width: 80px;
     }
 `;
 

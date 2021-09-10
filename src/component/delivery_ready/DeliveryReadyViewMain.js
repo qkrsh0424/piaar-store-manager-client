@@ -52,8 +52,13 @@ const DeliveryReadyViewMain = () => {
                         }
                     })
                     .catch(err => {
-                        console.log(err);
-                        alert('undefined error. : getDeliveryReadyUnreleasedData');
+                        let res = err.response;
+
+                        if (res.status === 403) {
+                            alert('권한이 없습니다.');
+                        } else {
+                            alert('undefined error. : getDeliveryReadyUnreleasedData');
+                        }
                     })
             },
             getDeliveryReadyReleasedData: async function (start, end) {
@@ -73,8 +78,13 @@ const DeliveryReadyViewMain = () => {
                         setSelectedDateText(date1.substring(0, 10) + " ~ " + date2.substring(0, 10));
                     })
                     .catch(err => {
-                        console.log(err);
-                        alert('undefined error. : getDeliveryReadyReleased');
+                        let res = err.response;
+
+                        if (res.status === 403) {
+                            alert('권한이 없습니다.');
+                        } else {
+                            alert('undefined error. : getDeliveryReadyReleased');
+                        }
                     })
 
                 setDeliveryReadyDateRangePickerModalOpen(false);
@@ -84,6 +94,7 @@ const DeliveryReadyViewMain = () => {
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            alert('삭제되었습니다.');
                         }
                     })
                     .catch(err => {
@@ -100,8 +111,13 @@ const DeliveryReadyViewMain = () => {
                         }
                     })
                     .catch(err => {
-                        console.log(err);
-                        alert('undefined error. : changeToUnreleasedData');
+                        let res = err.response;
+
+                        if (res.status === 403) {
+                            alert('권한이 없습니다.');
+                        } else {
+                            alert('undefined error. : changeToUnreleasedData');
+                        }
                     })
             },
             getOptionManagementCode: async function () {
@@ -112,8 +128,13 @@ const DeliveryReadyViewMain = () => {
                         }
                     })
                     .catch(err => {
-                        console.log(err);
-                        alert('undefined error. : getOptionManagementCode');
+                        let res = err.response;
+
+                        if (res.status === 403) {
+                            alert('권한이 없습니다.');
+                        } else {
+                            alert('undefined error. : getOptionManagementCode');
+                        }
                     })
             },
             changeItemOptionManagementCode: async function (deliveryReadyItem, optionCode) {
@@ -126,8 +147,13 @@ const DeliveryReadyViewMain = () => {
                         }
                     })
                     .catch(err => {
-                        console.log(err);
-                        alert('undefined error. : changeItemOptionManagementCode');
+                        let res = err.response;
+
+                        if (res.status === 403) {
+                            alert('권한이 없습니다.');
+                        } else {
+                            alert('undefined error. : changeItemOptionManagementCode');
+                        }
                     })
             },
             changeItemsOptionManagementCode: async function (deliveryReadyItem, optionCode) {
@@ -140,8 +166,13 @@ const DeliveryReadyViewMain = () => {
                         }
                     })
                     .catch(err => {
-                        console.log(err);
-                        alert('undefined error. : changeItemsOptionManagementCode');
+                        let res = err.response;
+
+                        if (res.status === 403) {
+                            alert('권한이 없습니다.');
+                        } else {
+                            alert('undefined error. : changeItemsOptionManagementCode');
+                        }
                     })
             },
             downloadOrderForm: async function (data) {
@@ -159,7 +190,6 @@ const DeliveryReadyViewMain = () => {
                         setBackdropLoading(false);
                     })
                     .catch(err => {
-                        console.log(err);
                         setBackdropLoading(false);
                     });
             }
@@ -218,8 +248,10 @@ const DeliveryReadyViewMain = () => {
                     delete: async function (e, itemCid) {
                         e.stopPropagation();
 
-                        await __handleDataConnect().deleteOrderData(itemCid);
-                        setUnreleaseCheckedOrderList([]);
+                        if(window.confirm('정말 삭제하시겠습니까?')) {
+                            await __handleDataConnect().deleteOrderData(itemCid);
+                            setUnreleaseCheckedOrderList([]);
+                        }
                     }
                 }
             },

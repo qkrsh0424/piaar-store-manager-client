@@ -36,7 +36,13 @@ const DeliveryReadyUploadMain = () => {
                         }
                     })
                     .catch(err => {
-                        alert('undefined error. : uploadExcelFile');
+                        let res = err.response;
+
+                        if (res.status === 401) {
+                            alert('접근 권한이 없습니다.');
+                        } else {
+                            alert('undefined error. : uploadExcelFile');
+                        }
                     })
             },
             storeExcelFile: async function () {
@@ -49,11 +55,18 @@ const DeliveryReadyUploadMain = () => {
                 await deliveryReadyDataConnect().putFileData(formData)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
+                            alert('저장되었습니다.');
                             history.push('/delivery-ready/naver/view');
                         }
                     })
                     .catch(err => {
-                        alert('undefined error. : storeExcelFile');
+                        let res = err.response;
+
+                        if (res.status === 403) {
+                            alert('권한이 없습니다.');
+                        } else {
+                            alert('undefined error. : storeExcelFile');
+                        }
                     })
             }
         }
