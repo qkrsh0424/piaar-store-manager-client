@@ -186,8 +186,8 @@ const DeliveryReadyViewBody = (props) => {
         <>
             <Container>
                 <DownloadBar>
-                    <Form>
-                        <DownloadButton onClick={(e) => props.__handleEventControl().downloadOrderFormData().submit(e)}>발주서 다운</DownloadButton>
+                    <Form onSubmit={(e) => props.__handleEventControl().downloadOrderFormData().submit(e)}>
+                        <DownloadButton type="submit">발주서 다운</DownloadButton>
                     </Form>
                 </DownloadBar>
                 <DataContainer>
@@ -330,7 +330,7 @@ const DeliveryReadyViewBody = (props) => {
                                         <span>070-0000-0000</span>
                                     </BodyTd>
                                     <BodyTd>
-                                        <CancelBtn className="col delete-btn small-cell" onClick={(e) => props.__handleEventControl().unreleaseCheckedOrderList().delete(e, data.deliveryReadyItem.cid)}>
+                                        <CancelBtn type="button" className="col delete-btn small-cell" onClick={(e) => props.__handleEventControl().unreleaseCheckedOrderList().delete(e, data.deliveryReadyItem.cid)}>
                                             <DeleteForeverTwoToneIcon />
                                         </CancelBtn>
                                     </BodyTd>
@@ -346,7 +346,7 @@ const DeliveryReadyViewBody = (props) => {
                     <BoardTitle>
                         <span>출고 데이터</span>
                         <CheckBodyTd>[✔️ : {props.releaseCheckedOrderList.length} / {props.releasedData ? props.releasedData.length : 0}개]</CheckBodyTd>
-                        <DateSelector onClick={() => props.__handleEventControl().deliveryReadyDateRangePicker().open()}>🗓 {props.selectedDateText}</DateSelector>
+                        <DateSelector type="button" onClick={() => props.__handleEventControl().deliveryReadyDateRangePicker().open()}>🗓 {props.selectedDateText}</DateSelector>
                     </BoardTitle>
                         <BoardContainer>
                             <table className="table table-sm" style={{ tableLayout: 'fixed' }}>
@@ -482,7 +482,7 @@ const DeliveryReadyViewBody = (props) => {
                                                     <span>070-0000-0000</span>
                                                 </BodyTd>
                                                 <BodyTd>
-                                                    <CancelBtn className="col cancel-btn small-cell" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeToUnreleaseData(e, data.deliveryReadyItem)}>
+                                                    <CancelBtn type="button" className="col cancel-btn small-cell" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeToUnreleaseData(e, data.deliveryReadyItem)}>
                                                         <CloseIcon></CloseIcon>
                                                     </CancelBtn>
                                                 </BodyTd>

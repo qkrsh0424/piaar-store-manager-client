@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {useState} from 'react';
 import { useHistory } from 'react-router';
 
@@ -8,12 +7,15 @@ import { deliveryReadyDataConnect } from '../../data_connect/deliveryReadyDataCo
 // component
 import DrawerNavbarMain from '../nav/DrawerNavbarMain';
 import DeliveryReadyUploadBody from './DeliveryReadyUploadBody';
+import BackdropLoading from '../loading/BackdropLoading';
 
 const DeliveryReadyUploadMain = () => {
     let history = useHistory();
 
     const [excelData, setExcelData] = useState(null);
-    const [formData, setFormData] = useState(new FormData());
+    const [formData, setFormData] = useState([]);
+    const [backdropLoading, setBackdropLoading] = useState(false);
+    // const [uploadedFile, setUploadedFile] = useState(null);
 
     const __handleDataConnect = () => {
         return {
@@ -23,16 +25,20 @@ const DeliveryReadyUploadMain = () => {
 
                 let addFiles = e.target.files;
 
-                for (let i = 0; i < addFiles.length; i++) {
-                    formData.set('file', addFiles[i]);
-                }
+                var uploadedFormData = new FormData();
+                uploadedFormData.set('file', addFiles[0]);
 
-                setFormData(formData);
+                // for (let i = 0; i < addFiles.length; i++) {
+                //     formData.set('file', addFiles[i]);
+                // }
 
-                await deliveryReadyDataConnect().postFile(formData)
+                setFormData(uploadedFormData);
+
+                await deliveryReadyDataConnect().postFile(uploadedFormData)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setExcelData(res.data.data);
+                            __handleEventControl().backdropLoading().close();
                         }
                     })
                     .catch(err => {
@@ -43,6 +49,7 @@ const DeliveryReadyUploadMain = () => {
                         } else {
                             alert('undefined error. : uploadExcelFile');
                         }
+                        __handleEventControl().backdropLoading().close();
                     })
             },
             storeExcelFile: async function () {
@@ -78,8 +85,14 @@ const DeliveryReadyUploadMain = () => {
                 return {
                     submit: async function (e) {
                         e.preventDefault();
+                        __handleEventControl().backdropLoading().open();
+                        // console.log(uploadedFile)
                         await __handleDataConnect().uploadExcelFile(e);
-                    }
+                    },
+                    // change: async function (e) {
+                    //     e.preventDefault();
+                    //     setUploadedFile(e);
+                    // }
                 }
             },
             storeExcelData: function () {
@@ -89,15 +102,27 @@ const DeliveryReadyUploadMain = () => {
                         await __handleDataConnect().storeExcelFile(e);
                     }
                 }
+            },
+            backdropLoading: function () {
+                return {
+                    open: function () {
+                        setBackdropLoading(true);
+                    },
+                    close: function () {
+                        setBackdropLoading(false);
+                    }
+                }
             }
         }
     }
 
     return (
         <>
+            <BackdropLoading open={backdropLoading} />
             <DrawerNavbarMain></DrawerNavbarMain>
             <DeliveryReadyUploadBody
                 excelData={excelData}
+                // uploadedFile={uploadedFile}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyUploadBody>

@@ -95,7 +95,7 @@ const ChangeBtn = styled.button`
     background-color: #a7a7a780;
     border: 1px solid #a7a7a760;
     overflow: hidden;
-    height: 5vh;
+    height: auto;
     transition: opacity 0.1s linear;
     &:hover {
         opacity: 0.6;

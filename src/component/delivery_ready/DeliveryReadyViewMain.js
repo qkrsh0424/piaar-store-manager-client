@@ -186,11 +186,13 @@ const DeliveryReadyViewMain = () => {
                         document.body.appendChild(link);
                         link.click();
 
-                        __handleDataConnect().getDeliveryReadyUnreleasedData();
-                        setBackdropLoading(false);
+                        setUnreleaseCheckedOrderList([]);
+
+                        __handleEventControl().backdropLoading().close();
                     })
                     .catch(err => {
-                        setBackdropLoading(false);
+                        console.log(err);
+                        __handleEventControl().backdropLoading().close();
                     });
             }
         }
@@ -364,20 +366,32 @@ const DeliveryReadyViewMain = () => {
                 return {
                     submit: async function (e) {
                         e.preventDefault();
-                        let unreleaseData = await __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
-                        let releaseData = await __handleEventControl().releaseCheckedOrderList().getCheckedData();
+                        let checkedUnreleaseData = await __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
+                        let checkedReleaseData = await __handleEventControl().releaseCheckedOrderList().getCheckedData();
 
-                        let downloadData = downloadOrderList.concat(unreleaseData);
-                        downloadData = downloadData.concat(releaseData);
+                        let downloadData = downloadOrderList.concat(checkedUnreleaseData);
+                        downloadData = downloadData.concat(checkedReleaseData);
 
                         if (downloadOrderList.length || downloadData.length) {
-                            setBackdropLoading(true);
+                            __handleEventControl().backdropLoading().open();
                             await __handleDataConnect().downloadOrderForm(downloadOrderList.concat(downloadData));
-                            await __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
                         }
                         else {
                             alert("no checked order data");
                         }
+                    }
+                }
+            },
+            backdropLoading: function () {
+                return {
+                    open: function () {
+                        setBackdropLoading(true);
+                    },
+                    close: function () {
+                        setBackdropLoading(false);
                     }
                 }
             }

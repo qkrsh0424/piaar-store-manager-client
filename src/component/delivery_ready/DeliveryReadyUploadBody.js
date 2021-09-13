@@ -105,11 +105,11 @@ const DeliveryReadyUploadBody = (props) => {
                     <UploadBar>
                         <Form>
                             <ControlBtn htmlFor="upload-file-input">배송준비 엑셀 파일 업로드</ControlBtn>
-                            <Input id="upload-file-input" type="file" accept=".xls,.xlsx" onClick={(e) => e.target.value = ''} onChange={(e) => props.__handleEventControl().uploadExcelData().submit(e)} />
+                            <Input id="upload-file-input" type="file" accept=".xls,.xlsx" onClick={(e) => e.target.value = ''} onChange={(e) => props.__handleEventControl().uploadExcelData().submit(e)}/>
                         </Form>
-                        <Form>
-                        <ControlBtn onClick={(e) => props.__handleEventControl().storeExcelData().submit(e)}>배송준비 엑셀 파일 저장</ControlBtn>
-                    </Form>
+                        <Form onSubmit={(e) => props.__handleEventControl().storeExcelData().submit(e)}>
+                            <ControlBtn type="submit">배송준비 엑셀 파일 저장</ControlBtn>
+                        </Form>
                     </UploadBar>
                     <TableContainer>
                         <table className="table table-sm" style={{tableLayout: 'fixed' }}>
@@ -144,7 +144,7 @@ const DeliveryReadyUploadBody = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {props.excelData && props.excelData.map((data, index) => {
+                            {props.excelData?.map((data, index) => {
                                 return (
                                     <BodyTr
                                         key={'subitem' + index}
@@ -159,7 +159,7 @@ const DeliveryReadyUploadBody = (props) => {
                                         <BodyTd className="col">{data.prodNumber}</BodyTd>
                                         <BodyTd className="col xlarge-cell">{data.prodName}</BodyTd>
                                         <BodyTd className="col large-cell">{data.optionInfo}</BodyTd>
-                                        <BodyTd className="col">{data.optionManageCode}</BodyTd>
+                                        <BodyTd className="col">{data.optionManagementCode}</BodyTd>
                                         <BodyTd className="col">{data.unit}</BodyTd>
                                         <BodyTd className="col large-cell">{data.orderConfirmationDate}</BodyTd>
                                         <BodyTd className="col large-cell">{data.shipmentDueDate}</BodyTd>

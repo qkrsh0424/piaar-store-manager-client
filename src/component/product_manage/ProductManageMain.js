@@ -388,7 +388,7 @@ const ProductManageMain = () => {
                     postUploadImageFile: async function (e) {
                         e.preventDefault();
 
-                        setBackdropLoading(true);
+                        __handleEventControl().backdropLoading().open();
                         
                         // 파일을 선택하지 않은 경우
                         if(e.target.files.length == 0) return;
@@ -397,7 +397,7 @@ const ProductManageMain = () => {
                     },
                     uploadImageInfo: function (data) {
                         setProductModifyData({...productModifyData, imageFileName: data.fileName, imageUrl: data.fileUploadUri});
-                        setBackdropLoading(false);
+                        __handleEventControl().backdropLoading().close();
                     },
                     deleteImageFile: function () {
                         setProductModifyData({...productModifyData, imageFileName: '', imageUrl: ''});
@@ -777,6 +777,16 @@ const ProductManageMain = () => {
                     receiveModalClose: function () {
                         setReceiveStatusModalOpen(false);
                         setReceiveAddData(null);
+                    }
+                }
+            },
+            backdropLoading: function () {
+                return {
+                    open: function () {
+                        setBackdropLoading(true);
+                    },
+                    close: function () {
+                        setBackdropLoading(false);
                     }
                 }
             }

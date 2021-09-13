@@ -129,7 +129,7 @@ const CreateMain = (props) => {
                             alert('undefined error. : uploadFilesToCloud');
                         }
 
-                        setBackdropLoading(false);
+                        __handleEventControl().backdropLoading().close();
                     })
             }
         }
@@ -223,7 +223,7 @@ const CreateMain = (props) => {
                         // 파일을 선택하지 않은 경우
                         if (e.target.files.length == 0) return;
 
-                        setBackdropLoading(true);
+                        __handleEventControl().backdropLoading().open();
                         
                         await __handleDataConnect().postUploadImageFileToCloud(productId, e);
                     },
@@ -241,7 +241,7 @@ const CreateMain = (props) => {
                             )
                         }))
 
-                        setBackdropLoading(false);
+                        __handleEventControl().backdropLoading().close();
                     },
                     deleteImageFile: function (productId) {
                         setProductListData(productListData.map(r => {
@@ -314,6 +314,16 @@ const CreateMain = (props) => {
                                 return product;
                             }
                         }))
+                    }
+                }
+            },
+            backdropLoading: function () {
+                return {
+                    open: function () {
+                        setBackdropLoading(true);
+                    },
+                    close: function () {
+                        setBackdropLoading(false);
                     }
                 }
             }
