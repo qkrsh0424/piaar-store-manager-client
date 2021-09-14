@@ -18,6 +18,10 @@ const DownloadBar = styled.div`
     display: inline-block;
     border-radius: 5px;
     margin-bottom: 5px;
+
+    @media only screen and (max-width:620px){
+        height: auto;
+    }
 `;
 
 const Form = styled.form`
@@ -28,6 +32,7 @@ const Form = styled.form`
 const DownloadButton = styled.button`
     display: inline-block;
     border: 1px solid transparent;
+    margin-right: 10px;
     font-size: 16px;
     padding: 8px;
     color: white;
@@ -39,6 +44,10 @@ const DownloadButton = styled.button`
     &:hover {
         opacity: 0.6;
         cursor: pointer;
+    }
+
+    @media only screen and (max-width:620px){
+        display: block;
     }
 `;
 
@@ -181,6 +190,13 @@ const BodyTd = styled.td`
     border-right: 1px solid #a7a7a720;
 `;
 
+const StoreInfoText = styled.input`
+    margin: 5px;
+    border: 1px solid #a7a7a740;
+    text-align: center;
+    height: 33px;
+`;
+
 const DeliveryReadyViewBody = (props) => {
     return (
         <>
@@ -188,6 +204,8 @@ const DeliveryReadyViewBody = (props) => {
                 <DownloadBar>
                     <Form onSubmit={(e) => props.__handleEventControl().downloadOrderFormData().submit(e)}>
                         <DownloadButton type="submit">발주서 다운</DownloadButton>
+                        <StoreInfoText id="sender" type="text" placeholder="스토어명" required></StoreInfoText>
+                        <StoreInfoText id="senderContact1" type="text" placeholder="스토어 전화번호" required></StoreInfoText>
                     </Form>
                 </DownloadBar>
                 <DataContainer>
@@ -208,22 +226,10 @@ const DeliveryReadyViewBody = (props) => {
                                             />
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
-                                            <span>주문번호</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>상품주문번호</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
                                             <span>받는사람</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
                                             <span>전화번호1</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>우편번호</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader xlarge-cell" scope="col">
-                                            <span>주소</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader xlarge-cell" scope="col">
                                             <span>상품명1</span>
@@ -233,12 +239,6 @@ const DeliveryReadyViewBody = (props) => {
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
                                             <span>옵션관리코드</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>내품수량1</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>배송메시지</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader large-cell" scope="col">
                                             <span>*상품명</span>
@@ -250,13 +250,25 @@ const DeliveryReadyViewBody = (props) => {
                                             <span>*옵션명2</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
-                                            <span>*옵션 수량</span>
+                                            <span>내품수량1</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
-                                            <span>보내는사람(지정)</span>
+                                            <span>*재고 수량</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
-                                            <span>전화번호1(지정)</span>
+                                            <span>주문번호</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixedHeader" scope="col">
+                                            <span>상품주문번호</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixedHeader xlarge-cell" scope="col">
+                                            <span>주소</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixedHeader" scope="col">
+                                            <span>우편번호</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixedHeader" scope="col">
+                                            <span>배송메시지</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader small-cell" scope="col">
                                             <span></span>
@@ -279,22 +291,10 @@ const DeliveryReadyViewBody = (props) => {
                                         />
                                     </BodyTd>
                                     <BodyTd className="col">
-                                        <span>{data.deliveryReadyItem.orderNumber}</span>
-                                    </BodyTd>
-                                    <BodyTd className="col">
-                                        <span>{data.deliveryReadyItem.prodOrderNumber}</span>
-                                    </BodyTd>
-                                    <BodyTd className="col">
                                         <span>{data.deliveryReadyItem.receiver}</span>
                                     </BodyTd>
                                     <BodyTd className="col">
                                         <span>{data.deliveryReadyItem.receiverContact1}</span>
-                                    </BodyTd>
-                                    <BodyTd className="col">
-                                        <span>{data.deliveryReadyItem.zipCode}</span>
-                                    </BodyTd>
-                                    <BodyTd className="co xlarge-cell">
-                                        <span>{data.deliveryReadyItem.destination}</span>
                                     </BodyTd>
                                     <BodyTd className="col xlarge-cell">
                                         <span>{data.deliveryReadyItem.prodName}</span>
@@ -305,13 +305,7 @@ const DeliveryReadyViewBody = (props) => {
                                     <BodyTd className="col option-code-btn" onClick={(e) => props.__handleEventControl().deliveryReadyOptionInfo().open(e, data.deliveryReadyItem)}>
                                         <span>{data.deliveryReadyItem.optionManagementCode}</span>
                                     </BodyTd>
-                                    <BodyTd className="col">
-                                        <span>{data.deliveryReadyItem.unit}</span>
-                                    </BodyTd>
-                                    <BodyTd className="col">
-                                        <span>{data.deliveryReadyItem.deliveryMessage}</span>
-                                    </BodyTd>
-                                    <BodyTd className="col">
+                                    <BodyTd className="col large-cell">
                                         <span>{data.prodManagementName}</span>
                                     </BodyTd>
                                     <BodyTd className="col large-cell">
@@ -321,13 +315,25 @@ const DeliveryReadyViewBody = (props) => {
                                         <span>{data.optionManagementName}</span>
                                     </BodyTd>
                                     <BodyTd className="col">
+                                        <span>{data.deliveryReadyItem.unit}</span>
+                                    </BodyTd>
+                                    <BodyTd className="col">
                                         <span>{data.optionStockUnit}</span>
                                     </BodyTd>
                                     <BodyTd className="col">
-                                        <span>스토어명</span>
+                                        <span>{data.deliveryReadyItem.orderNumber}</span>
                                     </BodyTd>
                                     <BodyTd className="col">
-                                        <span>070-0000-0000</span>
+                                        <span>{data.deliveryReadyItem.prodOrderNumber}</span>
+                                    </BodyTd>
+                                    <BodyTd className="co xlarge-cell">
+                                        <span>{data.deliveryReadyItem.destination}</span>
+                                    </BodyTd>
+                                    <BodyTd className="col">
+                                        <span>{data.deliveryReadyItem.zipCode}</span>
+                                    </BodyTd>
+                                    <BodyTd className="col">
+                                        <span>{data.deliveryReadyItem.deliveryMessage}</span>
                                     </BodyTd>
                                     <BodyTd>
                                         <CancelBtn type="button" className="col delete-btn small-cell" onClick={(e) => props.__handleEventControl().unreleaseCheckedOrderList().delete(e, data.deliveryReadyItem.cid)}>
@@ -360,22 +366,10 @@ const DeliveryReadyViewBody = (props) => {
                                             />
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
-                                            <span>주문번호</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>상품주문번호</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
                                             <span>받는사람</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
                                             <span>전화번호1</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>우편번호</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader xlarge-cell" scope="col">
-                                            <span>주소</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader xlarge-cell" scope="col">
                                             <span>상품명1</span>
@@ -386,29 +380,35 @@ const DeliveryReadyViewBody = (props) => {
                                         <HeaderTh className="fixedHeader" scope="col">
                                             <span>옵션관리코드</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>내품수량1</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>배송메시지</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
+                                        <HeaderTh className="fixedHeader large-cell" scope="col">
                                             <span>*상품명</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader large-cell" scope="col">
+                                        <HeaderTh className="fixedHeader" scope="col">
                                             <span>*옵션명1</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
                                             <span>*옵션명2</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
-                                            <span>*옵션 수량</span>
+                                            <span>내품수량1</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
-                                            <span>보내는사람(지정)</span>
+                                            <span>*재고 수량</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
-                                            <span>전화번호1(지정)</span>
+                                            <span>주문번호</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixedHeader" scope="col">
+                                            <span>상품주문번호</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixedHeader xlarge-cell" scope="col">
+                                            <span>주소</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixedHeader" scope="col">
+                                            <span>우편번호</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixedHeader" scope="col">
+                                            <span>배송메시지</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader cancel-btn small-cell" scope="col">
                                             <span></span>
@@ -430,23 +430,11 @@ const DeliveryReadyViewBody = (props) => {
                                                         checked={props.__handleEventControl().releaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
                                                     />
                                                 </BodyTd>
-                                                <BodyTd className="col midium-cell">
-                                                    <span>{data.deliveryReadyItem.orderNumber}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col midium-cell">
-                                                    <span>{data.deliveryReadyItem.prodOrderNumber}</span>
-                                                </BodyTd>
                                                 <BodyTd className="col">
                                                     <span>{data.deliveryReadyItem.receiver}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
                                                     <span>{data.deliveryReadyItem.receiverContact1}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.zipCode}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col xlarge-cell">
-                                                    <span>{data.deliveryReadyItem.destination}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col xlarge-cell">
                                                     <span>{data.deliveryReadyItem.prodName}</span>
@@ -457,29 +445,35 @@ const DeliveryReadyViewBody = (props) => {
                                                 <BodyTd className="col option-code-btn" onClick={(e) => props.__handleEventControl().deliveryReadyOptionInfo().open(e, data.deliveryReadyItem)}>
                                                     <span>{data.deliveryReadyItem.optionManagementCode}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.unit}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.deliveryMessage}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd className="col large-cell">
                                                     <span>{data.prodManagementName}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col large-cell">
+                                                <BodyTd className="col">
                                                     <span>{data.optionDefaultName}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
                                                     <span>{data.optionManagementName}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
+                                                    <span>{data.deliveryReadyItem.unit}</span>
+                                                </BodyTd>
+                                                <BodyTd className="col">
                                                     <span>{data.optionStockUnit}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>스토어명</span>
+                                                <BodyTd className="col midium-cell">
+                                                    <span>{data.deliveryReadyItem.orderNumber}</span>
+                                                </BodyTd>
+                                                <BodyTd className="col midium-cell">
+                                                    <span>{data.deliveryReadyItem.prodOrderNumber}</span>
+                                                </BodyTd>
+                                                <BodyTd className="col xlarge-cell">
+                                                    <span>{data.deliveryReadyItem.destination}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
-                                                    <span>070-0000-0000</span>
+                                                    <span>{data.deliveryReadyItem.zipCode}</span>
+                                                </BodyTd>
+                                                <BodyTd className="col">
+                                                    <span>{data.deliveryReadyItem.deliveryMessage}</span>
                                                 </BodyTd>
                                                 <BodyTd>
                                                     <CancelBtn type="button" className="col cancel-btn small-cell" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeToUnreleaseData(e, data.deliveryReadyItem)}>

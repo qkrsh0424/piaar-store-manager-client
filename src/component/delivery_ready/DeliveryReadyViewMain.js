@@ -2,6 +2,9 @@ import axios from 'axios';
 import {useState, useEffect} from 'react';
 import moment from 'moment';
 
+// handler
+import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD } from '../../handler/dateHandler';
+
 // data connect
 import { deliveryReadyDataConnect } from '../../data_connect/deliveryReadyDataConnect';
 
@@ -26,6 +29,12 @@ const DeliveryReadyViewMain = () => {
             key: 'selection'
         }
     );
+    const [exSelectionRange, setExSelectionRange] = useState(
+        {
+            startDate: new Date(),
+            endDate: new Date(),
+        }
+    );
     const [deliveryReadyDateRangePickerModalOpen, setDeliveryReadyDateRangePickerModalOpen] = useState(false);
     const [deliveryReadyOptionInfoModalOpen, setDeliveryReadyOptionInfoModalOpen] = useState(false);
     const [selectedDateText, setSelectedDateText] = useState("날짜 선택");
@@ -36,8 +45,8 @@ const DeliveryReadyViewMain = () => {
 
     useEffect(() => {
         async function fetchInit() {
-            await __handleDataConnect().getDeliveryReadyUnreleasedData();
-            await __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+            __handleDataConnect().getDeliveryReadyUnreleasedData();
+            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
         }
         fetchInit();
     }, []);
@@ -63,10 +72,12 @@ const DeliveryReadyViewMain = () => {
             },
             getDeliveryReadyReleasedData: async function (start, end) {
                 var date1 = new Date(start);
-                date1 = moment(date1).format('YYYY-MM-DD 00:00:00');        // start date 00:00:00 설정
+                date1 = getStartDate(date1);
+                date1 = dateToYYYYMMDDhhmmss(date1);
 
                 var date2 = new Date(end);
-                date2 = moment(date2).format('YYYY-MM-DD 23:59:59');        // end date 23:59:59 설정
+                date2 = getEndDate(date2);
+                date2 = dateToYYYYMMDDhhmmss(date2);
 
                 setReleaseCheckedOrderList([]);
 
@@ -75,7 +86,7 @@ const DeliveryReadyViewMain = () => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setReleasedData(res.data.data);
                         }
-                        setSelectedDateText(date1.substring(0, 10) + " ~ " + date2.substring(0, 10));
+                        setSelectedDateText(dateToYYMMDD(date1) + " ~ " + dateToYYMMDD(date2));
                     })
                     .catch(err => {
                         let res = err.response;
@@ -137,7 +148,12 @@ const DeliveryReadyViewMain = () => {
                         }
                     })
             },
-            changeItemOptionManagementCode: async function (deliveryReadyItem, optionCode) {
+            changeItemOptionManagementCode: async function (optionCode) {
+                // let json = {
+                //     ...deliveryReadyItem,
+                //     optionManagementCode:optionCode
+                // };
+
                 await deliveryReadyDataConnect().updateOptionInfo(deliveryReadyItem, optionCode)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
@@ -156,7 +172,7 @@ const DeliveryReadyViewMain = () => {
                         }
                     })
             },
-            changeItemsOptionManagementCode: async function (deliveryReadyItem, optionCode) {
+            changeItemsOptionManagementCode: async function (optionCode) {
                 await deliveryReadyDataConnect().updateAllOptionInfo(deliveryReadyItem, optionCode)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
@@ -175,10 +191,16 @@ const DeliveryReadyViewMain = () => {
                         }
                     })
             },
-            downloadOrderForm: async function (data) {
+            downloadOrderForm: async function (data, sender, senderContact1) {
+                data.map(r => {
+                    r.sender = sender;
+                    r.senderContact1 = senderContact1;
+
+                    return r;
+                })
+
                 await deliveryReadyDataConnect().downloadOrderForm(data)
                     .then(res => {
-                        console.log(res);
                         const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
                         const link = document.createElement('a');
                         link.href = url;
@@ -187,12 +209,9 @@ const DeliveryReadyViewMain = () => {
                         link.click();
 
                         setUnreleaseCheckedOrderList([]);
-
-                        __handleEventControl().backdropLoading().close();
                     })
                     .catch(err => {
                         console.log(err);
-                        __handleEventControl().backdropLoading().close();
                     });
             }
         }
@@ -235,7 +254,7 @@ const DeliveryReadyViewMain = () => {
                             setUnreleaseCheckedOrderList(unreleaseCheckedOrderList.concat(unreleaseOrderId));
                         }
                     },
-                    getCheckedData: async function () {
+                    getCheckedData: function () {
                         let dataList = [];
 
                         if (unreleasedData) {
@@ -292,7 +311,7 @@ const DeliveryReadyViewMain = () => {
                             setReleaseCheckedOrderList(releaseCheckedOrderList.concat(releaseOrderId));
                         }
                     },
-                    getCheckedData: async function () {
+                    getCheckedData: function () {
                         let dataList = [];
 
                         if (releasedData) {
@@ -318,11 +337,22 @@ const DeliveryReadyViewMain = () => {
                     },
                     close: function () {
                         setDeliveryReadyDateRangePickerModalOpen(false);
+                        setSelectionRange({
+                            startDate: exSelectionRange.startDate,
+                            endDate: exSelectionRange.endDate,
+                            key: 'selection'
+                        });
+                        __handleDataConnect().getDeliveryReadyReleasedData(exSelectionRange.startDate, exSelectionRange.endDate);
                     },
                     selectDateRange: async function (startDate, endDate) {
-                        await __handleDataConnect().getDeliveryReadyReleasedData(startDate, endDate);
+                        setExSelectionRange({
+                            startDate: selectionRange.startDate,
+                            endDate: selectionRange.endDate,
+                        });
+                        __handleDataConnect().getDeliveryReadyReleasedData(startDate, endDate);
                     },
                     changeReleasedData: function (date) {
+                        console.log(date);
                         setSelectionRange(date.selection);
                     }
                 }
@@ -355,10 +385,10 @@ const DeliveryReadyViewMain = () => {
                         return releaseCheckedOrderList.includes(optionCode);
                     },
                     changeItemOption: async function () {
-                        await __handleDataConnect().changeItemOptionManagementCode(deliveryReadyItem, changedOptionManagementCode);
+                        await __handleDataConnect().changeItemOptionManagementCode(changedOptionManagementCode);
                     },
                     changeItemsOption: async function () {
-                        await __handleDataConnect().changeItemsOptionManagementCode(deliveryReadyItem, changedOptionManagementCode);
+                        await __handleDataConnect().changeItemsOptionManagementCode(changedOptionManagementCode);
                     }
                 }
             },
@@ -366,15 +396,17 @@ const DeliveryReadyViewMain = () => {
                 return {
                     submit: async function (e) {
                         e.preventDefault();
-                        let checkedUnreleaseData = await __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
-                        let checkedReleaseData = await __handleEventControl().releaseCheckedOrderList().getCheckedData();
+
+                        let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
+                        let checkedReleaseData = __handleEventControl().releaseCheckedOrderList().getCheckedData();
 
                         let downloadData = downloadOrderList.concat(checkedUnreleaseData);
                         downloadData = downloadData.concat(checkedReleaseData);
 
                         if (downloadOrderList.length || downloadData.length) {
-                            __handleEventControl().backdropLoading().open();
-                            await __handleDataConnect().downloadOrderForm(downloadOrderList.concat(downloadData));
+                            setBackdropLoading(true);
+                            await __handleDataConnect().downloadOrderForm(downloadOrderList.concat(downloadData), e.target.sender.value, e.target.senderContact1.value);
+                            setBackdropLoading(false);
 
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
@@ -382,16 +414,6 @@ const DeliveryReadyViewMain = () => {
                         else {
                             alert("no checked order data");
                         }
-                    }
-                }
-            },
-            backdropLoading: function () {
-                return {
-                    open: function () {
-                        setBackdropLoading(true);
-                    },
-                    close: function () {
-                        setBackdropLoading(false);
                     }
                 }
             }

@@ -51,6 +51,7 @@ function dateToYYMMDD(idate){
     var date = new Date(idate);
     return moment(date).format("YY.MM.DD");
 }
+
 export {
     getStartDate,
     getEndDate,

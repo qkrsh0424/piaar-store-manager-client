@@ -26,7 +26,11 @@ const deliveryReadyDataConnect = () => {
             })
         },
         getSelectedReleasedData: async function (date1, date2) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/release/${date1}&&${date2}`, {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/release`, {
+                params: {
+                    startDate: date1,
+                    endDate: date2
+                },
                 withCredentials: true
             })
         },
@@ -46,12 +50,18 @@ const deliveryReadyDataConnect = () => {
             })
         },
         updateOptionInfo: async function (deliveryReadyItem, optionCode) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOption/${optionCode}`, deliveryReadyItem, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOption`, deliveryReadyItem, {
+                params: {
+                    optionCode: optionCode
+                },
                 withCredentials: true
             })
         },
         updateAllOptionInfo: async function (deliveryReadyItem, optionCode) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOptions/${optionCode}`, deliveryReadyItem, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/updateOptions`, deliveryReadyItem, {
+                params: {
+                    optionCode: optionCode
+                },
                 withCredentials:true
             })
         },

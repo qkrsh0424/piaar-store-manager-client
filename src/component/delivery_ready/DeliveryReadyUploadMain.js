@@ -15,7 +15,6 @@ const DeliveryReadyUploadMain = () => {
     const [excelData, setExcelData] = useState(null);
     const [formData, setFormData] = useState([]);
     const [backdropLoading, setBackdropLoading] = useState(false);
-    // const [uploadedFile, setUploadedFile] = useState(null);
 
     const __handleDataConnect = () => {
         return {
@@ -28,17 +27,12 @@ const DeliveryReadyUploadMain = () => {
                 var uploadedFormData = new FormData();
                 uploadedFormData.set('file', addFiles[0]);
 
-                // for (let i = 0; i < addFiles.length; i++) {
-                //     formData.set('file', addFiles[i]);
-                // }
-
                 setFormData(uploadedFormData);
 
                 await deliveryReadyDataConnect().postFile(uploadedFormData)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setExcelData(res.data.data);
-                            __handleEventControl().backdropLoading().close();
                         }
                     })
                     .catch(err => {
@@ -49,7 +43,6 @@ const DeliveryReadyUploadMain = () => {
                         } else {
                             alert('undefined error. : uploadExcelFile');
                         }
-                        __handleEventControl().backdropLoading().close();
                     })
             },
             storeExcelFile: async function () {
@@ -85,31 +78,18 @@ const DeliveryReadyUploadMain = () => {
                 return {
                     submit: async function (e) {
                         e.preventDefault();
-                        __handleEventControl().backdropLoading().open();
-                        // console.log(uploadedFile)
+                        setBackdropLoading(true);
                         await __handleDataConnect().uploadExcelFile(e);
+                        setBackdropLoading(false);
                     },
-                    // change: async function (e) {
-                    //     e.preventDefault();
-                    //     setUploadedFile(e);
-                    // }
                 }
             },
             storeExcelData: function () {
                 return {
                     submit: async function (e) {
                         e.preventDefault();
+                        console.log(e);
                         await __handleDataConnect().storeExcelFile(e);
-                    }
-                }
-            },
-            backdropLoading: function () {
-                return {
-                    open: function () {
-                        setBackdropLoading(true);
-                    },
-                    close: function () {
-                        setBackdropLoading(false);
                     }
                 }
             }
@@ -122,7 +102,6 @@ const DeliveryReadyUploadMain = () => {
             <DrawerNavbarMain></DrawerNavbarMain>
             <DeliveryReadyUploadBody
                 excelData={excelData}
-                // uploadedFile={uploadedFile}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyUploadBody>

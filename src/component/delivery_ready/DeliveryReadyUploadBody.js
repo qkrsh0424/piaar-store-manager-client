@@ -25,7 +25,7 @@ const Form = styled.form`
     margin-right: 20px;
 `;
 
-const ControlBtn = styled.label`
+const ControlLabel = styled.label`
     display: inline-block;
     font-size: 16px;
     padding: 6px;
@@ -34,6 +34,29 @@ const ControlBtn = styled.label`
     vertical-align: middle;
     background-color: #fdfdfd;
     border-radius: 3px;
+    transition: opacity 0.1s linear;
+    &:hover {
+        opacity: 0.8;
+        cursor: pointer;
+    }
+
+    @media only screen and (max-width:420px){
+        width: 80%;
+        text-align: center;
+        font-size: 12px;
+    }
+`;
+
+const ControlBtn = styled.button`
+    display: inline-block;
+    font-size: 16px;
+    padding: 6px;
+    margin: 4px;
+    color: #444;
+    vertical-align: middle;
+    background-color: #fdfdfd;
+    border-radius: 3px;
+    border: none;
     transition: opacity 0.1s linear;
     &:hover {
         opacity: 0.8;
@@ -104,7 +127,7 @@ const DeliveryReadyUploadBody = (props) => {
                 <Container className="mt-3">
                     <UploadBar>
                         <Form>
-                            <ControlBtn htmlFor="upload-file-input">배송준비 엑셀 파일 업로드</ControlBtn>
+                            <ControlLabel htmlFor="upload-file-input">배송준비 엑셀 파일 업로드</ControlLabel>
                             <Input id="upload-file-input" type="file" accept=".xls,.xlsx" onClick={(e) => e.target.value = ''} onChange={(e) => props.__handleEventControl().uploadExcelData().submit(e)}/>
                         </Form>
                         <Form onSubmit={(e) => props.__handleEventControl().storeExcelData().submit(e)}>
@@ -117,8 +140,8 @@ const DeliveryReadyUploadBody = (props) => {
                             <tr>
                                 <HeaderTh className="fixedHeader" scope="col">주문번호</HeaderTh>
                                 <HeaderTh className="fixedHeader" scope="col">상품주문번호</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">구매자명</HeaderTh>
                                 <HeaderTh className="fixedHeader" scope="col">판매채널</HeaderTh>
+                                <HeaderTh className="fixedHeader" scope="col">구매자명</HeaderTh>
                                 <HeaderTh className="fixedHeader" scope="col">구매자ID</HeaderTh>
                                 <HeaderTh className="fixedHeader" scope="col">수취인명</HeaderTh>
                                 <HeaderTh className="fixedHeader large-cell" scope="col">결제일</HeaderTh>
