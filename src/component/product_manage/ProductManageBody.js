@@ -172,6 +172,7 @@ const ProductManageBody = (props) => {
                                         <input type='checkbox' onChange={() => props.__handleEventControl().checkedOptionList().checkAll()} checked={props.__handleEventControl().checkedOptionList().isCheckedAll()}></input>
                                     </HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='200'>옵션식별코드</HeaderTh>
+                                    <HeaderTh className='fixedHeader' scope="col" width='150'>노스노스 고유코드</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='200'>옵션명</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='200'>옵션관리명</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='100'>재고수량</HeaderTh>
@@ -227,7 +228,7 @@ const ProductManageBody = (props) => {
                                                         <AddBtn type='button' onClick={() => props.__handleEventControl().productOption().addModalOpen(product.product.id)}>옵션추가</AddBtn>
                                                     </div>
                                                 </BodyTh>
-                                                <BodyTh colSpan={9} style={{background:'#7a7bda20', color:'#888'}}>
+                                                <BodyTh colSpan={10} style={{background:'#7a7bda20', color:'#888'}}>
                                                     <div>{product.product.managementName}-{product.product.code}-{product.product.manufacturingCode}</div>
                                                 </BodyTh>
                                             </RowSpanTr>
@@ -250,6 +251,7 @@ const ProductManageBody = (props) => {
                                                             ></input> */}
                                                         </BodyTd>
                                                         <BodyTd>{option.code}</BodyTd>
+                                                        <BodyTd>{option.nosUniqueCode}</BodyTd>
                                                         <BodyTd>{option.defaultName}</BodyTd>
                                                         <BodyTd>{option.managementName}</BodyTd>
                                                         <BodyTd style={{ fontWeight: '800' }}>{option.stockUnit}</BodyTd>

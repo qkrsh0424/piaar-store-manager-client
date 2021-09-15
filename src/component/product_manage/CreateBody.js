@@ -469,6 +469,7 @@ const CreateBody = (props) => {
                                                                     <OptionTableTh scope="col" width='200'>옵션명 <i className="icon-must" aria-label="필수항목"></i></OptionTableTh>
                                                                     <OptionTableTh scope="col" width='200'>관리옵션명 <i className="icon-must" aria-label="필수항목"></i></OptionTableTh>
                                                                     <OptionTableTh scope="col" width='200'>관리코드 <i className="icon-must" aria-label="필수항목"></i></OptionTableTh>
+                                                                    <OptionTableTh scope="col" width='200'>노스노스 고유코드</OptionTableTh>
                                                                     <OptionTableTh scope="col" width='200'>판매가</OptionTableTh>
                                                                     <OptionTableTh scope="col" width='200'>재고수량</OptionTableTh>
                                                                     <OptionTableTh scope="col" width='200'>상태</OptionTableTh>
@@ -495,6 +496,9 @@ const CreateBody = (props) => {
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
                                                                                     <OptionInput type='text' value={optionData.code} name='code' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
+                                                                                </OptionTableTd>
+                                                                                <OptionTableTd>
+                                                                                    <OptionInput type='text' value={optionData.nosUniqueCode} name='nosUniqueCode' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
                                                                                     <OptionInput type='number' value={optionData.salesPrice} name='salesPrice' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>

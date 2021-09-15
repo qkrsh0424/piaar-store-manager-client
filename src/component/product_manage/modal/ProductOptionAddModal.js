@@ -192,6 +192,20 @@ const ProductOptionAddModal = (props) => {
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">
+                                            노스노스 고유코드
+                                        </span>
+                                    </div>
+                                    <CommonInputEl
+                                        type="text"
+                                        className='form-control'
+                                        name='nosUniqueCode'
+                                        value={props.productOptionAddData.nosUniqueCode}
+                                        onChange={(e) => props.__handleEventControl().productOption().addDataOnChangeInputValue(e)}
+                                    />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
                                             판매가
                                         </span>
                                     </div>

@@ -747,7 +747,6 @@ const ProductManageMain = () => {
                         await __handleDataConnect().searchProductListFj();
                     },
                     checkRequiredAddData: function (receiveDataList) {
-                        // console.log(receiveDataList);
                         for (let i = 0; i < receiveDataList.length; i++) {
                             if (
                                 receiveDataList[i].receiveUnit == null ||
