@@ -94,7 +94,7 @@ const DateSelector = styled.button`
     border: 1px solid transparent;
     text-align: center;
     width: 230px;
-    height: 5vh;
+    height: 30px;
     margin-right: 15px;
     transition: opacity 0.1s linear;
     font-size: 13px;

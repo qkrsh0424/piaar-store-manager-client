@@ -149,11 +149,6 @@ const DeliveryReadyViewMain = () => {
                     })
             },
             changeItemOptionManagementCode: async function (optionCode) {
-                // let json = {
-                //     ...deliveryReadyItem,
-                //     optionManagementCode:optionCode
-                // };
-
                 await deliveryReadyDataConnect().updateOptionInfo(deliveryReadyItem, optionCode)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
@@ -204,7 +199,10 @@ const DeliveryReadyViewMain = () => {
                         const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
                         const link = document.createElement('a');
                         link.href = url;
-                        link.setAttribute('download', `발주서양식.xlsx`);
+
+                        let date = dateToYYMMDD(new Date());
+
+                        link.setAttribute('download', date + ' 발주서양식.xlsx');
                         document.body.appendChild(link);
                         link.click();
 
@@ -333,26 +331,23 @@ const DeliveryReadyViewMain = () => {
             deliveryReadyDateRangePicker: function () {
                 return {
                     open: function () {
+                        setSelectionRange({...selectionRange,
+                            startDate: exSelectionRange.startDate,
+                            endDate: exSelectionRange.endDate
+                        })
                         setDeliveryReadyDateRangePickerModalOpen(true);
                     },
                     close: function () {
                         setDeliveryReadyDateRangePickerModalOpen(false);
-                        setSelectionRange({
-                            startDate: exSelectionRange.startDate,
-                            endDate: exSelectionRange.endDate,
-                            key: 'selection'
-                        });
-                        __handleDataConnect().getDeliveryReadyReleasedData(exSelectionRange.startDate, exSelectionRange.endDate);
                     },
                     selectDateRange: async function (startDate, endDate) {
-                        setExSelectionRange({
+                        setExSelectionRange({...exSelectionRange,
                             startDate: selectionRange.startDate,
-                            endDate: selectionRange.endDate,
-                        });
+                            endDate: selectionRange.endDate
+                        })
                         __handleDataConnect().getDeliveryReadyReleasedData(startDate, endDate);
                     },
                     changeReleasedData: function (date) {
-                        console.log(date);
                         setSelectionRange(date.selection);
                     }
                 }
