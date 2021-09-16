@@ -1,6 +1,4 @@
-import axios from 'axios';
 import {useState, useEffect} from 'react';
-import moment from 'moment';
 
 // handler
 import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD } from '../../handler/dateHandler';
@@ -20,7 +18,6 @@ const DeliveryReadyViewMain = () => {
     const [releasedData, setReleasedData] = useState(null);
     const [unreleaseCheckedOrderList, setUnreleaseCheckedOrderList] = useState([]);
     const [releaseCheckedOrderList, setReleaseCheckedOrderList] = useState([]);
-    const [downloadOrderList, setDownloadOrderList] = useState([]);
     const [backdropLoading, setBackdropLoading] = useState(false);
     
     const [selectionRange, setSelectionRange] = useState(
@@ -125,6 +122,7 @@ const DeliveryReadyViewMain = () => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                            alert('출고 취소되었습니다.');
                         }
                     })
                     .catch(err => {
@@ -356,7 +354,9 @@ const DeliveryReadyViewMain = () => {
                     changeToUnreleaseData: async function (e, deliveryReadyItem) {
                         e.stopPropagation();
 
-                        await __handleDataConnect().changeToUnreleaseData(deliveryReadyItem);
+                        if(window.confirm('출고를 취소하시겠습니까?')) {
+                            await __handleDataConnect().changeToUnreleaseData(deliveryReadyItem);
+                        }
                     }
                 }
             },
@@ -455,17 +455,19 @@ const DeliveryReadyViewMain = () => {
                         let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
                         let checkedReleaseData = __handleEventControl().releaseCheckedOrderList().getCheckedData();
 
-                        let downloadData = downloadOrderList.concat(checkedUnreleaseData);
-                        downloadData = downloadData.concat(checkedReleaseData);
+                        let downloadData = [
+                            ...checkedReleaseData,
+                            ...checkedUnreleaseData
+                        ]
 
                         if(!storeInfoData.storeName || !storeInfoData.storeContact){
                             alert('스토어명과 스토어 전화번호를 모두 입력해 주세요.')
                             return;
                         };
 
-                        if (downloadOrderList.length || downloadData.length) {
+                        if (downloadData.length > 0) {
                             setBackdropLoading(true);
-                            await __handleDataConnect().downloadTailoOrderForm(downloadOrderList.concat(downloadData), storeInfoData.storeName, storeInfoData.storeContact);
+                            await __handleDataConnect().downloadTailoOrderForm(downloadData, storeInfoData.storeName, storeInfoData.storeContact);
                             setBackdropLoading(false);
 
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
