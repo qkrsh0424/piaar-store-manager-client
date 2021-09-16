@@ -22,6 +22,7 @@ const DeliveryReadyViewMain = () => {
     const [releaseCheckedOrderList, setReleaseCheckedOrderList] = useState([]);
     const [downloadOrderList, setDownloadOrderList] = useState([]);
     const [backdropLoading, setBackdropLoading] = useState(false);
+    
     const [selectionRange, setSelectionRange] = useState(
         {
             startDate: new Date(),
@@ -38,10 +39,15 @@ const DeliveryReadyViewMain = () => {
     const [deliveryReadyDateRangePickerModalOpen, setDeliveryReadyDateRangePickerModalOpen] = useState(false);
     const [deliveryReadyOptionInfoModalOpen, setDeliveryReadyOptionInfoModalOpen] = useState(false);
     const [selectedDateText, setSelectedDateText] = useState("날짜 선택");
+    
     const [deliveryReadyOptionInfo, setDeliveryReadyOptionInfo] = useState(null);
     const [deliveryReadyItem, setDeliveryReadyItem] = useState(null);
     const [originOptionManagementCode, setOriginOptionManagementCode] = useState(null);
     const [changedOptionManagementCode, setChangedOptionManagementCode] = useState(null);
+    const [storeInfoData, setStoreInfoData] = useState({
+        storeName: null,
+        storeContact: null
+    });
 
     useEffect(() => {
         async function fetchInit() {
@@ -186,7 +192,7 @@ const DeliveryReadyViewMain = () => {
                         }
                     })
             },
-            downloadOrderForm: async function (data, sender, senderContact1) {
+            downloadHansanOrderForm: async function (data, sender, senderContact1) {
                 data.map(r => {
                     r.sender = sender;
                     r.senderContact1 = senderContact1;
@@ -194,7 +200,7 @@ const DeliveryReadyViewMain = () => {
                     return r;
                 })
 
-                await deliveryReadyDataConnect().downloadOrderForm(data)
+                await deliveryReadyDataConnect().downloadHansanOrderForm(data)
                     .then(res => {
                         const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
                         const link = document.createElement('a');
@@ -202,7 +208,33 @@ const DeliveryReadyViewMain = () => {
 
                         let date = dateToYYMMDD(new Date());
 
-                        link.setAttribute('download', date + ' 발주서양식.xlsx');
+                        link.setAttribute('download', '[' + date + ']한산 발주서양식.xlsx');
+                        document.body.appendChild(link);
+                        link.click();
+
+                        setUnreleaseCheckedOrderList([]);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            },
+            downloadTailoOrderForm: async function (data, sender, senderContact1) {
+                data.map(r => {
+                    r.sender = sender;
+                    r.senderContact1 = senderContact1;
+
+                    return r;
+                })
+
+                await deliveryReadyDataConnect().downloadTailoOrderForm(data)
+                    .then(res => {
+                        const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
+                        const link = document.createElement('a');
+                        link.href = url;
+
+                        let date = dateToYYMMDD(new Date());
+
+                        link.setAttribute('download', '[' + date + ']테일로 발주서양식.xlsx');
                         document.body.appendChild(link);
                         link.click();
 
@@ -389,18 +421,25 @@ const DeliveryReadyViewMain = () => {
             },
             downloadOrderFormData: function () {
                 return {
-                    submit: async function (e) {
+                    hansanFormDownload: async function (e) {
                         e.preventDefault();
 
                         let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
                         let checkedReleaseData = __handleEventControl().releaseCheckedOrderList().getCheckedData();
 
-                        let downloadData = downloadOrderList.concat(checkedUnreleaseData);
-                        downloadData = downloadData.concat(checkedReleaseData);
+                        let downloadData = [
+                            ...checkedReleaseData,
+                            ...checkedUnreleaseData
+                        ]
 
-                        if (downloadOrderList.length || downloadData.length) {
+                        if(!storeInfoData.storeName || !storeInfoData.storeContact){
+                            alert('스토어명과 스토어 전화번호를 모두 입력해 주세요.')
+                            return;
+                        };
+
+                        if (downloadData.length > 0) {
                             setBackdropLoading(true);
-                            await __handleDataConnect().downloadOrderForm(downloadOrderList.concat(downloadData), e.target.sender.value, e.target.senderContact1.value);
+                            await __handleDataConnect().downloadHansanOrderForm(downloadData, storeInfoData.storeName, storeInfoData.storeContact);
                             setBackdropLoading(false);
 
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
@@ -409,6 +448,48 @@ const DeliveryReadyViewMain = () => {
                         else {
                             alert("no checked order data");
                         }
+                    },
+                    tailoFormDownload: async function (e) {
+                        e.preventDefault();
+
+                        let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
+                        let checkedReleaseData = __handleEventControl().releaseCheckedOrderList().getCheckedData();
+
+                        let downloadData = downloadOrderList.concat(checkedUnreleaseData);
+                        downloadData = downloadData.concat(checkedReleaseData);
+
+                        if(!storeInfoData.storeName || !storeInfoData.storeContact){
+                            alert('스토어명과 스토어 전화번호를 모두 입력해 주세요.')
+                            return;
+                        };
+
+                        if (downloadOrderList.length || downloadData.length) {
+                            setBackdropLoading(true);
+                            await __handleDataConnect().downloadTailoOrderForm(downloadOrderList.concat(downloadData), storeInfoData.storeName, storeInfoData.storeContact);
+                            setBackdropLoading(false);
+
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                        }
+                        else {
+                            alert("no checked order data");
+                        }
+                    }
+                }
+            },
+            storeInfo: function () {
+                return {
+                    modifyStoreNameOnChangeInputValue: function (e) {
+                        setStoreInfoData({
+                            ...storeInfoData,
+                            storeName : e.target.value
+                        });
+                    },
+                    modifyStoreContactOnChangeInputValue: function (e) {
+                        setStoreInfoData({
+                            ...storeInfoData,
+                            storeContact : e.target.value
+                        });
                     }
                 }
             }

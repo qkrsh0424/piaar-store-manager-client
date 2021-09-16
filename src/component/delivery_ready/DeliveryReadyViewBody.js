@@ -7,21 +7,19 @@ import CloseIcon from '@material-ui/icons/Close';
 
 
 const Container = styled.div`
+    padding-bottom: 150px;
     overflow: auto;
     background-color: rgba(122, 123, 218, 0.125);
 `;
 
 const DownloadBar = styled.div`
     color: white;
-    width: 100%;
     height: 50px;
-    display: inline-block;
+    display: flex;
     border-radius: 5px;
     margin-bottom: 5px;
-
-    @media only screen and (max-width:620px){
-        height: auto;
-    }
+    height: auto;
+    overflow: auto;
 `;
 
 const Form = styled.form`
@@ -30,9 +28,9 @@ const Form = styled.form`
 `;
 
 const DownloadButton = styled.button`
+    margin: 5px;
     display: inline-block;
     border: 1px solid transparent;
-    margin-right: 10px;
     font-size: 16px;
     padding: 8px;
     color: white;
@@ -46,8 +44,8 @@ const DownloadButton = styled.button`
         cursor: pointer;
     }
 
-    @media only screen and (max-width:620px){
-        display: block;
+    @media only screen and (max-width:450px){
+        width: 150px;
     }
 `;
 
@@ -80,7 +78,6 @@ const BoardContainer = styled.div`
 const BoardTitle = styled.div`
     margin: 10px;
     font-size: large;
-    /* padding: 5px 10px; */
     color: rgba(000, 102, 153, 0.9);
     display: inline-block;
     width: 100%;
@@ -113,7 +110,6 @@ const CancelBtn = styled.button`
     font-size: 13px;
     border-radius: 3px;
     border: none;
-    border-right: 1px solid #f5f5f5;
     background-color: inherit;
     transition: opacity 0.1s linear;
 
@@ -134,6 +130,15 @@ const TableContainer = styled.div`
         background: #f1f1f1;
         z-index:10;
     }
+    
+    & .small-cell {
+        width: 50px;
+        padding: 0;
+    }
+
+    & .medium-cell {
+        width:90px;
+    }
 
     & .large-cell {
         width: 300px;
@@ -141,11 +146,6 @@ const TableContainer = styled.div`
 
     & .xlarge-cell {
         width: 500px;
-    }
-
-    & .small-cell {
-        width: 50px;
-        padding: 0;
     }
 
     & .option-code-btn {
@@ -195,6 +195,20 @@ const StoreInfoText = styled.input`
     border: 1px solid #a7a7a740;
     text-align: center;
     height: 33px;
+
+    @media only screen and (max-width:900px){
+        width: 195px;
+    }
+
+    @media only screen and (max-width:450px){
+        width: 150px;
+    }
+`;
+
+const FormBox = styled.span`
+    @media only screen and (max-width:900px){
+        display: block;
+    }
 `;
 
 const DeliveryReadyViewBody = (props) => {
@@ -202,10 +216,15 @@ const DeliveryReadyViewBody = (props) => {
         <>
             <Container>
                 <DownloadBar>
-                    <Form onSubmit={(e) => props.__handleEventControl().downloadOrderFormData().submit(e)}>
-                        <DownloadButton type="submit">발주서 다운</DownloadButton>
-                        <StoreInfoText id="sender" type="text" placeholder="스토어명" required></StoreInfoText>
-                        <StoreInfoText id="senderContact1" type="text" placeholder="스토어 전화번호" required></StoreInfoText>
+                    <Form>
+                        <FormBox>
+                            <DownloadButton type="button" onClick={(e) => props.__handleEventControl().downloadOrderFormData().hansanFormDownload(e)}>한산 발주서 다운</DownloadButton>
+                            <DownloadButton type="button" onClick={(e) => props.__handleEventControl().downloadOrderFormData().tailoFormDownload(e)}>테일로 발주서 다운</DownloadButton>
+                        </FormBox>
+                        <FormBox>
+                            <StoreInfoText type="text" name="storeName" placeholder="스토어명" onChange={(e) => props.__handleEventControl().storeInfo().modifyStoreNameOnChangeInputValue(e)} required></StoreInfoText>
+                            <StoreInfoText type="text" name="storeContact" placeholder="스토어 전화번호" onChange={(e) => props.__handleEventControl().storeInfo().modifyStoreContactOnChangeInputValue(e)} required></StoreInfoText>
+                        </FormBox>
                     </Form>
                 </DownloadBar>
                 <DataContainer>
@@ -225,22 +244,25 @@ const DeliveryReadyViewBody = (props) => {
                                                 onChange={() => props.__handleEventControl().unreleaseCheckedOrderList().checkAll()} checked={props.__handleEventControl().unreleaseCheckedOrderList().isCheckedAll()}
                                             />
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
+                                        <HeaderTh className="fixedHeader medium-cell" scope="col">
                                             <span>받는사람</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>전화번호1</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader xlarge-cell" scope="col">
+                                        <HeaderTh className="fixedHeader large-cell" scope="col">
                                             <span>상품명1</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader large-cell" scope="col">
                                             <span>상품상세1</span>
                                         </HeaderTh>
+                                        <HeaderTh className="fixedHeader small-cell" scope="col">
+                                            <span>수량</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixedHeader medium-cell" scope="col">
+                                            <span>*재고 수량</span>
+                                        </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
                                             <span>옵션관리코드</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader large-cell" scope="col">
+                                        <HeaderTh className="fixedHeader" scope="col">
                                             <span>*상품명</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
@@ -248,12 +270,6 @@ const DeliveryReadyViewBody = (props) => {
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
                                             <span>*옵션명2</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>내품수량1</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>*재고 수량</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
                                             <span>주문번호</span>
@@ -265,6 +281,9 @@ const DeliveryReadyViewBody = (props) => {
                                             <span>주소</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
+                                            <span>전화번호1</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixedHeader medium-cell" scope="col">
                                             <span>우편번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
@@ -294,25 +313,10 @@ const DeliveryReadyViewBody = (props) => {
                                         <span>{data.deliveryReadyItem.receiver}</span>
                                     </BodyTd>
                                     <BodyTd className="col">
-                                        <span>{data.deliveryReadyItem.receiverContact1}</span>
-                                    </BodyTd>
-                                    <BodyTd className="col xlarge-cell">
                                         <span>{data.deliveryReadyItem.prodName}</span>
                                     </BodyTd>
-                                    <BodyTd className="col large-cell">
-                                        <span>{data.deliveryReadyItem.optionInfo}</span>
-                                    </BodyTd>
-                                    <BodyTd className="col option-code-btn" onClick={(e) => props.__handleEventControl().deliveryReadyOptionInfo().open(e, data.deliveryReadyItem)}>
-                                        <span>{data.deliveryReadyItem.optionManagementCode}</span>
-                                    </BodyTd>
-                                    <BodyTd className="col large-cell">
-                                        <span>{data.prodManagementName}</span>
-                                    </BodyTd>
-                                    <BodyTd className="col large-cell">
-                                        <span>{data.optionDefaultName}</span>
-                                    </BodyTd>
                                     <BodyTd className="col">
-                                        <span>{data.optionManagementName}</span>
+                                        <span>{data.deliveryReadyItem.optionInfo}</span>
                                     </BodyTd>
                                     <BodyTd className="col">
                                         <span>{data.deliveryReadyItem.unit}</span>
@@ -320,14 +324,29 @@ const DeliveryReadyViewBody = (props) => {
                                     <BodyTd className="col">
                                         <span>{data.optionStockUnit}</span>
                                     </BodyTd>
+                                    <BodyTd className="col option-code-btn" onClick={(e) => props.__handleEventControl().deliveryReadyOptionInfo().open(e, data.deliveryReadyItem)}>
+                                        <span>{data.deliveryReadyItem.optionManagementCode}</span>
+                                    </BodyTd>
+                                    <BodyTd className="col">
+                                        <span>{data.prodManagementName}</span>
+                                    </BodyTd>
+                                    <BodyTd className="col">
+                                        <span>{data.optionDefaultName}</span>
+                                    </BodyTd>
+                                    <BodyTd className="col">
+                                        <span>{data.optionManagementName}</span>
+                                    </BodyTd>
                                     <BodyTd className="col">
                                         <span>{data.deliveryReadyItem.orderNumber}</span>
                                     </BodyTd>
                                     <BodyTd className="col">
                                         <span>{data.deliveryReadyItem.prodOrderNumber}</span>
                                     </BodyTd>
-                                    <BodyTd className="co xlarge-cell">
+                                    <BodyTd className="co">
                                         <span>{data.deliveryReadyItem.destination}</span>
+                                    </BodyTd>
+                                    <BodyTd className="col">
+                                        <span>{data.deliveryReadyItem.receiverContact1}</span>
                                     </BodyTd>
                                     <BodyTd className="col">
                                         <span>{data.deliveryReadyItem.zipCode}</span>
@@ -365,22 +384,25 @@ const DeliveryReadyViewBody = (props) => {
                                                 onChange={() => props.__handleEventControl().releaseCheckedOrderList().checkAll()} checked={props.__handleEventControl().releaseCheckedOrderList().isCheckedAll()}
                                             />
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
+                                        <HeaderTh className="fixedHeader medium-cell" scope="col">
                                             <span>받는사람</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>전화번호1</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader xlarge-cell" scope="col">
+                                        <HeaderTh className="fixedHeader large-cell" scope="col">
                                             <span>상품명1</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader large-cell" scope="col">
                                             <span>상품상세1</span>
                                         </HeaderTh>
+                                        <HeaderTh className="fixedHeader small-cell" scope="col">
+                                            <span>수량</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixedHeader medium-cell" scope="col">
+                                            <span>*재고 수량</span>
+                                        </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
                                             <span>옵션관리코드</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader large-cell" scope="col">
+                                        <HeaderTh className="fixedHeader" scope="col">
                                             <span>*상품명</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
@@ -388,12 +410,6 @@ const DeliveryReadyViewBody = (props) => {
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
                                             <span>*옵션명2</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>내품수량1</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
-                                            <span>*재고 수량</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
                                             <span>주문번호</span>
@@ -405,6 +421,9 @@ const DeliveryReadyViewBody = (props) => {
                                             <span>주소</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
+                                            <span>전화번호1</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixedHeader medium-cell" scope="col">
                                             <span>우편번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
@@ -416,7 +435,7 @@ const DeliveryReadyViewBody = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {props.releasedData && props.releasedData.map((data, releasedDataIdx) => {
+                                    {props.releasedData?.map((data, releasedDataIdx) => {
                                         return (
                                             <BodyTr
                                                 key={'releasedItem' + releasedDataIdx}
@@ -434,18 +453,21 @@ const DeliveryReadyViewBody = (props) => {
                                                     <span>{data.deliveryReadyItem.receiver}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.receiverContact1}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col xlarge-cell">
                                                     <span>{data.deliveryReadyItem.prodName}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col large-cell">
+                                                <BodyTd className="col">
                                                     <span>{data.deliveryReadyItem.optionInfo}</span>
+                                                </BodyTd>
+                                                <BodyTd className="col">
+                                                    <span>{data.deliveryReadyItem.unit}</span>
+                                                </BodyTd>
+                                                <BodyTd className="col">
+                                                    <span>{data.optionStockUnit}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col option-code-btn" onClick={(e) => props.__handleEventControl().deliveryReadyOptionInfo().open(e, data.deliveryReadyItem)}>
                                                     <span>{data.deliveryReadyItem.optionManagementCode}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col large-cell">
+                                                <BodyTd className="col">
                                                     <span>{data.prodManagementName}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
@@ -455,19 +477,16 @@ const DeliveryReadyViewBody = (props) => {
                                                     <span>{data.optionManagementName}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.unit}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.optionStockUnit}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col midium-cell">
                                                     <span>{data.deliveryReadyItem.orderNumber}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col midium-cell">
+                                                <BodyTd className="col">
                                                     <span>{data.deliveryReadyItem.prodOrderNumber}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col xlarge-cell">
+                                                <BodyTd className="col">
                                                     <span>{data.deliveryReadyItem.destination}</span>
+                                                </BodyTd>
+                                                <BodyTd className="col">
+                                                    <span>{data.deliveryReadyItem.receiverContact1}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
                                                     <span>{data.deliveryReadyItem.zipCode}</span>

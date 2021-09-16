@@ -69,8 +69,14 @@ const deliveryReadyDataConnect = () => {
                 withCredentials:true
             })
         },
-        downloadOrderForm: async function (data) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/download`, data, {
+        downloadHansanOrderForm: async function (data) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/download/hansan`, data, {
+                responseType: 'blob',
+                withCredentials:true
+            })
+        },
+        downloadTailoOrderForm: async function (data) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/view/download/tailo`, data, {
                 responseType: 'blob',
                 withCredentials:true
             })
