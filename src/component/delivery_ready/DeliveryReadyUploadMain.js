@@ -40,6 +40,8 @@ const DeliveryReadyUploadMain = () => {
 
                         if (res.status === 401) {
                             alert('접근 권한이 없습니다.');
+                        } else if (res.status === 415) {
+                            alert('엑셀 파일만 업로드 해주세요.');
                         } else {
                             alert('undefined error. : uploadExcelFile');
                         }

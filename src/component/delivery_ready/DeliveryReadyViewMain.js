@@ -65,10 +65,10 @@ const DeliveryReadyViewMain = () => {
                     })
                     .catch(err => {
                         let res = err.response;
-
+                        
                         if (res.status === 403) {
                             alert('권한이 없습니다.');
-                        } else {
+                        } else{
                             alert('undefined error. : getDeliveryReadyUnreleasedData');
                         }
                     })

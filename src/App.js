@@ -130,7 +130,13 @@ function App(props) {
                                     {userRdx.userInfo ? <DeliveryReadyUploadMain></DeliveryReadyUploadMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                                 <Route exact path='/delivery-ready/naver/view'>
-                                    {userRdx.userInfo ? <DeliveryReadyViewMain></DeliveryReadyViewMain> : <Redirect to={'/login'}></Redirect>}
+                                    {
+                                        userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER"))
+                                            ?
+                                            <DeliveryReadyViewMain></DeliveryReadyViewMain>
+                                            :
+                                            <Redirect to={'/login'}></Redirect>
+                                    }
                                 </Route>
                             </Switch>
                         )

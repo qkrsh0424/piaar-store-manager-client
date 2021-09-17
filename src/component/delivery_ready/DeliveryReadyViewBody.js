@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
@@ -212,8 +213,11 @@ const FormBox = styled.span`
 `;
 
 const DeliveryReadyViewBody = (props) => {
+    const userRdx = useSelector(state => state.user);
+
     return (
         <>
+            {userRdx.isLoading === false &&
             <Container>
                 <DownloadBar>
                     <Form>
@@ -508,6 +512,7 @@ const DeliveryReadyViewBody = (props) => {
                     </TableContainer>
                 </DataContainer>
             </Container>
+        }
         </>
     )
 }
