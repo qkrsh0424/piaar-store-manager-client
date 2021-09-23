@@ -155,7 +155,6 @@ const ProductOptionModifyModal = (props) => {
                                         name='nosUniqueCode'
                                         value={props.productOptionModifyData.nosUniqueCode}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
-                                        required
                                     />
 
                                 </div>

@@ -8,10 +8,12 @@ import { deliveryReadyDataConnect } from '../../data_connect/deliveryReadyDataCo
 
 // component
 import DrawerNavbarMain from '../nav/DrawerNavbarMain';
-import DeliveryReadyViewBody from './DeliveryReadyViewBody';
 import DeliveryReadyDateRangePickerModal from './modal/DeliveryReadyDateRangePickerModal';
 import DeliveryReadyOptionInfoModal from './modal/DeliveryReadyOptionInfoModal';
 import BackdropLoading from '../loading/BackdropLoading';
+import DeliveryReadyViewBar from './DeliveryReadyViewBar';
+import DeliveryReadyUnreleasedView from './DeliveryReadyUnreleasedView';
+import DeliveryReadyReleasedView from './DeliveryReadyReleasedView';
 
 const DeliveryReadyViewMain = () => {
     const [unreleasedData, setUnreleasedData] = useState(null);
@@ -65,12 +67,7 @@ const DeliveryReadyViewMain = () => {
                     })
                     .catch(err => {
                         let res = err.response;
-                        
-                        if (res.status === 403) {
-                            alert('권한이 없습니다.');
-                        } else{
-                            alert('undefined error. : getDeliveryReadyUnreleasedData');
-                        }
+                        alert(res?.data?.memo);
                     })
             },
             getDeliveryReadyReleasedData: async function (start, end) {
@@ -93,12 +90,7 @@ const DeliveryReadyViewMain = () => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 403) {
-                            alert('권한이 없습니다.');
-                        } else {
-                            alert('undefined error. : getDeliveryReadyReleased');
-                        }
+                        alert(res?.data?.memo);
                     })
 
                 setDeliveryReadyDateRangePickerModalOpen(false);
@@ -112,8 +104,8 @@ const DeliveryReadyViewMain = () => {
                         }
                     })
                     .catch(err => {
-                        console.log(err);
-                        alert('undefined error. : deleteOrderData');
+                        let res = err.response;
+                        alert(res?.data?.memo);
                     })
             },
             changeToUnreleaseData: async function (deliveryReadyItem) {
@@ -127,12 +119,7 @@ const DeliveryReadyViewMain = () => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 403) {
-                            alert('권한이 없습니다.');
-                        } else {
-                            alert('undefined error. : changeToUnreleasedData');
-                        }
+                        alert(res?.data?.memo);
                     })
             },
             getOptionManagementCode: async function () {
@@ -144,12 +131,7 @@ const DeliveryReadyViewMain = () => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 403) {
-                            alert('권한이 없습니다.');
-                        } else {
-                            alert('undefined error. : getOptionManagementCode');
-                        }
+                        alert(res?.data?.memo);
                     })
             },
             changeItemOptionManagementCode: async function (optionCode) {
@@ -163,12 +145,7 @@ const DeliveryReadyViewMain = () => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 403) {
-                            alert('권한이 없습니다.');
-                        } else {
-                            alert('undefined error. : changeItemOptionManagementCode');
-                        }
+                        alert(res?.data?.memo);
                     })
             },
             changeItemsOptionManagementCode: async function (optionCode) {
@@ -182,12 +159,7 @@ const DeliveryReadyViewMain = () => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 403) {
-                            alert('권한이 없습니다.');
-                        } else {
-                            alert('undefined error. : changeItemsOptionManagementCode');
-                        }
+                        alert(res?.data?.memo);
                     })
             },
             downloadHansanOrderForm: async function (data, sender, senderContact1) {
@@ -520,16 +492,25 @@ const DeliveryReadyViewMain = () => {
 
            <BackdropLoading open={backdropLoading} />
            <DrawerNavbarMain></DrawerNavbarMain>
-           <DeliveryReadyViewBody
-                releasedData={releasedData}
-                unreleasedData={unreleasedData}
-                releaseCheckedOrderList={releaseCheckedOrderList}
-                unreleaseCheckedOrderList={unreleaseCheckedOrderList}
-                selectedDateText={selectedDateText}
+
+            <DeliveryReadyViewBar
                 storeInfoData={storeInfoData}
 
                 __handleEventControl={__handleEventControl}
-            ></DeliveryReadyViewBody>
+            ></DeliveryReadyViewBar>
+            <DeliveryReadyUnreleasedView
+                unreleasedData={unreleasedData}
+                unreleaseCheckedOrderList={unreleaseCheckedOrderList}
+
+                __handleEventControl={__handleEventControl}
+            ></DeliveryReadyUnreleasedView>
+            <DeliveryReadyReleasedView
+                releasedData={releasedData}
+                releaseCheckedOrderList={releaseCheckedOrderList}
+                selectedDateText={selectedDateText}
+
+                __handleEventControl={__handleEventControl}
+            ></DeliveryReadyReleasedView>
         </>
     )
 }
