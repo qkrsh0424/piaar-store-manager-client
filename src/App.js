@@ -44,7 +44,6 @@ const AppContainer = styled.div`
     -moz-animation: fadein 1.5s; /* Firefox */
     -webkit-animation: fadein 1.5s; /* Safari and Chrome */
     -o-animation: fadein 1.5s; /* Opera */
-    
 `;
 
 function App(props) {

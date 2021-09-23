@@ -69,7 +69,7 @@ const HomeBody = () => {
                         <CustomLink to='/delivery-ready/naver'>네이버 배송준비 데이터 저장하기</CustomLink>
                         {
                             userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
-                                <CustomLink to='/delivery-ready/naver/view'>발주서 다운로드 바로가기</CustomLink>
+                                <CustomLink to='/delivery-ready/naver/view'>발주서 다운로드</CustomLink>
                                 :
                                 <></>
                         }

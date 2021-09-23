@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useMemo} from 'react';
 import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
 
@@ -215,7 +215,7 @@ const FormBox = styled.span`
 const DeliveryReadyViewBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
-    return (
+    return useMemo(()=>(
         <>
             {userRdx.isLoading === false &&
             <Container>
@@ -226,8 +226,8 @@ const DeliveryReadyViewBody = (props) => {
                             <DownloadButton type="button" onClick={(e) => props.__handleEventControl().downloadOrderFormData().tailoFormDownload(e)}>테일로 발주서 다운</DownloadButton>
                         </FormBox>
                         <FormBox>
-                            <StoreInfoText type="text" name="storeName" placeholder="스토어명" onChange={(e) => props.__handleEventControl().storeInfo().modifyStoreNameOnChangeInputValue(e)} required></StoreInfoText>
-                            <StoreInfoText type="text" name="storeContact" placeholder="스토어 전화번호" onChange={(e) => props.__handleEventControl().storeInfo().modifyStoreContactOnChangeInputValue(e)} required></StoreInfoText>
+                            <StoreInfoText type="text" name="storeName" placeholder="스토어명" onChange={(e) => props.__handleEventControl().storeInfo().modifyStoreNameOnChangeInputValue(e)} value={props.storeInfoData.storeName} required></StoreInfoText>
+                            <StoreInfoText type="text" name="storeContact" placeholder="스토어 전화번호" onChange={(e) => props.__handleEventControl().storeInfo().modifyStoreContactOnChangeInputValue(e)} value={props.storeInfoData.storeContact} required></StoreInfoText>
                         </FormBox>
                     </Form>
                 </DownloadBar>
@@ -307,6 +307,7 @@ const DeliveryReadyViewBody = (props) => {
                                     checked={props.__handleEventControl().unreleaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
                                 >
                                     <BodyTd className="col small-cell">
+                                        
                                         <Checkbox
                                             color="default"
                                             inputProps={{ 'aria-label': '미출고 데이터 선택' }}
@@ -514,7 +515,8 @@ const DeliveryReadyViewBody = (props) => {
             </Container>
         }
         </>
-    )
+    ), [props.unreleasedData, props.unreleaseCheckedOrderList])
+        
 }
 
 export default DeliveryReadyViewBody;

@@ -42,8 +42,8 @@ const DeliveryReadyViewMain = () => {
     const [originOptionManagementCode, setOriginOptionManagementCode] = useState(null);
     const [changedOptionManagementCode, setChangedOptionManagementCode] = useState(null);
     const [storeInfoData, setStoreInfoData] = useState({
-        storeName: null,
-        storeContact: null
+        storeName: '',
+        storeContact: ''
     });
 
     useEffect(() => {
@@ -526,6 +526,7 @@ const DeliveryReadyViewMain = () => {
                 releaseCheckedOrderList={releaseCheckedOrderList}
                 unreleaseCheckedOrderList={unreleaseCheckedOrderList}
                 selectedDateText={selectedDateText}
+                storeInfoData={storeInfoData}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyViewBody>

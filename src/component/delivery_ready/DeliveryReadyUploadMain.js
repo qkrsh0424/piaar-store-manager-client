@@ -38,10 +38,12 @@ const DeliveryReadyUploadMain = () => {
                     .catch(err => {
                         let res = err.response;
 
-                        if (res.status === 401) {
+                        if (res.status === 401 && res.data.message === 'need_login') {
                             alert('접근 권한이 없습니다.');
-                        } else if (res.status === 415) {
+                        } else if (res.status === 415 && res.data.message === 'file_extension_error') {
                             alert('엑셀 파일만 업로드 해주세요.');
+                        } else if (res.status === 400){
+                            alert(res.data.memo);   // res.data.message도 비교할 건지 고민
                         } else {
                             alert('undefined error. : uploadExcelFile');
                         }
