@@ -41,7 +41,6 @@ const DeliveryReadyUploadMain = () => {
                     })
             },
             storeExcelFile: async function () {
-            
                 if(!excelData) {
                     alert('파일을 먼저 업로드 해주세요.');
                     return;

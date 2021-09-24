@@ -6,10 +6,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CloseIcon from '@material-ui/icons/Close';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import EventAvailableTwoToneIcon from '@mui/icons-material/EventAvailableTwoTone';
 
 const DataContainer = styled.div`
     padding-bottom: 150px;
-    height:100%;
+    height:auto;
     background-color: rgba(122, 123, 218, 0.125);
 
     & .fixed-header {
@@ -132,18 +133,18 @@ const CancelBtn = styled.button`
 `;
 
 const DateSelector = styled.button`
-    float: right;
-    margin-top: 10px;
     border-radius: 4px;
-    background-color: white;
+    background-color: rgba(122,146,218,0.2);
     box-shadow: 0 1px 2px 0 rgb(35 57 66 / 21%);
     border: 1px solid transparent;
     text-align: center;
-    width: 230px;
-    height: 30px;
-    margin-right: 15px;
+    width: 200px;
+    height: auto;
+    margin-left: 15px;
     transition: opacity 0.1s linear;
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: 400;
+    border: 1px solid rgba(122,146,218,0.55);
 
     &:hover{
         opacity: 0.6;
@@ -174,10 +175,10 @@ const DeliveryReadyReleasedView = (props) => {
             {userRdx.isLoading === false &&
                 <DataContainer>
                     <TableContainer>
-                        <DateSelector type="button" onClick={() => props.__handleEventControl().deliveryReadyDateRangePicker().open()}>🗓 {props.selectedDateText}</DateSelector>
                         <BoardTitle>
                             <span>출고 데이터</span>
                             <CheckBodyTd>[✔️ : {props.releaseCheckedOrderList.length} / {props.releasedData ? props.releasedData.length : 0}개]</CheckBodyTd>
+                            <DateSelector type="button" onClick={() => props.__handleEventControl().deliveryReadyDateRangePicker().open()}><EventAvailableTwoToneIcon fontSize="small" color="action" /> {props.selectedDateText}</DateSelector>
                             <PageBox>
                                 <Stack spacing={2}>
                                     <Pagination

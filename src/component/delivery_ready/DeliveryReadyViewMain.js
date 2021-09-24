@@ -387,7 +387,9 @@ const DeliveryReadyViewMain = () => {
                         await __handleDataConnect().changeItemOptionManagementCode(changedOptionManagementCode);
                     },
                     changeItemsOption: async function () {
-                        await __handleDataConnect().changeItemsOptionManagementCode(changedOptionManagementCode);
+                        if(window.confirm('일괄 변경하시겠습니까?')) {
+                            await __handleDataConnect().changeItemsOptionManagementCode(changedOptionManagementCode);
+                        }
                     }
                 }
             },

@@ -6,6 +6,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 
 import { dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
+
 const Container = styled.div`
 `;
 
@@ -52,6 +53,11 @@ const ReceiveLi = styled.li`
     }
 `;
 
+const TitleText = styled.div`
+    overflow: hidden;
+    height: auto;
+`;
+
 const ModalText = styled.div`
     overflow: hidden;
     height: auto;
@@ -82,15 +88,15 @@ const ReceiveStatusModal = (props) => {
                         </GroupTitle>
                         <NameGroup>
                             <ReceiveLi className="input-group mb-3">
-                                <div className="form-control form-title">
+                                <TitleText className="form-control form-title">
                                     <span>입고 날짜</span>
-                                </div>
-                                <div className="form-control form-title">
+                                </TitleText>
+                                <TitleText className="form-control form-title">
                                     <span>입고 개수</span>
-                                </div>
-                                <div className="form-control form-title">
+                                </TitleText>
+                                <TitleText className="form-control form-title">
                                     <span>메모</span>
-                                </div>
+                                </TitleText>
                             </ReceiveLi>
                             {props.receiveStatusData?.map((data) => {
                                 return (

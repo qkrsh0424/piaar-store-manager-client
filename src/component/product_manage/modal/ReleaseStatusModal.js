@@ -53,6 +53,11 @@ const ReleaseLi = styled.li`
     }
 `;
 
+const TitleText = styled.div`
+    overflow: hidden;
+    height: auto;
+`;
+
 const ModalText = styled.div`
     overflow: hidden;
     height: auto;
@@ -84,15 +89,15 @@ const ReleaseStatusModal = (props) => {
                         </GroupTitle>
                         <NameGroup>
                             <ReleaseLi className="input-group mb-3">
-                                <div className="form-control form-title">
+                                <TitleText className="form-control form-title">
                                     <span>출고 날짜</span>
-                                </div>
-                                <div className="form-control form-title">
+                                </TitleText>
+                                <TitleText className="form-control form-title">
                                     <span>출고 개수</span>
-                                </div>
-                                <div className="form-control form-title">
+                                </TitleText>
+                                <TitleText className="form-control form-title">
                                     <span>메모</span>
-                                </div>
+                                </TitleText>
                             </ReleaseLi>
                             {props.releaseStatusData?.map((data) => {
                                 return (

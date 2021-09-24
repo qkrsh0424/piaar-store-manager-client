@@ -1,4 +1,4 @@
-import React,{useEffect, useMemo, useState} from 'react';
+import React,{useMemo, useState} from 'react';
 import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
 
@@ -8,6 +8,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 const DataContainer = styled.div`
+    padding-bottom: 50px;
     height:auto;
     background-color: rgba(122, 123, 218, 0.125);
 
@@ -156,16 +157,16 @@ const DeliveryReadyUnreleasedView = (props) => {
                     <TableContainer>
                         <BoardTitle>
                             <span>미출고 데이터</span>
-                        <CheckBodyTd>[✔️ : {props.unreleaseCheckedOrderList.length} / {props.unreleasedData ? props.unreleasedData.length : 0}개]</CheckBodyTd>
-                        <PageBox>
-                            <Stack spacing={2}>
-                                <Pagination
-                                    count={pageNumber.length}
-                                    onChange={(e, val) => handleChange(e, val)}
-                                />
-                            </Stack>
-                        </PageBox>
-                    </BoardTitle>
+                            <CheckBodyTd>[✔️ : {props.unreleaseCheckedOrderList.length} / {props.unreleasedData ? props.unreleasedData.length : 0}개]</CheckBodyTd>
+                            <PageBox>
+                                <Stack spacing={2}>
+                                    <Pagination
+                                        count={pageNumber.length}
+                                        onChange={(e, val) => handleChange(e, val)}
+                                    />
+                                </Stack>
+                            </PageBox>
+                        </BoardTitle>
                         <BoardContainer>
                             <table className="table table-sm" style={{ tableLayout: 'fixed' }}>
                                 <thead>
@@ -229,73 +230,73 @@ const DeliveryReadyUnreleasedView = (props) => {
                                 </thead>
                                 <tbody>
                                     {props.unreleasedData?.map((data, unreleasedDataIdx) => {
-                                        if(unreleasedDataIdx < postsPerPage * currentPage && unreleasedDataIdx >= postsPerPage * (currentPage-1))
-                                        return (
-                                            <BodyTr
-                                                key={'unreleasedItem' + unreleasedDataIdx}
-                                                onClick={() => props.__handleEventControl().unreleaseCheckedOrderList().checkOneLi(data.deliveryReadyItem.id)}
-                                                checked={props.__handleEventControl().unreleaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
-                                            >
-                                                <BodyTd className="col small-cell">
+                                        if (unreleasedDataIdx < postsPerPage * currentPage && unreleasedDataIdx >= postsPerPage * (currentPage - 1))
+                                            return (
+                                                <BodyTr
+                                                    key={'unreleasedItem' + unreleasedDataIdx}
+                                                    onClick={() => props.__handleEventControl().unreleaseCheckedOrderList().checkOneLi(data.deliveryReadyItem.id)}
+                                                    checked={props.__handleEventControl().unreleaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
+                                                >
+                                                    <BodyTd className="col small-cell">
 
-                                                    <Checkbox
-                                                        color="default"
-                                                        inputProps={{ 'aria-label': '미출고 데이터 선택' }}
-                                                        checked={props.__handleEventControl().unreleaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
-                                                    />
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.receiver}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.prodName}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.optionInfo}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.unit}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.optionStockUnit}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col option-code-btn" onClick={(e) => props.__handleEventControl().deliveryReadyOptionInfo().open(e, data.deliveryReadyItem)}>
-                                                    <span>{data.deliveryReadyItem.optionManagementCode}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.prodManagementName}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.optionDefaultName}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.optionManagementName}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.orderNumber}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.prodOrderNumber}</span>
-                                                </BodyTd>
-                                                <BodyTd className="co">
-                                                    <span>{data.deliveryReadyItem.destination}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.receiverContact1}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.zipCode}</span>
-                                                </BodyTd>
-                                                <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.deliveryMessage}</span>
-                                                </BodyTd>
-                                                <BodyTd>
-                                                    <CancelBtn type="button" className="col delete-btn small-cell" onClick={(e) => props.__handleEventControl().unreleaseCheckedOrderList().delete(e, data.deliveryReadyItem.cid)}>
-                                                        <DeleteForeverTwoToneIcon />
-                                                    </CancelBtn>
-                                                </BodyTd>
-                                            </BodyTr>
-                                        )
+                                                        <Checkbox
+                                                            color="default"
+                                                            inputProps={{ 'aria-label': '미출고 데이터 선택' }}
+                                                            checked={props.__handleEventControl().unreleaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
+                                                        />
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.deliveryReadyItem.receiver}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.deliveryReadyItem.prodName}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.deliveryReadyItem.optionInfo}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.deliveryReadyItem.unit}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.optionStockUnit}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col option-code-btn" onClick={(e) => props.__handleEventControl().deliveryReadyOptionInfo().open(e, data.deliveryReadyItem)}>
+                                                        <span>{data.deliveryReadyItem.optionManagementCode}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.prodManagementName}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.optionDefaultName}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.optionManagementName}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.deliveryReadyItem.orderNumber}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.deliveryReadyItem.prodOrderNumber}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="co">
+                                                        <span>{data.deliveryReadyItem.destination}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.deliveryReadyItem.receiverContact1}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.deliveryReadyItem.zipCode}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.deliveryReadyItem.deliveryMessage}</span>
+                                                    </BodyTd>
+                                                    <BodyTd>
+                                                        <CancelBtn type="button" className="col delete-btn small-cell" onClick={(e) => props.__handleEventControl().unreleaseCheckedOrderList().delete(e, data.deliveryReadyItem.cid)}>
+                                                            <DeleteForeverTwoToneIcon />
+                                                        </CancelBtn>
+                                                    </BodyTd>
+                                                </BodyTr>
+                                            )
                                     })}
                                 </tbody>
                             </table>
