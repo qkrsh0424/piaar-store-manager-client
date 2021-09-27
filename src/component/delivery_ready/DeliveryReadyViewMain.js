@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import { useHistory } from 'react-router';
 
 // handler
 import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD } from '../../handler/dateHandler';
@@ -47,6 +48,7 @@ const DeliveryReadyViewMain = () => {
         storeName: '',
         storeContact: ''
     });
+    let history = useHistory();
 
     useEffect(() => {
         async function fetchInit() {
@@ -466,6 +468,13 @@ const DeliveryReadyViewMain = () => {
                             ...storeInfoData,
                             storeContact : e.target.value
                         });
+                    }
+                }
+            },
+            movePage: function () {
+                return {
+                    deliveryReadyUpload: async function () {
+                        history.push('/delivery-ready/naver');
                     }
                 }
             }

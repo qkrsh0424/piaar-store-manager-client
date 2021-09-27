@@ -2,6 +2,8 @@ import React,{useMemo} from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+
 const Container = styled.div`
     overflow: auto;
     background-color: rgba(122, 123, 218, 0.125);
@@ -11,19 +13,20 @@ const DownloadBar = styled.div`
     color: white;
     height: 50px;
     display: flex;
+    flex-wrap: wrap;
     border-radius: 5px;
-    margin-bottom: 5px;
     height: auto;
     overflow: auto;
+    margin-bottom: 10px;
 `;
 
 const Form = styled.form`
-    margin: 10px;
-    margin-left: 20px;
+    margin: 0 20px;
 `;
 
 const FormBox = styled.span`
-    @media only screen and (max-width:900px){
+/* 992px, 768px, 576px, 320px */
+    @media only screen and (max-width:768px){
         display: block;
     }
 `;
@@ -45,8 +48,20 @@ const DownloadButton = styled.button`
         cursor: pointer;
     }
 
-    @media only screen and (max-width:450px){
+    @media only screen and (max-width:992px){
+        font-size: 14px;
         width: 150px;
+        margin: 2px;
+    }
+    @media only screen and (max-width:578px){
+        font-size: 12px;
+        width: 130px;
+        margin: 2px;
+    }
+    @media only screen and (max-width:320px){
+        font-size: 10px;
+        width: 110px;
+        margin: 2px;
     }
 `;
 
@@ -54,14 +69,59 @@ const StoreInfoText = styled.input`
     margin: 5px;
     border: 1px solid #a7a7a740;
     text-align: center;
-    height: 33px;
+    padding: 8px 0;
+    /* height: 33px; */
 
-    @media only screen and (max-width:900px){
+    /* @media only screen and (max-width:900px){
         width: 195px;
     }
 
-    @media only screen and (max-width:450px){
+    @media only screen and (max-width:500px){
+        width: 143px;
+    } */
+    @media only screen and (max-width:992px){
+        font-size: 14px;
         width: 150px;
+        margin: 2px;
+    }
+    @media only screen and (max-width:578px){
+        font-size: 12px;
+        width: 130px;
+        margin: 2px;
+    }
+    @media only screen and (max-width:320px){
+        font-size: 10px;
+        width: 110px;
+        margin: 2px;
+    }
+`;
+
+const PageControlDiv = styled.div`
+    width: 100%;
+    overflow: auto;
+`;
+
+const PageControlBtn = styled.button`
+    display: block;
+    height: 50px;
+    float: right;
+    font-size: 14px;
+    width: 220px;
+    padding: 6px;
+    color: #555;
+    background-color: rgba(122, 123, 218, 0.001);
+    font-weight: 600;
+    border: none;
+    transition: opacity 0.1s linear;
+
+    &:hover {
+        color: rgba(122, 123, 218);
+        cursor: pointer;
+    }
+
+    @media only screen and (max-width:700px){
+        /* text-align: center; */
+        font-size: 12px;
     }
 `;
 
@@ -72,7 +132,9 @@ const DeliveryReadyViewBar = (props) => {
         <>
             {userRdx.isLoading === false &&
             <Container>
-                <DownloadBar>
+                    <PageControlDiv>
+                        <PageControlBtn type="button" onClick={() => props.__handleEventControl().movePage().deliveryReadyUpload()}>배송준비 파일 업로드 <KeyboardArrowRightIcon /></PageControlBtn>
+                    </PageControlDiv>
                     <Form>
                         <FormBox>
                             <DownloadButton type="button" onClick={(e) => props.__handleEventControl().downloadOrderFormData().hansanFormDownload(e)}>한산 발주서 다운</DownloadButton>
@@ -83,7 +145,6 @@ const DeliveryReadyViewBar = (props) => {
                             <StoreInfoText type="text" name="storeContact" placeholder="스토어 전화번호" onChange={(e) => props.__handleEventControl().storeInfo().modifyStoreContactOnChangeInputValue(e)} value={props.storeInfoData.storeContact} required></StoreInfoText>
                         </FormBox>
                     </Form>
-                </DownloadBar>
             </Container>
             }
         </>

@@ -85,17 +85,8 @@ const DrawerNavbarSiderComponent = (props) => {
                                 <CustomLink to='/products'>OUR PRODUCT</CustomLink>
                             </LinkContainer>
                             <LinkContainer>
-                                <CustomLink to='/delivery-ready/naver'>네이버 배송준비<br />데이터 저장하기</CustomLink>
+                                <CustomLink to='/delivery-ready/naver'>네이버 배송준비<br />발주서 다운로드</CustomLink>
                             </LinkContainer>
-
-                            {
-                                userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
-                                    <LinkContainer>
-                                        <CustomLink to='/delivery-ready/naver/view'>발주서 다운로드</CustomLink>
-                                    </LinkContainer>
-                                    :
-                                    <></>
-                            }
 
                             <LinkContainer>
                                 <form onSubmit={(e) => props.__handleEventControl().logoutSubmit(e)}>

@@ -27,12 +27,11 @@ const DeliveryReadyUploadMain = () => {
                 var uploadedFormData = new FormData();
                 uploadedFormData.set('file', addFiles[0]);
 
-                setFormData(uploadedFormData);
-
                 await deliveryReadyDataConnect().postFile(uploadedFormData)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setExcelData(res.data.data);
+                            setFormData(uploadedFormData);
                         }
                     })
                     .catch(err => {
@@ -79,6 +78,13 @@ const DeliveryReadyUploadMain = () => {
                         e.preventDefault();
                         console.log(e);
                         await __handleDataConnect().storeExcelFile(e);
+                    }
+                }
+            },
+            movePage: function () {
+                return {
+                    deliveryReadyView: async function () {
+                        history.push('/delivery-ready/naver/view');
                     }
                 }
             }

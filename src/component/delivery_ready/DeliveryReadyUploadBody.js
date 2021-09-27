@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+
 const Container = styled.div`
     overflow:hidden;
     margin-bottom: 100px;
@@ -11,11 +13,12 @@ const UploadBar = styled.div`
     width: 100%;
     height: auto;
     display: flex;
+    flex-wrap: wrap;
     border-radius: 5px;
     background-color: rgba(122, 123, 218, 0.125);
     margin-bottom: 5px;
 
-    @media only screen and (max-width:420px){
+    @media only screen and (max-width:500px){
         display: block;
     }
 `;
@@ -26,11 +29,12 @@ const Form = styled.form`
 `;
 
 const ControlLabel = styled.label`
-    display: inline-block;
     font-size: 16px;
+    width: 200px;
     padding: 6px;
     margin: 4px;
     color: #444;
+    text-align: center;
     vertical-align: middle;
     background-color: #fdfdfd;
     border-radius: 3px;
@@ -39,17 +43,11 @@ const ControlLabel = styled.label`
         opacity: 0.8;
         cursor: pointer;
     }
-
-    @media only screen and (max-width:420px){
-        width: 80%;
-        text-align: center;
-        font-size: 12px;
-    }
 `;
 
 const ControlBtn = styled.button`
-    display: inline-block;
     font-size: 16px;
+    width: 200px;
     padding: 6px;
     margin: 4px;
     color: #444;
@@ -61,12 +59,6 @@ const ControlBtn = styled.button`
     &:hover {
         opacity: 0.8;
         cursor: pointer;
-    }
-
-    @media only screen and (max-width:420px){
-        width: 80%;
-        text-align: center;
-        font-size: 12px;
     }
 `;
 
@@ -82,7 +74,6 @@ const TableContainer = styled.div`
     font-size: 14px;
     
     & .fixedHeader {
-        /* width:100%; */
         position: sticky;
         top: -1px;
         background: #f1f1f1;
@@ -118,6 +109,30 @@ const BodyTd = styled.td`
     border-right: 1px solid #efefef80;
 `;
 
+const PageControlBtn = styled.button`
+    display: inline;
+    margin-left: auto;
+    font-size: 14px;
+    width: 200px;
+    padding: 6px;
+    color: #555;
+    vertical-align: middle;
+    background-color: rgba(122, 123, 218, 0.001);
+    font-weight: 600;
+    border: none;
+    transition: opacity 0.1s linear;
+
+    &:hover {
+        color: rgba(122, 123, 218);
+        cursor: pointer;
+    }
+
+    @media only screen and (max-width:700px){
+        text-align: center;
+        font-size: 12px;
+    }
+`;
+
 const DeliveryReadyUploadBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
@@ -133,6 +148,7 @@ const DeliveryReadyUploadBody = (props) => {
                         <Form onSubmit={(e) => props.__handleEventControl().storeExcelData().submit(e)}>
                             <ControlBtn type="submit">배송준비 엑셀 파일 저장</ControlBtn>
                         </Form>
+                        <PageControlBtn type="button" onClick={() => props.__handleEventControl().movePage().deliveryReadyView()}>발주서 다운로드 <KeyboardArrowRightIcon /></PageControlBtn>
                     </UploadBar>
                     <TableContainer>
                         <table className="table table-sm" style={{tableLayout: 'fixed' }}>

@@ -64,6 +64,10 @@ const TableContainer = styled.div`
          }
      }
 
+     & .option-code-cell {
+        background-color: #eaeaea;
+     }
+
     @media only screen and (max-width:768px){
         font-size: 10px;
     }
@@ -160,7 +164,7 @@ const DeliveryReadyReleasedView = (props) => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const pageNumber = [];
-    const postsPerPage = 15;
+    const postsPerPage = 50;
     const releasedDataLength = props.releasedData != null ? props.releasedData.length : 0; 
     for(let i = 1; i <= Math.ceil(releasedDataLength / postsPerPage); i++){
         pageNumber.push(i);
@@ -182,6 +186,7 @@ const DeliveryReadyReleasedView = (props) => {
                             <PageBox>
                                 <Stack spacing={2}>
                                     <Pagination
+                                        size="small"
                                         count={pageNumber.length}
                                         onChange={(e, val) => handleChange(e, val)}
                                     />
@@ -214,7 +219,7 @@ const DeliveryReadyReleasedView = (props) => {
                                         <HeaderTh className="fixedHeader medium-cell" scope="col">
                                             <span>*재고 수량</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
+                                        <HeaderTh className="fixedHeader option-code-cell" scope="col">
                                             <span>옵션관리코드</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixedHeader" scope="col">
