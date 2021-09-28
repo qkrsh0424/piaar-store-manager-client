@@ -2,22 +2,11 @@ import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
 const Container = styled.div`
     overflow: auto;
     background-color: rgba(122, 123, 218, 0.125);
-`;
-
-const DownloadBar = styled.div`
-    color: white;
-    height: 50px;
-    display: flex;
-    flex-wrap: wrap;
-    border-radius: 5px;
-    height: auto;
-    overflow: auto;
-    margin-bottom: 10px;
 `;
 
 const Form = styled.form`
@@ -25,7 +14,6 @@ const Form = styled.form`
 `;
 
 const FormBox = styled.span`
-    /* 992px, 768px, 576px, 320px */    
     @media only screen and (max-width:768px){
         display: block;
     }
@@ -51,7 +39,7 @@ const DownloadButton = styled.button`
         font-size: 14px;
         width: 150px;
         margin: 2px;
-    }
+    } 
 
     @media only screen and (max-width:768px){
         font-size: 14px;
@@ -61,18 +49,6 @@ const DownloadButton = styled.button`
     @media only screen and (max-width:578px){
         font-size: 12px;
     }
-    
-    /* @media only screen and (max-width:578px){
-        font-size: 12px;
-        width: 50%;
-        margin: 2px;
-    }
-
-    @media only screen and (max-width:320px){
-        font-size: 10px;
-        width: 110px;
-        margin: 2px;
-    } */
 `;
 
 const StoreInfoText = styled.input`
@@ -104,11 +80,8 @@ const PageControlDiv = styled.div`
 
 const PageControlBtn = styled.button`
     display: block;
-    height: 50px;
-    float: right;
     font-size: 14px;
-    width: 220px;
-    padding: 6px;
+    padding: 15px 20px;
     color: #555;
     background-color: rgba(122, 123, 218, 0.001);
     font-weight: 600;
@@ -127,12 +100,13 @@ const PageControlBtn = styled.button`
 
 const DeliveryReadyViewBar = (props) => {
     const userRdx = useSelector(state => state.user);
+
     return (
         <>
             {userRdx.isLoading === false &&
             <Container>
                     <PageControlDiv>
-                        <PageControlBtn type="button" onClick={() => props.__handleEventControl().movePage().deliveryReadyUpload()}>배송준비 파일 업로드 <KeyboardArrowRightIcon /></PageControlBtn>
+                        <PageControlBtn type="button" onClick={() => props.__handleEventControl().movePage().deliveryReadyUpload()}><KeyboardArrowLeftIcon /> 배송준비 파일 업로드</PageControlBtn>
                     </PageControlDiv>
                     <Form>
                         <FormBox>

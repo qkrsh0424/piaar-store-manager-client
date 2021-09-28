@@ -17,15 +17,15 @@ const UploadBar = styled.div`
     border-radius: 5px;
     background-color: rgba(122, 123, 218, 0.125);
     margin-bottom: 5px;
-
-    @media only screen and (max-width:500px){
-        display: block;
-    }
 `;
 
 const Form = styled.form`
     margin: 10px;
     margin-right: 20px;
+
+    @media only screen and (max-width:576px){
+        width: 100%;
+    }
 `;
 
 const ControlLabel = styled.label`
@@ -42,6 +42,16 @@ const ControlLabel = styled.label`
     &:hover {
         opacity: 0.8;
         cursor: pointer;
+    }
+
+    @media only screen and (max-width:768px){
+        font-size: 14px;
+        width: 170px;
+    }
+
+    @media only screen and (max-width:576px){
+        width: 100%;
+        font-size: 12px;
     }
 `;
 
@@ -60,6 +70,16 @@ const ControlBtn = styled.button`
         opacity: 0.8;
         cursor: pointer;
     }
+
+    @media only screen and (max-width:768px){
+        font-size: 14px;
+        width: 170px;
+    }
+
+    @media only screen and (max-width:576px){
+        width: 100%;
+        font-size: 12px;
+    }
 `;
 
 const Input = styled.input`
@@ -73,7 +93,7 @@ const TableContainer = styled.div`
 	overflow: auto;
     font-size: 14px;
     
-    & .fixedHeader {
+    & .fiexed-header {
         position: sticky;
         top: -1px;
         background: #f1f1f1;
@@ -113,8 +133,8 @@ const PageControlBtn = styled.button`
     display: inline;
     margin-left: auto;
     font-size: 14px;
-    width: 200px;
-    padding: 6px;
+    /* width: 200px; */
+    /* padding: 6px; */
     color: #555;
     vertical-align: middle;
     background-color: rgba(122, 123, 218, 0.001);
@@ -127,7 +147,7 @@ const PageControlBtn = styled.button`
         cursor: pointer;
     }
 
-    @media only screen and (max-width:700px){
+    @media only screen and (max-width:576px){
         text-align: center;
         font-size: 12px;
     }
@@ -154,32 +174,32 @@ const DeliveryReadyUploadBody = (props) => {
                         <table className="table table-sm" style={{tableLayout: 'fixed' }}>
                             <thead>
                             <tr>
-                                <HeaderTh className="fixedHeader" scope="col">주문번호</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">상품주문번호</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">판매채널</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">구매자명</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">구매자ID</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">수취인명</HeaderTh>
-                                <HeaderTh className="fixedHeader large-cell" scope="col">결제일</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">상품번호</HeaderTh>
-                                <HeaderTh className="fixedHeader xlarge-cell" scope="col">상품명</HeaderTh>
-                                <HeaderTh className="fixedHeader large-cell" scope="col">옵션정보</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">옵션관리코드</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">수량</HeaderTh>
-                                <HeaderTh className="fixedHeader large-cell" scope="col">발주확인일</HeaderTh>
-                                <HeaderTh className="fixedHeader large-cell" scope="col">발송기한</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">배송비 묶음번호</HeaderTh>
-                                <HeaderTh className="fixedHeader large-cell" scope="col">판매자 상품코드</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">판매자 내부코드1</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">판매자 내부코드2</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">수취인연락처1</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">수취인연락처2</HeaderTh>
-                                <HeaderTh className="fixedHeader xlarge-cell" scope="col">배송지</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">구매자연락처</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">우편번호</HeaderTh>
-                                <HeaderTh className="fixedHeader" scope="col">배송메세지</HeaderTh>
-                                <HeaderTh className="fixedHeader xlarge-cell" scope="col">출고지</HeaderTh>
-                                <HeaderTh className="fixedHeader large-cell" scope="col">주문일시</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">주문번호</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">상품주문번호</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">판매채널</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">구매자명</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">구매자ID</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">수취인명</HeaderTh>
+                                <HeaderTh className="fiexed-header large-cell" scope="col">결제일</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">상품번호</HeaderTh>
+                                <HeaderTh className="fiexed-header xlarge-cell" scope="col">상품명</HeaderTh>
+                                <HeaderTh className="fiexed-header large-cell" scope="col">옵션정보</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">옵션관리코드</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">수량</HeaderTh>
+                                <HeaderTh className="fiexed-header large-cell" scope="col">발주확인일</HeaderTh>
+                                <HeaderTh className="fiexed-header large-cell" scope="col">발송기한</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">배송비 묶음번호</HeaderTh>
+                                <HeaderTh className="fiexed-header large-cell" scope="col">판매자 상품코드</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">판매자 내부코드1</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">판매자 내부코드2</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">수취인연락처1</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">수취인연락처2</HeaderTh>
+                                <HeaderTh className="fiexed-header xlarge-cell" scope="col">배송지</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">구매자연락처</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">우편번호</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">배송메세지</HeaderTh>
+                                <HeaderTh className="fiexed-header xlarge-cell" scope="col">출고지</HeaderTh>
+                                <HeaderTh className="fiexed-header large-cell" scope="col">주문일시</HeaderTh>
                             </tr>
                         </thead>
                         <tbody>

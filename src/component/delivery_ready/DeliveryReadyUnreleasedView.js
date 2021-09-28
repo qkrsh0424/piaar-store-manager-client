@@ -31,7 +31,7 @@ const TableContainer = styled.div`
 	overflow: hidden;
     font-size: 14px;
     
-    & .fixedHeader {
+    & .fixed-header {
         position: sticky;
         top: -1px;
         background: #f1f1f1;
@@ -86,6 +86,14 @@ const BoardTitle = styled.div`
     color: rgba(000, 102, 153, 0.9);
     display: inline-block;
     width: 100%;
+
+    @media only screen and (max-width:576px){
+        font-size: 16px;
+    }
+    
+    @media only screen and (max-width:320px){
+        font-size: 14px;
+    }
 `;
 
 const HeaderTh = styled.th`
@@ -137,11 +145,23 @@ const CancelBtn = styled.button`
 
 const PageBox = styled.span`
     float: right;
+    padding: 0 10px;
 
     @media only screen and (max-width:576px){
         width: 100%;
         display: inline;
-        font-size: 10px;
+        padding: 0;
+        
+        button {
+            font-size: 10px;
+        }
+    }
+
+    @media only screen and (max-width:320px){
+        button {
+            font-size: 8px;
+            margin: 0;
+        }
     }
 `;
 
@@ -171,7 +191,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                                 <CheckBodyTd>[✔️ : {props.unreleaseCheckedOrderList.length} / {props.unreleasedData ? props.unreleasedData.length : 0}개]</CheckBodyTd>
                             </span>
                             <PageBox>
-                                <Stack spacing={2}>
+                                <Stack spacing={0}>
                                     <Pagination
                                         size="small"
                                         count={pageNumber.length}
@@ -184,59 +204,59 @@ const DeliveryReadyUnreleasedView = (props) => {
                             <table className="table table-sm" style={{ tableLayout: 'fixed' }}>
                                 <thead>
                                     <tr>
-                                        <HeaderTh className="fixedHeader small-cell" scope="col">
+                                        <HeaderTh className="fixed-header small-cell" scope="col">
                                             <Checkbox
                                                 color="primary"
                                                 inputProps={{ 'aria-label': '전체 미출고 데이터 선택' }}
                                                 onChange={() => props.__handleEventControl().unreleaseCheckedOrderList().checkAll()} checked={props.__handleEventControl().unreleaseCheckedOrderList().isCheckedAll()}
                                             />
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader medium-cell" scope="col">
+                                        <HeaderTh className="fixed-header medium-cell" scope="col">
                                             <span>받는사람</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader large-cell" scope="col">
+                                        <HeaderTh className="fixed-header large-cell" scope="col">
                                             <span>상품명1</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader large-cell" scope="col">
+                                        <HeaderTh className="fixed-header large-cell" scope="col">
                                             <span>상품상세1</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader small-cell" scope="col">
+                                        <HeaderTh className="fixed-header small-cell" scope="col">
                                             <span>수량</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader medium-cell" scope="col">
+                                        <HeaderTh className="fixed-header medium-cell" scope="col">
                                             <span>*재고 수량</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader option-code-cell" scope="col">
+                                        <HeaderTh className="fixed-header option-code-cell" scope="col">
                                             <span>옵션관리코드</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
+                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>*상품명</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
+                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>*옵션명1</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
+                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>*옵션명2</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
+                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>주문번호</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
+                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>상품주문번호</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader xlarge-cell" scope="col">
+                                        <HeaderTh className="fixed-header xlarge-cell" scope="col">
                                             <span>주소</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
+                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>전화번호1</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader medium-cell" scope="col">
+                                        <HeaderTh className="fixed-header medium-cell" scope="col">
                                             <span>우편번호</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader" scope="col">
+                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>배송메시지</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixedHeader small-cell" scope="col">
+                                        <HeaderTh className="fixed-header small-cell" scope="col">
                                             <span></span>
                                         </HeaderTh>
                                     </tr>

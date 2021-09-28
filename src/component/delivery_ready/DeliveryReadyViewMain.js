@@ -390,7 +390,10 @@ const DeliveryReadyViewMain = () => {
                     },
                     changeItemsOption: async function () {
                         if(window.confirm('일괄 변경하시겠습니까?')) {
+                            setBackdropLoading(true);
                             await __handleDataConnect().changeItemsOptionManagementCode(changedOptionManagementCode);
+                            setBackdropLoading(false);
+
                         }
                     }
                 }

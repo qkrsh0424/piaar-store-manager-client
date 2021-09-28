@@ -38,14 +38,14 @@ const OptionLi = styled.li`
     }
 `;
 
-const OptionInfoLi = styled.li`
-    display: flex;
+const OptionInfoTitleList = styled.li`
+    list-style: none;
     border-radius: 10px;
     margin-bottom: 5px;
+    height: auto;
 
-    .info-title {
-        background: rgb(255, 253, 226);
-        height: auto;
+    .option-code{
+        font-weight: 600;
     }
 `;
 
@@ -62,7 +62,7 @@ const GroupTitle = styled.div`
     padding:15px;
     margin-bottom: 10px;
 
-    .closeButton {
+    .close-button {
         float: right;
         top: -5px;
     }
@@ -85,9 +85,34 @@ const ModalText = styled.div`
     margin-bottom: 2px;
 `;
 
+const ModalTitleText = styled.div`
+    overflow: hidden;
+    min-height: 30px;
+    height: auto;
+    font-size: 15px;
+    border: 1px solid #ced4da;
+    background: rgb(255, 253, 226);
+    width: 25%;
+    padding: 2px;
+    text-align: center;
+    margin-bottom: 2px;
+    display: inline-block;
+
+    @media only screen and (max-width:576px){
+        display: inline-block;
+        width: 50%;
+    }
+
+    @media only screen and (max-width:320px){
+        display: block;
+        width: 100%;
+    }
+`;
+
 const ChangeBtn = styled.button`
-    margin: 10px;
+    margin: 5px;
     float: right;
+    padding: 2px;
     width: 100px;
     vertical-align: middle;
     font-size: 15px;
@@ -97,9 +122,17 @@ const ChangeBtn = styled.button`
     overflow: hidden;
     height: auto;
     transition: opacity 0.1s linear;
+    margin-left: auto;
+    
     &:hover {
         opacity: 0.6;
         cursor: pointer;
+    }
+
+    @media only screen and (max-width:576px){
+        display: block;
+        width: 100%;
+        margin: 2px 0;
     }
 `;
 
@@ -128,26 +161,26 @@ const DeliveryReadyOptionInfoModal = (props) => {
                 <OptionContainer>
                     <div style={{ borderBottom: '2px solid #f1f1f1' }}>
                         <GroupTitle>옵션리스트
-                            <IconButton aria-label="close" className="closeButton" onClick={() => props.__handleEventControl().deliveryReadyOptionInfo().close()}>
+                            <IconButton aria-label="close" className="close-button" onClick={() => props.__handleEventControl().deliveryReadyOptionInfo().close()}>
                                 <CloseIcon />
                             </IconButton>
                         </GroupTitle>
                         <NameGroup>
                             <OptionInfoTitle>
-                                <OptionInfoLi>
-                                    <ModalText className="info-title">
+                                <OptionInfoTitleList>
+                                    <ModalTitleText className="info-title">
                                         <span>현재</span>
-                                    </ModalText>
-                                    <ModalText className="info-title">
+                                    </ModalTitleText>
+                                    <ModalTitleText className="info-title option-code">
                                         <span>{props.originOptionManagementCode}</span>
-                                    </ModalText>
-                                    <ModalText className="info-title">
+                                    </ModalTitleText>
+                                    <ModalTitleText className="info-title">
                                         <span>변경</span>
-                                    </ModalText>
-                                    <ModalText className="info-title">
+                                    </ModalTitleText>
+                                    <ModalTitleText className="info-title option-code">
                                         <span>{props.changedOptionManagementCode}</span>
-                                    </ModalText>
-                                </OptionInfoLi>
+                                    </ModalTitleText>
+                                </OptionInfoTitleList>
                                 <ChangeBox>
                                     <ChangeBtn onClick={() => props.__handleEventControl().deliveryReadyOptionInfo().changeItemsOption()} className="update-all">
                                         <span>일괄 변경</span>

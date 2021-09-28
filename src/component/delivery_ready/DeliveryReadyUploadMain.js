@@ -49,7 +49,6 @@ const DeliveryReadyUploadMain = () => {
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             alert('저장되었습니다.');
-                            history.push('/delivery-ready/naver/view');
                         }
                     })
                     .catch(err => {
@@ -76,8 +75,9 @@ const DeliveryReadyUploadMain = () => {
                 return {
                     submit: async function (e) {
                         e.preventDefault();
-                        console.log(e);
+                        setBackdropLoading(true);
                         await __handleDataConnect().storeExcelFile(e);
+                        setBackdropLoading(false);                
                     }
                 }
             },
