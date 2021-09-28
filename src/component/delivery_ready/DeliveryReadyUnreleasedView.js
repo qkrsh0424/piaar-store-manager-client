@@ -137,6 +137,12 @@ const CancelBtn = styled.button`
 
 const PageBox = styled.span`
     float: right;
+
+    @media only screen and (max-width:576px){
+        width: 100%;
+        display: inline;
+        font-size: 10px;
+    }
 `;
 
 const DeliveryReadyUnreleasedView = (props) => {
@@ -160,8 +166,10 @@ const DeliveryReadyUnreleasedView = (props) => {
                 <DataContainer>
                     <TableContainer>
                         <BoardTitle>
-                            <span>미출고 데이터</span>
-                            <CheckBodyTd>[✔️ : {props.unreleaseCheckedOrderList.length} / {props.unreleasedData ? props.unreleasedData.length : 0}개]</CheckBodyTd>
+                            <span>
+                                <span>미출고 데이터</span>
+                                <CheckBodyTd>[✔️ : {props.unreleaseCheckedOrderList.length} / {props.unreleasedData ? props.unreleasedData.length : 0}개]</CheckBodyTd>
+                            </span>
                             <PageBox>
                                 <Stack spacing={2}>
                                     <Pagination
@@ -243,7 +251,6 @@ const DeliveryReadyUnreleasedView = (props) => {
                                                     checked={props.__handleEventControl().unreleaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
                                                 >
                                                     <BodyTd className="col small-cell">
-
                                                         <Checkbox
                                                             color="default"
                                                             inputProps={{ 'aria-label': '미출고 데이터 선택' }}

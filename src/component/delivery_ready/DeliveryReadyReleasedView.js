@@ -143,12 +143,13 @@ const DateSelector = styled.button`
     border: 1px solid transparent;
     text-align: center;
     width: 200px;
+    padding: 6px 0px;
     height: auto;
-    margin-left: 15px;
+    margin-left: 25px;
     transition: opacity 0.1s linear;
     font-size: 14px;
     font-weight: 400;
-    border: 1px solid rgba(122,146,218,0.55);
+    border: 1px solid rgba(122,146,218,0.25);
 
     &:hover{
         opacity: 0.6;
@@ -157,6 +158,12 @@ const DateSelector = styled.button`
 
 const PageBox = styled.span`
     float: right;
+
+    @media only screen and (max-width:576px){
+        width: 100%;
+        display: inline;
+        font-size: 10px;
+    }
 `;
 
 const DeliveryReadyReleasedView = (props) => {
@@ -178,11 +185,11 @@ const DeliveryReadyReleasedView = (props) => {
         <>
             {userRdx.isLoading === false &&
                 <DataContainer>
+                    <DateSelector type="button" onClick={() => props.__handleEventControl().deliveryReadyDateRangePicker().open()}><EventAvailableTwoToneIcon fontSize="small" color="action" /> {props.selectedDateText}</DateSelector>
                     <TableContainer>
                         <BoardTitle>
                             <span>출고 데이터</span>
                             <CheckBodyTd>[✔️ : {props.releaseCheckedOrderList.length} / {props.releasedData ? props.releasedData.length : 0}개]</CheckBodyTd>
-                            <DateSelector type="button" onClick={() => props.__handleEventControl().deliveryReadyDateRangePicker().open()}><EventAvailableTwoToneIcon fontSize="small" color="action" /> {props.selectedDateText}</DateSelector>
                             <PageBox>
                                 <Stack spacing={2}>
                                     <Pagination

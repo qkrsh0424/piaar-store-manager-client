@@ -1,4 +1,4 @@
-import React,{useMemo} from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
@@ -25,7 +25,7 @@ const Form = styled.form`
 `;
 
 const FormBox = styled.span`
-/* 992px, 768px, 576px, 320px */
+    /* 992px, 768px, 576px, 320px */    
     @media only screen and (max-width:768px){
         display: block;
     }
@@ -33,7 +33,6 @@ const FormBox = styled.span`
 
 const DownloadButton = styled.button`
     margin: 5px;
-    display: inline-block;
     border: 1px solid transparent;
     font-size: 16px;
     padding: 8px;
@@ -53,46 +52,48 @@ const DownloadButton = styled.button`
         width: 150px;
         margin: 2px;
     }
+
+    @media only screen and (max-width:768px){
+        font-size: 14px;
+        width: 48%;
+    }
+
     @media only screen and (max-width:578px){
         font-size: 12px;
-        width: 130px;
+    }
+    
+    /* @media only screen and (max-width:578px){
+        font-size: 12px;
+        width: 50%;
         margin: 2px;
     }
+
     @media only screen and (max-width:320px){
         font-size: 10px;
         width: 110px;
         margin: 2px;
-    }
+    } */
 `;
 
 const StoreInfoText = styled.input`
     margin: 5px;
     border: 1px solid #a7a7a740;
     text-align: center;
-    padding: 8px 0;
-    /* height: 33px; */
+    padding: 5px 0;
 
-    /* @media only screen and (max-width:900px){
-        width: 195px;
-    }
-
-    @media only screen and (max-width:500px){
-        width: 143px;
-    } */
     @media only screen and (max-width:992px){
         font-size: 14px;
         width: 150px;
         margin: 2px;
     }
+    
+    @media only screen and (max-width:768px){
+        font-size: 14px;
+        width: 48%;
+    }
+
     @media only screen and (max-width:578px){
         font-size: 12px;
-        width: 130px;
-        margin: 2px;
-    }
-    @media only screen and (max-width:320px){
-        font-size: 10px;
-        width: 110px;
-        margin: 2px;
     }
 `;
 
@@ -120,15 +121,13 @@ const PageControlBtn = styled.button`
     }
 
     @media only screen and (max-width:700px){
-        /* text-align: center; */
         font-size: 12px;
     }
 `;
 
 const DeliveryReadyViewBar = (props) => {
     const userRdx = useSelector(state => state.user);
-
-    return useMemo(() => (
+    return (
         <>
             {userRdx.isLoading === false &&
             <Container>
@@ -148,7 +147,7 @@ const DeliveryReadyViewBar = (props) => {
             </Container>
             }
         </>
-    ), [props.storeInfoData])
+    )
 }
 
 export default DeliveryReadyViewBar;
