@@ -42,12 +42,31 @@ const DeliveryReadyViewMain = () => {
     
     const [deliveryReadyOptionInfo, setDeliveryReadyOptionInfo] = useState(null);
     const [deliveryReadyItem, setDeliveryReadyItem] = useState(null);
+    
     const [originOptionManagementCode, setOriginOptionManagementCode] = useState(null);
     const [changedOptionManagementCode, setChangedOptionManagementCode] = useState(null);
+    
     const [storeInfoData, setStoreInfoData] = useState({
         storeName: '',
         storeContact: ''
     });
+
+    const [releaseDataCurrentPage, setReleaseDataCurrentPage] = useState(1);
+    const [unreleaseDataCurrentPage, setUnreleaseDataCurrentPage] = useState(1);
+    const releaseDataTotalPageNumber = [];
+    const unreleaseDataTotalPageNumber = [];
+    const postsPerPage = 50;
+    
+    const releasedDataLength = releasedData != null ? releasedData.length : 0;
+    for(let i = 1; i <= Math.ceil(releasedDataLength / postsPerPage); i++){
+        releaseDataTotalPageNumber.push(i);
+    }
+
+    const unreleasedDataLength = unreleasedData != null ? unreleasedData.length : 0; 
+    for(let i = 1; i <= Math.ceil(unreleasedDataLength / postsPerPage); i++){
+        unreleaseDataTotalPageNumber.push(i);
+    }
+
     let history = useHistory();
 
     useEffect(() => {
@@ -275,6 +294,9 @@ const DeliveryReadyViewMain = () => {
                             await __handleDataConnect().deleteOrderData(itemCid);
                             setUnreleaseCheckedOrderList([]);
                         }
+                    },
+                    unreleaseDataPagingHandler: function (e, value) {
+                        setUnreleaseDataCurrentPage(value);
                     }
                 }
             },
@@ -331,6 +353,9 @@ const DeliveryReadyViewMain = () => {
                         if(window.confirm('출고를 취소하시겠습니까?')) {
                             await __handleDataConnect().changeToUnreleaseData(deliveryReadyItem);
                         }
+                    },
+                    releaseDataPagingHandler: function (e, value) {
+                        setReleaseDataCurrentPage(value);
                     }
                 }
             },
@@ -515,6 +540,9 @@ const DeliveryReadyViewMain = () => {
             <DeliveryReadyUnreleasedView
                 unreleasedData={unreleasedData}
                 unreleaseCheckedOrderList={unreleaseCheckedOrderList}
+                unreleaseDataCurrentPage={unreleaseDataCurrentPage}
+                unreleaseDataTotalPageNumber={unreleaseDataTotalPageNumber}
+                postsPerPage={postsPerPage}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyUnreleasedView>
@@ -522,6 +550,9 @@ const DeliveryReadyViewMain = () => {
                 releasedData={releasedData}
                 releaseCheckedOrderList={releaseCheckedOrderList}
                 selectedDateText={selectedDateText}
+                releaseDataCurrentPage={releaseDataCurrentPage}
+                releaseDataTotalPageNumber={releaseDataTotalPageNumber}
+                postsPerPage={postsPerPage}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReleasedView>

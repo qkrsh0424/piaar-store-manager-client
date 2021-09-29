@@ -84,6 +84,7 @@ const DeliveryReadyUploadMain = () => {
             movePage: function () {
                 return {
                     deliveryReadyView: async function () {
+                        
                         history.push('/delivery-ready/naver/view');
                     }
                 }

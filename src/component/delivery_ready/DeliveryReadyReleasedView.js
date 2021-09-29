@@ -197,18 +197,6 @@ const PageBox = styled.span`
 const DeliveryReadyReleasedView = (props) => {
     const userRdx = useSelector(state => state.user);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageNumber = [];
-    const postsPerPage = 50;
-    const releasedDataLength = props.releasedData != null ? props.releasedData.length : 0; 
-    for(let i = 1; i <= Math.ceil(releasedDataLength / postsPerPage); i++){
-        pageNumber.push(i);
-    }
-
-    const handleChange = (e, value) => {
-        setCurrentPage(value);
-    };
-
     return useMemo(() => (
         <>
             {userRdx.isLoading === false &&
@@ -219,11 +207,11 @@ const DeliveryReadyReleasedView = (props) => {
                             <span>출고 데이터</span>
                             <CheckBodyTd>[✔️ : {props.releaseCheckedOrderList.length} / {props.releasedData ? props.releasedData.length : 0}개]</CheckBodyTd>
                             <PageBox>
-                                <Stack spacing={2}>
+                                <Stack spacing={0}>
                                     <Pagination
                                         size="small"
-                                        count={pageNumber.length}
-                                        onChange={(e, val) => handleChange(e, val)}
+                                        count={props.releaseDataTotalPageNumber?.length}
+                                        onChange={(e, val) => props.__handleEventControl().releaseCheckedOrderList().releaseDataPagingHandler(e, val)}
                                     />
                                 </Stack>
                             </PageBox>
@@ -291,7 +279,7 @@ const DeliveryReadyReleasedView = (props) => {
                                 </thead>
                                 <tbody>
                                     {props.releasedData?.map((data, releasedDataIdx) => {
-                                        if(releasedDataIdx < postsPerPage * currentPage && releasedDataIdx >= postsPerPage * (currentPage-1))
+                                        if((releasedDataIdx < props.postsPerPage * props.releaseDataCurrentPage) && (releasedDataIdx >= props.postsPerPage * (props.releaseDataCurrentPage-1)))
                                         return (
                                             <BodyTr
                                                 key={'releasedItem' + releasedDataIdx}
@@ -365,7 +353,7 @@ const DeliveryReadyReleasedView = (props) => {
                 </DataContainer>
             }
         </>
-    ), [props.releasedData, props.releaseCheckedOrderList, props.selectedDateText, currentPage])
+    ), [props.releasedData, props.releaseCheckedOrderList, props.selectedDateText, props.releaseDataCurrentPage])
 }
 
 export default DeliveryReadyReleasedView;

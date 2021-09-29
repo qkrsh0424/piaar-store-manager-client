@@ -133,8 +133,6 @@ const PageControlBtn = styled.button`
     display: inline;
     margin-left: auto;
     font-size: 14px;
-    /* width: 200px; */
-    /* padding: 6px; */
     color: #555;
     vertical-align: middle;
     background-color: rgba(122, 123, 218, 0.001);

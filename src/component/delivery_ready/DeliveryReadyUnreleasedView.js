@@ -167,18 +167,6 @@ const PageBox = styled.span`
 
 const DeliveryReadyUnreleasedView = (props) => {
     const userRdx = useSelector(state => state.user);
-    
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageNumber = [];
-    const postsPerPage = 50;
-    const unreleasedDataLength = props.unreleasedData != null ? props.unreleasedData.length : 0; 
-    for(let i = 1; i <= Math.ceil(unreleasedDataLength / postsPerPage); i++){
-        pageNumber.push(i);
-    }
-
-    const handleChange = (e, value) => {
-        setCurrentPage(value);
-    };
 
     return useMemo(() => (
         <>
@@ -194,8 +182,8 @@ const DeliveryReadyUnreleasedView = (props) => {
                                 <Stack spacing={0}>
                                     <Pagination
                                         size="small"
-                                        count={pageNumber.length}
-                                        onChange={(e, val) => handleChange(e, val)}
+                                        count={props.unreleaseDataTotalPageNumber?.length}
+                                        onChange={(e, val) => props.__handleEventControl().unreleaseCheckedOrderList().unreleaseDataPagingHandler(e, val)}
                                     />
                                 </Stack>
                             </PageBox>
@@ -263,7 +251,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                                 </thead>
                                 <tbody>
                                     {props.unreleasedData?.map((data, unreleasedDataIdx) => {
-                                        if (unreleasedDataIdx < postsPerPage * currentPage && unreleasedDataIdx >= postsPerPage * (currentPage - 1))
+                                        if ((unreleasedDataIdx < props.postsPerPage * props.unreleaseDataCurrentPage) && (unreleasedDataIdx >= props.postsPerPage * (props.unreleaseDataCurrentPage-1)))
                                             return (
                                                 <BodyTr
                                                     key={'unreleasedItem' + unreleasedDataIdx}
@@ -310,7 +298,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                                                     <BodyTd className="col">
                                                         <span>{data.deliveryReadyItem.prodOrderNumber}</span>
                                                     </BodyTd>
-                                                    <BodyTd className="co">
+                                                    <BodyTd className="col">
                                                         <span>{data.deliveryReadyItem.destination}</span>
                                                     </BodyTd>
                                                     <BodyTd className="col">
@@ -337,7 +325,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                 </DataContainer>
             }
         </>
-    ), [props.unreleasedData, props.unreleaseCheckedOrderList, currentPage])
+    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleaseDataCurrentPage])
 }
 
 export default DeliveryReadyUnreleasedView;

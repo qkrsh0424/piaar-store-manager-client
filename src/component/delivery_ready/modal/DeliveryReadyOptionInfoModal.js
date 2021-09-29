@@ -99,11 +99,6 @@ const ModalTitleText = styled.div`
     display: inline-block;
 
     @media only screen and (max-width:576px){
-        display: inline-block;
-        width: 50%;
-    }
-
-    @media only screen and (max-width:320px){
         display: block;
         width: 100%;
     }

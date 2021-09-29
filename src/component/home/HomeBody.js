@@ -33,10 +33,12 @@ const CustomLink = styled(Link)`
     color:#7d7ada;
     font-weight: 600;
     box-shadow: 5px 5px 5px -1px #00000020;
+
     &:hover{
         text-decoration: none;
         border:3px double white;
-        background: #7d7ada;
+        background: rgba(122, 123, 218, 0.88);
+        transition-duration: 0.2s;
         color:white;
     }
     
