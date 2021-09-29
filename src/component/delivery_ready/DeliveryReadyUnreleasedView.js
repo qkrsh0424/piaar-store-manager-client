@@ -17,11 +17,6 @@ const DataContainer = styled.div`
         top: -1px;
         z-index:10;
         background-color: #f3f3f3;
-
-        &:hover{
-            opacity: 1;
-            background-color: #f3f3f3;
-        }
     }
 `;
 
