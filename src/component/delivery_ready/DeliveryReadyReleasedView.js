@@ -250,7 +250,7 @@ const DeliveryReadyReleasedView = (props) => {
                                             <span>*옵션명2</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
-                                            <span>주문번호</span>
+                                            <span>배송묶음전호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>상품주문번호</span>
@@ -316,7 +316,7 @@ const DeliveryReadyReleasedView = (props) => {
                                                     <span>{data.optionManagementName}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.orderNumber}</span>
+                                                    <span>{data.deliveryReadyItem.shipmentCostBundleNumber}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
                                                     <span>{data.deliveryReadyItem.prodOrderNumber}</span>

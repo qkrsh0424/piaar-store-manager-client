@@ -222,7 +222,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                                             <span>*옵션명2</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
-                                            <span>주문번호</span>
+                                            <span>배송묶음번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>상품주문번호</span>
@@ -287,8 +287,9 @@ const DeliveryReadyUnreleasedView = (props) => {
                                                     <BodyTd className="col">
                                                         <span>{data.optionManagementName}</span>
                                                     </BodyTd>
+                                                    {console.log(data.deliveryReadyItem)}
                                                     <BodyTd className="col">
-                                                        <span>{data.deliveryReadyItem.orderNumber}</span>
+                                                        <span>{data.deliveryReadyItem.shipmentCostBundleNumber}</span>
                                                     </BodyTd>
                                                     <BodyTd className="col">
                                                         <span>{data.deliveryReadyItem.prodOrderNumber}</span>
