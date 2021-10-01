@@ -32,6 +32,8 @@ import CreateMain from './component/product_manage/CreateMain';
 // component : delivery-ready
 import DeliveryReadyUploadMain from './component/delivery_ready/DeliveryReadyUploadMain';
 import DeliveryReadyViewMain from './component/delivery_ready/DeliveryReadyViewMain';
+import DeliveryReadyUploadCoupangMain from './component/delivery_ready/coupang/DeliveryReadyUploadCoupangMain';
+import DeliveryReadyViewCoupangMain from './component/delivery_ready/coupang/DeliveryReadyViewCoupangMain';
 
 // data connect
 import { userDataConnect } from './data_connect/userDataConnect';
@@ -133,6 +135,18 @@ function App(props) {
                                         userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER"))
                                             ?
                                             <DeliveryReadyViewMain></DeliveryReadyViewMain>
+                                            :
+                                            <Redirect to={'/login'}></Redirect>
+                                    }
+                                </Route>
+                                <Route exact path='/delivery-ready/coupang'>
+                                    {userRdx.userInfo ? <DeliveryReadyUploadCoupangMain></DeliveryReadyUploadCoupangMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                <Route exact path='/delivery-ready/coupang/view'>
+                                    {
+                                        userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER"))
+                                            ?
+                                            <DeliveryReadyViewCoupangMain></DeliveryReadyViewCoupangMain>
                                             :
                                             <Redirect to={'/login'}></Redirect>
                                     }

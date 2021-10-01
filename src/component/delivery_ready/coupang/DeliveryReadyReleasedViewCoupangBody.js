@@ -189,7 +189,7 @@ const PageBox = styled.span`
     }
 `;
 
-const DeliveryReadyReleasedView = (props) => {
+const DeliveryReadyReleasedViewCoupangBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
     return useMemo(() => (
@@ -226,10 +226,10 @@ const DeliveryReadyReleasedView = (props) => {
                                             <span>받는사람</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <span>상품명1</span>
+                                            <span>등록상품명</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <span>상품상세1</span>
+                                            <span>등록옵션명</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header small-cell" scope="col">
                                             <span>수량</span>
@@ -238,7 +238,7 @@ const DeliveryReadyReleasedView = (props) => {
                                             <span>*재고 수량</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header option-code-cell" scope="col">
-                                            <span>옵션관리코드</span>
+                                            <span>업체상품코드</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>*상품명</span>
@@ -250,16 +250,16 @@ const DeliveryReadyReleasedView = (props) => {
                                             <span>*옵션명2</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
-                                            <span>배송묶음전호</span>
+                                            <span>묶음배송번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
-                                            <span>상품주문번호</span>
+                                            <span>주문번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header xlarge-cell" scope="col">
                                             <span>주소</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
-                                            <span>전화번호1</span>
+                                            <span>전화번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header medium-cell" scope="col">
                                             <span>우편번호</span>
@@ -357,4 +357,4 @@ const DeliveryReadyReleasedView = (props) => {
     ), [props.releasedData, props.releaseCheckedOrderList, props.selectedDateText, props.releaseDataCurrentPage])
 }
 
-export default DeliveryReadyReleasedView;
+export default DeliveryReadyReleasedViewCoupangBody;
