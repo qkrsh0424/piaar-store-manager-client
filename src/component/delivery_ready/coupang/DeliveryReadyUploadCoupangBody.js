@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
+import { dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
+
 const Container = styled.div`
     overflow:hidden;
     margin-bottom: 100px;
@@ -30,7 +32,7 @@ const Form = styled.form`
 
 const ControlLabel = styled.label`
     font-size: 16px;
-    width: 220px;
+    width: 240px;
     padding: 6px;
     margin: 4px;
     color: #444;
@@ -46,7 +48,7 @@ const ControlLabel = styled.label`
 
     @media only screen and (max-width:768px){
         font-size: 14px;
-        width: 170px;
+        width: 100%;
     }
 
     @media only screen and (max-width:576px){
@@ -57,7 +59,7 @@ const ControlLabel = styled.label`
 
 const ControlBtn = styled.button`
     font-size: 16px;
-    width: 200px;
+    width: 240px;
     padding: 6px;
     margin: 4px;
     color: #444;
@@ -73,7 +75,7 @@ const ControlBtn = styled.button`
 
     @media only screen and (max-width:768px){
         font-size: 14px;
-        width: 170px;
+        width: 100%;
     }
 
     @media only screen and (max-width:576px){
@@ -145,8 +147,7 @@ const PageControlBtn = styled.button`
         cursor: pointer;
     }
 
-    @media only screen and (max-width:576px){
-        text-align: center;
+    @media only screen and (max-width:768px){
         font-size: 12px;
     }
 `;
@@ -160,11 +161,11 @@ const DeliveryReadyUploadCoupangBody = (props) => {
                 <Container className="mt-3">
                     <UploadBar>
                         <Form>
-                            <ControlLabel htmlFor="upload-file-input">쿠팡 배송준비 엑셀 파일 업로드</ControlLabel>
+                            <ControlLabel htmlFor="upload-file-input"><b>쿠팡</b> 배송준비 엑셀 파일 업로드</ControlLabel>
                             <Input id="upload-file-input" type="file" accept=".xls,.xlsx" onClick={(e) => e.target.value = ''} onChange={(e) => props.__handleEventControl().uploadExcelData().submit(e)}/>
                         </Form>
                         <Form onSubmit={(e) => props.__handleEventControl().storeExcelData().submit(e)}>
-                            <ControlBtn type="submit">쿠팡 배송준비 엑셀 파일 저장</ControlBtn>
+                            <ControlBtn type="submit"><b>쿠팡</b> 배송준비 엑셀 파일 저장</ControlBtn>
                         </Form>
                         <PageControlBtn type="button" onClick={() => props.__handleEventControl().movePage().deliveryReadyView()}>발주서 다운로드 <KeyboardArrowRightIcon /></PageControlBtn>
                     </UploadBar>
@@ -189,6 +190,7 @@ const DeliveryReadyUploadCoupangBody = (props) => {
                                 <HeaderTh className="fiexed-header" scope="col">구매자전화번호</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">우편번호</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">배송메세지</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">주문일시</HeaderTh>
                             </tr>
                         </thead>
                         <tbody>
@@ -207,13 +209,14 @@ const DeliveryReadyUploadCoupangBody = (props) => {
                                         <BodyTd>{data.optionManagementCode}</BodyTd>
                                         <BodyTd>{data.coupangOptionId}</BodyTd>
                                         <BodyTd>{data.unit}</BodyTd>
-                                        <BodyTd>{data.shipmentDueDate}</BodyTd>
+                                        <BodyTd>{dateToYYMMDDhhmmss(data.shipmentDueDate)}</BodyTd>
                                         <BodyTd>{data.shipmentCostBundleNumber}</BodyTd>
                                         <BodyTd>{data.receiverContact1}</BodyTd>
                                         <BodyTd>{data.destination}</BodyTd>
                                         <BodyTd>{data.buyerContact}</BodyTd>
                                         <BodyTd>{data.zipCode}</BodyTd>
                                         <BodyTd>{data.deliveryMessage}</BodyTd>
+                                        <BodyTd>{dateToYYMMDDhhmmss(data.orderDateTime)}</BodyTd>
                                     </BodyTr>
                                 )
                             })}

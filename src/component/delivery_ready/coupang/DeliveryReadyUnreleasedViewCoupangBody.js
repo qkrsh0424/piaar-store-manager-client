@@ -7,6 +7,8 @@ import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
+import { dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
+
 const DataContainer = styled.div`
     padding-bottom: 50px;
     height:auto;
@@ -170,7 +172,7 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                     <TableContainer>
                         <BoardTitle>
                             <span>
-                                <span>미출고 데이터</span>
+                                <span><b>쿠팡</b> 미출고 데이터</span>
                                 <CheckBodyTd>[✔️ : {props.unreleaseCheckedOrderList.length} / {props.unreleasedData ? props.unreleasedData.length : 0}개]</CheckBodyTd>
                             </span>
                             <PageBox>
@@ -239,7 +241,7 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>배송메시지</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header large-cell" scope="col">
+                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>주문일시</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header cancel-btn small-cell" scope="col">
@@ -290,7 +292,6 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                                     <BodyTd className="col">
                                                         <span>{data.optionManagementName}</span>
                                                     </BodyTd>
-                                                    {console.log(data.deliveryReadyItem)}
                                                     <BodyTd className="col">
                                                         <span>{data.deliveryReadyItem.shipmentCostBundleNumber}</span>
                                                     </BodyTd>
@@ -310,7 +311,7 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                                         <span>{data.deliveryReadyItem.deliveryMessage}</span>
                                                     </BodyTd>
                                                     <BodyTd className="col">
-                                                        <span>{data.deliveryReadyItem.orderDateTime}</span>
+                                                        <span>{dateToYYMMDDhhmmss(data.deliveryReadyItem.orderDateTime)}</span>
                                                     </BodyTd>
                                                     <BodyTd>
                                                         <CancelBtn type="button" className="col delete-btn small-cell" onClick={(e) => props.__handleEventControl().unreleaseCheckedOrderList().delete(e, data.deliveryReadyItem.cid)}>

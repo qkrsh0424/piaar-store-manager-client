@@ -15,6 +15,7 @@ const LinkGroup = styled.div`
     left: 50%;
     top: 50%;
     transform: translate(-50%,10%);
+    padding-bottom: 100px;
 `;
 
 const LinkBox = styled.div`

@@ -8,6 +8,8 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import EventAvailableTwoToneIcon from '@mui/icons-material/EventAvailableTwoTone';
 
+import { dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
+
 const DataContainer = styled.div`
     padding-bottom: 150px;
     height:auto;
@@ -199,7 +201,7 @@ const DeliveryReadyReleasedViewCoupangBody = (props) => {
                     <DateSelector type="button" onClick={() => props.__handleEventControl().deliveryReadyDateRangePicker().open()}><EventAvailableTwoToneIcon fontSize="small" color="action" /> {props.selectedDateText}</DateSelector>
                     <TableContainer>
                         <BoardTitle>
-                            <span>출고 데이터</span>
+                            <span><b>쿠팡</b> 출고 데이터</span>
                             <CheckBodyTd>[✔️ : {props.releaseCheckedOrderList.length} / {props.releasedData ? props.releasedData.length : 0}개]</CheckBodyTd>
                             <PageBox>
                                 <Stack spacing={0}>
@@ -267,7 +269,7 @@ const DeliveryReadyReleasedViewCoupangBody = (props) => {
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>배송메시지</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header large-cell" scope="col">
+                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>주문일시</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header cancel-btn small-cell" scope="col">
@@ -337,7 +339,7 @@ const DeliveryReadyReleasedViewCoupangBody = (props) => {
                                                     <span>{data.deliveryReadyItem.deliveryMessage}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
-                                                    <span>{data.deliveryReadyItem.orderDateTime}</span>
+                                                    <span>{dateToYYMMDDhhmmss(data.deliveryReadyItem.orderDateTime)}</span>
                                                 </BodyTd>
                                                 <BodyTd>
                                                     <CancelBtn type="button" className="col cancel-btn small-cell" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeToUnreleaseData(e, data.deliveryReadyItem)}>

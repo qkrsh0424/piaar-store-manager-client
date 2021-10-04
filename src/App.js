@@ -30,8 +30,8 @@ import ProductManageMain from './component/product_manage/ProductManageMain';
 import CreateMain from './component/product_manage/CreateMain';
 
 // component : delivery-ready
-import DeliveryReadyUploadMain from './component/delivery_ready/DeliveryReadyUploadMain';
-import DeliveryReadyViewMain from './component/delivery_ready/DeliveryReadyViewMain';
+import DeliveryReadyUploadNaverMain from './component/delivery_ready/naver/DeliveryReadyUploadNaverMain';
+import DeliveryReadyViewNaverMain from './component/delivery_ready/naver/DeliveryReadyViewNaverMain';
 import DeliveryReadyUploadCoupangMain from './component/delivery_ready/coupang/DeliveryReadyUploadCoupangMain';
 import DeliveryReadyViewCoupangMain from './component/delivery_ready/coupang/DeliveryReadyViewCoupangMain';
 
@@ -127,18 +127,20 @@ function App(props) {
                                 <Route exact path='/shipment/packing-list/coupang'>
                                     {userRdx.userInfo ? <SPackingListCoupangMain></SPackingListCoupangMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
+                                {/* DeliveryReady - NAVER */}
                                 <Route exact path='/delivery-ready/naver'>
-                                    {userRdx.userInfo ? <DeliveryReadyUploadMain></DeliveryReadyUploadMain> : <Redirect to={'/login'}></Redirect>}
+                                    {userRdx.userInfo ? <DeliveryReadyUploadNaverMain></DeliveryReadyUploadNaverMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                                 <Route exact path='/delivery-ready/naver/view'>
                                     {
                                         userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER"))
                                             ?
-                                            <DeliveryReadyViewMain></DeliveryReadyViewMain>
+                                            <DeliveryReadyViewNaverMain></DeliveryReadyViewNaverMain>
                                             :
                                             <Redirect to={'/login'}></Redirect>
                                     }
                                 </Route>
+                                {/* DeliveryReady - COUPANG */}
                                 <Route exact path='/delivery-ready/coupang'>
                                     {userRdx.userInfo ? <DeliveryReadyUploadCoupangMain></DeliveryReadyUploadCoupangMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
@@ -151,6 +153,7 @@ function App(props) {
                                             <Redirect to={'/login'}></Redirect>
                                     }
                                 </Route>
+
                             </Switch>
                         )
                             :

@@ -199,7 +199,7 @@ const DeliveryReadyViewMain = () => {
 
                         let date = dateToYYMMDD(new Date());
 
-                        link.setAttribute('download', '[' + date + ']한산 발주서양식.xlsx');
+                        link.setAttribute('download', '[' + date + ']한산 발주서양식_쿠팡.xlsx');
                         document.body.appendChild(link);
                         link.click();
 
@@ -225,7 +225,7 @@ const DeliveryReadyViewMain = () => {
 
                         let date = dateToYYMMDD(new Date());
 
-                        link.setAttribute('download', '[' + date + ']테일로 발주서양식.xlsx');
+                        link.setAttribute('download', '[' + date + ']테일로 발주서양식_쿠팡.xlsx');
                         document.body.appendChild(link);
                         link.click();
 

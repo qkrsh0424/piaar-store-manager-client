@@ -106,7 +106,7 @@ const DeliveryReadyViewBar = (props) => {
             {userRdx.isLoading === false &&
             <Container>
                     <PageControlDiv>
-                        <PageControlBtn type="button" onClick={() => props.__handleEventControl().movePage().deliveryReadyUpload()}><KeyboardArrowLeftIcon /> 배송준비 파일 업로드</PageControlBtn>
+                        <PageControlBtn type="button" onClick={() => props.__handleEventControl().movePage().deliveryReadyUpload()}><KeyboardArrowLeftIcon /> 네이버 배송준비 파일 업로드</PageControlBtn>
                     </PageControlDiv>
                     <Form>
                         <FormBox>

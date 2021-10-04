@@ -2,19 +2,19 @@ import {useState, useEffect} from 'react';
 import { useHistory } from 'react-router';
 
 // handler
-import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD } from '../../handler/dateHandler';
+import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD } from '../../../handler/dateHandler';
 
 // data connect
-import { deliveryReadyDataConnect } from '../../data_connect/deliveryReadyDataConnect';
+import { deliveryReadyDataConnect } from '../../../data_connect/deliveryReadyDataConnect';
 
 // component
-import DrawerNavbarMain from '../nav/DrawerNavbarMain';
-import DeliveryReadyDateRangePickerModal from './modal/DeliveryReadyDateRangePickerModal';
-import DeliveryReadyOptionInfoModal from './modal/DeliveryReadyOptionInfoModal';
-import BackdropLoading from '../loading/BackdropLoading';
-import DeliveryReadyViewBar from './DeliveryReadyViewBar';
-import DeliveryReadyUnreleasedView from './DeliveryReadyUnreleasedView';
-import DeliveryReadyReleasedView from './DeliveryReadyReleasedView';
+import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
+import DeliveryReadyDateRangePickerModal from '../modal/DeliveryReadyDateRangePickerModal';
+import DeliveryReadyOptionInfoModal from '../modal/DeliveryReadyOptionInfoModal';
+import BackdropLoading from '../../loading/BackdropLoading';
+import DeliveryReadyViewNaverBar from './DeliveryReadyViewNaverBar';
+import DeliveryReadyUnreleasedViewNaverBody from './DeliveryReadyUnreleasedViewNaverBody';
+import DeliveryReadyReleasedViewNaverBody from './DeliveryReadyReleasedViewNaverBody';
 
 const DeliveryReadyViewMain = () => {
     const [unreleasedData, setUnreleasedData] = useState(null);
@@ -199,7 +199,7 @@ const DeliveryReadyViewMain = () => {
 
                         let date = dateToYYMMDD(new Date());
 
-                        link.setAttribute('download', '[' + date + ']한산 발주서양식.xlsx');
+                        link.setAttribute('download', '[' + date + ']한산 발주서양식_네이버.xlsx');
                         document.body.appendChild(link);
                         link.click();
 
@@ -225,7 +225,7 @@ const DeliveryReadyViewMain = () => {
 
                         let date = dateToYYMMDD(new Date());
 
-                        link.setAttribute('download', '[' + date + ']테일로 발주서양식.xlsx');
+                        link.setAttribute('download', '[' + date + ']테일로 발주서양식_네이버.xlsx');
                         document.body.appendChild(link);
                         link.click();
 
@@ -532,12 +532,12 @@ const DeliveryReadyViewMain = () => {
            <BackdropLoading open={backdropLoading} />
            <DrawerNavbarMain></DrawerNavbarMain>
 
-            <DeliveryReadyViewBar
+            <DeliveryReadyViewNaverBar
                 storeInfoData={storeInfoData}
 
                 __handleEventControl={__handleEventControl}
-            ></DeliveryReadyViewBar>
-            <DeliveryReadyUnreleasedView
+            ></DeliveryReadyViewNaverBar>
+            <DeliveryReadyUnreleasedViewNaverBody
                 unreleasedData={unreleasedData}
                 unreleaseCheckedOrderList={unreleaseCheckedOrderList}
                 unreleaseDataCurrentPage={unreleaseDataCurrentPage}
@@ -545,8 +545,8 @@ const DeliveryReadyViewMain = () => {
                 postsPerPage={postsPerPage}
 
                 __handleEventControl={__handleEventControl}
-            ></DeliveryReadyUnreleasedView>
-            <DeliveryReadyReleasedView
+            ></DeliveryReadyUnreleasedViewNaverBody>
+            <DeliveryReadyReleasedViewNaverBody
                 releasedData={releasedData}
                 releaseCheckedOrderList={releaseCheckedOrderList}
                 selectedDateText={selectedDateText}
@@ -555,7 +555,7 @@ const DeliveryReadyViewMain = () => {
                 postsPerPage={postsPerPage}
 
                 __handleEventControl={__handleEventControl}
-            ></DeliveryReadyReleasedView>
+            ></DeliveryReadyReleasedViewNaverBody>
         </>
     )
 }

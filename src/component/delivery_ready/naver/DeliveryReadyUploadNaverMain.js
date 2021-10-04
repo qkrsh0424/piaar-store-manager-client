@@ -2,12 +2,12 @@ import {useState} from 'react';
 import { useHistory } from 'react-router';
 
 // data connect
-import { deliveryReadyDataConnect } from '../../data_connect/deliveryReadyDataConnect';
+import { deliveryReadyDataConnect } from '../../../data_connect/deliveryReadyDataConnect';
 
 // component
-import DrawerNavbarMain from '../nav/DrawerNavbarMain';
-import DeliveryReadyUploadBody from './DeliveryReadyUploadBody';
-import BackdropLoading from '../loading/BackdropLoading';
+import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
+import DeliveryReadyUploadNaverBody from './DeliveryReadyUploadNaverBody';
+import BackdropLoading from '../../loading/BackdropLoading';
 
 const DeliveryReadyUploadMain = () => {
     let history = useHistory();
@@ -96,11 +96,11 @@ const DeliveryReadyUploadMain = () => {
         <>
             <BackdropLoading open={backdropLoading} />
             <DrawerNavbarMain></DrawerNavbarMain>
-            <DeliveryReadyUploadBody
+            <DeliveryReadyUploadNaverBody
                 excelData={excelData}
 
                 __handleEventControl={__handleEventControl}
-            ></DeliveryReadyUploadBody>
+            ></DeliveryReadyUploadNaverBody>
         </>
     )
 }
