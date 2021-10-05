@@ -43,6 +43,7 @@ const OptionInfoTitleList = styled.li`
     border-radius: 10px;
     margin-bottom: 5px;
     height: auto;
+    display:flex;
 
     .option-code{
         font-weight: 600;
@@ -96,10 +97,8 @@ const ModalTitleText = styled.div`
     padding: 2px;
     text-align: center;
     margin-bottom: 2px;
-    display: inline-block;
 
     @media only screen and (max-width:576px){
-        display: block;
         width: 100%;
     }
 `;
@@ -163,16 +162,16 @@ const DeliveryReadyOptionInfoModal = (props) => {
                         <NameGroup>
                             <OptionInfoTitle>
                                 <OptionInfoTitleList>
-                                    <ModalTitleText className="info-title">
+                                    <ModalTitleText>
                                         <span>현재</span>
                                     </ModalTitleText>
-                                    <ModalTitleText className="info-title option-code">
+                                    <ModalTitleText className="option-code">
                                         <span>{props.originOptionManagementCode}</span>
                                     </ModalTitleText>
-                                    <ModalTitleText className="info-title">
+                                    <ModalTitleText>
                                         <span>변경</span>
                                     </ModalTitleText>
-                                    <ModalTitleText className="info-title option-code">
+                                    <ModalTitleText className="option-code">
                                         <span>{props.changedOptionManagementCode}</span>
                                     </ModalTitleText>
                                 </OptionInfoTitleList>
