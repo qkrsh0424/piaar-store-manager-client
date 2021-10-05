@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD } from '../../../handler/dateHandler';
 
 // data connect
-import { deliveryReadyDataConnect } from '../../../data_connect/deliveryReadyDataConnect';
+import { deliveryReadyNaverDataConnect } from '../../../data_connect/deliveryReadyNaverDataConnect';
 
 // component
 import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
@@ -80,7 +80,7 @@ const DeliveryReadyViewMain = () => {
     const __handleDataConnect = () => {
         return {
             getDeliveryReadyUnreleasedData: async function () {
-                await deliveryReadyDataConnect().getUnreleasedData()
+                await deliveryReadyNaverDataConnect().getUnreleasedData()
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setUnreleasedData(res.data.data);
@@ -102,7 +102,7 @@ const DeliveryReadyViewMain = () => {
 
                 setReleaseCheckedOrderList([]);
 
-                await deliveryReadyDataConnect().getSelectedReleasedData(date1, date2)
+                await deliveryReadyNaverDataConnect().getSelectedReleasedData(date1, date2)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setReleasedData(res.data.data);
@@ -117,7 +117,7 @@ const DeliveryReadyViewMain = () => {
                 setDeliveryReadyDateRangePickerModalOpen(false);
             },
             deleteOrderData: async function (itemCid) {
-                await deliveryReadyDataConnect().deleteUnreleasedData(itemCid)
+                await deliveryReadyNaverDataConnect().deleteUnreleasedData(itemCid)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
@@ -130,7 +130,7 @@ const DeliveryReadyViewMain = () => {
                     })
             },
             changeToUnreleaseData: async function (deliveryReadyItem) {
-                await deliveryReadyDataConnect().updateReleasedData(deliveryReadyItem)
+                await deliveryReadyNaverDataConnect().updateReleasedData(deliveryReadyItem)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
@@ -144,7 +144,7 @@ const DeliveryReadyViewMain = () => {
                     })
             },
             getOptionManagementCode: async function () {
-                await deliveryReadyDataConnect().searchOptionInfo()
+                await deliveryReadyNaverDataConnect().searchOptionInfo()
                     .then(res => {
                         if(res.status === 200 && res.data && res.data.message === 'success') {
                             setDeliveryReadyOptionInfo(res.data.data);
@@ -156,7 +156,7 @@ const DeliveryReadyViewMain = () => {
                     })
             },
             changeItemOptionManagementCode: async function (optionCode) {
-                await deliveryReadyDataConnect().updateOptionInfo(deliveryReadyItem, optionCode)
+                await deliveryReadyNaverDataConnect().updateOptionInfo(deliveryReadyItem, optionCode)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setDeliveryReadyOptionInfoModalOpen(false);
@@ -170,7 +170,7 @@ const DeliveryReadyViewMain = () => {
                     })
             },
             changeItemsOptionManagementCode: async function (optionCode) {
-                await deliveryReadyDataConnect().updateAllOptionInfo(deliveryReadyItem, optionCode)
+                await deliveryReadyNaverDataConnect().updateAllOptionInfo(deliveryReadyItem, optionCode)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setDeliveryReadyOptionInfoModalOpen(false);
@@ -191,7 +191,7 @@ const DeliveryReadyViewMain = () => {
                     return r;
                 })
 
-                await deliveryReadyDataConnect().downloadHansanOrderForm(data)
+                await deliveryReadyNaverDataConnect().downloadHansanOrderForm(data)
                     .then(res => {
                         const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
                         const link = document.createElement('a');
@@ -217,7 +217,7 @@ const DeliveryReadyViewMain = () => {
                     return r;
                 })
 
-                await deliveryReadyDataConnect().downloadTailoOrderForm(data)
+                await deliveryReadyNaverDataConnect().downloadTailoOrderForm(data)
                     .then(res => {
                         const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
                         const link = document.createElement('a');

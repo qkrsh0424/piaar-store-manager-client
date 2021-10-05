@@ -173,7 +173,7 @@ const DeliveryReadyUploadCoupangBody = (props) => {
                         <table className="table table-sm" style={{tableLayout: 'fixed' }}>
                             <thead>
                             <tr>
-                                <HeaderTh className="fiexed-header" scope="col">주문번호</HeaderTh>
+                                <HeaderTh className="fiexed-header large-cell" scope="col">상품주문번호(주문번호|노출상품ID|옵션ID)</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">구매자</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">수취인이름</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">노출상품ID</HeaderTh>

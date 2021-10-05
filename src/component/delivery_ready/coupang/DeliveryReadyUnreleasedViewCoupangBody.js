@@ -226,8 +226,8 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>묶음배송번호</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header" scope="col">
-                                            <span>주문번호</span>
+                                        <HeaderTh className="fixed-header large-cell" scope="col">
+                                            <span>상품주문번호(주문번호|노출상품ID|옵션ID)</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header xlarge-cell" scope="col">
                                             <span>주소</span>

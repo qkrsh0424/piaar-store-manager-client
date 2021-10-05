@@ -2,7 +2,7 @@ import {useState} from 'react';
 import { useHistory } from 'react-router';
 
 // data connect
-import { deliveryReadyDataConnect } from '../../../data_connect/deliveryReadyDataConnect';
+import { deliveryReadyNaverDataConnect } from '../../../data_connect/deliveryReadyNaverDataConnect';
 
 // component
 import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
@@ -27,7 +27,7 @@ const DeliveryReadyUploadMain = () => {
                 var uploadedFormData = new FormData();
                 uploadedFormData.set('file', addFiles[0]);
 
-                await deliveryReadyDataConnect().postFile(uploadedFormData)
+                await deliveryReadyNaverDataConnect().postFile(uploadedFormData)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setExcelData(res.data.data);
@@ -45,7 +45,7 @@ const DeliveryReadyUploadMain = () => {
                     return;
                 }
 
-                await deliveryReadyDataConnect().putFileData(formData)
+                await deliveryReadyNaverDataConnect().putFileData(formData)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             alert('저장되었습니다.');
