@@ -39,8 +39,23 @@ const deliveryReadyNaverDataConnect = () => {
                 withCredentials: true
             })
         },
+        deleteListUnreleasedData: async function (itemCids) {
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/deleteList/${itemCids}`, {
+                withCredentials: true
+            })
+        },
+        changeListToReleaseData: async function (deliveryReadyItem) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/updateListToRelease`, deliveryReadyItem, {
+                withCredentials: true
+            })
+        },
         updateReleasedData: async function (deliveryReadyItem) {
             return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/updateOne`, deliveryReadyItem, {
+                withCredentials: true
+            })
+        },
+        changeListToUnreleaseData : async function (deliveryReadyItem) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/updateListToUnrelease`, deliveryReadyItem, {
                 withCredentials: true
             })
         },

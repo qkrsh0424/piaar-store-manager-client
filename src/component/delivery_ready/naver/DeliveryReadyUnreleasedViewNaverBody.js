@@ -122,7 +122,7 @@ const BodyTd = styled.td`
     border-right: 1px solid #a7a7a720;
 `;
 
-const CheckBodyTd = styled.span`
+const CheckBodyBox = styled.span`
     font-size: 13px;
     margin: 0 15px;
 `;
@@ -137,6 +137,48 @@ const CancelBtn = styled.button`
     &:hover {
         opacity: 0.6;
         cursor: pointer;
+    }
+`;
+
+const CancelListBtn = styled.button`
+    font-size: 14px;
+    border-radius: 3px;
+    border: none;
+    /* background-color: #ff5555; */
+    background-color: rgb(178, 179, 221);
+    color: white;
+    transition: opacity 0.1s linear;
+    margin: 7px;
+    padding: 5px 10px;
+
+    &:hover {
+        opacity: 0.6;
+        cursor: pointer;
+    }
+
+    @media only screen and (max-width:576px){
+        font-size: 12px;
+    }
+`;
+
+const ChangeListBtn = styled.button`
+    font-size: 14px;
+    border-radius: 3px;
+    border: none;
+    /* background-color: #ff9966; */
+    background-color: rgb(178, 179, 221);
+    color: white;
+    transition: opacity 0.1s linear;
+    margin: 7px;
+    padding: 5px 10px;
+
+    &:hover {
+        opacity: 0.6;
+        cursor: pointer;
+    }
+
+    @media only screen and (max-width:576px){
+        font-size: 12px;
     }
 `;
 
@@ -162,6 +204,12 @@ const PageBox = styled.span`
     }
 `;
 
+const DataOptionBox = styled.span`
+    @media only screen and (max-width:576px){
+        display: block;
+    }
+`;
+
 const DeliveryReadyUnreleasedView = (props) => {
     const userRdx = useSelector(state => state.user);
 
@@ -171,10 +219,12 @@ const DeliveryReadyUnreleasedView = (props) => {
                 <DataContainer>
                     <TableContainer>
                         <BoardTitle>
-                            <span>
-                                <span><b>네이버</b> 미출고 데이터</span>
-                                <CheckBodyTd>[✔️ : {props.unreleaseCheckedOrderList.length} / {props.unreleasedData ? props.unreleasedData.length : 0}개]</CheckBodyTd>
-                            </span>
+                            <span><b>네이버</b> 미출고 데이터</span>
+                            <CheckBodyBox>[✔️ : {props.unreleaseCheckedOrderList.length} / {props.unreleasedData ? props.unreleasedData.length : 0}개]</CheckBodyBox>
+                            <DataOptionBox>
+                                <CancelListBtn type="button" onClick={(e) => props.__handleEventControl().unreleaseCheckedOrderList().deleteList(e)}>일괄 삭제</CancelListBtn>
+                                <ChangeListBtn type="button" onClick={(e) => props.__handleEventControl().unreleaseCheckedOrderList().changeListToReleaseData(e)}>일괄 출고</ChangeListBtn>
+                            </DataOptionBox>
                             <PageBox>
                                 <Stack spacing={0}>
                                     <Pagination

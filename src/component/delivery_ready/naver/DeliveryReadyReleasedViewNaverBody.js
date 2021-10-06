@@ -191,6 +191,33 @@ const PageBox = styled.span`
     }
 `;
 
+const ChangeListBtn = styled.button`
+    font-size: 14px;
+    border-radius: 3px;
+    border: none;
+    /* background-color: #99cccc; */
+    background-color: rgb(178, 179, 221);
+    color: white;
+    transition: opacity 0.1s linear;
+    margin: 7px;
+    padding: 5px 10px;
+
+    &:hover {
+        opacity: 0.6;
+        cursor: pointer;
+    }
+
+    @media only screen and (max-width:576px){
+        font-size: 12px;
+    }
+`;
+
+const DataOptionBox = styled.span`
+    @media only screen and (max-width:576px){
+        display: block;
+    }
+`;
+
 const DeliveryReadyReleasedView = (props) => {
     const userRdx = useSelector(state => state.user);
 
@@ -203,6 +230,9 @@ const DeliveryReadyReleasedView = (props) => {
                         <BoardTitle>
                             <span><b>네이버</b> 출고 데이터</span>
                             <CheckBodyTd>[✔️ : {props.releaseCheckedOrderList.length} / {props.releasedData ? props.releasedData.length : 0}개]</CheckBodyTd>
+                            <DataOptionBox>
+                                <ChangeListBtn type="button" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeListToUnreleaseData(e)}>일괄 출고 취소</ChangeListBtn>
+                            </DataOptionBox>
                             <PageBox>
                                 <Stack spacing={0}>
                                     <Pagination
