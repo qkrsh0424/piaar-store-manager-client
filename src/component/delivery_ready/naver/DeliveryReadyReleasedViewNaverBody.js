@@ -199,8 +199,8 @@ const ChangeListBtn = styled.button`
     background-color: rgb(178, 179, 221);
     color: white;
     transition: opacity 0.1s linear;
-    margin: 7px;
-    padding: 5px 10px;
+    margin: 3px;
+    padding: 5px 15px;
 
     &:hover {
         opacity: 0.6;
@@ -208,7 +208,7 @@ const ChangeListBtn = styled.button`
     }
 
     @media only screen and (max-width:576px){
-        font-size: 12px;
+        font-size: 10px;
     }
 `;
 

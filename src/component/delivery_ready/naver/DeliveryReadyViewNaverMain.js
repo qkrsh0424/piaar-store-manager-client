@@ -275,6 +275,25 @@ const DeliveryReadyViewMain = () => {
                     .catch(err => {
                         console.log(err);
                     });
+            },
+            downloadNaverExcelOrderForm: async function (data) {
+                await deliveryReadyNaverDataConnect().downloadNaverExcelOrderForm(data)
+                    .then(res => {
+                        const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
+                        const link = document.createElement('a');
+                        link.href = url;
+
+                        let date = dateToYYMMDD(new Date());
+
+                        link.setAttribute('download', '[' + date + ']배송준비 데이터_네이버.xlsx');
+                        document.body.appendChild(link);
+                        link.click();
+
+                        setUnreleaseCheckedOrderList([]);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
             }
         }
     }
@@ -558,6 +577,29 @@ const DeliveryReadyViewMain = () => {
                         if (downloadData.length > 0) {
                             setBackdropLoading(true);
                             await __handleDataConnect().downloadTailoOrderForm(downloadData, storeInfoData.storeName, storeInfoData.storeContact);
+                            setBackdropLoading(false);
+
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                        }
+                        else {
+                            alert("no checked order data");
+                        }
+                    },
+                    naverExcelDownload: async function (e) {
+                        e.preventDefault();
+
+                        let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
+                        let checkedReleaseData = __handleEventControl().releaseCheckedOrderList().getCheckedData();
+
+                        let downloadData = [
+                            ...checkedReleaseData,
+                            ...checkedUnreleaseData
+                        ]
+
+                        if (downloadData.length > 0) {
+                            setBackdropLoading(true);
+                            await __handleDataConnect().downloadNaverExcelOrderForm(downloadData);
                             setBackdropLoading(false);
 
                             __handleDataConnect().getDeliveryReadyUnreleasedData();

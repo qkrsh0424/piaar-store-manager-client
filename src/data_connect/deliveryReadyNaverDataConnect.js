@@ -95,6 +95,12 @@ const deliveryReadyNaverDataConnect = () => {
                 responseType: 'blob',
                 withCredentials:true
             })
+        },
+        downloadNaverExcelOrderForm: async function (data) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/download/excel`, data, {
+                responseType: 'blob',
+                withCredentials:true
+            })
         }
 
     }

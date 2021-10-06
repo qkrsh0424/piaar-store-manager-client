@@ -39,8 +39,23 @@ const deliveryReadyCoupangDataConnect = () => {
                 withCredentials: true
             })
         },
+        deleteListUnreleasedData: async function (itemCids) {
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/deleteList/${itemCids}`, {
+                withCredentials: true
+            })
+        },
+        changeListToReleaseData: async function (deliveryReadyItem) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/updateListToRelease`, deliveryReadyItem, {
+                withCredentials: true
+            })
+        },
         updateReleasedData: async function (deliveryReadyItem) {
             return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/updateOne`, deliveryReadyItem, {
+                withCredentials: true
+            })
+        },
+        changeListToUnreleaseData : async function (deliveryReadyItem) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/updateListToUnrelease`, deliveryReadyItem, {
                 withCredentials: true
             })
         },
@@ -77,6 +92,12 @@ const deliveryReadyCoupangDataConnect = () => {
         },
         downloadTailoOrderForm: async function (data) {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/download/tailo`, data, {
+                responseType: 'blob',
+                withCredentials:true
+            })
+        },
+        downloadCoupangExcelOrderForm: async function (data) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/download/excel`, data, {
                 responseType: 'blob',
                 withCredentials:true
             })

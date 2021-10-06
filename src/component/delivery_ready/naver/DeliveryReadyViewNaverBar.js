@@ -79,7 +79,6 @@ const PageControlDiv = styled.div`
 `;
 
 const PageControlBtn = styled.button`
-    display: block;
     font-size: 14px;
     padding: 15px 20px;
     color: #555;
@@ -93,7 +92,33 @@ const PageControlBtn = styled.button`
         cursor: pointer;
     }
 
-    @media only screen and (max-width:700px){
+    @media only screen and (max-width:768px){
+        font-size: 12px;
+    }
+`;
+
+const DataDownloadBtn = styled.button`
+    margin: 10px;
+    margin-right: 20px;
+    border: 1px solid transparent;
+    font-size: 16px;
+    padding: 6px;
+    color: white;
+    width: 150px;
+    float: right;
+    border-radius: 20px;
+    background-color: rgba(132, 149, 201, 0.8);
+    transition: opacity 0.1s linear;
+    &:hover {
+        opacity: 0.6;
+        cursor: pointer;
+    }
+
+    @media only screen and (max-width:992px){
+        width: 100px;
+    }
+
+    @media only screen and (max-width:768px){
         font-size: 12px;
     }
 `;
@@ -107,6 +132,7 @@ const DeliveryReadyViewBar = (props) => {
             <Container>
                     <PageControlDiv>
                         <PageControlBtn type="button" onClick={() => props.__handleEventControl().movePage().deliveryReadyUpload()}><KeyboardArrowLeftIcon /> 네이버 배송준비 파일 업로드</PageControlBtn>
+                        <DataDownloadBtn type="button" onClick={(e) => props.__handleEventControl().downloadOrderFormData().naverExcelDownload(e)}>엑셀 다운</DataDownloadBtn>
                     </PageControlDiv>
                     <Form>
                         <FormBox>

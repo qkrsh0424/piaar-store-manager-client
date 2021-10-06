@@ -129,8 +129,49 @@ const DeliveryReadyViewMain = () => {
                         alert(res?.data?.memo);
                     })
             },
+            deleteOrderListData: async function (checkedUnreleaseDataCid) {
+                await deliveryReadyCoupangDataConnect().deleteListUnreleasedData(checkedUnreleaseDataCid)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            alert('삭제되었습니다.');
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        alert(res?.data?.memo);
+                })
+            },
+            changeListToReleaseData: async function (deliveryReadyItem) {
+                await deliveryReadyCoupangDataConnect().changeListToReleaseData(deliveryReadyItem)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                            alert('출고 처리되었습니다.');
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        alert(res?.data?.memo);
+                    })
+            },
             changeToUnreleaseData: async function (deliveryReadyItem) {
                 await deliveryReadyCoupangDataConnect().updateReleasedData(deliveryReadyItem)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                            alert('출고 취소되었습니다.');
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        alert(res?.data?.memo);
+                    })
+            },
+            changeListToUnreleaseData: async function (deliveryReadyItem) {
+                await deliveryReadyCoupangDataConnect().changeListToUnreleaseData(deliveryReadyItem)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
@@ -234,6 +275,25 @@ const DeliveryReadyViewMain = () => {
                     .catch(err => {
                         console.log(err);
                     });
+            },
+            downloadCoupangExcelOrderForm: async function (data) {
+                await deliveryReadyCoupangDataConnect().downloadCoupangExcelOrderForm(data)
+                    .then(res => {
+                        const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
+                        const link = document.createElement('a');
+                        link.href = url;
+
+                        let date = dateToYYMMDD(new Date());
+
+                        link.setAttribute('download', '[' + date + ']배송준비 데이터_쿠팡.xlsx');
+                        document.body.appendChild(link);
+                        link.click();
+
+                        setUnreleaseCheckedOrderList([]);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
             }
         }
     }
@@ -295,8 +355,39 @@ const DeliveryReadyViewMain = () => {
                             setUnreleaseCheckedOrderList([]);
                         }
                     },
+                    deleteList: async function (e) {
+                        e.stopPropagation();
+
+                        let checkedUnreleaseDataCids = __handleEventControl().unreleaseCheckedOrderList().getCheckedData().map(data => data.deliveryReadyItem.cid);
+
+
+                        if (checkedUnreleaseDataCids.length > 0) {
+                            if(window.confirm('선택 항목을 모두 삭제하시겠습니까?')) {
+                                await __handleDataConnect().deleteOrderListData(checkedUnreleaseDataCids);
+                                setUnreleaseCheckedOrderList([]);
+                            }
+                        }
+                        else {
+                            alert("no checked order data");
+                        }
+                    },
                     unreleaseDataPagingHandler: function (e, value) {
                         setUnreleaseDataCurrentPage(value);
+                    },
+                    changeListToReleaseData: async function (e) {
+                        e.stopPropagation();
+
+                        let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
+                        
+                        if (checkedUnreleaseData.length > 0) {
+                            if(window.confirm('선택 항목을 모두 출고 처리 하시겠습니까?')) {
+                                await __handleDataConnect().changeListToReleaseData(checkedUnreleaseData);
+                                setUnreleaseCheckedOrderList([]);
+                            }
+                        }
+                        else {
+                            alert("no checked order data");
+                        }
                     }
                 }
             },
@@ -352,6 +443,20 @@ const DeliveryReadyViewMain = () => {
 
                         if(window.confirm('출고를 취소하시겠습니까?')) {
                             await __handleDataConnect().changeToUnreleaseData(deliveryReadyItem);
+                        }
+                    },
+                    changeListToUnreleaseData: async function (e) {
+                        e.stopPropagation();
+
+                        let checkedReleaseData = __handleEventControl().releaseCheckedOrderList().getCheckedData().map(data => data.deliveryReadyItem);
+
+                        if (checkedReleaseData.length > 0) {
+                            if(window.confirm('선택 항목을 모두 출고 취소 하시겠습니까?')) {
+                                await __handleDataConnect().changeListToUnreleaseData(checkedReleaseData);
+                            }
+                        }
+                        else {
+                            alert("no checked order data");
                         }
                     },
                     releaseDataPagingHandler: function (e, value) {
@@ -472,6 +577,31 @@ const DeliveryReadyViewMain = () => {
                         if (downloadData.length > 0) {
                             setBackdropLoading(true);
                             await __handleDataConnect().downloadTailoOrderForm(downloadData, storeInfoData.storeName, storeInfoData.storeContact);
+                            setBackdropLoading(false);
+
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                        }
+                        else {
+                            alert("no checked order data");
+                        }
+                    },
+                    coupangExcelDownload: async function (e) {
+                        e.preventDefault();
+
+                        let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
+                        let checkedReleaseData = __handleEventControl().releaseCheckedOrderList().getCheckedData();
+
+                        let downloadData = [
+                            ...checkedReleaseData,
+                            ...checkedUnreleaseData
+                        ]
+
+                        console.log(downloadData);
+
+                        if (downloadData.length > 0) {
+                            setBackdropLoading(true);
+                            await __handleDataConnect().downloadCoupangExcelOrderForm(downloadData);
                             setBackdropLoading(false);
 
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
