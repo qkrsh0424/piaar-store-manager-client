@@ -368,7 +368,7 @@ const DeliveryReadyViewMain = () => {
                             }
                         }
                         else {
-                            alert("no checked order data");
+                            alert("선택된 데이터가 없습니다.");
                         }
                     },
                     unreleaseDataPagingHandler: function (e, value) {
@@ -386,7 +386,7 @@ const DeliveryReadyViewMain = () => {
                             }
                         }
                         else {
-                            alert("no checked order data");
+                            alert("선택된 데이터가 없습니다.");
                         }
                     }
                 }
@@ -456,7 +456,7 @@ const DeliveryReadyViewMain = () => {
                             }
                         }
                         else {
-                            alert("no checked order data");
+                            alert("선택된 데이터가 없습니다.");
                         }
                     },
                     releaseDataPagingHandler: function (e, value) {
@@ -555,7 +555,7 @@ const DeliveryReadyViewMain = () => {
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
                         }
                         else {
-                            alert("no checked order data");
+                            alert("선택된 데이터가 없습니다.");
                         }
                     },
                     tailoFormDownload: async function (e) {
@@ -583,7 +583,7 @@ const DeliveryReadyViewMain = () => {
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
                         }
                         else {
-                            alert("no checked order data");
+                            alert("선택된 데이터가 없습니다.");
                         }
                     },
                     coupangExcelDownload: async function (e) {
@@ -597,8 +597,6 @@ const DeliveryReadyViewMain = () => {
                             ...checkedUnreleaseData
                         ]
 
-                        console.log(downloadData);
-
                         if (downloadData.length > 0) {
                             setBackdropLoading(true);
                             await __handleDataConnect().downloadCoupangExcelOrderForm(downloadData);
@@ -608,7 +606,7 @@ const DeliveryReadyViewMain = () => {
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
                         }
                         else {
-                            alert("no checked order data");
+                            alert("선택된 데이터가 없습니다.");
                         }
                     }
                 }

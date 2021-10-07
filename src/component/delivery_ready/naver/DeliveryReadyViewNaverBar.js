@@ -95,6 +95,10 @@ const PageControlBtn = styled.button`
     @media only screen and (max-width:768px){
         font-size: 12px;
     }
+
+    @media only screen and (max-width:576px){
+        padding: 10px 0px 0px 10px;
+    }
 `;
 
 const DataDownloadBtn = styled.button`
@@ -120,6 +124,13 @@ const DataDownloadBtn = styled.button`
 
     @media only screen and (max-width:768px){
         font-size: 12px;
+        margin-right: 40px;
+    }
+
+    @media only screen and (max-width:576px){
+        width: 70px;
+        font-size: 10px;
+        margin: 10px 25px 10px 0px;
     }
 `;
 
