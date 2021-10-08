@@ -172,8 +172,8 @@ const DeliveryReadyUploadBody = (props) => {
                         <table className="table table-sm" style={{tableLayout: 'fixed' }}>
                             <thead>
                             <tr>
-                                <HeaderTh className="fiexed-header" scope="col">주문번호</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">상품주문번호</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">주문번호</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">판매채널</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">구매자명</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">구매자ID</HeaderTh>

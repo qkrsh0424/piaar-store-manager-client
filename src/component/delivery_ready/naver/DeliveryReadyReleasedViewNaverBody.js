@@ -114,6 +114,14 @@ const BodyTr = styled.tr`
             }
         `
     }
+
+    ${(props) => props.reflectedUnit ?
+        css`
+            background-color: #99cccc60;
+        `
+        :
+        css``
+    }
 `;
 
 const BodyTd = styled.td`
@@ -193,7 +201,7 @@ const PageBox = styled.span`
 
 const ChangeListBtn = styled.button`
     font-size: 14px;
-    border-radius: 3px;
+    border-radius: 20px;
     border: none;
     /* background-color: #99cccc; */
     background-color: rgb(178, 179, 221);
@@ -216,6 +224,14 @@ const DataOptionBox = styled.span`
     @media only screen and (max-width:576px){
         display: block;
     }
+
+    & .unitReflectBtn {
+        background-color: #99cccc;
+    }
+
+    & .unitReflectCancelBtn {
+        background-color: #99b5cc;
+    };
 `;
 
 const DeliveryReadyReleasedView = (props) => {
@@ -232,6 +248,9 @@ const DeliveryReadyReleasedView = (props) => {
                             <CheckBodyTd>[✔️ : {props.releaseCheckedOrderList.length} / {props.releasedData ? props.releasedData.length : 0}개]</CheckBodyTd>
                             <DataOptionBox>
                                 <ChangeListBtn type="button" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeListToUnreleaseData(e)}>일괄 출고 취소</ChangeListBtn>
+                                {/* <ChangeListBtn type="button" className="unitReflectBtn" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().reflectStockUnit(e)}>재고반영</ChangeListBtn> */}
+                                <ChangeListBtn type="button" className="unitReflectBtn" onClick={(e) => props.__handleEventControl().deliveryReadyReleaseMemo().open(e)}>재고반영</ChangeListBtn>
+                                <ChangeListBtn type="button" className="unitReflectCancelBtn" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().cancelReflectedStockUnit(e)}>재고반영 취소</ChangeListBtn>
                             </DataOptionBox>
                             <PageBox>
                                 <Stack spacing={0}>
@@ -255,13 +274,13 @@ const DeliveryReadyReleasedView = (props) => {
                                             />
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header medium-cell" scope="col">
-                                            <span>받는사람</span>
+                                            <span>수취인명</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <span>상품명1</span>
+                                            <span>상품명</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <span>상품상세1</span>
+                                            <span>옵션정보</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header small-cell" scope="col">
                                             <span>수량</span>
@@ -282,22 +301,22 @@ const DeliveryReadyReleasedView = (props) => {
                                             <span>*옵션명2</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
-                                            <span>배송묶음전호</span>
+                                            <span>배송비 묶음번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>상품주문번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header xlarge-cell" scope="col">
-                                            <span>주소</span>
+                                            <span>배송지</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
-                                            <span>전화번호1</span>
+                                            <span>수취인연락처1</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header medium-cell" scope="col">
                                             <span>우편번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
-                                            <span>배송메시지</span>
+                                            <span>배송메세지</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>주문일시</span>
@@ -315,6 +334,7 @@ const DeliveryReadyReleasedView = (props) => {
                                                 key={'releasedItem' + releasedDataIdx}
                                                 onClick={() => props.__handleEventControl().releaseCheckedOrderList().checkOneLi(data.deliveryReadyItem.id)}
                                                 checked={props.__handleEventControl().releaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
+                                                reflectedUnit={data.deliveryReadyItem.releaseCompleted}
                                             >
                                                 <BodyTd className="col small-cell">
                                                     <Checkbox

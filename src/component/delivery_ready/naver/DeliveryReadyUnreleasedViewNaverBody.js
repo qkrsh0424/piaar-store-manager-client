@@ -142,7 +142,7 @@ const CancelBtn = styled.button`
 
 const CancelListBtn = styled.button`
     font-size: 14px;
-    border-radius: 3px;
+    border-radius: 20px;
     border: none;
     /* background-color: #ff5555; */
     background-color: rgb(178, 179, 221);
@@ -163,7 +163,7 @@ const CancelListBtn = styled.button`
 
 const ChangeListBtn = styled.button`
     font-size: 14px;
-    border-radius: 3px;
+    border-radius: 20px;
     border: none;
     /* background-color: #ff9966; */
     background-color: rgb(178, 179, 221);
@@ -247,13 +247,13 @@ const DeliveryReadyUnreleasedView = (props) => {
                                             />
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header medium-cell" scope="col">
-                                            <span>받는사람</span>
+                                            <span>수취인명</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <span>상품명1</span>
+                                            <span>상품명</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <span>상품상세1</span>
+                                            <span>옵션정보</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header small-cell" scope="col">
                                             <span>수량</span>
@@ -274,22 +274,22 @@ const DeliveryReadyUnreleasedView = (props) => {
                                             <span>*옵션명2</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
-                                            <span>배송묶음번호</span>
+                                            <span>배송비 묶음번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>상품주문번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header xlarge-cell" scope="col">
-                                            <span>주소</span>
+                                            <span>배송지</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
-                                            <span>전화번호1</span>
+                                            <span>수취인연락처1</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header medium-cell" scope="col">
                                             <span>우편번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
-                                            <span>배송메시지</span>
+                                            <span>배송메세지</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>주문일시</span>

@@ -15,6 +15,7 @@ import BackdropLoading from '../../loading/BackdropLoading';
 import DeliveryReadyViewNaverBar from './DeliveryReadyViewNaverBar';
 import DeliveryReadyUnreleasedViewNaverBody from './DeliveryReadyUnreleasedViewNaverBody';
 import DeliveryReadyReleasedViewNaverBody from './DeliveryReadyReleasedViewNaverBody';
+import DeliveryReadyReleaseMemoModal from '../modal/DeliveryReadyReleaseMemoModal';
 
 const DeliveryReadyViewMain = () => {
     const [unreleasedData, setUnreleasedData] = useState(null);
@@ -66,6 +67,8 @@ const DeliveryReadyViewMain = () => {
     for(let i = 1; i <= Math.ceil(unreleasedDataLength / postsPerPage); i++){
         unreleaseDataTotalPageNumber.push(i);
     }
+
+    const [deliveryReadyReleaseMemoModalOpen, setDeliveryReadyReleaseMemoModalOpen] = useState(false);
 
     let history = useHistory();
 
@@ -294,6 +297,36 @@ const DeliveryReadyViewMain = () => {
                     .catch(err => {
                         console.log(err);
                     });
+            },
+            reflectStockUnit: async function (data) {
+                await deliveryReadyNaverDataConnect().reflectStockUnit(data)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+
+                            alert('재고수량이 변경되었습니다.');
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        alert(res?.data?.memo);
+                    })
+            },
+            cancelReflectedStockUnit: async function (data) {
+                await deliveryReadyNaverDataConnect().cancelReflectedStockUnit(data)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                        
+                            alert('재고수량이 변경되었습니다.');
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        alert(res?.data?.memo);
+                    })
             }
         }
     }
@@ -359,7 +392,6 @@ const DeliveryReadyViewMain = () => {
                         e.stopPropagation();
 
                         let checkedUnreleaseDataCids = __handleEventControl().unreleaseCheckedOrderList().getCheckedData().map(data => data.deliveryReadyItem.cid);
-
 
                         if (checkedUnreleaseDataCids.length > 0) {
                             if(window.confirm('선택 항목을 모두 삭제하시겠습니까?')) {
@@ -441,8 +473,12 @@ const DeliveryReadyViewMain = () => {
                     changeToUnreleaseData: async function (e, deliveryReadyItem) {
                         e.stopPropagation();
 
-                        if(window.confirm('출고를 취소하시겠습니까?')) {
+                        // 재고 반영된 데이터들 추출
+                        let reflectedUnitList = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => item.deliveryReadyItem.releaseCompleted);
+
+                        if(window.confirm('출고를 취소하시겠습니까?\n출고 취소 시 반영된 재고수량도 변경됩니다.')) {
                             await __handleDataConnect().changeToUnreleaseData(deliveryReadyItem);
+                            await __handleDataConnect().cancelReflectedStockUnit(reflectedUnitList);
                         }
                     },
                     changeListToUnreleaseData: async function (e) {
@@ -450,9 +486,13 @@ const DeliveryReadyViewMain = () => {
 
                         let checkedReleaseData = __handleEventControl().releaseCheckedOrderList().getCheckedData().map(data => data.deliveryReadyItem);
 
+                        // 재고 반영된 데이터들만 추출
+                        let reflectedUnitList = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => item.deliveryReadyItem.releaseCompleted);
+
                         if (checkedReleaseData.length > 0) {
-                            if(window.confirm('선택 항목을 모두 출고 취소 하시겠습니까?')) {
+                            if(window.confirm('선택 항목을 모두 출고 취소하시겠습니까?\n출고 취소 시 반영된 재고수량도 변경됩니다.')) {
                                 await __handleDataConnect().changeListToUnreleaseData(checkedReleaseData);
+                                await __handleDataConnect().cancelReflectedStockUnit(reflectedUnitList);
                             }
                         }
                         else {
@@ -461,6 +501,52 @@ const DeliveryReadyViewMain = () => {
                     },
                     releaseDataPagingHandler: function (e, value) {
                         setReleaseDataCurrentPage(value);
+                    },
+                    reflectStockUnit: async function (e) {
+                        e.stopPropagation();
+
+                        // 아직 재고 반영이 되지 않은 데이터들만 추출
+                        let checkedReleaseData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => !item.deliveryReadyItem.releaseCompleted);
+
+                        if (checkedReleaseData.length > 0) {
+                            if(window.confirm('선택 항목의 수량을 재고에 반영하시겠습니까?')) {
+                                await __handleDataConnect().reflectStockUnit(checkedReleaseData);
+                            }
+                        }
+                        else {
+                            alert("선택된 데이터가 없습니다.");
+                        }
+                    },
+                    cancelReflectedStockUnit: async function (e) {
+                        e.stopPropagation();
+
+                        // 재고 반영된 데이터들만 추출
+                        let checkedReleaseData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => item.deliveryReadyItem.releaseCompleted);
+
+                        if (checkedReleaseData.length > 0) {
+                            if(window.confirm('반영된 재고수량을 취소하시겠습니까?')) {
+                                await __handleDataConnect().cancelReflectedStockUnit(checkedReleaseData);
+                            }
+                        }
+                        else {
+                            alert("선택된 데이터가 없습니다.");
+                        }
+                    } 
+                }
+            },
+            deliveryReadyReleaseMemo: function () {
+                return {
+                    open: function (e) {
+                        e.stopPropagation();
+
+                        if(releaseCheckedOrderList.length > 0) {
+                            setDeliveryReadyReleaseMemoModalOpen(true);
+                        } else {
+                            alert("선택된 데이터가 없습니다.");
+                        }
+                    },
+                    close: function () {
+                        setDeliveryReadyReleaseMemoModalOpen(false);
                     }
                 }
             },
@@ -656,6 +742,12 @@ const DeliveryReadyViewMain = () => {
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyOptionInfoModal>
+
+            <DeliveryReadyReleaseMemoModal
+                open={deliveryReadyReleaseMemoModalOpen}
+                
+                __handleEventControl={__handleEventControl}
+            ></DeliveryReadyReleaseMemoModal>
 
            <BackdropLoading open={backdropLoading} />
            <DrawerNavbarMain></DrawerNavbarMain>

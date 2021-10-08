@@ -101,8 +101,17 @@ const deliveryReadyNaverDataConnect = () => {
                 responseType: 'blob',
                 withCredentials:true
             })
+        },
+        reflectStockUnit: async function (data) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/releaseStockUnit`, data, {
+                withCredentials:true
+            })
+        },
+        cancelReflectedStockUnit: async function (data) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/cancelReleasedStockUnit`, data, {
+                withCredentials:true
+            })
         }
-
     }
 }
 
