@@ -101,6 +101,16 @@ const deliveryReadyCoupangDataConnect = () => {
                 responseType: 'blob',
                 withCredentials:true
             })
+        },
+        reflectStockUnit: async function (data) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/releaseStockUnit`, data, {
+                withCredentials:true
+            })
+        },
+        cancelReflectedStockUnit: async function (data) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/cancelReleasedStockUnit`, data, {
+                withCredentials:true
+            })
         }
     }
 }

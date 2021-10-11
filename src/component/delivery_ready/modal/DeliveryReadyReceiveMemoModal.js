@@ -66,7 +66,7 @@ const SubmitBtn = styled.button`
     }
 `;
 
-const DeliveryReadyReleaseMemoModal = (props) => {
+const DeliveryReadyReceiveMemoModal = (props) => {
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('sm');
 
@@ -74,17 +74,17 @@ const DeliveryReadyReleaseMemoModal = (props) => {
         <>
             <Dialog
                 open={props.open}
-                onClose={() => props.__handleEventControl().deliveryReadyReleaseMemo().close()}
+                onClose={() => props.__handleEventControl().deliveryReadyReceiveMemo().close()}
                 fullWidth={fullWidth}
                 maxWidth={maxWidth}
             >
                 <MemoContainer>
-                        <GroupTitle>재고반영 메모 작성
-                            <IconButton aria-label="close" className="close-button" onClick={() => props.__handleEventControl().deliveryReadyReleaseMemo().close()}>
+                        <GroupTitle>재고반영 취소 메모 작성
+                            <IconButton aria-label="close" className="close-button" onClick={() => props.__handleEventControl().deliveryReadyReceiveMemo().close()}>
                                 <CloseIcon />
                             </IconButton>
                         </GroupTitle>
-                        <form onSubmit={(e) => props.__handleEventControl().releaseCheckedOrderList().reflectStockUnit(e)}>
+                        <form onSubmit={(e) => props.__handleEventControl().releaseCheckedOrderList().cancelReflectedStockUnit(e)}>
                             <NameGroup>
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">
@@ -96,9 +96,9 @@ const DeliveryReadyReleaseMemoModal = (props) => {
                                     <CommonInputEl
                                         type="text"
                                         className='form-control'
-                                        name='releaseMemo'
-                                        value={props.releaseCompletedMemo.releaseMemo}
-                                        onChange={(e) => props.__handleEventControl().deliveryReadyReleaseMemo().writeReleaseMemo(e)}
+                                        name='receiveMemo'
+                                        value={props.releaseCompletedMemo.receiveMemo}
+                                        onChange={(e) => props.__handleEventControl().deliveryReadyReceiveMemo().writeReceiveMemo(e)}
                                         required
                                     />
                                 </div>
@@ -113,4 +113,4 @@ const DeliveryReadyReleaseMemoModal = (props) => {
     )
 }
 
-export default DeliveryReadyReleaseMemoModal;
+export default DeliveryReadyReceiveMemoModal;

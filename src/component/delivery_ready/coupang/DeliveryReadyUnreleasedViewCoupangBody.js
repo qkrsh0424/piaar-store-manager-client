@@ -142,9 +142,8 @@ const CancelBtn = styled.button`
 
 const CancelListBtn = styled.button`
     font-size: 14px;
-    border-radius: 3px;
+    border-radius: 20px;
     border: none;
-    /* background-color: #ff5555; */
     background-color: rgb(178, 179, 221);
     color: white;
     transition: opacity 0.1s linear;
@@ -163,9 +162,8 @@ const CancelListBtn = styled.button`
 
 const ChangeListBtn = styled.button`
     font-size: 14px;
-    border-radius: 3px;
+    border-radius: 20px;
     border: none;
-    /* background-color: #ff9966; */
     background-color: rgb(178, 179, 221);
     color: white;
     transition: opacity 0.1s linear;

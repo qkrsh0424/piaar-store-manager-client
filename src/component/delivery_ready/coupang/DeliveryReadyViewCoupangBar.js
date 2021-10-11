@@ -110,7 +110,7 @@ const DataDownloadBtn = styled.button`
     color: white;
     width: 150px;
     float: right;
-    border-radius: 20px;
+    border-radius: 3px;
     background-color: rgba(132, 149, 201, 0.8);
     transition: opacity 0.1s linear;
     &:hover {

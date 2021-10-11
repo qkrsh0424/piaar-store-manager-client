@@ -203,7 +203,6 @@ const ChangeListBtn = styled.button`
     font-size: 14px;
     border-radius: 20px;
     border: none;
-    /* background-color: #99cccc; */
     background-color: rgb(178, 179, 221);
     color: white;
     transition: opacity 0.1s linear;
@@ -248,9 +247,8 @@ const DeliveryReadyReleasedView = (props) => {
                             <CheckBodyTd>[✔️ : {props.releaseCheckedOrderList.length} / {props.releasedData ? props.releasedData.length : 0}개]</CheckBodyTd>
                             <DataOptionBox>
                                 <ChangeListBtn type="button" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeListToUnreleaseData(e)}>일괄 출고 취소</ChangeListBtn>
-                                {/* <ChangeListBtn type="button" className="unitReflectBtn" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().reflectStockUnit(e)}>재고반영</ChangeListBtn> */}
                                 <ChangeListBtn type="button" className="unitReflectBtn" onClick={(e) => props.__handleEventControl().deliveryReadyReleaseMemo().open(e)}>재고반영</ChangeListBtn>
-                                <ChangeListBtn type="button" className="unitReflectCancelBtn" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().cancelReflectedStockUnit(e)}>재고반영 취소</ChangeListBtn>
+                                <ChangeListBtn type="button" className="unitReflectCancelBtn" onClick={(e) => props.__handleEventControl().deliveryReadyReceiveMemo().open(e)}>재고반영 취소</ChangeListBtn>
                             </DataOptionBox>
                             <PageBox>
                                 <Stack spacing={0}>
@@ -331,10 +329,10 @@ const DeliveryReadyReleasedView = (props) => {
                                         if((releasedDataIdx < props.postsPerPage * props.releaseDataCurrentPage) && (releasedDataIdx >= props.postsPerPage * (props.releaseDataCurrentPage-1)))
                                         return (
                                             <BodyTr
-                                                key={'releasedItem' + releasedDataIdx}
-                                                onClick={() => props.__handleEventControl().releaseCheckedOrderList().checkOneLi(data.deliveryReadyItem.id)}
-                                                checked={props.__handleEventControl().releaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
-                                                reflectedUnit={data.deliveryReadyItem.releaseCompleted}
+                                            key={'releasedItem' + releasedDataIdx}
+                                            onClick={() => props.__handleEventControl().releaseCheckedOrderList().checkOneLi(data.deliveryReadyItem.id)}
+                                            checked={props.__handleEventControl().releaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
+                                            reflectedUnit={data.deliveryReadyItem.releaseCompleted}
                                             >
                                                 <BodyTd className="col small-cell">
                                                     <Checkbox
