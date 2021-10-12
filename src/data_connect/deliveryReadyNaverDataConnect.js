@@ -102,13 +102,23 @@ const deliveryReadyNaverDataConnect = () => {
                 withCredentials:true
             })
         },
-        reflectStockUnit: async function (data) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/releaseStockUnit`, data, {
+        reflectStockUnit: async function (deliveryReadyItem, releaseMemo) {
+            let json = deliveryReadyItem.map(r => {
+                r.releaseMemo = releaseMemo;
+                return r;
+            });
+
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/releaseStockUnit`, json, {
                 withCredentials:true
             })
         },
-        cancelReflectedStockUnit: async function (data) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/cancelReleasedStockUnit`, data, {
+        cancelReflectedStockUnit: async function (deliveryReadyItem, receiveMemo) {
+            let json = deliveryReadyItem.map(r => {
+                r.receiveMemo = receiveMemo;
+                return r;
+            });
+
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/cancelReleasedStockUnit`, json, {
                 withCredentials:true
             })
         }

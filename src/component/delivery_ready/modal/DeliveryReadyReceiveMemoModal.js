@@ -90,7 +90,6 @@ const DeliveryReadyReceiveMemoModal = (props) => {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">
                                             메모
-                                            <i className="icon-must" aria-label="필수항목"></i>
                                         </span>
                                     </div>
                                     <CommonInputEl
@@ -99,7 +98,6 @@ const DeliveryReadyReceiveMemoModal = (props) => {
                                         name='receiveMemo'
                                         value={props.releaseCompletedMemo.receiveMemo}
                                         onChange={(e) => props.__handleEventControl().deliveryReadyReceiveMemo().writeReceiveMemo(e)}
-                                        required
                                     />
                                 </div>
                             </NameGroup>

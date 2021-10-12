@@ -90,7 +90,6 @@ const DeliveryReadyReleaseMemoModal = (props) => {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">
                                             메모
-                                            <i className="icon-must" aria-label="필수항목"></i>
                                         </span>
                                     </div>
                                     <CommonInputEl
@@ -99,12 +98,11 @@ const DeliveryReadyReleaseMemoModal = (props) => {
                                         name='releaseMemo'
                                         value={props.releaseCompletedMemo.releaseMemo}
                                         onChange={(e) => props.__handleEventControl().deliveryReadyReleaseMemo().writeReleaseMemo(e)}
-                                        required
                                     />
                                 </div>
                             </NameGroup>
                             <SubmitBtnGroup className="clearfix">
-                                <SubmitBtn type='submit'>등록</SubmitBtn>
+                                <SubmitBtn type="submit">등록</SubmitBtn>
                             </SubmitBtnGroup>
                         </form>
                 </MemoContainer>
