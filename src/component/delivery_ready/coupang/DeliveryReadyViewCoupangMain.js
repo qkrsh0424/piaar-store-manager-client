@@ -634,9 +634,15 @@ const DeliveryReadyViewMain = () => {
                     open: function (e, deliveryReadyItem) {
                         e.stopPropagation();
 
-                        setChangedOptionManagementCode(null);
-                        setDeliveryReadyOptionInfoModalOpen(true);
-                        __handleEventControl().deliveryReadyOptionInfo().getOptionManagementCode(deliveryReadyItem)
+                        // 재고반영 시 옵션관리코드 변경하지 못하도록
+                        if(deliveryReadyItem.releaseCompleted) {
+                            alert('재고가 반영된 데이터들은 옵션관리코드를 변경할 수 없습니다.');
+                        } else {
+                            setChangedOptionManagementCode(null);
+                            setDeliveryReadyOptionInfoModalOpen(true);
+                            __handleEventControl().deliveryReadyOptionInfo().getOptionManagementCode(deliveryReadyItem)
+                        }
+
                     },
                     close: function () {
                         setDeliveryReadyOptionInfoModalOpen(false);
