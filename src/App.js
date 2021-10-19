@@ -35,6 +35,9 @@ import DeliveryReadyViewNaverMain from './component/delivery_ready/naver/Deliver
 import DeliveryReadyUploadCoupangMain from './component/delivery_ready/coupang/DeliveryReadyUploadCoupangMain';
 import DeliveryReadyViewCoupangMain from './component/delivery_ready/coupang/DeliveryReadyViewCoupangMain';
 
+import OrderRegistrationNaverMain from './component/order_registration/naver/OrderRegistrationNaverMain';
+
+
 // data connect
 import { userDataConnect } from './data_connect/userDataConnect';
 
@@ -153,6 +156,10 @@ function App(props) {
                                             <Redirect to={'/login'}></Redirect>
                                     }
                                 </Route>
+                                <Route exact path='/order-registration/naver'>
+                                    <OrderRegistrationNaverMain></OrderRegistrationNaverMain>
+                                </Route>
+
 
                             </Switch>
                         )

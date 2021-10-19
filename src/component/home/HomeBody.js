@@ -73,6 +73,7 @@ const HomeBody = () => {
                         <CustomLink to='/sales-rate/naver'>네이버 주문통합검색 판매량 추출기</CustomLink>
                         <CustomLink to='/delivery-ready/naver'>네이버 배송준비 발주서 다운로드</CustomLink>
                         <CustomLink to='/delivery-ready/coupang'>쿠팡 배송준비 발주서 다운로드</CustomLink>
+                        <CustomLink to='/order-registration/naver'>네이버 대량등록 엑셀 다운로드</CustomLink>
                     </LinkBox>
                 </LinkGroup>
 
