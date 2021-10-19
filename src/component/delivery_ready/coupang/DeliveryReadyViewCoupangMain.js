@@ -642,7 +642,6 @@ const DeliveryReadyViewMain = () => {
                             setDeliveryReadyOptionInfoModalOpen(true);
                             __handleEventControl().deliveryReadyOptionInfo().getOptionManagementCode(deliveryReadyItem)
                         }
-
                     },
                     close: function () {
                         setDeliveryReadyOptionInfoModalOpen(false);
