@@ -18,29 +18,16 @@ const orderRegistrationNaverDataConnect = () => {
                 withCredentials:true
             })
         },
-        postSendedTailoFile: async function (formData) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/order-registration/naver/upload/tailo/sended`, formData, {
+        postTailoFile: async function (formData) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/order-registration/naver/upload/tailo`, formData, {
                 headers: {
                     "content-types": "multipart/form-data"
                 },
                 withCredentials: true
             })
         },
-        postReceivedTailoFile: async function (formData) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/order-registration/naver/upload/tailo/received`, formData, {
-                headers: {
-                    "content-types": "multipart/form-data"
-                },
-                withCredentials: true
-            })
-        },
-        downloadNaverExcelByTailo: async function (sendedTailoExcel, receivedTailoExcel) {
-            let json = {
-                sendedDto : [...sendedTailoExcel],
-                receivedDto : [...receivedTailoExcel]
-            };
-
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/order-registration/naver/download/tailo`, json, {
+        downloadNaverExcelByTailo: async function (data) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/order-registration/naver/download/tailo`, data, {
                 responseType: 'blob',
                 withCredentials:true
             })

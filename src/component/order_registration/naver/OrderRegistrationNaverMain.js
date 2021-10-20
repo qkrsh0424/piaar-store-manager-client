@@ -15,19 +15,7 @@ const OrderRegistrationNaverMain = () => {
     const [backdropLoading, setBackdropLoading] = useState(false);
     
     const [orderRegistrationHansanList, setOrderRegistrationHansanList] = useState([]);
-    const [orderRegistrationSendedTailoList, setOrderRegistrationSendedTailoList] = useState([]);
-    const [orderRegistrationReceivedTailoList, setOrderRegistrationReceivedTailoList] = useState([]);
     const [orderRegistrationTailoList, setOrderRegistrationTailoList] = useState([]);
-
-    useEffect(() => {
-        let uploadedExcelData = [
-            ...orderRegistrationSendedTailoList,
-            ...orderRegistrationReceivedTailoList
-        ];
-
-        setOrderRegistrationTailoList(uploadedExcelData);
-
-    }, [orderRegistrationSendedTailoList, orderRegistrationReceivedTailoList]);
 
     const __handleDataConnect = () => {
         return {
@@ -69,7 +57,7 @@ const OrderRegistrationNaverMain = () => {
                     console.log(err);
                 });
             },
-            uploadTailoSendedExcelFile: async function (e) {
+            uploadTailoExcelFile: async function (e) {
                 if(e.target.files.length === 0) return;
 
                 let addFiles = e.target.files;
@@ -77,10 +65,10 @@ const OrderRegistrationNaverMain = () => {
                 var uploadedFormData = new FormData();
                 uploadedFormData.set('file', addFiles[0]);
 
-                await orderRegistrationNaverDataConnect().postSendedTailoFile(uploadedFormData)
+                await orderRegistrationNaverDataConnect().postTailoFile(uploadedFormData)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
-                            setOrderRegistrationSendedTailoList(res.data.data);
+                            setOrderRegistrationTailoList(res.data.data);
                         }
                     })
                     .catch(err => {
@@ -88,27 +76,8 @@ const OrderRegistrationNaverMain = () => {
                         alert(res?.data?.memo);
                     })
             },
-            uploadTailoReceivedExcelFile: async function (e) {
-                if(e.target.files.length === 0) return;
-
-                let addFiles = e.target.files;
-
-                var uploadedFormData = new FormData();
-                uploadedFormData.set('file', addFiles[0]);
-
-                await orderRegistrationNaverDataConnect().postReceivedTailoFile(uploadedFormData)
-                    .then(res => {
-                        if (res.status === 200 && res.data && res.data.message === 'success') {
-                            setOrderRegistrationReceivedTailoList(res.data.data);
-                        }
-                    })
-                    .catch(err => {
-                        let res = err.response;
-                        alert(res?.data?.memo);
-                    })
-            },
-            downloadNaverExcelByTailo: async function (sendedTailoExcel, receivedTailoExcel) {
-                await orderRegistrationNaverDataConnect().downloadNaverExcelByTailo(sendedTailoExcel, receivedTailoExcel)
+            downloadNaverExcelByTailo: async function (data) {
+                await orderRegistrationNaverDataConnect().downloadNaverExcelByTailo(data)
                 .then(res => {
                     const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
                     const link = document.createElement('a');
@@ -155,28 +124,22 @@ const OrderRegistrationNaverMain = () => {
             },
             tailoExcelList: function () {
                 return {
-                    uploadSendedExcel: async function (e) {
+                    upload: async function (e) {
                         e.preventDefault();
                         setBackdropLoading(true);
-                        await __handleDataConnect().uploadTailoSendedExcelFile(e);
-                        setBackdropLoading(false);
-                    },
-                    uploadReceivedExcel: async function (e) {
-                        e.preventDefault();
-                        setBackdropLoading(true);
-                        await __handleDataConnect().uploadTailoReceivedExcelFile(e);
+                        await __handleDataConnect().uploadTailoExcelFile(e);
                         setBackdropLoading(false);
                     },
                     download: async function (e) {
                         e.preventDefault();
 
-                        if(orderRegistrationSendedTailoList.length === 0 || orderRegistrationReceivedTailoList.length === 0) {
+                        if(orderRegistrationTailoList.length === 0) {
                             alert('테일로 엑셀1&엑셀2 파일을 모두 업로드해주세요.');
                             return;
                         }
 
                         setBackdropLoading(true);
-                        await __handleDataConnect().downloadNaverExcelByTailo(orderRegistrationSendedTailoList, orderRegistrationReceivedTailoList);
+                        await __handleDataConnect().downloadNaverExcelByTailo(orderRegistrationTailoList);
                         setBackdropLoading(false);
                     }
                 }

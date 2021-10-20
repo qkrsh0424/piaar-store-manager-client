@@ -223,22 +223,25 @@ const OrderRegistrationNaverBody = (props) => {
                                     <HeaderTh className="fixed-header medium-cell" scope="col">
                                             <span>수령인</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header" scope="col">
-                                            <span>전화번호</span>
+                                        <HeaderTh className="fixed-header large-cell" scope="col">
+                                            <span>상품명</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header large-cell" scope="col">
+                                            <span>옵션명</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header small-cell" scope="col">
                                             <span>수량</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header xlarge-cell" scope="col">
-                                            <span>주소</span>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>송장번호</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header large-cell" scope="col">
+                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>주문번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>옵션관리코드</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header xlarge-cell" scope="col">
+                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>상품주문번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header medium-cell" scope="col">
@@ -250,8 +253,11 @@ const OrderRegistrationNaverBody = (props) => {
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>택배사</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <span>송장번호</span>
+                                        <HeaderTh className="fixed-header xlarge-cell" scope="col">
+                                            <span>주소</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>전화번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
                                             <span>총 상품주문번호</span>
@@ -268,13 +274,16 @@ const OrderRegistrationNaverBody = (props) => {
                                                     <span>{data.receiver}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
-                                                    <span>{data.receiverContact1}</span>
+                                                    <span>{data.prodName}</span>
+                                                </BodyTd>
+                                                <BodyTd className="col">
+                                                    <span>{data.optionInfo}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
                                                     <span>{data.unit}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
-                                                    <span>{data.destination}</span>
+                                                    <span>{data.transportNumber}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
                                                     <span>{data.orderNumber}</span>
@@ -295,7 +304,10 @@ const OrderRegistrationNaverBody = (props) => {
                                                     <span>{data.deliveryService}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
-                                                    <span>{data.transportNumber}</span>
+                                                    <span>{data.destination}</span>
+                                                </BodyTd>
+                                                <BodyTd className="col">
+                                                    <span>{data.receiverContact1}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
                                                     <span>{data.allProdOrderNumber}</span>
@@ -312,12 +324,8 @@ const OrderRegistrationNaverBody = (props) => {
                         <UploadBar>
                             <div>
                                 <Form>
-                                    <ControlLabel htmlFor="sended-tailo-upload">테일로 엑셀 업로드1</ControlLabel>
-                                    <Input id="sended-tailo-upload" type="file" accept=".xls,.xlsx" onClick={(e) => e.target.value = ''} onChange={(e) => props.__handleEventControl().tailoExcelList().uploadSendedExcel(e)} />
-                                </Form>
-                                <Form>
-                                    <ControlLabel htmlFor="received-tailo-upload">테일로 엑셀 업로드2</ControlLabel>
-                                    <Input id="received-tailo-upload" type="file" accept=".xls,.xlsx" onClick={(e) => e.target.value = ''} onChange={(e) => props.__handleEventControl().tailoExcelList().uploadReceivedExcel(e)} />
+                                    <ControlLabel htmlFor="received-tailo-upload">테일로 엑셀 업로드</ControlLabel>
+                                    <Input id="received-tailo-upload" type="file" accept=".xls,.xlsx" onClick={(e) => e.target.value = ''} onChange={(e) => props.__handleEventControl().tailoExcelList().upload(e)} />
                                 </Form>
                                 <DataLen>[ 항목 : {props.orderRegistrationTailoList ? props.orderRegistrationTailoList.length : 0}개 ]</DataLen>
                             </div>
@@ -335,16 +343,16 @@ const OrderRegistrationNaverBody = (props) => {
                                             <span>수령인</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
-                                            <span>전화번호</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>노스노스 고유코드</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header large-cell" scope="col">
+                                            <span>상품상세</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header small-cell" scope="col">
                                             <span>수량</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header xlarge-cell" scope="col">
-                                            <span>주소</span>
+                                        <HeaderTh className="fixed-header large-cell" scope="col">
+                                            <span>송장번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
                                             <span>주문번호</span>
@@ -364,8 +372,11 @@ const OrderRegistrationNaverBody = (props) => {
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>택배사</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <span>송장번호</span>
+                                        <HeaderTh className="fixed-header xlarge-cell" scope="col">
+                                            <span>주소</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>전화번호</span>
                                         </HeaderTh>
                                     </tr>
                                 </thead>
@@ -379,16 +390,16 @@ const OrderRegistrationNaverBody = (props) => {
                                                     <span>{data.receiver}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
-                                                    <span>{data.receiverContact1}</span>
+                                                    <span>{data.prodUniqueCode}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
-                                                    <span>{data.prodUniqueCode}</span>
+                                                    <span>{data.salesProdName}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
                                                     <span>{data.unit}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
-                                                    <span>{data.destination1}</span>
+                                                    <span>{data.transportNumber}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
                                                     <span>{data.orderNumber}</span>
@@ -409,7 +420,10 @@ const OrderRegistrationNaverBody = (props) => {
                                                     <span>{data.deliveryService}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
-                                                    <span>{data.transportNumber}</span>
+                                                    <span>{data.destination1}</span>
+                                                </BodyTd>
+                                                <BodyTd className="col">
+                                                    <span>{data.receiverContact1}</span>
                                                 </BodyTd>
                                             </BodyTr>
                                         )

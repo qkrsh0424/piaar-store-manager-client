@@ -254,7 +254,7 @@ const DeliveryReadyReleasedViewCoupangBody = (props) => {
                                 <Stack spacing={0}>
                                     <Pagination
                                         size="small"
-                                        count={props.releaseDataTotalPageNumber?.length}
+                                        count={props.releasedDataPagenate.totalPageNumber}
                                         onChange={(e, val) => props.__handleEventControl().releaseCheckedOrderList().releaseDataPagingHandler(e, val)}
                                     />
                                 </Stack>
@@ -325,8 +325,9 @@ const DeliveryReadyReleasedViewCoupangBody = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {props.releasedData?.map((data, releasedDataIdx) => {
-                                        if((releasedDataIdx < props.postsPerPage * props.releaseDataCurrentPage) && (releasedDataIdx >= props.postsPerPage * (props.releaseDataCurrentPage-1)))
+                                {props.releasedData?.map((data, releasedDataIdx) => {
+                                        if((releasedDataIdx < props.releasedDataPagenate.postsPerPage * props.releasedDataPagenate.currentPage)
+                                            && (releasedDataIdx >= props.releasedDataPagenate.postsPerPage * (props.releasedDataPagenate.currentPage-1)))
                                         return (
                                             <BodyTr
                                                 key={'releasedItem' + releasedDataIdx}
@@ -404,7 +405,7 @@ const DeliveryReadyReleasedViewCoupangBody = (props) => {
                 </DataContainer>
             }
         </>
-    ), [props.releasedData, props.releaseCheckedOrderList, props.selectedDateText, props.releaseDataCurrentPage])
+    ), [props.releasedData, props.releaseCheckedOrderList, props.selectedDateText, props.releasedDataPagenate])
 }
 
 export default DeliveryReadyReleasedViewCoupangBody;

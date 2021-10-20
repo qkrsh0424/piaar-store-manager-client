@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import { useHistory } from 'react-router';
+import { withRouter } from 'react-router';
 
 // data connect
 import { deliveryReadyNaverDataConnect } from '../../../data_connect/deliveryReadyNaverDataConnect';
@@ -9,9 +9,7 @@ import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
 import DeliveryReadyUploadNaverBody from './DeliveryReadyUploadNaverBody';
 import BackdropLoading from '../../loading/BackdropLoading';
 
-const DeliveryReadyUploadMain = () => {
-    let history = useHistory();
-
+const DeliveryReadyUploadMain = (props) => {
     const [excelData, setExcelData] = useState(null);
     const [formData, setFormData] = useState([]);
     const [backdropLoading, setBackdropLoading] = useState(false);
@@ -84,8 +82,7 @@ const DeliveryReadyUploadMain = () => {
             movePage: function () {
                 return {
                     deliveryReadyView: async function () {
-                        
-                        history.push('/delivery-ready/naver/view');
+                        props.history.replace('/delivery-ready/naver/view');
                     }
                 }
             }
@@ -105,4 +102,4 @@ const DeliveryReadyUploadMain = () => {
     )
 }
 
-export default DeliveryReadyUploadMain;
+export default withRouter(DeliveryReadyUploadMain);

@@ -227,12 +227,12 @@ const DeliveryReadyUnreleasedView = (props) => {
                                 <Stack spacing={0}>
                                     <Pagination
                                         size="small"
-                                        count={props.unreleaseDataTotalPageNumber?.length}
+                                        count={props.unreleasedDataPagenate.totalPageNumber}
                                         onChange={(e, val) => props.__handleEventControl().unreleaseCheckedOrderList().unreleaseDataPagingHandler(e, val)}
                                     />
                                 </Stack>
                             </PageBox>
-                        </BoardTitle>
+                    </BoardTitle>
                         <BoardContainer>
                             <table className="table table-sm" style={{ tableLayout: 'fixed' }}>
                                 <thead>
@@ -299,7 +299,8 @@ const DeliveryReadyUnreleasedView = (props) => {
                                 </thead>
                                 <tbody>
                                     {props.unreleasedData?.map((data, unreleasedDataIdx) => {
-                                        if ((unreleasedDataIdx < props.postsPerPage * props.unreleaseDataCurrentPage) && (unreleasedDataIdx >= props.postsPerPage * (props.unreleaseDataCurrentPage-1)))
+                                        if ((unreleasedDataIdx < props.unreleasedDataPagenate.postsPerPage * props.unreleasedDataPagenate.currentPage) 
+                                            && (unreleasedDataIdx >= props.unreleasedDataPagenate.postsPerPage * (props.unreleasedDataPagenate.currentPage-1)))
                                             return (
                                                 <BodyTr
                                                     key={'unreleasedItem' + unreleasedDataIdx}
@@ -376,7 +377,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                 </DataContainer>
             }
         </>
-    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleaseDataCurrentPage])
+    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleasedDataPagenate])
 }
 
 export default DeliveryReadyUnreleasedView;

@@ -227,7 +227,7 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                 <Stack spacing={0}>
                                     <Pagination
                                         size="small"
-                                        count={props.unreleaseDataTotalPageNumber?.length}
+                                        count={props.unreleasedDataPagenate.totalPageNumber}
                                         onChange={(e, val) => props.__handleEventControl().unreleaseCheckedOrderList().unreleaseDataPagingHandler(e, val)}
                                     />
                                 </Stack>
@@ -298,8 +298,9 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {props.unreleasedData?.map((data, unreleasedDataIdx) => {
-                                        if ((unreleasedDataIdx < props.postsPerPage * props.unreleaseDataCurrentPage) && (unreleasedDataIdx >= props.postsPerPage * (props.unreleaseDataCurrentPage-1)))
+                                {props.unreleasedData?.map((data, unreleasedDataIdx) => {
+                                        if ((unreleasedDataIdx < props.unreleasedDataPagenate.postsPerPage * props.unreleasedDataPagenate.currentPage) 
+                                            && (unreleasedDataIdx >= props.unreleasedDataPagenate.postsPerPage * (props.unreleasedDataPagenate.currentPage-1)))
                                             return (
                                                 <BodyTr
                                                     key={'unreleasedItem' + unreleasedDataIdx}
@@ -376,7 +377,7 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                 </DataContainer>
             }
         </>
-    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleaseDataCurrentPage])
+    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleasedDataPagenate])
 }
 
 export default DeliveryReadyUnreleasedViewCoupangBody;

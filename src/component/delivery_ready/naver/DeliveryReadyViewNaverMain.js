@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import { useHistory } from 'react-router';
+import { withRouter } from 'react-router';
 
 // handler
 import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD } from '../../../handler/dateHandler';
@@ -17,8 +17,12 @@ import DeliveryReadyUnreleasedViewNaverBody from './DeliveryReadyUnreleasedViewN
 import DeliveryReadyReleasedViewNaverBody from './DeliveryReadyReleasedViewNaverBody';
 import DeliveryReadyReleaseMemoModal from '../modal/DeliveryReadyReleaseMemoModal';
 import DeliveryReadyReceiveMemoModal from '../modal/DeliveryReadyReceiveMemoModal';
+import { isPropsEqual } from '@fullcalendar/react';
 
-const DeliveryReadyViewMain = () => {
+// 한페이지에 보여지는 데이터
+const POSTS_PER_PAGE = 50;
+
+const DeliveryReadyViewMain = (props) => {
     const [unreleasedData, setUnreleasedData] = useState(null);
     const [releasedData, setReleasedData] = useState(null);
     const [unreleaseCheckedOrderList, setUnreleaseCheckedOrderList] = useState([]);
@@ -56,21 +60,17 @@ const DeliveryReadyViewMain = () => {
     });
 
     // 페이징
-    const [releaseDataCurrentPage, setReleaseDataCurrentPage] = useState(1);
-    const [unreleaseDataCurrentPage, setUnreleaseDataCurrentPage] = useState(1);
-    const releaseDataTotalPageNumber = [];
-    const unreleaseDataTotalPageNumber = [];
-    const postsPerPage = 50;
-    
-    const releasedDataLength = releasedData != null ? releasedData.length : 0;
-    for(let i = 1; i <= Math.ceil(releasedDataLength / postsPerPage); i++){
-        releaseDataTotalPageNumber.push(i);
-    }
+    const [releasedDataPagenate, setReleasedDataPagenate] = useState({
+        currentPage : 1,
+        totalPageNumber : 1,
+        postsPerPage : POSTS_PER_PAGE
+    });
 
-    const unreleasedDataLength = unreleasedData != null ? unreleasedData.length : 0; 
-    for(let i = 1; i <= Math.ceil(unreleasedDataLength / postsPerPage); i++){
-        unreleaseDataTotalPageNumber.push(i);
-    }
+    const [unreleasedDataPagenate, setUnReleasedDataPagenate] = useState({
+        currentPage : 1,
+        totalPageNumber : 1,
+        postsPerPage : POSTS_PER_PAGE
+    });
 
     // 재고반영
     const [deliveryReadyReleaseMemoModalOpen, setDeliveryReadyReleaseMemoModalOpen] = useState(false);
@@ -79,8 +79,6 @@ const DeliveryReadyViewMain = () => {
     // 재고반영 취소
     const [deliveryReadyReceiveMemoModalOpen, setDeliveryReadyReceiveMemoModalOpen] = useState(false);
     const [releaseCompletedCancelMemo, setReleaseCompletedCancelMemo] = useState({ receiveMemo: ''});
-
-    let history = useHistory();
 
     useEffect(() => {
         async function fetchInit() {
@@ -97,6 +95,14 @@ const DeliveryReadyViewMain = () => {
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setUnreleasedData(res.data.data);
+
+                            let unreleasedDataLength = res.data.data.length;
+                            let pageNum = Math.ceil(unreleasedDataLength / POSTS_PER_PAGE);
+
+                            setUnReleasedDataPagenate({
+                                ...unreleasedDataPagenate,
+                                totalPageNumber : pageNum
+                            });
                         }
                     })
                     .catch(err => {
@@ -121,6 +127,14 @@ const DeliveryReadyViewMain = () => {
                             setReleasedData(res.data.data);
                         }
                         setSelectedDateText(dateToYYMMDD(date1) + " ~ " + dateToYYMMDD(date2));
+
+                        let releasedDataLength = res.data.data.length;
+                        let pageNum = Math.ceil(releasedDataLength / POSTS_PER_PAGE);
+
+                        setReleasedDataPagenate({
+                            ...releasedDataPagenate,
+                            totalPageNumber: pageNum
+                        });
                     })
                     .catch(err => {
                         let res = err.response;
@@ -410,7 +424,10 @@ const DeliveryReadyViewMain = () => {
                         }
                     },
                     unreleaseDataPagingHandler: function (e, value) {
-                        setUnreleaseDataCurrentPage(value);
+                        setUnReleasedDataPagenate({
+                            ...unreleasedDataPagenate,
+                            currentPage : value
+                        });
                     },
                     changeListToReleaseData: async function (e) {
                         e.stopPropagation();
@@ -514,7 +531,10 @@ const DeliveryReadyViewMain = () => {
                         }
                     },
                     releaseDataPagingHandler: function (e, value) {
-                        setReleaseDataCurrentPage(value);
+                        setReleasedDataPagenate({
+                            ...releasedDataPagenate,
+                            currentPage : value
+                        })
                     },
                     reflectStockUnit: async function (e) {
                         e.preventDefault();
@@ -775,7 +795,7 @@ const DeliveryReadyViewMain = () => {
             movePage: function () {
                 return {
                     deliveryReadyUpload: async function () {
-                        history.push('/delivery-ready/naver');
+                        props.history.replace('/delivery-ready/naver');
                     }
                 }
             }
@@ -827,9 +847,7 @@ const DeliveryReadyViewMain = () => {
             <DeliveryReadyUnreleasedViewNaverBody
                 unreleasedData={unreleasedData}
                 unreleaseCheckedOrderList={unreleaseCheckedOrderList}
-                unreleaseDataCurrentPage={unreleaseDataCurrentPage}
-                unreleaseDataTotalPageNumber={unreleaseDataTotalPageNumber}
-                postsPerPage={postsPerPage}
+                unreleasedDataPagenate={unreleasedDataPagenate}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyUnreleasedViewNaverBody>
@@ -837,9 +855,7 @@ const DeliveryReadyViewMain = () => {
                 releasedData={releasedData}
                 releaseCheckedOrderList={releaseCheckedOrderList}
                 selectedDateText={selectedDateText}
-                releaseDataCurrentPage={releaseDataCurrentPage}
-                releaseDataTotalPageNumber={releaseDataTotalPageNumber}
-                postsPerPage={postsPerPage}
+                releasedDataPagenate={releasedDataPagenate}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReleasedViewNaverBody>
@@ -847,4 +863,4 @@ const DeliveryReadyViewMain = () => {
     )
 }
 
-export default DeliveryReadyViewMain;
+export default withRouter(DeliveryReadyViewMain);
