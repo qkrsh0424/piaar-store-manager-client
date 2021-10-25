@@ -35,32 +35,32 @@ const deliveryReadyNaverDataConnect = () => {
             })
         },
         deleteUnreleasedData: async function (itemCid) {
-            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/deleteOne/${itemCid}`, {
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/delete/one/${itemCid}`, {
                 withCredentials: true
             })
         },
-        deleteListUnreleasedData: async function (itemCids) {
-            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/deleteList/${itemCids}`, {
+        deleteListUnreleasedData: async function (deliveryReadyitem) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/delete/batch`, deliveryReadyitem, {
                 withCredentials: true
             })
         },
         changeListToReleaseData: async function (deliveryReadyItem) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/updateListToRelease`, deliveryReadyItem, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/update/list/release`, deliveryReadyItem, {
                 withCredentials: true
             })
         },
         updateReleasedData: async function (deliveryReadyItem) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/updateOne`, deliveryReadyItem, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/update/one`, deliveryReadyItem, {
                 withCredentials: true
             })
         },
         changeListToUnreleaseData : async function (deliveryReadyItem) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/updateListToUnrelease`, deliveryReadyItem, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/update/list/unrelease`, deliveryReadyItem, {
                 withCredentials: true
             })
         },
         searchOptionInfo: async function () {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/searchList/optionInfo`, {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/search/list/option-info`, {
                 withCredentials: true
             })
         },
@@ -70,7 +70,7 @@ const deliveryReadyNaverDataConnect = () => {
                 optionManagementCode: optionCode
             };
 
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/updateOption`, json, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/update/option`, json, {
                 withCredentials: true
             })
         },
@@ -80,7 +80,7 @@ const deliveryReadyNaverDataConnect = () => {
                 optionManagementCode: optionCode
             };
 
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/updateOptions`, json, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/update/options`, json, {
                 withCredentials:true
             })
         },
@@ -108,7 +108,7 @@ const deliveryReadyNaverDataConnect = () => {
                 return r;
             });
 
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/releaseStockUnit`, json, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/stock-unit`, json, {
                 withCredentials:true
             })
         },
@@ -118,7 +118,7 @@ const deliveryReadyNaverDataConnect = () => {
                 return r;
             });
 
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/cancelReleasedStockUnit`, json, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/naver/view/stock-unit/cancel`, json, {
                 withCredentials:true
             })
         }

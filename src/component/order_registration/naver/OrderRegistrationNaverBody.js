@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
 
@@ -171,12 +171,16 @@ const BodyTr = styled.tr`
 
     transition: opacity 0.2s linear;
 
-    & .changeable-info {
-        &:hover{
-            opacity: 0.8;
-            cursor: pointer;
-            background-color: #9bb6d170;
-        }
+    & .hansanOptionActive {
+        opacity: 0.8;
+        cursor: pointer;
+        background-color: #9bb6d170;
+    }
+
+    & .tailoOptionActive {
+        opacity: 0.8;
+        cursor: pointer;
+        background-color: #9bb6d170;
     }
 `;
 
@@ -195,6 +199,9 @@ const DataLen = styled.span`
 
 const OrderRegistrationNaverBody = (props) => {
     const userRdx = useSelector(state => state.user);
+
+    const [hansanOptionActive, setHansanOptionActive] = useState('');
+    const [tailoOptionActive, setTailoOptionActive] = useState('');
 
     return (
         <>
@@ -302,14 +309,18 @@ const OrderRegistrationNaverBody = (props) => {
                                                 <BodyTd className="col">
                                                     <span>{data.platformName}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col changeable-info" 
+                                                <BodyTd className={`col ${hansanOptionActive === hansanDataIdx ? 'hansanOptionActive' : ''}`}
                                                     onClick={(e) => props.__handleEventControl().orderRegistrationInfo().open(e, data)}
-                                                    >
+                                                    onMouseEnter={() => setHansanOptionActive(hansanDataIdx)}
+                                                    onMouseLeave={()=> setHansanOptionActive('')}
+                                                >
                                                     <span>{data.transportType}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col changeable-info" 
+                                                <BodyTd className={`col ${hansanOptionActive === hansanDataIdx ? 'hansanOptionActive' : ''}`}
                                                     onClick={(e) => props.__handleEventControl().orderRegistrationInfo().open(e, data)}
-                                                    >
+                                                    onMouseEnter={() => setHansanOptionActive(hansanDataIdx)}
+                                                    onMouseLeave={()=> setHansanOptionActive('')}
+                                                >
                                                     <span>{data.deliveryService}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">
@@ -419,10 +430,18 @@ const OrderRegistrationNaverBody = (props) => {
                                                 <BodyTd className="col">
                                                     <span>{data.managementMemo3}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col changeable-info" onClick={(e) => props.__handleEventControl().orderRegistrationInfo().open(e, data)}>
+                                                <BodyTd className={`col ${tailoOptionActive === tailoDataIdx ? 'tailoOptionActive' : ''}`}
+                                                    onClick={(e) => props.__handleEventControl().orderRegistrationInfo().open(e, data)}
+                                                    onMouseEnter={() => setTailoOptionActive(tailoDataIdx)}
+                                                    onMouseLeave={()=> setTailoOptionActive('')}
+                                                >
                                                     <span>{data.transportType}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col changeable-info" onClick={(e) => props.__handleEventControl().orderRegistrationInfo().open(e, data)}>
+                                                <BodyTd className={`col ${tailoOptionActive === tailoDataIdx ? 'tailoOptionActive' : ''}`}
+                                                    onClick={(e) => props.__handleEventControl().orderRegistrationInfo().open(e, data)}
+                                                    onMouseEnter={() => setTailoOptionActive(tailoDataIdx)}
+                                                    onMouseLeave={()=> setTailoOptionActive('')}
+                                                >
                                                     <span>{data.deliveryService}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col">

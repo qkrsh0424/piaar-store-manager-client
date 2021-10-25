@@ -35,32 +35,32 @@ const deliveryReadyCoupangDataConnect = () => {
             })
         },
         deleteUnreleasedData: async function (itemCid) {
-            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/deleteOne/${itemCid}`, {
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/delete/one/${itemCid}`, {
                 withCredentials: true
             })
         },
-        deleteListUnreleasedData: async function (itemCids) {
-            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/deleteList/${itemCids}`, {
+        deleteListUnreleasedData: async function (deliveryReadyItem) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/delete/batch`, deliveryReadyItem, {
                 withCredentials: true
             })
         },
         changeListToReleaseData: async function (deliveryReadyItem) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/updateListToRelease`, deliveryReadyItem, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/update/list/release`, deliveryReadyItem, {
                 withCredentials: true
             })
         },
         updateReleasedData: async function (deliveryReadyItem) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/updateOne`, deliveryReadyItem, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/update/one`, deliveryReadyItem, {
                 withCredentials: true
             })
         },
         changeListToUnreleaseData : async function (deliveryReadyItem) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/updateListToUnrelease`, deliveryReadyItem, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/update/list/unrelease`, deliveryReadyItem, {
                 withCredentials: true
             })
         },
         searchOptionInfo: async function () {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/searchList/optionInfo`, {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/search/list/option-info`, {
                 withCredentials: true
             })
         },
@@ -70,7 +70,7 @@ const deliveryReadyCoupangDataConnect = () => {
                 optionManagementCode: optionCode
             };
 
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/updateOption`, json, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/update/option`, json, {
                 withCredentials: true
             })
         },
@@ -80,7 +80,7 @@ const deliveryReadyCoupangDataConnect = () => {
                 optionManagementCode: optionCode
             };
 
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/updateOptions`, json, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/update/options`, json, {
                 withCredentials:true
             })
         },
@@ -108,7 +108,7 @@ const deliveryReadyCoupangDataConnect = () => {
                 return r;
             });
 
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/releaseStockUnit`, json, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/stock-unit`, json, {
                 withCredentials:true
             })
         },
@@ -118,7 +118,7 @@ const deliveryReadyCoupangDataConnect = () => {
                 return r;
             });
 
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/cancelReleasedStockUnit`, json, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/stock-unit/cancel`, json, {
                 withCredentials:true
             })
         }

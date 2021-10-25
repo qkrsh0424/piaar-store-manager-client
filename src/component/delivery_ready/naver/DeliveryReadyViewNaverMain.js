@@ -156,8 +156,8 @@ const DeliveryReadyViewMain = (props) => {
                         alert(res?.data?.memo);
                     })
             },
-            deleteOrderListData: async function (checkedUnreleaseDataCid) {
-                await deliveryReadyNaverDataConnect().deleteListUnreleasedData(checkedUnreleaseDataCid)
+            deleteOrderListData: async function (checkedUnreleaseData) {
+                await deliveryReadyNaverDataConnect().deleteListUnreleasedData(checkedUnreleaseData)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
@@ -411,11 +411,12 @@ const DeliveryReadyViewMain = (props) => {
                     deleteList: async function (e) {
                         e.stopPropagation();
 
-                        let checkedUnreleaseDataCids = __handleEventControl().unreleaseCheckedOrderList().getCheckedData().map(data => data.deliveryReadyItem.cid);
+                        // let checkedUnreleaseDataCids = __handleEventControl().unreleaseCheckedOrderList().getCheckedData().map(data => data.deliveryReadyItem.cid);
+                        let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData().map(data => data.deliveryReadyItem);
 
-                        if (checkedUnreleaseDataCids.length > 0) {
+                        if (checkedUnreleaseData.length > 0) {
                             if(window.confirm('선택 항목을 모두 삭제하시겠습니까?')) {
-                                await __handleDataConnect().deleteOrderListData(checkedUnreleaseDataCids);
+                                await __handleDataConnect().deleteOrderListData(checkedUnreleaseData);
                                 setUnreleaseCheckedOrderList([]);
                             }
                         }
@@ -496,11 +497,8 @@ const DeliveryReadyViewMain = (props) => {
                     changeToUnreleaseData: async function (e, deliveryReadyItem) {
                         e.stopPropagation();
 
-                        // 재고 반영된 데이터들 추출
-                        let reflectedUnitList = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => item.deliveryReadyItem.releaseCompleted);
-
-                        if(reflectedUnitList.length > 0) {
-                            alert('재고가 반영된 데이터들은 출고를 취소할 수 없습니다.\n재고 반영 취소를 먼저 진행해 주세요.')
+                        if(deliveryReadyItem.releaseCompleted) {
+                            alert('재고가 반영된 데이터는 출고를 취소할 수 없습니다.\n재고 반영 취소를 먼저 진행해 주세요.')
                             return;
                         }
                 
