@@ -157,7 +157,13 @@ function App(props) {
                                     }
                                 </Route>
                                 <Route exact path='/order-registration/naver'>
-                                    <OrderRegistrationNaverMain></OrderRegistrationNaverMain>
+                                    {
+                                        userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER"))
+                                            ?
+                                            <OrderRegistrationNaverMain></OrderRegistrationNaverMain>
+                                            :
+                                            <Redirect to={'/login'}></Redirect>
+                                    }
                                 </Route>
 
 

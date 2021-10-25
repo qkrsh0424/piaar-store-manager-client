@@ -9,6 +9,7 @@ import { orderRegistrationNaverDataConnect } from '../../../data_connect/orderRe
 import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
 import OrderRegistrationNaverBody from './OrderRegistrationNaverBody';
 import BackdropLoading from '../../loading/BackdropLoading';
+import OrderRegistrationInfoModal from '../modal/OrderRegistraionInfoModal';
 
 
 const OrderRegistrationNaverMain = () => {
@@ -16,6 +17,9 @@ const OrderRegistrationNaverMain = () => {
     
     const [orderRegistrationHansanList, setOrderRegistrationHansanList] = useState([]);
     const [orderRegistrationTailoList, setOrderRegistrationTailoList] = useState([]);
+
+    const [orderRegistrationInfoModalOpen, setOrderRegistrationInfoModalOpen] = useState(false);
+    const [orderRegistrationItem, setOrderRegistrationItem] = useState(null);
 
     const __handleDataConnect = () => {
         return {
@@ -50,8 +54,6 @@ const OrderRegistrationNaverMain = () => {
                     link.setAttribute('download', '[' + date + ']네이버 대량등록_한산.xlsx');
                     document.body.appendChild(link);
                     link.click();
-
-                    setOrderRegistrationHansanList([]);
                 })
                 .catch(err => {
                     console.log(err);
@@ -88,8 +90,6 @@ const OrderRegistrationNaverMain = () => {
                     link.setAttribute('download', '[' + date + ']네이버 대량등록_테일로.xlsx');
                     document.body.appendChild(link);
                     link.click();
-
-                    setOrderRegistrationTailoList([]);
                 })
                 .catch(err => {
                     console.log(err);
@@ -143,6 +143,60 @@ const OrderRegistrationNaverMain = () => {
                         setBackdropLoading(false);
                     }
                 }
+            },
+            orderRegistrationInfo: function () {
+                return {
+                    open: function (e, data) {
+                        e.stopPropagation();
+
+                        if(data.deliveryService === null) {
+                            alert('택배사가 지정된 데이터만 변경할 수 있습니다.');
+                            return;
+                        }
+
+                        setOrderRegistrationItem(data);
+                        setOrderRegistrationInfoModalOpen(true);
+                    },
+                    close: function () {
+                        setOrderRegistrationInfoModalOpen(false);
+                    },
+                    modifyDataChangeInputValue: function (e) {
+                        setOrderRegistrationItem({
+                            ...orderRegistrationItem,
+                            [e.target.name] : e.target.value
+                        });
+                    },
+                    submitModifyData: function (e) {
+                        e.preventDefault();
+
+                        if(window.confirm('변경하시겠습니까?')) {
+                            this.changeOrderRegistrationInfo();
+                            setOrderRegistrationInfoModalOpen(false);
+                        }
+                    },
+                    changeOrderRegistrationInfo: function () {
+                        let hansanData = orderRegistrationHansanList.map(item =>
+                            (item.prodOrderNumber === orderRegistrationItem.prodOrderNumber) ?
+                                ({
+                                    ...item,
+                                    transportType: orderRegistrationItem.transportType,
+                                    deliveryService: orderRegistrationItem.deliveryService
+                                }) : item
+                        );
+                        
+                        let tailoData = orderRegistrationTailoList.map(item => 
+                            (item.managementMemo2 === orderRegistrationItem.managementMemo2) ?
+                                ({
+                                    ...item,
+                                    transportType: orderRegistrationItem.transportType,
+                                    deliveryService: orderRegistrationItem.deliveryService
+                                }) : item
+                        );
+        
+                        setOrderRegistrationHansanList(hansanData);
+                        setOrderRegistrationTailoList(tailoData);
+                    }
+                }
             }
         }
     }
@@ -151,6 +205,16 @@ const OrderRegistrationNaverMain = () => {
         <>
             <BackdropLoading open={backdropLoading} />
             <DrawerNavbarMain></DrawerNavbarMain>
+
+            {orderRegistrationItem && 
+                <OrderRegistrationInfoModal
+                    open={orderRegistrationInfoModalOpen}
+                    orderRegistrationItem={orderRegistrationItem}
+
+                    __handleEventControl={__handleEventControl}
+                ></OrderRegistrationInfoModal>
+            }
+
             <OrderRegistrationNaverBody
                 orderRegistrationHansanList={orderRegistrationHansanList}
                 orderRegistrationTailoList={orderRegistrationTailoList}
