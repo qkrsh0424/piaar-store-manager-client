@@ -87,7 +87,12 @@ const DrawerNavbarSiderComponent = (props) => {
                             <LinkContainer>
                                 <CustomLink to='/delivery-ready/naver'>네이버 배송준비<br />발주서 다운로드</CustomLink>
                             </LinkContainer>
-
+                            <LinkContainer>
+                                <CustomLink to='/delivery-ready/coupang'>쿠팡 배송준비<br />발주서 다운로드</CustomLink>
+                            </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink to='/order-registration/naver'>네이버 대량등록<br />엑셀 다운로드</CustomLink>
+                            </LinkContainer>
                             <LinkContainer>
                                 <form onSubmit={(e) => props.__handleEventControl().logoutSubmit(e)}>
                                     <button type='submit' className='btn btn-sm btn-outline-danger btn-block'>로그아웃</button>

@@ -195,7 +195,7 @@ const DeliveryReadyUploadBody = (props) => {
                                 <HeaderTh className="fiexed-header xlarge-cell" scope="col">배송지</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">구매자연락처</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">우편번호</HeaderTh>
-                                <HeaderTh className="fiexed-header" scope="col">배송메세지</HeaderTh>
+                                <HeaderTh className="fiexed-header xlarge-cell" scope="col">배송메세지</HeaderTh>
                                 <HeaderTh className="fiexed-header xlarge-cell" scope="col">출고지</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">주문일시</HeaderTh>
                             </tr>
@@ -212,26 +212,26 @@ const DeliveryReadyUploadBody = (props) => {
                                         <BodyTd className="col">{data.buyer}</BodyTd>
                                         <BodyTd className="col">{data.buyerId}</BodyTd>
                                         <BodyTd className="col">{data.receiver}</BodyTd>
-                                        <BodyTd className="col large-cell">{dateToYYMMDDhhmmss(data.paymentDate)}</BodyTd>
+                                        <BodyTd className="col">{dateToYYMMDDhhmmss(data.paymentDate)}</BodyTd>
                                         <BodyTd className="col">{data.prodNumber}</BodyTd>
-                                        <BodyTd className="col xlarge-cell">{data.prodName}</BodyTd>
-                                        <BodyTd className="col large-cell">{data.optionInfo}</BodyTd>
+                                        <BodyTd className="col">{data.prodName}</BodyTd>
+                                        <BodyTd className="col">{data.optionInfo}</BodyTd>
                                         <BodyTd className="col">{data.optionManagementCode}</BodyTd>
                                         <BodyTd className="col">{data.unit}</BodyTd>
-                                        <BodyTd className="col large-cell">{dateToYYMMDDhhmmss(data.orderConfirmationDate)}</BodyTd>
-                                        <BodyTd className="col large-cell">{dateToYYMMDDhhmmss(data.shipmentDueDate)}</BodyTd>
+                                        <BodyTd className="col">{dateToYYMMDDhhmmss(data.orderConfirmationDate)}</BodyTd>
+                                        <BodyTd className="col">{dateToYYMMDDhhmmss(data.shipmentDueDate)}</BodyTd>
                                         <BodyTd className="col">{data.shipmentCostBundleNumber}</BodyTd>
-                                        <BodyTd className="col large-cell">{data.sellerProdCode}</BodyTd>
+                                        <BodyTd className="col">{data.sellerProdCode}</BodyTd>
                                         <BodyTd className="col">{data.sellerInnerCode1}</BodyTd>
                                         <BodyTd className="col">{data.sellerInnerCode2}</BodyTd>
                                         <BodyTd className="col">{data.receiverContact1}</BodyTd>
                                         <BodyTd className="col">{data.receiverContact2}</BodyTd>
-                                        <BodyTd className="col xlarge-cell">{data.destination}</BodyTd>
+                                        <BodyTd className="col">{data.destination}</BodyTd>
                                         <BodyTd className="col">{data.buyerContact}</BodyTd>
                                         <BodyTd className="col">{data.zipCode}</BodyTd>
                                         <BodyTd className="col">{data.deliveryMessage}</BodyTd>
-                                        <BodyTd className="col xlarge-cell">{data.releaseArea}</BodyTd>
-                                        <BodyTd className="col large-cell">{dateToYYMMDDhhmmss(data.orderDateTime)}</BodyTd>
+                                        <BodyTd className="col">{data.releaseArea}</BodyTd>
+                                        <BodyTd className="col">{dateToYYMMDDhhmmss(data.orderDateTime)}</BodyTd>
                                     </BodyTr>
                                 )
                             })}

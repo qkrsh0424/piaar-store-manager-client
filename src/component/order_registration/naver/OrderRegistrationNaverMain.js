@@ -185,7 +185,7 @@ const OrderRegistrationNaverMain = () => {
                         );
                         
                         let tailoData = orderRegistrationTailoList.map(item => 
-                            (item.managementMemo2 === orderRegistrationItem.managementMemo2) ?
+                            (item.prodMemo1 === orderRegistrationItem.prodMemo1) ?
                                 ({
                                     ...item,
                                     transportType: orderRegistrationItem.transportType,
