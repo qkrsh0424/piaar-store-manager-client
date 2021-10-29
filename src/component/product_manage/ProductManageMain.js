@@ -20,17 +20,25 @@ import ReleaseStatusModal from './modal/ReleaseStatusModal';
 import ReceiveAddModal from './modal/ReceiveAddModal';
 import ReceiveStatusModal from './modal/ReceiveStatusModal';
 import BackdropLoading from '../loading/BackdropLoading';
+import { formControlClasses } from '@mui/material';
+import { data } from 'jquery';
 
 class ProductOption {
-    constructor(productId, optionDefaultName = '', optionManagementName = '') {
+    constructor(productId, optionDefaultName = '', optionManagementName = '', nosUniqueCode = '') {
         this.id = uuidv4();
         this.code = ''
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
+        this.nosUniqueCode = nosUniqueCode;
         this.salesPrice = 0;
         this.stockUnit = 0;
         this.status = '준비중';
         this.memo = '';
+        this.imageUrl = '';
+        this.imageFileName = '';
+        this.color = '';
+        this.unitCny = '';
+        this.unitKrw = '';
         this.productCid = null;
         this.productId = productId;
     }
@@ -41,10 +49,16 @@ class ProductOption {
             code: this.code,
             defaultName: this.defaultName,
             managementName: this.managementName,
+            nosUniqueCode: this.nosUniqueCode,
             salesPrice: this.salesPrice,
             stockUnit: this.stockUnit,
             status: this.status,
             memo: this.memo,
+            imageUrl: this.imageUrl,
+            imageFileName: this.imageFileName,
+            color: this.color,
+            unitCny: this.unitCny,
+            unitKrw: this.Krw,
             productCid: this.productCid,
             productId: this.productId
         }
@@ -187,6 +201,7 @@ const ProductManageMain = () => {
                     })
             },
             changeProductOne: async function () {
+                console.log(productModifyData);
                 await productDataConnect().putOne(productModifyData)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
@@ -319,6 +334,44 @@ const ProductManageMain = () => {
                         console.log(err);
                         alert('undefined error. : uploadFilesToCloud');
                     })
+            },
+            postModifyOptionImageFileToCloud: async function(e) {
+                await productDataConnect().postUploadImageFileToCloud(e)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            __handleEventControl().productOption().modifyImageInfo(res.data.data[0]);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else {
+                            console.log(err);
+                            alert('undefined error. : uploadFilesToCloud');
+                        }
+
+                        __handleEventControl().backdropLoading().close();
+                    })
+            },
+            postUploadOptionImageFileToCloud: async function(e) {
+                await productDataConnect().postUploadImageFileToCloud(e)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            __handleEventControl().productOption().uploadImageInfo(res.data.data[0]);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else {
+                            console.log(err);
+                            alert('undefined error. : uploadFilesToCloud');
+                        }
+
+                        __handleEventControl().backdropLoading().close();
+                    })
             }
         }
     }
@@ -403,6 +456,11 @@ const ProductManageMain = () => {
                     },
                     onClickImageButton: function () {
                         document.getElementById("image-file-upload").click();
+                    },
+                    stockManagementCheck: function () {
+                        let stockManagement = productModifyData.stockManagement ? false : true;
+
+                        setProductModifyData({...productModifyData, stockManagement : stockManagement});
                     }
                 }
             },
@@ -522,6 +580,59 @@ const ProductManageMain = () => {
                             await __handleDataConnect().searchProductListFj();
                         }
 
+                    },
+                    postModifyImageFile: async function (e) {
+                        e.preventDefault();
+
+                        // 파일을 선택하지 않은 경우
+                        if (e.target.files.length == 0) return;
+
+                        __handleEventControl().backdropLoading().open();
+                        
+                        await __handleDataConnect().postModifyOptionImageFileToCloud(e);
+                    },
+                    postUploadImageFile: async function (e) {
+                        e.preventDefault();
+
+                        // 파일을 선택하지 않은 경우
+                        if (e.target.files.length == 0) return;
+
+                        __handleEventControl().backdropLoading().open();
+                        
+                        await __handleDataConnect().postUploadOptionImageFileToCloud(e);
+                    },
+                    modifyImageInfo: function (data) {
+                        setProductOptionModifyData({
+                            ...productOptionModifyData,
+                            imageFileName: data.fileName,
+                            imageUrl: data.fileUploadUri
+                        })
+                        __handleEventControl().backdropLoading().close();
+                    },
+                    uploadImageInfo: function (data) {
+                        setProductOptionAddData({
+                            ...productOptionAddData,
+                            imageFileName: data.fileName,
+                            imageUrl: data.fileUploadUri
+                        })
+                        __handleEventControl().backdropLoading().close();
+                    },
+                    deleteModifyImageFile: function () {
+                        setProductOptionModifyData({
+                            ...productOptionModifyData,
+                            imageFileName: '',
+                            imageUrl: ''
+                        })
+                    },
+                    deleteImageFile: function () {
+                        setProductOptionAddData({
+                            ...productOptionAddData,
+                            imageFileName: '',
+                            imageUrl: ''
+                        })
+                    },
+                    onClickImageButton: function (optionId) {
+                        document.getElementById("i_pm_pom_uploader_" + optionId).click();
                     }
                 }
             },

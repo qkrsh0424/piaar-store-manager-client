@@ -5,10 +5,11 @@ import { browserName, CustomView, isMobile, isIOS, isSafari } from 'react-device
 
 import { numberWithCommas } from '../../handler/numberHandler';
 import { ContactPhoneOutlined } from '@material-ui/icons';
+import AddIcon from '@mui/icons-material/Add';
 
 const Container = styled.div`
     margin-top: 80px;
-
+    margin-bottom: 120px;
 `;
 
 const BackBtn = styled.button`
@@ -85,6 +86,8 @@ const ItemWrapper = styled.div`
     background:white;
     border: 1px solid #4682B488;
     border-radius: 5px;
+
+    padding-bottom: 15px;
 `;
 
 const ItemHeaderWrapper = styled.div`
@@ -92,6 +95,10 @@ const ItemHeaderWrapper = styled.div`
     padding:10px;
     overflow: auto;
     
+    & .ref-stock-btn-active {
+        background-color: #4682B4;
+        color: white;
+    }
 `;
 
 const BodyContainer = styled.div`
@@ -119,6 +126,19 @@ const DeleteBtn = styled.button`
     border-radius: 10px;
     box-shadow: 2px 2px 2px 2px #f1f1f1;
     color:#dc3545;
+    font-weight: 600;
+    float: right;
+`;
+
+const RefCheckBtn = styled.button`
+    width:100px;
+    margin:5px;
+    padding:5px;
+    background: white;
+    border:1px solid #4682B4;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px #f1f1f1;
+    color:#4682B4;
     font-weight: 600;
     float: right;
 `;
@@ -173,6 +193,28 @@ const BodyWrapper = styled.div`
     }
 `;
 
+const OptionBodyWrapper = styled.div`
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background-color: #4682B417;
+
+    .icon-dot, .icon-must {
+        display: inline-block;
+        background-color: #ff545c;
+        border-radius: 50%;
+        vertical-align: middle;
+    }
+
+    .icon-must {
+        position: relative;
+        /* top:-3px; */
+        margin-left: 5px;
+        width: 6px;
+        height: 6px;
+    }
+`;
+
 const GroupTitle = styled.div`
     font-size: 1.3rem;
     font-weight: 700;
@@ -180,6 +222,8 @@ const GroupTitle = styled.div`
     @media only screen and (max-width:425px){
         padding: 15px 0;
     }
+
+    
 `;
 
 const CategoryGroup = styled.div`
@@ -247,7 +291,23 @@ const KeyGroup = styled.div`
 `;
 
 const CommonFunctionalBtn = styled.button`
-    float:right;
+    border:1px solid #f1f1f100;
+    background: #4682B4;
+    border-radius: 50%;
+    padding: 10px;
+    color: white;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+
+    &:hover{
+         transform: scale(1.1);
+     }
+
+     &:active{
+         transition: 0s;
+         transform: scale(1.05);
+
+         background:#4662B4;
+     }
 `;
 
 const TableContainer = styled.div`
@@ -319,6 +379,32 @@ const ImageEl = styled.img`
 const ImageDeleteBtn = styled.button`
     color: #dc3545;
     border: 1px solid #ced4da;
+    background-color: white;
+`;
+
+const OptionAddBtn = styled.div`
+    text-align: center;
+    padding: 5px 0px;
+`;
+
+const OptionDeleteBtn = styled.button`
+    border:1px solid #ef5350;
+    color: #ef5350;
+    font-weight: 600;
+    padding: 7px 12px;
+    border-radius: 50%;
+    float: right;
+
+    &:hover{
+         transform: scale(1.1);
+     }
+
+     &:active{
+         transition: 0s;
+         transform: scale(1.05);
+
+         background:#4662B4;
+     }
 `;
 
 const CreateBody = (props) => {
@@ -339,6 +425,7 @@ const CreateBody = (props) => {
                                     <ItemHeaderWrapper>
                                         <IdentifyBtn disabled>{r.id.split('-')[0]}</IdentifyBtn>
                                         <DeleteBtn type='button' onClick={() => { props.__handleEventControl().productListData().delete(r.id) }}>삭제</DeleteBtn>
+                                        <RefCheckBtn type='button' className={r.stockManagement ? `ref-stock-btn-active` : ''} onClick={() => {props.__handleEventControl().productListData().stockManagementCheck(r.id)}}>재고반영 {r.stockManagement ? 'O' : 'X'}</RefCheckBtn>
                                     </ItemHeaderWrapper>
                                     <BodyContainer>
                                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
@@ -381,7 +468,6 @@ const CreateBody = (props) => {
                                                         </span>
                                                     </div>
                                                     <CommonInputEl type="text" className='form-control' name='memo' value={r.memo} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)}/>
-
                                                 
                                                 </div>
                                             </NameGroup>
@@ -442,52 +528,135 @@ const CreateBody = (props) => {
                                                 </ImageWrapper>
                                             </KeyGroup>
                                         </BodyWrapper>
-                                        {/* <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
-                                            <GroupTitle>이미지</GroupTitle>
+
+                                        <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
+                                            <GroupTitle>수입 정보</GroupTitle>
                                             <KeyGroup>
                                                 <div className="input-group mb-3">
                                                     <div className="input-group-prepend">
-                                                        <span className="input-group-text">이미지업로더</span>
+                                                        <span className="input-group-text">HS CODE</span>
                                                     </div>
-                                                    <CommonInputEl type="text" className='form-control' name='code' value={r.code} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+                                                    <CommonInputEl type="text" className='form-control' name='hsCode' value={r.hsCode} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+
+                                                </div>
+                                                <div className="input-group mb-3">
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text">STYLE</span>
+                                                    </div>
+                                                    <CommonInputEl type="text" className='form-control' name='style' value={r.style} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+                                                </div>
+                                                <div className="input-group mb-3">
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text">관세율</span>
+                                                    </div>
+                                                    <CommonInputEl type="text" className='form-control' name='tariffRate' value={r.tariffRate} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+                                                </div>
+                                                <div className="input-group mb-3">
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text">
+                                                            SIZE_가로(cm)
+                                                            <i className="icon-must" aria-label="필수항목"></i>
+                                                        </span>
+                                                    </div>
+                                                    <CommonInputEl type="number" className='form-control' name='defaultWidth' value={r.defaultWidth} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text">
+                                                            SIZE_세로(cm)
+                                                            <i className="icon-must" aria-label="필수항목"></i>
+                                                        </span>
+                                                    </div>
+                                                    <CommonInputEl type="number" className='form-control' name='defaultLength' value={r.defaultLength} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text">
+                                                            SIZE_높이(cm)
+                                                            <i className="icon-must" aria-label="필수항목"></i>
+                                                        </span>
+                                                    </div>
+                                                    <CommonInputEl type="number" className='form-control' name='defaultHeight' value={r.defaultHeight} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+                                                </div>
+                                                <div className="input-group mb-3">
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text">
+                                                            내품수량
+                                                            <i className="icon-must" aria-label="필수항목"></i>
+                                                        </span>
+                                                    </div>
+                                                    <CommonInputEl type="number" className='form-control' name='defaultQuantity' value={r.defaultQuantity} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+                                                </div>
+                                                <div className="input-group mb-3">
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text">
+                                                            무게(kg)
+                                                            <i className="icon-must" aria-label="필수항목"></i>
+                                                        </span>
+                                                    </div>
+                                                    <CommonInputEl type="number" className='form-control' name='defaultWeight' value={r.defaultWeight} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
                                                 </div>
                                             </KeyGroup>
-                                        </BodyWrapper> */}
+                                        </BodyWrapper>
+
                                         <BodyWrapper>
                                             <GroupTitle>
                                                 옵션정보
-                                                <CommonFunctionalBtn type='button' className='btn btn-sm btn-outline-secondary' onClick={() => props.__handleEventControl().productOptionListData().add(r.id)}>+</CommonFunctionalBtn>
+                                                {/* <CommonFunctionalBtn type='button' className='btn btn-sm btn-outline-secondary' onClick={() => props.__handleEventControl().productOptionListData().add(r.id)}><AddIcon /></CommonFunctionalBtn> */}
                                             </GroupTitle>
                                             <KeyGroup>
-                                                <TableContainer>
-                                                    {r.productOptions &&
-                                                        <table className="table" style={{ tableLayout: 'fixed' }}>
-                                                            <thead>
-                                                                <tr>
-                                                                    <OptionTableTh scope="col" width='50'>#</OptionTableTh>
-                                                                    <OptionTableTh scope="col" width='200'>Control</OptionTableTh>
-                                                                    <OptionTableTh scope="col" width='200'>옵션명 <i className="icon-must" aria-label="필수항목"></i></OptionTableTh>
-                                                                    <OptionTableTh scope="col" width='200'>관리옵션명 <i className="icon-must" aria-label="필수항목"></i></OptionTableTh>
-                                                                    <OptionTableTh scope="col" width='200'>관리코드 <i className="icon-must" aria-label="필수항목"></i></OptionTableTh>
-                                                                    <OptionTableTh scope="col" width='200'>노스노스 고유코드</OptionTableTh>
-                                                                    <OptionTableTh scope="col" width='200'>판매가</OptionTableTh>
-                                                                    <OptionTableTh scope="col" width='200'>재고수량</OptionTableTh>
-                                                                    <OptionTableTh scope="col" width='200'>상태</OptionTableTh>
-                                                                    <OptionTableTh scope="col" width='200'>비고</OptionTableTh>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
+                                                {r.productOptions && r.productOptions.map((optionData, optionIndex) => {
+                                                    return (
+                                                        <React.Fragment key={optionData.id}>
+                                                            <OptionBodyWrapper>
+                                                                <OptionDeleteBtn type='button' className='btn btn-outline-danger btn-sm' onClick={() => props.__handleEventControl().productOptionListData().delete(r.id, optionData.id)}>X</OptionDeleteBtn>
+                                                                <KeyGroup>
+                                                                    <div className="input-group mb-3">
+                                                                        <UploadInputEl
+                                                                            id={`i_pm_cb_po_uploader_${optionData.id}`}
+                                                                            type="file"
+                                                                            accept="image/*"
+                                                                            onClick={(e) => e.target.value = ''}
+                                                                            onChange={(e) => props.__handleEventControl().productOptionListData().postUploadImageFile(r.id, optionData.id, e)}
+                                                                        />
+                                                                        {optionData.imageUrl ?
+                                                                            <div className="input-group-prepend">
+                                                                                <ImageDeleteBtn className="btn btn-outline-secondary" type="button" onClick={() => props.__handleEventControl().productOptionListData().deleteImageFile(r.id, optionData.id)}>삭제</ImageDeleteBtn>
+                                                                            </div>
+                                                                            :
+                                                                            <></>
+                                                                        }
+                                                                    </div>
+                                                                    <ImageWrapper>
+                                                                        <ImageBox>
+                                                                            {optionData.imageUrl ?
+                                                                                <ImageEl name='imageFile' type="file" src={optionData.imageUrl} title={optionData.imageFileName} onClick={() => props.__handleEventControl().productOptionListData().onClickImageButton(optionData.id)} />
+                                                                                :
+                                                                                <ImageEl name='imageFile' src='/images/icon/no-image.jpg' title='no-image' onClick={() => props.__handleEventControl().productOptionListData().onClickImageButton(optionData.id)} />
+                                                                            }
+                                                                        </ImageBox>
+                                                                    </ImageWrapper>
+                                                                </KeyGroup>
+                                                                <TableContainer>
+                                                                    <table className="table" style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <OptionTableTh scope="col" width='50'>#</OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>옵션명 <i className="icon-must" aria-label="필수항목"></i></OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>관리옵션명 <i className="icon-must" aria-label="필수항목"></i></OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>관리코드 <i className="icon-must" aria-label="필수항목"></i></OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>노스노스 고유코드</OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>판매가</OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>재고수량</OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>상태</OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>비고</OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>색상</OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>CNY</OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>KRW</OptionTableTh>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
 
-                                                                {r.productOptions.map((optionData, optionIndex) => {
-                                                                    return (
-                                                                        <React.Fragment key={optionData.id}>
                                                                             <tr>
                                                                                 <OptionTableTh scope="row">
                                                                                     {optionIndex + 1}
                                                                                 </OptionTableTh>
-                                                                                <OptionTableTd>
-                                                                                    <button type='button' className='btn btn-outline-danger btn-sm' onClick={() => props.__handleEventControl().productOptionListData().delete(r.id, optionData.id)}>X</button>
-                                                                                </OptionTableTd>
                                                                                 <OptionTableTd>
                                                                                     <OptionInput type='text' value={optionData.defaultName} name='defaultName' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
                                                                                 </OptionTableTd>
@@ -512,27 +681,39 @@ const CreateBody = (props) => {
                                                                                 <OptionTableTd>
                                                                                     <OptionInput type='text' value={optionData.memo} name='memo' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
                                                                                 </OptionTableTd>
+                                                                                <OptionTableTd>
+                                                                                    <OptionInput type='text' value={optionData.color}></OptionInput>
+                                                                                </OptionTableTd>
+                                                                                <OptionTableTd>
+                                                                                    <OptionInput type='text' value={optionData.defaultCny}></OptionInput>
+                                                                                </OptionTableTd>
+                                                                                <OptionTableTd>
+                                                                                    <OptionInput type='text' value={optionData.defaultKrw}></OptionInput>
+                                                                                </OptionTableTd>
                                                                             </tr>
-                                                                        </React.Fragment>
-                                                                    );
-                                                                })}
-                                                            </tbody>
-                                                        </table>
-                                                    }
-                                                </TableContainer>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </TableContainer>
+                                                            </OptionBodyWrapper>
+                                                        </React.Fragment>
+                                                    );})}
+                                                    <OptionAddBtn>
+                                                        <CommonFunctionalBtn type='button' className='btn btn-sm btn-outline-secondary' onClick={() => props.__handleEventControl().productOptionListData().add(r.id)}>
+                                                            <AddIcon />
+                                                        </CommonFunctionalBtn>
+                                                    </OptionAddBtn>    
                                             </KeyGroup>
                                         </BodyWrapper>
                                     </BodyContainer>
-
                                 </ItemWrapper>
                             </ItemContainer>
                         );
                     })}
-                    <FormAddContainer>
+                    {/* <FormAddContainer>
                         <FormAddBtnEl type='button' onClick={() => props.__handleEventControl().productListData().add()}>
                             <img className='button-img' src='/images/icon/plus.png'></img>
                         </FormAddBtnEl>
-                    </FormAddContainer>
+                    </FormAddContainer> */}
                 </form>
             </Container>
         </>

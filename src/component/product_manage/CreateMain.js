@@ -8,6 +8,7 @@ import { productDataConnect } from '../../data_connect/productDataConnect';
 // component
 import CreateBody from "./CreateBody";
 import BackdropLoading from "../loading/BackdropLoading";
+import { formControlClasses } from "@mui/material";
 
 class Product {
     constructor(optionDefaultName = '', optionManagementName = '') {
@@ -20,6 +21,15 @@ class Product {
         this.imageUrl = '';
         this.imageFileName = '';
         this.memo = '';
+        this.hsCode = '';
+        this.style = '';
+        this.tariffRate = 0;
+        this.defaultWidth = '';
+        this.defaultLength = '';
+        this.defaultHeight = '';
+        this.defaultQuantity = '';
+        this.defaultWeight = '';
+        this.stockManagement = true;
         this.productCategoryCid = null;
         this.productOptions = [
             new ProductOption(this.id, optionDefaultName, optionManagementName).toJSON()
@@ -37,6 +47,15 @@ class Product {
             imageUrl: this.imageUrl,
             imageFileName: this.imageFileName,
             memo: this.memo,
+            hsCode: this.hsCode,
+            style: this.style,
+            tariffRate: this.tariffRate,
+            defaultWidth: this.defaultWidth,
+            defaultLength: this.defaultLength,
+            defaultHeight: this.defaultHeight,
+            defaultQuantity: this.defaultQuantity,
+            defaultWeight: this.defaultWeight,
+            stockManagement: this.stockManagement,
             productCategoryCid: this.productCategoryCid,
             productOptions: this.productOptions
         }
@@ -131,6 +150,25 @@ const CreateMain = (props) => {
 
                         __handleEventControl().backdropLoading().close();
                     })
+            },
+            postUploadOptionImageFileToCloud: async function(productId, optionId, e) {
+                await productDataConnect().postUploadImageFileToCloud(e)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            __handleEventControl().productOptionListData().uploadImageInfo(productId, optionId, res.data.data[0]);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else {
+                            console.log(err);
+                            alert('undefined error. : uploadFilesToCloud');
+                        }
+
+                        __handleEventControl().backdropLoading().close();
+                    })
             }
         }
     }
@@ -198,6 +236,31 @@ const CreateMain = (props) => {
                                 return false;
                             }
 
+                            if (productListData[i].defaultWidth == '' || productListData[i].defaultWidth == null || productListData[i].defaultWidth == undefined) {
+                                alert('상품 가로 사이즈를 한번더 확인해 주세요.')
+                                return false;
+                            }
+
+                            if (productListData[i].defaultLength == '' || productListData[i].defaultLength == null || productListData[i].defaultLength == undefined) {
+                                alert('상품 세로 사이즈를 한번더 확인해 주세요.')
+                                return false;
+                            }
+
+                            if (productListData[i].defaultHeight == '' || productListData[i].defaultHeight == null || productListData[i].defaultHeight == undefined) {
+                                alert('상품 높이 사이즈를 한번더 확인해 주세요.')
+                                return false;
+                            }
+
+                            if (productListData[i].defaultQuantity == '' || productListData[i].defaultQuantity == null || productListData[i].defaultQuantity == undefined) {
+                                alert('상품 내품수량을 한번더 확인해 주세요.')
+                                return false;
+                            }
+
+                            if (productListData[i].defaultWeight == '' || productListData[i].defaultWeight == null || productListData[i].defaultWeight == undefined) {
+                                alert('상품 무게를 한번더 확인해 주세요.')
+                                return false;
+                            }
+
                             for (let j = 0; j < productListData[i].productOptions.length; j++) {
                                 if (productListData[i].productOptions[j].defaultName == '' || productListData[i].productOptions[j].defaultName == null || productListData[i].productOptions[j].defaultName == undefined) {
                                     alert('옵션명을 한번더 확인해 주세요.')
@@ -230,7 +293,7 @@ const CreateMain = (props) => {
                     uploadImageInfo: function (productId, data) {
                         setProductListData(productListData.map(r => {
                             return (
-                                r.id === productId ?
+                                r.id === productId?
                                     {
                                         ...r,
                                         imageFileName: data.fileName,
@@ -259,6 +322,22 @@ const CreateMain = (props) => {
                     },
                     onClickImageButton: function (productId) {
                         document.getElementById("i_pm_cb_uploader_" + productId).click();
+                    },
+                    stockManagementCheck: function (productId) {
+                        let product = productListData.filter(r => r.id === productId)[0];
+                        let stockManagement = product.stockManagement ? false : true;
+
+                        setProductListData(productListData.map(r => {
+                            return (
+                                r.id === productId ?
+                                    {
+                                        ...r,
+                                        stockManagement : stockManagement,
+                                    }
+                                    :
+                                    r
+                            )
+                        }))
                     }
                 }
             },
@@ -314,6 +393,65 @@ const CreateMain = (props) => {
                                 return product;
                             }
                         }))
+                    },
+                    postUploadImageFile: async function (productId, optionId,  e) {
+                        e.preventDefault();
+
+                        // 파일을 선택하지 않은 경우
+                        if (e.target.files.length == 0) return;
+
+                        __handleEventControl().backdropLoading().open();
+                        
+                        await __handleDataConnect().postUploadOptionImageFileToCloud(productId, optionId, e);
+                    },
+                    uploadImageInfo: function (productId, optionId, data) {
+                        setProductListData(productListData.map(product => {
+                            if (product.id === productId) {
+                                return {
+                                    ...product,
+                                    productOptions: product.productOptions.map(option => {
+                                        if (option.id === optionId) {
+                                            return {
+                                                ...option,
+                                                imageFileName: data.fileName,
+                                                imageUrl: data.fileUploadUri
+                                            }
+                                        } else {
+                                            return option;
+                                        }
+                                    })
+                                }
+                            } else {
+                                return product;
+                            }
+                        }))
+
+                        __handleEventControl().backdropLoading().close();
+                    },
+                    deleteImageFile: function (productId, optionId) {
+                        setProductListData(productListData.map(product => {
+                            if (product.id === productId) {
+                                return {
+                                    ...product,
+                                    productOptions: product.productOptions.map(option => {
+                                        if (option.id === optionId) {
+                                            return {
+                                                ...option,
+                                                imageFileName: '',
+                                                imageUrl: ''
+                                            }
+                                        } else {
+                                            return option;
+                                        }
+                                    })
+                                }
+                            } else {
+                                return product;
+                            }
+                        }))
+                    },
+                    onClickImageButton: function (optionId) {
+                        document.getElementById("i_pm_cb_po_uploader_" + optionId).click();
                     }
                 }
             },

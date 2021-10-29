@@ -96,7 +96,6 @@ const AccountBookMain = (props) => {
 
                 await expenditureTypeDataConnect().getExpenditureTypeList(startDate, endDate)
                     .then(res => {
-                        console.log(res);
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setExpenditureTypeList(res.data.data);
                         }

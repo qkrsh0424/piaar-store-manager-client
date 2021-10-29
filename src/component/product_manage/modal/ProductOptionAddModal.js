@@ -119,6 +119,51 @@ const OptionInput = styled.input`
     padding:5px;
 `;
 
+const UploadInputEl = styled.input`
+    display: none;
+`;
+
+const ImageBox = styled.div`
+   position: relative;
+   padding-bottom: 100%; // 1:1
+`;
+
+const ImageWrapper = styled.div`
+   width:20%;
+   height:auto;
+   padding: 10px 10px;
+
+   @media only screen and (max-width:992px){
+        width:35%;
+   }
+    @media only screen and (max-width:425px){
+        width:50%;
+    }
+
+    &:hover {
+        ${ImageBox} {
+            opacity: 0.3;
+        }
+    }
+`;
+
+const ImageEl = styled.img`
+   position: absolute;
+   object-fit: cover;
+   width: 90%;
+   height: 90%;
+   transition: .5s;
+   border:1px solid #f1f1f1;
+   border-radius: 8px;
+   cursor: pointer;
+`;
+
+const ImageDeleteBtn = styled.button`
+    color: #dc3545;
+    border: 1px solid #ced4da;
+    background-color: white;
+`;
+
 const ProductOptionAddModal = (props) => {
 
     const [fullWidth, setFullWidth] = useState(true);
@@ -138,6 +183,33 @@ const ProductOptionAddModal = (props) => {
                                 옵션추가
                             </GroupTitle>
                             <NameGroup>
+                            <div className="input-group mb-3">
+                                    <UploadInputEl
+                                        id={`i_pm_pom_uploader_${props.productOptionAddData.id}`}
+                                        type="file"
+                                        accept="image/*"
+                                        onClick={(e) => e.target.value = ''}
+                                        onChange={(e) => props.__handleEventControl().productOption().postUploadImageFile(e)}
+                                    />
+                                    {props.productOptionAddData.imageUrl ?
+                                        <div className="input-group-prepend">
+                                            <ImageDeleteBtn className="btn btn-outline-secondary" type="button"
+                                            onClick={() => props.__handleEventControl().productOption().deleteImageFile()}
+                                            >삭제</ImageDeleteBtn>
+                                        </div>
+                                        :
+                                        <></>
+                                    }
+                                </div>
+                                <ImageWrapper>
+                                    <ImageBox>
+                                        {props.productOptionAddData.imageUrl ?
+                                            <ImageEl name='imageFile' type="file" src={props.productOptionAddData.imageUrl} title={props.productOptionAddData.imageFileName} onClick={() => props.__handleEventControl().productOption().onClickImageButton(props.productOptionAddData.id)} />
+                                            :
+                                            <ImageEl name='imageFile' src='/images/icon/no-image.jpg' title='no-image' onClick={() => props.__handleEventControl().productOption().onClickImageButton(props.productOptionAddData.id)} />
+                                        }
+                                    </ImageBox>
+                                </ImageWrapper>
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">
@@ -256,6 +328,48 @@ const ProductOptionAddModal = (props) => {
                                         className='form-control'
                                         name='memo'
                                         value={props.productOptionAddData.memo}
+                                        onChange={(e) => props.__handleEventControl().productOption().addDataOnChangeInputValue(e)}
+                                    />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
+                                            색상
+                                        </span>
+                                    </div>
+                                    <CommonInputEl
+                                        type="text"
+                                        className='form-control'
+                                        name='color'
+                                        value={props.productOptionAddData.color}
+                                        onChange={(e) => props.__handleEventControl().productOption().addDataOnChangeInputValue(e)}
+                                    />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
+                                            CNY
+                                        </span>
+                                    </div>
+                                    <CommonInputEl
+                                        type="text"
+                                        className='form-control'
+                                        name='unitCny'
+                                        value={props.productOptionAddData.unitCny}
+                                        onChange={(e) => props.__handleEventControl().productOption().addDataOnChangeInputValue(e)}
+                                    />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
+                                            KRW
+                                        </span>
+                                    </div>
+                                    <CommonInputEl
+                                        type="text"
+                                        className='form-control'
+                                        name='unitKrw'
+                                        value={props.productOptionAddData.unitKrw}
                                         onChange={(e) => props.__handleEventControl().productOption().addDataOnChangeInputValue(e)}
                                     />
                                 </div>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import queryString from 'query-string';
 import styled from 'styled-components';
 import Dialog from '@material-ui/core/Dialog';
+import Tooltip from '@mui/material/Tooltip';
 
 const Container = styled.div`
 `;
@@ -45,7 +46,9 @@ const ExpenditureTypeSetModal = (props) => {
                     <ItemGroup>
                         {props.expenditureTypeList && props.expenditureTypeList.map(r => {
                             return (
-                                <ItemBtn key={r.expenditureTypeId} type='button' onClick={()=>props.__handleEventControl().expenditureType().setType(r.expenditureTypeId)}>{r.expenditureType}</ItemBtn>
+                                <Tooltip title={r.expenditureTypeDesc} arrow>
+                                    <ItemBtn key={r.expenditureTypeId} type='button' onClick={()=>props.__handleEventControl().expenditureType().setType(r.expenditureTypeId)}>{r.expenditureType}</ItemBtn>
+                                </Tooltip>
                             );
                         })}
                     </ItemGroup>

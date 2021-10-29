@@ -76,6 +76,51 @@ const SubmitBtn = styled.button`
     padding:8px;
 `;
 
+const UploadInputEl = styled.input`
+    display: none;
+`;
+
+const ImageBox = styled.div`
+   position: relative;
+   padding-bottom: 100%; // 1:1
+`;
+
+const ImageWrapper = styled.div`
+   width:20%;
+   height:auto;
+   padding: 10px 10px;
+
+   @media only screen and (max-width:992px){
+        width:35%;
+   }
+    @media only screen and (max-width:425px){
+        width:50%;
+    }
+
+    &:hover {
+        ${ImageBox} {
+            opacity: 0.3;
+        }
+    }
+`;
+
+const ImageEl = styled.img`
+   position: absolute;
+   object-fit: cover;
+   width: 90%;
+   height: 90%;
+   transition: .5s;
+   border:1px solid #f1f1f1;
+   border-radius: 8px;
+   cursor: pointer;
+`;
+
+const ImageDeleteBtn = styled.button`
+    color: #dc3545;
+    border: 1px solid #ced4da;
+    background-color: white;
+`;
+
 const ProductOptionModifyModal = (props) => {
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('lg');
@@ -92,6 +137,33 @@ const ProductOptionModifyModal = (props) => {
                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
                             <GroupTitle>옵션수정</GroupTitle>
                             <NameGroup>
+                                <div className="input-group mb-3">
+                                    <UploadInputEl
+                                        id={`i_pm_pom_uploader_${props.productOptionModifyData.id}`}
+                                        type="file"
+                                        accept="image/*"
+                                        onClick={(e) => e.target.value = ''}
+                                        onChange={(e) => props.__handleEventControl().productOption().postModifyImageFile(e)}
+                                    />
+                                    {props.productOptionModifyData.imageUrl ?
+                                        <div className="input-group-prepend">
+                                            <ImageDeleteBtn className="btn btn-outline-secondary" type="button"
+                                            onClick={() => props.__handleEventControl().productOption().deleteModifyImageFile()}
+                                            >삭제</ImageDeleteBtn>
+                                        </div>
+                                        :
+                                        <></>
+                                    }
+                                </div>
+                                <ImageWrapper>
+                                    <ImageBox>
+                                        {props.productOptionModifyData.imageUrl ?
+                                            <ImageEl name='imageFile' type="file" src={props.productOptionModifyData.imageUrl} title={props.productOptionModifyData.imageFileName} onClick={() => props.__handleEventControl().productOption().onClickImageButton(props.productOptionModifyData.id)} />
+                                            :
+                                            <ImageEl name='imageFile' src='/images/icon/no-image.jpg' title='no-image' onClick={() => props.__handleEventControl().productOption().onClickImageButton(props.productOptionModifyData.id)} />
+                                        }
+                                    </ImageBox>
+                                </ImageWrapper>
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">
@@ -199,6 +271,48 @@ const ProductOptionModifyModal = (props) => {
                                         className='form-control'
                                         name='memo'
                                         value={props.productOptionModifyData.memo}
+                                        onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
+                                    />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
+                                            색상
+                                        </span>
+                                    </div>
+                                    <CommonInputEl
+                                        type="text"
+                                        className='form-control'
+                                        name='color'
+                                        value={props.productOptionModifyData.color}
+                                        onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
+                                    />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
+                                            CNY
+                                        </span>
+                                    </div>
+                                    <CommonInputEl
+                                        type="text"
+                                        className='form-control'
+                                        name='unitCny'
+                                        value={props.productOptionModifyData.unitCny}
+                                        onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
+                                    />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
+                                            KRW
+                                        </span>
+                                    </div>
+                                    <CommonInputEl
+                                        type="text"
+                                        className='form-control'
+                                        name='unitKrw'
+                                        value={props.productOptionModifyData.unitKrw}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                     />
                                 </div>

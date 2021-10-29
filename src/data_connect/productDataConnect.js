@@ -11,13 +11,22 @@ const productDataConnect = () => {
                 let productDto = {
                     id: productListData[i].id,
                     code: productListData[i].code,
+                    naverProductCode: productListData[i].naverProductCode,
                     defaultName: productListData[i].defaultName,
                     imageFileName: productListData[i].imageFileName,
                     imageUrl: productListData[i].imageUrl,
                     managementName: productListData[i].managementName,
                     manufacturingCode: productListData[i].manufacturingCode,
                     memo: productListData[i].memo,
-                    naverProductCode: productListData[i].naverProductCode,
+                    hsCode: productListData[i].hsCode,
+                    style: productListData[i].style,
+                    tariffRate: productListData[i].tariffRate,
+                    defaultWidth: productListData[i].defaultWidth,
+                    defaultLength: productListData[i].defaultLength,
+                    defaultHeight: productListData[i].defaultHeight,
+                    defaultQuantity: productListData[i].defaultQuantity,
+                    defaultWeight: productListData[i].defaultWeight,
+                    stockManagement: productListData[i].stockManagement,
                     productCategoryCid: productListData[i].productCategoryCid
                 }
                 let optionDtos = productListData[i].productOptions

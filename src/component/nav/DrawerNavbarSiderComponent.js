@@ -82,7 +82,10 @@ const DrawerNavbarSiderComponent = (props) => {
                                 <CustomLink to='/sales-rate/naver'>네이버 주문통합검색<br />판매량 추출기</CustomLink>
                             </LinkContainer>
                             <LinkContainer>
-                                <CustomLink to='/products'>OUR PRODUCT</CustomLink>
+                                <CustomLink to='/products'>상품 재고관리</CustomLink>
+                            </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink to='/product-info'>상품 정보</CustomLink>
                             </LinkContainer>
                             <LinkContainer>
                                 <CustomLink to='/delivery-ready/naver'>네이버 배송준비<br />발주서 다운로드</CustomLink>
