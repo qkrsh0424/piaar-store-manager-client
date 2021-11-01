@@ -29,7 +29,7 @@ class Product {
         this.defaultHeight = '';
         this.defaultQuantity = '';
         this.defaultWeight = '';
-        this.stockManagement = true;
+        this.stockManagement = false;
         this.productCategoryCid = null;
         this.productOptions = [
             new ProductOption(this.id, optionDefaultName, optionManagementName).toJSON()

@@ -222,8 +222,6 @@ const GroupTitle = styled.div`
     @media only screen and (max-width:425px){
         padding: 15px 0;
     }
-
-    
 `;
 
 const CategoryGroup = styled.div`
@@ -424,7 +422,7 @@ const CreateBody = (props) => {
                                 <ItemWrapper>
                                     <ItemHeaderWrapper>
                                         <IdentifyBtn disabled>{r.id.split('-')[0]}</IdentifyBtn>
-                                        <DeleteBtn type='button' onClick={() => { props.__handleEventControl().productListData().delete(r.id) }}>삭제</DeleteBtn>
+                                        {/* <DeleteBtn type='button' onClick={() => { props.__handleEventControl().productListData().delete(r.id) }}>삭제</DeleteBtn> */}
                                         <RefCheckBtn type='button' className={r.stockManagement ? `ref-stock-btn-active` : ''} onClick={() => {props.__handleEventControl().productListData().stockManagementCheck(r.id)}}>재고반영 {r.stockManagement ? 'O' : 'X'}</RefCheckBtn>
                                     </ItemHeaderWrapper>
                                     <BodyContainer>
