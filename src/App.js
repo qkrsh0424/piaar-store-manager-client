@@ -39,7 +39,7 @@ import DeliveryReadyViewCoupangMain from './component/delivery_ready/coupang/Del
 import OrderRegistrationNaverMain from './component/order_registration/naver/OrderRegistrationNaverMain';
 
 // product-information
-import ProductInformationMain from './component/product_information/ProductInformationMain';
+import ProductDetailMain from './component/product_detail/ProductDetailMain';
 
 
 // data connect
@@ -163,8 +163,8 @@ function App(props) {
                                 <Route exact path='/order-registration/naver'>
                                     {userRdx.userInfo ? <OrderRegistrationNaverMain></OrderRegistrationNaverMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
-                                <Route exact path='/product-info'>
-                                    {userRdx.userInfo ? <ProductInformationMain></ProductInformationMain> : <Redirect to={'/login'}></Redirect>}
+                                <Route exact path='/product-detail'>
+                                    {userRdx.userInfo ? <ProductDetailMain></ProductDetailMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                             </Switch>
                         )

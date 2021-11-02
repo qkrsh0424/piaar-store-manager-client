@@ -40,6 +40,11 @@ const productDataConnect = () => {
                 withCredentials: true
             })
         },
+        getStockListFj: async function () {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list-fj/stock`, {
+                withCredentials: true
+            })
+        },
         getListFj: async function () {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list-fj`, {
                 withCredentials: true

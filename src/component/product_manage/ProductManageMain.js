@@ -146,7 +146,7 @@ const ProductManageMain = () => {
     const __handleDataConnect = () => {
         return {
             searchProductListFj: async function () {
-                await productDataConnect().getListFj()
+                await productDataConnect().getStockListFj()
                     .then(res => {
                         console.log(res)
                         if (res.status == 200 && res.data && res.data.message == 'success') {
