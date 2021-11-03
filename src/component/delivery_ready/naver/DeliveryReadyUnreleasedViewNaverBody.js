@@ -13,13 +13,6 @@ const DataContainer = styled.div`
     padding-bottom: 50px;
     height:auto;
     background-color: rgba(122, 123, 218, 0.125);
-
-    & .fixed-header {
-        position: sticky;
-        top: -1px;
-        z-index:10;
-        background-color: #f3f3f3;
-    }
 `;
 
 const TableContainer = styled.div`

@@ -123,7 +123,8 @@ const CreateMain = (props) => {
                 await productDataConnect().postCreateList(productListData)
                     .then(res=>{
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            props.history.replace('/products');
+                            // props.history.replace('/products');
+                            props.history.goBack();
                         }
                     })
                     .catch(err=>{
