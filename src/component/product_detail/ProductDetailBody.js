@@ -558,6 +558,7 @@ const ProductDetailBody = (props) => {
                             <span>
                                 <AddBtn
                                     type='button'
+                                    //test
                                     // onClick={() => window.location.href = '/products/create'}
                                 ><AddIcon /></AddBtn>
                             </span>
