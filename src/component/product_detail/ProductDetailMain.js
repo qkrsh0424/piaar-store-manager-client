@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { withRouter } from 'react-router';
 
 // data connect
-import { productDetailConnect } from "../../data_connect/productDetailConnect";
+import { productDetailDataConnect } from "../../data_connect/productDetailDataConnect";
 import { productCategoryDataConnect } from "../../data_connect/productCategoryDataConnect";
 
 // component
@@ -13,6 +13,8 @@ import ProductModifyModal from '../product_manage/modal/ProductModifyModal';
 import BackdropLoading from '../loading/BackdropLoading';
 import ProductOptionAddModal from '../product_manage/modal/ProductOptionAddModal';
 import ProductOptionModifyModal from '../product_manage/modal/ProductOptionModifyModal';
+import ProductDetailAddModal from './modal/ProductDetailAddModal';
+import ProductDetailModifyModal from './modal/ProductDetailModifyModal';
 import { productDataConnect } from '../../data_connect/productDataConnect';
 import { productOptionDataConnect } from '../../data_connect/productOptionDataConnect';
 
@@ -59,29 +61,64 @@ class ProductOption {
     }
 }
 
+class ProductDetail {
+    constructor(productOptionId) {
+        this.id = uuidv4();
+        this.detailWidth = ''
+        this.detailLength = ''
+        this.detailHeight = ''
+        this.detailQuantity = ''
+        this.detailWeight = ''
+        this.detailCbm = ''
+        this.productOptionCid = null;
+        this.productOptionId = productOptionId;
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            detailWidth: this.detailWidth,
+            detailLength: this.detailLength,
+            detailHegith: this.detailHeight,
+            detailQuantity: this.detailQuantity,
+            detailWeight: this.detailWeight,
+            detailCbm: this.detailCbm,
+            productDetailCid: this.productDetailCid,
+            productDetailId: this.productDetailId
+        }
+    }
+}
+
 const ProductDetailMain = (props) => {
     const [categoryListData, setCategoryListData] = useState(null);
     const [productListData, setProductListData] = useState(null);
     const [productViewData, setProductViewData] = useState([]);
+    const [optionViewData, setOptionViewData] = useState([]);
+    const [detailViewData, setDetailViewData] = useState([]);
+    
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [selectedOption, setSelectedOption] = useState(null);
-    const [optionViewData, setOptionViewData] = useState([]);
-    const [detailViewData, setDetailViewData] = useState([]);
-    // const [checkedData, setCheckedData] = useState({
-    //     product : [],
-    //     option : [],
-    // });
+    const [selectedDetail, setSelectedDetail] = useState(null);
+
     const [productModifyModalOpen, setProductModifyModalOpen] = useState(false);
     const [productModifyData, setProductModifyData] = useState(null);
+    
+    const [productOptionAddModalOpen, setProductOptionAddModalOpen] = useState(false);
+    const [productOptionAddData, setProductOptionAddData] = useState(null);
 
     const [productOptionModifyModalOpen, setProductOptionModifyModalOpen] = useState(false);
     const [productOptionModifyData, setProductOptionModifyData] = useState(null);
 
-    const [productOptionAddModalOpen, setProductOptionAddModalOpen] = useState(false);
-    const [productOptionAddData, setProductOptionAddData] = useState(null);
+    const [productDetailAddModalOpen, setProductDetailAddModalOpen] = useState(false);
+    const [productDetailAddData, setProductDetailAddData] = useState(null);
+
+    const [productDetailModifyModalOpen, setProductDetailModifyModalOpen] = useState(false);
+    const [productDetailModifyData, setProductDetailModifyData] = useState(null);
 
     const [backdropLoading, setBackdropLoading] = useState(false);
+
+    const [dataChangedTrigger, setDataChangedTrigger] = useState(false);
 
     useEffect(() => {
         async function fetchInit() {
@@ -91,6 +128,16 @@ const ProductDetailMain = (props) => {
 
         fetchInit();
     }, []);
+
+    useEffect(() => {
+        if(dataChangedTrigger === true) {
+            __handleEventControl().productViewData().onChangeCategoryData(selectedCategory?.id);
+            __handleEventControl().productViewData().onClickProductData(selectedProduct?.cid);
+            __handleEventControl().productViewData().onClickOptionData(selectedOption?.cid);
+        }
+
+        setDataChangedTrigger(false);
+    }, [dataChangedTrigger]);
 
     const __handleDataConnect = () => {
         return {
@@ -117,7 +164,7 @@ const ProductDetailMain = (props) => {
                     })
             },
             searchDetailList: async function (optionCid) {
-                await productDetailConnect().searchList(optionCid)
+                await productDetailDataConnect().searchList(optionCid)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setDetailViewData(res.data.data);
@@ -157,7 +204,7 @@ const ProductDetailMain = (props) => {
                         if (res.status === 401) {
                             alert('접근 권한이 없습니다.')
                         } else {
-                            alert('undefined error. : changeProductOne');
+                            alert('undefined error. : deleteProductOptionOne');
                         }
                     })
             },
@@ -191,7 +238,7 @@ const ProductDetailMain = (props) => {
                         if (res.status === 401) {
                             alert('접근 권한이 없습니다.')
                         } else {
-                            alert('undefined error. : changeProductOne');
+                            alert('undefined error. : changeProductOptionOne');
                         }
                     })
             },
@@ -208,7 +255,7 @@ const ProductDetailMain = (props) => {
                         if (res.status === 401) {
                             alert('접근 권한이 없습니다.')
                         } else {
-                            alert('undefined error. : changeProductOne');
+                            alert('undefined error. : changeProductOptionOne');
                         }
                     })
                     ;
@@ -222,7 +269,7 @@ const ProductDetailMain = (props) => {
                     })
                     .catch(err => {
                         console.log(err);
-                        alert('undefined error. : uploadFilesToCloud');
+                        alert('undefined error. : postUploadImageFileToCloud');
                     })
             },
             postModifyOptionImageFileToCloud: async function(e) {
@@ -238,7 +285,7 @@ const ProductDetailMain = (props) => {
                             alert('권한이 없습니다.')
                         } else {
                             console.log(err);
-                            alert('undefined error. : uploadFilesToCloud');
+                            alert('undefined error. : postModifyOptionImageFileToCloud');
                         }
 
                         __handleEventControl().backdropLoading().close();
@@ -262,7 +309,59 @@ const ProductDetailMain = (props) => {
 
                         __handleEventControl().backdropLoading().close();
                     })
-            }
+            },
+            createProductDetailOne: async function () {
+                await productDetailDataConnect().postOne(productDetailAddData)
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            alert('해당 상품상세가 정상적으로 추가되었습니다.')
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+
+                        if (res.status === 401) {
+                            alert('접근 권한이 없습니다.')
+                        } else {
+                            alert('undefined error. : createProductDetailOne');
+                        }
+                    })
+                    ;
+            },
+            changeProductDetailOne: async function () {
+                await productDetailDataConnect().putOne(productDetailModifyData)
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            alert('정상적으로 수정되었습니다.')
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+
+                        if (res.status === 401) {
+                            alert('접근 권한이 없습니다.')
+                        } else {
+                            alert('undefined error. : changeProductDetailOne');
+                        }
+                    })
+            },
+            deleteProductDetailOne: async function (detailCid) {
+                await productDetailDataConnect().deleteOne(detailCid)
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            alert('해당 옵션이 정상적으로 삭제되었습니다.')
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+
+                        if (res.status === 401) {
+                            alert('접근 권한이 없습니다.')
+                        } else {
+                            alert('undefined error. : deleteProductDetailOne');
+                        }
+                    })
+            },
         }
     }
 
@@ -270,9 +369,9 @@ const ProductDetailMain = (props) => {
         return {
             productViewData: function () {
                 return {
-                    onChangeCategoryValue: function (categoryCid, categoryId) {
+                    onChangeCategoryData: function (categoryId) {
                         let category = categoryListData.filter(r => categoryId === r.id)[0];
-                        setSelectedCategory(category.cid);
+                        setSelectedCategory(category);
 
                         setProductViewData(productListData.filter(r => r.category.id === category.id));
                         setOptionViewData(null);
@@ -288,20 +387,22 @@ const ProductDetailMain = (props) => {
 
                         setOptionViewData(productViewData.filter(r => r.product.cid === productCid)[0].options);
                     },
-                    onClickOptionData: async function (optionCid) {
+                    onClickOptionData: function (optionCid) {
                         let checkedOption = optionViewData.filter(r => optionCid === r.cid)[0];
                         setSelectedOption(checkedOption);
                         setDetailViewData(null);
 
-                        await __handleDataConnect().searchDetailList(optionCid);
+                        __handleDataConnect().searchDetailList(optionCid);
+                    },
+                    onClickDetailData: function (detailCid) {
+                        let checkedDetail = detailViewData.filter(r => detailCid === r.cid)[0];
+                        setSelectedDetail(checkedDetail);
                     }
+
                 }
             },
             product: function () {
                 return {
-                    getSelectedModifyData: function (productId) {
-                        return productListData.filter(r => r.product.id === productId)[0].product;
-                    },
                     deleteOne: async function () {
                         if(!selectedProduct){
                             alert('상품을 먼저 선택해주세요.');
@@ -309,9 +410,9 @@ const ProductDetailMain = (props) => {
                         }
 
                         if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
-
                             await __handleDataConnect().deleteProductOne(selectedProduct.cid);
                             await __handleDataConnect().searchProductListFj();
+                            setDataChangedTrigger(true);
                         }
                     },
                     modifyModalOpen: function () {
@@ -320,14 +421,14 @@ const ProductDetailMain = (props) => {
                             return;
                         }
 
-                        setProductModifyData(this.getSelectedModifyData(selectedProduct.id));
+                        setProductModifyData(selectedProduct);
                         setProductModifyModalOpen(true);
                     },
                     modifyModalClose: function () {
                         setProductModifyData(null);
                         setProductModifyModalOpen(false);
                     },
-                    modifyDataOnChangeCategoryValue: function (categoryCid) {
+                    modifyDataOnChangeCategoryData: function (categoryCid) {
                         setProductModifyData({ ...productModifyData, productCategoryCid: categoryCid });
                     },
                     modifyDataOnChangeInputValue: function (e) {
@@ -338,52 +439,54 @@ const ProductDetailMain = (props) => {
                     },
                     submitModifyData: async function (e) {
                         e.preventDefault();
+
                         if (this.checkRequiredData()) {
                             await __handleDataConnect().changeProductOne();
                             this.modifyModalClose();
                             await __handleDataConnect().searchProductListFj();
+                            setDataChangedTrigger(true);
                         } else {
                             return;
                         }
 
                     },
                     checkRequiredData: function () {
-                        if (productModifyData.productCategoryCid == null || productModifyData.productCategoryCid == undefined || productModifyData.productCategoryCid == '' || productModifyData.productCategoryCid == 0) {
+                        if (!productModifyData.productCategoryCid || productModifyData.productCategoryCid == '') {
                             alert('카테고리 선택은 필수항목입니다.');
                             return false;
                         }
 
-                        if (productModifyData.defaultName == null || productModifyData.defaultName == undefined || productModifyData.defaultName == '') {
+                        if (!productModifyData.defaultName || productModifyData.defaultName == '') {
                             alert('상품명은 필수항목입니다.');
                             return false;
                         }
 
-                        if (productModifyData.managementName == null || productModifyData.managementName == undefined || productModifyData.managementName == '') {
+                        if (!productModifyData.managementName || productModifyData.managementName == '') {
                             alert('관리상품명은 필수항목입니다.');
                             return false;
                         }
 
-                        if (productModifyData.defaultWidth == '' || productModifyData.defaultWidth == null || productModifyData.defaultWidth == undefined) {
+                        if (!productModifyData.defaultWidth || productModifyData.defaultWidth == '') {
                             alert('상품 가로 사이즈를 한번더 확인해 주세요.')
                             return false;
                         }
 
-                        if (productModifyData.defaultLength == '' || productModifyData.defaultLength == null || productModifyData.defaultLength == undefined) {
+                        if (!productModifyData.defaultLength || productModifyData.defaultLength == '') {
                             alert('상품 세로 사이즈를 한번더 확인해 주세요.')
                             return false;
                         }
 
-                        if (productModifyData.defaultHeight == '' || productModifyData.defaultHeight == null || productModifyData.defaultHeight == undefined) {
+                        if (!productModifyData.defaultHeight || productModifyData.defaultHeight == '') {
                             alert('상품 높이 사이즈를 한번더 확인해 주세요.')
                             return false;
                         }
 
-                        if (productModifyData.defaultQuantity == '' || productModifyData.defaultQuantity == null || productModifyData.defaultQuantity == undefined) {
+                        if (!productModifyData.defaultQuantity || productModifyData.defaultQuantity == '') {
                             alert('상품 내품수량을 한번더 확인해 주세요.')
                             return false;
                         }
 
-                        if (productModifyData.defaultWeight == '' || productModifyData.defaultWeight == null || productModifyData.defaultWeight == undefined) {
+                        if (!productModifyData.defaultWeight || productModifyData.defaultWeight == '') {
                             alert('상품 무게를 한번더 확인해 주세요.')
                             return false;
                         }
@@ -447,6 +550,7 @@ const ProductDetailMain = (props) => {
                             await __handleDataConnect().createProductOptionOne();
                             this.addModalClose();
                             await __handleDataConnect().searchProductListFj();
+                            setDataChangedTrigger(true);
                         } else {
                             return;
                         }
@@ -495,6 +599,7 @@ const ProductDetailMain = (props) => {
                             await __handleDataConnect().changeProductOptionOne();
                             this.modifyModalClose();
                             await __handleDataConnect().searchProductListFj();
+                            setDataChangedTrigger(true);
                         } else {
                             return;
                         }
@@ -538,9 +643,9 @@ const ProductDetailMain = (props) => {
                         }
 
                         if (window.confirm('정말로 삭제하시겠습니까?')) {
-
                             await __handleDataConnect().deleteProductOptionOne(selectedOption.cid);
                             await __handleDataConnect().searchProductListFj();
+                            setDataChangedTrigger(true);
                         }
 
                     },
@@ -599,6 +704,147 @@ const ProductDetailMain = (props) => {
                     }
                 }
             },
+            productDetail: function () {
+                return {
+                    addModalOpen: function () {
+                        if(!selectedOption){
+                            alert('상품옵션을 먼저 선택해주세요.');
+                            return;
+                        }
+
+                        let detail = new ProductDetail(selectedOption.id);
+                        detail.productOptionCid = selectedOption.cid;
+
+                        setProductDetailAddData(detail);
+                        setProductDetailAddModalOpen(true);
+                    },
+                    addModalClose: function () {
+                        setProductDetailAddData(null);
+                        setProductDetailAddModalOpen(false);
+                    },
+                    addDataOnChangeInputValue: function (e) {
+                        setProductDetailAddData({
+                            ...productDetailAddData,
+                            [e.target.name]: e.target.value
+                        })
+                    },
+                    submitAddData: async function (e) {
+                        e.preventDefault();
+
+                        if (this.checkRequiredAddData()) {
+                            await __handleDataConnect().createProductDetailOne();
+                            this.addModalClose();
+                            await __handleDataConnect().searchProductListFj();
+                            setDataChangedTrigger(true);
+                        } else {
+                            return;
+                        }
+                    },
+                    checkRequiredAddData: function () {
+                        if (!productDetailAddData.detailWidth || productDetailAddData.detailWidth == '') {
+                            alert('가로사이즈는 필수항목입니다.');
+                            return false;
+                        }
+
+                        if (!productDetailAddData.detailLength || productDetailAddData.detailLength == '') {
+                            alert('세로사이즈는 필수항목입니다.');
+                            return false;
+                        }
+
+                        if (!productDetailAddData.detailHeight || productDetailAddData.detailHeight == '') {
+                            alert('높이사이즈는 필수항목입니다.');
+                            return false;
+                        }
+
+                        if (!productDetailAddData.detailQuantity || productDetailAddData.detailQuantity == '') {
+                            alert('내품수량은 필수항목입니다.');
+                            return false;
+                        }
+                        
+                        if (!productDetailAddData.detailWeight || productDetailAddData.detailWeight == '') {
+                            alert('무게는 필수항목입니다.');
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    modifyModalOpen: function () {
+
+                        if(!selectedDetail){
+                            alert('상세 데이터를 먼저 선택해주세요.');
+                            return;
+                        }
+
+                        setProductDetailModifyData(selectedDetail);
+                        setProductDetailModifyModalOpen(true);
+                    },
+                    modifyModalClose: function () {
+                        setProductDetailModifyData(null);
+                        setProductDetailModifyModalOpen(false);
+                    },
+                    modifyDataOnChangeInputValue: function (e) {
+                        setProductDetailModifyData({
+                            ...productDetailModifyData,
+                            [e.target.name]: e.target.value
+                        })
+                    },
+                    submitModifyData: async function (e) {
+                        e.preventDefault();
+                        if (this.checkRequiredData()) {
+                            await __handleDataConnect().changeProductDetailOne();
+                            this.modifyModalClose();
+                            await __handleDataConnect().searchProductListFj();
+                            setDataChangedTrigger(true);
+                        } else {
+                            return;
+                        }
+
+                    },
+                    checkRequiredData: function () {
+                        if (!productDetailModifyData.detailWidth || productDetailModifyData.detailWidth == '') {
+                            alert('가로사이즈는 필수항목입니다.');
+                            return false;
+                        }
+
+                        if (!productDetailModifyData.detailLength || productDetailModifyData.detailLength == '') {
+                            alert('세로사이즈는 필수항목입니다.');
+                            return false;
+                        }
+
+                        if (!productDetailModifyData.detailHeight || productDetailModifyData.detailHeight == '') {
+                            alert('높이사이즈는 필수항목입니다.');
+                            return false;
+                        }
+
+                        if (!productDetailModifyData.detailQuantity || productDetailModifyData.detailQuantity == '') {
+                            alert('내품수량은 필수항목입니다.');
+                            return false;
+                        }
+                        
+                        if (!productDetailModifyData.detailWeight || productDetailModifyData.detailWeight == '') {
+                            alert('무게는 필수항목입니다.');
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    deleteOne: async function () {
+                        
+                        if(!selectedDetail){
+                            alert('상세 데이터를 먼저 선택해주세요.');
+                            return;
+                        }
+
+                        if (window.confirm('정말로 삭제하시겠습니까?')) {
+
+                            await __handleDataConnect().deleteProductDetailOne(selectedDetail.cid);
+                            await __handleDataConnect().searchProductListFj();
+                            setDataChangedTrigger(true);
+                        }
+
+                    }
+                }
+            },
             backdropLoading: function () {
                 return {
                     open: function () {
@@ -645,12 +891,30 @@ const ProductDetailMain = (props) => {
                 ></ProductOptionModifyModal>
             }
 
+            {productDetailAddModalOpen && productDetailAddData &&
+                <ProductDetailAddModal
+                    open={productDetailAddModalOpen}
+                    productDetailAddData={productDetailAddData}
+
+                    __handleEventControl={__handleEventControl}
+                ></ProductDetailAddModal>
+            }
+            {productDetailModifyModalOpen && productDetailModifyData &&
+                <ProductDetailModifyModal
+                    open={productDetailModifyModalOpen}
+                    productDetailModifyData={productDetailModifyData}
+
+                    __handleEventControl={__handleEventControl}
+                ></ProductDetailModifyModal>
+            }
+
             <ProductDetailBody
                 categoryListData={categoryListData}
                 productViewData={productViewData}
                 selectedCategory={selectedCategory}
                 selectedProduct={selectedProduct}
                 selectedOption={selectedOption}
+                selectedDetail={selectedDetail}
                 optionViewData={optionViewData}
                 // checkedData={checkedData}
                 detailViewData={detailViewData}
