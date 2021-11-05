@@ -1,5 +1,6 @@
 import React,{useMemo} from 'react';
 import styled, {css} from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { BloodtypeRounded } from '@mui/icons-material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -136,6 +137,7 @@ const CategoryGroup = styled.div`
     }
 `;
 
+// const CategorySelectBtn = styled(Link)`
 const CategorySelectBtn = styled.button`
     padding: 5px 15px;
     background: white;
@@ -294,6 +296,7 @@ const ProductDetailBody = (props) => {
                                     <CategorySelectBtn key={r.cid} type='button'
                                         className={props.selectedCategory?.cid === r.cid ? `category-btn-active` : ''}
                                         onClick={() => { props.__handleEventControl().productViewData().onChangeCategoryData(r.id) }}
+                                        // to={`product-detail?category=${r.cid}`}
                                     >{r.name}</CategorySelectBtn>
                                 )
                             })}
@@ -335,9 +338,9 @@ const ProductDetailBody = (props) => {
                                 {props.productViewData && props.productViewData.map((r, index) => {
                                     return (
                                         <div
-                                            key={'product_info_idx' + index}
-                                            className={props.selectedProduct?.cid === r.product.cid ? `product-btn-active` : '' || `data-hover-active`}
-                                            onClick={() => props.__handleEventControl().productViewData().onClickProductData(r.product.cid)}
+                                        key={'product_info_idx' + index}
+                                        className={props.selectedProduct?.cid === r.product.cid ? `product-btn-active` : '' || `data-hover-active`}
+                                        onClick={() => props.__handleEventControl().productViewData().onClickProductData(r.product.cid)}
                                         >
                                             <ItemContainer>
                                                 <ItemData>
@@ -444,7 +447,7 @@ const ProductDetailBody = (props) => {
                                     <HeaderTh className="fixed-header fixed-header" scope="col">
                                         <span>STYLE</span>
                                     </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="100">
                                         <span>재고관리여부</span>
                                     </HeaderTh>
                                 </tr>
@@ -486,10 +489,10 @@ const ProductDetailBody = (props) => {
                                     <HeaderTh className="fixed-header fixed-header" scope="col">
                                         <span>노스노스 고유코드</span>
                                     </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="100">
                                         <span>가격</span>
                                     </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="100">
                                         <span>재고</span>
                                     </HeaderTh>
                                     <HeaderTh className="fixed-header fixed-header" scope="col">

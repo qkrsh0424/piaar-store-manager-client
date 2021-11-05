@@ -119,13 +119,13 @@ const ProductDetailMain = (props) => {
     const [backdropLoading, setBackdropLoading] = useState(false);
 
     const [dataChangedTrigger, setDataChangedTrigger] = useState(false);
+    const [optionChangedTrigger, setOptionChangedTrigger] = useState(false);
 
     useEffect(() => {
         async function fetchInit() {
             __handleDataConnect().searchProductListFj();
             __handleDataConnect().searchCategoryList();
         }
-
         fetchInit();
     }, []);
 
@@ -133,11 +133,20 @@ const ProductDetailMain = (props) => {
         if(dataChangedTrigger === true) {
             __handleEventControl().productViewData().onChangeCategoryData(selectedCategory?.id);
             __handleEventControl().productViewData().onClickProductData(selectedProduct?.cid);
-            __handleEventControl().productViewData().onClickOptionData(selectedOption?.cid);
+            __handleEventControl().productViewData().onClickOptionData(selectedOption?.cid);        
         }
 
         setDataChangedTrigger(false);
     }, [dataChangedTrigger]);
+
+    useEffect(() => {
+        if(optionChangedTrigger === true) {
+            __handleEventControl().productViewData().onClickOptionData(selectedOption?.cid);
+            setOptionViewData(productViewData.filter(r => r.product.cid === selectedProduct.cid)[0]?.options);
+        }
+
+        setOptionChangedTrigger(false);
+    }, [optionChangedTrigger]);
 
     const __handleDataConnect = () => {
         return {
@@ -381,18 +390,22 @@ const ProductDetailMain = (props) => {
                     },
                     onClickProductData: function (productCid) {
                         let checkedProduct = productViewData.filter(r => productCid === r.product.cid)[0].product;
+                        
                         setSelectedProduct(checkedProduct);
                         setSelectedOption(null);
                         setDetailViewData(null);
-
+                        
                         setOptionViewData(productViewData.filter(r => r.product.cid === productCid)[0].options);
                     },
-                    onClickOptionData: function (optionCid) {
+                    onClickOptionData: async function (optionCid) {
                         let checkedOption = optionViewData.filter(r => optionCid === r.cid)[0];
                         setSelectedOption(checkedOption);
+                        setSelectedDetail(null);
                         setDetailViewData(null);
 
-                        __handleDataConnect().searchDetailList(optionCid);
+                        if(checkedOption)
+                            await __handleDataConnect().searchDetailList(optionCid);
+
                     },
                     onClickDetailData: function (detailCid) {
                         let checkedDetail = detailViewData.filter(r => detailCid === r.cid)[0];
@@ -451,42 +464,42 @@ const ProductDetailMain = (props) => {
 
                     },
                     checkRequiredData: function () {
-                        if (!productModifyData.productCategoryCid || productModifyData.productCategoryCid == '') {
+                        if (productModifyData.productCategoryCid == null || productModifyData.productCategoryCid == undefined || productModifyData.productCategoryCid == '') {
                             alert('카테고리 선택은 필수항목입니다.');
                             return false;
                         }
 
-                        if (!productModifyData.defaultName || productModifyData.defaultName == '') {
+                        if (productModifyData.defaultName == null || productModifyData.defaultName == undefined || productModifyData.defaultName == '') {
                             alert('상품명은 필수항목입니다.');
                             return false;
                         }
 
-                        if (!productModifyData.managementName || productModifyData.managementName == '') {
+                        if (!productModifyData.managementName) {
                             alert('관리상품명은 필수항목입니다.');
                             return false;
                         }
 
-                        if (!productModifyData.defaultWidth || productModifyData.defaultWidth == '') {
+                        if (productModifyData.defaultWidth == null || productModifyData.defaultWidth == undefined || productModifyData.defaultWidth == '') {
                             alert('상품 가로 사이즈를 한번더 확인해 주세요.')
                             return false;
                         }
 
-                        if (!productModifyData.defaultLength || productModifyData.defaultLength == '') {
+                        if (productModifyData.defaultLength == 0 || productModifyData.defaultLength == undefined || productModifyData.defaultLength == '') {
                             alert('상품 세로 사이즈를 한번더 확인해 주세요.')
                             return false;
                         }
 
-                        if (!productModifyData.defaultHeight || productModifyData.defaultHeight == '') {
+                        if (productModifyData.defaultHeight == 0 || productModifyData.defaultHeight == undefined || productModifyData.defaultHeight == '') {
                             alert('상품 높이 사이즈를 한번더 확인해 주세요.')
                             return false;
                         }
 
-                        if (!productModifyData.defaultQuantity || productModifyData.defaultQuantity == '') {
+                        if (productModifyData.defaultQuantity == 0 || productModifyData.defaultQuantity == undefined || productModifyData.defaultQuantity == '') {
                             alert('상품 내품수량을 한번더 확인해 주세요.')
                             return false;
                         }
 
-                        if (!productModifyData.defaultWeight || productModifyData.defaultWeight == '') {
+                        if (productModifyData.defaultWeight == 0 || productModifyData.defaultWeight == undefined || productModifyData.defaultWeight == '') {
                             alert('상품 무게를 한번더 확인해 주세요.')
                             return false;
                         }
@@ -551,6 +564,7 @@ const ProductDetailMain = (props) => {
                             this.addModalClose();
                             await __handleDataConnect().searchProductListFj();
                             setDataChangedTrigger(true);
+                            setOptionChangedTrigger(true);
                         } else {
                             return;
                         }
@@ -599,11 +613,12 @@ const ProductDetailMain = (props) => {
                             await __handleDataConnect().changeProductOptionOne();
                             this.modifyModalClose();
                             await __handleDataConnect().searchProductListFj();
+                            setSelectedOption(null);
                             setDataChangedTrigger(true);
+                            setOptionChangedTrigger(true);
                         } else {
                             return;
                         }
-
                     },
                     checkRequiredData: function () {
                         if (productOptionModifyData.defaultName == null || productOptionModifyData.defaultName == undefined || productOptionModifyData.defaultName == '') {
@@ -622,12 +637,6 @@ const ProductDetailMain = (props) => {
 
                         return true;
                     },
-                    modifyDataAdd: function () {
-                        setProductModifyData({
-                            ...productModifyData,
-                            options: productModifyData.options.concat(new ProductOption(productModifyData.product.id).toJSON())
-                        });
-                    },
                     modifyDataDelete: function (optionId) {
                         setProductModifyData({
                             ...productModifyData,
@@ -645,7 +654,9 @@ const ProductDetailMain = (props) => {
                         if (window.confirm('정말로 삭제하시겠습니까?')) {
                             await __handleDataConnect().deleteProductOptionOne(selectedOption.cid);
                             await __handleDataConnect().searchProductListFj();
+                            setSelectedOption(null);
                             setDataChangedTrigger(true);
+                            setOptionChangedTrigger(true);
                         }
 
                     },
@@ -741,27 +752,26 @@ const ProductDetailMain = (props) => {
                         }
                     },
                     checkRequiredAddData: function () {
-                        if (!productDetailAddData.detailWidth || productDetailAddData.detailWidth == '') {
+                        if (productDetailModifyData.detailWidth == null || productDetailModifyData.detailWidth == undefined || productDetailModifyData.detailWidth == '') {
                             alert('가로사이즈는 필수항목입니다.');
                             return false;
                         }
 
-                        if (!productDetailAddData.detailLength || productDetailAddData.detailLength == '') {
+                        if (productDetailModifyData.detailLength == null || productDetailModifyData.detailLength == undefined || productDetailModifyData.detailLength == '') {
                             alert('세로사이즈는 필수항목입니다.');
                             return false;
                         }
-
-                        if (!productDetailAddData.detailHeight || productDetailAddData.detailHeight == '') {
+                        if (productDetailModifyData.detailHeight == null || productDetailModifyData.detailHeight == undefined || productDetailModifyData.detailHeight == '') {
                             alert('높이사이즈는 필수항목입니다.');
                             return false;
                         }
 
-                        if (!productDetailAddData.detailQuantity || productDetailAddData.detailQuantity == '') {
+                        if (productDetailModifyData.detailQuantity == null || productDetailModifyData.detailQuantity == undefined || productDetailModifyData.detailQuantity == '') {
                             alert('내품수량은 필수항목입니다.');
                             return false;
                         }
                         
-                        if (!productDetailAddData.detailWeight || productDetailAddData.detailWeight == '') {
+                        if (productDetailModifyData.detailWeight == null || productDetailModifyData.detailWeight == undefined || productDetailModifyData.detailWeight == '') {
                             alert('무게는 필수항목입니다.');
                             return false;
                         }
@@ -801,27 +811,27 @@ const ProductDetailMain = (props) => {
 
                     },
                     checkRequiredData: function () {
-                        if (!productDetailModifyData.detailWidth || productDetailModifyData.detailWidth == '') {
+                        if (productDetailModifyData.detailWidth == null || productDetailModifyData.detailWidth == undefined) {
                             alert('가로사이즈는 필수항목입니다.');
                             return false;
                         }
 
-                        if (!productDetailModifyData.detailLength || productDetailModifyData.detailLength == '') {
+                        if (productDetailModifyData.detailLength == null || productDetailModifyData.detailLength == undefined) {
                             alert('세로사이즈는 필수항목입니다.');
                             return false;
                         }
 
-                        if (!productDetailModifyData.detailHeight || productDetailModifyData.detailHeight == '') {
+                        if (productDetailModifyData.detailHeight == null || productDetailModifyData.detailHeight == undefined) {
                             alert('높이사이즈는 필수항목입니다.');
                             return false;
                         }
 
-                        if (!productDetailModifyData.detailQuantity || productDetailModifyData.detailQuantity == '') {
+                        if (productDetailModifyData.detailQuantity == null || productDetailModifyData.detailQuantity == undefined) {
                             alert('내품수량은 필수항목입니다.');
                             return false;
                         }
                         
-                        if (!productDetailModifyData.detailWeight || productDetailModifyData.detailWeight == '') {
+                        if (productDetailModifyData.detailWeight == null || productDetailModifyData.detailWeight == undefined) {
                             alert('무게는 필수항목입니다.');
                             return false;
                         }
@@ -836,7 +846,6 @@ const ProductDetailMain = (props) => {
                         }
 
                         if (window.confirm('정말로 삭제하시겠습니까?')) {
-
                             await __handleDataConnect().deleteProductDetailOne(selectedDetail.cid);
                             await __handleDataConnect().searchProductListFj();
                             setDataChangedTrigger(true);
