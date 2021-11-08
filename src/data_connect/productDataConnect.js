@@ -45,8 +45,18 @@ const productDataConnect = () => {
                 withCredentials: true
             })
         },
+        getList: async function(){
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list`, {
+                withCredentials: true
+            })
+        },
         getListFj: async function () {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list-fj`, {
+                withCredentials: true
+            })
+        },
+        searchProductListByCategory: async function (categoryCid) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list/${categoryCid}`, {
                 withCredentials: true
             })
         },

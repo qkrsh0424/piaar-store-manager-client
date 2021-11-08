@@ -120,7 +120,7 @@ const BodyWrapper = styled.div`
 
 const CategoryGroup = styled.div`
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     font-size: 1rem;
     padding:0 10px;
     column-gap: 5px;
@@ -135,9 +135,12 @@ const CategoryGroup = styled.div`
         background: rgba(122,146,218,0.88);
         color:white;
     }
+
+    & .non-category {
+        color: rgba(95,115,205);
+    }
 `;
 
-// const CategorySelectBtn = styled(Link)`
 const CategorySelectBtn = styled.button`
     padding: 5px 15px;
     background: white;
@@ -291,12 +294,15 @@ const ProductDetailBody = (props) => {
                 <Container>
                     <CategoryContainer>
                         <CategoryGroup className='mb-3'>
-                            {props.categoryListData && props.categoryListData.map((r) => {
+                            <CategorySelectBtn key={4} type='button'
+                                className={props.params.category === '4' ? `category-btn-active` : '' || 'non-category'}
+                                onClick={() => props.__handleEventControl().productViewData().changeRouterByCategory(4)}
+                            >전체조회</CategorySelectBtn>
+                            {props.categoryListData?.map((r) => {
                                 return (
                                     <CategorySelectBtn key={r.cid} type='button'
-                                        className={props.selectedCategory?.cid === r.cid ? `category-btn-active` : ''}
-                                        onClick={() => { props.__handleEventControl().productViewData().onChangeCategoryData(r.id) }}
-                                        // to={`product-detail?category=${r.cid}`}
+                                        className={props.params.categoryCid === r.cid.toString() ? `category-btn-active` : ''}
+                                        onClick={() => props.__handleEventControl().productViewData().changeRouterByCategory(r.cid)}
                                     >{r.name}</CategorySelectBtn>
                                 )
                             })}
@@ -335,19 +341,19 @@ const ProductDetailBody = (props) => {
                                         <span>상품명</span>
                                     </ItemHeader>
                                 </ItemContainer>
-                                {props.productViewData && props.productViewData.map((r, index) => {
+                                {props.productViewData?.map((r, index) => {
                                     return (
                                         <div
-                                        key={'product_info_idx' + index}
-                                        className={props.selectedProduct?.cid === r.product.cid ? `product-btn-active` : '' || `data-hover-active`}
-                                        onClick={() => props.__handleEventControl().productViewData().onClickProductData(r.product.cid)}
+                                            key={'product_info_idx' + index}
+                                            className={props.params.productCid === r.cid.toString() ? `product-btn-active` : '' || `data-hover-active`}
+                                            onClick={() => props.__handleEventControl().productViewData().changeRouterByProduct(r.cid)}
                                         >
                                             <ItemContainer>
                                                 <ItemData>
                                                     <ImageWrapper>
                                                         <ImageBox>
-                                                            {r.product.imageUrl ?
-                                                                <ImageEl src={r.product.imageUrl} title={r.product.imageFileName} />
+                                                            {r.imageUrl ?
+                                                                <ImageEl src={r.imageUrl} title={r.imageFileName} />
                                                                 :
                                                                 <ImageEl src='/images/icon/no-image.jpg' title='no-image' />
                                                             }
@@ -355,7 +361,7 @@ const ProductDetailBody = (props) => {
                                                     </ImageWrapper>
                                                 </ItemData>
                                                 <ItemData className="default-name">
-                                                    <span>{r.product.defaultName}</span>
+                                                    <span>{r.defaultName}</span>
                                                 </ItemData>
                                             </ItemContainer>
                                         </div>
@@ -398,12 +404,12 @@ const ProductDetailBody = (props) => {
                                         <span>옵션명</span>
                                     </ItemHeader>
                                 </ItemContainer>
-                                {props.optionViewData && props.optionViewData.map((r, index) => {
+                                {props.optionViewData?.map((r, index) => {
                                     return (
                                         <div
                                             key={'option_info_idx' + index}
-                                            className={props.selectedOption?.cid === r.cid ? `product-btn-active` : '' || `data-hover-active`}
-                                            onClick={() => props.__handleEventControl().productViewData().onClickOptionData(r.cid)}
+                                            className={props.params.optionCid === r.cid.toString() ? `product-btn-active` : '' || `data-hover-active`}
+                                            onClick={() => props.__handleEventControl().productViewData().changeRouterByOption(r.cid)}
                                         >
                                             <ItemContainer>
                                                 <ItemData>
@@ -597,12 +603,12 @@ const ProductDetailBody = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {props.detailViewData && props.detailViewData.map((r, productDetailIdx) => {
+                                    {props.detailViewData?.map((r, productDetailIdx) => {
                                         return (
                                             <DetailTr
                                                 key={'product_detail_idx' + productDetailIdx}
-                                                className={props.selectedDetail?.cid === r.cid ? `detail-list-active` : '' || `data-hover-active`}
-                                                onClick={() => props.__handleEventControl().productViewData().onClickDetailData(r.cid)}
+                                                className={props.params.detailCid === r.cid.toString() ? `detail-list-active` : '' || `data-hover-active`}
+                                                onClick={() => props.__handleEventControl().productViewData().changeRouterByDetail(r.cid)}
                                             >
                                                 <DetailTd className="col">
                                                     <span>{r.detailWidth}</span>

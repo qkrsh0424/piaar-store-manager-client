@@ -9,6 +9,11 @@ const productOptionDataConnect = () => {
                 withCredentials: true
             })
         },
+        searchOptionListByProduct: async function (productCid) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/list/${productCid}`, {
+                withCredentials: true
+            })
+        },
         postOne: async function(productOption){
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-option/one`, productOption,{
                 withCredentials: true
