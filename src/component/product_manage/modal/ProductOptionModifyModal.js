@@ -124,6 +124,7 @@ const ImageDeleteBtn = styled.button`
 const ProductOptionModifyModal = (props) => {
     const [fullWidth, setFullWidth] = useState(true);
     const [maxWidth, setMaxWidth] = useState('lg');
+    
     return (
         <>
             <Dialog
@@ -175,7 +176,7 @@ const ProductOptionModifyModal = (props) => {
                                         type="text"
                                         className='form-control'
                                         name='defaultName'
-                                        value={props.productOptionModifyData.defaultName}
+                                        value={props.productOptionModifyData.defaultName ?? ''}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                         required
                                     />
@@ -192,7 +193,7 @@ const ProductOptionModifyModal = (props) => {
                                         type="text"
                                         className='form-control'
                                         name='managementName'
-                                        value={props.productOptionModifyData.managementName}
+                                        value={props.productOptionModifyData.managementName ?? ''}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                         required
                                     />
@@ -209,7 +210,7 @@ const ProductOptionModifyModal = (props) => {
                                         type="text"
                                         className='form-control'
                                         name='code'
-                                        value={props.productOptionModifyData.code ? props.productOptionModifyData.code : ''}
+                                        value={props.productOptionModifyData.code ?? ''}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                         required
                                     />
@@ -225,7 +226,7 @@ const ProductOptionModifyModal = (props) => {
                                         type="text"
                                         className='form-control'
                                         name='nosUniqueCode'
-                                        value={props.productOptionModifyData.nosUniqueCode}
+                                        value={props.productOptionModifyData.nosUniqueCode ?? ''}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                     />
 
@@ -240,7 +241,7 @@ const ProductOptionModifyModal = (props) => {
                                         type="number"
                                         className='form-control'
                                         name='salesPrice'
-                                        value={props.productOptionModifyData.salesPrice}
+                                        value={props.productOptionModifyData.salesPrice ?? ''}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                         required
                                     />
@@ -256,7 +257,7 @@ const ProductOptionModifyModal = (props) => {
                                         type="text"
                                         className='form-control'
                                         name='status'
-                                        value={props.productOptionModifyData.status}
+                                        value={props.productOptionModifyData.status ?? ''}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                     />
                                 </div>
@@ -270,7 +271,7 @@ const ProductOptionModifyModal = (props) => {
                                         type="text"
                                         className='form-control'
                                         name='memo'
-                                        value={props.productOptionModifyData.memo}
+                                        value={props.productOptionModifyData.memo ?? ''}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                     />
                                 </div>
@@ -284,7 +285,7 @@ const ProductOptionModifyModal = (props) => {
                                         type="text"
                                         className='form-control'
                                         name='color'
-                                        value={props.productOptionModifyData.color}
+                                        value={props.productOptionModifyData.color ?? ''}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                     />
                                 </div>
@@ -298,7 +299,7 @@ const ProductOptionModifyModal = (props) => {
                                         type="text"
                                         className='form-control'
                                         name='unitCny'
-                                        value={props.productOptionModifyData.unitCny}
+                                        value={props.productOptionModifyData.unitCny ?? ''}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                     />
                                 </div>
@@ -312,7 +313,7 @@ const ProductOptionModifyModal = (props) => {
                                         type="text"
                                         className='form-control'
                                         name='unitKrw'
-                                        value={props.productOptionModifyData.unitKrw}
+                                        value={props.productOptionModifyData.unitKrw ?? ''}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                     />
                                 </div>

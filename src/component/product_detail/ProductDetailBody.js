@@ -5,6 +5,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { withRouter } from 'react-router';
 
 const Container = styled.div`
     height:auto;
@@ -240,8 +241,13 @@ const ItemData = styled.div`
     }
 `;
 
+
+
 const ProductDetailBody = (props) => {
     const userRdx = useSelector(state => state.user);
+    let routerState = {
+        prevUrl: props.location.pathname
+    }
 
     return (
         <>
@@ -271,7 +277,10 @@ const ProductDetailBody = (props) => {
                                 <span>
                                     <AddBtn
                                         type='button'
-                                        onClick={() => window.location.href = '/products/create'}
+                                        onClick={() => props.history.push({
+                                            pathname:'/products/create',
+                                            state:routerState
+                                        })}
                                     ><AddIcon /></AddBtn>
                                 </span>
                                 <span>
@@ -394,4 +403,4 @@ const ProductDetailBody = (props) => {
     )
 }
 
-export default ProductDetailBody;
+export default withRouter(ProductDetailBody);

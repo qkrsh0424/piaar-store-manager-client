@@ -408,9 +408,8 @@ const OptionDeleteBtn = styled.button`
 const CreateBody = (props) => {
     return (
         <>
-            <BackBtn type='button' 
-                // onClick={() => props.history.replace('/products')}
-                onClick={() => props.history.goBack()}
+            <BackBtn type='button'
+                onClick={() => props.history.replace(props.location.state.prevUrl)}
             >
                 <img className='back-button-img' src='/images/icon/back-button.png'></img>
             </BackBtn>

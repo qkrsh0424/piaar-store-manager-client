@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 const Container = styled.div`
 
@@ -53,6 +53,9 @@ const ReceiveReleaseBtn = styled.button`
     }
 `;
 const ProductManageNav = (props) => {
+    let routerState = {
+        prevUrl: props.location.pathname
+    }
 
     return (
         <>
@@ -61,7 +64,10 @@ const ProductManageNav = (props) => {
                     <CommonLinkGroupWrapper className='row'>
                         <div className='col-4 mb-2'>
                             <CommonLinkEl
-                                to={'/products/create'}
+                                to={{
+                                    pathname:'/products/create',
+                                    state:routerState
+                                }}
                                 color={'#7a7bdae0'}
                                 // color={'#333333e0'}
                             >상품등록</CommonLinkEl>
@@ -89,4 +95,4 @@ const ProductManageNav = (props) => {
     );
 }
 
-export default ProductManageNav;
+export default withRouter(ProductManageNav);
