@@ -20,7 +20,6 @@ const BodyWrapper = styled.div`
 
     .icon-must {
         position: relative;
-        /* top:-3px; */
         margin-left: 5px;
         width: 6px;
         height: 6px;
@@ -74,94 +73,6 @@ const SubmitBtn = styled.button`
     color:white;
     font-weight:700;
     padding:8px;
-`;
-
-const KeyGroup = styled.div`
-    & .input-group{
-        padding: 0 15px;
-    }
-
-    @media only screen and (max-width:992px){
-        & .input-group{
-            padding: 0;
-        }
-    }
-`;
-
-const CommonFunctionalBtn = styled.button`
-    float:right;
-`;
-
-const TableContainer = styled.div`
-	overflow: auto;
-    & .fixedHeader {
-        position: sticky;
-        top: -1px;
-        background: white;
-    }
-`;
-
-const OptionTableTh = styled.th`
-    padding:8px !important;
-    border: 1px solid #dee2e6;
-    text-align: center;
-`;
-const OptionTableTd = styled.td`
-    padding:8px !important;
-    border: 1px solid #dee2e6;
-    text-align: center;
-`;
-const OptionInput = styled.input`
-    border: none;
-    text-align: center;
-    font-weight: 700;
-    width:100%;
-    padding:5px;
-`;
-
-const UploadInputEl = styled.input`
-    display: none;
-`;
-
-const ImageBox = styled.div`
-   position: relative;
-   padding-bottom: 100%; // 1:1
-`;
-
-const ImageWrapper = styled.div`
-   width:20%;
-   height:auto;
-   padding: 10px 10px;
-
-   @media only screen and (max-width:992px){
-        width:35%;
-   }
-    @media only screen and (max-width:425px){
-        width:50%;
-    }
-
-    &:hover {
-        ${ImageBox} {
-            opacity: 0.3;
-        }
-    }
-`;
-
-const ImageEl = styled.img`
-   position: absolute;
-   object-fit: cover;
-   width: 90%;
-   height: 90%;
-   transition: .5s;
-   border:1px solid #f1f1f1;
-   border-radius: 8px;
-   cursor: pointer;
-`;
-
-const ImageDeleteBtn = styled.button`
-    color: #dc3545;
-    border: 1px solid #ced4da;
-    background-color: white;
 `;
 
 const ProductDetailAddModal = (props) => {

@@ -1,8 +1,6 @@
-import React,{useMemo} from 'react';
-import styled, {css} from 'styled-components';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { BloodtypeRounded } from '@mui/icons-material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -85,10 +83,12 @@ const InfoContainer = styled.div`
     }
 
     & .detail-list-active{
-        background: #9bb6d180;
+        background: #9bb6d1DD;
+        color: white;
+        font-weight: 700;
 
         &:hover{
-            background: #9bb6d180;
+            background: #9bb6d1DD;
         }
     }
 
@@ -113,7 +113,8 @@ const BodyWrapper = styled.div`
 
     & .data-hover-active {
         &:hover{
-            background:#9bb6d130;
+            background:#9bb6d155;
+            transition: .2s;
         }
     }
 `;
@@ -125,6 +126,12 @@ const CategoryGroup = styled.div`
     padding:0 10px;
     column-gap: 5px;
 
+    @media only screen and (max-width:768px){
+        font-size: 14px;
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 10px;
+    }
+
     @media only screen and (max-width:576px){
         font-size: 12px;
         grid-template-columns: repeat(1, 1fr);
@@ -132,7 +139,7 @@ const CategoryGroup = styled.div`
     }
 
     & .category-btn-active{
-        background: rgba(122,146,218,0.88);
+        background: #4360A3C9;
         color:white;
     }
 
@@ -149,6 +156,13 @@ const CategorySelectBtn = styled.button`
     color:#333;
     font-weight: 600;
     box-shadow: 2px 2px 15px #b0b2b7;
+
+    transition: .2s;
+
+    &:hover{
+        background: #4360A3C9;
+        color: white;
+    }
 `;
 
 const DataBody = styled.div`
@@ -160,10 +174,12 @@ const DataBody = styled.div`
     margin: 0 auto;
 
     & .product-btn-active{
-        background: #9bb6d180;
+        background: #9bb6d1DD;
+        color: white;
+        font-weight: 700;
 
         &:hover{
-            background: #9bb6d180;
+            background: #9bb6d1DD;
         }
     }
 
@@ -273,9 +289,6 @@ const ItemHeader = styled.div`
 `;
 
 const ItemData = styled.div`
-    /* &:hover{
-        background:#9bb6d130;
-    } */
 
     &.default-name {
         display: flex;
@@ -295,7 +308,7 @@ const ProductDetailBody = (props) => {
                     <CategoryContainer>
                         <CategoryGroup className='mb-3'>
                             <CategorySelectBtn key={4} type='button'
-                                className={props.params.category === '4' ? `category-btn-active` : '' || 'non-category'}
+                                className={props.params.categoryCid === '4' ? `category-btn-active` : '' || 'non-category'}
                                 onClick={() => props.__handleEventControl().productViewData().changeRouterByCategory(4)}
                             >전체조회</CategorySelectBtn>
                             {props.categoryListData?.map((r) => {
