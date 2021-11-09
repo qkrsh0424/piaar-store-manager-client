@@ -9,6 +9,7 @@ import { productCategoryDataConnect } from "../../data_connect/productCategoryDa
 
 // component
 import ProductDetailBody from "./ProductDetailBody";
+import ProductDetailTableBody from "./ProductDetailTableBody";
 import DrawerNavbarMain from '../nav/DrawerNavbarMain';
 import ProductModifyModal from '../product_manage/modal/ProductModifyModal';
 import BackdropLoading from '../loading/BackdropLoading';
@@ -18,7 +19,7 @@ import ProductDetailAddModal from './modal/ProductDetailAddModal';
 import ProductDetailModifyModal from './modal/ProductDetailModifyModal';
 import { productDataConnect } from '../../data_connect/productDataConnect';
 import { productOptionDataConnect } from '../../data_connect/productOptionDataConnect';
-import { ConstructionOutlined } from '@mui/icons-material';
+
 
 
 class ProductOption {
@@ -977,6 +978,7 @@ const ProductDetailMain = (props) => {
     return (
         <>
             <DrawerNavbarMain></DrawerNavbarMain>
+            <BackdropLoading open={backdropLoading} />
 
             {categoryListData && productModifyModalOpen && productModifyData &&
                 <ProductModifyModal
@@ -1025,16 +1027,23 @@ const ProductDetailMain = (props) => {
 
             <ProductDetailBody
                 categoryListData={categoryListData}
-                selectedProduct={selectedProduct}
-                selectedOption={selectedOption}
-                selectedDetail={selectedDetail}
                 productViewData={productViewData}
                 optionViewData={optionViewData}
-                detailViewData={detailViewData}
                 params={params}
 
                 __handleEventControl={__handleEventControl}
             ></ProductDetailBody>
+
+            <ProductDetailTableBody
+                selectedProduct={selectedProduct}
+                selectedOption={selectedOption}
+                selectedDetail={selectedDetail}
+                detailViewData={detailViewData}
+                params={params}
+
+            
+                __handleEventControl={__handleEventControl}
+            ></ProductDetailTableBody>
         </>
     )
 }

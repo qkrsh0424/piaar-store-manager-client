@@ -29,10 +29,14 @@ const CustomLink = styled(Link)`
     color:#7d7ada;
     font-weight: 600;
     border-left:3px solid #7d7ada00;
+    transition: 0.3s;
+
     &:hover{
         text-decoration: none;
-        border-left:3px solid #7d7ada;
+        /* border-left:3px solid #7d7ada; */
         color:#7d7ada;
+        background-color: #F2ECFF;
+        border-radius: 30px;
     }
     
 `;
