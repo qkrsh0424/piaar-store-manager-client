@@ -7,29 +7,6 @@ import React from 'react';
 const Container = styled.div`
 `;
 
-const ItemGroup = styled.div`
-    display: grid;
-    grid-template-columns: 32% 32% 32%;
-    padding:3px 8px;
-    grid-gap: 2px;
-    border-bottom: 1px solid #f1f1f1;
-`;
-
-const ItemBtn = styled.button`
-    display: inline-block;
-    border:1px solid #1199dc;
-    border-radius: 5px;
-    margin:5px 2px;
-    padding:5px;
-    background: none;
-    color: #1199dc;
-    font-weight: 600;
-    @media only screen and (max-width:992px){
-        font-size: 0.7rem;
-    }
-
-`;
-
 const BodyWrapper = styled.div`
     padding:0 10px;
     overflow: auto;
@@ -82,8 +59,6 @@ const CategoryGroup = styled.div`
 `;
 
 const CategorySelectBtn = styled.button`
-    /* width:100px; */
-    /* margin:5px; */
     padding:5px;
     background: white;
     border:1px solid #4682B4;
@@ -126,37 +101,6 @@ const KeyGroup = styled.div`
             padding: 0;
         }
     }
-`;
-
-const CommonFunctionalBtn = styled.button`
-    float:right;
-`;
-
-const TableContainer = styled.div`
-	overflow: auto;
-    & .fixedHeader {
-        position: sticky;
-        top: -1px;
-        background: white;
-    }
-`;
-
-const OptionTableTh = styled.th`
-    padding:8px !important;
-    border: 1px solid #dee2e6;
-    text-align: center;
-`;
-const OptionTableTd = styled.td`
-    padding:8px !important;
-    border: 1px solid #dee2e6;
-    text-align: center;
-`;
-const OptionInput = styled.input`
-    border: none;
-    text-align: center;
-    font-weight: 700;
-    width:100%;
-    padding:5px;
 `;
 
 const SubmitBtnGroup = styled.div`

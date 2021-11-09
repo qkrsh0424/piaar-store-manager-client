@@ -589,17 +589,17 @@ const ProductDetailMain = (props) => {
 
                     },
                     checkRequiredData: function () {
-                        if (productModifyData.productCategoryCid == null || productModifyData.productCategoryCid == undefined) {
+                        if (productModifyData.productCategoryCid == null || productModifyData.productCategoryCid == undefined || productModifyData.productCategoryCid == '') {
                             alert('카테고리 선택은 필수항목입니다.');
                             return false;
                         }
 
-                        if (productModifyData.defaultName == null || productModifyData.defaultName == undefined) {
+                        if (productModifyData.defaultName == null || productModifyData.defaultName == undefined || productModifyData.defaultName == '') {
                             alert('상품명은 필수항목입니다.');
                             return false;
                         }
 
-                        if (productModifyData.managementName == null || productModifyData.managementName == undefined) {
+                        if (productModifyData.managementName == null || productModifyData.managementName == undefined || productModifyData.managementName == '') {
                             alert('관리상품명은 필수항목입니다.');
                             return false;
                         }
@@ -609,22 +609,22 @@ const ProductDetailMain = (props) => {
                             return false;
                         }
 
-                        if (productModifyData.defaultLength == 0 || productModifyData.defaultLength == undefined) {
+                        if (productModifyData.defaultLength == null || productModifyData.defaultLength == undefined) {
                             alert('상품 세로 사이즈를 한번더 확인해 주세요.')
                             return false;
                         }
 
-                        if (productModifyData.defaultHeight == 0 || productModifyData.defaultHeight == undefined) {
+                        if (productModifyData.defaultHeight == null || productModifyData.defaultHeight == undefined) {
                             alert('상품 높이 사이즈를 한번더 확인해 주세요.')
                             return false;
                         }
 
-                        if (productModifyData.defaultQuantity == 0 || productModifyData.defaultQuantity == undefined) {
+                        if (productModifyData.defaultQuantity == null || productModifyData.defaultQuantity == undefined) {
                             alert('상품 내품수량을 한번더 확인해 주세요.')
                             return false;
                         }
 
-                        if (productModifyData.defaultWeight == 0 || productModifyData.defaultWeight == undefined) {
+                        if (productModifyData.defaultWeight == null || productModifyData.defaultWeight == undefined) {
                             alert('상품 무게를 한번더 확인해 주세요.')
                             return false;
                         }
@@ -863,26 +863,26 @@ const ProductDetailMain = (props) => {
                         }
                     },
                     checkRequiredAddData: function () {
-                        if (productDetailAddData.detailWidth == null || productDetailAddData.detailWidth == undefined || productDetailAddData.detailWidth == '') {
+                        if (productDetailAddData.detailWidth == null || productDetailAddData.detailWidth == undefined) {
                             alert('가로사이즈는 필수항목입니다.');
                             return false;
                         }
 
-                        if (productDetailAddData.detailLength == null || productDetailAddData.detailLength == undefined || productDetailAddData.detailLength == '') {
+                        if (productDetailAddData.detailLength == null || productDetailAddData.detailLength == undefined) {
                             alert('세로사이즈는 필수항목입니다.');
                             return false;
                         }
-                        if (productDetailAddData.detailHeight == null || productDetailAddData.detailHeight == undefined || productDetailAddData.detailHeight == '') {
+                        if (productDetailAddData.detailHeight == null || productDetailAddData.detailHeight == undefined) {
                             alert('높이사이즈는 필수항목입니다.');
                             return false;
                         }
 
-                        if (productDetailAddData.detailQuantity == null || productDetailAddData.detailQuantity == undefined || productDetailAddData.detailQuantity == '') {
+                        if (productDetailAddData.detailQuantity == null || productDetailAddData.detailQuantity == undefined) {
                             alert('내품수량은 필수항목입니다.');
                             return false;
                         }
 
-                        if (productDetailAddData.detailWeight == null || productDetailAddData.detailWeight == undefined || productDetailAddData.detailWeight == '') {
+                        if (productDetailAddData.detailWeight == null || productDetailAddData.detailWeight == undefined) {
                             alert('무게는 필수항목입니다.');
                             return false;
                         }

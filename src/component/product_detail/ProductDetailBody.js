@@ -67,6 +67,21 @@ const ItemContainer = styled.div`
     }
 `;
 
+const BodyWrapper = styled.div`
+    & .arrow-img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    & .data-hover-active {
+        &:hover{
+            background:#9bb6d155;
+            transition: .2s;
+        }
+    }
+`;
+
 const CategoryGroup = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 1fr);

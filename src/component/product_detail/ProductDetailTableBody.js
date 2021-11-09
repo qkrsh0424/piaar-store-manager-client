@@ -6,7 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const InfoContainer = styled.div`
-    padding: 20px 50px;
+    padding: 20px 30px;
 	overflow: hidden;
     display: grid;
     height: auto;
@@ -29,6 +29,10 @@ const InfoContainer = styled.div`
         &:hover{
             background: #9bb6d1DD;
         }
+    }
+
+    & .large-table {
+        min-height: 130px;
     }
 
     @media only screen and (max-width:576px){
@@ -56,6 +60,10 @@ const TableContainer = styled.div`
     display: block;
     margin: 10px;
     min-height: 100px;
+
+    @media only screen and (max-width: 576px) {
+        min-height: 70px;
+    }
 `;
 
 const HeaderTh = styled.th`
@@ -145,7 +153,7 @@ const ProductDetailTableBody = (props) => {
                                     <HeaderTh className="fixed-header fixed-header" scope="col">
                                         <span>STYLE</span>
                                     </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="100">
+                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
                                         <span>재고관리여부</span>
                                     </HeaderTh>
                                 </tr>
@@ -174,7 +182,7 @@ const ProductDetailTableBody = (props) => {
                         </table>
                     </TableContainer>
 
-                    <TableContainer>
+                    <TableContainer className="large-table">
                         <table className="table table-sm" style={{ tableLayout: 'fixed', marginBottom: '0', backgroundColor: 'white' }}>
                             <thead>
                                 <tr>
@@ -187,26 +195,11 @@ const ProductDetailTableBody = (props) => {
                                     <HeaderTh className="fixed-header fixed-header" scope="col">
                                         <span>노스노스 고유코드</span>
                                     </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="100">
+                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
                                         <span>가격</span>
                                     </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="100">
+                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
                                         <span>재고</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>상태</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>메모</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>색상</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>CNY</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>KRW</span>
                                     </HeaderTh>
                                 </tr>
                             </thead>
@@ -228,6 +221,33 @@ const ProductDetailTableBody = (props) => {
                                         <DetailTd className="col">
                                             <span>{props.selectedOption.stockUnit}</span>
                                         </DetailTd>
+                                    </DetailTr>
+                                }
+                            </tbody>
+                        </table>
+                        <table className="table table-sm" style={{ tableLayout: 'fixed', marginBottom: '0', backgroundColor: 'white' }}>
+                            <thead>
+                                <tr>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>상태</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>메모</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>색상</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
+                                        <span>CNY</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
+                                        <span>KRW</span>
+                                    </HeaderTh>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {props.selectedOption &&
+                                    <DetailTr>
                                         <DetailTd className="col">
                                             <span>{props.selectedOption.status}</span>
                                         </DetailTd>

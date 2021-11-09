@@ -453,7 +453,7 @@ const ProductManageMain = () => {
                             alert('상품 내품수량을 한번더 확인해 주세요.')
                             return false;
                         }
-
+                        
                         if (productModifyData.defaultWeight == '' || productModifyData.defaultWeight == null || productModifyData.defaultWeight == undefined) {
                             alert('상품 무게를 한번더 확인해 주세요.')
                             return false;
