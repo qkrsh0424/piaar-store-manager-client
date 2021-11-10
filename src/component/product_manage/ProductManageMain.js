@@ -434,30 +434,30 @@ const ProductManageMain = () => {
                             return false;
                         }
 
-                        if (productModifyData.defaultWidth == '' || productModifyData.defaultWidth == null || productModifyData.defaultWidth == undefined) {
-                            alert('상품 가로 사이즈를 한번더 확인해 주세요.')
-                            return false;
-                        }
+                        // if (productModifyData.defaultWidth == '' || productModifyData.defaultWidth == null || productModifyData.defaultWidth == undefined) {
+                        //     alert('상품 가로 사이즈를 한번더 확인해 주세요.')
+                        //     return false;
+                        // }
 
-                        if (productModifyData.defaultLength == '' || productModifyData.defaultLength == null || productModifyData.defaultLength == undefined) {
-                            alert('상품 세로 사이즈를 한번더 확인해 주세요.')
-                            return false;
-                        }
+                        // if (productModifyData.defaultLength == '' || productModifyData.defaultLength == null || productModifyData.defaultLength == undefined) {
+                        //     alert('상품 세로 사이즈를 한번더 확인해 주세요.')
+                        //     return false;
+                        // }
 
-                        if (productModifyData.defaultHeight == '' || productModifyData.defaultHeight == null || productModifyData.defaultHeight == undefined) {
-                            alert('상품 높이 사이즈를 한번더 확인해 주세요.')
-                            return false;
-                        }
+                        // if (productModifyData.defaultHeight == '' || productModifyData.defaultHeight == null || productModifyData.defaultHeight == undefined) {
+                        //     alert('상품 높이 사이즈를 한번더 확인해 주세요.')
+                        //     return false;
+                        // }
 
-                        if (productModifyData.defaultQuantity == '' || productModifyData.defaultQuantity == null || productModifyData.defaultQuantity == undefined) {
-                            alert('상품 내품수량을 한번더 확인해 주세요.')
-                            return false;
-                        }
+                        // if (productModifyData.defaultQuantity == '' || productModifyData.defaultQuantity == null || productModifyData.defaultQuantity == undefined) {
+                        //     alert('상품 내품수량을 한번더 확인해 주세요.')
+                        //     return false;
+                        // }
                         
-                        if (productModifyData.defaultWeight == '' || productModifyData.defaultWeight == null || productModifyData.defaultWeight == undefined) {
-                            alert('상품 무게를 한번더 확인해 주세요.')
-                            return false;
-                        }
+                        // if (productModifyData.defaultWeight == '' || productModifyData.defaultWeight == null || productModifyData.defaultWeight == undefined) {
+                        //     alert('상품 무게를 한번더 확인해 주세요.')
+                        //     return false;
+                        // }
 
                         return true;
                     },

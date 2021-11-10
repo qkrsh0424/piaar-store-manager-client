@@ -67,12 +67,12 @@ class ProductOption {
 class ProductDetail {
     constructor(productOptionId) {
         this.id = uuidv4();
-        this.detailWidth = ''
-        this.detailLength = ''
-        this.detailHeight = ''
-        this.detailQuantity = ''
-        this.detailWeight = ''
-        this.detailCbm = ''
+        this.detailWidth = 0;
+        this.detailLength = 0;
+        this.detailHeight = 0;
+        this.detailQuantity = 0;
+        this.detailWeight = 0;
+        this.detailCbm = 0;
         this.productOptionCid = null;
         this.productOptionId = productOptionId;
     }
@@ -82,12 +82,12 @@ class ProductDetail {
             id: this.id,
             detailWidth: this.detailWidth,
             detailLength: this.detailLength,
-            detailHegith: this.detailHeight,
+            detailHeight: this.detailHeight,
             detailQuantity: this.detailQuantity,
             detailWeight: this.detailWeight,
             detailCbm: this.detailCbm,
-            productDetailCid: this.productDetailCid,
-            productDetailId: this.productDetailId
+            productOptionCid: this.productOptionCid,
+            productOptionId: this.productOptionId
         }
     }
 }
@@ -187,7 +187,7 @@ const ProductDetailMain = (props) => {
     useEffect(() => {
         async function fetchInit() {
             if (!params.productCid) {
-                setDetailViewData(null);
+                setOptionViewData(null);
                 return;
             }
 
@@ -604,30 +604,30 @@ const ProductDetailMain = (props) => {
                             return false;
                         }
 
-                        if (productModifyData.defaultWidth == null || productModifyData.defaultWidth == undefined) {
-                            alert('상품 가로 사이즈를 한번더 확인해 주세요.')
-                            return false;
-                        }
+                        // if (productModifyData.defaultWidth == null || productModifyData.defaultWidth == undefined) {
+                        //     alert('상품 가로 사이즈를 한번더 확인해 주세요.')
+                        //     return false;
+                        // }
 
-                        if (productModifyData.defaultLength == null || productModifyData.defaultLength == undefined) {
-                            alert('상품 세로 사이즈를 한번더 확인해 주세요.')
-                            return false;
-                        }
+                        // if (productModifyData.defaultLength == null || productModifyData.defaultLength == undefined) {
+                        //     alert('상품 세로 사이즈를 한번더 확인해 주세요.')
+                        //     return false;
+                        // }
 
-                        if (productModifyData.defaultHeight == null || productModifyData.defaultHeight == undefined) {
-                            alert('상품 높이 사이즈를 한번더 확인해 주세요.')
-                            return false;
-                        }
+                        // if (productModifyData.defaultHeight == null || productModifyData.defaultHeight == undefined) {
+                        //     alert('상품 높이 사이즈를 한번더 확인해 주세요.')
+                        //     return false;
+                        // }
 
-                        if (productModifyData.defaultQuantity == null || productModifyData.defaultQuantity == undefined) {
-                            alert('상품 내품수량을 한번더 확인해 주세요.')
-                            return false;
-                        }
+                        // if (productModifyData.defaultQuantity == null || productModifyData.defaultQuantity == undefined) {
+                        //     alert('상품 내품수량을 한번더 확인해 주세요.')
+                        //     return false;
+                        // }
 
-                        if (productModifyData.defaultWeight == null || productModifyData.defaultWeight == undefined) {
-                            alert('상품 무게를 한번더 확인해 주세요.')
-                            return false;
-                        }
+                        // if (productModifyData.defaultWeight == null || productModifyData.defaultWeight == undefined) {
+                        //     alert('상품 무게를 한번더 확인해 주세요.')
+                        //     return false;
+                        // }
 
                         return true;
                     },
