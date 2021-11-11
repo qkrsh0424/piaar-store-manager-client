@@ -236,31 +236,6 @@ const CreateMain = (props) => {
                                 return false;
                             }
 
-                            // if (productListData[i].defaultWidth == '' || productListData[i].defaultWidth == null || productListData[i].defaultWidth == undefined) {
-                            //     alert('상품 가로 사이즈를 한번더 확인해 주세요.')
-                            //     return false;
-                            // }
-
-                            // if (productListData[i].defaultLength == '' || productListData[i].defaultLength == null || productListData[i].defaultLength == undefined) {
-                            //     alert('상품 세로 사이즈를 한번더 확인해 주세요.')
-                            //     return false;
-                            // }
-
-                            // if (productListData[i].defaultHeight == '' || productListData[i].defaultHeight == null || productListData[i].defaultHeight == undefined) {
-                            //     alert('상품 높이 사이즈를 한번더 확인해 주세요.')
-                            //     return false;
-                            // }
-
-                            // if (productListData[i].defaultQuantity == '' || productListData[i].defaultQuantity == null || productListData[i].defaultQuantity == undefined) {
-                            //     alert('상품 내품수량을 한번더 확인해 주세요.')
-                            //     return false;
-                            // }
-
-                            // if (productListData[i].defaultWeight == '' || productListData[i].defaultWeight == null || productListData[i].defaultWeight == undefined) {
-                            //     alert('상품 무게를 한번더 확인해 주세요.')
-                            //     return false;
-                            // }
-
                             for (let j = 0; j < productListData[i].productOptions.length; j++) {
                                 if (productListData[i].productOptions[j].defaultName == '' || productListData[i].productOptions[j].defaultName == null || productListData[i].productOptions[j].defaultName == undefined) {
                                     alert('옵션명을 한번더 확인해 주세요.')
