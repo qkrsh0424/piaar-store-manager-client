@@ -145,7 +145,19 @@ const ProductDetailTableBody = (props) => {
                                         <span>상품명</span>
                                     </HeaderTh>
                                     <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>관리상품명</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>메모</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
                                         <span>상품코드</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>제조번호</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>네이버 상품번호</span>
                                     </HeaderTh>
                                     <HeaderTh className="fixed-header fixed-header" scope="col">
                                         <span>HS_CODE</span>
@@ -153,8 +165,26 @@ const ProductDetailTableBody = (props) => {
                                     <HeaderTh className="fixed-header fixed-header" scope="col">
                                         <span>STYLE</span>
                                     </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>관세율</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>가로(cm)</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>세로(cm)</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>높이(cm)</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>내품수량</span>
+                                    </HeaderTh>
                                     <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
-                                        <span>재고관리여부</span>
+                                        <span>무게(kg)</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>재고관리 여부</span>
                                     </HeaderTh>
                                 </tr>
                             </thead>
@@ -165,13 +195,43 @@ const ProductDetailTableBody = (props) => {
                                             <span>{props.selectedProduct.defaultName}</span>
                                         </DetailTd>
                                         <DetailTd className="col">
+                                            <span>{props.selectedProduct.managementName}</span>
+                                        </DetailTd>
+                                        <DetailTd className="col">
+                                            <span>{props.selectedProduct.memo}</span>
+                                        </DetailTd>
+                                        <DetailTd className="col">
                                             <span>{props.selectedProduct.code}</span>
+                                        </DetailTd>
+                                        <DetailTd className="col">
+                                            <span>{props.selectedProduct.manufacturingCode}</span>
+                                        </DetailTd>
+                                        <DetailTd className="col">
+                                            <span>{props.selectedProduct.naverProductCode}</span>
                                         </DetailTd>
                                         <DetailTd className="col">
                                             <span>{props.selectedProduct.hsCode}</span>
                                         </DetailTd>
                                         <DetailTd className="col">
                                             <span>{props.selectedProduct.style}</span>
+                                        </DetailTd>
+                                        <DetailTd className="col">
+                                            <span>{props.selectedProduct.tariffRate}</span>
+                                        </DetailTd>
+                                        <DetailTd className="col">
+                                            <span>{props.selectedProduct.defaultWidth}</span>
+                                        </DetailTd>
+                                        <DetailTd className="col">
+                                            <span>{props.selectedProduct.defaultLength}</span>
+                                        </DetailTd>
+                                        <DetailTd className="col">
+                                            <span>{props.selectedProduct.defaultHeight}</span>
+                                        </DetailTd>
+                                        <DetailTd className="col">
+                                            <span>{props.selectedProduct.defaultQuantity}</span>
+                                        </DetailTd>
+                                        <DetailTd className="col">
+                                            <span>{props.selectedProduct.defaultWeight}</span>
                                         </DetailTd>
                                         <DetailTd className="col">
                                             <span>{props.selectedProduct.stockManagement ? "O" : "X"}</span>
@@ -190,16 +250,16 @@ const ProductDetailTableBody = (props) => {
                                         <span>옵션명</span>
                                     </HeaderTh>
                                     <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>옵션코드</span>
+                                        <span>관리옵션명</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>관리코드</span>
                                     </HeaderTh>
                                     <HeaderTh className="fixed-header fixed-header" scope="col">
                                         <span>노스노스 고유코드</span>
                                     </HeaderTh>
                                     <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
-                                        <span>가격</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
-                                        <span>재고</span>
+                                        <span>판매가</span>
                                     </HeaderTh>
                                 </tr>
                             </thead>
@@ -210,6 +270,9 @@ const ProductDetailTableBody = (props) => {
                                             <span>{props.selectedOption.defaultName}</span>
                                         </DetailTd>
                                         <DetailTd className="col">
+                                            <span>{props.selectedOption.managementName}</span>
+                                        </DetailTd>
+                                        <DetailTd className="col">
                                             <span>{props.selectedOption.code}</span>
                                         </DetailTd>
                                         <DetailTd className="col">
@@ -218,9 +281,6 @@ const ProductDetailTableBody = (props) => {
                                         <DetailTd className="col">
                                             <span>{props.selectedOption.salesPrice}</span>
                                         </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedOption.stockUnit}</span>
-                                        </DetailTd>
                                     </DetailTr>
                                 }
                             </tbody>
@@ -228,19 +288,22 @@ const ProductDetailTableBody = (props) => {
                         <table className="table table-sm" style={{ tableLayout: 'fixed', marginBottom: '0', backgroundColor: 'white' }}>
                             <thead>
                                 <tr>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>상태</span>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
+                                        <span>재고수량</span>
                                     </HeaderTh>
                                     <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>메모</span>
+                                        <span>현재상태</span>
+                                    </HeaderTh>
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
+                                        <span>비고</span>
                                     </HeaderTh>
                                     <HeaderTh className="fixed-header fixed-header" scope="col">
                                         <span>색상</span>
                                     </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
                                         <span>CNY</span>
                                     </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
+                                    <HeaderTh className="fixed-header fixed-header" scope="col">
                                         <span>KRW</span>
                                     </HeaderTh>
                                 </tr>

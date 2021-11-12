@@ -75,6 +75,11 @@ const SubmitBtn = styled.button`
     padding:8px;
 `;
 
+const DefaultInfo = styled.div`
+    color: red;
+    padding: 0 15px 15px 15px;
+`;
+
 const ProductDetailAddModal = (props) => {
 
     const [fullWidth, setFullWidth] = useState(true);
@@ -93,6 +98,7 @@ const ProductDetailAddModal = (props) => {
                             <GroupTitle>
                                 상세추가
                             </GroupTitle>
+                            <DefaultInfo>* 기본으로 주어지는 데이터는 상품에 등록된 기본값입니다.</DefaultInfo>
                             <NameGroup>
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">

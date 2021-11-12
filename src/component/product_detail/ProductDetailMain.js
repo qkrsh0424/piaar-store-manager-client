@@ -67,12 +67,12 @@ class ProductOption {
 class ProductDetail {
     constructor(productOptionId) {
         this.id = uuidv4();
-        this.detailWidth = 0;
-        this.detailLength = 0;
-        this.detailHeight = 0;
-        this.detailQuantity = 0;
-        this.detailWeight = 0;
-        this.detailCbm = 0;
+        this.detailWidth = '';
+        this.detailLength = '';
+        this.detailHeight = '';
+        this.detailQuantity = '';
+        this.detailWeight = '';
+        this.detailCbm = '';
         this.productOptionCid = null;
         this.productOptionId = productOptionId;
     }
@@ -309,12 +309,7 @@ const ProductDetailMain = (props) => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
-                        } else {
-                            alert('undefined error. : changeProductOne');
-                        }
+                        alert(res?.data?.memo);
                     })
             },
             deleteProductOptionOne: async function (optionCid) {
@@ -326,12 +321,7 @@ const ProductDetailMain = (props) => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
-                        } else {
-                            alert('undefined error. : deleteProductOptionOne');
-                        }
+                        alert(res?.data?.memo);
                     })
             },
             changeProductOne: async function () {
@@ -343,12 +333,7 @@ const ProductDetailMain = (props) => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
-                        } else {
-                            alert('undefined error. : changeProductOne');
-                        }
+                        alert(res?.data?.memo);
                     })
             },
             changeProductOptionOne: async function () {
@@ -360,12 +345,7 @@ const ProductDetailMain = (props) => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
-                        } else {
-                            alert('undefined error. : changeProductOptionOne');
-                        }
+                        alert(res?.data?.memo);
                     })
             },
             createProductOptionOne: async function () {
@@ -377,12 +357,7 @@ const ProductDetailMain = (props) => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
-                        } else {
-                            alert('undefined error. : changeProductOptionOne');
-                        }
+                        alert(res?.data?.memo);
                     })
                     ;
             },
@@ -407,12 +382,7 @@ const ProductDetailMain = (props) => {
                     })
                     .catch(err => {
                         let res = err.response;
-                        if (res.status == 403) {
-                            alert('권한이 없습니다.')
-                        } else {
-                            console.log(err);
-                            alert('undefined error. : postModifyOptionImageFileToCloud');
-                        }
+                        alert(res?.data?.memo);
 
                         __handleEventControl().backdropLoading().close();
                     })
@@ -426,12 +396,7 @@ const ProductDetailMain = (props) => {
                     })
                     .catch(err => {
                         let res = err.response;
-                        if (res.status == 403) {
-                            alert('권한이 없습니다.')
-                        } else {
-                            console.log(err);
-                            alert('undefined error. : uploadFilesToCloud');
-                        }
+                        alert(res?.data?.memo);
 
                         __handleEventControl().backdropLoading().close();
                     })
@@ -445,12 +410,7 @@ const ProductDetailMain = (props) => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
-                        } else {
-                            alert('undefined error. : createProductDetailOne');
-                        }
+                        alert(res?.data?.memo);
                     })
                     ;
             },
@@ -463,29 +423,19 @@ const ProductDetailMain = (props) => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
-                        } else {
-                            alert('undefined error. : changeProductDetailOne');
-                        }
+                        alert(res?.data?.memo);
                     })
             },
             deleteProductDetailOne: async function (detailCid) {
                 await productDetailDataConnect().deleteOne(detailCid)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            alert('해당 옵션이 정상적으로 삭제되었습니다.')
+                            alert('해당 상세 데이터가 정상적으로 삭제되었습니다.')
                         }
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
-                        } else {
-                            alert('undefined error. : deleteProductDetailOne');
-                        }
+                        alert(res?.data?.memo);
                     })
             },
         }
@@ -603,31 +553,6 @@ const ProductDetailMain = (props) => {
                             alert('관리상품명은 필수항목입니다.');
                             return false;
                         }
-
-                        // if (productModifyData.defaultWidth == null || productModifyData.defaultWidth == undefined) {
-                        //     alert('상품 가로 사이즈를 한번더 확인해 주세요.')
-                        //     return false;
-                        // }
-
-                        // if (productModifyData.defaultLength == null || productModifyData.defaultLength == undefined) {
-                        //     alert('상품 세로 사이즈를 한번더 확인해 주세요.')
-                        //     return false;
-                        // }
-
-                        // if (productModifyData.defaultHeight == null || productModifyData.defaultHeight == undefined) {
-                        //     alert('상품 높이 사이즈를 한번더 확인해 주세요.')
-                        //     return false;
-                        // }
-
-                        // if (productModifyData.defaultQuantity == null || productModifyData.defaultQuantity == undefined) {
-                        //     alert('상품 내품수량을 한번더 확인해 주세요.')
-                        //     return false;
-                        // }
-
-                        // if (productModifyData.defaultWeight == null || productModifyData.defaultWeight == undefined) {
-                        //     alert('상품 무게를 한번더 확인해 주세요.')
-                        //     return false;
-                        // }
 
                         return true;
                     },
@@ -765,7 +690,7 @@ const ProductDetailMain = (props) => {
                             return;
                         }
 
-                        if (window.confirm('정말로 삭제하시겠습니까?')) {
+                        if (window.confirm('옵션을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
                             await __handleDataConnect().deleteProductOptionOne(params.optionCid);
                         }
 
@@ -835,8 +760,14 @@ const ProductDetailMain = (props) => {
                             return;
                         }
 
+                        // detail 데이터를 기본값으로 설정.
                         let detail = new ProductDetail(selectedOption.id);
                         detail.productOptionCid = params.optionCid;
+                        detail.detailWidth = selectedProduct.defaultWidth;
+                        detail.detailLength = selectedProduct.defaultLength;
+                        detail.detailHeight = selectedProduct.defaultHeight;
+                        detail.detailQuantity = selectedProduct.defaultQuantity;
+                        detail.detailWeight = selectedProduct.defaultWeight;
 
                         setProductDetailAddData(detail);
                         setProductDetailAddModalOpen(true);

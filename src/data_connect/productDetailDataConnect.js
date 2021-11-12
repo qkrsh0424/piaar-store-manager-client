@@ -10,7 +10,6 @@ const productDetailDataConnect = () => {
             })
         },
         postOne: async function (productDetail) {
-            console.log(productDetail);
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-detail/one`, productDetail, {
                 withCredentials: true
             })
