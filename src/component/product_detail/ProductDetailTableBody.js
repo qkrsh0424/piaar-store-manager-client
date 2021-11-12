@@ -6,11 +6,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const InfoContainer = styled.div`
-    padding: 20px 30px;
+    padding: 20px 50px;
 	overflow: hidden;
     display: grid;
     height: auto;
-    background-color: rgba(122, 123, 218, 0.125);
+    /* background-color: rgba(122, 123, 218, 0.125); */
+    background: linear-gradient(to top right, #d3e1e5, #dce3f6);
     padding-bottom: 100px;
     
     & .fixed-header {
@@ -36,17 +37,19 @@ const InfoContainer = styled.div`
     }
 
     @media only screen and (max-width:576px){
-        font-size: 12px;
-        padding: 2px;
+        padding: 10px 40px;
+    }
+
+    @media only screen and (max-width:320px){
+        font-size: 10px;
+        padding: 15px;
     }
 `;
 
 const BodyWrapper = styled.div`
-    & .arrow-img {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+    min-height: 200px;
 
     & .data-hover-active {
         &:hover{
@@ -54,43 +57,6 @@ const BodyWrapper = styled.div`
             transition: .2s;
         }
     }
-`;
-
-const TableContainer = styled.div`
-    display: block;
-    margin: 10px;
-    min-height: 100px;
-
-    @media only screen and (max-width: 576px) {
-        min-height: 70px;
-    }
-`;
-
-const HeaderTh = styled.th`
-    vertical-align: middle !important;
-    text-align: center;
-
-    @media only screen and (max-width:576px){
-        font-weight: 400;
-        font-size: 10px;
-    }
-`;
-
-const DetailTd = styled.td`
-    border-right: 1px solid #a7a7a720;
-    height: auto;
-
-    vertical-align: middle !important;
-    text-align: center;
-`;
-
-const DetailTr = styled.tr`
-`;
-
-const ControlBox = styled.div`
-    float: right;
-    padding: 5px;
-    padding-right: 45px;
 `;
 
 const AddBtn = styled.button`
@@ -131,287 +97,379 @@ const DeleteBtn = styled.button`
     }
 `;
 
+const DataContainer = styled.div`
+    display: block;
+    padding: 10px;
+    min-height: 100px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 15px #b0b2b7;
+
+    @media only screen and (max-width: 576px) {
+        min-height: 70px;
+    }
+`;
+
+const ImageWrapper = styled.div`
+   width:100%;
+   height:auto;
+   padding: 10px 15px;
+
+    @media only screen and (max-width:992px){
+        width: 150px;
+    }
+
+    @media only screen and (max-width: 768px) {
+        width: 130px;
+    }
+
+   @media only screen and (max-width: 576px){
+        width: 80px;
+    }
+`;
+
+const ImageBox = styled.div`
+   position: relative;
+   padding-bottom: 100%; // 1:1
+`;
+ 
+const ImageEl = styled.img`
+   position: absolute;
+   object-fit: cover;
+   width: 100%;
+   height: 100%;
+   transition: .5s;
+   border:1px solid #f1f1f1;
+   border-radius: 8px;
+`;
+
+const DataBody = styled.div`
+    display: grid;    
+    grid-template-columns: 150px 85%;
+    grid-gap: 30px;
+    padding-bottom: 10px;
+
+    @media only screen and (max-width:992px){
+        grid-template-columns: 1fr;
+    }
+`;
+
+const GroupTitle = styled.div`
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding: 5px 0 10px 15px;
+
+    & .control-box {
+        float: right;
+        padding-right: 45px;
+    }
+
+    @media only screen and (max-width: 768px){
+        font-size: 15px;
+    }
+
+    @media only screen and (max-width:576px){
+        padding: 15px 0;
+        font-size: 14px;
+    }
+`;
+
+const DataHeader = styled.span`
+    display:inline-block;
+    padding: 5px;
+`;
+
+const DataText = styled.span`
+    color: #0085A5;
+    font-weight: 700;
+    display:inline-block;
+    padding: 5px;
+`;
+
+const DetailText = styled.span`
+    color: #0085A5;
+    font-weight: 700;
+    display:inline-block;
+    padding: 5px;
+    height: auto;
+`;
+
+const DataDiv = styled.div`
+    border-bottom: 1px solid #0085A522;
+    grid-template-columns: repeat(2, 1fr);
+    height: auto;
+`;
+
+const DataWrapper = styled.div`
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    font-size: 14px;
+
+    & .grid-span-2 {
+        grid-column: span 2;
+    }
+
+    & .grid-span-3 {
+        grid-column: span 3;
+    }
+
+    & .grid-span-4 {
+        grid-column: span 4;
+    }
+
+    & .grid-span-6 {
+        grid-column: span 6;
+    }
+
+    @media only screen and (max-width: 768px){
+        display: block;
+    }
+
+    @media only screen and (max-width: 576px) {
+        font-size: 10px;
+    }
+`;
+
+const DetailWrapper = styled.div`
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-size: 14px;
+    border-bottom: 1px solid #0085A522;
+    text-align: center;
+    padding: 5px;
+
+    & .grid-span-2 {
+        grid-column: span 2;
+    }
+
+    @media only screen and (max-width:576px){
+        font-size: 10px;
+    }
+`;
+
 const ProductDetailTableBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
     return (
         <>
             <InfoContainer>
-                    <TableContainer>
-                        <table className="table table-sm" style={{ tableLayout: 'fixed', marginBottom: '0', backgroundColor: 'white' }}>
-                            <thead>
-                                <tr>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>상품명</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>관리상품명</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>메모</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>상품코드</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>제조번호</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>네이버 상품번호</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>HS_CODE</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>STYLE</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>관세율</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>가로(cm)</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>세로(cm)</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>높이(cm)</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>내품수량</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
-                                        <span>무게(kg)</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>재고관리 여부</span>
-                                    </HeaderTh>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {props.selectedProduct &&
-                                    <DetailTr>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.defaultName}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.managementName}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.memo}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.code}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.manufacturingCode}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.naverProductCode}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.hsCode}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.style}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.tariffRate}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.defaultWidth}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.defaultLength}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.defaultHeight}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.defaultQuantity}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.defaultWeight}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedProduct.stockManagement ? "O" : "X"}</span>
-                                        </DetailTd>
-                                    </DetailTr>
-                                }
-                            </tbody>
-                        </table>
-                    </TableContainer>
-
-                    <TableContainer className="large-table">
-                        <table className="table table-sm" style={{ tableLayout: 'fixed', marginBottom: '0', backgroundColor: 'white' }}>
-                            <thead>
-                                <tr>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>옵션명</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>관리옵션명</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>관리코드</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>노스노스 고유코드</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
-                                        <span>판매가</span>
-                                    </HeaderTh>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {props.selectedOption &&
-                                    <DetailTr>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedOption.defaultName}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedOption.managementName}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedOption.code}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedOption.nosUniqueCode}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedOption.salesPrice}</span>
-                                        </DetailTd>
-                                    </DetailTr>
-                                }
-                            </tbody>
-                        </table>
-                        <table className="table table-sm" style={{ tableLayout: 'fixed', marginBottom: '0', backgroundColor: 'white' }}>
-                            <thead>
-                                <tr>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col" width="10%">
-                                        <span>재고수량</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>현재상태</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>비고</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>색상</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>CNY</span>
-                                    </HeaderTh>
-                                    <HeaderTh className="fixed-header fixed-header" scope="col">
-                                        <span>KRW</span>
-                                    </HeaderTh>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {props.selectedOption &&
-                                    <DetailTr>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedOption.status}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedOption.memo}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedOption.color}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedOption.unitCny}</span>
-                                        </DetailTd>
-                                        <DetailTd className="col">
-                                            <span>{props.selectedOption.unitKrw}</span>
-                                        </DetailTd>
-                                    </DetailTr>
-                                }
-                            </tbody>
-                        </table>
-                    </TableContainer>
+                <DataContainer>
+                    <BodyWrapper>
+                        <GroupTitle>상품</GroupTitle>
+                        {props.selectedProduct &&
+                            <DataBody>
+                                <ImageWrapper>
+                                    <ImageBox>
+                                        {props.selectedProduct.imageUrl ?
+                                            <ImageEl src={props.selectedProduct.imageUrl} title={props.selectedProduct.imageFileName} />
+                                            :
+                                            <ImageEl src='/images/icon/no-image.jpg' title='no-image' />
+                                        }
+                                    </ImageBox>
+                                </ImageWrapper>
+                                <DataWrapper>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>상품명 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.defaultName}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>관리 상품명 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.managementName}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>상품코드 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.code}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>제조번호 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.manufacturingCode}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>네이버 상품코드 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.naverProductCode}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>HS_CODE :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.hsCode}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-3">
+                                        <DataHeader>STYLE :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.style}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-3">
+                                        <DataHeader>관세율 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.tariffRate}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>가로(cm) :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.defaultWidth}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>세로(cm) :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.defaultLength}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>높이(cm) :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.defaultHeight}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>내품수량(ea) :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.defaultQuantity}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>무게(kg) :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.defaultWeight}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>재고관리여부 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.stockManagement ? "O" : "X"}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-6">
+                                        <DataHeader>메모 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedProduct.memo}</DataText>
+                                    </DataDiv>
+                                </DataWrapper>
+                            </DataBody>
+                        }
+                    </BodyWrapper>
 
                     <BodyWrapper>
-                        <ControlBox>
-                            <span>
-                                <AddBtn
-                                    type='button'
-                                    onClick={() => props.__handleEventControl().productDetail().addModalOpen()}
-                                ><AddIcon /></AddBtn>
-                            </span>
-                            <span>
-                                <ModifyBtn
-                                    type='button'
-                                onClick={() => props.__handleEventControl().productDetail().modifyModalOpen()}
-                                ><EditIcon /></ModifyBtn>
-                            </span>
-                            <span>
-                                <DeleteBtn
-                                    type='button'
-                                onClick={() => props.__handleEventControl().productDetail().deleteOne()}
-                                ><DeleteIcon /></DeleteBtn>
-                            </span>
-                        </ControlBox>
-                        <TableContainer>
-                            <table className="table table-sm" style={{ tableLayout: 'fixed', marginBottom: '0', backgroundColor: 'white', marginTop: '5px' }}>
-                                <thead>
-                                    <tr>
-                                        <HeaderTh className="fixed-header fixed-header" scope="col">
-                                            <span>가로(cm)</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixed-header fixed-header" scope="col">
-                                            <span>세로(cm)</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixed-header fixed-header" scope="col">
-                                            <span>높이(cm)</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixed-header fixed-header" scope="col">
-                                            <span>내품수량(ea)</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixed-header fixed-header" scope="col">
-                                            <span>무게(kg)</span>
-                                        </HeaderTh>
-                                        <HeaderTh className="fixed-header fixed-header" scope="col">
-                                            <span>CBM</span>
-                                        </HeaderTh>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {props.detailViewData?.map((r, productDetailIdx) => {
-                                        return (
-                                            <DetailTr
-                                                key={'product_detail_idx' + productDetailIdx}
-                                                className={props.params.detailCid === r.cid.toString() ? `detail-list-active` : '' || `data-hover-active`}
-                                                onClick={() => props.__handleEventControl().productViewData().changeRouterByDetail(r.cid)}
-                                            >
-                                                <DetailTd className="col">
-                                                    <span>{r.detailWidth}</span>
-                                                </DetailTd>
-                                                <DetailTd className="col">
-                                                    <span>{r.detailLength}</span>
-                                                </DetailTd>
-                                                <DetailTd className="col">
-                                                    <span>{r.detailHeight}</span>
-                                                </DetailTd>
-                                                <DetailTd className="col">
-                                                    <span>{r.detailQuantity}</span>
-                                                </DetailTd>
-                                                <DetailTd className="col">
-                                                    <span>{r.detailWeight}</span>
-                                                </DetailTd>
-                                                <DetailTd className="col">
-                                                    <span>{r.detailCbm}</span>
-                                                </DetailTd>
-                                            </DetailTr>
-                                        )
-                                    })
-                                    }
-                                </tbody>
-                            </table>
-                        </TableContainer>
+                        <GroupTitle>옵션</GroupTitle>
+                        {props.selectedOption &&
+                            <DataBody>
+                                <ImageWrapper>
+                                    <ImageBox>
+                                        {props.selectedOption.imageUrl ?
+                                            <ImageEl src={props.selectedOption.imageUrl} title={props.selectedOption.imageFileName} />
+                                            :
+                                            <ImageEl src='/images/icon/no-image.jpg' title='no-image' />
+                                        }
+                                    </ImageBox>
+                                </ImageWrapper>
+                                <DataWrapper>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>옵션명 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedOption.defaultName}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>관리 옵션명 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedOption.managementName}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>관리코드 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedOption.code}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>노스노스 고유코드 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedOption.nosUniqueCode}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>판매가 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedOption.salesPrice}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>재고수량 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedOption.stockUnit}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>색상 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedOption.color}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>CNY :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedOption.unitCny}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-2">
+                                        <DataHeader>KRW :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedOption.unitKrw}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-6">
+                                        <DataHeader>현재상태 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedOption.status}</DataText>
+                                    </DataDiv>
+                                    <DataDiv className="grid-span-6">
+                                        <DataHeader>비고 :</DataHeader>
+                                        <DataText className="data-info-text">{props.selectedOption.memo}</DataText>
+                                    </DataDiv>
+                                </DataWrapper>
+                            </DataBody>
+                        }
                     </BodyWrapper>
-                </InfoContainer>
+                    
+                    <BodyWrapper>
+                        <GroupTitle>상세
+                            <div className="control-box">
+                                <span>
+                                    <AddBtn
+                                        type='button'
+                                        onClick={() => props.__handleEventControl().productDetail().addModalOpen()}
+                                    ><AddIcon /></AddBtn>
+                                </span>
+                                <span>
+                                    <ModifyBtn
+                                        type='button'
+                                        onClick={() => props.__handleEventControl().productDetail().modifyModalOpen()}
+                                    ><EditIcon /></ModifyBtn>
+                                </span>
+                                <span>
+                                    <DeleteBtn
+                                        type='button'
+                                        onClick={() => props.__handleEventControl().productDetail().deleteOne()}
+                                    ><DeleteIcon /></DeleteBtn>
+                                </span>
+                            </div>
+                        </GroupTitle>
+                        <DetailWrapper>
+                            <div>
+                                <DataHeader>가로(cm)</DataHeader>
+                            </div>
+                            <div>
+                                <DataHeader>세로(cm)</DataHeader>
+                            </div>
+                            <div>
+                                <DataHeader>높이(cm)</DataHeader>
+                            </div>
+                            <div>
+                                <DataHeader>내품수량(ea)</DataHeader>
+                            </div>
+                            <div>
+                                <DataHeader>무게(kg)</DataHeader>
+                            </div>
+                            <div className="grid-span-2">
+                                <DataHeader>CBM</DataHeader>
+                            </div>
+                        </DetailWrapper>
+                        {props.detailViewData?.map((r, productDetailIdx) => {
+                            return (
+                                <DetailWrapper
+                                    key={'product_detail_idx' + productDetailIdx}
+                                    className={props.params.detailCid === r.cid.toString() ? `detail-list-active` : '' || `data-hover-active`}
+                                    onClick={() => props.__handleEventControl().productViewData().changeRouterByDetail(r.cid)}
+                                >
+                                    <div>
+                                        <DetailText className="data-info-text">{r.detailWidth}</DetailText>
+                                    </div>
+                                    <div>
+                                        <DetailText className="data-info-text">{r.detailLength}</DetailText>
+                                    </div>
+                                    <div>
+                                        <DetailText className="data-info-text">{r.detailHeight}</DetailText>
+                                    </div>
+                                    <div>
+                                        <DetailText className="data-info-text">{r.detailQuantity}</DetailText>
+                                    </div>
+                                    <div>
+                                        <DetailText className="data-info-text">{r.detailWeight}</DetailText>
+                                    </div>
+                                    <div className="grid-span-2">
+                                        <DetailText className="data-info-text">{r.detailCbm}</DetailText>
+                                    </div>
+                                </DetailWrapper>
+                            )
+                        })}
+                    </BodyWrapper>
+                </DataContainer>
+            </InfoContainer>
         </>
     )
 }

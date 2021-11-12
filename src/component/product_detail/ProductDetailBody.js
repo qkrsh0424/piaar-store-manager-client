@@ -10,6 +10,7 @@ import { withRouter } from 'react-router';
 const Container = styled.div`
     height:auto;
     background-color: rgba(122, 123, 218, 0.125);
+    background: linear-gradient(to bottom right, #d3e1e5, #dce3f6);
 
     & .info-table {
         display: grid;
@@ -134,8 +135,9 @@ const DataBody = styled.div`
     height: 500px;
     overflow: scroll;
     background-color: white;
-    border-radius: 5px;
+    border-radius: 10px;
     margin: 0 auto;
+    box-shadow: 2px 2px 15px #b0b2b799;
 
     & .product-btn-active{
         background: #9bb6d1DD;
