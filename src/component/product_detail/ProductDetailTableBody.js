@@ -145,7 +145,7 @@ const ImageEl = styled.img`
 
 const DataBody = styled.div`
     display: grid;    
-    grid-template-columns: 150px 85%;
+    grid-template-columns: 150px 80%;
     grid-gap: 30px;
     padding-bottom: 10px;
 
@@ -183,7 +183,7 @@ const DataText = styled.span`
     color: #0085A5;
     font-weight: 700;
     display:inline-block;
-    padding: 5px;
+    padding: 5px;  
 `;
 
 const DetailText = styled.span`
