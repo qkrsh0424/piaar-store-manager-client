@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import { useHistory } from 'react-router';
 
 // handler
-import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD } from '../../../handler/dateHandler';
+import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
 
 // data connect
 import { deliveryReadyCoupangDataConnect } from '../../../data_connect/deliveryReadyCoupangDataConnect';
@@ -266,7 +266,7 @@ const DeliveryReadyViewMain = () => {
                         const link = document.createElement('a');
                         link.href = url;
 
-                        let date = dateToYYMMDD(new Date());
+                        let date = dateToYYMMDDhhmmss(new Date());
 
                         link.setAttribute('download', '[' + date + ']한산 발주서양식_쿠팡.xlsx');
                         document.body.appendChild(link);
@@ -292,7 +292,7 @@ const DeliveryReadyViewMain = () => {
                         const link = document.createElement('a');
                         link.href = url;
 
-                        let date = dateToYYMMDD(new Date());
+                        let date = dateToYYMMDDhhmmss(new Date());
 
                         link.setAttribute('download', '[' + date + ']테일로 발주서양식_쿠팡.xlsx');
                         document.body.appendChild(link);
