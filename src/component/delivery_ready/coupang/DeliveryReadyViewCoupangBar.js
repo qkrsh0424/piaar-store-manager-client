@@ -149,6 +149,7 @@ const DeliveryReadyViewCoupangBar = (props) => {
                         <FormBox>
                             <DownloadButton type="button" onClick={(e) => props.__handleEventControl().downloadOrderFormData().hansanFormDownload(e)}>한산 발주서 다운</DownloadButton>
                             <DownloadButton type="button" onClick={(e) => props.__handleEventControl().downloadOrderFormData().tailoFormDownload(e)}>테일로 발주서 다운</DownloadButton>
+                            <DownloadButton type="button" onClick={(e) => props.__handleEventControl().downloadOrderFormData().lotteFormDownload(e)}>롯데 발주서 다운</DownloadButton>
                         </FormBox>
                         <FormBox>
                             <StoreInfoText type="text" name="storeName" placeholder="스토어명" onChange={(e) => props.__handleEventControl().storeInfo().modifyStoreNameOnChangeInputValue(e)} value={props.storeInfoData.storeName} required></StoreInfoText>

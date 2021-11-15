@@ -303,6 +303,32 @@ const DeliveryReadyViewMain = (props) => {
                         console.log(err);
                     });
             },
+            downloadLotteOrderForm: async function (data, sender, senderContact1) {
+                data.map(r => {
+                    r.sender = sender;
+                    r.senderContact1 = senderContact1;
+
+                    return r;
+                })
+
+                await deliveryReadyNaverDataConnect().downloadLotteOrderForm(data)
+                    .then(res => {
+                        const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
+                        const link = document.createElement('a');
+                        link.href = url;
+
+                        let date = dateToYYMMDDhhmmss(new Date());
+
+                        link.setAttribute('download', '[' + date + ']롯데 발주서양식_네이버.xlsx');
+                        document.body.appendChild(link);
+                        link.click();
+
+                        setUnreleaseCheckedOrderList([]);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            },
             downloadNaverExcelOrderForm: async function (data) {
                 await deliveryReadyNaverDataConnect().downloadNaverExcelOrderForm(data)
                     .then(res => {
@@ -740,6 +766,34 @@ const DeliveryReadyViewMain = (props) => {
                         if (downloadData.length > 0) {
                             setBackdropLoading(true);
                             await __handleDataConnect().downloadTailoOrderForm(downloadData, storeInfoData.storeName, storeInfoData.storeContact);
+                            setBackdropLoading(false);
+
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                        }
+                        else {
+                            alert("선택된 데이터가 없습니다.");
+                        }
+                    },
+                    lotteFormDownload: async function (e) {
+                        e.preventDefault();
+
+                        let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
+                        let checkedReleaseData = __handleEventControl().releaseCheckedOrderList().getCheckedData();
+
+                        let downloadData = [
+                            ...checkedReleaseData,
+                            ...checkedUnreleaseData
+                        ]
+
+                        if(!storeInfoData.storeName || !storeInfoData.storeContact){
+                            alert('스토어명과 스토어 전화번호를 모두 입력해 주세요.')
+                            return;
+                        };
+
+                        if (downloadData.length > 0) {
+                            setBackdropLoading(true);
+                            await __handleDataConnect().downloadLotteOrderForm(downloadData, storeInfoData.storeName, storeInfoData.storeContact);
                             setBackdropLoading(false);
 
                             __handleDataConnect().getDeliveryReadyUnreleasedData();

@@ -96,6 +96,12 @@ const deliveryReadyCoupangDataConnect = () => {
                 withCredentials:true
             })
         },
+        downloadLotteOrderForm: async function (data) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/download/lotte`, data, {
+                responseType: 'blob',
+                withCredentials:true
+            })
+        },
         downloadCoupangExcelOrderForm: async function (data) {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/download/excel`, data, {
                 responseType: 'blob',
