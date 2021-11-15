@@ -6,7 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const InfoContainer = styled.div`
-    padding: 20px 50px;
+    padding: 20px 3.2%;
 	overflow: hidden;
     display: grid;
     height: auto;
@@ -25,13 +25,12 @@ const InfoContainer = styled.div`
         min-height: 130px;
     }
 
-    @media only screen and (max-width:576px){
-        padding: 8%;
+    & .detail-table {
+        border-bottom: none;
     }
 
-    @media only screen and (max-width:320px){
-        font-size: 10px;
-        padding: 10%;
+    @media only screen and (max-width: 992px) {
+        padding: 20px 35px;
     }
 `;
 
@@ -60,6 +59,10 @@ const BodyWrapper = styled.div`
     & .detail-header {
         border-bottom : 1px solid #eee;
     }
+`;
+
+const ControlBox = styled.div`
+    float: right;
 `;
 
 const AddBtn = styled.button`
@@ -162,11 +165,6 @@ const GroupTitle = styled.div`
     font-weight: 700;
     padding: 5px 0 10px 15px;
 
-    & .control-box {
-        float: right;
-        padding-right: 30px;
-    }
-
     @media only screen and (max-width: 768px){
         font-size: 15px;
     }
@@ -202,14 +200,6 @@ const DetailText = styled.span`
 
 const DataDiv = styled.div`
     border-bottom: 1px solid #0085A522;
-    overflow:scroll;
-    min-height: 27px;
-    max-height: 27px;
-
-    @media only screen and (max-width:576px){
-        min-height: 20px;
-        max-height: 20px;
-    }
 `;
 
 const DataWrapper = styled.div`
@@ -409,9 +399,9 @@ const ProductDetailTableBody = (props) => {
                         }
                     </BodyWrapper>
                     
-                    <BodyWrapper>
+                    <BodyWrapper className="detail-table">
                         <GroupTitle>상세
-                            <div className="control-box">
+                            <ControlBox>
                                 <span>
                                     <AddBtn
                                         type='button'
@@ -430,7 +420,7 @@ const ProductDetailTableBody = (props) => {
                                         onClick={() => props.__handleEventControl().productDetail().deleteOne()}
                                     ><DeleteIcon /></DeleteBtn>
                                 </span>
-                            </div>
+                            </ControlBox>
                         </GroupTitle>
                         <DetailWrapper className="detail-header">
                             <div>

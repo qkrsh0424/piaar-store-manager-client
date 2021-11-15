@@ -19,6 +19,14 @@ const Container = styled.div`
 
 const CategoryContainer = styled.div`
     padding: 30px 50px 0px 50px;
+
+    @media only screen and (max-width: 768px) {
+        padding: 4%;
+    }
+
+    @media only screen and (max-width: 576px) {
+        padding: 2% 7%;
+    }
 `;
 
 const DataContainer = styled.div`
@@ -182,7 +190,7 @@ const ArrowSpan = styled.div`
 const ControlBox = styled.div`
     float: right;
     padding: 5px;
-    padding-right: 45px;
+    padding-right: 7%;
 `;
 
 const AddBtn = styled.button`
