@@ -101,7 +101,6 @@ const ProductDetailMain = (props) => {
     const [optionViewData, setOptionViewData] = useState([]);
     const [detailViewData, setDetailViewData] = useState([]);
 
-    
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [selectedOption, setSelectedOption] = useState(null);
     const [selectedDetail, setSelectedDetail] = useState(null);
@@ -162,7 +161,7 @@ const ProductDetailMain = (props) => {
 
             // category Cid와 매칭되는 product 가져오기
             if (params.categoryCid === '4') {
-                // 전체조회
+                // '전체조회'
                 await __handleDataConnect().searchProductList();
             }
             else await __handleDataConnect().searchProductListByCategory(params.categoryCid);
@@ -443,7 +442,7 @@ const ProductDetailMain = (props) => {
 
     const __handleEventControl = () => {
         return {
-            productViewData: function () {
+            viewData: function () {
                 return {
                     changeRouterByCategory: function (categoryCid) {
                         delete params.categoryCid;

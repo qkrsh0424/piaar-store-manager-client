@@ -9,7 +9,6 @@ import { withRouter } from 'react-router';
 
 const Container = styled.div`
     height:auto;
-    background-color: rgba(122, 123, 218, 0.125);
     background: linear-gradient(to bottom right, #d3e1e5, #dce3f6);
 
     & .info-table {
@@ -259,13 +258,13 @@ const ProductDetailBody = (props) => {
                         <CategoryGroup className='mb-3'>
                             <CategorySelectBtn key={4} type='button'
                                 className={props.params.categoryCid === '4' ? `category-btn-active` : '' || 'non-category'}
-                                onClick={() => props.__handleEventControl().productViewData().changeRouterByCategory(4)}
+                                onClick={() => props.__handleEventControl().viewData().changeRouterByCategory(4)}
                             >전체조회</CategorySelectBtn>
                             {props.categoryListData?.map((r) => {
                                 return (
                                     <CategorySelectBtn key={r.cid} type='button'
                                         className={props.params.categoryCid === r.cid.toString() ? `category-btn-active` : ''}
-                                        onClick={() => props.__handleEventControl().productViewData().changeRouterByCategory(r.cid)}
+                                        onClick={() => props.__handleEventControl().viewData().changeRouterByCategory(r.cid)}
                                     >{r.name}</CategorySelectBtn>
                                 )
                             })}
@@ -312,7 +311,7 @@ const ProductDetailBody = (props) => {
                                         <div
                                             key={'product_info_idx' + index}
                                             className={props.params.productCid === r.cid.toString() ? `product-btn-active` : '' || `data-hover-active`}
-                                            onClick={() => props.__handleEventControl().productViewData().changeRouterByProduct(r.cid)}
+                                            onClick={() => props.__handleEventControl().viewData().changeRouterByProduct(r.cid)}
                                         >
                                             <ItemContainer>
                                                 <ItemData>
@@ -375,7 +374,7 @@ const ProductDetailBody = (props) => {
                                         <div
                                             key={'option_info_idx' + index}
                                             className={props.params.optionCid === r.cid.toString() ? `product-btn-active` : '' || `data-hover-active`}
-                                            onClick={() => props.__handleEventControl().productViewData().changeRouterByOption(r.cid)}
+                                            onClick={() => props.__handleEventControl().viewData().changeRouterByOption(r.cid)}
                                         >
                                             <ItemContainer>
                                                 <ItemData>

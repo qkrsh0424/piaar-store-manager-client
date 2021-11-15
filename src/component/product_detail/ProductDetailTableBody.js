@@ -10,7 +10,6 @@ const InfoContainer = styled.div`
 	overflow: hidden;
     display: grid;
     height: auto;
-    /* background-color: rgba(122, 123, 218, 0.125); */
     background: linear-gradient(to top right, #d3e1e5, #dce3f6);
     padding-bottom: 100px;
     
@@ -22,27 +21,17 @@ const InfoContainer = styled.div`
         padding: 2px;
     }
 
-    & .detail-list-active{
-        background: #9bb6d1DD;
-        color: white;
-        font-weight: 700;
-
-        &:hover{
-            background: #9bb6d1DD;
-        }
-    }
-
     & .large-table {
         min-height: 130px;
     }
 
     @media only screen and (max-width:576px){
-        padding: 10px 40px;
+        padding: 8%;
     }
 
     @media only screen and (max-width:320px){
         font-size: 10px;
-        padding: 15px;
+        padding: 10%;
     }
 `;
 
@@ -56,6 +45,20 @@ const BodyWrapper = styled.div`
             background:#9bb6d155;
             transition: .2s;
         }
+    }
+
+    & .detail-list-active{
+        background: #9bb6d1DD;
+        color: white;
+        font-weight: 700;
+
+        &:hover{
+            background: #9bb6d1DD;
+        }
+    }
+
+    & .detail-header {
+        border-bottom : 1px solid #eee;
     }
 `;
 
@@ -124,7 +127,7 @@ const ImageWrapper = styled.div`
     }
 
    @media only screen and (max-width: 576px){
-        width: 80px;
+        width: 110px;
     }
 `;
 
@@ -161,7 +164,7 @@ const GroupTitle = styled.div`
 
     & .control-box {
         float: right;
-        padding-right: 45px;
+        padding-right: 30px;
     }
 
     @media only screen and (max-width: 768px){
@@ -171,33 +174,42 @@ const GroupTitle = styled.div`
     @media only screen and (max-width:576px){
         padding: 15px 0;
         font-size: 14px;
+
+        & .control-box {
+            padding-right: 10px;
+        }
     }
 `;
 
-const DataHeader = styled.span`
-    display:inline-block;
+const DataHeader = styled.div`
+    display:inline;
     padding: 5px;
+    color: #4a4949;
 `;
 
-const DataText = styled.span`
+const DataText = styled.div`
     color: #0085A5;
     font-weight: 700;
-    display:inline-block;
-    padding: 5px;  
+    display:inline;
+    padding: 5px;
 `;
 
 const DetailText = styled.span`
-    color: #0085A5;
     font-weight: 700;
-    display:inline-block;
+    display:inline;
     padding: 5px;
-    height: auto;
 `;
 
 const DataDiv = styled.div`
     border-bottom: 1px solid #0085A522;
-    grid-template-columns: repeat(2, 1fr);
-    height: auto;
+    overflow:scroll;
+    min-height: 27px;
+    max-height: 27px;
+
+    @media only screen and (max-width:576px){
+        min-height: 20px;
+        max-height: 20px;
+    }
 `;
 
 const DataWrapper = styled.div`
@@ -237,6 +249,7 @@ const DetailWrapper = styled.div`
     border-bottom: 1px solid #0085A522;
     text-align: center;
     padding: 5px;
+    color: #0085A5;
 
     & .grid-span-2 {
         grid-column: span 2;
@@ -270,63 +283,63 @@ const ProductDetailTableBody = (props) => {
                                 <DataWrapper>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>상품명 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.defaultName}</DataText>
+                                        <DataText>{props.selectedProduct.defaultName}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>관리 상품명 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.managementName}</DataText>
+                                        <DataText>{props.selectedProduct.managementName}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>상품코드 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.code}</DataText>
+                                        <DataText>{props.selectedProduct.code}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>제조번호 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.manufacturingCode}</DataText>
+                                        <DataText>{props.selectedProduct.manufacturingCode}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>네이버 상품코드 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.naverProductCode}</DataText>
+                                        <DataText>{props.selectedProduct.naverProductCode}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>HS_CODE :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.hsCode}</DataText>
+                                        <DataText>{props.selectedProduct.hsCode}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-3">
                                         <DataHeader>STYLE :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.style}</DataText>
+                                        <DataText>{props.selectedProduct.style}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-3">
                                         <DataHeader>관세율 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.tariffRate}</DataText>
+                                        <DataText>{props.selectedProduct.tariffRate}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>가로(cm) :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.defaultWidth}</DataText>
+                                        <DataText>{props.selectedProduct.defaultWidth}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>세로(cm) :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.defaultLength}</DataText>
+                                        <DataText>{props.selectedProduct.defaultLength}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>높이(cm) :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.defaultHeight}</DataText>
+                                        <DataText>{props.selectedProduct.defaultHeight}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>내품수량(ea) :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.defaultQuantity}</DataText>
+                                        <DataText>{props.selectedProduct.defaultQuantity}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>무게(kg) :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.defaultWeight}</DataText>
+                                        <DataText>{props.selectedProduct.defaultWeight}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>재고관리여부 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.stockManagement ? "O" : "X"}</DataText>
+                                        <DataText>{props.selectedProduct.stockManagement ? "O" : "X"}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-6">
                                         <DataHeader>메모 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedProduct.memo}</DataText>
+                                        <DataText>{props.selectedProduct.memo}</DataText>
                                     </DataDiv>
                                 </DataWrapper>
                             </DataBody>
@@ -349,47 +362,47 @@ const ProductDetailTableBody = (props) => {
                                 <DataWrapper>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>옵션명 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedOption.defaultName}</DataText>
+                                        <DataText>{props.selectedOption.defaultName}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>관리 옵션명 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedOption.managementName}</DataText>
+                                        <DataText>{props.selectedOption.managementName}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>관리코드 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedOption.code}</DataText>
+                                        <DataText>{props.selectedOption.code}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>노스노스 고유코드 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedOption.nosUniqueCode}</DataText>
+                                        <DataText>{props.selectedOption.nosUniqueCode}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>판매가 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedOption.salesPrice}</DataText>
+                                        <DataText>{props.selectedOption.salesPrice}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>재고수량 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedOption.stockUnit}</DataText>
+                                        <DataText>{props.selectedOption.stockUnit}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>색상 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedOption.color}</DataText>
+                                        <DataText>{props.selectedOption.color}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>CNY :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedOption.unitCny}</DataText>
+                                        <DataText>{props.selectedOption.unitCny}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>KRW :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedOption.unitKrw}</DataText>
+                                        <DataText>{props.selectedOption.unitKrw}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-6">
                                         <DataHeader>현재상태 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedOption.status}</DataText>
+                                        <DataText>{props.selectedOption.status}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-6">
                                         <DataHeader>비고 :</DataHeader>
-                                        <DataText className="data-info-text">{props.selectedOption.memo}</DataText>
+                                        <DataText>{props.selectedOption.memo}</DataText>
                                     </DataDiv>
                                 </DataWrapper>
                             </DataBody>
@@ -419,7 +432,7 @@ const ProductDetailTableBody = (props) => {
                                 </span>
                             </div>
                         </GroupTitle>
-                        <DetailWrapper>
+                        <DetailWrapper className="detail-header">
                             <div>
                                 <DataHeader>가로(cm)</DataHeader>
                             </div>
@@ -444,25 +457,25 @@ const ProductDetailTableBody = (props) => {
                                 <DetailWrapper
                                     key={'product_detail_idx' + productDetailIdx}
                                     className={props.params.detailCid === r.cid.toString() ? `detail-list-active` : '' || `data-hover-active`}
-                                    onClick={() => props.__handleEventControl().productViewData().changeRouterByDetail(r.cid)}
+                                    onClick={() => props.__handleEventControl().viewData().changeRouterByDetail(r.cid)}
                                 >
                                     <div>
-                                        <DetailText className="data-info-text">{r.detailWidth}</DetailText>
+                                        <DetailText>{r.detailWidth}</DetailText>
                                     </div>
                                     <div>
-                                        <DetailText className="data-info-text">{r.detailLength}</DetailText>
+                                        <DetailText>{r.detailLength}</DetailText>
                                     </div>
                                     <div>
-                                        <DetailText className="data-info-text">{r.detailHeight}</DetailText>
+                                        <DetailText>{r.detailHeight}</DetailText>
                                     </div>
                                     <div>
-                                        <DetailText className="data-info-text">{r.detailQuantity}</DetailText>
+                                        <DetailText>{r.detailQuantity}</DetailText>
                                     </div>
                                     <div>
-                                        <DetailText className="data-info-text">{r.detailWeight}</DetailText>
+                                        <DetailText>{r.detailWeight}</DetailText>
                                     </div>
                                     <div className="grid-span-2">
-                                        <DetailText className="data-info-text">{r.detailCbm}</DetailText>
+                                        <DetailText>{r.detailCbm}</DetailText>
                                     </div>
                                 </DetailWrapper>
                             )
