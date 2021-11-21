@@ -93,7 +93,7 @@ const BodyWrapper = styled.div`
 
 const CategoryGroup = styled.div`
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     font-size: 1rem;
     padding:0 10px;
     column-gap: 5px;

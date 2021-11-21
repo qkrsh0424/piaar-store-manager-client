@@ -14,18 +14,24 @@ const Form = styled.form`
 `;
 
 const FormBox = styled.span`
-    @media only screen and (max-width:768px){
-        display: block;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+
+    @media only screen and (max-width:992px){
+        font-size: 14px;
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    @media only screen and (max-width:576px){
+        font-size: 12px;
     }
 `;
 
 const DownloadButton = styled.button`
     margin: 5px;
     border: 1px solid transparent;
-    font-size: 16px;
     padding: 8px;
     color: white;
-    width: 200px;
     border-radius: 3px;
     font-weight: bold;
     background-color: rgba(122, 146, 218, 0.88);
@@ -35,19 +41,8 @@ const DownloadButton = styled.button`
         cursor: pointer;
     }
 
-    @media only screen and (max-width:992px){
-        font-size: 14px;
-        width: 150px;
-        margin: 2px;
-    } 
-
-    @media only screen and (max-width:768px){
-        font-size: 14px;
-        width: 48%;
-    }
-
-    @media only screen and (max-width:578px){
-        font-size: 12px;
+    @media only screen and (max-width: 992px) {
+        padding: 5px;
     }
 `;
 
@@ -55,22 +50,6 @@ const StoreInfoText = styled.input`
     margin: 5px;
     border: 1px solid #a7a7a740;
     text-align: center;
-    padding: 5px 0;
-
-    @media only screen and (max-width:992px){
-        font-size: 14px;
-        width: 150px;
-        margin: 2px;
-    }
-    
-    @media only screen and (max-width:768px){
-        font-size: 14px;
-        width: 48%;
-    }
-
-    @media only screen and (max-width:578px){
-        font-size: 12px;
-    }
 `;
 
 const PageControlDiv = styled.div`
@@ -150,8 +129,6 @@ const DeliveryReadyViewCoupangBar = (props) => {
                             <DownloadButton type="button" onClick={(e) => props.__handleEventControl().downloadOrderFormData().hansanFormDownload(e)}>한산 발주서 다운</DownloadButton>
                             <DownloadButton type="button" onClick={(e) => props.__handleEventControl().downloadOrderFormData().tailoFormDownload(e)}>테일로 발주서 다운</DownloadButton>
                             <DownloadButton type="button" onClick={(e) => props.__handleEventControl().downloadOrderFormData().lotteFormDownload(e)}>롯데 발주서 다운</DownloadButton>
-                        </FormBox>
-                        <FormBox>
                             <StoreInfoText type="text" name="storeName" placeholder="스토어명" onChange={(e) => props.__handleEventControl().storeInfo().modifyStoreNameOnChangeInputValue(e)} value={props.storeInfoData.storeName} required></StoreInfoText>
                             <StoreInfoText type="text" name="storeContact" placeholder="스토어 전화번호" onChange={(e) => props.__handleEventControl().storeInfo().modifyStoreContactOnChangeInputValue(e)} value={props.storeInfoData.storeContact} required></StoreInfoText>
                         </FormBox>

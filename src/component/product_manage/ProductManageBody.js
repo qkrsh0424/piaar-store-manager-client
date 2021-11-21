@@ -96,6 +96,16 @@ const ReleaseBtn = styled.button`
     margin-left: 5px;
 `;
 
+const StockStatusBtn = styled.button`
+    padding:3px 8px;
+    background: #9fa0f1;
+    color:white;
+    border:1px solid #9fa0f1;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-left: 5px;
+`;
+
 const DeleteProductBtn = styled.button`
     padding:3px 8px;
     background: #ff5555;
@@ -267,14 +277,18 @@ const ProductManageBody = (props) => {
                                                                 type='button'
                                                                 onClick={(e) => props.__handleEventControl().productOption().deleteOne(e, product.product.id, option.id)}
                                                             >옵션삭제</DeleteBtn>
-                                                            <ReceiveBtn
+                                                            {/* <ReceiveBtn
                                                                 type='button'
                                                                 onClick={(e) => props.__handleEventControl().receive().receiveStatusModalOpen(e, product.product.id, option.id)}
                                                             >입고현황</ReceiveBtn>
                                                             <ReleaseBtn
                                                                 type='button'
                                                                 onClick={(e) => props.__handleEventControl().release().releaseStatusModalOpen(e, product.product.id, option.id)}
-                                                            >출고현황</ReleaseBtn>
+                                                            >출고현황</ReleaseBtn> */}
+                                                            <StockStatusBtn
+                                                                type='button'
+                                                                onClick={(e) => props.__handleEventControl().productOption().stockStatusModalOpen(e, product.product.id, option.id)}
+                                                            >입출고현황</StockStatusBtn>
                                                         </BodyTd>
                                                     </BodyTr>
                                                 )

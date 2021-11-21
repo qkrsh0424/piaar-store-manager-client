@@ -19,9 +19,11 @@ import ReleaseAddModal from './modal/ReleaseAddModal';
 import ReleaseStatusModal from './modal/ReleaseStatusModal';
 import ReceiveAddModal from './modal/ReceiveAddModal';
 import ReceiveStatusModal from './modal/ReceiveStatusModal';
+import StockStatusModal from './modal/StockStatusModal';
 import BackdropLoading from '../loading/BackdropLoading';
 import { formControlClasses } from '@mui/material';
 import { data } from 'jquery';
+import { subMilliseconds } from 'date-fns';
 
 class ProductOption {
     constructor(productId, optionDefaultName = '', optionManagementName = '', nosUniqueCode = '') {
@@ -131,6 +133,9 @@ const ProductManageMain = () => {
     const [receiveStatusModalOpen, setReceiveStatusModalOpen] = useState(false);
     const [receiveStatusData, setReceiveStatusData] = useState(null);
 
+    const [stockStatusModalOpen, setStockStatusModalOpen] = useState(false);
+    const [stockStatusData, setStockStatusData] = useState(null);
+
     const [backdropLoading, setBackdropLoading] = useState(false);
 
     useEffect(() => {
@@ -189,7 +194,8 @@ const ProductManageMain = () => {
                     .catch(err=>{
                         alert('undefined error.');
                     })
-            },searchReleaseStatusList: async function (productOptionCid) {
+            },
+            searchReleaseStatusList: async function (productOptionCid) {
                 await productReleaseDataConnect().searchList(productOptionCid)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
@@ -197,6 +203,17 @@ const ProductManageMain = () => {
                         }
                     })
                     .catch(err=>{
+                        alert('undefined error.')
+                    })
+            },
+            searchStockStatusList: async function (productOptionCid) {
+                await productOptionDataConnect().searchStockStatus(productOptionCid)
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            __handleEventControl().productOption().setStockStatusList(res.data.data);
+                        }
+                    })
+                    .catch(err => {
                         alert('undefined error.')
                     })
             },
@@ -632,6 +649,49 @@ const ProductManageMain = () => {
                     },
                     onClickImageButton: function (optionId) {
                         document.getElementById("i_pm_pom_uploader_" + optionId).click();
+                    },
+                    stockStatusModalOpen: async function (e, productId, optionId) {
+                        e.stopPropagation();
+                        let product = productListData.filter(r => r.product.id === productId)[0];
+                        let option = product.options.filter(r => r.id === optionId)[0];
+                        let optionCid = option.cid;
+
+                        await __handleDataConnect().searchStockStatusList(optionCid);
+
+                        setStockStatusModalOpen(true);
+                    },
+                    stockStatusModalClose: function () {
+                        setStockStatusModalOpen(false);
+                    },
+                    setStockStatusList: function (data) {
+                        // 입출고 데이터를 포함하는 배열 생성
+                        let sortedByDate = [...data.productRelease, ...data.productReceive];
+
+                        // 날짜 오름차순으로 정렬 - 재고 현황을 위해
+                        sortedByDate.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+
+                        // 재고현황 기록
+                        let sum = 0;
+                        sortedByDate = sortedByDate.map(r => {
+                            if (r.receiveUnit) {
+                                sum += r.receiveUnit;
+                                return {
+                                    ...r,
+                                    currentStock: sum
+                                }
+                            } else {
+                                sum -= r.releaseUnit;
+                                return {
+                                    ...r,
+                                    currentStock: sum
+                                }
+                            }
+                        });
+
+                        // 화면에는 최신 데이터부터 보여주도록 함.
+                        sortedByDate.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+                        setStockStatusData(sortedByDate);
                     }
                 }
             },
@@ -975,6 +1035,14 @@ const ProductManageMain = () => {
 
                     __handleEventControl={__handleEventControl}
                 ></ReceiveStatusModal>
+            }
+            {stockStatusModalOpen && stockStatusData &&
+                <StockStatusModal
+                    open={stockStatusModalOpen}
+                    stockStatusData={stockStatusData}
+
+                    __handleEventControl={__handleEventControl}
+                ></StockStatusModal>
             }
         </>
     );

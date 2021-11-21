@@ -28,6 +28,11 @@ const productOptionDataConnect = () => {
             return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product-option/one/${optionCid}`,{
                 withCredentials: true
             })
+        },
+        searchStockStatus: async function(optionCid) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/${optionCid}`, {
+                withCredentials: true
+            })
         }
     }
 }
