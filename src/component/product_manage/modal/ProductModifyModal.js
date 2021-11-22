@@ -43,7 +43,7 @@ const GroupTitle = styled.div`
 
 const CategoryGroup = styled.div`
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(${props => props.categorySize}, 1fr);
     font-size: 1rem;
     padding:0 10px;
     column-gap: 5px;
@@ -194,7 +194,7 @@ const ProductModifyModal = (props) => {
                     <form onSubmit={(e) => props.__handleEventControl().product().submitModifyData(e)}>
                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
                             <GroupTitle>카테고리 <i className="icon-must" aria-label="필수항목"></i></GroupTitle>
-                            <CategoryGroup className='mb-3'>
+                            <CategoryGroup className='mb-3' categorySize={props.categoryListData != null ? props.categoryListData.length : 0}>
                                 {props.categoryListData && props.categoryListData.map(r => {
                                     return (
                                         <CategorySelectBtn

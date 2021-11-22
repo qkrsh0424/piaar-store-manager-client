@@ -93,7 +93,7 @@ const BodyWrapper = styled.div`
 
 const CategoryGroup = styled.div`
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(${props => props.categorySize}, 1fr);
     font-size: 1rem;
     padding:0 10px;
     column-gap: 5px;
@@ -263,10 +263,10 @@ const ProductDetailBody = (props) => {
             {userRdx.isLoading === false &&
                 <Container>
                     <CategoryContainer>
-                        <CategoryGroup className='mb-3'>
-                            <CategorySelectBtn key={4} type='button'
-                                className={props.params.categoryCid === '4' ? `category-btn-active` : '' || 'non-category'}
-                                onClick={() => props.__handleEventControl().viewData().changeRouterByCategory(4)}
+                        <CategoryGroup className='mb-3' categorySize={props.categoryListData != null ? props.categoryListData.length+1 : 0}>
+                            <CategorySelectBtn key={0} type='button'
+                                className={props.params.categoryCid === '0' ? `category-btn-active` : '' || 'non-category'}
+                                onClick={() => props.__handleEventControl().viewData().changeRouterByCategory(0)}
                             >전체조회</CategorySelectBtn>
                             {props.categoryListData?.map((r) => {
                                 return (

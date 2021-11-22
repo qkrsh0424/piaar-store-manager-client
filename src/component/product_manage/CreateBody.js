@@ -226,7 +226,7 @@ const GroupTitle = styled.div`
 
 const CategoryGroup = styled.div`
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(${props => props.categorySize}, 1fr);
     font-size: 1rem;
     padding:0 10px;
     column-gap: 5px;
@@ -430,7 +430,7 @@ const CreateBody = (props) => {
                                     <BodyContainer>
                                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
                                             <GroupTitle>카테고리 <i className="icon-must" aria-label="필수항목"></i></GroupTitle>
-                                            <CategoryGroup className='mb-3'>
+                                            <CategoryGroup className='mb-3' categorySize={props.categoryList != null ? props.categoryList.length : 0}>
                                                 {props.categoryList && props.categoryList.map(r2 => {
                                                     return (
                                                         <CategorySelectBtn key={r2.cid} type='button' className={r.productCategoryCid === r2.cid ? `category-btn-active` : ''} onClick={() => { props.__handleEventControl().productListData().onChangeCategoryValue(r.id, r2.id) }}>{r2.name}</CategorySelectBtn>

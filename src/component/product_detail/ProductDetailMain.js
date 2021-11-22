@@ -160,7 +160,7 @@ const ProductDetailMain = (props) => {
             setSelectedDetail(null);
 
             // category Cid와 매칭되는 product 가져오기
-            if (params.categoryCid === '4') {
+            if (params.categoryCid === '0') {
                 // '전체조회'
                 await __handleDataConnect().searchProductList();
             }
