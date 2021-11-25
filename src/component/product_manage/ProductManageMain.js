@@ -689,7 +689,7 @@ const ProductManageMain = () => {
                         });
 
                         // 화면에는 최신 데이터부터 보여주도록 함.
-                        sortedByDate.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+                        sortedByDate.reverse();
 
                         setStockStatusData(sortedByDate);
                     }

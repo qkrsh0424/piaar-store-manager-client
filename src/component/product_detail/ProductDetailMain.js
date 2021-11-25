@@ -133,7 +133,9 @@ const ProductDetailMain = (props) => {
     // 데이터 생성, 수정, 삭제 시 즉시 반영
     useEffect(() => {
         if (dataChangedTrigger === true) {
-            if (params.categoryCid) {
+            if (params.categoryCid === '0') {
+                __handleDataConnect().searchProductList();
+            }else if(params.categoryCid) {
                 __handleDataConnect().searchProductListByCategory(params.categoryCid);
             }
 
