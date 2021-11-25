@@ -272,6 +272,9 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                             <span>*옵션명2</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
+                                            <span>비고</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
                                             <span>묶음배송번호</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
@@ -340,6 +343,9 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                                     </BodyTd>
                                                     <BodyTd className="col">
                                                         <span>{data.optionManagementName}</span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>{data.optionMemo}</span>
                                                     </BodyTd>
                                                     <BodyTd className="col">
                                                         <span>{data.deliveryReadyItem.shipmentCostBundleNumber}</span>
