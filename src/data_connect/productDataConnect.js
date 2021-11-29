@@ -75,7 +75,7 @@ const productDataConnect = () => {
 
             formData.append('files', e.target.files[0]);
 
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/file-upload/uploadFilesToCloud`, formData, {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/file-upload/cloud`, formData, {
                 headers: {
                     "content-types": "multipart/form-data"
                 },
