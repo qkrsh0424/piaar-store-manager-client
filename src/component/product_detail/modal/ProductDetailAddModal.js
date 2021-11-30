@@ -189,7 +189,7 @@ const ProductDetailAddModal = (props) => {
                         </BodyWrapper>
                         <BodyWrapper>
                             <SubmitBtnGroup className='clearfix'>
-                                <SubmitBtn type='submit'>상세추가</SubmitBtn>
+                                <SubmitBtn type='submit' disabled={props.isObjectSubmitted.detailAdd}>상세추가</SubmitBtn>
                             </SubmitBtnGroup>
                         </BodyWrapper>
                     </form>

@@ -97,6 +97,7 @@ const CreateMain = (props) => {
         new Product('단일상품', '단일상품').toJSON()
     ]);
     const [backdropLoading, setBackdropLoading] = useState(false);
+    const [isSubmit, setIsSubmit] = useState(false);
     
     useEffect(() => {
         async function fetchInit() {
@@ -124,6 +125,7 @@ const CreateMain = (props) => {
                     .then(res=>{
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             props.history.replace(props.location.state.prevUrl);
+                            setIsSubmit(false);
                         }
                     })
                     .catch(err=>{
@@ -215,7 +217,8 @@ const CreateMain = (props) => {
                     submit: async function (e) {
                         e.preventDefault();
 
-                        if(this.checkFormData()){
+                        if(this.checkFormData() && !isSubmit){
+                            setIsSubmit(true);
                             await __handleDataConnect().postCreateProductList();
                         }
                     },
@@ -449,6 +452,7 @@ const CreateMain = (props) => {
             <CreateBody
                 categoryList={categoryListSample}
                 productListData={productListData}
+                isSubmit={isSubmit}
 
                 __handleEventControl={__handleEventControl}
             ></CreateBody>

@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import { useHistory } from 'react-router';
+import { withRouter } from 'react-router';
 
 // handler
 import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
@@ -21,7 +21,7 @@ import DeliveryReadyReceiveMemoModal from '../modal/DeliveryReadyReceiveMemoModa
 // 한페이지에 보여지는 데이터
 const POSTS_PER_PAGE = 50;
 
-const DeliveryReadyViewMain = () => {
+const DeliveryReadyViewCoupnagMain = (props) => {
     const [unreleasedData, setUnreleasedData] = useState(null);
     const [releasedData, setReleasedData] = useState(null);
     const [unreleaseCheckedOrderList, setUnreleaseCheckedOrderList] = useState([]);
@@ -79,7 +79,11 @@ const DeliveryReadyViewMain = () => {
     const [deliveryReadyReceiveMemoModalOpen, setDeliveryReadyReceiveMemoModalOpen] = useState(false);
     const [releaseCompletedCancelMemo, setReleaseCompletedCancelMemo] = useState({ receiveMemo: ''});
 
-    let history = useHistory();
+    // 클릭 이벤트 여부
+    const [isObjectSubmitted, setIsObjectSubmitted] = useState({
+        reflectedUnit: false,
+        cancelReflectedUnit: false, 
+    });
 
     useEffect(() => {
         async function fetchInit() {
@@ -355,6 +359,10 @@ const DeliveryReadyViewMain = () => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                reflectedUnit: false
+                            });
                         }
                     })
                     .catch(err => {
@@ -368,6 +376,10 @@ const DeliveryReadyViewMain = () => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                cancelreflectedUnit: false
+                            });
                         }
                     })
                     .catch(err => {
@@ -569,7 +581,15 @@ const DeliveryReadyViewMain = () => {
                         let nonReflectedData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => !item.deliveryReadyItem.releaseCompleted);
             
                         if(window.confirm('선택 항목의 수량을 재고에 반영하시겠습니까?')) {
-                            await __handleDataConnect().reflectStockUnit(nonReflectedData, releaseCompletedMemo.releaseMemo);
+                            if(!isObjectSubmitted.reflectedUnit){
+                                setBackdropLoading(true);
+                                setIsObjectSubmitted({
+                                    ...isObjectSubmitted,
+                                    reflectedUnit: true
+                                });
+                                await __handleDataConnect().reflectStockUnit(nonReflectedData, releaseCompletedMemo.releaseMemo);
+                                setBackdropLoading(false);
+                            }
                         }
                         __handleEventControl().deliveryReadyReleaseMemo().close();
                     },
@@ -580,7 +600,15 @@ const DeliveryReadyViewMain = () => {
                         let reflectedData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => item.deliveryReadyItem.releaseCompleted);
 
                         if(window.confirm('반영된 재고수량을 취소하시겠습니까?')) {
-                            await __handleDataConnect().cancelReflectedStockUnit(reflectedData, releaseCompletedCancelMemo.receiveMemo);
+                            if(!isObjectSubmitted.cancelreflectedUnit){
+                                setBackdropLoading(true);
+                                setIsObjectSubmitted({
+                                    ...isObjectSubmitted,
+                                    cancelreflectedUnit: true
+                                });
+                                await __handleDataConnect().cancelReflectedStockUnit(reflectedData, releaseCompletedCancelMemo.receiveMemo);
+                                setBackdropLoading(false);
+                            }
                         }
                         __handleEventControl().deliveryReadyReceiveMemo().close();
                     } 
@@ -849,7 +877,7 @@ const DeliveryReadyViewMain = () => {
             movePage: function () {
                 return {
                     deliveryReadyUpload: async function () {
-                        history.push('/delivery-ready/coupang');
+                        props.history.replace('/delivery-ready/coupang');
                     }
                 }
             }
@@ -879,6 +907,7 @@ const DeliveryReadyViewMain = () => {
             <DeliveryReadyReleaseMemoModal
                 open={deliveryReadyReleaseMemoModalOpen}
                 releaseCompletedMemo={releaseCompletedMemo}
+                isObjectSubmitted={isObjectSubmitted}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReleaseMemoModal>
@@ -886,6 +915,7 @@ const DeliveryReadyViewMain = () => {
             <DeliveryReadyReceiveMemoModal
                 open={deliveryReadyReceiveMemoModalOpen}
                 releaseCompletedMemo={releaseCompletedCancelMemo}
+                isObjectSubmitted={isObjectSubmitted}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReceiveMemoModal>
@@ -917,4 +947,4 @@ const DeliveryReadyViewMain = () => {
     )
 }
 
-export default DeliveryReadyViewMain;
+export default withRouter(DeliveryReadyViewCoupnagMain);

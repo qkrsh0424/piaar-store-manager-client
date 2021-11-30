@@ -138,6 +138,12 @@ const ProductManageMain = () => {
 
     const [backdropLoading, setBackdropLoading] = useState(false);
 
+    const [isObjectSubmitted, setIsObjectSubmitted] = useState({
+        optionAdd: false,
+        releaseAdd: false,
+        receiveAdd: false
+    })
+
     useEffect(() => {
         async function fetchInit() {
             __handleDataConnect().searchProductListFj();
@@ -289,7 +295,11 @@ const ProductManageMain = () => {
                 await productOptionDataConnect().postOne(productOptionAddData)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            alert('해당 옵션이 정상적으로 추가되었습니다.')
+                            alert('해당 옵션이 정상적으로 추가되었습니다.');
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                optionAdd : false
+                            });
                         }
                     })
                     .catch(err => {
@@ -307,7 +317,11 @@ const ProductManageMain = () => {
                 await productReleaseDataConnect().postList(data)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            alert('출고등록 되었습니다.')
+                            alert('출고등록 되었습니다.');
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                releaseAdd: false
+                            })
                         }
                     })
                     .catch(err => {
@@ -325,7 +339,11 @@ const ProductManageMain = () => {
                 await productReceiveDataConnect().postList(data)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            alert('입고등록 되었습니다.')
+                            alert('입고등록 되었습니다.');
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                receiveAdd: false
+                            })
                         }
                     })
                     .catch(err => {
@@ -502,7 +520,12 @@ const ProductManageMain = () => {
                     },
                     submitAddData: async function (e) {
                         e.preventDefault();
-                        if (this.checkRequiredAddData()) {
+
+                        if (this.checkRequiredAddData() && !isObjectSubmitted.optionAdd) {
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                optionAdd : true
+                            });
                             await __handleDataConnect().createProductOptionOne();
                             this.addModalClose();
                             await __handleDataConnect().searchProductListFj();
@@ -809,9 +832,15 @@ const ProductManageMain = () => {
                                 )
                             }
                         });
-                        await __handleDataConnect().createProductReleaseList(releaseJsonList);
-                        this.addModalClose();
-                        await __handleDataConnect().searchProductListFj();
+                        if(!isObjectSubmitted.releaseAdd){
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                releaseAdd: true
+                            })
+                            await __handleDataConnect().createProductReleaseList(releaseJsonList);
+                            this.addModalClose();
+                            await __handleDataConnect().searchProductListFj();
+                        }
 
 
                     },
@@ -852,7 +881,7 @@ const ProductManageMain = () => {
                 return {
                     getAddData: function () {
                         let dataList = []
-                        productListData.forEach(product => {
+                        productListData?.forEach(product => {
                             product.options.forEach(option => {
                                 if (checkedOptionList.includes(option.id)) {
                                     let json = {
@@ -911,9 +940,15 @@ const ProductManageMain = () => {
                                 );
                             }
                         });
-                        await __handleDataConnect().createProductReceiveList(receiveJsonList);
-                        this.addModalClose();
-                        await __handleDataConnect().searchProductListFj();
+                        if(!isObjectSubmitted.receiveAdd){
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                receiveAdd: true
+                            })
+                            await __handleDataConnect().createProductReceiveList(receiveJsonList);
+                            this.addModalClose();
+                            await __handleDataConnect().searchProductListFj();
+                        }
                     },
                     checkRequiredAddData: function (receiveDataList) {
                         for (let i = 0; i < receiveDataList.length; i++) {
@@ -998,6 +1033,7 @@ const ProductManageMain = () => {
                 <ProductOptionAddModal
                     open={productOptionAddModalOpen}
                     productOptionAddData={productOptionAddData}
+                    isObjectSubmitted={isObjectSubmitted}
 
                     __handleEventControl={__handleEventControl}
                 ></ProductOptionAddModal>
@@ -1007,6 +1043,7 @@ const ProductManageMain = () => {
                     open={releaseAddModalOpen}
                     releaseAddData={releaseAddData}
                     releaseAddMemo={releaseAddMemo}
+                    isObjectSubmitted={isObjectSubmitted}
 
                     __handleEventControl={__handleEventControl}
                 ></ReleaseAddModal>
@@ -1016,6 +1053,7 @@ const ProductManageMain = () => {
                     open={receiveAddModalOpen}
                     receiveAddData={receiveAddData}
                     receiveAddMemo={receiveAddMemo}
+                    isObjectSubmitted={isObjectSubmitted}
 
                     __handleEventControl={__handleEventControl}
                 ></ReceiveAddModal>

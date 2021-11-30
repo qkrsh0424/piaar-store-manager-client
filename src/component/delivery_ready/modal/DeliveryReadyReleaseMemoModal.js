@@ -102,7 +102,7 @@ const DeliveryReadyReleaseMemoModal = (props) => {
                                 </div>
                             </NameGroup>
                             <SubmitBtnGroup className="clearfix">
-                                <SubmitBtn type="submit">등록</SubmitBtn>
+                                <SubmitBtn type="submit" disabled={props.isObjectSubmitted.reflectedUnit}>등록</SubmitBtn>
                             </SubmitBtnGroup>
                         </form>
                 </MemoContainer>

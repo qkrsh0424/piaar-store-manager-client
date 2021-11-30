@@ -63,10 +63,11 @@ const BodyWrapper = styled.div`
 
 const ControlBox = styled.div`
     float: right;
+    font-size: 1rem;
 `;
 
 const AddBtn = styled.button`
-    padding:1px 3px;
+    padding:2px 4px;
     background: rgb(179 199 219);
     color:white;
     border:1px solid rgb(179 199 219);
@@ -78,7 +79,7 @@ const AddBtn = styled.button`
 `;
 
 const ModifyBtn = styled.button`
-    padding:1px 3px;
+    padding:2px 4px;
     background: #a2a9c1;
     color:white;
     border:1px solid #a2a9c1;
@@ -91,7 +92,7 @@ const ModifyBtn = styled.button`
 `;
 
 const DeleteBtn = styled.button`
-    padding:1px 3px;
+    padding:2px 4px;
     background: #868b9d;
     color:white;
     border:1px solid #868b9d;

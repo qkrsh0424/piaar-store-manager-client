@@ -262,7 +262,7 @@ const ReceiveAddModal = (props) => {
                                 />
                             </div>
                             <SubmitBtnGroup className='clearfix'>
-                                <SubmitBtn type='submit'>입고등록</SubmitBtn>
+                                <SubmitBtn type='submit' disabled={props.isObjectSubmitted.releaseUnit}>입고등록</SubmitBtn>
                             </SubmitBtnGroup>
                         </BodyWrapper>
                     </form>

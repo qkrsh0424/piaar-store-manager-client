@@ -123,6 +123,11 @@ const ProductDetailMain = (props) => {
     const [backdropLoading, setBackdropLoading] = useState(false);
     const [dataChangedTrigger, setDataChangedTrigger] = useState(false);
 
+    const [isObjectSubmitted, setIsObjectSubmitted] = useState({
+        optionAdd: false,
+        detailAdd: false
+    });
+
     useEffect(() => {
         async function fetchInit() {
             __handleDataConnect().searchCategoryList();
@@ -353,7 +358,11 @@ const ProductDetailMain = (props) => {
                 await productOptionDataConnect().postOne(productOptionAddData)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            alert('해당 옵션이 정상적으로 추가되었습니다.')
+                            alert('해당 옵션이 정상적으로 추가되었습니다.');
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                optionAdd: false
+                            });
                         }
                     })
                     .catch(err => {
@@ -406,7 +415,11 @@ const ProductDetailMain = (props) => {
                 await productDetailDataConnect().postOne(productDetailAddData)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            alert('해당 상품상세가 정상적으로 추가되었습니다.')
+                            alert('해당 상품상세가 정상적으로 추가되었습니다.');
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                detailAdd: false
+                            });
                         }
                     })
                     .catch(err => {
@@ -607,7 +620,12 @@ const ProductDetailMain = (props) => {
                     },
                     submitAddData: async function (e) {
                         e.preventDefault();
-                        if (this.checkRequiredAddData()) {
+
+                        if (this.checkRequiredAddData() && !isObjectSubmitted.optionAdd) {
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                optionAdd: true
+                            });
                             await __handleDataConnect().createProductOptionOne();
                             this.addModalClose();
                             setDataChangedTrigger(true);
@@ -786,12 +804,14 @@ const ProductDetailMain = (props) => {
                     submitAddData: async function (e) {
                         e.preventDefault();
 
-                        if (this.checkRequiredAddData()) {
+                        if (this.checkRequiredAddData() && !isObjectSubmitted.detailAdd) {
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                detailAdd: true
+                            });
                             await __handleDataConnect().createProductDetailOne();
                             this.addModalClose();
                             setDataChangedTrigger(true);
-                        } else {
-                            return;
                         }
                     },
                     checkRequiredAddData: function () {
@@ -927,6 +947,7 @@ const ProductDetailMain = (props) => {
                 <ProductOptionAddModal
                     open={productOptionAddModalOpen}
                     productOptionAddData={productOptionAddData}
+                    isObjectSubmitted={isObjectSubmitted}
 
                     __handleEventControl={__handleEventControl}
                 ></ProductOptionAddModal>
@@ -944,7 +965,8 @@ const ProductDetailMain = (props) => {
                 <ProductDetailAddModal
                     open={productDetailAddModalOpen}
                     productDetailAddData={productDetailAddData}
-
+                    isObjectSubmitted={isObjectSubmitted}
+                    
                     __handleEventControl={__handleEventControl}
                 ></ProductDetailAddModal>
             }

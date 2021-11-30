@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import { browserName, CustomView, isMobile, isIOS, isSafari } from 'react-device-detect';
 
 import { numberWithCommas } from '../../handler/numberHandler';
-import { ContactPhoneOutlined } from '@material-ui/icons';
+import { ContactPhoneOutlined, PersonPin } from '@material-ui/icons';
 import AddIcon from '@mui/icons-material/Add';
 
 const Container = styled.div`
@@ -414,8 +414,8 @@ const CreateBody = (props) => {
                 <img className='back-button-img' src='/images/icon/back-button.png'></img>
             </BackBtn>
             <Container className='container'>
-                <form onSubmit={(e) => props.__handleEventControl().productListData().submit(e)}>
-                <CreateBtn type='submit'>
+                <form onSubmit={(e) => props.__handleEventControl().productListData().submit(e)} >
+                <CreateBtn type='submit' disabled={props.isSubmit}>
                     <img className='button-img' src='/images/icon/add.png'></img>
                 </CreateBtn>
                     {props.productListData && props.productListData.map(r => {
@@ -560,21 +560,18 @@ const CreateBody = (props) => {
                                                     <div className="input-group-prepend">
                                                         <span className="input-group-text">
                                                             SIZE_가로(cm)
-                                                            {/* <i className="icon-must" aria-label="필수항목"></i> */}
                                                         </span>
                                                     </div>
                                                     <CommonInputEl type="number" className='form-control' name='defaultWidth' value={r.defaultWidth} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
                                                     <div className="input-group-prepend">
                                                         <span className="input-group-text">
                                                             SIZE_세로(cm)
-                                                            {/* <i className="icon-must" aria-label="필수항목"></i> */}
                                                         </span>
                                                     </div>
                                                     <CommonInputEl type="number" className='form-control' name='defaultLength' value={r.defaultLength} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
                                                     <div className="input-group-prepend">
                                                         <span className="input-group-text">
                                                             SIZE_높이(cm)
-                                                            {/* <i className="icon-must" aria-label="필수항목"></i> */}
                                                         </span>
                                                     </div>
                                                     <CommonInputEl type="number" className='form-control' name='defaultHeight' value={r.defaultHeight} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
@@ -583,7 +580,6 @@ const CreateBody = (props) => {
                                                     <div className="input-group-prepend">
                                                         <span className="input-group-text">
                                                             내품수량
-                                                            {/* <i className="icon-must" aria-label="필수항목"></i> */}
                                                         </span>
                                                     </div>
                                                     <CommonInputEl type="number" className='form-control' name='defaultQuantity' value={r.defaultQuantity} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
@@ -592,7 +588,6 @@ const CreateBody = (props) => {
                                                     <div className="input-group-prepend">
                                                         <span className="input-group-text">
                                                             무게(kg)
-                                                            {/* <i className="icon-must" aria-label="필수항목"></i> */}
                                                         </span>
                                                     </div>
                                                     <CommonInputEl type="number" className='form-control' name='defaultWeight' value={r.defaultWeight} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />

@@ -3,6 +3,7 @@ import queryString from 'query-string';
 import styled from 'styled-components';
 import Dialog from '@material-ui/core/Dialog';
 import React from 'react';
+import { formControlClasses } from '@mui/material';
 
 const Container = styled.div`
 `;
@@ -377,7 +378,7 @@ const ProductOptionAddModal = (props) => {
                         </BodyWrapper>
                         <BodyWrapper>
                             <SubmitBtnGroup className='clearfix'>
-                                <SubmitBtn type='submit'>옵션추가</SubmitBtn>
+                                <SubmitBtn type='submit' disabled={props.isObjectSubmitted.optionAdd}>옵션추가</SubmitBtn>
                             </SubmitBtnGroup>
                         </BodyWrapper>
                     </form>

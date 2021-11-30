@@ -264,7 +264,7 @@ const ReleaseAddModal = (props) => {
                             </div>
                             <SubmitBtnGroup className='clearfix'>
 
-                                <SubmitBtn type='submit'>출고등록</SubmitBtn>
+                                <SubmitBtn type='submit' disabled={props.isObjectSubmitted.releaseAdd}>출고등록</SubmitBtn>
                             </SubmitBtnGroup>
                         </BodyWrapper>
                     </form>

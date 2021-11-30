@@ -22,7 +22,7 @@ import { isPropsEqual } from '@fullcalendar/react';
 // 한페이지에 보여지는 데이터
 const POSTS_PER_PAGE = 50;
 
-const DeliveryReadyViewMain = (props) => {
+const DeliveryReadyViewNaverMain = (props) => {
     const [unreleasedData, setUnreleasedData] = useState(null);
     const [releasedData, setReleasedData] = useState(null);
     const [unreleaseCheckedOrderList, setUnreleaseCheckedOrderList] = useState([]);
@@ -79,6 +79,12 @@ const DeliveryReadyViewMain = (props) => {
     // 재고반영 취소
     const [deliveryReadyReceiveMemoModalOpen, setDeliveryReadyReceiveMemoModalOpen] = useState(false);
     const [releaseCompletedCancelMemo, setReleaseCompletedCancelMemo] = useState({ receiveMemo: ''});
+
+    // 클릭 이벤트 여부
+    const [isObjectSubmitted, setIsObjectSubmitted] = useState({
+        reflectedUnit: false,
+        cancelReflectedUnit: false, 
+    });
 
     useEffect(() => {
         async function fetchInit() {
@@ -354,6 +360,10 @@ const DeliveryReadyViewMain = (props) => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                reflectedUnit: false
+                            });
                         }
                     })
                     .catch(err => {
@@ -367,6 +377,10 @@ const DeliveryReadyViewMain = (props) => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                            setIsObjectSubmitted({
+                                ...isObjectSubmitted,
+                                cancelreflectedUnit: false
+                            });
                         }
                     })
                     .catch(err => {
@@ -437,7 +451,6 @@ const DeliveryReadyViewMain = (props) => {
                     deleteList: async function (e) {
                         e.stopPropagation();
 
-                        // let checkedUnreleaseDataCids = __handleEventControl().unreleaseCheckedOrderList().getCheckedData().map(data => data.deliveryReadyItem.cid);
                         let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData().map(data => data.deliveryReadyItem);
 
                         if (checkedUnreleaseData.length > 0) {
@@ -463,8 +476,10 @@ const DeliveryReadyViewMain = (props) => {
                         
                         if (checkedUnreleaseData.length > 0) {
                             if(window.confirm('선택 항목을 모두 출고 처리 하시겠습니까?')) {
+                                setBackdropLoading(true);
                                 await __handleDataConnect().changeListToReleaseData(checkedUnreleaseData);
                                 setUnreleaseCheckedOrderList([]);
+                                setBackdropLoading(false);
                             }
                         }
                         else {
@@ -547,7 +562,9 @@ const DeliveryReadyViewMain = (props) => {
                             }
 
                             if(window.confirm('선택 항목을 모두 출고 취소하시겠습니까?')) {
+                                setBackdropLoading(true);
                                 await __handleDataConnect().changeListToUnreleaseData(checkedReleaseData);
+                                setBackdropLoading(false);
                             }
                         }
                         else {
@@ -567,7 +584,15 @@ const DeliveryReadyViewMain = (props) => {
                         let nonReflectedData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => !item.deliveryReadyItem.releaseCompleted);
             
                         if(window.confirm('선택 항목의 수량을 재고에 반영하시겠습니까?')) {
-                            await __handleDataConnect().reflectStockUnit(nonReflectedData, releaseCompletedMemo.releaseMemo);
+                            if(!isObjectSubmitted.reflectedUnit){
+                                setBackdropLoading(true);
+                                setIsObjectSubmitted({
+                                    ...isObjectSubmitted,
+                                    reflectedUnit: true
+                                });
+                                await __handleDataConnect().reflectStockUnit(nonReflectedData, releaseCompletedMemo.releaseMemo);
+                                setBackdropLoading(false);
+                            }
                         }
                         __handleEventControl().deliveryReadyReleaseMemo().close();
                     },
@@ -578,7 +603,15 @@ const DeliveryReadyViewMain = (props) => {
                         let reflectedData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => item.deliveryReadyItem.releaseCompleted);
 
                         if(window.confirm('반영된 재고수량을 취소하시겠습니까?')) {
-                            await __handleDataConnect().cancelReflectedStockUnit(reflectedData, releaseCompletedCancelMemo.receiveMemo);
+                            if(!isObjectSubmitted.cancelreflectedUnit){
+                                setBackdropLoading(true);
+                                setIsObjectSubmitted({
+                                    ...isObjectSubmitted,
+                                    cancelreflectedUnit: true
+                                });
+                                await __handleDataConnect().cancelReflectedStockUnit(reflectedData, releaseCompletedCancelMemo.receiveMemo);
+                                setBackdropLoading(false);
+                            }
                         }
                         __handleEventControl().deliveryReadyReceiveMemo().close();
                     } 
@@ -877,6 +910,7 @@ const DeliveryReadyViewMain = (props) => {
             <DeliveryReadyReleaseMemoModal
                 open={deliveryReadyReleaseMemoModalOpen}
                 releaseCompletedMemo={releaseCompletedMemo}
+                isObjectSubmitted={isObjectSubmitted}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReleaseMemoModal>
@@ -884,6 +918,7 @@ const DeliveryReadyViewMain = (props) => {
             <DeliveryReadyReceiveMemoModal
                 open={deliveryReadyReceiveMemoModalOpen}
                 releaseCompletedMemo={releaseCompletedCancelMemo}
+                isObjectSubmitted={isObjectSubmitted}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReceiveMemoModal>
@@ -915,4 +950,4 @@ const DeliveryReadyViewMain = (props) => {
     )
 }
 
-export default withRouter(DeliveryReadyViewMain);
+export default withRouter(DeliveryReadyViewNaverMain);
