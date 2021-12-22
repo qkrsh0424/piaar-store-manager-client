@@ -27,7 +27,7 @@ const CustomLink = styled(Link)`
     display: inline-block;
     width: 100%;
     border:3px double #7d7ada;
-    border-radius: 5px;
+    border-radius: 30px;
     padding:5px;
     text-align: center;
     font-size: 1.5rem;

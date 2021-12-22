@@ -454,7 +454,7 @@ const DeliveryReadyViewNaverMain = (props) => {
                         let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData().map(data => data.deliveryReadyItem);
 
                         if (checkedUnreleaseData.length > 0) {
-                            if(window.confirm('선택 항목을 모두 삭제하시겠습니까?')) {
+                            if(window.confirm('선택 항목(' + checkedUnreleaseData.length +'개)을 모두 삭제하시겠습니까?')) {
                                 await __handleDataConnect().deleteOrderListData(checkedUnreleaseData);
                                 setUnreleaseCheckedOrderList([]);
                             }
@@ -475,7 +475,7 @@ const DeliveryReadyViewNaverMain = (props) => {
                         let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
                         
                         if (checkedUnreleaseData.length > 0) {
-                            if(window.confirm('선택 항목을 모두 출고 처리 하시겠습니까?')) {
+                            if(window.confirm('선택 항목(' + checkedUnreleaseData.length +'개)을 모두 출고 처리 하시겠습니까?')) {
                                 setBackdropLoading(true);
                                 await __handleDataConnect().changeListToReleaseData(checkedUnreleaseData);
                                 setUnreleaseCheckedOrderList([]);
@@ -561,7 +561,7 @@ const DeliveryReadyViewNaverMain = (props) => {
                                 return;
                             }
 
-                            if(window.confirm('선택 항목을 모두 출고 취소하시겠습니까?')) {
+                            if(window.confirm('선택 항목(' + checkedReleaseData.length +'개)을 모두 출고 취소하시겠습니까?')) {
                                 setBackdropLoading(true);
                                 await __handleDataConnect().changeListToUnreleaseData(checkedReleaseData);
                                 setBackdropLoading(false);
@@ -583,7 +583,7 @@ const DeliveryReadyViewNaverMain = (props) => {
                         // 아직 재고 반영이 되지 않은 데이터들만 추출
                         let nonReflectedData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => !item.deliveryReadyItem.releaseCompleted);
             
-                        if(window.confirm('선택 항목의 수량을 재고에 반영하시겠습니까?')) {
+                        if(window.confirm('선택 항목(' + nonReflectedData.length +'개)의 수량을 재고에 반영하시겠습니까?')) {
                             if(!isObjectSubmitted.reflectedUnit){
                                 setBackdropLoading(true);
                                 setIsObjectSubmitted({
@@ -602,12 +602,12 @@ const DeliveryReadyViewNaverMain = (props) => {
                         // 재고 반영된 데이터들만 추출
                         let reflectedData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => item.deliveryReadyItem.releaseCompleted);
 
-                        if(window.confirm('반영된 재고수량을 취소하시겠습니까?')) {
-                            if(!isObjectSubmitted.cancelreflectedUnit){
+                        if(window.confirm('선택 항목(' + reflectedData.length +'개)에 반영된 재고수량을 취소하시겠습니까?')) {
+                            if(!isObjectSubmitted.cancelReflectedUnit){
                                 setBackdropLoading(true);
                                 setIsObjectSubmitted({
                                     ...isObjectSubmitted,
-                                    cancelreflectedUnit: true
+                                    cancelReflectedUnit: true
                                 });
                                 await __handleDataConnect().cancelReflectedStockUnit(reflectedData, releaseCompletedCancelMemo.receiveMemo);
                                 setBackdropLoading(false);
@@ -627,11 +627,11 @@ const DeliveryReadyViewNaverMain = (props) => {
                         let reflectedData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => item.deliveryReadyItem.releaseCompleted);
 
                         if(reflectedData.length > 0) {
-                            alert("선택항목 중 이미 재고가 반영된 데이터가 존재합니다.");
+                            alert('선택 항목 중 이미 재고가 반영된 데이터(' + reflectedData.length +'개)가 존재합니다.');
                         } else if(nonReflectedData.length > 0) {
                             setDeliveryReadyReleaseMemoModalOpen(true);
                         } else if(releaseCheckedOrderList.length === 0) {
-                            alert("선택된 데이터가 없습니다.");
+                            alert('선택된 데이터가 없습니다.');
                         }
                     },
                     close: function () {
@@ -659,11 +659,11 @@ const DeliveryReadyViewNaverMain = (props) => {
                         let nonReflectedData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => !item.deliveryReadyItem.releaseCompleted);
 
                         if(nonReflectedData.length > 0) {
-                            alert("선택항목 중 재고반영이 선행되지 않은 데이터가 존재합니다.");
+                            alert('선택 항목 중 재고반영이 선행되지 않은 데이터(' + nonReflectedData.length +'개)가 존재합니다.');
                         } else if(reflectedData.length > 0) {
                             setDeliveryReadyReceiveMemoModalOpen(true);
                         } else if(releaseCheckedOrderList.length === 0) {
-                            alert("선택된 데이터가 없습니다.");
+                            alert('선택된 데이터가 없습니다.');
                         }
                     },
                     close: function () {
