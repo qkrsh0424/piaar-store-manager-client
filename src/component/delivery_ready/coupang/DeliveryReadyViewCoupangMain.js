@@ -17,6 +17,7 @@ import DeliveryReadyUnreleasedViewCoupangBody from './DeliveryReadyUnreleasedVie
 import DeliveryReadyReleasedViewCoupangBody from './DeliveryReadyReleasedViewCoupangBody';
 import DeliveryReadyReleaseMemoModal from '../modal/DeliveryReadyReleaseMemoModal';
 import DeliveryReadyReceiveMemoModal from '../modal/DeliveryReadyReceiveMemoModal';
+import { unstable_composeClasses } from '@mui/material';
 
 // 한페이지에 보여지는 데이터
 const POSTS_PER_PAGE = 50;
@@ -27,6 +28,8 @@ const DeliveryReadyViewCoupnagMain = (props) => {
     const [unreleaseCheckedOrderList, setUnreleaseCheckedOrderList] = useState([]);
     const [releaseCheckedOrderList, setReleaseCheckedOrderList] = useState([]);
     const [backdropLoading, setBackdropLoading] = useState(false);
+    const [originUnreleasedData, setOriginUnreleasedData] = useState(null);
+    const [originReleasedData, setOriginReleasedData] = useState(null);
     
     // date picker
     const [selectionRange, setSelectionRange] = useState(
@@ -52,6 +55,12 @@ const DeliveryReadyViewCoupnagMain = (props) => {
     const [originOptionManagementCode, setOriginOptionManagementCode] = useState(null);
     const [changedOptionManagementCode, setChangedOptionManagementCode] = useState(null);
     
+    // 창고 코드
+    const [storageInputMemo, setStorageInputMemo] = useState({
+        unreleaseStorageMemo: '',
+        releaseStorageMemo: ''
+    });
+
     // 스토어 정보
     const [storeInfoData, setStoreInfoData] = useState({
         storeName: '',
@@ -100,7 +109,8 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setUnreleasedData(res.data.data);
-                        
+                            setOriginUnreleasedData(res.data.data);
+                            
                             let unreleasedDataLength = res.data.data.length;
                             let pageNum = Math.ceil(unreleasedDataLength / POSTS_PER_PAGE);
 
@@ -130,6 +140,7 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setReleasedData(res.data.data);
+                            setOriginReleasedData(res.data.data);
                         }
                         setSelectedDateText(dateToYYMMDD(date1) + " ~ " + dateToYYMMDD(date2));
                     
@@ -874,6 +885,66 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                     }
                 }
             },
+            unreleaseStorageMemo: function () {
+                return {
+                    onChangeInputValue: function (e) {
+                        setStorageInputMemo({
+                            ...storageInputMemo,
+                            unreleaseStorageMemo : e.target.value
+                        });
+                    },
+                    submit: function (e) {
+                        e.preventDefault(); 
+
+                        let unreleaseStorageMemo = storageInputMemo.unreleaseStorageMemo;
+
+                        if (unreleaseStorageMemo !== '') {
+                            setUnreleasedData(originUnreleasedData.filter(data => {
+                                var unreleaseStorageMemo = data.optionMemo || '';
+                                if (unreleaseStorageMemo.includes(storageInputMemo.unreleaseStorageMemo)) {
+                                    return data;
+                                }
+                            }));
+                        }else{
+                            setStorageInputMemo({
+                                ...storageInputMemo,
+                                unreleaseStorageMemo: ''
+                            });
+                            setUnreleasedData(originUnreleasedData);
+                        }
+                    }
+                }
+            },
+            releaseStorageMemo: function () {
+                return {
+                    onChangeInputValue: function (e) {
+                        setStorageInputMemo({
+                            ...storageInputMemo,
+                            releaseStorageMemo : e.target.value
+                        });
+                    },
+                    submit: function (e) {
+                        e.preventDefault(); 
+
+                        let releaseStorageMemo = storageInputMemo.releaseStorageMemo;
+
+                        if (releaseStorageMemo !== '') {
+                            setReleasedData(originReleasedData.filter(data => {
+                                var releaseStorageMemo = data.optionMemo || '';
+                                if (releaseStorageMemo.includes(storageInputMemo.releaseStorageMemo)) {
+                                    return data;
+                                }
+                            }));
+                        }else{
+                            setStorageInputMemo({
+                                ...storageInputMemo,
+                                releaseStorageMemo: ''
+                            });
+                            setReleasedData(originReleasedData);
+                        }
+                    }
+                }
+            },
             movePage: function () {
                 return {
                     deliveryReadyUpload: async function () {
@@ -932,6 +1003,7 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                 unreleasedData={unreleasedData}
                 unreleaseCheckedOrderList={unreleaseCheckedOrderList}
                 unreleasedDataPagenate={unreleasedDataPagenate}
+                storageInputMemo={storageInputMemo}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyUnreleasedViewCoupangBody>
@@ -940,6 +1012,7 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                 releaseCheckedOrderList={releaseCheckedOrderList}
                 selectedDateText={selectedDateText}
                 releasedDataPagenate={releasedDataPagenate}
+                storageInputMemo={storageInputMemo}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReleasedViewCoupangBody>

@@ -208,6 +208,32 @@ const DataOptionBox = styled.span`
     }
 `;
 
+const CommonInputEl = styled.input`
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    &:focus{
+        outline: none;
+        border: 1px solid #4662B4;
+        background: white;
+    }
+`;
+
+const MemoInputForm = styled.form`
+    display: grid;
+    grid-template-columns: repeat(3, 20% 55% 15%);
+    column-gap: 10px;
+    justify-content: space-between;
+    place-items: center;
+`;
+
+const MemoBtn = styled.button`
+    border: none;
+    background-color: #b2b3dd9e;
+    border-radius: 5px;
+    padding: 5px;
+`;
+
+
 const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
@@ -271,8 +297,20 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>*옵션명2</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header" scope="col">
-                                            <span>비고</span>
+                                        <HeaderTh className="fixed-header large-cell" scope="col">
+                                            <MemoInputForm 
+                                                onSubmit={(e) => props.__handleEventControl().unreleaseStorageMemo().submit(e)}
+                                            >
+                                                <span>비고</span>
+                                                <CommonInputEl
+                                                    type="text"
+                                                    className='form-control'
+                                                    name='unreleaseStorageMemo'
+                                                    value={props.storageInputMemo.unreleaseStorageMemo}
+                                                    onChange={(e) => props.__handleEventControl().unreleaseStorageMemo().onChangeInputValue(e)}
+                                                />
+                                                <MemoBtn type='submit'>확인</MemoBtn>
+                                            </MemoInputForm>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>묶음배송번호</span>
@@ -383,7 +421,7 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                 </DataContainer>
             }
         </>
-    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleasedDataPagenate])
+    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleasedDataPagenate, props.storageInputMemo])
 }
 
 export default DeliveryReadyUnreleasedViewCoupangBody;
