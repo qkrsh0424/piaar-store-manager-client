@@ -951,6 +951,26 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                         props.history.replace('/delivery-ready/coupang');
                     }
                 }
+            },
+            sortDataList: function () {
+                return {
+                    unreleasedDataSortedByReceiver: function () {
+                        let sortedData = unreleasedData.sort((a, b) => a.deliveryReadyItem.receiver.localeCompare(b.deliveryReadyItem.receiver));
+                        setUnreleasedData([...unreleasedData], sortedData);
+                    },
+                    unreleasedDataSortedByProdName: function () {
+                        let sortedData = unreleasedData.sort((a, b) => a.deliveryReadyItem.prodName.localeCompare(b.deliveryReadyItem.prodName));
+                        setUnreleasedData([...unreleasedData], sortedData);
+                    },
+                    releasedDataSortedByReceiver: function () {
+                        let sortedData = releasedData.sort((a, b) => a.deliveryReadyItem.receiver.localeCompare(b.deliveryReadyItem.receiver));
+                        setReleasedData([...releasedData], sortedData);
+                    },
+                    releasedDataSortedByProdName: function () {
+                        let sortedData = releasedData.sort((a, b) => a.deliveryReadyItem.prodName.localeCompare(b.deliveryReadyItem.prodName));
+                        setReleasedData([...releasedData], sortedData);
+                    }
+                }
             }
         }
     }

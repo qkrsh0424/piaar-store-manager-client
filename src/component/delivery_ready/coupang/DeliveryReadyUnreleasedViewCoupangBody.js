@@ -6,6 +6,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import { dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
 
@@ -271,10 +272,10 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                             />
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header medium-cell" scope="col">
-                                            <span>받는사람</span>
+                                            <span>받는사람</span><ArrowDropDownIcon type="button" onClick={() => props.__handleEventControl().sortDataList().unreleasedDataSortedByReceiver()}/>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <span>등록상품명</span>
+                                            <span>등록상품명</span><ArrowDropDownIcon type="button" onClick={() => props.__handleEventControl().sortDataList().unreleasedDataSortedByProdName()}/>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
                                             <span>등록옵션명</span>

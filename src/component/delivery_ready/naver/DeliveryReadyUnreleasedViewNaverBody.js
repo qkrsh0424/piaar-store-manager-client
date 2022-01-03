@@ -12,6 +12,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import { dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
 
@@ -269,10 +270,10 @@ const DeliveryReadyUnreleasedView = (props) => {
                                             />
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header medium-cell" scope="col">
-                                            <span>수취인명</span>
+                                            <span>수취인명</span><ArrowDropDownIcon type="button" onClick={(e) => props.__handleEventControl().sortDataList().unreleasedDataSortedByReceiver()}/>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <span>상품명</span>
+                                            <span>상품명</span><ArrowDropDownIcon type="button" onClick={() => props.__handleEventControl().sortDataList().unreleasedDataSortedByProdName()}/>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
                                             <span>옵션정보</span>
