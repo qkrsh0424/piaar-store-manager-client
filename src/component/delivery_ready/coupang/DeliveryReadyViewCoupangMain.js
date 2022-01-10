@@ -126,13 +126,15 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                     })
             },
             getDeliveryReadyReleasedData: async function (start, end) {
-                var date1 = new Date(start);
-                date1 = getStartDate(date1);
-                date1 = dateToYYYYMMDDhhmmss(date1);
+                var date1 = start ? new Date(getStartDate(start)).toUTCString() : null;
+                var date2 = end ? new Date(getEndDate(end)).toUTCString() : null;
+                // var date1 = new Date(start);
+                // date1 = getStartDate(date1);
+                // date1 = dateToYYYYMMDDhhmmss(date1);
 
-                var date2 = new Date(end);
-                date2 = getEndDate(date2);
-                date2 = dateToYYYYMMDDhhmmss(date2);
+                // var date2 = new Date(end);
+                // date2 = getEndDate(date2);
+                // date2 = dateToYYYYMMDDhhmmss(date2);
 
                 setReleaseCheckedOrderList([]);
 
