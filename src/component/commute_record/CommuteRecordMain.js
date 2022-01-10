@@ -12,6 +12,7 @@ import HeaderComponent from "./HeaderComponent";
 const Container = styled.div`
     background: #000000; 
     padding-bottom:150px;
+    min-height: 100vh;
     animation: 20s backgroundAni infinite ;
     @keyframes backgroundAni {
         0% {
