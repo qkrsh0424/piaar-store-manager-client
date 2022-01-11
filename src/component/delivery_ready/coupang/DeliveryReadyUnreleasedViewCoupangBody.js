@@ -7,6 +7,7 @@ import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
 import { dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
 
@@ -310,7 +311,7 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                                     value={props.storageInputMemo.unreleaseStorageMemo}
                                                     onChange={(e) => props.__handleEventControl().unreleaseStorageMemo().onChangeInputValue(e)}
                                                 />
-                                                <MemoBtn type='submit'>확인</MemoBtn>
+                                                <MemoBtn type='submit'><ManageSearchIcon /></MemoBtn>
                                             </MemoInputForm>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">

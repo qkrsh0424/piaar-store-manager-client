@@ -61,6 +61,12 @@ const DeliveryReadyViewNaverMain = (props) => {
         unreleaseStorageMemo: '',
         releaseStorageMemo: ''
     });
+
+    // 수취인명 검색
+    const [receiverSearchBarData, setReceiverSearchBarData] = useState({
+        isOpen: true,
+        searchedData: ''
+    });
     
     // 스토어 정보
     const [storeInfoData, setStoreInfoData] = useState({
@@ -975,6 +981,35 @@ const DeliveryReadyViewNaverMain = (props) => {
                         setReleasedData([...releasedData], sortedData);
                     }
                 }
+            },
+            searchDataList: function () {
+                return {
+                    openSearchBarForReceiver: function (e) {
+                        e.preventDefault();
+
+                        if(receiverSearchBarData.isOpen) {
+                            setReceiverSearchBarData({
+                                ...receiverSearchBarData,
+                                isOpen: false
+                            });
+                        }
+                        else{
+                            setReceiverSearchBarData({
+                                ...receiverSearchBarData,
+                                isOpen: true
+                            });
+                        }
+                    },
+                    onChangeInputValue: function (newValue) {
+                        setReceiverSearchBarData({
+                            ...receiverSearchBarData,
+                            searchedData: newValue
+                        });
+                    },
+                    search: function () {
+                        setUnreleasedData(originUnreleasedData.filter(data => data.deliveryReadyItem.receiver.includes(receiverSearchBarData.searchedData)));
+                    }
+                }
             }
         }
     }
@@ -1028,6 +1063,7 @@ const DeliveryReadyViewNaverMain = (props) => {
                 unreleaseCheckedOrderList={unreleaseCheckedOrderList}
                 unreleasedDataPagenate={unreleasedDataPagenate}
                 storageInputMemo={storageInputMemo}
+                receiverSearchBarData={receiverSearchBarData}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyUnreleasedViewNaverBody>

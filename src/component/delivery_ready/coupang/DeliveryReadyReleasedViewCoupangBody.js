@@ -8,6 +8,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import EventAvailableTwoToneIcon from '@mui/icons-material/EventAvailableTwoTone';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
 import { dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
 
@@ -336,7 +337,7 @@ const DeliveryReadyReleasedViewCoupangBody = (props) => {
                                                     value={props.storageInputMemo.releaseStorageMemo}
                                                     onChange={(e) => props.__handleEventControl().releaseStorageMemo().onChangeInputValue(e)}
                                                 />
-                                                <MemoBtn type='submit'>확인</MemoBtn>
+                                                <MemoBtn type='submit'><ManageSearchIcon /></MemoBtn>
                                             </MemoInputForm>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">

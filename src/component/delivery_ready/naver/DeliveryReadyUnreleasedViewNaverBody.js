@@ -7,12 +7,9 @@ import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
+import SearchBar from "material-ui-search-bar";
 
 import { dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
 
@@ -220,9 +217,15 @@ const CommonInputEl = styled.input`
 
 const MemoInputForm = styled.form`
     display: grid;
-    grid-template-columns: repeat(3, 20% 55% 15%);
+    grid-template-columns: 20% 55% 15%;
     column-gap: 10px;
     justify-content: space-between;
+    place-items: center;
+`;
+
+const ReceiverInputForm = styled.form`
+    display: flex;
+    justify-content: space-around;
     place-items: center;
 `;
 
@@ -231,6 +234,28 @@ const MemoBtn = styled.button`
     background-color: #b2b3dd9e;
     border-radius: 5px;
     padding: 5px;
+`;
+
+const ControlBtn = styled.span`
+    border: none;
+
+    ${(props) => props.clicked ?
+        css`
+            color: #b2b3dd;
+            transform: scale(1.2);
+        `
+        :
+        css`
+            &:hover {
+                color: #b2b3dd;
+                transform: scale(1.2);
+            }
+        `
+    }
+`;
+
+const SearchBarBox = styled.div`
+    position: absolute;
 `;
 
 const DeliveryReadyUnreleasedView = (props) => {
@@ -269,11 +294,23 @@ const DeliveryReadyUnreleasedView = (props) => {
                                                 onChange={() => props.__handleEventControl().unreleaseCheckedOrderList().checkAll()} checked={props.__handleEventControl().unreleaseCheckedOrderList().isCheckedAll()}
                                             />
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header medium-cell" scope="col">
-                                            <span>수취인명</span><ArrowDropDownIcon type="button" onClick={(e) => props.__handleEventControl().sortDataList().unreleasedDataSortedByReceiver()}/>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <div>
+                                                <span>수취인명</span>
+                                                <ControlBtn><ArrowDropDownIcon type="button" onClick={() => props.__handleEventControl().sortDataList().unreleasedDataSortedByReceiver()} /></ControlBtn>
+                                                <ControlBtn clicked={!props.receiverSearchBarData.isOpen}><ManageSearchIcon type="button" onClick={(e) => props.__handleEventControl().searchDataList().openSearchBarForReceiver(e)}/></ControlBtn>
+                                            </div>
+                                            <SearchBarBox hidden={props.receiverSearchBarData.isOpen}>
+                                                <SearchBar
+                                                    value={props.receiverSearchBarData.searchedData}
+                                                    onChange={(newValue) => props.__handleEventControl().searchDataList().onChangeInputValue(newValue)}
+                                                    onRequestSearch={() => props.__handleEventControl().searchDataList().search()}
+                                                />
+                                            </SearchBarBox>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <span>상품명</span><ArrowDropDownIcon type="button" onClick={() => props.__handleEventControl().sortDataList().unreleasedDataSortedByProdName()}/>
+                                            <span>상품명</span>
+                                            <ControlBtn><ArrowDropDownIcon type="button" onClick={() => props.__handleEventControl().sortDataList().unreleasedDataSortedByProdName()}/></ControlBtn>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
                                             <span>옵션정보</span>
@@ -308,7 +345,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                                                     value={props.storageInputMemo.unreleaseStorageMemo}
                                                     onChange={(e) => props.__handleEventControl().unreleaseStorageMemo().onChangeInputValue(e)}
                                                 />
-                                                <MemoBtn type='submit'>확인</MemoBtn>
+                                                <MemoBtn type='submit'><ManageSearchIcon /></MemoBtn>
                                             </MemoInputForm>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
@@ -420,7 +457,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                 </DataContainer>
             }
         </>
-    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleasedDataPagenate, props.storageInputMemo])
+    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleasedDataPagenate, props.storageInputMemo, props.receiverSearchBarData])
 }
 
 export default DeliveryReadyUnreleasedView;
