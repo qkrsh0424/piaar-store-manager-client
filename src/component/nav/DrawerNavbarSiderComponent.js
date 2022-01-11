@@ -12,7 +12,6 @@ const ContentContainer = styled.div`
 const LinkContainer = styled.div`
     padding:10px;
     width:100%;
-    
 `;
 
 const LinkEl = styled(Link)`
@@ -30,13 +29,13 @@ const CustomLink = styled(Link)`
     font-weight: 600;
     border-left:3px solid #7d7ada00;
     transition: 0.3s;
+    border-radius: 30px;
 
     &:hover{
         text-decoration: none;
         /* border-left:3px solid #7d7ada; */
         color:#7d7ada;
         background-color: #F2ECFF;
-        border-radius: 30px;
     }
     
 `;

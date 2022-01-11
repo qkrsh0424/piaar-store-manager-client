@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,8 +31,14 @@ const CustomLink = styled(Link)`
     }
 `;
 
+const UserInfoText = styled.div`
+    font-weight: 600;
+    font-size: 16px;
+`;
+
 export default function DrawerNavbarComponent(props) {
     const classes = useStyles();
+    const userRdx = useSelector(state => state.user);
 
     return (
         <div className={classes.root}>
@@ -45,6 +53,11 @@ export default function DrawerNavbarComponent(props) {
                         </CustomLink>
 
                     </Typography>
+                    {userRdx.isLoading === false && 
+                    <UserInfoText>
+                        {userRdx?.userInfo.username} 님 <span><SentimentSatisfiedAltIcon /></span>
+                    </UserInfoText>
+                    }
                 </Toolbar>
             </AppBar>
         </div>
