@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useReducer} from 'react';
 import { withRouter } from 'react-router';
 
 // handler
@@ -17,11 +17,26 @@ import DeliveryReadyUnreleasedViewNaverBody from './DeliveryReadyUnreleasedViewN
 import DeliveryReadyReleasedViewNaverBody from './DeliveryReadyReleasedViewNaverBody';
 import DeliveryReadyReleaseMemoModal from '../modal/DeliveryReadyReleaseMemoModal';
 import DeliveryReadyReceiveMemoModal from '../modal/DeliveryReadyReceiveMemoModal';
-import { isPropsEqual } from '@fullcalendar/react';
-import { FormControlUnstyled } from '@mui/material';
 
 // 한페이지에 보여지는 데이터
 const POSTS_PER_PAGE = 50;
+
+const initialSearchBarState = null;
+
+const searchBarStateReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'SET_DATA':
+            return {
+                ...state,
+                [action.payload.name] : action.payload.value
+            }
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
 
 const DeliveryReadyViewNaverMain = (props) => {
     const [unreleasedData, setUnreleasedData] = useState(null);
@@ -58,18 +73,14 @@ const DeliveryReadyViewNaverMain = (props) => {
 
     // 수취인명 검색
     const [receiverSearchBarData, setReceiverSearchBarData] = useState({
-        isOpen: true,
-        searchedData: '',
+        isOpenForUnreleased: true,
         isOpenForReleased: true,
-        searchedReleasedData: ''
     });
     
     // 비고(창고) 검색
     const [storageSearchBarData, setStorageSearchBarData] = useState({
-        isOpen: true,
-        searchedData: '',
+        isOpenForUnreleased: true,
         isOpenForReleased: true,
-        searchedReleasedData: ''
     });
 
     // 스토어 정보
@@ -104,6 +115,9 @@ const DeliveryReadyViewNaverMain = (props) => {
         reflectedUnit: false,
         cancelReflectedUnit: false, 
     });
+
+    // 검색 데이터 (수취인명, 비고)
+    const [searchBarState, dispatchSearchBarState] = useReducer(searchBarStateReducer, initialSearchBarState);
 
     useEffect(() => {
         async function fetchInit() {
@@ -926,67 +940,55 @@ const DeliveryReadyViewNaverMain = (props) => {
                     }
                 }
             },
-            searchDataList: function () {
+            searchUnreleasedDataList: function () {
                 return {
                     openSearchBarForReceiver: function (e) {
                         e.preventDefault();
 
-                        if(receiverSearchBarData.isOpen) {
+                        if(receiverSearchBarData.isOpenForUnreleased) {
                             setReceiverSearchBarData({
                                 ...receiverSearchBarData,
-                                isOpen: false
+                                isOpenForUnreleased: false
                             });
                         }
                         else{
                             setReceiverSearchBarData({
                                 ...receiverSearchBarData,
-                                isOpen: true
+                                isOpenForUnreleased: true
                             });
                         }
-                    },
-                    onChangeReceiverInputValue: function (newValue) {
-                        setReceiverSearchBarData({
-                            ...receiverSearchBarData,
-                            searchedData: newValue
-                        });
-                    },
-                    searchForReceiver: function () {
-                        let searchedResultData = originUnreleasedData.filter(data => data.deliveryReadyItem.receiver.includes(receiverSearchBarData.searchedData));
-                        setUnreleasedData(searchedResultData);
-                        
-                        let unreleasedDataLength = searchedResultData.length;
-                        let pageNum = Math.ceil(unreleasedDataLength / POSTS_PER_PAGE);
-
-                        setUnReleasedDataPagenate({
-                            ...unreleasedDataPagenate,
-                            totalPageNumber: pageNum
-                        });
-
                     },
                     openSearchBarForStorageMemo: function (e) {
                         e.preventDefault();
 
-                        if(storageSearchBarData.isOpen) {
+                        if(storageSearchBarData.isOpenForUnreleased) {
                             setStorageSearchBarData({
                                 ...storageSearchBarData,
-                                isOpen: false
+                                isOpenForUnreleased: false
                             });
                         }
                         else{
                             setStorageSearchBarData({
                                 ...storageSearchBarData,
-                                isOpen: true
+                                isOpenForUnreleased: true
                             });
                         }
                     },
-                    onChangeStorageInputValue: function (newValue) {
-                        setStorageSearchBarData({
-                            ...storageSearchBarData,
-                            searchedData: newValue
+                    onChangeInputValue: function (e) {
+                        e.preventDefault();
+
+                        dispatchSearchBarState({
+                            type: 'SET_DATA',
+                            payload: {
+                                name: e.target.name,
+                                value: e.target.value
+                            }
                         });
                     },
-                    searchForStorage: function () {
-                        let searchedResultData = originUnreleasedData.filter(data => data.optionMemo?.includes(storageSearchBarData.searchedData));
+                    searchForReceiver: function (e) {
+                        e.preventDefault();
+
+                        let searchedResultData = originUnreleasedData.filter(data => data.deliveryReadyItem.receiver.includes(searchBarState.searchedUnreleasedReceiverData));
                         setUnreleasedData(searchedResultData);
                         
                         let unreleasedDataLength = searchedResultData.length;
@@ -996,8 +998,21 @@ const DeliveryReadyViewNaverMain = (props) => {
                             ...unreleasedDataPagenate,
                             totalPageNumber: pageNum
                         });
-
                     },
+                    searchForStorage: function (e) {
+                        e.preventDefault();
+
+                        let searchedResultData = originUnreleasedData.filter(data => data.optionMemo?.includes(searchBarState.searchedUnreleasedStorageData));
+                        setUnreleasedData(searchedResultData);
+                        
+                        let unreleasedDataLength = searchedResultData.length;
+                        let pageNum = Math.ceil(unreleasedDataLength / POSTS_PER_PAGE);
+
+                        setUnReleasedDataPagenate({
+                            ...unreleasedDataPagenate,
+                            totalPageNumber: pageNum
+                        });
+                    }
                 }
             },
             searchReleasedDataList: function () {
@@ -1018,25 +1033,6 @@ const DeliveryReadyViewNaverMain = (props) => {
                             });
                         }
                     },
-                    onChangeReceiverInputValue: function (newValue) {
-                        setReceiverSearchBarData({
-                            ...receiverSearchBarData,
-                            searchedReleasedData: newValue
-                        });
-                    },
-                    searchForReceiver: function () {
-                        let searchedResultData = originReleasedData.filter(data => data.deliveryReadyItem.receiver.includes(receiverSearchBarData.searchedReleasedData));
-                        setReleasedData(searchedResultData);
-                        
-                        let releasedDataLength = searchedResultData.length;
-                        let pageNum = Math.ceil(releasedDataLength / POSTS_PER_PAGE);
-
-                        setReleasedDataPagenate({
-                            ...releasedDataPagenate,
-                            totalPageNumber: pageNum
-                        });
-
-                    },
                     openSearchBarForStorageMemo: function (e) {
                         e.preventDefault();
 
@@ -1053,14 +1049,35 @@ const DeliveryReadyViewNaverMain = (props) => {
                             });
                         }
                     },
-                    onChangeStorageInputValue: function (newValue) {
-                        setStorageSearchBarData({
-                            ...storageSearchBarData,
-                            searchedReleasedData: newValue
+                    onChangeInputValue: function (e) {
+                        e.preventDefault();
+
+                        dispatchSearchBarState({
+                            type: 'SET_DATA',
+                            payload: {
+                                name: e.target.name,
+                                value: e.target.value
+                            }
                         });
                     },
-                    searchForStorage: function () {
-                        let searchedResultData = originReleasedData.filter(data => data.optionMemo?.includes(storageSearchBarData.searchedReleasedData));
+                    searchForReceiver: function (e) {
+                        e.preventDefault();
+
+                        let searchedResultData = originReleasedData.filter(data => data.deliveryReadyItem.receiver.includes(searchBarState.searchedReleasedReceiverData));
+                        setReleasedData(searchedResultData);
+                        
+                        let releasedDataLength = searchedResultData.length;
+                        let pageNum = Math.ceil(releasedDataLength / POSTS_PER_PAGE);
+
+                        setReleasedDataPagenate({
+                            ...releasedDataPagenate,
+                            totalPageNumber: pageNum
+                        });
+                    },
+                    searchForStorage: function (e) {
+                        e.preventDefault();
+
+                        let searchedResultData = originReleasedData.filter(data => data.optionMemo?.includes(searchBarState.searchedReleasedStorageData));
                         setReleasedData(searchedResultData);
                         
                         let releasedDataLength = searchedResultData.length;
@@ -1127,6 +1144,7 @@ const DeliveryReadyViewNaverMain = (props) => {
                 unreleasedDataPagenate={unreleasedDataPagenate}
                 receiverSearchBarData={receiverSearchBarData}
                 storageSearchBarData={storageSearchBarData}
+                searchBarState={searchBarState}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyUnreleasedViewNaverBody>
@@ -1137,6 +1155,7 @@ const DeliveryReadyViewNaverMain = (props) => {
                 releasedDataPagenate={releasedDataPagenate}
                 receiverSearchBarData={receiverSearchBarData}
                 storageSearchBarData={storageSearchBarData}
+                searchBarState={searchBarState}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReleasedViewNaverBody>

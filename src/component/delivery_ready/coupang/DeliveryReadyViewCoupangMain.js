@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useReducer} from 'react';
 import { withRouter } from 'react-router';
 
 // handler
@@ -21,6 +21,23 @@ import { unstable_composeClasses } from '@mui/material';
 
 // 한페이지에 보여지는 데이터
 const POSTS_PER_PAGE = 50;
+
+const initialSearchBarState = null;
+
+const searchBarStateReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'SET_DATA':
+            return {
+                ...state,
+                [action.payload.name] : action.payload.value
+            }
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
 
 const DeliveryReadyViewCoupnagMain = (props) => {
     const [unreleasedData, setUnreleasedData] = useState(null);
@@ -54,27 +71,17 @@ const DeliveryReadyViewCoupnagMain = (props) => {
     
     const [originOptionManagementCode, setOriginOptionManagementCode] = useState(null);
     const [changedOptionManagementCode, setChangedOptionManagementCode] = useState(null);
-    
-    // 창고 코드
-    // const [storageInputMemo, setStorageInputMemo] = useState({
-    //     unreleaseStorageMemo: '',
-    //     releaseStorageMemo: ''
-    // });
 
     // 수취인명 검색
     const [receiverSearchBarData, setReceiverSearchBarData] = useState({
-        isOpen: true,
-        searchedData: '',
+        isOpenForUnreleased: true,
         isOpenForReleased: true,
-        searchedReleasedData: ''
     });
     
     // 비고(창고) 검색
     const [storageSearchBarData, setStorageSearchBarData] = useState({
-        isOpen: true,
-        searchedData: '',
+        isOpenForUnreleased: true,
         isOpenForReleased: true,
-        searchedReleasedData: ''
     });
 
     // 스토어 정보
@@ -109,6 +116,9 @@ const DeliveryReadyViewCoupnagMain = (props) => {
         reflectedUnit: false,
         cancelReflectedUnit: false, 
     });
+
+    // 검색 데이터 (수취인명, 비고)
+    const [searchBarState, dispatchSearchBarState] = useReducer(searchBarStateReducer, initialSearchBarState);
 
     useEffect(() => {
         async function fetchInit() {
@@ -903,66 +913,6 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                     }
                 }
             },
-            // unreleaseStorageMemo: function () {
-            //     return {
-            //         onChangeInputValue: function (e) {
-            //             setStorageInputMemo({
-            //                 ...storageInputMemo,
-            //                 unreleaseStorageMemo : e.target.value
-            //             });
-            //         },
-            //         submit: function (e) {
-            //             e.preventDefault(); 
-
-            //             let unreleaseStorageMemo = storageInputMemo.unreleaseStorageMemo;
-
-            //             if (unreleaseStorageMemo !== '') {
-            //                 setUnreleasedData(originUnreleasedData.filter(data => {
-            //                     var unreleaseStorageMemo = data.optionMemo || '';
-            //                     if (unreleaseStorageMemo.includes(storageInputMemo.unreleaseStorageMemo)) {
-            //                         return data;
-            //                     }
-            //                 }));
-            //             }else{
-            //                 setStorageInputMemo({
-            //                     ...storageInputMemo,
-            //                     unreleaseStorageMemo: ''
-            //                 });
-            //                 setUnreleasedData(originUnreleasedData);
-            //             }
-            //         }
-            //     }
-            // },
-            // releaseStorageMemo: function () {
-            //     return {
-            //         onChangeInputValue: function (e) {
-            //             setStorageInputMemo({
-            //                 ...storageInputMemo,
-            //                 releaseStorageMemo : e.target.value
-            //             });
-            //         },
-            //         submit: function (e) {
-            //             e.preventDefault(); 
-
-            //             let releaseStorageMemo = storageInputMemo.releaseStorageMemo;
-
-            //             if (releaseStorageMemo !== '') {
-            //                 setReleasedData(originReleasedData.filter(data => {
-            //                     var releaseStorageMemo = data.optionMemo || '';
-            //                     if (releaseStorageMemo.includes(storageInputMemo.releaseStorageMemo)) {
-            //                         return data;
-            //                     }
-            //                 }));
-            //             }else{
-            //                 setStorageInputMemo({
-            //                     ...storageInputMemo,
-            //                     releaseStorageMemo: ''
-            //                 });
-            //                 setReleasedData(originReleasedData);
-            //             }
-            //         }
-            //     }
-            // },
             movePage: function () {
                 return {
                     deliveryReadyUpload: async function () {
@@ -990,67 +940,55 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                     }
                 }
             },
-            searchDataList: function () {
+            searchUnreleasedDataList: function () {
                 return {
                     openSearchBarForReceiver: function (e) {
                         e.preventDefault();
 
-                        if(receiverSearchBarData.isOpen) {
+                        if(receiverSearchBarData.isOpenForUnreleased) {
                             setReceiverSearchBarData({
                                 ...receiverSearchBarData,
-                                isOpen: false
+                                isOpenForUnreleased: false
                             });
                         }
                         else{
                             setReceiverSearchBarData({
                                 ...receiverSearchBarData,
-                                isOpen: true
+                                isOpenForUnreleased: true
                             });
                         }
-                    },
-                    onChangeReceiverInputValue: function (newValue) {
-                        setReceiverSearchBarData({
-                            ...receiverSearchBarData,
-                            searchedData: newValue
-                        });
-                    },
-                    searchForReceiver: function () {
-                        let searchedResultData = originUnreleasedData.filter(data => data.deliveryReadyItem.receiver.includes(receiverSearchBarData.searchedData));
-                        setUnreleasedData(searchedResultData);
-                        
-                        let unreleasedDataLength = searchedResultData.length;
-                        let pageNum = Math.ceil(unreleasedDataLength / POSTS_PER_PAGE);
-
-                        setUnReleasedDataPagenate({
-                            ...unreleasedDataPagenate,
-                            totalPageNumber: pageNum
-                        });
-
                     },
                     openSearchBarForStorageMemo: function (e) {
                         e.preventDefault();
 
-                        if(storageSearchBarData.isOpen) {
+                        if(storageSearchBarData.isOpenForUnreleased) {
                             setStorageSearchBarData({
                                 ...storageSearchBarData,
-                                isOpen: false
+                                isOpenForUnreleased: false
                             });
                         }
                         else{
                             setStorageSearchBarData({
                                 ...storageSearchBarData,
-                                isOpen: true
+                                isOpenForUnreleased: true
                             });
                         }
                     },
-                    onChangeStorageInputValue: function (newValue) {
-                        setStorageSearchBarData({
-                            ...storageSearchBarData,
-                            searchedData: newValue
+                    onChangeInputValue: function (e) {
+                        e.preventDefault();
+
+                        dispatchSearchBarState({
+                            type: 'SET_DATA',
+                            payload: {
+                                name: e.target.name,
+                                value: e.target.value
+                            }
                         });
                     },
-                    searchForStorage: function () {
-                        let searchedResultData = originUnreleasedData.filter(data => data.optionMemo?.includes(storageSearchBarData.searchedData));
+                    searchForReceiver: function (e) {
+                        e.preventDefault();
+
+                        let searchedResultData = originUnreleasedData.filter(data => data.deliveryReadyItem.receiver.includes(searchBarState.searchedUnreleasedReceiverData));
                         setUnreleasedData(searchedResultData);
                         
                         let unreleasedDataLength = searchedResultData.length;
@@ -1060,8 +998,21 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                             ...unreleasedDataPagenate,
                             totalPageNumber: pageNum
                         });
-
                     },
+                    searchForStorage: function (e) {
+                        e.preventDefault();
+
+                        let searchedResultData = originUnreleasedData.filter(data => data.optionMemo?.includes(searchBarState.searchedUnreleasedStorageData));
+                        setUnreleasedData(searchedResultData);
+                        
+                        let unreleasedDataLength = searchedResultData.length;
+                        let pageNum = Math.ceil(unreleasedDataLength / POSTS_PER_PAGE);
+
+                        setUnReleasedDataPagenate({
+                            ...unreleasedDataPagenate,
+                            totalPageNumber: pageNum
+                        });
+                    }
                 }
             },
             searchReleasedDataList: function () {
@@ -1082,25 +1033,6 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                             });
                         }
                     },
-                    onChangeReceiverInputValue: function (newValue) {
-                        setReceiverSearchBarData({
-                            ...receiverSearchBarData,
-                            searchedReleasedData: newValue
-                        });
-                    },
-                    searchForReceiver: function () {
-                        let searchedResultData = originReleasedData.filter(data => data.deliveryReadyItem.receiver.includes(receiverSearchBarData.searchedReleasedData));
-                        setReleasedData(searchedResultData);
-                        
-                        let releasedDataLength = searchedResultData.length;
-                        let pageNum = Math.ceil(releasedDataLength / POSTS_PER_PAGE);
-
-                        setReleasedDataPagenate({
-                            ...releasedDataPagenate,
-                            totalPageNumber: pageNum
-                        });
-
-                    },
                     openSearchBarForStorageMemo: function (e) {
                         e.preventDefault();
 
@@ -1117,14 +1049,21 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                             });
                         }
                     },
-                    onChangeStorageInputValue: function (newValue) {
-                        setStorageSearchBarData({
-                            ...storageSearchBarData,
-                            searchedReleasedData: newValue
+                    onChangeInputValue: function (e) {
+                        e.preventDefault();
+
+                        dispatchSearchBarState({
+                            type: 'SET_DATA',
+                            payload: {
+                                name: e.target.name,
+                                value: e.target.value
+                            }
                         });
                     },
-                    searchForStorage: function () {
-                        let searchedResultData = originReleasedData.filter(data => data.optionMemo?.includes(storageSearchBarData.searchedReleasedData));
+                    searchForReceiver: function (e) {
+                        e.preventDefault();
+
+                        let searchedResultData = originReleasedData.filter(data => data.deliveryReadyItem.receiver.includes(searchBarState.searchedReleasedReceiverData));
                         setReleasedData(searchedResultData);
                         
                         let releasedDataLength = searchedResultData.length;
@@ -1134,7 +1073,22 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                             ...releasedDataPagenate,
                             totalPageNumber: pageNum
                         });
-                    }
+                    },
+                    searchForStorage: function (e) {
+                        e.preventDefault();
+
+                        let searchedResultData = originReleasedData.filter(data => data.optionMemo?.includes(searchBarState.searchedReleasedStorageData));
+                        setReleasedData(searchedResultData);
+                        
+                        let releasedDataLength = searchedResultData.length;
+                        let pageNum = Math.ceil(releasedDataLength / POSTS_PER_PAGE);
+
+                        setReleasedDataPagenate({
+                            ...releasedDataPagenate,
+                            totalPageNumber: pageNum
+                        });
+
+                    },
                 }
             }
         }
@@ -1188,9 +1142,9 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                 unreleasedData={unreleasedData}
                 unreleaseCheckedOrderList={unreleaseCheckedOrderList}
                 unreleasedDataPagenate={unreleasedDataPagenate}
-                // storageInputMemo={storageInputMemo}
                 receiverSearchBarData={receiverSearchBarData}
                 storageSearchBarData={storageSearchBarData}
+                searchBarState={searchBarState}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyUnreleasedViewCoupangBody>
@@ -1199,9 +1153,9 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                 releaseCheckedOrderList={releaseCheckedOrderList}
                 selectedDateText={selectedDateText}
                 releasedDataPagenate={releasedDataPagenate}
-                // storageInputMemo={storageInputMemo}
                 receiverSearchBarData={receiverSearchBarData}
                 storageSearchBarData={storageSearchBarData}
+                searchBarState={searchBarState}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReleasedViewCoupangBody>

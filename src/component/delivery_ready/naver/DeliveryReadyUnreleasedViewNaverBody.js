@@ -225,8 +225,18 @@ const ControlBtn = styled.span`
     }
 `;
 
-const SearchBarBox = styled.div`
+const SearchBarBox = styled.form`
     position: absolute;
+`;
+
+const SearchInput = styled.input`
+    width: 100%;
+    border: 2px solid #d2d2ed;
+    background: #f9f9ff;
+    border-radius: 5px;
+    padding: 3px 10px;
+    font-size: 16px;
+    font-weight: 500;
 `;
 
 const DeliveryReadyUnreleasedView = (props) => {
@@ -269,14 +279,17 @@ const DeliveryReadyUnreleasedView = (props) => {
                                             <div>
                                                 <span>수취인명</span>
                                                 <ControlBtn><ArrowDropDownIcon type="button" onClick={() => props.__handleEventControl().sortDataList().unreleasedDataSortedByReceiver()} /></ControlBtn>
-                                                <ControlBtn clicked={!props.receiverSearchBarData.isOpen}><ManageSearchIcon type="button" onClick={(e) => props.__handleEventControl().searchDataList().openSearchBarForReceiver(e)}/></ControlBtn>
+                                                <ControlBtn clicked={!props.receiverSearchBarData.isOpenForUnreleased} type="button" onClick={(e) => props.__handleEventControl().searchUnreleasedDataList().openSearchBarForReceiver(e)}>
+                                                    <ManageSearchIcon />
+                                                </ControlBtn>
                                             </div>
-                                            <SearchBarBox hidden={props.receiverSearchBarData.isOpen}>
-                                                <SearchBar
-                                                    value={props.receiverSearchBarData.searchedData}
-                                                    onChange={(newValue) => props.__handleEventControl().searchDataList().onChangeReceiverInputValue(newValue)}
-                                                    onRequestSearch={() => props.__handleEventControl().searchDataList().searchForReceiver()}
-                                                />
+                                            <SearchBarBox hidden={props.receiverSearchBarData.isOpenForUnreleased} onSubmit={(e) => props.__handleEventControl().searchUnreleasedDataList().searchForReceiver(e)}>
+                                                <SearchInput
+                                                    type='text'
+                                                    name='searchedUnreleasedReceiverData'
+                                                    value={props.searchBarState?.searchedUnreleasedReceiverData || ''}
+                                                    onChange={(e) => props.__handleEventControl().searchUnreleasedDataList().onChangeInputValue(e)}>
+                                                </SearchInput>
                                             </SearchBarBox>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
@@ -307,14 +320,17 @@ const DeliveryReadyUnreleasedView = (props) => {
                                         <HeaderTh className="fixed-header" scope="col">
                                             <div>
                                                 <span>비고</span>
-                                                <ControlBtn clicked={!props.storageSearchBarData.isOpen}><ManageSearchIcon type="button" onClick={(e) => props.__handleEventControl().searchDataList().openSearchBarForStorageMemo(e)}/></ControlBtn>
+                                                <ControlBtn clicked={!props.storageSearchBarData.isOpenForUnreleased} type="button" onClick={(e) => props.__handleEventControl().searchUnreleasedDataList().openSearchBarForStorageMemo(e)}>
+                                                    <ManageSearchIcon />
+                                                </ControlBtn>
                                             </div>
-                                            <SearchBarBox hidden={props.storageSearchBarData.isOpen}>
-                                                <SearchBar
-                                                    value={props.storageSearchBarData.searchedData}
-                                                    onChange={(newValue) => props.__handleEventControl().searchDataList().onChangeStorageInputValue(newValue)}
-                                                    onRequestSearch={() => props.__handleEventControl().searchDataList().searchForStorage()}
-                                                />
+                                            <SearchBarBox hidden={props.storageSearchBarData.isOpenForUnreleased} onSubmit={(e) => props.__handleEventControl().searchUnreleasedDataList().searchForStorage(e)}>
+                                                <SearchInput
+                                                    type='text'
+                                                    name='searchedUnreleasedStorageData'
+                                                    value={props.searchBarState?.searchedUnreleasedStorageData || ''}
+                                                    onChange={(e) => props.__handleEventControl().searchUnreleasedDataList().onChangeInputValue(e)}>
+                                                </SearchInput>
                                             </SearchBarBox>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
@@ -426,7 +442,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                 </DataContainer>
             }
         </>
-    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleasedDataPagenate, props.receiverSearchBarData, props.storageSearchBarData])
+    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleasedDataPagenate, props.receiverSearchBarData, props.storageSearchBarData, props.searchBarState])
 }
 
 export default DeliveryReadyUnreleasedView;

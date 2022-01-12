@@ -257,8 +257,18 @@ const ControlBtn = styled.span`
     }
 `;
 
-const SearchBarBox = styled.div`
+const SearchBarBox = styled.form`
     position: absolute;
+`;
+
+const SearchInput = styled.input`
+    width: 100%;
+    border: 2px solid #d2d2ed;
+    background: #f9f9ff;
+    border-radius: 5px;
+    padding: 3px 10px;
+    font-size: 16px;
+    font-weight: 500;
 `;
 
 const DeliveryReadyReleasedViewCoupangBody = (props) => {
@@ -301,16 +311,19 @@ const DeliveryReadyReleasedViewCoupangBody = (props) => {
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <div>
-                                                <span>받는사람</span>
+                                                <span>수취인명</span>
                                                 <ControlBtn><ArrowDropDownIcon type="button" onClick={() => props.__handleEventControl().sortDataList().releasedDataSortedByReceiver()} /></ControlBtn>
-                                                <ControlBtn clicked={!props.receiverSearchBarData.isOpenForReleased}><ManageSearchIcon type="button" onClick={(e) => props.__handleEventControl().searchReleasedDataList().openSearchBarForReceiver(e)}/></ControlBtn>
+                                                <ControlBtn clicked={!props.receiverSearchBarData.isOpenForReleased} type="button" onClick={(e) => props.__handleEventControl().searchReleasedDataList().openSearchBarForReceiver(e)}>
+                                                    <ManageSearchIcon />
+                                                </ControlBtn>
                                             </div>
-                                            <SearchBarBox hidden={props.receiverSearchBarData.isOpenForReleased}>
-                                                <SearchBar
-                                                    value={props.receiverSearchBarData.searchedReleasedData}
-                                                    onChange={(newValue) => props.__handleEventControl().searchReleasedDataList().onChangeReceiverInputValue(newValue)}
-                                                    onRequestSearch={() => props.__handleEventControl().searchReleasedDataList().searchForReceiver()}
-                                                />
+                                            <SearchBarBox hidden={props.receiverSearchBarData.isOpenForReleased} onSubmit={(e) => props.__handleEventControl().searchReleasedDataList().searchForReceiver(e)}>
+                                                <SearchInput
+                                                    type='text'
+                                                    name='searchedReleasedReceiverData'
+                                                    value={props.searchBarState?.searchedReleasedReceiverData || ''}
+                                                    onChange={(e) => props.__handleEventControl().searchReleasedDataList().onChangeInputValue(e)}>
+                                                </SearchInput>
                                             </SearchBarBox>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
@@ -340,14 +353,17 @@ const DeliveryReadyReleasedViewCoupangBody = (props) => {
                                         <HeaderTh className="fixed-header" scope="col">
                                             <div>
                                                 <span>비고</span>
-                                                <ControlBtn clicked={!props.storageSearchBarData.isOpenForReleased}><ManageSearchIcon type="button" onClick={(e) => props.__handleEventControl().searchReleasedDataList().openSearchBarForStorageMemo(e)}/></ControlBtn>
+                                                <ControlBtn clicked={!props.storageSearchBarData.isOpenForReleased} type="button" onClick={(e) => props.__handleEventControl().searchReleasedDataList().openSearchBarForStorageMemo(e)}>
+                                                    <ManageSearchIcon />
+                                                </ControlBtn>
                                             </div>
-                                            <SearchBarBox hidden={props.storageSearchBarData.isOpenForReleased}>
-                                                <SearchBar
-                                                    value={props.storageSearchBarData.searchedReleasedData}
-                                                    onChange={(newValue) => props.__handleEventControl().searchReleasedDataList().onChangeStorageInputValue(newValue)}
-                                                    onRequestSearch={() => props.__handleEventControl().searchReleasedDataList().searchForStorage()}
-                                                />
+                                            <SearchBarBox hidden={props.storageSearchBarData.isOpenForReleased} onSubmit={(e) => props.__handleEventControl().searchReleasedDataList().searchForStorage(e)}>
+                                                <SearchInput
+                                                    type='text'
+                                                    name='searchedReleasedStorageData'
+                                                    value={props.searchBarState?.searchedReleasedStorageData || ''}
+                                                    onChange={(e) => props.__handleEventControl().searchReleasedDataList().onChangeInputValue(e)}>
+                                                </SearchInput>
                                             </SearchBarBox>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
@@ -460,7 +476,7 @@ const DeliveryReadyReleasedViewCoupangBody = (props) => {
                 </DataContainer>
             }
         </>
-    ), [props.releasedData, props.releaseCheckedOrderList, props.selectedDateText, props.releasedDataPagenate, props.releasedDataPagenate, props.receiverSearchBarData, props.storageSearchBarData])
+    ), [props.releasedData, props.releaseCheckedOrderList, props.selectedDateText, props.releasedDataPagenate, props.releasedDataPagenate, props.receiverSearchBarData, props.storageSearchBarData, props.searchBarState])
 }
 
 export default DeliveryReadyReleasedViewCoupangBody;
