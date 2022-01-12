@@ -53,6 +53,37 @@ const CustomLink = styled(Link)`
     
 `;
 
+const CustomLink2 = styled.a`
+    margin-bottom: 30px;
+    display: inline-block;
+    width: 100%;
+    border:3px double #7d7ada;
+    border-radius: 30px;
+    padding:5px;
+    text-align: center;
+    font-size: 1.5rem;
+    color:#7d7ada;
+    font-weight: 600;
+    box-shadow: 5px 5px 5px -1px #00000020;
+
+    &:hover{
+        text-decoration: none;
+        border:3px double white;
+        background: rgba(122, 123, 218, 0.88);
+        transition-duration: 0.2s;
+        color:white;
+    }
+    
+    @media only screen and (max-width:992px){
+        font-size: 1.3rem;
+    }
+
+    @media only screen and (max-width:335px){
+        font-size: 1rem;
+    }
+    
+`;
+
 const HomeBody = () => {
     const userRdx = useSelector(state => state.user);
 
@@ -76,6 +107,7 @@ const HomeBody = () => {
                         <CustomLink to='/delivery-ready/coupang'>쿠팡 배송준비 발주서 다운로드</CustomLink>
                         <CustomLink to='/order-registration/naver'>네이버 대량등록 엑셀 다운로드</CustomLink>
                         <CustomLink to='/commute-record'>출/퇴근 기록</CustomLink>
+                        <CustomLink2 href='https://analytics.piaar.co.kr'>분석기</CustomLink2>
                     </LinkBox>
                 </LinkGroup>
 

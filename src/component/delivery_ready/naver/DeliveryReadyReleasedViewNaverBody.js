@@ -398,10 +398,10 @@ const DeliveryReadyReleasedView = (props) => {
                                             && (releasedDataIdx >= props.releasedDataPagenate.postsPerPage * (props.releasedDataPagenate.currentPage-1)))
                                         return (
                                             <BodyTr
-                                            key={'releasedItem' + releasedDataIdx}
-                                            onClick={() => props.__handleEventControl().releaseCheckedOrderList().checkOneLi(data.deliveryReadyItem.id)}
-                                            checked={props.__handleEventControl().releaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
-                                            reflectedUnit={data.deliveryReadyItem.releaseCompleted}
+                                                key={'releasedItem' + releasedDataIdx}
+                                                onClick={() => props.__handleEventControl().releaseCheckedOrderList().checkOneLi(data.deliveryReadyItem.id)}
+                                                checked={props.__handleEventControl().releaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
+                                                reflectedUnit={data.deliveryReadyItem.releaseCompleted}
                                             >
                                                 <BodyTd className="col small-cell">
                                                     <Checkbox
