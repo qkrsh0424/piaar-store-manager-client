@@ -3,9 +3,11 @@ import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
 
 import Checkbox from '@material-ui/core/Checkbox';
-import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import SearchBar from "material-ui-search-bar";
+
+import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
@@ -210,31 +212,29 @@ const DataOptionBox = styled.span`
     }
 `;
 
-const CommonInputEl = styled.input`
-    font-size: 1rem;
-    border: 1px solid #ced4da;
-    &:focus{
-        outline: none;
-        border: 1px solid #4662B4;
-        background: white;
+const ControlBtn = styled.span`
+    border: none;
+    padding: 0 4px;
+
+    ${(props) => props.clicked ?
+        css`
+            color: #b2b3dd;
+            transform: scale(1.2);
+        `
+        :
+        css`
+            color: rgb(122, 123, 218);
+            
+            &:hover {
+                transform: scale(1.2);
+            }
+        `
     }
 `;
 
-const MemoInputForm = styled.form`
-    display: grid;
-    grid-template-columns: repeat(3, 20% 55% 15%);
-    column-gap: 10px;
-    justify-content: space-between;
-    place-items: center;
+const SearchBarBox = styled.div`
+    position: absolute;
 `;
-
-const MemoBtn = styled.button`
-    border: none;
-    background-color: #b2b3dd9e;
-    border-radius: 5px;
-    padding: 5px;
-`;
-
 
 const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
     const userRdx = useSelector(state => state.user);
@@ -272,8 +272,19 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                                 onChange={() => props.__handleEventControl().unreleaseCheckedOrderList().checkAll()} checked={props.__handleEventControl().unreleaseCheckedOrderList().isCheckedAll()}
                                             />
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header medium-cell" scope="col">
-                                            <span>받는사람</span><ArrowDropDownIcon type="button" onClick={() => props.__handleEventControl().sortDataList().unreleasedDataSortedByReceiver()}/>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <div>
+                                                <span>받는사람</span>
+                                                <ControlBtn><ArrowDropDownIcon type="button" onClick={() => props.__handleEventControl().sortDataList().unreleasedDataSortedByReceiver()} /></ControlBtn>
+                                                <ControlBtn clicked={!props.receiverSearchBarData.isOpen}><ManageSearchIcon type="button" onClick={(e) => props.__handleEventControl().searchDataList().openSearchBarForReceiver(e)}/></ControlBtn>
+                                            </div>
+                                            <SearchBarBox hidden={props.receiverSearchBarData.isOpen}>
+                                                <SearchBar
+                                                    value={props.receiverSearchBarData.searchedData}
+                                                    onChange={(newValue) => props.__handleEventControl().searchDataList().onChangeReceiverInputValue(newValue)}
+                                                    onRequestSearch={() => props.__handleEventControl().searchDataList().searchForReceiver()}
+                                                />
+                                            </SearchBarBox>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
                                             <span>등록상품명</span><ArrowDropDownIcon type="button" onClick={() => props.__handleEventControl().sortDataList().unreleasedDataSortedByProdName()}/>
@@ -299,20 +310,18 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>*옵션명2</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <MemoInputForm 
-                                                onSubmit={(e) => props.__handleEventControl().unreleaseStorageMemo().submit(e)}
-                                            >
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <div>
                                                 <span>비고</span>
-                                                <CommonInputEl
-                                                    type="text"
-                                                    className='form-control'
-                                                    name='unreleaseStorageMemo'
-                                                    value={props.storageInputMemo.unreleaseStorageMemo}
-                                                    onChange={(e) => props.__handleEventControl().unreleaseStorageMemo().onChangeInputValue(e)}
+                                                <ControlBtn clicked={!props.storageSearchBarData.isOpen}><ManageSearchIcon type="button" onClick={(e) => props.__handleEventControl().searchDataList().openSearchBarForStorageMemo(e)}/></ControlBtn>
+                                            </div>
+                                            <SearchBarBox hidden={props.storageSearchBarData.isOpen}>
+                                                <SearchBar
+                                                    value={props.storageSearchBarData.searchedData}
+                                                    onChange={(newValue) => props.__handleEventControl().searchDataList().onChangeStorageInputValue(newValue)}
+                                                    onRequestSearch={() => props.__handleEventControl().searchDataList().searchForStorage()}
                                                 />
-                                                <MemoBtn type='submit'><ManageSearchIcon /></MemoBtn>
-                                            </MemoInputForm>
+                                            </SearchBarBox>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>묶음배송번호</span>
@@ -423,7 +432,7 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                 </DataContainer>
             }
         </>
-    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleasedDataPagenate, props.storageInputMemo])
+    ), [props.unreleasedData, props.unreleaseCheckedOrderList, props.unreleasedDataPagenate, props.receiverSearchBarData, props.storageSearchBarData])
 }
 
 export default DeliveryReadyUnreleasedViewCoupangBody;
