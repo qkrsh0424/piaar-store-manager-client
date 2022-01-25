@@ -1,4 +1,4 @@
-import {useState, useEffect, useReducer} from 'react';
+import React, {useState, useEffect, useReducer} from 'react';
 import { withRouter } from 'react-router';
 
 // handler
@@ -153,6 +153,7 @@ const DeliveryReadyViewNaverMain = (props) => {
             getDeliveryReadyReleasedData: async function (start, end) {
                 var date1 = start ? new Date(getStartDate(start)).toUTCString() : null;
                 var date2 = end ? new Date(getEndDate(end)).toUTCString() : null;
+
                 // date1 = getStartDate(date1);
                 // date1 = dateToYYYYMMDDhhmmss(date1);
 
@@ -950,6 +951,10 @@ const DeliveryReadyViewNaverMain = (props) => {
                                 ...receiverSearchBarData,
                                 isOpenForUnreleased: false
                             });
+
+                            dispatchSearchBarState({
+                                type: 'CLEAR'
+                            });
                         }
                         else{
                             setReceiverSearchBarData({
@@ -965,6 +970,10 @@ const DeliveryReadyViewNaverMain = (props) => {
                             setStorageSearchBarData({
                                 ...storageSearchBarData,
                                 isOpenForUnreleased: false
+                            });
+
+                            dispatchSearchBarState({
+                                type: 'CLEAR'
                             });
                         }
                         else{
@@ -1025,6 +1034,10 @@ const DeliveryReadyViewNaverMain = (props) => {
                                 ...receiverSearchBarData,
                                 isOpenForReleased: false
                             });
+
+                            dispatchSearchBarState({
+                                type: 'CLEAR'
+                            });
                         }
                         else{
                             setReceiverSearchBarData({
@@ -1040,6 +1053,10 @@ const DeliveryReadyViewNaverMain = (props) => {
                             setStorageSearchBarData({
                                 ...storageSearchBarData,
                                 isOpenForReleased: false
+                            });
+
+                            dispatchSearchBarState({
+                                type: 'CLEAR'
                             });
                         }
                         else{

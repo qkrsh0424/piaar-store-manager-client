@@ -288,7 +288,9 @@ const DeliveryReadyUnreleasedView = (props) => {
                                                     type='text'
                                                     name='searchedUnreleasedReceiverData'
                                                     value={props.searchBarState?.searchedUnreleasedReceiverData || ''}
-                                                    onChange={(e) => props.__handleEventControl().searchUnreleasedDataList().onChangeInputValue(e)}>
+                                                    onChange={(e) => props.__handleEventControl().searchUnreleasedDataList().onChangeInputValue(e)}
+                                                    autoFocus
+                                                    >
                                                 </SearchInput>
                                             </SearchBarBox>
                                         </HeaderTh>
