@@ -540,7 +540,6 @@ const ExcelTranslatorUploadDataBoard = (props) => {
                             <HeaderFormControlBtn type="button" className="upload-header-excel-download" onClick={(e) => excelFormControl().uploadedExcelForm().download(e)} disabled={!selectedHeaderTitleState?.uploadHeaderDetail.details.length}>양식 다운로드</HeaderFormControlBtn>
                             <HeaderFormControlBtn type="button" onClick={(e) => excelFormControl().uploadedExcelForm().open(e)}>양식 설정</HeaderFormControlBtn>
                         </DataOptionBox>
-                        {console.log(uploadedExcelDataState)}
                     </BoardTitle>
                     <BoardContainer>
                         <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>

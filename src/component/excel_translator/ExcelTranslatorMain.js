@@ -258,8 +258,6 @@ const ExcelTranslatorMain = (props) => {
                             });
                         });
 
-                        console.log(excelData);
-
                         // dto로 변경
                         let translatedDetail = excelData.map(r => {
                             let data = new TranslatedData().toJSON();
