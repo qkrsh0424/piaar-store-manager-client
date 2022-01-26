@@ -39,6 +39,28 @@ const CustomLink = styled(Link)`
     }
     
 `;
+
+const CustomLink2 = styled.a`
+    display: inline-block;
+    width: 100%;
+    padding:5px;
+    text-align: center;
+    font-size: 1rem;
+    color:#7d7ada;
+    font-weight: 600;
+    border-left:3px solid #7d7ada00;
+    transition: 0.3s;
+    border-radius: 30px;
+
+    &:hover{
+        text-decoration: none;
+        /* border-left:3px solid #7d7ada; */
+        color:#7d7ada;
+        background-color: #F2ECFF;
+    }
+    
+`;
+
 const DrawerNavbarSiderComponent = (props) => {
     const userRdx = useSelector(state => state.user);
     return (
@@ -98,6 +120,15 @@ const DrawerNavbarSiderComponent = (props) => {
                             </LinkContainer>
                             <LinkContainer>
                                 <CustomLink to='/order-registration/naver'>네이버 대량등록<br />엑셀 다운로드</CustomLink>
+                            </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink to='/commute-record'>출퇴근기록</CustomLink>
+                            </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink2 href='https://analytics.piaar.co.kr'>분석기</CustomLink2>
+                            </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
                             </LinkContainer>
                             <LinkContainer>
                                 <form onSubmit={(e) => props.__handleEventControl().logoutSubmit(e)}>

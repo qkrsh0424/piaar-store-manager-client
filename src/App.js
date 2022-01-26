@@ -45,6 +45,7 @@ import ProductDetailMain from './component/product_detail/ProductDetailMain';
 // data connect
 import { userDataConnect } from './data_connect/userDataConnect';
 import CommuteRecordMain from './component/commute_record/CommuteRecordMain';
+import ExcelTranslatorMain from './component/excel_translator/ExcelTranslatorMain';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -169,6 +170,9 @@ function App(props) {
                                 </Route>
                                 <Route exact path='/commute-record'>
                                     {userRdx.userInfo ? <CommuteRecordMain></CommuteRecordMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                <Route exact path='/excel-translator'>
+                                    {userRdx.userInfo ? <ExcelTranslatorMain></ExcelTranslatorMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                             </Switch>
                         )

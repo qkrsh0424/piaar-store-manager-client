@@ -108,6 +108,7 @@ const HomeBody = () => {
                         <CustomLink to='/order-registration/naver'>네이버 대량등록 엑셀 다운로드</CustomLink>
                         <CustomLink to='/commute-record'>출/퇴근 기록</CustomLink>
                         <CustomLink2 href='https://analytics.piaar.co.kr'>분석기</CustomLink2>
+                        <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
                     </LinkBox>
                 </LinkGroup>
 
