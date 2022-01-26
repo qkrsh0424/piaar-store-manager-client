@@ -58,33 +58,14 @@ const BodyContainer = styled.div`
 
 const CommonInputEl = styled.input`
     font-size: 1.1rem;
-    border: none;
     padding: 10px;
+    border: 1px solid #00000000;
     border-bottom: 1px solid #ced4da;
 
     &:focus{
         outline: none;
         border: 1px solid #4662B4;
         background: white;
-    }
-`;
-
-const SubmitBtn = styled.button`
-    border: none;
-    border-radius: 50%;
-    background-color: #c7cee3ee;
-    margin: 8px 11px;
-
-    &:hover{
-        transform: scale(1.1);
-        cursor: pointer;
-    }
-
-    &:active{
-        transition: 0s;
-        transform: scale(1.05);
-
-        color: #8e90e3;
     }
 `;
 

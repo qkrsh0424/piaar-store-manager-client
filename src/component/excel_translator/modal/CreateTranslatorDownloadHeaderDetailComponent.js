@@ -71,6 +71,7 @@ const DataWrapper = styled.div`
 const DataInputEl = styled.input`
     border: none;
     padding: 10px;
+    border: 1px solid #00000000;
     border-bottom: 1px solid #ced4da;
     &:focus{
         outline: none;
@@ -225,7 +226,7 @@ const CreateBtn = styled.button`
 `;
 
 const DataContainer = styled.div`
-    height: 60vh;
+    height: 40vh;
     overflow: auto;
     background-color: white;
     padding: 20px;
