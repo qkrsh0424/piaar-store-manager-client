@@ -891,6 +891,13 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                             ...checkedUnreleaseData
                         ]
 
+                        for(var i = 0; i < downloadData.length; i++) {
+                            if(downloadData[i].prodManagementName === null) {
+                                alert('모든 상품의 옵션관리코드를 설정해주세요.')
+                                return;
+                            }
+                        }
+
                         if(!storeInfoData.storeName || !storeInfoData.storeContact){
                             alert('스토어명과 스토어 전화번호를 모두 입력해 주세요.')
                             return;
