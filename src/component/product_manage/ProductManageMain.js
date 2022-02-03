@@ -24,6 +24,7 @@ import BackdropLoading from '../loading/BackdropLoading';
 import { formControlClasses } from '@mui/material';
 import { data } from 'jquery';
 import { subMilliseconds } from 'date-fns';
+import ReceiveAndReleaseStatusModal from './modal/ReceiveAndReleaseStatusModal';
 
 class ProductOption {
     constructor(productId, optionDefaultName = '', optionManagementName = '', nosUniqueCode = '') {
@@ -136,6 +137,10 @@ const ProductManageMain = () => {
     const [stockStatusModalOpen, setStockStatusModalOpen] = useState(false);
     const [stockStatusData, setStockStatusData] = useState(null);
 
+    const [receiveAndReleaseStatusModalOpen, setReceiveAndReleaseStatusModalOpen] = useState(false);
+    const [optionReceiveStatusData, setOptionReceiveStatusData] = useState(null);
+    const [optionReleaseStatusData, setOptionReleaseStatusData] = useState(null);
+
     const [backdropLoading, setBackdropLoading] = useState(false);
 
     const [isObjectSubmitted, setIsObjectSubmitted] = useState({
@@ -217,6 +222,17 @@ const ProductManageMain = () => {
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             __handleEventControl().productOption().setStockStatusList(res.data.data);
+                        }
+                    })
+                    .catch(err => {
+                        alert('undefined error.')
+                    })
+            },
+            searchAllStockStatusList: async function () {
+                await productOptionDataConnect().searchAllStockStatus()
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            __handleEventControl().productOption().setAllStockStatusList(res.data.data);
                         }
                     })
                     .catch(err => {
@@ -715,7 +731,26 @@ const ProductManageMain = () => {
                         sortedByDate.reverse();
 
                         setStockStatusData(sortedByDate);
-                    }
+                    },
+                    receiveAndReleaseStatusModalOpen: async function () {
+                        await __handleDataConnect().searchAllStockStatusList();
+                        setReceiveAndReleaseStatusModalOpen(true);
+                    },
+                    receiveAndReleaseStatusModalClose: function () {
+                        setReceiveAndReleaseStatusModalOpen(false);
+                    },
+                    setAllStockStatusList: function (data) {
+                        // 입출고 데이터를 포함하는 배열 생성
+                        let sortedReceiveData = [...data.productReceive];
+                        let sortedReleaseData = [...data.productRelease];
+
+                        // createdAt 내림차순 정렬
+                        sortedReceiveData.sort((b, a) => a.receive.createdAt.localeCompare(b.receive.createdAt));
+                        sortedReleaseData.sort((b, a) => a.release.createdAt.localeCompare(b.release.createdAt));
+
+                        setOptionReceiveStatusData(sortedReceiveData);
+                        setOptionReleaseStatusData(sortedReleaseData);
+                    },
                 }
             },
             checkedOptionList: function () {
@@ -1081,6 +1116,15 @@ const ProductManageMain = () => {
 
                     __handleEventControl={__handleEventControl}
                 ></StockStatusModal>
+            }
+            {receiveAndReleaseStatusModalOpen && optionReceiveStatusData && optionReleaseStatusData && 
+                <ReceiveAndReleaseStatusModal
+                    open={receiveAndReleaseStatusModalOpen}
+                    optionReceiveStatusData={optionReceiveStatusData}
+                    optionReleaseStatusData={optionReleaseStatusData}
+
+                    __handleEventControl={__handleEventControl}
+                ></ReceiveAndReleaseStatusModal>
             }
         </>
     );

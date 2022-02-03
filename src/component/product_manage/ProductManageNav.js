@@ -62,7 +62,7 @@ const ProductManageNav = (props) => {
             <Container>
                 <CommonLinkGroupContainer>
                     <CommonLinkGroupWrapper className='row'>
-                        <div className='col-4 mb-2'>
+                        <div className='col-3 mb-2'>
                             <CommonLinkEl
                                 to={{
                                     pathname:'/products/create',
@@ -72,7 +72,7 @@ const ProductManageNav = (props) => {
                                 // color={'#333333e0'}
                             >상품등록</CommonLinkEl>
                         </div>
-                        <div className='col-4 mb-2'>
+                        <div className='col-3 mb-2'>
                             <ReceiveReleaseBtn
                                 type='button'
                                 color={'#7a7bdae0'}
@@ -80,13 +80,21 @@ const ProductManageNav = (props) => {
                                 onClick={()=>props.__handleEventControl().release().addModalOpen()}
                             >출고등록</ReceiveReleaseBtn>
                         </div>
-                        <div className='col-4 mb-2'>
+                        <div className='col-3 mb-2'>
                             <ReceiveReleaseBtn
                                 type='button'
                                 color={'#7a7bdae0'}
                                 // color={'#333333e0'}
                                 onClick={()=>props.__handleEventControl().receive().addModalOpen()}
                             >입고등록</ReceiveReleaseBtn>
+                        </div>
+                        <div className='col-3 mb-2'>
+                            <ReceiveReleaseBtn
+                                type='button'
+                                color={'#7a7bdae0'}
+                                // color={'#333333e0'}
+                                onClick={()=>props.__handleEventControl().productOption().receiveAndReleaseStatusModalOpen()}
+                            >입출고확인</ReceiveReleaseBtn>
                         </div>
                     </CommonLinkGroupWrapper>
                 </CommonLinkGroupContainer>
