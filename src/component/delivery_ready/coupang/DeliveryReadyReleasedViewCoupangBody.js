@@ -126,6 +126,10 @@ const BodyTr = styled.tr`
         :
         css``
     }
+
+    & .duplication-user{
+        color: red;
+    }
 `;
 
 const BodyTd = styled.td`
@@ -410,55 +414,55 @@ const DeliveryReadyReleasedViewCoupangBody = (props) => {
                                                         checked={props.__handleEventControl().releaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
                                                     />
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd className={data.duplicationUser != null ? `duplication-user` : ''}>
                                                     <span>{data.deliveryReadyItem.receiver}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.deliveryReadyItem.prodName}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.deliveryReadyItem.optionInfo}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.deliveryReadyItem.unit}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.optionStockUnit}</span>
                                                 </BodyTd>
                                                 <BodyTd className="col option-code-btn" onClick={(e) => props.__handleEventControl().deliveryReadyOptionInfo().open(e, data.deliveryReadyItem)}>
                                                     <span>{data.deliveryReadyItem.optionManagementCode}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.prodManagementName}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.optionDefaultName}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.optionManagementName}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.optionMemo}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.deliveryReadyItem.shipmentCostBundleNumber}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.deliveryReadyItem.prodOrderNumber}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.deliveryReadyItem.destination}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.deliveryReadyItem.receiverContact1}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.deliveryReadyItem.zipCode}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{data.deliveryReadyItem.deliveryMessage}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col">
+                                                <BodyTd>
                                                     <span>{dateToYYMMDDhhmmss(data.deliveryReadyItem.orderDateTime)}</span>
                                                 </BodyTd>
                                                 <BodyTd>

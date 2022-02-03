@@ -134,7 +134,25 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                 await deliveryReadyCoupangDataConnect().getUnreleasedData()
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
-                            setUnreleasedData(res.data.data);
+                            let data = res.data.data;
+                            let sortedData = data.sort((a, b) => a.deliveryReadyItem.receiver.localeCompare(b.deliveryReadyItem.receiver));
+                            
+                            for(var i = 0; i < sortedData.length-1; i++){
+                                if((sortedData[i].deliveryReadyItem.receiver === sortedData[i+1].deliveryReadyItem.receiver)
+                                    && (sortedData[i].deliveryReadyItem.receiverContact1 === sortedData[i+1].deliveryReadyItem.receiverContact1)) {
+                                        sortedData[i] = {
+                                            ...sortedData[i],
+                                            duplicationUser : true
+                                        };
+
+                                        sortedData[i+1] = {
+                                            ...sortedData[i+1],
+                                            duplicationUser : true
+                                        };
+                                }
+                            }
+
+                            setUnreleasedData(sortedData);
                             setOriginUnreleasedData(res.data.data);
                             
                             let unreleasedDataLength = res.data.data.length;
@@ -167,7 +185,25 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                 await deliveryReadyCoupangDataConnect().getSelectedReleasedData(date1, date2)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            setReleasedData(res.data.data);
+                            let data = res.data.data;
+                            let sortedData = data.sort((a, b) => a.deliveryReadyItem.receiver.localeCompare(b.deliveryReadyItem.receiver));
+                            
+                            for(var i = 0; i < sortedData.length-1; i++){
+                                if((sortedData[i].deliveryReadyItem.receiver === sortedData[i+1].deliveryReadyItem.receiver)
+                                    && (sortedData[i].deliveryReadyItem.receiverContact1 === sortedData[i+1].deliveryReadyItem.receiverContact1)) {
+                                        sortedData[i] = {
+                                            ...sortedData[i],
+                                            duplicationUser : true
+                                        };
+
+                                        sortedData[i+1] = {
+                                            ...sortedData[i+1],
+                                            duplicationUser : true
+                                        };
+                                }
+                            }
+
+                            setReleasedData(sortedData);
                             setOriginReleasedData(res.data.data);
                         }
                         setSelectedDateText(dateToYYMMDD(date1) + " ~ " + dateToYYMMDD(date2));
