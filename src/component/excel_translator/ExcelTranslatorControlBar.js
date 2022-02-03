@@ -439,7 +439,7 @@ const ExcelTranslatorControlBar = (props) => {
                         }
 
                         props.loadingControl().open();
-                        await props.downloadTranslatedExcelFileControl(selectedHeaderTitleState.downloadHeaderDetail.details);
+                        await props.downloadTranslatedExcelFileControl(selectedHeaderTitleState.downloadHeaderTitle, selectedHeaderTitleState.downloadHeaderDetail.details);
                         props.loadingControl().close();
                     }
                 }

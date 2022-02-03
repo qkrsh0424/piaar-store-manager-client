@@ -522,7 +522,7 @@ const ExcelTranslatorUploadDataBoard = (props) => {
                             }
                         });
 
-                        await props.downloadUploadHeaderDetailsControl(downloadDetail);
+                        await props.downloadUploadHeaderDetailsControl(selectedHeaderTitleState.uploadHeaderTitle, downloadDetail);
                         props.loadingControl().close();
                     }
                 }
