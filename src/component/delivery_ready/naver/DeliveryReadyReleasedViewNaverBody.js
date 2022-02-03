@@ -141,7 +141,7 @@ const BodyTd = styled.td`
 
 const CheckBodyTd = styled.span`
     font-size: 13px;
-    margin: 0 15px;
+    padding: 0 15px;
 `;
 
 const CancelBtn = styled.button`
@@ -165,7 +165,6 @@ const DateSelector = styled.button`
     width: 200px;
     padding: 6px 0px;
     height: auto;
-    margin-left: 25px;
     transition: opacity 0.1s linear;
     font-size: 14px;
     font-weight: 400;
@@ -275,6 +274,38 @@ const SearchInput = styled.input`
     font-weight: 500;
 `;
 
+const ReflectControl = styled.button`
+    float: right;
+    font-size: 14px;
+    border: none;
+    border-radius: 2px;
+    background-color: rgb(152 181 204);
+    color: white;
+    transition: 0.1s linear;
+    margin: 3px;
+    padding: 5px 20px;
+    font-weight: 600;
+
+    &:hover {
+        background-color: rgb(117 147 171);
+        cursor: pointer;
+    }
+
+    @media only screen and (max-width:576px){
+        font-size: 10px;
+    }
+`;
+
+const ReleaseDataControlBox = styled.div`
+    padding: 2px 25px;
+
+    @media only screen and (max-width: 992px) {
+        display: grid;
+        grid-template-columns: 1fr;
+        row-gap: 10px;
+    }
+`;
+
 const DeliveryReadyReleasedView = (props) => {
     const userRdx = useSelector(state => state.user);
 
@@ -282,15 +313,18 @@ const DeliveryReadyReleasedView = (props) => {
         <>
             {userRdx.isLoading === false &&
                 <DataContainer>
-                    <DateSelector type="button" onClick={() => props.__handleEventControl().deliveryReadyDateRangePicker().open()}><EventAvailableTwoToneIcon fontSize="small" color="action" /> {props.selectedDateText}</DateSelector>
+                    <ReleaseDataControlBox>
+                        <DateSelector type="button" onClick={() => props.__handleEventControl().deliveryReadyDateRangePicker().open()}><EventAvailableTwoToneIcon fontSize="small" color="action" /> {props.selectedDateText}</DateSelector>
+                        <ReflectControl onClick={(e) => props.__handleEventControl().searchReleasedDataList().controlReflectedData(e)}>{props.releasedDataReflectedState?.controlText}</ReflectControl>
+                    </ReleaseDataControlBox>
                     <TableContainer>
                         <BoardTitle>
                             <span><b>네이버</b> 출고 데이터</span>
                             <CheckBodyTd>[✔️ : {props.releaseCheckedOrderList.length} / {props.releasedData ? props.releasedData.length : 0}개]</CheckBodyTd>
                             <DataOptionBox>
-                                <ChangeListBtn type="button" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeListToUnreleaseData(e)}>일괄 출고 취소</ChangeListBtn>
-                                <ChangeListBtn type="button" className="unitReflectBtn" onClick={(e) => props.__handleEventControl().deliveryReadyReleaseMemo().open(e)}>재고반영</ChangeListBtn>
-                                <ChangeListBtn type="button" className="unitReflectCancelBtn" onClick={(e) => props.__handleEventControl().deliveryReadyReceiveMemo().open(e)}>재고반영 취소</ChangeListBtn>
+                                <ChangeListBtn onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeListToUnreleaseData(e)}>일괄 출고 취소</ChangeListBtn>
+                                <ChangeListBtn className="unitReflectBtn" onClick={(e) => props.__handleEventControl().deliveryReadyReleaseMemo().open(e)}>재고반영</ChangeListBtn>
+                                <ChangeListBtn className="unitReflectCancelBtn" onClick={(e) => props.__handleEventControl().deliveryReadyReceiveMemo().open(e)}>재고반영 취소</ChangeListBtn>
                             </DataOptionBox>
                             <PageBox>
                                 <Stack spacing={0}>
@@ -480,7 +514,7 @@ const DeliveryReadyReleasedView = (props) => {
                 </DataContainer>
             }
         </>
-    ), [props.releasedData, props.releaseCheckedOrderList, props.selectedDateText, props.releasedDataPagenate, props.receiverSearchBarData, props.storageSearchBarData, props.searchBarState])
+    ), [props.releasedData, props.releaseCheckedOrderList, props.selectedDateText, props.releasedDataPagenate, props.receiverSearchBarData, props.storageSearchBarData, props.searchBarState, props.releasedDataReflectedState])
 }
 
 export default DeliveryReadyReleasedView;

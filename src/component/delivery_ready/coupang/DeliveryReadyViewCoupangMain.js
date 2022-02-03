@@ -23,6 +23,7 @@ import { unstable_composeClasses } from '@mui/material';
 const POSTS_PER_PAGE = 50;
 
 const initialSearchBarState = null;
+const initialReleasedDataReflectedState = null;
 
 const searchBarStateReducer = (state, action) => {
     switch(action.type) {
@@ -35,6 +36,30 @@ const searchBarStateReducer = (state, action) => {
             }
         case 'CLEAR':
             return null;
+        default: return { ...state }
+    }
+}
+
+const releasedDataReflectedStateReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return {
+                ...state,
+                controlValue : 0,
+                controlText : '재고반영여부 선택'
+            }
+        case 'REFLECTED':
+            return {
+                ...state,
+                controlValue : 1,
+                controlText : '재고반영 O'
+            }
+        case 'NOT_REFLECTED':
+            return {
+                ...state,
+                controlValue : 2,
+                controlText : '재고반영 X'
+            }
         default: return { ...state }
     }
 }
@@ -111,6 +136,9 @@ const DeliveryReadyViewCoupnagMain = (props) => {
     const [deliveryReadyReceiveMemoModalOpen, setDeliveryReadyReceiveMemoModalOpen] = useState(false);
     const [releaseCompletedCancelMemo, setReleaseCompletedCancelMemo] = useState({ receiveMemo: ''});
 
+    // 재고반영 여부 컨트롤
+    const [releasedDataReflectedState, dispatchReleasedDataReflectedState] = useReducer(releasedDataReflectedStateReducer, initialReleasedDataReflectedState);
+    
     // 클릭 이벤트 여부
     const [isObjectSubmitted, setIsObjectSubmitted] = useState({
         reflectedUnit: false,
@@ -181,6 +209,9 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                 // date2 = dateToYYYYMMDDhhmmss(date2);
 
                 setReleaseCheckedOrderList([]);
+                dispatchReleasedDataReflectedState({
+                    type: 'INIT_DATA'
+                });
 
                 await deliveryReadyCoupangDataConnect().getSelectedReleasedData(date1, date2)
                     .then(res => {
@@ -1132,6 +1163,38 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                         });
 
                     },
+                    controlReflectedData: function (e) {
+                        e.preventDefault();
+
+                        // 0:전체, 1:반영O, 2:반영X
+                        let refelctedData = null;
+                        if(releasedDataReflectedState.controlValue === 0) {
+                            dispatchReleasedDataReflectedState({
+                                type: 'REFLECTED'
+                            });
+                            refelctedData = originReleasedData.filter(data => data.deliveryReadyItem.releaseCompleted === true);
+                        } else if(releasedDataReflectedState.controlValue == 1) {
+                            dispatchReleasedDataReflectedState({
+                                type: 'NOT_REFLECTED'
+                            });
+                            refelctedData = originReleasedData.filter(data => data.deliveryReadyItem.releaseCompleted === false);
+                        } else{
+                            dispatchReleasedDataReflectedState({
+                                type: 'INIT_DATA'
+                            });
+                            refelctedData = originReleasedData;
+                        }
+
+                        setReleasedData(refelctedData);
+                        
+                        let releasedDataLength = refelctedData.length;
+                        let pageNum = Math.ceil(releasedDataLength / POSTS_PER_PAGE);
+
+                        setReleasedDataPagenate({
+                            ...releasedDataPagenate,
+                            totalPageNumber: pageNum
+                        });
+                    }
                 }
             }
         }
@@ -1199,6 +1262,7 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                 receiverSearchBarData={receiverSearchBarData}
                 storageSearchBarData={storageSearchBarData}
                 searchBarState={searchBarState}
+                releasedDataReflectedState={releasedDataReflectedState}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReleasedViewCoupangBody>
