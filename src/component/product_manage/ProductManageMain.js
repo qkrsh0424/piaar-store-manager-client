@@ -162,6 +162,7 @@ const ProductManageMain = () => {
     const __handleDataConnect = () => {
         return {
             searchProductListFj: async function () {
+                __handleEventControl().backdropLoading().open();
                 await productDataConnect().getStockListFj()
                     .then(res => {
                         console.log(res)
@@ -171,7 +172,8 @@ const ProductManageMain = () => {
                     })
                     .catch(err => {
                         alert('undefined error. : searchProductListFj');
-                    })
+                    });
+                __handleEventControl().backdropLoading().close();
             },
             searchOptionList: async function () {
                 await productOptionDataConnect().getList()
@@ -733,8 +735,10 @@ const ProductManageMain = () => {
                         setStockStatusData(sortedByDate);
                     },
                     receiveAndReleaseStatusModalOpen: async function () {
+                        __handleEventControl().backdropLoading().open();
                         await __handleDataConnect().searchAllStockStatusList();
                         setReceiveAndReleaseStatusModalOpen(true);
+                        __handleEventControl().backdropLoading().close();
                     },
                     receiveAndReleaseStatusModalClose: function () {
                         setReceiveAndReleaseStatusModalOpen(false);

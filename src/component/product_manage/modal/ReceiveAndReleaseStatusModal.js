@@ -41,72 +41,74 @@ const GroupTitle = styled.div`
     }
 `;
 
-const NameGroup = styled.ul`
-    list-style: none;
-    padding:0 10px;
-
-    & .receive-list {
-        background: #ffecd4;
-        font-weight: 500;
-    }
-
-    & .release-list {
-        background: #d8def5;
-        font-weight: 500;
-    }
-`;
-
-const DataLi = styled.li`
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    border: 1px solid #e9e9e9;
-`;
-
-const HeaderLi = styled.li`
-    text-align: center;
-`;
-
-const TitleText = styled.div`
-    overflow: hidden;
-    height: auto;
-`;
-
-const ModalText = styled.div`
-    overflow: hidden;
-    height: auto;
-    font-size: 15px;
-    padding: 2px;
-    text-align: center;
-    border-right: 1px solid #e9e9e9;
-`;
-
-const DataWrapper = styled.div`
-    min-height: 40vh;
-    max-height: 40px;
-    background-color: white;
-    overflow: auto;
-    border-radius: 5px;
-
-    & .fixed-header {
-        position: sticky;
-        top: -1px;
-        background: #dddddd;
-        z-index:10;
-        padding: 2px;
-        font-size: 16px;
-        font-weight: 600;
-
-        @media only screen and (max-width:576px){
-            font-size: 14px;
-        }
-    }
-`;
-
 const DataContainer = styled.div`
     display: grid;
     width: 100%;
     row-gap: 10px;
     padding: 10px;
+`;
+
+const BoardContainer = styled.div`
+    min-height: 40vh;
+    max-height: 40px;
+    background-color: white;
+    overflow: auto;
+    border-radius: 5px;
+    font-size: 14px;
+    box-shadow: 1px 1px 15px #a9b3d599;
+
+    & .fixed-header {
+        position: sticky;
+        top: -1px;
+        background: #d5dae9;
+        z-index:10;
+        padding: 2px;
+        font-size: 16px;
+
+        @media only screen and (max-width:576px){
+            font-size: 14px;
+        }
+    }
+
+    & .receive-header {
+        background: #ffeac9;
+        box-shadow: 1px 1px 15px #ffeac9;
+    }
+
+    & .large-cell {
+        width: 300px;
+    }
+
+    & .xlarge-cell {
+        width: 500px;
+    }
+
+    @media only screen and (max-width:576px){
+        font-size: 12px;
+    }
+`;
+
+const HeaderTh = styled.th`
+    vertical-align: middle !important;
+    text-align: center;
+    width: 150px;
+    border-right: 1px solid #efefef;
+`;
+
+const BodyTr = styled.tr`
+    border-bottom: 1px solid #d5dae9;
+
+    & .receive-table {
+        border-right: 1px solid #f5ecdd;
+        border-bottom: 1px solid #f5ecdd;
+    }
+`;
+
+const BodyTd = styled.td`
+    vertical-align: middle !important;
+    text-align: center;
+    width: 150px;
+    border-right: 1px solid #a7a7a720;
 `;
 
 const ReceiveAndReleaseStatusModal = (props) => {
@@ -132,132 +134,140 @@ const ReceiveAndReleaseStatusModal = (props) => {
                         </GroupTitle>
 
                         <DataContainer>
-                        
-                        <DataWrapper>
-                            <NameGroup>
-                                <HeaderLi className="input-group fixed-header">
-                                    <TitleText className="col">
-                                        <span>입고 날짜</span>
-                                    </TitleText>
-                                    <TitleText className="col">
-                                        <span>상품명</span>
-                                    </TitleText>
-                                    <TitleText className="col">
-                                        <span>옵션명</span>
-                                    </TitleText>
-                                    <TitleText className="col">
-                                        <span>옵션관리코드</span>
-                                    </TitleText>
-                                    <TitleText className="col">
-                                        <span>입고 개수</span>
-                                    </TitleText>
-                                    <TitleText className="col">
-                                        <span>메모</span>
-                                    </TitleText>
-                                </HeaderLi>
-                                {props.optionReceiveStatusData?.map((data, idx) => {
-                                    return (
-                                        <DataLi
-                                            key={`option_receive_status_idx` + idx}
-                                        >
-                                            <ModalText className="receive-list">
-                                                <span>
-                                                    {dateToYYMMDDhhmmss(data.receive.createdAt)}
-                                                </span>
-                                            </ModalText>
-                                            <ModalText className="receive-list">
-                                                <span>
-                                                    {data.product.defaultName}
-                                                </span>
-                                            </ModalText>
-                                            <ModalText className="receive-list">
-                                                <span>
-                                                    {data.option.defaultName}
-                                                </span>
-                                            </ModalText>
-                                            <ModalText className="receive-list">
-                                                <span>
-                                                    {data.option.code}
-                                                </span>
-                                            </ModalText>
-                                            <ModalText className="receive-list">
-                                                <span>
-                                                    {data.receive.receiveUnit}
-                                                </span>
-                                            </ModalText>
-                                            <ModalText className="receive-list">
-                                                <span>
-                                                    {data.receive.memo}
-                                                </span>
-                                            </ModalText>
-                                        </DataLi>
-                                    )
-                                })}
-                            </NameGroup>
-                        </DataWrapper>
 
-                        <DataWrapper>
-                            <NameGroup>
-                                <HeaderLi className="input-group fixed-header">
-                                    <TitleText className="col">
-                                        <span>출고 날짜</span>
-                                    </TitleText>
-                                    <TitleText className="col">
-                                        <span>상품명</span>
-                                    </TitleText>
-                                    <TitleText className="col">
-                                        <span>옵션명</span>
-                                    </TitleText>
-                                    <TitleText className="col">
-                                        <span>옵션관리코드</span>
-                                    </TitleText>
-                                    <TitleText className="col">
-                                        <span>출고 개수</span>
-                                    </TitleText>
-                                    <TitleText className="col">
-                                        <span>메모</span>
-                                    </TitleText>
-                                </HeaderLi>
-                                {props.optionReleaseStatusData?.map((data, idx) => {
-                                    return (
-                                        <DataLi
-                                            key={`option_release_status_idx` + idx}
-                                        >
-                                            <ModalText className="release-list">
-                                                <span>
-                                                    {dateToYYMMDDhhmmss(data.release.createdAt)}
-                                                </span>
-                                            </ModalText>
-                                            <ModalText className="release-list">
-                                                <span>
-                                                    {data.product.defaultName}
-                                                </span>
-                                            </ModalText>
-                                            <ModalText className="release-list">
-                                                <span>
-                                                    {data.option.defaultName}
-                                                </span>
-                                            </ModalText>
-                                            <ModalText className="release-list">
-                                                <span>
-                                                    {data.option.code}
-                                                </span>
-                                            </ModalText>
-                                            <ModalText className="release-list">
-                                                <span>
-                                                    {data.release.releaseUnit}
-                                                </span>
-                                            </ModalText>
-                                            <ModalText className="release-list">
-                                                <span>
-                                                    {data.release.memo}
-                                                </span>
-                                            </ModalText>
-                                        </DataLi>
-                                    )
-                                })}
-                            </NameGroup>
-                        </DataWrapper>
+                            <BoardContainer>
+                                <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
+                                    <thead>
+                                        <tr className="fixed-header receive-header">
+                                            <HeaderTh scope="col">
+                                                <span>입고날짜</span>
+                                            </HeaderTh>
+                                            <HeaderTh scope="col">
+                                                <span>상품명</span>
+                                            </HeaderTh>
+                                            <HeaderTh scope="col">
+                                                <span>옵션명</span>
+                                            </HeaderTh>
+                                            <HeaderTh scope="col">
+                                                <span>옵션관리코드</span>
+                                            </HeaderTh>
+                                            <HeaderTh scope="col">
+                                                <span>입고개수</span>
+                                            </HeaderTh>
+                                            <HeaderTh scope="col" className="large-cell">
+                                                <span>입고메모</span>
+                                            </HeaderTh>
+                                        </tr>
+                                    </thead>
+                                    <tbody style={{ border: 'none' }}>
+                                        {props.optionReceiveStatusData?.map((data, idx) => {
+                                            return (
+                                                <BodyTr
+                                                    key={'option_receive_status_idx' + idx}
+                                                >
+                                                    <BodyTd className="col receive-table">
+                                                        <span>
+                                                            {dateToYYMMDDhhmmss(data.receive.createdAt)}
+                                                        </span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col receive-table">
+                                                        <span>
+                                                            {data.product.defaultName}
+                                                        </span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col receive-table">
+                                                        <span>
+                                                            {data.option.defaultName}
+                                                        </span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col receive-table">
+                                                        <span>
+                                                            {data.option.code}
+                                                        </span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col receive-table">
+                                                        <span>
+                                                            +{data.receive.receiveUnit}
+                                                        </span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col receive-table">
+                                                        <span>
+                                                            {data.receive.memo}
+                                                        </span>
+                                                    </BodyTd>
+                                                </BodyTr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            </BoardContainer>
+
+                            <BoardContainer>
+                                <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
+                                    <thead>
+                                        <tr className="fixed-header">
+                                            <HeaderTh scope="col">
+                                                <span>출고날짜</span>
+                                            </HeaderTh>
+                                            <HeaderTh scope="col">
+                                                <span>상품명</span>
+                                            </HeaderTh>
+                                            <HeaderTh scope="col">
+                                                <span>옵션명</span>
+                                            </HeaderTh>
+                                            <HeaderTh scope="col">
+                                                <span>옵션관리코드</span>
+                                            </HeaderTh>
+                                            <HeaderTh scope="col">
+                                                <span>출고개수</span>
+                                            </HeaderTh>
+                                            <HeaderTh scope="col" className="large-cell">
+                                                <span>출고메모</span>
+                                            </HeaderTh>
+                                        </tr>
+                                    </thead>
+                                    <tbody style={{ border: 'none' }}>
+                                        {props.optionReleaseStatusData?.map((data, idx) => {
+                                            return (
+                                                <BodyTr
+                                                    key={'option_release_status_idx' + idx}
+                                                >
+                                                    <BodyTd className="col">
+                                                        <span>
+                                                            {dateToYYMMDDhhmmss(data.release.createdAt)}
+                                                        </span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>
+                                                            {data.product.defaultName}
+                                                        </span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>
+                                                            {data.option.defaultName}
+                                                        </span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>
+                                                            {data.option.code}
+                                                        </span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>
+                                                            -{data.release.releaseUnit}
+                                                        </span>
+                                                    </BodyTd>
+                                                    <BodyTd className="col">
+                                                        <span>
+                                                            {data.release.memo}
+                                                        </span>
+                                                    </BodyTd>
+                                                </BodyTr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            </BoardContainer>
                         </DataContainer>
                     </BodyWrapper>
                 </Container>

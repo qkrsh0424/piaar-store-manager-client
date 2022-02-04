@@ -253,12 +253,6 @@ const ProductManageBody = (props) => {
                                                             <CheckboxShape
                                                                 checked={props.__handleEventControl().checkedOptionList().isChecked(option.id)}
                                                             ></CheckboxShape>
-                                                            {/* 체크박스를 클릭해서 선택하게할때 사용가능 */}
-                                                            {/* <input
-                                                                type='checkbox'
-                                                                onChange={(e) => props.__handleEventControl().checkedOptionList().checkOne(e, option.id)}
-                                                                checked={props.__handleEventControl().checkedOptionList().isChecked(option.id)}
-                                                            ></input> */}
                                                         </BodyTd>
                                                         <BodyTd>{option.code}</BodyTd>
                                                         <BodyTd>{option.nosUniqueCode}</BodyTd>
@@ -277,14 +271,6 @@ const ProductManageBody = (props) => {
                                                                 type='button'
                                                                 onClick={(e) => props.__handleEventControl().productOption().deleteOne(e, product.product.id, option.id)}
                                                             >옵션삭제</DeleteBtn>
-                                                            {/* <ReceiveBtn
-                                                                type='button'
-                                                                onClick={(e) => props.__handleEventControl().receive().receiveStatusModalOpen(e, product.product.id, option.id)}
-                                                            >입고현황</ReceiveBtn>
-                                                            <ReleaseBtn
-                                                                type='button'
-                                                                onClick={(e) => props.__handleEventControl().release().releaseStatusModalOpen(e, product.product.id, option.id)}
-                                                            >출고현황</ReleaseBtn> */}
                                                             <StockStatusBtn
                                                                 type='button'
                                                                 onClick={(e) => props.__handleEventControl().productOption().stockStatusModalOpen(e, product.product.id, option.id)}
@@ -293,10 +279,6 @@ const ProductManageBody = (props) => {
                                                     </BodyTr>
                                                 )
                                             })}
-                                            {/* <tr style={{ background: '#ff000010' }}>
-                                                    <td colSpan={2} style={{ fontWeight: '800', borderBottom: '2px solid black' }}>총 개수</td>
-                                                    <td style={{ fontWeight: '800', borderBottom: '2px solid black', color: 'red' }}>{product.unitSum}</td>
-                                                </tr> */}
                                         </React.Fragment>
                                     );
 
@@ -307,31 +289,6 @@ const ProductManageBody = (props) => {
                         </table>
 
                     </TableContainer>
-                    {/* <table style={{ border: '1px solid black' }}>
-                        <tr>
-                            <th style={{ border: '1px solid black' }}>Month</th>
-                            <th style={{ border: '1px solid black' }}>Savings</th>
-                            <th style={{ border: '1px solid black' }}>Savings for holiday!</th>
-                        </tr>
-                        <tr>
-                            <td style={{ border: '1px solid black' }} rowSpan="2">
-                                <div>hello</div>
-                                <div>hello</div>
-                                <div>hello</div>
-                                <div>hello</div>
-                                <div>hello</div>
-                                <div>hello</div>
-                                <div>hello</div>
-                            </td>
-                            <td style={{ border: '1px solid black' }}>January</td>
-                            <td style={{ border: '1px solid black' }}>$100</td>
-                        </tr>
-                        <tr>
-                            <td style={{ border: '1px solid black' }}>February</td>
-                            <td style={{ border: '1px solid black' }}>$80</td>
-                        </tr>
-                    </table> */}
-
                 </Container>
             }
 
