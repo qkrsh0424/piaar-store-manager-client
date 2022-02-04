@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 // data connect
@@ -25,6 +25,7 @@ import { formControlClasses } from '@mui/material';
 import { data } from 'jquery';
 import { subMilliseconds } from 'date-fns';
 import ReceiveAndReleaseStatusModal from './modal/ReceiveAndReleaseStatusModal';
+import ModifyStatusMemoModal from './modal/ModifyStatusMemoModal';
 
 class ProductOption {
     constructor(productId, optionDefaultName = '', optionManagementName = '', nosUniqueCode = '') {
@@ -104,6 +105,23 @@ class ProductReceive {
     }
 }
 
+const initialStockStatusState = null;
+
+const stockStatusStateReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'SET_DATA':
+            return {
+                ...state,
+                [action.payload.name] : action.payload.value
+            }
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
+
 const ProductManageMain = () => {
     const [productListData, setProductListData] = useState(null);
     const [optionListData, setOptionListData] = useState(null);
@@ -134,8 +152,13 @@ const ProductManageMain = () => {
     const [receiveStatusModalOpen, setReceiveStatusModalOpen] = useState(false);
     const [receiveStatusData, setReceiveStatusData] = useState(null);
 
+    const [modifyStatusMemoModalOpen, setModifyStatusMemoModalOpen] = useState(false);
+    const [modifyStockStatusData, setModifyStockStatusData] = useState(null);
+
     const [stockStatusModalOpen, setStockStatusModalOpen] = useState(false);
     const [stockStatusData, setStockStatusData] = useState(null);
+
+    const [stockStatusState, dispatchStockStatusState] = useReducer(stockStatusStateReducer, initialStockStatusState);
 
     const [receiveAndReleaseStatusModalOpen, setReceiveAndReleaseStatusModalOpen] = useState(false);
     const [optionReceiveStatusData, setOptionReceiveStatusData] = useState(null);
@@ -423,6 +446,40 @@ const ProductManageMain = () => {
                         }
 
                         __handleEventControl().backdropLoading().close();
+                    })
+            },
+            changeReceiveStockStatusMemo: async function (data) {
+                await productReceiveDataConnect().putOne(data)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            this.searchStockStatusList(data.productOptionCid);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else {
+                            console.log(err);
+                            alert('undefined error. : changeStockStatusMemo');
+                        }
+                    })
+            },
+            changeReleaseStockStatusMemo: async function (data) {
+                await productReleaseDataConnect().putOne(data)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            this.searchStockStatusList(data.productOptionCid);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else {
+                            console.log(err);
+                            alert('undefined error. : changeStockStatusMemo');
+                        }
                     })
             }
         }
@@ -1022,6 +1079,43 @@ const ProductManageMain = () => {
                     }
                 }
             },
+            stockStatus: function () {
+                return {
+                    modifyModalOpen: function (e, data) {
+                        e.stopPropagation();
+
+                        dispatchStockStatusState({
+                            type: 'INIT_DATA',
+                            payload: data
+                        });
+                        setModifyStatusMemoModalOpen(true);
+                    },
+                    modifyModalClose: function () {
+                        setModifyStatusMemoModalOpen(false);
+                    },
+                    onChangeInputValue: function (e) {
+                        dispatchStockStatusState({
+                            type: 'SET_DATA',
+                            payload: {
+                                name: e.target.name,
+                                value: e.target.value
+                            }
+                        })
+                    },
+                    modifyStockStatusMemo: async function (e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+
+                        if(stockStatusState.receiveUnit) {
+                            await __handleDataConnect().changeReceiveStockStatusMemo(stockStatusState);
+                        }else{
+                            await __handleDataConnect().changeReleaseStockStatusMemo(stockStatusState);
+                        }
+                        
+                        setModifyStatusMemoModalOpen(false);
+                    }
+                }
+            },
             backdropLoading: function () {
                 return {
                     open: function () {
@@ -1129,6 +1223,14 @@ const ProductManageMain = () => {
 
                     __handleEventControl={__handleEventControl}
                 ></ReceiveAndReleaseStatusModal>
+            }
+            {modifyStatusMemoModalOpen && stockStatusState && 
+                <ModifyStatusMemoModal
+                    open={modifyStatusMemoModalOpen}
+                    stockStatusState={stockStatusState}
+
+                    __handleEventControl={__handleEventControl}
+                ></ModifyStatusMemoModal>
             }
         </>
     );

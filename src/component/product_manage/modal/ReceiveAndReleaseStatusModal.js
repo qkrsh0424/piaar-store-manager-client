@@ -51,19 +51,19 @@ const DataContainer = styled.div`
 const BoardContainer = styled.div`
     min-height: 40vh;
     max-height: 40px;
-    background-color: white;
+    background-color: #f3f5ff;
     overflow: auto;
     border-radius: 5px;
     font-size: 14px;
-    box-shadow: 1px 1px 15px #a9b3d599;
 
     & .fixed-header {
         position: sticky;
         top: -1px;
-        background: #d5dae9;
+        background: #d8def5;
         z-index:10;
         padding: 2px;
         font-size: 16px;
+        box-shadow: 1px 1px 15px #c8cef7;
 
         @media only screen and (max-width:576px){
             font-size: 14px;
@@ -71,8 +71,8 @@ const BoardContainer = styled.div`
     }
 
     & .receive-header {
-        background: #ffeac9;
-        box-shadow: 1px 1px 15px #ffeac9;
+        background: #c8cef7;
+        box-shadow: 1px 1px 15px #c8cef7;
     }
 
     & .large-cell {
@@ -92,16 +92,11 @@ const HeaderTh = styled.th`
     vertical-align: middle !important;
     text-align: center;
     width: 150px;
-    border-right: 1px solid #efefef;
+    border-right: 1px solid #f3f5ff;
 `;
 
 const BodyTr = styled.tr`
-    border-bottom: 1px solid #d5dae9;
-
-    & .receive-table {
-        border-right: 1px solid #f5ecdd;
-        border-bottom: 1px solid #f5ecdd;
-    }
+    border-bottom: 1px solid #f3f5ff;
 `;
 
 const BodyTd = styled.td`
@@ -165,32 +160,32 @@ const ReceiveAndReleaseStatusModal = (props) => {
                                                 <BodyTr
                                                     key={'option_receive_status_idx' + idx}
                                                 >
-                                                    <BodyTd className="col receive-table">
+                                                    <BodyTd className="col">
                                                         <span>
                                                             {dateToYYMMDDhhmmss(data.receive.createdAt)}
                                                         </span>
                                                     </BodyTd>
-                                                    <BodyTd className="col receive-table">
+                                                    <BodyTd className="col">
                                                         <span>
                                                             {data.product.defaultName}
                                                         </span>
                                                     </BodyTd>
-                                                    <BodyTd className="col receive-table">
+                                                    <BodyTd className="col">
                                                         <span>
                                                             {data.option.defaultName}
                                                         </span>
                                                     </BodyTd>
-                                                    <BodyTd className="col receive-table">
+                                                    <BodyTd className="col">
                                                         <span>
                                                             {data.option.code}
                                                         </span>
                                                     </BodyTd>
-                                                    <BodyTd className="col receive-table">
+                                                    <BodyTd className="col">
                                                         <span>
                                                             +{data.receive.receiveUnit}
                                                         </span>
                                                     </BodyTd>
-                                                    <BodyTd className="col receive-table">
+                                                    <BodyTd className="col">
                                                         <span>
                                                             {data.receive.memo}
                                                         </span>

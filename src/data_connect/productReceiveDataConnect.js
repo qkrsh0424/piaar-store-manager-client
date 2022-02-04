@@ -14,6 +14,11 @@ const productReceiveDataConnect = () => {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-receive/list/${productOptionCid}`,{
                 withCredentials: true
             })
+        },
+        putOne: async function (data) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/product-receive/one`, data, {
+                withCredentials: true
+            })
         }
     }
 }
