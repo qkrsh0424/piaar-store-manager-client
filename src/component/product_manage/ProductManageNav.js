@@ -110,7 +110,7 @@ const ProductManageNav = (props) => {
                             <NavControlBtn
                                 type='button'
                                 color={'#7a7bdae0'}
-                                onClick={()=>props.__handleEventControl().productOption().receiveAndReleaseStatusModalOpen()}
+                                onClick={()=>props.__handleEventControl().receiveAndRelease().receiveAndReleaseStatusModalOpen()}
                             >입출고확인</NavControlBtn>
                         </div>
                     </CommonLinkGroupWrapper>

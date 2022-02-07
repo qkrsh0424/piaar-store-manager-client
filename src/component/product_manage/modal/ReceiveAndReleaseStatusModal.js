@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import EventAvailableTwoToneIcon from '@mui/icons-material/EventAvailableTwoTone';
 import React from 'react';
 
 import { dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
@@ -106,6 +107,33 @@ const BodyTd = styled.td`
     border-right: 1px solid #a7a7a720;
 `;
 
+const DateSelector = styled.button`
+    border-radius: 4px;
+    background-color: rgba(122,146,218,0.2);
+    border: 1px solid transparent;
+    text-align: center;
+    width: 200px;
+    padding: 6px 0px;
+    height: auto;
+    transition: opacity 0.1s linear;
+    font-size: 14px;
+    font-weight: 400;
+    border: 1px solid rgba(122,146,218,0.25);
+
+    &:hover{
+        opacity: 0.6;
+    }
+
+    @media only screen and (max-width:576px){
+        font-size: 12px;
+    }
+
+    @media only screen and (max-width:320px){
+        width: 50%;
+        font-size: 10px;
+    }
+`;
+
 const ReceiveAndReleaseStatusModal = (props) => {
 
     const [fullWidth, setFullWidth] = useState(true);
@@ -117,18 +145,19 @@ const ReceiveAndReleaseStatusModal = (props) => {
                 fullWidth={fullWidth}
                 maxWidth={maxWidth}
                 open={props.open} 
-                onClose={() => props.__handleEventControl().productOption().receiveAndReleaseStatusModalClose()}
+                onClose={() => props.__handleEventControl().receiveAndRelease().receiveAndReleaseStatusModalClose()}
             >
                 <Container>
                     <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
                         <GroupTitle>
                             <span>전체상품 입출고 현황</span>
-                            <IconButton aria-label="close" className="closeButton" onClick={()=>props.__handleEventControl().productOption().receiveAndReleaseStatusModalClose()}>
+                            <IconButton aria-label="close" className="closeButton" onClick={()=>props.__handleEventControl().receiveAndRelease().receiveAndReleaseStatusModalClose()}>
                                 <CloseIcon />
                             </IconButton>
                         </GroupTitle>
 
                         <DataContainer>
+                            <DateSelector type="button" onClick={() => props.__handleEventControl().receiveAndRelease().datePickerOpen()}><EventAvailableTwoToneIcon fontSize="small" color="action" /> {props.selectedDateText}</DateSelector>
                             <BoardContainer>
                                 <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
                                     <thead>
@@ -153,8 +182,9 @@ const ReceiveAndReleaseStatusModal = (props) => {
                                             </HeaderTh>
                                         </tr>
                                     </thead>
+
                                     <tbody style={{ border: 'none' }}>
-                                        {props.optionReceiveStatusData?.map((data, idx) => {
+                                        {props.selectedOptionReceiveStatusData?.map((data, idx) => {
                                             return (
                                                 <BodyTr
                                                     key={'option_receive_status_idx' + idx}
@@ -221,7 +251,7 @@ const ReceiveAndReleaseStatusModal = (props) => {
                                         </tr>
                                     </thead>
                                     <tbody style={{ border: 'none' }}>
-                                        {props.optionReleaseStatusData?.map((data, idx) => {
+                                        {props.selectedOptionReleaseStatusData?.map((data, idx) => {
                                             return (
                                                 <BodyTr
                                                     key={'option_release_status_idx' + idx}
