@@ -125,7 +125,14 @@ const BodyTd = styled.td`
 
 const CheckBodyBox = styled.span`
     font-size: 13px;
-    margin: 0 15px;
+    padding: 0 15px;
+    display: inline-block;
+
+    & .fixed-size-text {
+        display: inline-block;
+        min-width: 20px;
+        text-align: center;
+    }
 `;
 
 const CancelBtn = styled.button`
@@ -253,7 +260,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                     <TableContainer>
                         <BoardTitle>
                             <span><b>네이버</b> 미출고 데이터</span>
-                            <CheckBodyBox>[✔️ : {props.unreleaseCheckedOrderList.length} / {props.unreleasedData ? props.unreleasedData.length : 0}개]</CheckBodyBox>
+                            <CheckBodyBox>[✔️ : <span class="fixed-size-text">{props.unreleaseCheckedOrderList.length}</span> / <span class="fixed-size-text">{props.unreleasedData ? props.unreleasedData.length : 0}</span> 개]</CheckBodyBox>
                             <DataOptionBox>
                                 <CancelListBtn type="button" onClick={(e) => props.__handleEventControl().unreleaseCheckedOrderList().deleteList(e)}>일괄 삭제</CancelListBtn>
                                 <ChangeListBtn type="button" onClick={(e) => props.__handleEventControl().unreleaseCheckedOrderList().changeListToReleaseData(e)}>일괄 출고</ChangeListBtn>
@@ -268,6 +275,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                                 </Stack>
                             </PageBox>
                     </BoardTitle>
+
                         <BoardContainer>
                             <table className="table table-sm" style={{ tableLayout: 'fixed' }}>
                                 <thead>

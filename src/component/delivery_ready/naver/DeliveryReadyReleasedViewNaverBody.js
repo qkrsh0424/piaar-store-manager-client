@@ -142,6 +142,13 @@ const BodyTd = styled.td`
 const CheckBodyTd = styled.span`
     font-size: 13px;
     padding: 0 15px;
+    display: inline-block;
+
+    & .fixed-size-text {
+        display: inline-block;
+        min-width: 20px;
+        text-align: center;
+    }
 `;
 
 const CancelBtn = styled.button`
@@ -320,7 +327,7 @@ const DeliveryReadyReleasedView = (props) => {
                     <TableContainer>
                         <BoardTitle>
                             <span><b>네이버</b> 출고 데이터</span>
-                            <CheckBodyTd>[✔️ : {props.releaseCheckedOrderList.length} / {props.releasedData ? props.releasedData.length : 0}개]</CheckBodyTd>
+                            <CheckBodyTd>[✔️ : <span class="fixed-size-text">{props.releaseCheckedOrderList.length}</span> / <span class="fixed-size-text">{props.releasedData ? props.releasedData.length : 0}</span> 개]</CheckBodyTd>
                             <DataOptionBox>
                                 <ChangeListBtn onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeListToUnreleaseData(e)}>일괄 출고 취소</ChangeListBtn>
                                 <ChangeListBtn className="unitReflectBtn" onClick={(e) => props.__handleEventControl().deliveryReadyReleaseMemo().open(e)}>재고반영</ChangeListBtn>

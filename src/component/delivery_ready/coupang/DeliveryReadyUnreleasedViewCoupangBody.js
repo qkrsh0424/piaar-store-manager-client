@@ -132,7 +132,13 @@ const BodyTd = styled.td`
 
 const CheckBodyTd = styled.span`
     font-size: 13px;
-    margin: 0 15px;
+    padding: 0 15px;
+
+    & .fixed-size-text {
+        display: inline-block;
+        min-width: 20px;
+        text-align: center;
+    }
 `;
 
 const CancelBtn = styled.button`
@@ -260,7 +266,7 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                     <TableContainer>
                         <BoardTitle>
                             <span><b>쿠팡</b> 미출고 데이터</span>
-                            <CheckBodyTd>[✔️ : {props.unreleaseCheckedOrderList.length} / {props.unreleasedData ? props.unreleasedData.length : 0}개]</CheckBodyTd>
+                            <CheckBodyTd>[✔️ : <span class="fixed-size-text">{props.unreleaseCheckedOrderList.length}</span> / <span class="fixed-size-text">{props.unreleasedData ? props.unreleasedData.length : 0}</span> 개]</CheckBodyTd>
                             <DataOptionBox>
                                 <CancelListBtn type="button" onClick={(e) => props.__handleEventControl().unreleaseCheckedOrderList().deleteList(e)}>일괄 삭제</CancelListBtn>
                                 <ChangeListBtn type="button" onClick={(e) => props.__handleEventControl().unreleaseCheckedOrderList().changeListToReleaseData(e)}>일괄 출고</ChangeListBtn>
