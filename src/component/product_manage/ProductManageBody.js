@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 const Container = styled.div`
     overflow:hidden;
-    margin-bottom: 200px;
+    margin-bottom: 80px;
 
 `;
 
@@ -118,13 +118,12 @@ const DeleteProductBtn = styled.button`
 
 const AddBtn = styled.button`
     padding:0 8px;
-    background: #4682B4e0;
+    background: rgba(70, 130, 180, 0.88);
     color:white;
-    border:1px solid #4682B4e0;
+    border:1px solid rgba(70, 130, 180, 0.88);
     border-radius: 3px;
     font-weight: 600;
     margin-left: 5px;
-
 `;
 
 const CheckboxShape = styled.div`

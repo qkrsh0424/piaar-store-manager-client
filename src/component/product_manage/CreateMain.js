@@ -129,8 +129,15 @@ const CreateMain = (props) => {
                         }
                     })
                     .catch(err=>{
-                        console.log(err);
-                        alert('undefined error. : postCreateProductList');
+                        let res = err.response;
+                        
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else if(res?.data?.memo) {
+                            alert(res.data.memo);
+                        }else{
+                            alert('undefined error. : postCreateProductList');
+                        }
                     })
                 ;
             },
@@ -202,7 +209,6 @@ const CreateMain = (props) => {
                     },
                     onChangeInputValue: function (productId, e) {
                         setProductListData(productListData.map(r => {
-                            console.log(r);
                             return (
                                 r.id === productId ?
                                     {

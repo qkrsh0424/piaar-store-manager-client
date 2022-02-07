@@ -188,7 +188,6 @@ const ProductManageMain = () => {
                 __handleEventControl().backdropLoading().open();
                 await productDataConnect().getStockListFj()
                     .then(res => {
-                        console.log(res)
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setProductListData(res.data.data);
                         }
@@ -291,10 +290,12 @@ const ProductManageMain = () => {
                     .catch(err => {
                         let res = err.response;
 
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
-                        } else {
-                            alert('undefined error. : changeProductOne');
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else if(res?.data?.memo) {
+                            alert(res.data.memo);
+                        }else{
+                            alert('undefined error. : changeProductOptionOne');
                         }
                     })
             },
@@ -307,9 +308,9 @@ const ProductManageMain = () => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
+                        
+                        if (res.status === 403) {
+                            alert('권한이 없습니다.')
                         } else {
                             alert('undefined error. : deleteProductOne');
                         }
@@ -325,8 +326,8 @@ const ProductManageMain = () => {
                     .catch(err => {
                         let res = err.response;
 
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
+                        if (res.status === 403) {
+                            alert('권한이 없습니다.')
                         } else {
                             alert('undefined error. : changeProductOne');
                         }
@@ -348,6 +349,8 @@ const ProductManageMain = () => {
 
                         if (res.status === 401) {
                             alert('접근 권한이 없습니다.')
+                        } else if(res?.data?.memo) {
+                            alert(res.data.memo)
                         } else {
                             alert('undefined error. : changeProductOne');
                         }

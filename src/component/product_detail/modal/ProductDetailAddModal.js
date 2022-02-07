@@ -78,6 +78,10 @@ const SubmitBtn = styled.button`
 const DefaultInfo = styled.div`
     color: red;
     padding: 0 15px 15px 15px;
+
+    @media only screen and (max-width:992px){
+        font-size: 12px;
+    }
 `;
 
 const ProductDetailAddModal = (props) => {
@@ -98,7 +102,7 @@ const ProductDetailAddModal = (props) => {
                             <GroupTitle>
                                 상세추가
                             </GroupTitle>
-                            <DefaultInfo>* 기본으로 주어지는 데이터는 상품에 등록된 기본값입니다.</DefaultInfo>
+                            <DefaultInfo>* 기본으로 주어지는 데이터는 상품에 등록된 기본값입니다. 기본값을 설정하려면 상품 데이터의 아래 정보를 채워주세요.</DefaultInfo>
                             <NameGroup>
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">

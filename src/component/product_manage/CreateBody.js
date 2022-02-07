@@ -230,14 +230,20 @@ const CategoryGroup = styled.div`
     font-size: 1rem;
     padding:0 10px;
     column-gap: 5px;
-    @media only screen and (max-width:425px){
-        font-size: 12px;
-        padding: 0;
-    }
 
     & .category-btn-active{
         background: #4682B4;
         color:white;
+    }
+
+    @media only screen and (max-width:992px){
+        grid-template-columns: 1fr;
+        row-gap: 10px;
+    }
+
+    @media only screen and (max-width:425px){
+        font-size: 12px;
+        padding: 0;
     }
 `;
 
@@ -431,9 +437,9 @@ const CreateBody = (props) => {
                                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
                                             <GroupTitle>카테고리 <i className="icon-must" aria-label="필수항목"></i></GroupTitle>
                                             <CategoryGroup className='mb-3' categorySize={props.categoryList != null ? props.categoryList.length : 0}>
-                                                {props.categoryList && props.categoryList.map(r2 => {
+                                                {props.categoryList && props.categoryList.map(category => {
                                                     return (
-                                                        <CategorySelectBtn key={r2.cid} type='button' className={r.productCategoryCid === r2.cid ? `category-btn-active` : ''} onClick={() => { props.__handleEventControl().productListData().onChangeCategoryValue(r.id, r2.id) }}>{r2.name}</CategorySelectBtn>
+                                                        <CategorySelectBtn key={category.cid} type='button' className={r.productCategoryCid === category.cid ? `category-btn-active` : ''} onClick={() => { props.__handleEventControl().productListData().onChangeCategoryValue(r.id, category.id) }}>{category.name}</CategorySelectBtn>
                                                     )
                                                 })}
                                             </CategoryGroup>
@@ -563,12 +569,18 @@ const CreateBody = (props) => {
                                                         </span>
                                                     </div>
                                                     <CommonInputEl type="number" className='form-control' name='defaultWidth' value={r.defaultWidth} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+                                                </div>
+                                                <div className="input-group mb-3">
+
                                                     <div className="input-group-prepend">
                                                         <span className="input-group-text">
                                                             SIZE_세로(cm)
                                                         </span>
                                                     </div>
                                                     <CommonInputEl type="number" className='form-control' name='defaultLength' value={r.defaultLength} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+                                                </div>
+                                                <div className="input-group mb-3">
+
                                                     <div className="input-group-prepend">
                                                         <span className="input-group-text">
                                                             SIZE_높이(cm)

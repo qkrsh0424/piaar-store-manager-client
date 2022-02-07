@@ -129,7 +129,6 @@ const ReceiveAndReleaseStatusModal = (props) => {
                         </GroupTitle>
 
                         <DataContainer>
-
                             <BoardContainer>
                                 <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
                                     <thead>
