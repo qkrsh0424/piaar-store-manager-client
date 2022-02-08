@@ -46,6 +46,7 @@ import ProductDetailMain from './component/product_detail/ProductDetailMain';
 import { userDataConnect } from './data_connect/userDataConnect';
 import CommuteRecordMain from './component/commute_record/CommuteRecordMain';
 import ExcelTranslatorMain from './component/excel_translator/ExcelTranslatorMain';
+import DeliveryReadyUploadPiaarMain from './component/delivery_ready/piaar/DeliveryReadyUploadPiaarMain';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -162,6 +163,20 @@ function App(props) {
                                             <Redirect to={'/login'}></Redirect>
                                     }
                                 </Route>
+                                {/* DeliveryReady - PIAAR */}
+                                <Route exact path='/delivery-ready/piaar'>
+                                    {userRdx.userInfo ? <DeliveryReadyUploadPiaarMain></DeliveryReadyUploadPiaarMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                {/* <Route exact path='/delivery-ready/piaar/view'>
+                                    {
+                                        userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER"))
+                                            ?
+                                            <DeliveryReadyViewPiaarMain></DeliveryReadyViewPiaarMain>
+                                            :
+                                            <Redirect to={'/login'}></Redirect>
+                                    }
+                                </Route> */}
+
                                 <Route exact path='/order-registration/naver'>
                                     {userRdx.userInfo ? <OrderRegistrationNaverMain></OrderRegistrationNaverMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
