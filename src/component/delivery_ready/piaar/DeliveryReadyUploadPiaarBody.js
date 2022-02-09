@@ -16,7 +16,7 @@ const UploadBar = styled.div`
     display: flex;
     flex-wrap: wrap;
     border-radius: 5px;
-    background-color: rgba(122, 123, 218, 0.125);
+    /* background-color: rgba(122, 123, 218, 0.125); */
     margin-bottom: 5px;
 `;
 
@@ -32,12 +32,14 @@ const Form = styled.form`
 const ControlLabel = styled.label`
     font-size: 16px;
     width: 240px;
-    padding: 6px;
+    padding: 8px;
     margin: 4px;
-    color: #444;
+    /* color: #444; */
+    color: white;
     text-align: center;
     vertical-align: middle;
-    background-color: #fdfdfd;
+    /* background-color: #fdfdfd; */
+    background-color: #609FFF;
     border-radius: 3px;
     transition: opacity 0.1s linear;
     &:hover {
@@ -59,11 +61,13 @@ const ControlLabel = styled.label`
 const ControlBtn = styled.button`
     font-size: 16px;
     width: 240px;
-    padding: 6px;
+    padding: 8px;
     margin: 4px;
-    color: #444;
+    /* color: #444; */
+    color: white;
     vertical-align: middle;
-    background-color: #fdfdfd;
+    /* background-color: #fdfdfd; */
+    background-color: #609FFF;
     border-radius: 3px;
     border: none;
     transition: opacity 0.1s linear;
@@ -93,11 +97,13 @@ const TableContainer = styled.div`
     height: 80vh;
 	overflow: auto;
     font-size: 14px;
+    padding: 1%;
     
     & .fiexed-header {
         position: sticky;
         top: -1px;
-        background: #f1f1f1;
+        /* background: #f1f1f1; */
+        background: #7DC2FF;
         z-index:10;
     }
 
@@ -161,18 +167,23 @@ const DeliveryReadyUploadPiaarBody = (props) => {
                     <UploadBar>
                         <Form>
                             <ControlLabel htmlFor="upload-file-input"><b>피아르</b> 엑셀 파일 업로드</ControlLabel>
-                            <Input id="upload-file-input" type="file" accept=".xls,.xlsx" onClick={(e) => e.target.value = ''} onChange={(e) => props.__handleEventControl().uploadExcelData().submit(e)}/>
+                            <Input id="upload-file-input" type="file" accept=".xls,.xlsx" onClick={(e) => e.target.value = ''} onChange={(e) => props.uploadExcelDataControl(e)}/>
                         </Form>
-                        <Form onSubmit={(e) => props.__handleEventControl().storeExcelData().submit(e)}>
+                        <Form onSubmit={(e) => props.storeExcelDataControl(e)}>
                             <ControlBtn type="submit"><b>피아르</b> 엑셀 파일 저장</ControlBtn>
                         </Form>
-                        <PageControlBtn type="button" onClick={() => props.__handleEventControl().movePage().deliveryReadyView()}>발주서 다운로드 <KeyboardArrowRightIcon /></PageControlBtn>
+                        <PageControlBtn type="button" onClick={() => props.moveViewPageControl()}>발주서 다운로드 <KeyboardArrowRightIcon /></PageControlBtn>
                     </UploadBar>
                     <TableContainer>
                         <table className="table table-sm" style={{tableLayout: 'fixed' }}>
                             <thead>
                             <tr>
-                                <HeaderTh className="fiexed-header" scope="col">피아르 고유번호</HeaderTh>
+                                {props.piaarCustomizedHeaderListState?.map((data, index) => {
+                                    return (
+                                        <HeaderTh key={'piaar_excel_header_idx' + index} className="fiexed-header" scope="col">{data.cellName}</HeaderTh>
+                                    )
+                                })}
+                                {/* <HeaderTh className="fiexed-header" scope="col">피아르 고유번호</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">주문번호1</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">주문번호2</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">주문번호3</HeaderTh>
@@ -196,7 +207,7 @@ const DeliveryReadyUploadPiaarBody = (props) => {
                                 <HeaderTh className="fiexed-header" scope="col">관리메모2</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">관리메모3</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">관리메모4</HeaderTh>
-                                <HeaderTh className="fiexed-headeㄱ" scope="col">관리메모5</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">관리메모5</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">관리메모6</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">관리메모7</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">관리메모8</HeaderTh>
@@ -211,7 +222,7 @@ const DeliveryReadyUploadPiaarBody = (props) => {
                                 <HeaderTh className="fiexed-header" scope="col">관리메모17</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">관리메모18</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">관리메모19</HeaderTh>
-                                <HeaderTh className="fiexed-header" scope="col">관리메모20</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">관리메모20</HeaderTh> */}
                             </tr>
                         </thead>
                         <tbody>

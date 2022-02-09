@@ -311,7 +311,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                                             <ControlBtn><ArrowDropDownIcon type="button" onClick={() => props.__handleEventControl().sortDataList().unreleasedDataSortedByProdName()}/></ControlBtn>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
-                                            <span>옵션정보</span>
+                                            <span>옵션명</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header small-cell" scope="col">
                                             <span>수량</span>
@@ -320,7 +320,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                                             <span>*재고 수량</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header option-code-cell" scope="col">
-                                            <span>옵션관리코드</span>
+                                            <span>옵션코드</span>
                                         </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>*상품명</span>

@@ -583,7 +583,6 @@ const ExcelTranslatorUploadDataBoard = (props) => {
                     >
                         <CreateTranslatorUploadHeaderDetailComponent
                             createUploadHeaderDetailState={createUploadHeaderDetailState}
-                            selectedHeaderTitleState={selectedHeaderTitleState}
 
                             storeUploadExcelFormControl={(e) => excelFormControl().uploadedExcelForm().storeUploadedExcelHeaderDetail(e)}
                             onChangeUploadHeaderDetail={(e, detailId) => excelFormControl().uploadedExcelForm().onChangeInputValue(e, detailId)}

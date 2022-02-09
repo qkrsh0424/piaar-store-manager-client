@@ -434,7 +434,6 @@ const ExcelTranslatorDownloadDataBoard = (props) => {
                         fullWidth={true}
                     >
                         <CreateTranslatorDownloadHeaderDetailComponent
-                            selectedHeaderTitleState={selectedHeaderTitleState}
                             updateDownloadHeaderForm={updateDownloadHeaderForm}
 
                             downloadExcelFormControl={excelFormControl().downloadExcelForm}
