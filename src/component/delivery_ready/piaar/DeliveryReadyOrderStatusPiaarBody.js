@@ -1,4 +1,5 @@
 import { useEffect, useReducer, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import { useSelector } from 'react-redux';
@@ -10,13 +11,13 @@ const Container = styled.div`
 `;
 
 const BoardTitle = styled.div`
-    font-size: large;
+    font-size: 20px;
     /* color: rgba(000, 102, 153, 0.9); */
-    font-weight: 600;
+    font-weight: 700;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 4fr 1fr;
     align-items: center;
-    padding: 10px;
+    padding: 20px 10px;
 
     @media only screen and (max-width: 992px){
         grid-template-columns: 1fr;
@@ -34,7 +35,7 @@ const BoardTitle = styled.div`
 
 const DataOptionBox = styled.span`
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     column-gap: 10px;
 
     & .upload-header-excel-download {
@@ -68,7 +69,7 @@ const DataOptionBox = styled.span`
 
 const HeaderFormControlBtn = styled.button`
     padding: 2%;
-    background:  #609FFF;;
+    background:  #2C73D2;;
     color: white;
     font-size: 1em;
     font-weight: 500;
@@ -105,12 +106,16 @@ const BoardContainer = styled.div`
     overflow: auto;
     border-radius: 5px;
     font-size: 14px;
-    box-shadow: 1px 1px 15px #a9b3d599;
+    /* box-shadow: 1px 1px 10px #a9b3d599; */
+    border: 2px solid #2C73D2;
 
     & .fixed-header {
         position: sticky;
         top: -1px;
-        background: #7DC2FF;
+        /* background: #309FFF; */
+        /* color: white; */
+        border-bottom: 2px solid #2C73D2;
+        border-right: 2px solid #2C73D2;
         z-index:10;
         padding: 2px;
         font-size: 16px;
@@ -137,7 +142,7 @@ const HeaderTh = styled.th`
     vertical-align: middle !important;
     text-align: center;
     width: 150px;
-    border-right: 1px solid #609FFF;
+    border-right: 1px solid #eee;
 `;
 
 const BodyTr = styled.tr`
@@ -151,7 +156,89 @@ const BodyTd = styled.td`
     border-right: 1px solid #a7a7a720;
 `;
 
+class DeliveryReadyPiaarHeader {
+    constructor() {
+        this.id = uuidv4();
+        this.viewHeaderDetail = {
+            details: []
+        };
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            viewHeaderDetail: this.viewHeaderDetail
+        }
+    }
+}
+
+const DELIVERY_READY_PIAAR_HEADER_SIZE = 40;
+
+const deliveryReadyPiaarHeaderName = [
+    '피아르 고유번호',
+    '주문번호1',
+    '주문번호2',
+    '주문번호3',
+    '상품명',
+    '옵션명',
+    '수량',
+    '수취인명',
+    '전화번호1',
+    '전화번호2',
+    '주소',
+    '우편번호',
+    '배송방식',
+    '배송메세지',
+    '상품고유번호1',
+    '상품고유번호2',
+    '옵션고유번호1',
+    '옵션고유번호2',
+    '피아르 상품코드',
+    '피아르 옵션코드',
+    '관리메모1',
+    '관리메모2',
+    '관리메모3',
+    '관리메모4',
+    '관리메모5',
+    '관리메모6',
+    '관리메모7',
+    '관리메모8',
+    '관리메모9',
+    '관리메모10',
+    '관리메모11',
+    '관리메모12',
+    '관리메모13',
+    '관리메모14',
+    '관리메모15',
+    '관리메모16',
+    '관리메모17',
+    '관리메모18',
+    '관리메모19',
+    '관리메모20'
+];
+
+const initialPiaarDefaultHeaderListState = null;
+
+const piaarDefaultHeaderListStateReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return {...action.payload};
+        case 'SET_HEADER_DETAIL_DATA':
+            return {
+                ...state,
+                viewHeaderDetail: {
+                    ...state.viewHeaderDetail,
+                    details: action.payload
+                }
+            }
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
+
 const initialCreateViewHeaderDetailState = null;
+const initialViewExcelDataState = null;
 
 const createViewHeaderDetailStateReducer = (state, action) => {
     switch (action.type) {
@@ -160,8 +247,21 @@ const createViewHeaderDetailStateReducer = (state, action) => {
         case 'SET_HEADER_DETAIL_DATA':
             return {
                 ...state,
-                headerDetails: action.payload
+                viewHeaderDetail: {
+                    ...state.viewHeaderDetail,
+                    details: action.payload
+                }
             }
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
+
+const viewExcelDataStateReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
         case 'CLEAR':
             return null;
         default: return { ...state }
@@ -172,14 +272,73 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
     const [createPiaarViewHeaderDetailModalOpen, setCreatePiaarViewHeaderDetailModalOpen] = useState(false);
-    const [createViewHeaderDetailState, dispatchCreateViewUploadHeaderDetailState] = useReducer(createViewHeaderDetailStateReducer, initialCreateViewHeaderDetailState);
+    const [createViewHeaderDetailState, dispatchCreateViewHeaderDetailState] = useReducer(createViewHeaderDetailStateReducer, initialCreateViewHeaderDetailState);
+    const [piaarDefaultHeaderListState, dispatchPiaarDefaultHeaderListState] = useReducer(piaarDefaultHeaderListStateReducer, initialPiaarDefaultHeaderListState);
+    const [viewExcelDataState, dispatchViewExcelDataState] = useReducer(viewExcelDataStateReducer, initialViewExcelDataState);
 
+    // 피아르 기본 엑셀 양식 설정
+    useEffect(() => {
+        function fetchInit() {
+            let deliveryReadyPiaarCustomizedHeaderList = [];
+
+            // 피아르 엑셀 헤더 생성
+            for(var i = 0; i < DELIVERY_READY_PIAAR_HEADER_SIZE; i++) {
+                let data = new DeliveryReadyPiaarHeader().toJSON();
+                data = {
+                    ...data,
+                    cellNumber : i,
+                    cellName : deliveryReadyPiaarHeaderName[i],
+                    cellSize: 'default'
+                }
+
+                deliveryReadyPiaarCustomizedHeaderList.push({...data});
+            }
+
+            let headerDetail = {
+                details : deliveryReadyPiaarCustomizedHeaderList
+            };
+
+            let defaultViewHeader = new DeliveryReadyPiaarHeader();
+            defaultViewHeader = {
+                ...defaultViewHeader,
+                viewHeaderDetail : headerDetail
+            };
+
+            dispatchPiaarDefaultHeaderListState({
+                type: 'INIT_DATA',
+                payload: defaultViewHeader
+            });
+        }
+
+        fetchInit();
+    }, []);
+
+    // Get Piaar View Data
+    useEffect(() => {
+        if (!(props.viewHeaderDetailList && props.excelOrderList)) {
+            return;
+        }
+
+        if (props.viewHeaderDetailList.viewHeaderDetail.details.length) {
+            let data = props.excelOrderList.map(viewData => {
+                return viewData.uploadDetail.details.filter(viewDataDetail => 
+                    props.viewHeaderDetailList.viewHeaderDetail.details.filter(viewHeader => viewHeader.cellNumber === viewDataDetail.cellNumber)[0]
+                )
+            });
+
+            dispatchViewExcelDataState({
+                type: 'INIT_DATA',
+                payload: data
+            });
+            return;
+        }
+    }, [props.viewHeaderDetailList, props.excelOrderList]);
 
     const onCreatePiaarViewHeaderDetailModalOpen = () => {
         setCreatePiaarViewHeaderDetailModalOpen(true);
     }
 
-    const onCreateTranslatorUploadHeaderDetailModalClose = () => {
+    const onCreatePiaarViewHeaderDetailModalClose = () => {
         setCreatePiaarViewHeaderDetailModalOpen(false);
     }
 
@@ -191,52 +350,47 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                         e.preventDefault();
                         onCreatePiaarViewHeaderDetailModalOpen();
 
-                        dispatchCreateViewUploadHeaderDetailState({
-                            type: 'INIT_DATA',
-                            payload: props.piaarCustomizedHeaderListState
-                        });
+                        // 저장된 view header가 없다면 default값을 넣자
+                        if(!props.viewHeaderDetailList){
+                            dispatchCreateViewHeaderDetailState({
+                                type: 'INIT_DATA',
+                                payload: piaarDefaultHeaderListState
+                            });
+                        }else{
+                            dispatchCreateViewHeaderDetailState({
+                                type: 'INIT_DATA',
+                                payload: props.viewHeaderDetailList
+                            });
+                        }
                     },
                     close: function () {
-                        onCreateTranslatorUploadHeaderDetailModalClose()
+                        onCreatePiaarViewHeaderDetailModalClose()
                     },
-                    // storeUploadedExcelHeaderDetail: async function (e) {
-                    //     e.preventDefault();
+                    storeViewExcelFormDetail: async function (e) {
+                        e.preventDefault();
 
-                    //     let uploadedHeader = createUploadHeaderDetailState.uploadedData;
+                        // 저장된 view header가 없다면 새로 생성, 있다면 수정
+                        if(!props.viewHeaderDetailList){
+                            await props.createPiaarCustomizedHeaderControl(createViewHeaderDetailState);
+                        }else{
+                            await props.changePiaarCutomizedHeaderControl(createViewHeaderDetailState);
+                        }
+                        await props.getViewExcelHeaderDetailControl();
 
-                    //     let uploadDetails = uploadedHeader.details.map((r, idx) => {
-                    //         let data = new UploadHeaderDetail().toJSON();
-                    //         data = {
-                    //             ...data,
-                    //             cellNumber: idx,
-                    //             headerName: r.headerName || r.colData,
-                    //             cellType: r.cellType
-                    //         };
+                        onCreatePiaarViewHeaderDetailModalClose();
+                    },
+                    resetViewExcelFormDetail: async function (e) {
+                        e.preventDefault();
 
-                    //         return data;
-                    //     });
-
-                    //     let excelHeader = {
-                    //         ...selectedHeaderTitleState,
-                    //         uploadHeaderDetail: {
-                    //             ...selectedHeaderTitleState.uploadHeaderDetail,
-                    //             details: uploadDetails
-                    //         }
-                    //     };
-
-                    //     dispatchSelectedHeaderTitleState({
-                    //         type: 'SET_UPLOAD_HEADER_DETAIL_DATA',
-                    //         payload: uploadDetails
-                    //     });
-
-                    //     await props.createUploadHeaderDetailsControl(excelHeader);
-
-                    //     onCreateTranslatorUploadHeaderDetailModalClose();
-                    // },
+                        dispatchCreateViewHeaderDetailState({
+                            type: 'INIT_DATA',
+                            payload: piaarDefaultHeaderListState
+                        });
+                    },
                     onChangeInputValue: function (e, detailId) {
                         e.preventDefault();
 
-                        let newDetails = createViewHeaderDetailState?.headerDetails?.map(r=>{
+                        let newDetails = createViewHeaderDetailState.viewHeaderDetail.details.map(r=>{
                             if(r.id === detailId){
                                 return {
                                     ...r,
@@ -249,93 +403,62 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                             }
                         });
 
-                        dispatchCreateViewUploadHeaderDetailState({
+                        dispatchCreateViewHeaderDetailState({
                             type: 'SET_HEADER_DETAIL_DATA',
                             payload: newDetails
                         });
                     },
-                    // deleteCell: function (e, uploadHeaderId) {
-                    //     e.preventDefault();
+                    deleteCell: function (e, detailId) {
+                        e.preventDefault();
 
-                    //     let newDetails = createUploadHeaderDetailState.uploadedData.details.filter(r => r.id !== uploadHeaderId);
+                        let newDetails = createViewHeaderDetailState.viewHeaderDetail.details.filter(r => r.id !== detailId);
 
-                    //     dispatchCreateUploadHeaderDetailState({
-                    //         type: 'SET_UPLOAD_HEADER_DETAIL_DATA',
-                    //         payload: newDetails
-                    //     });
-                    // },
-                    // addCell: function (e) {
-                    //     e.preventDefault();
+                        dispatchCreateViewHeaderDetailState({
+                            type: 'SET_HEADER_DETAIL_DATA',
+                            payload: newDetails
+                        });
+                    },
+                    moveUp: function (e, detailId) {
+                        e.preventDefault();
 
-                    //     let newDetail = {
-                    //         id: uuidv4(),
-                    //         colData: '',
-                    //         cellType: 'String'
-                    //     }
-
-                    //     dispatchCreateUploadHeaderDetailState({
-                    //         type: 'SET_UPLOAD_HEADER_DETAIL_DATA',
-                    //         payload: createUploadHeaderDetailState.uploadedData.details.concat(newDetail)
-                    //     });
-                    // },
-                    // moveUp: function (e, detailId) {
-                    //     e.preventDefault();
-
-                    //     let targetIdx = -1;
-
-                    //     createUploadHeaderDetailState.uploadedData.details.forEach((detail, idx) => {
-                    //         if(detail.id === detailId) {
-                    //             targetIdx = idx;
-                    //             return;
-                    //         }
-                    //     });
+                        let targetIdx = -1;
+                        createViewHeaderDetailState.viewHeaderDetail.details.forEach((data, idx) => {
+                            if(data.id === detailId) {
+                                targetIdx = idx;
+                                return;
+                            }
+                        });
                     
-                    //     this.changeArrayControl(targetIdx, parseInt(targetIdx)-1);
-                    // },
-                    // moveDown: function (e, detailId) {
-                    //     e.preventDefault();
+                        this.changeArrayControl(targetIdx, parseInt(targetIdx)-1);
+                    },
+                    moveDown: function (e, detailId) {
+                        e.preventDefault();
 
-                    //     let targetIdx = -1;
-
-                    //     createUploadHeaderDetailState.uploadedData.details.forEach((detail, idx) => {
-                    //         if(detail.id === detailId) {
-                    //             targetIdx = idx;
-                    //             return;
-                    //         }
-                    //     });
+                        let targetIdx = -1;
+                        createViewHeaderDetailState.viewHeaderDetail.details.forEach((data, idx) => {
+                            if(data.id === detailId) {
+                                targetIdx = idx;
+                                return;
+                            }
+                        });
                     
-                    //     this.changeArrayControl(targetIdx, parseInt(targetIdx)+1);
-                    // },
-                    // changeArrayControl: function (targetIdx, moveValue) {
-                    //     if(!(createUploadHeaderDetailState.uploadedData.details.length > 1)) return;
+                        this.changeArrayControl(targetIdx, parseInt(targetIdx)+1);
+                    },
+                    changeArrayControl: function (targetIdx, moveValue) {
+                        if(!(createViewHeaderDetailState.viewHeaderDetail.details.length > 1)) return;
                         
-                    //     let newPosition = parseInt(moveValue);
-                    //     if(newPosition < 0 || newPosition >= createUploadHeaderDetailState.uploadedData.details.length) return;
+                        let newPosition = parseInt(moveValue);
+                        if(newPosition < 0 || newPosition >= createViewHeaderDetailState.viewHeaderDetail.details.length) return;
 
-                    //     let headerDetailList = createUploadHeaderDetailState.uploadedData.details;
-                    //     let target = headerDetailList.splice(targetIdx, 1)[0];
-                    //     headerDetailList.splice(newPosition, 0, target);
+                        let headerDetailList = createViewHeaderDetailState.viewHeaderDetail.details;
+                        let target = headerDetailList.splice(targetIdx, 1)[0];
+                        headerDetailList.splice(newPosition, 0, target);
 
-                    //     dispatchCreateUploadHeaderDetailState({
-                    //         type: 'SET_UPLOAD_HEADER_DETAIL_DATA',
-                    //         payload: headerDetailList
-                    //     })
-                    // },
-                    // download: async function (e){
-                    //     e.preventDefault();
-
-                    //     props.loadingControl().open();
-
-                    //     let downloadDetail = selectedHeaderTitleState.uploadHeaderDetail.details.map(r => {
-                    //         return {
-                    //             ...r,
-                    //             colData: r.headerName
-                    //         }
-                    //     });
-
-                    //     await props.downloadUploadHeaderDetailsControl(selectedHeaderTitleState.uploadHeaderTitle, downloadDetail);
-                    //     props.loadingControl().close();
-                    // }
+                        dispatchCreateViewHeaderDetailState({
+                            type: 'SET_HEADER_DETAIL_DATA',
+                            payload: headerDetailList
+                        });
+                    }
                 }
             }
         }
@@ -348,9 +471,6 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                     <BoardTitle>
                         <span>피아르 주문 현황 데이터</span>
                         <DataOptionBox>
-                            <HeaderFormControlBtn type="button" className="upload-header-excel-download" 
-                                // onClick={(e) => excelFormControl().piaarViewExcelForm().download(e)} disabled={!selectedHeaderTitleState?.uploadHeaderDetail.details.length}
-                                >양식 다운로드</HeaderFormControlBtn>
                             <HeaderFormControlBtn type="button" onClick={(e) => excelFormControl().piaarViewExcelForm().open(e)}>양식 설정</HeaderFormControlBtn>
                         </DataOptionBox>
                     </BoardTitle>
@@ -359,7 +479,7 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                         <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
                             <thead>
                                 <tr>
-                                    {props.piaarCustomizedHeaderListState?.headerDetails?.map((data, idx) => {
+                                    {props.viewHeaderDetailList?.viewHeaderDetail?.details?.map((data, idx) => {
                                         return (
                                             <HeaderTh key={'piaar_excel_header_idx' + idx} className="fixed-header large-cell" scope="col">
                                                 <span>{data.cellName}</span>
@@ -369,21 +489,21 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                                 </tr>
                             </thead>
                             <tbody style={{ border: 'none' }}>
-                                {/* {uploadedExcelDataState?.map((data, idx) => {
+                                {viewExcelDataState?.map((data, idx) => {
                                     return (
                                         <BodyTr
                                             key={'upload_exel_data_idx' + idx}
                                         >
-                                            {data.uploadedData.details.map((detailData, detailIdx) => {
+                                            {data.map((detailData, detailIdx) => {
                                                 return (
                                                     <BodyTd key={'upload_excel_data_detail_idx' + detailIdx} className="col">
-                                                        <span>{detailData.cellType === 'Date' ? dateToYYMMDDhhmmss(detailData.colData) : detailData.colData}</span>
+                                                        <span>{detailData.cellValue}</span>
                                                     </BodyTd>
                                                 )
                                             })}
                                         </BodyTr>
                                     )
-                                })} */}
+                                })}
                             </tbody>
                         </table>
                     </BoardContainer>
@@ -399,6 +519,11 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                             createViewHeaderDetailState={createViewHeaderDetailState}
 
                             onChangeInputHeaderDetailControl={(e, detailId) => excelFormControl().piaarViewExcelForm().onChangeInputValue(e, detailId)}
+                            deleteCellControl={(e, detailId) => excelFormControl().piaarViewExcelForm().deleteCell(e, detailId)}
+                            storeViewExcelFormControl={(e) => excelFormControl().piaarViewExcelForm().storeViewExcelFormDetail(e)}
+                            resetViewExcelFormControl={(e) => excelFormControl().piaarViewExcelForm().resetViewExcelFormDetail(e)}
+                            moveHeaderFormUpControl={(e, detailId) => excelFormControl().piaarViewExcelForm().moveUp(e, detailId)}
+                            moveHeaderFormDownControl={(e, detailId) => excelFormControl().piaarViewExcelForm().moveDown(e, detailId)}
                         >
                         </CreateExcelViewHeaderDetailComponent>
                         

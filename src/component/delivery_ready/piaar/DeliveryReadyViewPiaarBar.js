@@ -61,14 +61,13 @@ const PageControlDiv = styled.div`
 const PageControlBtn = styled.button`
     font-size: 14px;
     padding: 15px 20px;
-    color: #555;
     background-color: rgba(122, 123, 218, 0.001);
     font-weight: 600;
     border: none;
     transition: opacity 0.1s linear;
 
     &:hover {
-        color: rgba(122, 123, 218);
+        color: #2C73D2;
         cursor: pointer;
     }
 

@@ -140,6 +140,8 @@ const DeliveryReadyUploadPiaarMain = (props) => {
                     .catch(err => {
                         let res = err.response;
                         alert(res?.data?.memo);
+                        setExcelData(null);
+                        setFormData(null);
                     })
             },
             storeExcelFile: async function () {
