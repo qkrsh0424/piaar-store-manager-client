@@ -1,7 +1,10 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
-// components
+import { withRouter } from 'react-router';
+
+import LinkIcon from '@mui/icons-material/Link';
+import LinkOffIcon from '@mui/icons-material/LinkOff';
 
 const Container = styled.div`
     overflow:hidden;
@@ -160,6 +163,15 @@ const ImageEl = styled.img`
    border-radius: 8px;
 `;
 
+const ImageLink = styled.a`
+    display: inline;
+    background-color: red;
+
+    & .hover {
+        background-color: red;
+    }
+`;
+
 const ProductManageBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
@@ -222,15 +234,24 @@ const ProductManageBody = (props) => {
                                                 <BodyTh style={{ textAlign: 'left' }} rowSpan={product.options.length + 1}>
                                                     <ImageWrapper>
                                                         <ImageBox>
-                                                            {product.product.imageUrl ? 
-                                                                <ImageEl src={product.product.imageUrl} title={product.product.imageFileName} />
+                                                            {product.product.imageUrl ?
+                                                                <ImageEl src={product.product.imageUrl} title={product.product.imageFileName}/>
                                                                 :
-                                                                <ImageEl src='/images/icon/no-image.jpg' title='no-image' />
+                                                                <ImageEl src='/images/icon/no-image.jpg' title='no-image'/>
                                                             }
                                                         </ImageBox>
                                                     </ImageWrapper>
                                                 </BodyTh>
                                                 <BodyTh rowSpan={product.options.length + 1}>
+                                                    <div>
+                                                        {product.product.purchaseUrl ?
+                                                            <a href={product.product.purchaseUrl}>
+                                                                <LinkIcon type='button'>구매링크</LinkIcon>
+                                                            </a>
+                                                            :
+                                                            <LinkOffIcon type='button' onClick={() => alert('링크를 먼저 등록해주세요.')}>구매링크</LinkOffIcon>
+                                                        }
+                                                    </div>
                                                     <div style={{ color: 'green' }}>[{product.category.name}]</div>
                                                     <div>{product.product.imageFileUri}</div>
                                                     <div>
@@ -295,4 +316,4 @@ const ProductManageBody = (props) => {
     );
 }
 
-export default ProductManageBody;
+export default withRouter(ProductManageBody);

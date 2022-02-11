@@ -1,5 +1,6 @@
 import { useEffect, useState, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { withRouter } from 'react-router-dom';
 
 // handler
 import { getStartDate, getEndDate, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../handler/dateHandler';
@@ -44,6 +45,7 @@ class ProductOption {
         this.memo = '';
         this.imageUrl = '';
         this.imageFileName = '';
+        this.purchaseUrl = '';
         this.color = '';
         this.unitCny = '';
         this.unitKrw = '';
@@ -64,6 +66,7 @@ class ProductOption {
             memo: this.memo,
             imageUrl: this.imageUrl,
             imageFileName: this.imageFileName,
+            purchaseUrl: this.purchaseUrl,
             color: this.color,
             unitCny: this.unitCny,
             unitKrw: this.Krw,
@@ -126,7 +129,7 @@ const stockStatusStateReducer = (state, action) => {
     }
 }
 
-const ProductManageMain = () => {
+const ProductManageMain = (props) => {
     const [productListData, setProductListData] = useState(null);
     const [optionListData, setOptionListData] = useState(null);
     const [categoryListData, setCategoryListData] = useState(null);
@@ -1319,4 +1322,4 @@ const ProductManageMain = () => {
     );
 }
 
-export default ProductManageMain;
+export default withRouter(ProductManageMain);

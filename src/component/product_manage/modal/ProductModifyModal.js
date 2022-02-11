@@ -260,6 +260,14 @@ const ProductModifyModal = (props) => {
                                     </div>
                                     <CommonInputEl type="text" className='form-control' name='memo' value={props.productModifyData.memo ?? ''} onChange={(e) => props.__handleEventControl().product().modifyDataOnChangeInputValue(e)} />
                                 </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
+                                            구매링크
+                                        </span>
+                                    </div>
+                                    <CommonInputEl type="text" className='form-control' name='purchaseUrl' value={props.productModifyData.purchaseUrl ?? ''} onChange={(e) => props.__handleEventControl().product().modifyDataOnChangeInputValue(e)} />
+                                </div>
                             </NameGroup>
                         </BodyWrapper>
 

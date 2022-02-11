@@ -15,6 +15,7 @@ const productDataConnect = () => {
                     defaultName: productListData[i].defaultName,
                     imageFileName: productListData[i].imageFileName,
                     imageUrl: productListData[i].imageUrl,
+                    purchaseUrl: productListData[i].purchaseUrl,
                     managementName: productListData[i].managementName,
                     manufacturingCode: productListData[i].manufacturingCode,
                     memo: productListData[i].memo,

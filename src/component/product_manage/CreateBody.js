@@ -476,6 +476,15 @@ const CreateBody = (props) => {
                                                     <CommonInputEl type="text" className='form-control' name='memo' value={r.memo} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)}/>
                                                 
                                                 </div>
+                                                <div className="input-group mb-3">
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text">
+                                                            구매링크
+                                                        </span>
+                                                    </div>
+                                                    <CommonInputEl type="text" className='form-control' name='purchaseUrl' value={r.purchaseUrl} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)}/>
+                                                
+                                                </div>
                                             </NameGroup>
                                         </BodyWrapper>
 
