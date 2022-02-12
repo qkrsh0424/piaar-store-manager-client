@@ -245,11 +245,11 @@ const ProductManageBody = (props) => {
                                                 <BodyTh rowSpan={product.options.length + 1}>
                                                     <div>
                                                         {product.product.purchaseUrl ?
-                                                            <a href={product.product.purchaseUrl}>
+                                                            <a href={product.product.purchaseUrl} target='_blank'>
                                                                 <LinkIcon type='button'>구매링크</LinkIcon>
                                                             </a>
                                                             :
-                                                            <LinkOffIcon type='button' onClick={() => alert('링크를 먼저 등록해주세요.')}>구매링크</LinkOffIcon>
+                                                            <LinkOffIcon type='button' onClick={() => alert('구매링크를 먼저 등록해주세요.')}>구매링크</LinkOffIcon>
                                                         }
                                                     </div>
                                                     <div style={{ color: 'green' }}>[{product.category.name}]</div>

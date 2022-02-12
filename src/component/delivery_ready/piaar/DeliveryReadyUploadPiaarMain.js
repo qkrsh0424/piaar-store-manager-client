@@ -11,10 +11,10 @@ import BackdropLoading from '../../loading/BackdropLoading';
 import DeliveryReadyUploadPiaarBody from './DeliveryReadyUploadPiaarBody';
 
 class DeliveryReadyPiaarHeader {
-    constructor(cellNumber, cellName) {
+    constructor(cellNumber, cellValue) {
         this.id = uuidv4();
         this.cellNumber = cellNumber;
-        this.cellName = cellName;
+        this.cellValue = cellValue;
         this.cellSize = 'default-cell';
     }
 
@@ -22,7 +22,7 @@ class DeliveryReadyPiaarHeader {
         return {
             id: this.id,
             cellNumber: this.cellNumber,
-            cellName: this.cellName,
+            cellValue: this.cellValue,
             cellSize: this.cellSize
         }
     }
@@ -105,7 +105,7 @@ const DeliveryReadyUploadPiaarMain = (props) => {
             for(var i = 0; i < DELIVERY_READY_PIAAR_HEADER_SIZE; i++) {
                 deliveryReadyPiaarCustomizedHeaderList.push({
                     cellNumber : i,
-                    cellName : deliveryReadyPiaarHeaderName[i],
+                    cellValue : deliveryReadyPiaarHeaderName[i],
                     cellSize : 'default'
                 });
             }

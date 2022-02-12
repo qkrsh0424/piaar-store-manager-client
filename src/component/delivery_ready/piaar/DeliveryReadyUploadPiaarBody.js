@@ -24,6 +24,10 @@ const Form = styled.form`
     margin: 10px;
     margin-right: 20px;
 
+    @media only screen and (max-width:992px){
+        width: 100%;
+    }
+
     @media only screen and (max-width:576px){
         width: 100%;
     }
@@ -31,20 +35,31 @@ const Form = styled.form`
 
 const ControlLabel = styled.label`
     font-size: 16px;
+    font-weight: 600;
     width: 240px;
-    padding: 8px;
+    padding: 10px;
     margin: 4px;
-    /* color: #444; */
     color: white;
     text-align: center;
     vertical-align: middle;
-    /* background-color: #fdfdfd; */
     background-color: #2C73D2;
-    border-radius: 3px;
+    border-radius: 20px;
     transition: opacity 0.1s linear;
-    &:hover {
-        opacity: 0.8;
+    
+    &:hover{
         cursor: pointer;
+        transition: 0.2s;
+        transform: scale(1.05);
+        background: #7DC2FF;
+    }
+
+    &:active{
+        transition: 0s;
+        transform: scale(1.05);
+    }
+    
+    @media only screen and (max-width:992px){
+        width: 100%;
     }
 
     @media only screen and (max-width:768px){
@@ -60,20 +75,31 @@ const ControlLabel = styled.label`
 
 const ControlBtn = styled.button`
     font-size: 16px;
+    font-weight: 600;
     width: 240px;
-    padding: 8px;
+    padding: 10px;
     margin: 4px;
-    /* color: #444; */
     color: white;
     vertical-align: middle;
-    /* background-color: #fdfdfd; */
     background-color: #2C73D2;
-    border-radius: 3px;
+    border-radius: 20px;
     border: none;
     transition: opacity 0.1s linear;
-    &:hover {
-        opacity: 0.8;
+
+    &:hover{
         cursor: pointer;
+        transition: 0.2s;
+        transform: scale(1.05);
+        background: #7DC2FF;
+    }
+
+    &:active{
+        transition: 0s;
+        transform: scale(1.05);
+    }
+
+    @media only screen and (max-width:992px){
+        width: 100%;
     }
 
     @media only screen and (max-width:768px){
@@ -102,11 +128,8 @@ const TableContainer = styled.div`
     & .fiexed-header {
         position: sticky;
         top: -1px;
-        /* background: #f1f1f1; */
         background: #309FFF;
         color: white;
-        /* border-bottom: 2px solid #2C73D2;
-        border-right: 2px solid #2C73D2; */
         z-index:10;
     }
 
@@ -168,11 +191,11 @@ const DeliveryReadyUploadPiaarBody = (props) => {
                 <Container className="mt-3">
                     <UploadBar>
                         <Form>
-                            <ControlLabel htmlFor="upload-file-input"><b>피아르</b> 엑셀 파일 업로드</ControlLabel>
+                            <ControlLabel htmlFor="upload-file-input">피아르 엑셀 파일 업로드</ControlLabel>
                             <Input id="upload-file-input" type="file" accept=".xls,.xlsx" onClick={(e) => e.target.value = ''} onChange={(e) => props.uploadExcelDataControl(e)}/>
                         </Form>
                         <Form onSubmit={(e) => props.storeExcelDataControl(e)}>
-                            <ControlBtn type="submit"><b>피아르</b> 엑셀 파일 저장</ControlBtn>
+                            <ControlBtn type="submit">피아르 엑셀 파일 저장</ControlBtn>
                         </Form>
                         <PageControlBtn type="button" onClick={() => props.moveViewPageControl()}>발주서 다운로드 <KeyboardArrowRightIcon /></PageControlBtn>
                     </UploadBar>
@@ -182,19 +205,23 @@ const DeliveryReadyUploadPiaarBody = (props) => {
                             <tr>
                                 {props.piaarCustomizedHeaderListState?.map((data, index) => {
                                     return (
-                                        <HeaderTh key={'piaar_excel_header_idx' + index} className="fiexed-header large-cell" scope="col">{data.cellName}</HeaderTh>
+                                        <HeaderTh key={'piaar_excel_header_idx' + index} className="fiexed-header large-cell" scope="col">{data.cellValue}</HeaderTh>
                                     )
                                 })}
                             </tr>
                             </thead>
                             <tbody>
-                                <BodyTr>
-                                    {props.excelData?.uploadDetail?.details.map((data, index) => {
-                                        return (
-                                            <BodyTd className="col">{data.cellValue}</BodyTd>
-                                        )
-                                    })}
-                                </BodyTr>
+                                {props.excelData?.map((rowData, rowIndex) => {
+                                    return (
+                                        <BodyTr key={'piaar_excel_data_row_idx' + rowIndex}>
+                                            {rowData.uploadDetail?.details.map((data, index) => {
+                                                return (
+                                                    <BodyTd key={'piaar_excel_data_idx' + index} className="col">{data.cellValue}</BodyTd>
+                                                )
+                                            })}
+                                        </BodyTr>
+                                    )
+                                })}
                             </tbody>
                         </table>
                     </TableContainer>

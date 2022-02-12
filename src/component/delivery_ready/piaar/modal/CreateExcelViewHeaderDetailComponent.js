@@ -194,7 +194,7 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
                                                 </IndexChangeBtn>
                                             </div>
                                             <span>{idx + 1}.</span>
-                                            <DataInputEl type="text" name='cellName' placeholder='엑셀 항목명' onChange={(e) => props.onChangeInputHeaderDetailControl(e, data.id)} value={data.cellName || ''} required></DataInputEl>
+                                            <DataInputEl type="text" name='cellValue' placeholder='엑셀 항목명' onChange={(e) => props.onChangeInputHeaderDetailControl(e, data.id)} value={data.cellValue || ''} required></DataInputEl>
                                         </DataText>
                                         <DeleteBox>
                                             <DeleteBtn>
