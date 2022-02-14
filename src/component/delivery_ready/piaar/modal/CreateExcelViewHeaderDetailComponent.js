@@ -1,10 +1,11 @@
 import styled from "styled-components";
+
+import Checkbox from '@material-ui/core/Checkbox';
 import AddTaskIcon from '@mui/icons-material/AddTask';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import CancelIcon from '@mui/icons-material/Cancel';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ReplayIcon from '@mui/icons-material/Replay';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const Container = styled.div`
 `;
@@ -13,22 +14,21 @@ const ItemContainer = styled.div`
 `;
 
 const ItemWrapper = styled.div`
-    /* background:white; */
     border-radius: 5px;
 `;
 
 const ItemHeaderWrapper = styled.div`
     align-items: center;
     padding: 20px;
+    padding-bottom: 10px;
     overflow: auto;
     display: grid;
-    grid-template-columns: 5fr 1fr 1fr;
+    grid-template-columns: 90% 5% 5%;
 `;
 
 const GroupTitle = styled.div`
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 700;
-    /* padding:15px; */
 
     @media only screen and (max-width:425px){
         padding: 15px 0;
@@ -41,49 +41,29 @@ const InfoText = styled.span`
     color: #2C73D2;
 `;
 
-const DataText = styled.div`
-    font-size: 1rem;
-    font-weight: 500;
-    display: grid;
-    grid-template-columns: 1fr 1fr 5fr;
-    border: 1px solid #609FFF;
-    padding: 2%;
-    background-color: white;
-    border-radius: 30px;
-    align-items: center;
-
-    @media only screen and (max-width:425px){
-        padding: 15px 0;
-    }
-`;
-
 const BodyContainer = styled.div`
-    padding: 10px;
+    padding: 20px 15px;
     min-height: 50vh;
     max-height: 50vh;
     overflow: auto;
-    /* background-color: #7DC2FF; */
     background:white;
     overflow-x: hidden;
+    display: grid;
+    grid-template-rows: 10% 30% 10% 20%;
+    row-gap: 30px;
+    
 `;
 
-const CreateHeaderInfo = styled.div`
-    display: grid;
-    grid-template-columns: 90% 5%;
-    column-gap: 10px;
-    padding: 3px 10px;
+const ArrowBox = styled.div`
     text-align: center;
-    align-items: center;
 `;
 
 const CreateContainer = styled.div`
-    /* background-color: #7DC2FF88; */
-    height: 45vh;
     overflow: auto;
-    padding: 10px;
     border-radius: 5px;
     border: 1px solid #2C73D2;
-    /* background-color: #7DC2FF; */
+    align-items: center;
+    justify-content: center;
 `;
 
 const CreateBtn = styled.button`
@@ -117,39 +97,40 @@ const DataInputEl = styled.input`
     width: 90%;
     padding: 10px;
     border: 1px solid #00000000;
+    color: white;
     border-bottom: 1px solid #ced4da;
+    text-align: center;
+    font-weight: 700;
+    background-color: #309FFF;
+
     &:focus{
         outline: none;
-        border: 1px solid #4662B4;
-        background: white;
     }
 `;
 
-const DeleteBox = styled.div`
-    text-align: right;
-    width: 100%;
-`;
-
 const DeleteBtn = styled.span`
-    color: #2C73D2;
-    margin-bottom: 5px;
-    transition: 0.2s;
+    position: absolute;
+    left: 100px;
+    top: -4px;
+    transition: 0.1s;
+    color: #ffffff;
 
     &:hover{
-        transform: scale(1.1);
+        transform: scale(1.05);
         cursor: pointer;
-        color: #309FFF;
+        color: #ff6565;
 
     }
 
     &:active{
         transform: scale(1.05);
-
-        color: #7DC2FF;
+        color: red;
     }
 `;
 
-const IndexChangeBtn = styled.div`
+const IndexChangeBtn = styled.span`
+    color: white;
+
     &:hover{
         transform: scale(1.2);
         cursor: pointer;
@@ -163,6 +144,53 @@ const IndexChangeBtn = styled.div`
     }
 `;
 
+const HeaderControlBox = styled.div`
+    /* position: relative;
+    display: inline; */
+`;
+
+const HeaderTh = styled.th`
+    vertical-align: middle !important;
+    text-align: center;
+    width: 250px;
+    border-right: 1px solid #eee;
+`;
+
+const HeaderForm = styled.th`
+    vertical-align: middle !important;
+    text-align: center;
+    width: 250px;
+    border-right: 1px solid #eee;
+    background-color: #309FFF;
+    color: white;
+`;
+
+const BodyTd = styled.td`
+    vertical-align: middle !important;
+    text-align: center;
+    width: 150px;
+    border-right: 1px solid #a7a7a720;
+`;
+
+const CustomHeaderTh = styled.th`
+    vertical-align: middle !important;
+    text-align: center;
+    width: 250px;
+    border-right: 1px solid #eee;
+    background-color: #309FFF;
+`;
+
+const HeaderDataBox = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    place-items: center;
+`;
+
+const AllCheckBox = styled.div`
+    text-align: left;
+    padding: 10px;
+`;
+
 const CreateExcelViewHeaderDetailComponent = (props) => {
     return (
         <>
@@ -171,41 +199,77 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
                     <ItemContainer>
                         <ItemWrapper>
                             <ItemHeaderWrapper>
-                                <GroupTitle>엑셀 양식 저장</GroupTitle>
+                                <GroupTitle>view 엑셀 양식 설정</GroupTitle>
                                 <CreateBtn onClick={(e) => props.resetViewExcelFormControl(e)}><ReplayIcon /></CreateBtn>
                                 <CreateBtn type='submit'><AddTaskIcon /></CreateBtn>
-                                {/* TODO :: 초기화버튼 생성해야 함 */}
                             </ItemHeaderWrapper>
-                            <InfoText>* 주문 현황에서 확인할 데이터를 설정해주세요.</InfoText>
+                            <InfoText>* 주문 현황에서 확인할 데이터 항목을 설정해주세요.</InfoText>
                         </ItemWrapper>
                     </ItemContainer>
                     <BodyContainer>
+                        <AllCheckBox>
+                            <span>전체 선택</span>
+                            <Checkbox
+                                size="small"
+                                color="primary"
+                                inputProps={{ 'aria-label': '전체 미출고 데이터 선택' }}
+                                onChange={() => props.checkAllHeaderControl()} checked={props.isCheckedAllHeaderControl()}
+                            />
+                        </AllCheckBox>
                         <CreateContainer>
-                            {props.createViewHeaderDetailState?.viewHeaderDetail?.details?.map((data, idx) => {
-                                return (
-                                    <CreateHeaderInfo key={'create_view_header_detail_idx' + idx} className="input-group mb-3">
-                                        <DataText>
-                                            <div>
-                                                <IndexChangeBtn onClick={(e) => props.moveHeaderFormUpControl(e, data.id)}>
-                                                    <ExpandLessIcon />
-                                                </IndexChangeBtn>
-                                                <IndexChangeBtn onClick={(e) => props.moveHeaderFormDownControl(e, data.id)}>
-                                                    <ExpandMoreIcon />
-                                                </IndexChangeBtn>
-                                            </div>
-                                            <span>{idx + 1}.</span>
-                                            <DataInputEl type="text" name='cellValue' placeholder='엑셀 항목명' onChange={(e) => props.onChangeInputHeaderDetailControl(e, data.id)} value={data.cellValue || ''} required></DataInputEl>
-                                        </DataText>
-                                        <DeleteBox>
-                                            <DeleteBtn>
-                                                <CancelIcon type="button" sx={{ fontSize: 33 }}
-                                                    onClick={(e) => props.deleteCellControl(e, data.id)}
-                                                />
-                                            </DeleteBtn>
-                                        </DeleteBox>
-                                    </CreateHeaderInfo>
-                                )
-                            })}
+                            <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
+                                <thead>
+                                    <tr>
+                                        {props.piaarDefaultHeaderListState?.viewHeaderDetail?.details?.map((data, idx) => {
+                                            return (
+                                                <HeaderTh key={'piaar_view_excel_header_idx' + idx} className="fixed-header large-cell" scope="col">
+                                                    <Checkbox
+                                                        color="default"
+                                                        size="small"
+                                                        inputProps={{ 'aria-label': '뷰 데이터 선택' }}
+                                                        onClick={() => props.checkOneHeaderControl(data.id)}
+                                                        checked={props.isCheckedHeaderControl(data.id)}
+                                                    />
+                                                </HeaderTh>
+                                            )
+                                        })}
+                                    </tr>
+                                </thead>
+                                <tbody style={{ border: 'none' }}>
+                                    {props.piaarDefaultHeaderListState?.viewHeaderDetail?.details?.map((data, idx) => {
+                                        return (
+                                            <BodyTd key={'view_excel_data_detail_idx' + idx}>
+                                                <span>{idx + 1}. {data.cellValue}</span>
+                                            </BodyTd>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        </CreateContainer>
+                        <ArrowBox>
+                            <ArrowDownwardIcon />
+                        </ArrowBox>
+                        <CreateContainer>
+                            <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
+                                <thead>
+                                    {props.createViewHeaderDetailState?.viewHeaderDetail?.details?.map((data, idx) => {
+                                        return (
+                                            <CustomHeaderTh key={'view_excel_data_detail_idx' + idx}>
+                                                <HeaderDataBox>
+                                                    <IndexChangeBtn onClick={(e) => props.moveHeaderFormUpControl(e, data.id)}>
+                                                        <ChevronLeftIcon />
+                                                    </IndexChangeBtn>
+                                                    <DataInputEl type="text" name='cellValue' placeholder='엑셀 항목명' onChange={(e) => props.onChangeInputHeaderDetailControl(e, data.id)} value={data.cellValue || ''} required></DataInputEl>
+                                                    <IndexChangeBtn onClick={(e) => props.moveHeaderFormDownControl(e, data.id)}>
+                                                        <ChevronRightIcon />
+                                                    </IndexChangeBtn>
+                                                </HeaderDataBox>
+                                            </CustomHeaderTh>
+                                        )
+                                    })}
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </CreateContainer>
                     </BodyContainer>
                 </form>

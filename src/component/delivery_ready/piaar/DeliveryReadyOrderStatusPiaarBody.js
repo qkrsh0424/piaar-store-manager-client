@@ -3,8 +3,10 @@ import { v4 as uuidv4 } from 'uuid';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import { useSelector } from 'react-redux';
+
 import PiaarExcelViewCommonModal from "./modal/PiaarExcelViewCommonModal";
 import CreateExcelViewHeaderDetailComponent from "./modal/CreateExcelViewHeaderDetailComponent";
+
 
 const Container = styled.div`
     padding: 0 2%;
@@ -68,14 +70,17 @@ const DataOptionBox = styled.span`
 `;
 
 const HeaderFormControlBtn = styled.button`
-    padding: 2%;
+    padding: 10px;
     background:  #2C73D2;;
     color: white;
-    font-size: 1em;
+    font-size: 16px;
     font-weight: 600;
     border:1px solid  #7DC2FF;;
     border-radius: 20px;
     float: right;
+    width: 240px;
+    border: none;
+
 
     @media only screen and (max-width: 992px){
         display: inline-block;
@@ -243,7 +248,7 @@ const initialViewExcelDataState = null;
 const createViewHeaderDetailStateReducer = (state, action) => {
     switch (action.type) {
         case 'INIT_DATA':
-            return action.payload;
+            return {...action.payload};
         case 'SET_HEADER_DETAIL_DATA':
             return {
                 ...state,
@@ -275,6 +280,7 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
     const [createViewHeaderDetailState, dispatchCreateViewHeaderDetailState] = useReducer(createViewHeaderDetailStateReducer, initialCreateViewHeaderDetailState);
     const [piaarDefaultHeaderListState, dispatchPiaarDefaultHeaderListState] = useReducer(piaarDefaultHeaderListStateReducer, initialPiaarDefaultHeaderListState);
     const [viewExcelDataState, dispatchViewExcelDataState] = useReducer(viewExcelDataStateReducer, initialViewExcelDataState);
+    const [checkedViewHeaderIdList, setCheckedViewHeaderIdList] = useState([]);
 
     // 피아르 기본 엑셀 양식 설정
     useEffect(() => {
@@ -285,7 +291,8 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
             for(var i = 0; i < DELIVERY_READY_PIAAR_HEADER_SIZE; i++) {
                 let data = new DeliveryReadyPiaarHeader().toJSON();
                 data = {
-                    ...data,
+                    ...data.viewHeaderDetail.details,
+                    id: uuidv4(),
                     cellNumber : i,
                     cellValue : deliveryReadyPiaarHeaderName[i],
                     cellSize: 'default'
@@ -294,14 +301,12 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                 deliveryReadyPiaarCustomizedHeaderList.push({...data});
             }
 
-            let headerDetail = {
-                details : deliveryReadyPiaarCustomizedHeaderList
-            };
-
             let defaultViewHeader = new DeliveryReadyPiaarHeader();
             defaultViewHeader = {
                 ...defaultViewHeader,
-                viewHeaderDetail : headerDetail
+                viewHeaderDetail: {
+                    details : deliveryReadyPiaarCustomizedHeaderList
+                }
             };
 
             dispatchPiaarDefaultHeaderListState({
@@ -357,17 +362,17 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                         onCreatePiaarViewHeaderDetailModalOpen();
 
                         // 저장된 view header가 없다면 default값을 넣자
-                        if(!(props.viewHeaderDetailList && props.viewHeaderDetailList.viewHeaderDetail.details.length)){
+                        // if(!(props.viewHeaderDetailList && props.viewHeaderDetailList.viewHeaderDetail.details.length)){
+                        //     dispatchCreateViewHeaderDetailState({
+                        //         type: 'INIT_DATA',
+                        //         payload: piaarDefaultHeaderListState
+                        //     });
+                        // }else{
                             dispatchCreateViewHeaderDetailState({
                                 type: 'INIT_DATA',
-                                payload: piaarDefaultHeaderListState
+                                payload: new DeliveryReadyPiaarHeader().toJSON()
                             });
-                        }else{
-                            dispatchCreateViewHeaderDetailState({
-                                type: 'INIT_DATA',
-                                payload: props.viewHeaderDetailList
-                            });
-                        }
+                        // }
                     },
                     close: function () {
                         onCreatePiaarViewHeaderDetailModalClose();
@@ -414,16 +419,16 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                             payload: newDetails
                         });
                     },
-                    deleteCell: function (e, detailId) {
-                        e.preventDefault();
+                    // deleteCell: function (e, detailId) {
+                    //     e.preventDefault();
 
-                        let newDetails = createViewHeaderDetailState.viewHeaderDetail.details.filter(r => r.id !== detailId);
+                    //     let newDetails = createViewHeaderDetailState.viewHeaderDetail.details.filter(r => r.id !== detailId);
 
-                        dispatchCreateViewHeaderDetailState({
-                            type: 'SET_HEADER_DETAIL_DATA',
-                            payload: newDetails
-                        });
-                    },
+                    //     dispatchCreateViewHeaderDetailState({
+                    //         type: 'SET_HEADER_DETAIL_DATA',
+                    //         payload: newDetails
+                    //     });
+                    // },
                     moveUp: function (e, detailId) {
                         e.preventDefault();
 
@@ -464,6 +469,56 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                             type: 'SET_HEADER_DETAIL_DATA',
                             payload: headerDetailList
                         });
+                    },
+                    checkAll: function () {
+                        if (this.isCheckedAll()) {
+                            setCheckedViewHeaderIdList([]);
+                        } else {
+                            let headerIdList = piaarDefaultHeaderListState.viewHeaderDetail.details.map(r => r.id);
+                            setCheckedViewHeaderIdList(headerIdList);
+                        }
+                    },
+                    isCheckedAll: function () {
+                        if (piaarDefaultHeaderListState && piaarDefaultHeaderListState?.viewHeaderDetail.details.length) {
+                            let headerIdList = piaarDefaultHeaderListState.viewHeaderDetail.details.map(r => r.id).sort();
+                            checkedViewHeaderIdList.sort();
+
+                            return JSON.stringify(headerIdList) === JSON.stringify(checkedViewHeaderIdList);
+                        } else return false;
+                    },
+                    isChecked: function (headerId) {                        
+                        return checkedViewHeaderIdList.includes(headerId);
+                    },
+                    checkOneLi: function (headerId) {
+                        if (checkedViewHeaderIdList.includes(headerId)) {
+                            let checkedIdLi = checkedViewHeaderIdList.filter(r => r !== headerId);
+                            setCheckedViewHeaderIdList(checkedIdLi);
+
+                            let checkedData = checkedIdLi.map(id => {
+                                let data = piaarDefaultHeaderListState.viewHeaderDetail.details.filter(r => r.id === id)[0];
+                                return data;
+                            });
+
+                            dispatchCreateViewHeaderDetailState({
+                                type: 'SET_HEADER_DETAIL_DATA',
+                                payload: checkedData
+                            });
+
+                            setCheckedViewHeaderIdList(checkedViewHeaderIdList.filter(r => r !== headerId));
+                        } else {
+                            let checkedIdLi = checkedViewHeaderIdList.concat(headerId);
+                            setCheckedViewHeaderIdList(checkedIdLi);
+
+                            let checkedData = checkedIdLi.map(id => {
+                                let data = piaarDefaultHeaderListState.viewHeaderDetail.details.filter(r => r.id === id)[0];
+                                return data;
+                            });
+
+                            dispatchCreateViewHeaderDetailState({
+                                type: 'SET_HEADER_DETAIL_DATA',
+                                payload: checkedData
+                            });
+                        }
                     }
                 }
             }
@@ -477,9 +532,10 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                     <BoardTitle>
                         <span>피아르 주문 현황 데이터</span>
                         <DataOptionBox>
-                            <HeaderFormControlBtn type="button" onClick={(e) => excelFormControl().piaarViewExcelForm().open(e)}>양식 설정</HeaderFormControlBtn>
+                            <HeaderFormControlBtn type="button" onClick={(e) => excelFormControl().piaarViewExcelForm().open(e)}>view 양식 설정</HeaderFormControlBtn>
                         </DataOptionBox>
                     </BoardTitle>
+                    {console.log(createViewHeaderDetailState)}
 
                     <BoardContainer>
                         <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
@@ -518,11 +574,12 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                     <PiaarExcelViewCommonModal
                         open={createPiaarViewHeaderDetailModalOpen}
                         onClose={() => excelFormControl().piaarViewExcelForm().close()}
-                        maxWidth={'xs'}
+                        maxWidth={'lg'}
                         fullWidth={true}
                     >
                         <CreateExcelViewHeaderDetailComponent
                             createViewHeaderDetailState={createViewHeaderDetailState}
+                            piaarDefaultHeaderListState={piaarDefaultHeaderListState}
 
                             onChangeInputHeaderDetailControl={(e, detailId) => excelFormControl().piaarViewExcelForm().onChangeInputValue(e, detailId)}
                             deleteCellControl={(e, detailId) => excelFormControl().piaarViewExcelForm().deleteCell(e, detailId)}
@@ -530,6 +587,10 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                             resetViewExcelFormControl={(e) => excelFormControl().piaarViewExcelForm().resetViewExcelFormDetail(e)}
                             moveHeaderFormUpControl={(e, detailId) => excelFormControl().piaarViewExcelForm().moveUp(e, detailId)}
                             moveHeaderFormDownControl={(e, detailId) => excelFormControl().piaarViewExcelForm().moveDown(e, detailId)}
+                            checkOneHeaderControl={(headerId) => excelFormControl().piaarViewExcelForm().checkOneLi(headerId)}
+                            isCheckedHeaderControl={(headerId) => excelFormControl().piaarViewExcelForm().isChecked(headerId)}
+                            checkAllHeaderControl={() => excelFormControl().piaarViewExcelForm().checkAll()}
+                            isCheckedAllHeaderControl={() => excelFormControl().piaarViewExcelForm().isCheckedAll()}
                         >
                         </CreateExcelViewHeaderDetailComponent>
                         
