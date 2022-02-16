@@ -11,22 +11,25 @@ const Container = styled.div`
 `;
 
 const ItemContainer = styled.div`
+    border-bottom: 1px solid #a6a6a6;
 `;
 
 const ItemWrapper = styled.div`
     border-radius: 5px;
+    /* display: flex; */
+    width: 100%;
+    display: flex;
 `;
 
 const ItemHeaderWrapper = styled.div`
-    align-items: center;
     padding: 20px;
-    padding-bottom: 10px;
     overflow: auto;
-    display: grid;
-    grid-template-columns: 90% 5% 5%;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
 `;
 
-const GroupTitle = styled.div`
+const GroupTitle = styled.span`
     font-size: 1.3rem;
     font-weight: 700;
 
@@ -37,16 +40,21 @@ const GroupTitle = styled.div`
 
 const InfoText = styled.span`
     font-size: 14px;
-    padding: 20px;
+    padding: 10px;
     color: #2C73D2;
+    text-align: left;
+    display: block;
 `;
 
 const BodyContainer = styled.div`
-    padding: 20px 15px;
+    padding: 10px 20px;
+    padding-bottom: 50px;
     min-height: 70vh;
     max-height: 70vh;
     background:white;
     display: grid;
+    align-items: center;
+    row-gap: 0.5rem;
 `;
 
 const CreateContainer = styled.div`
@@ -55,15 +63,16 @@ const CreateContainer = styled.div`
     border: 1px solid #2C73D2;
     align-items: center;
     justify-content: center;
-    /* min-height: 15vh;
-    max-height: 15vh; */
+    min-height: 12vh;
+    /* max-height: 13vh; */
 `;
 
 const CreateBtn = styled.button`
     background: #2C73D2;
     color: white;
     border:none;
-    margin: 0 auto;
+    margin: 0 10px;
+    /* float: right; */
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -90,10 +99,11 @@ const ResetBtn = styled.button`
     background: #2C73D2;
     color: white;
     border:none;
-    font-size: 14px;
-    /* width: 20px;
-    height: 20px; */
-    border-radius: 5px;
+    margin: 0 10px;
+    /* float: right; */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     transition: 0.4s;
 
     & .button-img{
@@ -148,18 +158,24 @@ const HeaderTh = styled.th`
     vertical-align: middle !important;
     text-align: center;
     width: 250px;
+    font-weight: 500;
     border-right: 1px solid #eee;
+    font-size: 14px;
 `;
 
 const BodyTd = styled.td`
     vertical-align: middle !important;
     text-align: center;
     width: 150px;
+    font-weight: 700;
     border-right: 1px solid #a7a7a720;
+    cursor: pointer;
+    font-size: 14px;
 
     ${(props) => props.checked ?
         css`
-            background-color: #9bb6d150;
+            /* background-color: #9bb6d150; */
+            background-color: #309fff38;
         `
         :
         css`
@@ -176,6 +192,7 @@ const CustomHeaderTd = styled.td`
     width: 250px;
     border-right: 1px solid #eee;
     background-color: #309FFF;
+    font-size: 14px;
 `;
 
 const HeaderDataBox = styled.div`
@@ -186,13 +203,17 @@ const HeaderDataBox = styled.div`
 
 const AllCheckBox = styled.div`
     text-align: left;
-    padding: 10px;
+    padding: 0px 10px;
+    font-weight: 600;
 `;
 
 const BodyWrapper = styled.div`
     overflow-x: hidden;
-    /* align-content: center; */
     text-align: center;
+`;
+
+const ControlBox = styled.div`
+    float: right;
 `;
 
 const CreateExcelViewHeaderDetailComponent = (props) => {
@@ -204,14 +225,16 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
                         <ItemWrapper>
                             <ItemHeaderWrapper>
                                 <GroupTitle>view 엑셀 양식 설정</GroupTitle>
-                                <CreateBtn onClick={(e) => props.resetViewExcelFormControl(e)}><ReplayIcon /></CreateBtn>
-                                <CreateBtn type='submit'><AddTaskIcon /></CreateBtn>
+                                <ControlBox>
+                                    <ResetBtn onClick={(e) => props.resetViewExcelFormControl(e)}><ReplayIcon /></ResetBtn>
+                                    <CreateBtn type='submit'><AddTaskIcon /></CreateBtn>
+                                </ControlBox>
                             </ItemHeaderWrapper>
-                            <InfoText>* 주문 현황에서 확인할 데이터 항목을 설정해주세요.</InfoText>
                         </ItemWrapper>
                     </ItemContainer>
                     <BodyContainer>
                         <BodyWrapper>
+                            <InfoText>* 주문 현황에서 확인할 데이터 항목을 선택해주세요.</InfoText>
                             <AllCheckBox>
                                 <span>전체 선택</span>
                                 <Checkbox
@@ -222,7 +245,7 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
                                 />
                             </AllCheckBox>
                             <CreateContainer>
-                                <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
+                                <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%', marginBottom: '0rem' }}>
                                     <thead>
                                         <tr>
                                             {props.piaarDefaultHeaderListState?.viewHeaderDetail?.details?.map((data, idx) => {
@@ -241,7 +264,7 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
                                         </tr>
                                     </thead>
                                     <tbody style={{ border: 'none' }}>
-                                        <tr>
+                                        <tr height="45">
                                             {props.piaarDefaultHeaderListState?.viewHeaderDetail?.details?.map((data, idx) => {
                                                 return (
                                                     <BodyTd key={'view_excel_data_detail_idx' + idx}
@@ -259,12 +282,13 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
                         </BodyWrapper>
 
                         <BodyWrapper>
-                            <ArrowDownwardIcon />
+                            <div><ArrowDownwardIcon /></div>
                         </BodyWrapper>
                         
                         <BodyWrapper>
+                            <InfoText>* 선택한 양식의 헤더명과 순서를 변경할 수 있습니다.</InfoText>
                             <CreateContainer>
-                                <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
+                                <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%', marginBottom: '0rem' }}>
                                     <thead>
                                         <tr>
                                             {props.createViewHeaderDetailState?.viewHeaderDetail?.details?.map((data, idx) => {
@@ -277,7 +301,7 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
                                         </tr>
                                     </thead>
                                     <tbody style={{ border: 'none' }}>
-                                        <tr>
+                                        <tr height="60">
                                             {props.createViewHeaderDetailState?.viewHeaderDetail?.details?.map((data, idx) => {
                                                 return (
                                                     <CustomHeaderTd key={'custom_view_excel_data_detail_idx' + idx}>

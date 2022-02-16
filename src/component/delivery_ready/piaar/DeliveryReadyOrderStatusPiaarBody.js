@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import { useSelector } from 'react-redux';
 
+import Checkbox from '@material-ui/core/Checkbox';
+
 import PiaarExcelViewCommonModal from "./modal/PiaarExcelViewCommonModal";
 import CreateExcelViewHeaderDetailComponent from "./modal/CreateExcelViewHeaderDetailComponent";
 
@@ -85,6 +87,7 @@ const HeaderFormControlBtn = styled.button`
     @media only screen and (max-width: 992px){
         display: inline-block;
         padding: 4px;
+        width: 100%;
     }
 
     @media only screen and (max-width:576px ){
@@ -136,6 +139,10 @@ const BoardContainer = styled.div`
 
     & .xlarge-cell {
         width: 500px;
+    }
+
+    & .xsmall-cell {
+        width: 50px;
     }
 
     @media only screen and (max-width:576px){
@@ -283,6 +290,7 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
     const [piaarDefaultHeaderListState, dispatchPiaarDefaultHeaderListState] = useReducer(piaarDefaultHeaderListStateReducer, initialPiaarDefaultHeaderListState);
     const [viewExcelDataState, dispatchViewExcelDataState] = useReducer(viewExcelDataStateReducer, initialViewExcelDataState);
     const [checkedViewHeaderCellNumberList, setCheckedViewHeaderCellNumberList] = useState([]);
+    const [checkedOrderStatusDataIdList, setCheckedOrderStatusDataIdList] = useState([]);
 
     // 피아르 기본 엑셀 양식 설정
     useEffect(() => {
@@ -332,18 +340,32 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
             return;
         }
 
-        if (props.viewHeaderDetailList.viewHeaderDetail.details.length) {
+        if(!props.excelOrderList) {
+            return;
+        }
 
+        if (props.viewHeaderDetailList.viewHeaderDetail.details.length) {
             let data = props.excelOrderList.map(viewData => {
-                return viewData.uploadDetail.details.filter(viewDataDetail => 
+                let data2 = viewData.uploadDetail.details.filter(viewDataDetail => 
                     props.viewHeaderDetailList.viewHeaderDetail.details.filter(viewHeader => viewHeader.cellNumber === viewDataDetail.cellNumber)[0]
                 )
+
+                viewData = {
+                    ...viewData,
+                    uploadDetail : {
+                        ...viewData.uploadDetail,
+                        details : data2
+                    }
+                }
+
+                return viewData;
             });
 
             dispatchViewExcelDataState({
                 type: 'INIT_DATA',
                 payload: data
             });
+
             return;
         }
     }, [props.viewHeaderDetailList, props.excelOrderList]);
@@ -376,7 +398,6 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                                 payload: props.viewHeaderDetailList
                             });
 
-                            // TODO :: return 값 배열로 만들기
                             let checkedCellNumberLi = props.viewHeaderDetailList?.viewHeaderDetail?.details.map(viewHeader => {
                                 let data = piaarDefaultHeaderListState?.viewHeaderDetail?.details.filter(defaultHeader => defaultHeader.cellNumber === viewHeader.cellNumber)[0];
                                 return data.cellNumber;
@@ -542,6 +563,45 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
         }
     }
 
+    const statusExcelControl = () => {
+        return {
+            piaarOrderStatusExcelData: function () {
+                return {
+                    checkAll: function () {
+                        if (this.isCheckedAll()) {
+                            setCheckedOrderStatusDataIdList([]);
+                        } else {
+                            let checkedIdList = viewExcelDataState?.map(rowData => rowData.id);
+
+                            setCheckedOrderStatusDataIdList(checkedIdList);
+                        }
+                    },
+                    isCheckedAll: function () {
+                        if (props.excelOrderList) {
+                            let checkedIdList = viewExcelDataState?.map(rowData => rowData.id).sort();
+
+                            checkedOrderStatusDataIdList.sort();
+
+                            return JSON.stringify(checkedIdList) === JSON.stringify(checkedOrderStatusDataIdList);
+                        } else return false;
+                    },
+                    isChecked: function (dataId) {
+                        return checkedOrderStatusDataIdList.includes(dataId);
+                    },
+                    checkOneLi: function (dataId) {
+                        if (checkedOrderStatusDataIdList.includes(dataId)) {
+                            let checkedIdList = checkedOrderStatusDataIdList.filter(r => r !== dataId);
+                            setCheckedOrderStatusDataIdList(checkedIdList);
+                        } else {
+                            let checkedIdList = checkedOrderStatusDataIdList.concat(dataId);
+                            setCheckedOrderStatusDataIdList(checkedIdList);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     return (
         <>
             {userRdx.isLoading === false &&
@@ -552,12 +612,21 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                             <HeaderFormControlBtn type="button" onClick={(e) => excelFormControl().piaarViewExcelForm().open(e)}>view 양식 설정</HeaderFormControlBtn>
                         </DataOptionBox>
                     </BoardTitle>
-
+                    <div>
                     <BoardContainer>
                         <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
                             <thead>
                                 <tr>
-                                    {props.viewHeaderDetailList?.viewHeaderDetail?.details?.map((data, idx) => {
+                                        <HeaderTh className="fixed-header xsmall-cell" scope="col">
+                                            <Checkbox
+                                                size="small"
+                                                color="primary"
+                                                inputProps={{ 'aria-label': '주문 데이터 전체 선택' }}
+                                                onChange={() => statusExcelControl().piaarOrderStatusExcelData().checkAll()}
+                                                checked={statusExcelControl().piaarOrderStatusExcelData().isCheckedAll()}
+                                            />
+                                        </HeaderTh>
+                                    {props.viewHeaderDetailList?.viewHeaderDetail.details.map((data, idx) => {
                                         return (
                                             <HeaderTh key={'piaar_excel_header_idx' + idx} className="fixed-header large-cell" scope="col">
                                                 <span>{data.cellValue}</span>
@@ -566,13 +635,23 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                                     })}
                                 </tr>
                             </thead>
+                            
                             <tbody style={{ border: 'none' }}>
                                 {viewExcelDataState?.map((data, idx) => {
                                     return (
                                         <BodyTr
                                             key={'upload_exel_data_idx' + idx}
                                         >
-                                            {data.map((detailData, detailIdx) => {
+                                            <BodyTd className="col">
+                                                <Checkbox
+                                                    color="default"
+                                                    size="small"
+                                                    inputProps={{ 'aria-label': '주문 데이터 선택' }}
+                                                    onClick={() => statusExcelControl().piaarOrderStatusExcelData().checkOneLi(data.id)}
+                                                    checked={statusExcelControl().piaarOrderStatusExcelData().isChecked(data.id)}
+                                                />
+                                            </BodyTd>
+                                            {data.uploadDetail.details.map((detailData, detailIdx) => {
                                                 return (
                                                     <BodyTd key={'upload_excel_data_detail_idx' + detailIdx} className="col">
                                                         <span>{detailData.cellValue}</span>
@@ -585,6 +664,11 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                             </tbody>
                         </table>
                     </BoardContainer>
+
+                    <div>
+                        <button>판매 처리</button>
+                    </div>
+                    </div>
                     
                     {/* Create Piaar View Header Form Modal */}
                     <PiaarExcelViewCommonModal
