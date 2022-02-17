@@ -9,21 +9,20 @@ import { deliveryReadyPiaarDataConnect } from '../../../data_connect/deliveryRea
 import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
 import BackdropLoading from '../../loading/BackdropLoading';
 import DeliveryReadyUploadPiaarBody from './DeliveryReadyUploadPiaarBody';
+import { de } from 'date-fns/locale';
 
 class DeliveryReadyPiaarHeader {
-    constructor(cellNumber, cellValue) {
+    constructor() {
         this.id = uuidv4();
-        this.cellNumber = cellNumber;
-        this.cellValue = cellValue;
-        this.cellSize = 'default-cell';
+        this.uploadDetail = {
+            details: []
+        };
     }
 
     toJSON() {
         return {
             id: this.id,
-            cellNumber: this.cellNumber,
-            cellValue: this.cellValue,
-            cellSize: this.cellSize
+            uploadDetail: this.uploadDetail
         }
     }
 }
@@ -78,11 +77,14 @@ const initialPiaarCustomizedHeaderListState = null;
 const piaarCustomizedHeaderListStateReducer = (state, action) => {
     switch (action.type) {
         case 'INIT_DATA':
-            return action.payload;
+            return {...action.payload};
         case 'SET_HEADER_LIST':
             return {
                 ...state,
-                headerDetail: action.payload
+                uploadDetail: {
+                    ...state.uploadDetail,
+                    details: action.payload
+                }
             }
         case 'CLEAR':
             return null;
@@ -99,20 +101,33 @@ const DeliveryReadyUploadPiaarMain = (props) => {
 
     useEffect(() => {
         function fetchInit() {
-            let deliveryReadyPiaarCustomizedHeaderList = [];
+            let headerList = [];
 
             // 피아르 엑셀 헤더 생성
             for(var i = 0; i < DELIVERY_READY_PIAAR_HEADER_SIZE; i++) {
-                deliveryReadyPiaarCustomizedHeaderList.push({
+                let data = new DeliveryReadyPiaarHeader().toJSON();
+                data = {
+                    ...data.uploadDetail.details,
+                    id: uuidv4(),
                     cellNumber : i,
                     cellValue : deliveryReadyPiaarHeaderName[i],
-                    cellSize : 'default'
-                });
+                    cellSize: 'default'
+                }
+
+                headerList.push({...data});
             }
+
+            let defaultViewHeader = new DeliveryReadyPiaarHeader();
+            defaultViewHeader = {
+                ...defaultViewHeader,
+                uploadDetail: {
+                    details : headerList
+                }
+            };
 
             dispatchPiaarCutomizedHeaderListState({
                 type: 'INIT_DATA',
-                payload: deliveryReadyPiaarCustomizedHeaderList
+                payload: defaultViewHeader
             });
         }
 

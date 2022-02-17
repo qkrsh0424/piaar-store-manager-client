@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
 
 const Container = styled.div`
     overflow:hidden;
@@ -203,7 +202,7 @@ const DeliveryReadyUploadPiaarBody = (props) => {
                         <table className="table table-sm" style={{tableLayout: 'fixed'}}>
                             <thead>
                             <tr>
-                                {props.piaarCustomizedHeaderListState?.map((data, index) => {
+                                {props.piaarCustomizedHeaderListState?.uploadDetail.details.map((data, index) => {
                                     return (
                                         <HeaderTh key={'piaar_excel_header_idx' + index} className="fiexed-header large-cell" scope="col">{data.cellValue}</HeaderTh>
                                     )
@@ -214,11 +213,46 @@ const DeliveryReadyUploadPiaarBody = (props) => {
                                 {props.excelData?.map((rowData, rowIndex) => {
                                     return (
                                         <BodyTr key={'piaar_excel_data_row_idx' + rowIndex}>
-                                            {rowData.uploadDetail?.details.map((data, index) => {
-                                                return (
-                                                    <BodyTd key={'piaar_excel_data_idx' + index} className="col">{data.cellValue}</BodyTd>
-                                                )
-                                            })}
+                                            <BodyTd>{rowData.uniqueCode}</BodyTd>
+                                            <BodyTd>{rowData.orderNumber1}</BodyTd>
+                                            <BodyTd>{rowData.orderNumber2}</BodyTd>
+                                            <BodyTd>{rowData.orderNumber3}</BodyTd>
+                                            <BodyTd>{rowData.prodName}</BodyTd>
+                                            <BodyTd>{rowData.optionName}</BodyTd>
+                                            <BodyTd>{rowData.unit}</BodyTd>
+                                            <BodyTd>{rowData.receiver}</BodyTd>
+                                            <BodyTd>{rowData.receiverContact1}</BodyTd>
+                                            <BodyTd>{rowData.receiverContact2}</BodyTd>
+                                            <BodyTd>{rowData.destination}</BodyTd>
+                                            <BodyTd>{rowData.zipCode}</BodyTd>
+                                            <BodyTd>{rowData.transportType}</BodyTd>
+                                            <BodyTd>{rowData.deliveryMessage}</BodyTd>
+                                            <BodyTd>{rowData.prodUniqueNumber1}</BodyTd>
+                                            <BodyTd>{rowData.prodUniqueNumber2}</BodyTd>
+                                            <BodyTd>{rowData.optionUniqueNumber1}</BodyTd>
+                                            <BodyTd>{rowData.optionUniqueNumber2}</BodyTd>
+                                            <BodyTd>{rowData.prodCode}</BodyTd>
+                                            <BodyTd>{rowData.optionCode}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo1}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo2}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo3}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo4}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo5}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo6}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo7}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo8}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo9}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo10}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo11}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo12}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo13}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo14}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo15}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo16}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo17}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo18}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo19}</BodyTd>
+                                            <BodyTd>{rowData.managementMemo20}</BodyTd>
                                         </BodyTr>
                                     )
                                 })}

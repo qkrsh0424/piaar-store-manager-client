@@ -188,47 +188,52 @@ class DeliveryReadyPiaarHeader {
 const DELIVERY_READY_PIAAR_HEADER_SIZE = 46;
 
 const deliveryReadyPiaarHeaderName = [
-    '피아르 고유번호',
-    '주문번호1',
-    '주문번호2',
-    '주문번호3',
-    '상품명',
-    '옵션명',
-    '수량',
-    '수취인명',
-    '전화번호1',
-    '전화번호2',
-    '주소',
-    '우편번호',
-    '배송방식',
-    '배송메세지',
-    '상품고유번호1',
-    '상품고유번호2',
-    '옵션고유번호1',
-    '옵션고유번호2',
-    '피아르 상품코드',
-    '피아르 옵션코드',
-    '관리메모1',
-    '관리메모2',
-    '관리메모3',
-    '관리메모4',
-    '관리메모5',
-    '관리메모6',
-    '관리메모7',
-    '관리메모8',
-    '관리메모9',
-    '관리메모10',
-    '관리메모11',
-    '관리메모12',
-    '관리메모13',
-    '관리메모14',
-    '관리메모15',
-    '관리메모16',
-    '관리메모17',
-    '관리메모18',
-    '관리메모19',
-    '관리메모20',
-    '*카테고리명', '*상품명', '*상품관리명', '*옵션명', '*옵션관리명', '*재고수량'
+    ['피아르 고유번호', 'uniqueCode'],
+    ['주문번호1', 'orderNumber1'],
+    ['주문번호2', 'orderNumber2'],
+    ['주문번호3', 'orderNumber3'],
+    ['상품명', 'prodName'],
+    ['옵션명', 'optionName'],
+    ['수량', 'unit'],
+    ['수취인명', 'receiver'],
+    ['전화번호1', 'receiverContact1'],
+    ['전화번호2', 'receiverContact2'],
+    ['주소', 'destination'],
+    ['우편번호', 'zipCode'],
+    ['배송방식', 'transportType'],
+    ['배송메세지', 'deliveryMessage'],
+    ['상품고유번호1', 'prodUniqueNumber1'],
+    ['상품고유번호2', 'prodUniqueNumber2'],
+    ['옵션고유번호1', 'optionUniqueNumber1'],
+    ['옵션고유번호2', 'optionUniqueNumber2'],
+    ['피아르 상품코드', 'prodCode'],
+    ['피아르 옵션코드', 'optionCode'],
+    ['관리메모1', 'managementMemo1'],
+    ['관리메모2', 'managementMemo2'],
+    ['관리메모3', 'managementMemo3'],
+    ['관리메모4', 'managementMemo4'],
+    ['관리메모5', 'managementMemo5'],
+    ['관리메모6', 'managementMemo6'],
+    ['관리메모7', 'managementMemo7'],
+    ['관리메모8', 'managementMemo8'],
+    ['관리메모9', 'managementMemo9'],
+    ['관리메모10', 'managementMemo10'],
+    ['관리메모11', 'managementMemo11'],
+    ['관리메모12', 'managementMemo12'],
+    ['관리메모13', 'managementMemo13'],
+    ['관리메모14', 'managementMemo14'],
+    ['관리메모15', 'managementMemo15'],
+    ['관리메모16', 'managementMemo16'],
+    ['관리메모17', 'managementMemo17'],
+    ['관리메모18', 'managementMemo18'],
+    ['관리메모19', 'managementMemo19'],
+    ['관리메모20', 'managementMemo20'],
+    ['*카테고리명', 'categoryName'],
+    ['*상품명', 'prodDefaultName'],
+    ['*상품관리명', 'prodManagementName'],
+    ['*옵션명', 'optionDefaultName'],
+    ['*옵션관리명', 'optionManagementName'],
+    ['*재고수량', 'optionStockUnit']
 ];
 
 const initialPiaarDefaultHeaderListState = null;
@@ -252,7 +257,6 @@ const piaarDefaultHeaderListStateReducer = (state, action) => {
 }
 
 const initialCreateViewHeaderDetailState = null;
-const initialViewExcelDataState = null;
 
 const createViewHeaderDetailStateReducer = (state, action) => {
     switch (action.type) {
@@ -272,23 +276,12 @@ const createViewHeaderDetailStateReducer = (state, action) => {
     }
 }
 
-const viewExcelDataStateReducer = (state, action) => {
-    switch (action.type) {
-        case 'INIT_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return null;
-        default: return { ...state }
-    }
-}
-
 const DeliveryReadyOrderStatusPiaarBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
     const [createPiaarViewHeaderDetailModalOpen, setCreatePiaarViewHeaderDetailModalOpen] = useState(false);
     const [createViewHeaderDetailState, dispatchCreateViewHeaderDetailState] = useReducer(createViewHeaderDetailStateReducer, initialCreateViewHeaderDetailState);
     const [piaarDefaultHeaderListState, dispatchPiaarDefaultHeaderListState] = useReducer(piaarDefaultHeaderListStateReducer, initialPiaarDefaultHeaderListState);
-    const [viewExcelDataState, dispatchViewExcelDataState] = useReducer(viewExcelDataStateReducer, initialViewExcelDataState);
     const [checkedViewHeaderCellNumberList, setCheckedViewHeaderCellNumberList] = useState([]);
     const [checkedOrderStatusDataIdList, setCheckedOrderStatusDataIdList] = useState([]);
 
@@ -304,7 +297,8 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                     ...data.viewHeaderDetail.details,
                     id: uuidv4(),
                     cellNumber : i,
-                    cellValue : deliveryReadyPiaarHeaderName[i],
+                    cellValue : deliveryReadyPiaarHeaderName[i][0],
+                    matchedColumnName : deliveryReadyPiaarHeaderName[i][1],
                     cellSize: 'default'
                 }
 
@@ -327,48 +321,6 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
 
         fetchInit();
     }, []);
-
-    // Get Piaar View Excel Data
-    useEffect(() => {
-        if(!(props.viewHeaderDetailList && props.viewHeaderDetailList.viewHeaderDetail.details.length)){
-            dispatchViewExcelDataState({
-                type: 'CLEAR'
-            });
-        }
-        
-        if (!(props.viewHeaderDetailList && props.excelOrderList)) {
-            return;
-        }
-
-        if(!props.excelOrderList) {
-            return;
-        }
-
-        if (props.viewHeaderDetailList.viewHeaderDetail.details.length) {
-            let data = props.excelOrderList.map(viewData => {
-                let data2 = viewData.uploadDetail.details.filter(viewDataDetail => 
-                    props.viewHeaderDetailList.viewHeaderDetail.details.filter(viewHeader => viewHeader.cellNumber === viewDataDetail.cellNumber)[0]
-                )
-
-                viewData = {
-                    ...viewData,
-                    uploadDetail : {
-                        ...viewData.uploadDetail,
-                        details : data2
-                    }
-                }
-
-                return viewData;
-            });
-
-            dispatchViewExcelDataState({
-                type: 'INIT_DATA',
-                payload: data
-            });
-
-            return;
-        }
-    }, [props.viewHeaderDetailList, props.excelOrderList]);
 
     const onCreatePiaarViewHeaderDetailModalOpen = () => {
         setCreatePiaarViewHeaderDetailModalOpen(true);
@@ -571,14 +523,14 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                         if (this.isCheckedAll()) {
                             setCheckedOrderStatusDataIdList([]);
                         } else {
-                            let checkedIdList = viewExcelDataState?.map(rowData => rowData.id);
+                            let checkedIdList = props.excelOrderList?.map(rowData => rowData.id);
 
                             setCheckedOrderStatusDataIdList(checkedIdList);
                         }
                     },
                     isCheckedAll: function () {
                         if (props.excelOrderList) {
-                            let checkedIdList = viewExcelDataState?.map(rowData => rowData.id).sort();
+                            let checkedIdList = props.excelOrderList?.map(rowData => rowData.id).sort();
 
                             checkedOrderStatusDataIdList.sort();
 
@@ -613,10 +565,10 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                         </DataOptionBox>
                     </BoardTitle>
                     <div>
-                    <BoardContainer>
-                        <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
-                            <thead>
-                                <tr>
+                        <BoardContainer>
+                            <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
+                                <thead>
+                                    <tr>
                                         <HeaderTh className="fixed-header xsmall-cell" scope="col">
                                             <Checkbox
                                                 size="small"
@@ -626,18 +578,18 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                                                 checked={statusExcelControl().piaarOrderStatusExcelData().isCheckedAll()}
                                             />
                                         </HeaderTh>
-                                    {props.viewHeaderDetailList?.viewHeaderDetail.details.map((data, idx) => {
-                                        return (
-                                            <HeaderTh key={'piaar_excel_header_idx' + idx} className="fixed-header large-cell" scope="col">
-                                                <span>{data.cellValue}</span>
-                                            </HeaderTh>
-                                        )
-                                    })}
-                                </tr>
-                            </thead>
-                            
-                            <tbody style={{ border: 'none' }}>
-                                {viewExcelDataState?.map((data, idx) => {
+                                        {props.viewHeaderDetailList?.viewHeaderDetail.details.map((data, idx) => {
+                                            return (
+                                                <HeaderTh key={'piaar_excel_header_idx' + idx} className="fixed-header large-cell" scope="col">
+                                                    <span>{data.cellValue}</span>
+                                                </HeaderTh>
+                                            )
+                                        })}
+                                    </tr>
+                                </thead>
+
+                                <tbody style={{ border: 'none' }}>
+                                {props.excelOrderList?.map((data, idx) => {
                                     return (
                                         <BodyTr
                                             key={'upload_exel_data_idx' + idx}
@@ -651,10 +603,10 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                                                     checked={statusExcelControl().piaarOrderStatusExcelData().isChecked(data.id)}
                                                 />
                                             </BodyTd>
-                                            {data.uploadDetail.details.map((detailData, detailIdx) => {
+                                            {props.viewHeaderDetailList?.viewHeaderDetail.details.map((detailData, detailIdx) => {
                                                 return (
                                                     <BodyTd key={'upload_excel_data_detail_idx' + detailIdx} className="col">
-                                                        <span>{detailData.cellValue}</span>
+                                                        <span>{data[detailData.matchedColumnName]}</span>
                                                     </BodyTd>
                                                 )
                                             })}
