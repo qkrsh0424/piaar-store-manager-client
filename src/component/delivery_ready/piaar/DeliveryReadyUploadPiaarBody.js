@@ -202,7 +202,7 @@ const DeliveryReadyUploadPiaarBody = (props) => {
                         <table className="table table-sm" style={{tableLayout: 'fixed'}}>
                             <thead>
                             <tr>
-                                {props.piaarCustomizedHeaderListState?.uploadDetail.details.map((data, index) => {
+                                {props.piaarExcelHeaderListState?.uploadDetail.details.map((data, index) => {
                                     return (
                                         <HeaderTh key={'piaar_excel_header_idx' + index} className="fiexed-header large-cell" scope="col">{data.cellValue}</HeaderTh>
                                     )

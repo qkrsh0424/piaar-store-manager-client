@@ -12,6 +12,8 @@ import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
 import BackdropLoading from '../../loading/BackdropLoading';
 import DeliveryReadyViewPiaarBar from './DeliveryReadyViewPiaarBar';
 import DeliveryReadyOrderStatusPiaarBody from './DeliveryReadyOrderStatusPiaarBody';
+import DeliveryReadySoldStatusPiaarBody from './DeliveryReadySoldStatusPiaarBody';
+import DeliveryReadyReleasedStatusPiaarBody from './DeliveryReadyReleasedStatusPiaarBody';
 
 const Container = styled.div`
     height: 100vh;
@@ -22,6 +24,7 @@ const DeliveryReadyViewPiaarMain = (props) => {
     const [backdropLoading, setBackdropLoading] = useState(false);
     const [viewHeaderDetailList, setViewHeaderDetailList] = useState(null);
     const [excelOrderList, setExcelOrderList] = useState(null);
+    const [combinedDeliveryItemList, setCombinedDeliveryItemList] = useState(null);
     
     useEffect(() => {
         async function initViewHeaderDetailList() {
@@ -89,6 +92,45 @@ const DeliveryReadyViewPiaarMain = (props) => {
                         let res = err.response;
                         alert(res?.data?.message);
                     })
+            },
+            changeOrderDataToSold: async function (orderData) {
+                await deliveryReadyPiaarDataConnect().updateListToSold(orderData)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            alert('처리되었습니다.');
+                            __handleDataConnect().getExcelOrderList();
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        alert(res?.data?.message);
+                    })
+            },
+            changeSoldDataToReleased: async function (soldData) {
+                await deliveryReadyPiaarDataConnect().updateListToReleased(soldData)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            alert('처리되었습니다.');
+                            __handleDataConnect().getExcelOrderList();
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        alert(res?.data?.message);
+                    })
+            },
+            changeReleasedDataToCombinedDelivery: async function (releasedData) {
+                await deliveryReadyPiaarDataConnect().getCombinedDeliveryItem(releasedData)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            // __handleDataConnect().getExcelOrderList();
+                            setCombinedDeliveryItemList(res.data.data);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        alert(res?.data?.message);
+                    })
             }
         }
     }
@@ -136,7 +178,34 @@ const DeliveryReadyViewPiaarMain = (props) => {
                     getViewExcelHeaderDetailControl={() => __handleDataConnect().getViewExcelHeaderDetail()}
                     createPiaarCustomizedHeaderControl={(headerDetails) => __handleEventControl().piaarCustomizedHeader().createHeader(headerDetails)}
                     changePiaarCutomizedHeaderControl={(headerDetails) => __handleEventControl().piaarCustomizedHeader().changeHeader(headerDetails)}
+                    changeOrderDataToSoldControl={(orderData) => __handleDataConnect().changeOrderDataToSold(orderData)}
                 ></DeliveryReadyOrderStatusPiaarBody>
+
+                {/* 판매현황 데이터 보드 */}
+                <DeliveryReadySoldStatusPiaarBody
+                    viewHeaderDetailList={viewHeaderDetailList}
+                    excelOrderList={excelOrderList}
+
+                    getViewExcelHeaderDetailControl={() => __handleDataConnect().getViewExcelHeaderDetail()}
+                    createPiaarCustomizedHeaderControl={(headerDetails) => __handleEventControl().piaarCustomizedHeader().createHeader(headerDetails)}
+                    changePiaarCutomizedHeaderControl={(headerDetails) => __handleEventControl().piaarCustomizedHeader().changeHeader(headerDetails)}
+                    changeOrderDataToSoldControl={(orderData) => __handleDataConnect().changeOrderDataToSold(orderData)}
+                    changeSoldDataToReleasedControl={(orderData) => __handleDataConnect().changeSoldDataToReleased(orderData)}
+                ></DeliveryReadySoldStatusPiaarBody>
+
+                {/* 출고현황 데이터 보드 */}
+                <DeliveryReadyReleasedStatusPiaarBody
+                    viewHeaderDetailList={viewHeaderDetailList}
+                    excelOrderList={excelOrderList}
+                    combinedDeliveryItemList={combinedDeliveryItemList}
+
+                    getViewExcelHeaderDetailControl={() => __handleDataConnect().getViewExcelHeaderDetail()}
+                    createPiaarCustomizedHeaderControl={(headerDetails) => __handleEventControl().piaarCustomizedHeader().createHeader(headerDetails)}
+                    changePiaarCutomizedHeaderControl={(headerDetails) => __handleEventControl().piaarCustomizedHeader().changeHeader(headerDetails)}
+                    changeOrderDataToSoldControl={(orderData) => __handleDataConnect().changeOrderDataToSold(orderData)}
+                    changeSoldDataToReleasedControl={(soldData) => __handleDataConnect().changeSoldDataToReleased(soldData)}
+                    changeReleasedDataToCombinedDeliveryControl={(releasedData) => __handleDataConnect().changeReleasedDataToCombinedDelivery(releasedData)}
+                ></DeliveryReadyReleasedStatusPiaarBody>
 
             </Container>
         </>

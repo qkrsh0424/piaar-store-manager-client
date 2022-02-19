@@ -72,9 +72,9 @@ const deliveryReadyPiaarHeaderName = [
     '관리메모20'
 ];
 
-const initialPiaarCustomizedHeaderListState = null;
+const initialPiaarExcelHeaderListState = null;
 
-const piaarCustomizedHeaderListStateReducer = (state, action) => {
+const piaarExcelHeaderListStateReducer = (state, action) => {
     switch (action.type) {
         case 'INIT_DATA':
             return {...action.payload};
@@ -96,7 +96,7 @@ const DeliveryReadyUploadPiaarMain = (props) => {
     const [excelData, setExcelData] = useState(null);
     const [formData, setFormData] = useState([]);
     const [backdropLoading, setBackdropLoading] = useState(false);
-    const [piaarCustomizedHeaderListState, dispatchPiaarCutomizedHeaderListState] = useReducer(piaarCustomizedHeaderListStateReducer, initialPiaarCustomizedHeaderListState);
+    const [piaarExcelHeaderListState, dispatchPiaarExcelHeaderListState] = useReducer(piaarExcelHeaderListStateReducer, initialPiaarExcelHeaderListState);
 
 
     useEffect(() => {
@@ -125,7 +125,7 @@ const DeliveryReadyUploadPiaarMain = (props) => {
                 }
             };
 
-            dispatchPiaarCutomizedHeaderListState({
+            dispatchPiaarExcelHeaderListState({
                 type: 'INIT_DATA',
                 payload: defaultViewHeader
             });
@@ -217,7 +217,7 @@ const DeliveryReadyUploadPiaarMain = (props) => {
             <DrawerNavbarMain></DrawerNavbarMain>
             <DeliveryReadyUploadPiaarBody
                 excelData={excelData}
-                piaarCustomizedHeaderListState={piaarCustomizedHeaderListState}
+                piaarExcelHeaderListState={piaarExcelHeaderListState}
 
                 uploadExcelDataControl={(e) => __handleEventControl().uploadExcelData().submit(e)}
                 storeExcelDataControl={(e) => __handleEventControl().storeExcelData().submit(e)}

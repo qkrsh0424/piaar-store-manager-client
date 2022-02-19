@@ -168,6 +168,14 @@ const BodyTd = styled.td`
     border-right: 1px solid #a7a7a720;
 `;
 
+const DataControlBox = styled.div`
+    
+`;
+
+const ChangeBtn = styled.button`
+
+`;
+
 class DeliveryReadyPiaarHeader {
     constructor() {
         this.id = uuidv4();
@@ -184,56 +192,193 @@ class DeliveryReadyPiaarHeader {
     }
 }
 
-// const DELIVERY_READY_PIAAR_HEADER_SIZE = 40;
 const DELIVERY_READY_PIAAR_HEADER_SIZE = 46;
 
 const deliveryReadyPiaarHeaderName = [
-    ['피아르 고유번호', 'uniqueCode'],
-    ['주문번호1', 'orderNumber1'],
-    ['주문번호2', 'orderNumber2'],
-    ['주문번호3', 'orderNumber3'],
-    ['상품명', 'prodName'],
-    ['옵션명', 'optionName'],
-    ['수량', 'unit'],
-    ['수취인명', 'receiver'],
-    ['전화번호1', 'receiverContact1'],
-    ['전화번호2', 'receiverContact2'],
-    ['주소', 'destination'],
-    ['우편번호', 'zipCode'],
-    ['배송방식', 'transportType'],
-    ['배송메세지', 'deliveryMessage'],
-    ['상품고유번호1', 'prodUniqueNumber1'],
-    ['상품고유번호2', 'prodUniqueNumber2'],
-    ['옵션고유번호1', 'optionUniqueNumber1'],
-    ['옵션고유번호2', 'optionUniqueNumber2'],
-    ['피아르 상품코드', 'prodCode'],
-    ['피아르 옵션코드', 'optionCode'],
-    ['관리메모1', 'managementMemo1'],
-    ['관리메모2', 'managementMemo2'],
-    ['관리메모3', 'managementMemo3'],
-    ['관리메모4', 'managementMemo4'],
-    ['관리메모5', 'managementMemo5'],
-    ['관리메모6', 'managementMemo6'],
-    ['관리메모7', 'managementMemo7'],
-    ['관리메모8', 'managementMemo8'],
-    ['관리메모9', 'managementMemo9'],
-    ['관리메모10', 'managementMemo10'],
-    ['관리메모11', 'managementMemo11'],
-    ['관리메모12', 'managementMemo12'],
-    ['관리메모13', 'managementMemo13'],
-    ['관리메모14', 'managementMemo14'],
-    ['관리메모15', 'managementMemo15'],
-    ['관리메모16', 'managementMemo16'],
-    ['관리메모17', 'managementMemo17'],
-    ['관리메모18', 'managementMemo18'],
-    ['관리메모19', 'managementMemo19'],
-    ['관리메모20', 'managementMemo20'],
-    ['*카테고리명', 'categoryName'],
-    ['*상품명', 'prodDefaultName'],
-    ['*상품관리명', 'prodManagementName'],
-    ['*옵션명', 'optionDefaultName'],
-    ['*옵션관리명', 'optionManagementName'],
-    ['*재고수량', 'optionStockUnit']
+    {
+        "headerName" : "피아르 고유번호",
+        "matchedColumnName" : "uniqueCode"
+    },
+    {
+        "headerName" : "주문번호1",
+        "matchedColumnName" : "orderNumber1"
+    },
+    {
+        "headerName" : "주문번호2",
+        "matchedColumnName" : "orderNumber2"
+    },
+    {
+        "headerName" : "주문번호3",
+        "matchedColumnName" : "orderNumber3"
+    },
+    {
+        "headerName" : "상품명",
+        "matchedColumnName" : "prodName"
+    },
+    {
+        "headerName" : "옵션명",
+        "matchedColumnName" : "optionName"
+    },
+    {
+        "headerName" : "수량",
+        "matchedColumnName" : "unit"
+    },
+    {
+        "headerName" : "수취인명",
+        "matchedColumnName" : "receiver"
+    },
+    {
+        "headerName" : "전화번호1",
+        "matchedColumnName" : "receiverContact1"
+    },
+    {
+        "headerName" : "전화번호2",
+        "matchedColumnName" : "receiverContact2"
+    },
+    {
+        "headerName" : "주소",
+        "matchedColumnName" : "destination"
+    },
+    {
+        "headerName" : "우편번호",
+        "matchedColumnName" : "zipCode"
+    },
+    {
+        "headerName" : "배송방식",
+        "matchedColumnName" : "transportType"
+    },
+    {
+        "headerName" : "배송메세지",
+        "matchedColumnName" : "deliveryMessage"
+    },
+    {
+        "headerName" : "상품고유번호1",
+        "matchedColumnName" : "prodUniqueNumber1"
+    },
+    {
+        "headerName" : "상품고유번호2",
+        "matchedColumnName" : "prodUniqueNumber2"
+    },
+    {
+        "headerName" : "옵션고유번호1",
+        "matchedColumnName" : "optionUniqueNumber1"
+    },
+    {
+        "headerName" : "옵션고유번호2",
+        "matchedColumnName" : "optionUniqueNumber2"
+    },
+    {
+        "headerName" : "피아르 상품코드",
+        "matchedColumnName" : "prodCode"
+    },
+    {
+        "headerName" : "피아르 옵션코드",
+        "matchedColumnName" : "optionCode"
+    },
+    {
+        "headerName" : "관리메모1",
+        "matchedColumnName" : "managementMemo1"
+    },
+    {
+        "headerName" : "관리메모2",
+        "matchedColumnName" : "managementMemo2"
+    },
+    {
+        "headerName" : "관리메모3",
+        "matchedColumnName" : "managementMemo3"
+    },
+    {
+        "headerName" : "관리메모4",
+        "matchedColumnName" : "managementMemo4"
+    },
+    {
+        "headerName" : "관리메모5",
+        "matchedColumnName" : "managementMemo5"
+    },
+    {
+        "headerName" : "관리메모6",
+        "matchedColumnName" : "managementMemo6"
+    },
+    {
+        "headerName" : "관리메모7",
+        "matchedColumnName" : "managementMemo7"
+    },
+    {
+        "headerName" : "관리메모8",
+        "matchedColumnName" : "managementMemo8"
+    },
+    {
+        "headerName" : "관리메모9",
+        "matchedColumnName" : "managementMemo9"
+    },
+    {
+        "headerName" : "관리메모10",
+        "matchedColumnName" : "managementMemo10"
+    },
+    {
+        "headerName" : "관리메모11",
+        "matchedColumnName" : "managementMemo11"
+    },
+    {
+        "headerName" : "관리메모12",
+        "matchedColumnName" : "managementMemo12"
+    },
+    {
+        "headerName" : "관리메모13",
+        "matchedColumnName" : "managementMemo13"
+    },
+    {
+        "headerName" : "관리메모14",
+        "matchedColumnName" : "managementMemo14"
+    },
+    {
+        "headerName" : "관리메모15",
+        "matchedColumnName" : "managementMemo15"
+    },
+    {
+        "headerName" : "관리메모16",
+        "matchedColumnName" : "managementMemo16"
+    },
+    {
+        "headerName" : "관리메모17",
+        "matchedColumnName" : "managementMemo17"
+    },
+    {
+        "headerName" : "관리메모18",
+        "matchedColumnName" : "managementMemo18"
+    },
+    {
+        "headerName" : "관리메모19",
+        "matchedColumnName" : "managementMemo19"
+    },
+    {
+        "headerName" : "관리메모20",
+        "matchedColumnName" : "managementMemo20"
+    },
+    {
+        "headerName" : "*카테고리명",
+        "matchedColumnName" : "categoryName"
+    },
+    {
+        "headerName" : "*상품명",
+        "matchedColumnName" : "prodDefaultName"
+    },
+    {
+        "headerName" : "*상품관리명",
+        "matchedColumnName" : "prodManagementName"
+    },
+    {
+        "headerName" : "*옵션명",
+        "matchedColumnName" : "optionDefaultName"
+    },
+    {
+        "headerName" : "*옵션관리명",
+        "matchedColumnName" : "optionManagementName"
+    },
+    {
+        "headerName" : "*재고수량",
+        "matchedColumnName" : "optionStockUnit"
+    }
 ];
 
 const initialPiaarDefaultHeaderListState = null;
@@ -284,6 +429,7 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
     const [piaarDefaultHeaderListState, dispatchPiaarDefaultHeaderListState] = useReducer(piaarDefaultHeaderListStateReducer, initialPiaarDefaultHeaderListState);
     const [checkedViewHeaderCellNumberList, setCheckedViewHeaderCellNumberList] = useState([]);
     const [checkedOrderStatusDataIdList, setCheckedOrderStatusDataIdList] = useState([]);
+    const [orderStatusExcelList, setOrderStatusExcelList] = useState(null);
 
     // 피아르 기본 엑셀 양식 설정
     useEffect(() => {
@@ -297,8 +443,8 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                     ...data.viewHeaderDetail.details,
                     id: uuidv4(),
                     cellNumber : i,
-                    cellValue : deliveryReadyPiaarHeaderName[i][0],
-                    matchedColumnName : deliveryReadyPiaarHeaderName[i][1],
+                    cellValue : deliveryReadyPiaarHeaderName[i].headerName,
+                    matchedColumnName : deliveryReadyPiaarHeaderName[i].matchedColumnName,
                     cellSize: 'default'
                 }
 
@@ -321,6 +467,16 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
 
         fetchInit();
     }, []);
+
+    useEffect(() => {
+        function setOrderData() {
+            let orderData = props.excelOrderList?.filter(rowData => rowData.soldYn === "n");
+            
+            setOrderStatusExcelList(orderData);
+        }
+
+        setOrderData();
+    }, [props.excelOrderList]);
 
     const onCreatePiaarViewHeaderDetailModalOpen = () => {
         setCreatePiaarViewHeaderDetailModalOpen(true);
@@ -515,7 +671,7 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
         }
     }
 
-    const statusExcelControl = () => {
+    const orderExcelControl = () => {
         return {
             piaarOrderStatusExcelData: function () {
                 return {
@@ -523,14 +679,14 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                         if (this.isCheckedAll()) {
                             setCheckedOrderStatusDataIdList([]);
                         } else {
-                            let checkedIdList = props.excelOrderList?.map(rowData => rowData.id);
+                            let checkedIdList = orderStatusExcelList?.map(rowData => rowData.id);
 
                             setCheckedOrderStatusDataIdList(checkedIdList);
                         }
                     },
                     isCheckedAll: function () {
-                        if (props.excelOrderList) {
-                            let checkedIdList = props.excelOrderList?.map(rowData => rowData.id).sort();
+                        if (orderStatusExcelList?.length) {
+                            let checkedIdList = orderStatusExcelList?.map(rowData => rowData.id).sort();
 
                             checkedOrderStatusDataIdList.sort();
 
@@ -548,6 +704,24 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                             let checkedIdList = checkedOrderStatusDataIdList.concat(dataId);
                             setCheckedOrderStatusDataIdList(checkedIdList);
                         }
+                    },
+                    chageOrderDataToSold: async function () {
+                        if(!checkedOrderStatusDataIdList.length){
+                            alert('선택된 데이터가 없습니다.');
+                            return;
+                        } 
+
+                        let orderData = orderStatusExcelList?.filter(rowData => {
+                            if(checkedOrderStatusDataIdList.includes(rowData.id)){
+                                return {
+                                    ...rowData,
+                                    soldYn: "y"
+                                }
+                            }
+                        });
+
+                        setCheckedOrderStatusDataIdList([]);
+                        await props.changeOrderDataToSoldControl(orderData);
                     }
                 }
             }
@@ -566,60 +740,66 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                     </BoardTitle>
                     <div>
                         <BoardContainer>
-                            <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
-                                <thead>
-                                    <tr>
-                                        <HeaderTh className="fixed-header xsmall-cell" scope="col">
-                                            <Checkbox
-                                                size="small"
-                                                color="primary"
-                                                inputProps={{ 'aria-label': '주문 데이터 전체 선택' }}
-                                                onChange={() => statusExcelControl().piaarOrderStatusExcelData().checkAll()}
-                                                checked={statusExcelControl().piaarOrderStatusExcelData().isCheckedAll()}
-                                            />
-                                        </HeaderTh>
-                                        {props.viewHeaderDetailList?.viewHeaderDetail.details.map((data, idx) => {
-                                            return (
-                                                <HeaderTh key={'piaar_excel_header_idx' + idx} className="fixed-header large-cell" scope="col">
-                                                    <span>{data.cellValue}</span>
-                                                </HeaderTh>
-                                            )
-                                        })}
-                                    </tr>
-                                </thead>
-
-                                <tbody style={{ border: 'none' }}>
-                                {props.excelOrderList?.map((data, idx) => {
-                                    return (
-                                        <BodyTr
-                                            key={'upload_exel_data_idx' + idx}
-                                        >
-                                            <BodyTd className="col">
+                            {(props.viewHeaderDetailList?.viewHeaderDetail.details.length > 0) &&
+                                <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
+                                    <thead>
+                                        <tr>
+                                            <HeaderTh className="fixed-header xsmall-cell" scope="col">
                                                 <Checkbox
-                                                    color="default"
                                                     size="small"
-                                                    inputProps={{ 'aria-label': '주문 데이터 선택' }}
-                                                    onClick={() => statusExcelControl().piaarOrderStatusExcelData().checkOneLi(data.id)}
-                                                    checked={statusExcelControl().piaarOrderStatusExcelData().isChecked(data.id)}
+                                                    color="primary"
+                                                    inputProps={{ 'aria-label': '주문 데이터 전체 선택' }}
+                                                    onChange={() => orderExcelControl().piaarOrderStatusExcelData().checkAll()}
+                                                    checked={orderExcelControl().piaarOrderStatusExcelData().isCheckedAll()}
                                                 />
-                                            </BodyTd>
-                                            {props.viewHeaderDetailList?.viewHeaderDetail.details.map((detailData, detailIdx) => {
+                                            </HeaderTh>
+                                            {props.viewHeaderDetailList?.viewHeaderDetail.details.map((data, idx) => {
                                                 return (
-                                                    <BodyTd key={'upload_excel_data_detail_idx' + detailIdx} className="col">
-                                                        <span>{data[detailData.matchedColumnName]}</span>
-                                                    </BodyTd>
+                                                    <HeaderTh key={'piaar_excel_header_idx' + idx} className="fixed-header large-cell" scope="col">
+                                                        <span>{data.cellValue}</span>
+                                                    </HeaderTh>
                                                 )
                                             })}
-                                        </BodyTr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                    </BoardContainer>
+                                        </tr>
+                                    </thead>
 
-                    <div>
-                        <button>판매 처리</button>
-                    </div>
+                                    <tbody style={{ border: 'none' }}>
+
+                                        {orderStatusExcelList?.map((data, idx) => {
+                                            return (
+                                                <BodyTr
+                                                    key={'upload_exel_data_idx' + idx}
+                                                >
+                                                    <BodyTd className="col">
+                                                        <Checkbox
+                                                            color="default"
+                                                            size="small"
+                                                            inputProps={{ 'aria-label': '주문 데이터 선택' }}
+                                                            onClick={() => orderExcelControl().piaarOrderStatusExcelData().checkOneLi(data.id)}
+                                                            checked={orderExcelControl().piaarOrderStatusExcelData().isChecked(data.id)}
+                                                        />
+                                                    </BodyTd>
+                                                    {props.viewHeaderDetailList?.viewHeaderDetail.details.map((detailData, detailIdx) => {
+                                                        return (
+                                                            <BodyTd key={'upload_excel_data_detail_idx' + detailIdx} className="col"
+                                                                onClick={() => orderExcelControl().piaarOrderStatusExcelData().checkOneLi(data.id)}
+                                                                checked={orderExcelControl().piaarOrderStatusExcelData().isChecked(data.id)}
+                                                            >
+                                                                <span>{data[detailData.matchedColumnName]}</span>
+                                                            </BodyTd>
+                                                        )
+                                                    })}
+                                                </BodyTr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            }
+                        </BoardContainer>
+
+                        <DataControlBox>
+                            <ChangeBtn type="button" onClick={() => orderExcelControl().piaarOrderStatusExcelData().chageOrderDataToSold()}>판매 처리</ChangeBtn>
+                        </DataControlBox>
                     </div>
                     
                     {/* Create Piaar View Header Form Modal */}
