@@ -4,16 +4,16 @@ const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 
 const deliveryReadyPiaarDataConnect = () => {
     return {
-        postFile: async function (formData) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/piaar/upload`, formData, {
+        postFile: async function (params) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/piaar/upload`, params, {
                 headers: {
                     "content-types": "multipart/form-data"
                 },
                 withCredentials: true
             })
         },
-        putFileData: async function (formData) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/piaar/store`, formData, {
+        putFileData: async function (params) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/piaar/store`, params, {
                 headers: {
                     "content-types": "multipart/form-data"
                 },

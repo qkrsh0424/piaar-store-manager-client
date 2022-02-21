@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
@@ -324,7 +324,7 @@ const DeliveryReadyReleasedStatusPiaarBody = (props) => {
                                                         <Checkbox
                                                             color="default"
                                                             size="small"
-                                                            inputProps={{ 'aria-label': '주문 데이터 선택' }}
+                                                            inputProps={{ 'aria-label': '출고 데이터 선택' }}
                                                             onClick={() => releasedExcelControl().piaarReleasedStatusExcelData().checkOneLi(data.id)}
                                                             checked={releasedExcelControl().piaarReleasedStatusExcelData().isChecked(data.id)}
                                                         />
@@ -390,47 +390,42 @@ const DeliveryReadyReleasedStatusPiaarBody = (props) => {
                                     </thead>
 
                                     <tbody style={{ border: 'none' }}>
-                                        {props.combinedDeliveryItemList?.map((group, index) => {
+                                        {props.combinedDeliveryItemList?.map((group, combinedIdx) => {
                                             return (
-                                                <>
-                                                    {group.combinedDelivery.details?.map((data, idx) => {
+                                                <React.Fragment key={'combined_delivery_excel' + combinedIdx}>
+                                                    {group.combinedDeliveryItems?.map((data, idx) => {
                                                         return (
-                                                            <>
-                                                                <BodyTr
-                                                                    key={'upload_exel_data_idx' + idx}
-                                                                >
-                                                                    {idx === 0 &&
-                                                                    <BodyTd className="col" rowSpan={group.combinedDelivery.details.length}>
-                                                                        {index + 1}.
+                                                            <BodyTr
+                                                                key={'combined_delivery_exel_data_idx' + idx}
+                                                            >
+                                                                {idx === 0 &&
+                                                                    <BodyTd className="col" rowSpan={group.combinedDeliveryItems.length}>
+                                                                        {combinedIdx + 1}.
                                                                     </BodyTd>
-                                                                    }
-                                                                    <BodyTd className="col">
-                                                                        <Checkbox
-                                                                            color="default"
-                                                                            size="small"
-                                                                            inputProps={{ 'aria-label': '주문 데이터 선택' }}
-                                                                        // onClick={() => releasedExcelControl().piaarReleasedStatusExcelData().checkOneLi(data.id)}
-                                                                        // checked={releasedExcelControl().piaarReleasedStatusExcelData().isChecked(data.id)}
-                                                                        />
-                                                                    </BodyTd>
-                                                                    {props.viewHeaderDetailList?.viewHeaderDetail.details.map((detailData, detailIdx) => {
-                                                                        return (
-                                                                            <>
-                                                                                <BodyTd key={'upload_excel_data_detail_idx' + detailIdx} className="col"
-                                                                                    onClick={() => releasedExcelControl().piaarReleasedStatusExcelData().checkOneLi(data.id)}
-                                                                                    checked={releasedExcelControl().piaarReleasedStatusExcelData().isChecked(data.id)}
-                                                                                >
-                                                                                    <span>{data[detailData.matchedColumnName]}</span>
-                                                                                </BodyTd>
-                                                                            </>
-                                                                        )
-                                                                    })}
-                                                                </BodyTr>
-
-                                                            </>
+                                                                }
+                                                                <BodyTd className="col">
+                                                                    <Checkbox
+                                                                        color="default"
+                                                                        size="small"
+                                                                        inputProps={{ 'aria-label': '합배송 데이터 선택' }}
+                                                                    // onClick={() => releasedExcelControl().piaarReleasedStatusExcelData().checkOneLi(data.id)}
+                                                                    // checked={releasedExcelControl().piaarReleasedStatusExcelData().isChecked(data.id)}
+                                                                    />
+                                                                </BodyTd>
+                                                                {props.viewHeaderDetailList?.viewHeaderDetail.details.map((detailData, detailIdx) => {
+                                                                    return (
+                                                                        <BodyTd key={'combined_delivery_excel_data_detail_idx' + detailIdx} className="col"
+                                                                            // onClick={() => releasedExcelControl().piaarReleasedStatusExcelData().checkOneLi(data.id)}
+                                                                            // checked={releasedExcelControl().piaarReleasedStatusExcelData().isChecked(data.id)}
+                                                                        >
+                                                                            <span>{data[detailData.matchedColumnName]}</span>
+                                                                        </BodyTd>
+                                                                    )
+                                                                })}
+                                                            </BodyTr>
                                                         )
                                                     })}
-                                                </>
+                                                </React.Fragment>
                                             )
                                         })}
                                     </tbody>

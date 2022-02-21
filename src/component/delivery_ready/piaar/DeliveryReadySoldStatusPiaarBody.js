@@ -330,7 +330,7 @@ const DeliveryReadySoldStatusPiaarBody = (props) => {
                                                         <Checkbox
                                                             color="default"
                                                             size="small"
-                                                            inputProps={{ 'aria-label': '주문 데이터 선택' }}
+                                                            inputProps={{ 'aria-label': '판매 데이터 선택' }}
                                                             onClick={() => soldExcelControl().piaarSoldStatusExcelData().checkOneLi(data.id)}
                                                             checked={soldExcelControl().piaarSoldStatusExcelData().isChecked(data.id)}
                                                         />
