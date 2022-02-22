@@ -11,11 +11,13 @@ import { deliveryReadyPiaarViewHeaderDataConnect } from '../../../data_connect/d
 import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
 import BackdropLoading from '../../loading/BackdropLoading';
 import DeliveryReadyViewPiaarBar from './DeliveryReadyViewPiaarBar';
-import DeliveryReadyOrderStatusPiaarBody from './DeliveryReadyOrderStatusPiaarBody';
-import DeliveryReadySoldStatusPiaarBody from './DeliveryReadySoldStatusPiaarBody';
-import DeliveryReadyReleasedStatusPiaarBody from './DeliveryReadyReleasedStatusPiaarBody';
+import DeliveryReadyOrderStatusPiaarBody from './DeliveryReadyPiaarOrderStatusBoard';
+import DeliveryReadySoldStatusPiaarBody from './DeliveryReadyPiaarSoldStatusBoard';
+import DeliveryReadyReleasedStatusPiaarBody from './DeliveryReadyPiaarReleasedStatusBoard';
 import PiaarExcelViewCommonModal from './modal/PiaarExcelViewCommonModal';
 import CreateExcelViewHeaderDetailComponent from './modal/CreateExcelViewHeaderDetailComponent';
+import PiaarCombinedDeliveryBoard from './PiaarCombinedDeliveryBoard';
+import PiaarUnitCombinedDeliveryBoard from './PiaarUnitCombinedDeliveryBoard';
 
 const Container = styled.div`
     height: 100vh;
@@ -93,6 +95,7 @@ const DeliveryReadyViewPiaarMain = (props) => {
     const [viewHeaderDetailList, setViewHeaderDetailList] = useState(null);
     const [excelOrderList, setExcelOrderList] = useState(null);
     const [combinedDeliveryItemList, setCombinedDeliveryItemList] = useState(null);
+    const [unitCombinedDeliveryItemList, setUnitCombinedDeliveryItemList] = useState(null);
     const [createPiaarViewHeaderDetailModalOpen, setCreatePiaarViewHeaderDetailModalOpen] = useState(false);
 
     useEffect(() => {
@@ -235,7 +238,23 @@ const DeliveryReadyViewPiaarMain = (props) => {
                         }
                         alert(res?.data?.message);
                     })
-            }
+            },
+            changeReleasedDataToUnitCombinedDelivery: async function (releasedData) {
+                await deliveryReadyPiaarDataConnect().getUnitCombinedDeliveryItem(releasedData)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            setUnitCombinedDeliveryItemList(res.data.data);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (res.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+                        alert(res?.data?.message);
+                    })
+            },
         }
     }
 
@@ -306,11 +325,24 @@ const DeliveryReadyViewPiaarMain = (props) => {
                 <DeliveryReadyReleasedStatusPiaarBody
                     viewHeaderDetailList={viewHeaderDetailList}
                     excelOrderList={excelOrderList}
-                    combinedDeliveryItemList={combinedDeliveryItemList}
 
                     changeReleasedDataToCombinedDeliveryControl={(releasedData) => __handleDataConnect().changeReleasedDataToCombinedDelivery(releasedData)}
+                    changeReleasedDataToUnitCombinedDeliveryControl={(releasedData) => __handleDataConnect().changeReleasedDataToUnitCombinedDelivery(releasedData)}
                 ></DeliveryReadyReleasedStatusPiaarBody>
 
+                {/* 합배송 데이터 보드 */}
+                <PiaarCombinedDeliveryBoard
+                    viewHeaderDetailList={viewHeaderDetailList}
+                    combinedDeliveryItemList={combinedDeliveryItemList}
+
+                ></PiaarCombinedDeliveryBoard>
+
+                {/* 합배송 수량처리 데이터 보드 */}
+                <PiaarUnitCombinedDeliveryBoard
+                    viewHeaderDetailList={viewHeaderDetailList}
+                    unitCombinedDeliveryItemList={unitCombinedDeliveryItemList}
+
+                ></PiaarUnitCombinedDeliveryBoard>
             </Container>
 
             {/* Create Piaar View Header Form Modal */}

@@ -39,6 +39,11 @@ const deliveryReadyPiaarDataConnect = () => {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/piaar/view/orderList/combined`, releasedData, {
                 withCredentials: true
             })
+        },
+        getUnitCombinedDeliveryItem: async function (releasedData) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/piaar/view/orderList/combined-unit`, releasedData, {
+                withCredentials: true
+            })
         }
     }
 }

@@ -176,47 +176,7 @@ const ChangeBtn = styled.button`
 
 `;
 
-const initialPiaarDefaultHeaderListState = null;
-
-const piaarDefaultHeaderListStateReducer = (state, action) => {
-    switch (action.type) {
-        case 'INIT_DATA':
-            return {...action.payload};
-        case 'SET_HEADER_DETAIL_DATA':
-            return {
-                ...state,
-                viewHeaderDetail: {
-                    ...state.viewHeaderDetail,
-                    details: action.payload
-                }
-            }
-        case 'CLEAR':
-            return null;
-        default: return { ...state }
-    }
-}
-
-const initialCreateViewHeaderDetailState = null;
-
-const createViewHeaderDetailStateReducer = (state, action) => {
-    switch (action.type) {
-        case 'INIT_DATA':
-            return {...action.payload};
-        case 'SET_HEADER_DETAIL_DATA':
-            return {
-                ...state,
-                viewHeaderDetail: {
-                    ...state.viewHeaderDetail,
-                    details: action.payload
-                }
-            }
-        case 'CLEAR':
-            return null;
-        default: return { ...state }
-    }
-}
-
-const DeliveryReadySoldStatusPiaarBody = (props) => {
+const DeliveryReadyPiaarSoldStatusBoard = (props) => {
     const userRdx = useSelector(state => state.user);
 
     const [checkedSoldStatusDataIdList, setCheckedSoldStatusDataIdList] = useState([]);
@@ -232,56 +192,52 @@ const DeliveryReadySoldStatusPiaarBody = (props) => {
         setOrderData();
     }, [props.excelOrderList]);
 
-    const soldExcelControl = () => {
-        return {
-            piaarSoldStatusExcelData: function () {
+    const _checkAllOfSoldData = () => {
+        if (_isCheckedAllOfSoldData()) {
+            setCheckedSoldStatusDataIdList([]);
+        } else {
+            let checkedIdList = orderStatusExcelList?.map(rowData => rowData.id);
+
+            setCheckedSoldStatusDataIdList(checkedIdList);
+        }
+    }
+
+    const _isCheckedAllOfSoldData = () => {
+        if (orderStatusExcelList?.length) {
+            let checkedIdList = orderStatusExcelList?.map(rowData => rowData.id).sort();
+
+            checkedSoldStatusDataIdList.sort();
+
+            return JSON.stringify(checkedIdList) === JSON.stringify(checkedSoldStatusDataIdList);
+        } else return false;
+    }
+
+    const _isCheckedOfSoldData = (dataId) => {
+        return checkedSoldStatusDataIdList.includes(dataId);
+    }
+
+    const _checkOneLiOfSoldData = (dataId) => {
+        if (checkedSoldStatusDataIdList.includes(dataId)) {
+            let checkedIdList = checkedSoldStatusDataIdList.filter(r => r !== dataId);
+            setCheckedSoldStatusDataIdList(checkedIdList);
+        } else {
+            let checkedIdList = checkedSoldStatusDataIdList.concat(dataId);
+            setCheckedSoldStatusDataIdList(checkedIdList);
+        }
+    }
+
+    const _updateSoldDataToReleased = async () => {
+        let orderData = orderStatusExcelList?.filter(rowData => {
+            if(checkedSoldStatusDataIdList.includes(rowData.id)){
                 return {
-                    checkAll: function () {
-                        if (this.isCheckedAll()) {
-                            setCheckedSoldStatusDataIdList([]);
-                        } else {
-                            let checkedIdList = orderStatusExcelList?.map(rowData => rowData.id);
-
-                            setCheckedSoldStatusDataIdList(checkedIdList);
-                        }
-                    },
-                    isCheckedAll: function () {
-                        if (orderStatusExcelList?.length) {
-                            let checkedIdList = orderStatusExcelList?.map(rowData => rowData.id).sort();
-
-                            checkedSoldStatusDataIdList.sort();
-
-                            return JSON.stringify(checkedIdList) === JSON.stringify(checkedSoldStatusDataIdList);
-                        } else return false;
-                    },
-                    isChecked: function (dataId) {
-                        return checkedSoldStatusDataIdList.includes(dataId);
-                    },
-                    checkOneLi: function (dataId) {
-                        if (checkedSoldStatusDataIdList.includes(dataId)) {
-                            let checkedIdList = checkedSoldStatusDataIdList.filter(r => r !== dataId);
-                            setCheckedSoldStatusDataIdList(checkedIdList);
-                        } else {
-                            let checkedIdList = checkedSoldStatusDataIdList.concat(dataId);
-                            setCheckedSoldStatusDataIdList(checkedIdList);
-                        }
-                    },
-                    updateSoldDataToReleased: async function () {
-                        let orderData = orderStatusExcelList?.filter(rowData => {
-                            if(checkedSoldStatusDataIdList.includes(rowData.id)){
-                                return {
-                                    ...rowData,
-                                    releasedYn: "y"
-                                }
-                            }
-                        });
-
-                        await props.changeSoldDataToReleasedControl(orderData);
-                        setCheckedSoldStatusDataIdList([]);
-                    }
+                    ...rowData,
+                    releasedYn: "y"
                 }
             }
-        }
+        });
+
+        await props.changeSoldDataToReleasedControl(orderData);
+        setCheckedSoldStatusDataIdList([]);
     }
 
     return (
@@ -305,8 +261,8 @@ const DeliveryReadySoldStatusPiaarBody = (props) => {
                                                     size="small"
                                                     color="primary"
                                                     inputProps={{ 'aria-label': '주문 데이터 전체 선택' }}
-                                                    onChange={() => soldExcelControl().piaarSoldStatusExcelData().checkAll()}
-                                                    checked={soldExcelControl().piaarSoldStatusExcelData().isCheckedAll()}
+                                                    onChange={() => _checkAllOfSoldData()}
+                                                    checked={_isCheckedAllOfSoldData()}
                                                 />
                                             </HeaderTh>
                                             {props.viewHeaderDetailList?.viewHeaderDetail.details.map((data, idx) => {
@@ -331,15 +287,15 @@ const DeliveryReadySoldStatusPiaarBody = (props) => {
                                                             color="default"
                                                             size="small"
                                                             inputProps={{ 'aria-label': '판매 데이터 선택' }}
-                                                            onClick={() => soldExcelControl().piaarSoldStatusExcelData().checkOneLi(data.id)}
-                                                            checked={soldExcelControl().piaarSoldStatusExcelData().isChecked(data.id)}
+                                                            onClick={() => _checkOneLiOfSoldData(data.id)}
+                                                            checked={_isCheckedOfSoldData(data.id)}
                                                         />
                                                     </BodyTd>
                                                     {props.viewHeaderDetailList?.viewHeaderDetail.details.map((detailData, detailIdx) => {
                                                         return (
                                                             <BodyTd key={'upload_excel_data_detail_idx' + detailIdx} className="col"
-                                                                onClick={() => soldExcelControl().piaarSoldStatusExcelData().checkOneLi(data.id)}
-                                                                checked={soldExcelControl().piaarSoldStatusExcelData().isChecked(data.id)}
+                                                                onClick={() => _checkOneLiOfSoldData(data.id)}
+                                                                checked={_isCheckedOfSoldData(data.id)}
                                                             >
                                                                 <span>{data[detailData.matchedColumnName]}</span>
                                                             </BodyTd>
@@ -355,7 +311,7 @@ const DeliveryReadySoldStatusPiaarBody = (props) => {
 
                         <DataControlBox>
                             <ChangeBtn type="button" 
-                            onClick={() => soldExcelControl().piaarSoldStatusExcelData().updateSoldDataToReleased()}
+                            onClick={() => _updateSoldDataToReleased()}
                             >출고 처리</ChangeBtn>
                         </DataControlBox>
                     </div>
@@ -364,4 +320,4 @@ const DeliveryReadySoldStatusPiaarBody = (props) => {
         </>
     );
 }
-export default withRouter(DeliveryReadySoldStatusPiaarBody);
+export default withRouter(DeliveryReadyPiaarSoldStatusBoard);

@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
@@ -6,9 +6,101 @@ import { useSelector } from 'react-redux';
 
 import Checkbox from '@material-ui/core/Checkbox';
 
-
 const Container = styled.div`
     padding: 0 2%;
+`;
+
+const BoardTitle = styled.div`
+    font-size: 20px;
+    /* color: rgba(000, 102, 153, 0.9); */
+    font-weight: 700;
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    align-items: center;
+    padding: 20px 10px;
+
+    @media only screen and (max-width: 992px){
+        grid-template-columns: 1fr;
+        row-gap: 10px;
+    }
+    
+    @media only screen and (max-width:576px){
+        font-size: 16px;
+    }
+
+    @media only screen and (max-width:320px){
+        font-size: 14px;
+    }
+`;
+
+const DataOptionBox = styled.span`
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 10px;
+
+    & .upload-header-excel-download {
+        background: #609FFF;;
+        border: 1px solid #7DC2FF;
+
+        &:hover{
+            cursor: pointer;
+            transition: 0.2s;
+            transform: scale(1.05);
+            background: #7DC2FF;
+        }
+
+        &:active{
+            transition: 0s;
+            transform: scale(1.05);
+        }
+
+        &:disabled{
+            background: #d3d3d388;
+            cursor: not-allowed;
+            border: none;
+        }
+    }
+
+    @media only screen and (max-width: 992px) {
+        padding: 1% 0%;
+        column-gap: 20px;
+    }
+`;
+
+const HeaderFormControlBtn = styled.button`
+    padding: 10px;
+    background:  #2C73D2;;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border:1px solid  #7DC2FF;;
+    border-radius: 20px;
+    float: right;
+    width: 240px;
+    border: none;
+
+
+    @media only screen and (max-width: 992px){
+        display: inline-block;
+        padding: 4px;
+        width: 100%;
+    }
+
+    @media only screen and (max-width:576px ){
+        padding: 0;
+    }
+
+    &:hover{
+        cursor: pointer;
+        transition: 0.2s;
+        transform: scale(1.05);
+        background: #7DC2FF;
+    }
+
+    &:active{
+        transition: 0s;
+        transform: scale(1.05);
+    }
 `;
 
 const BoardContainer = styled.div`
@@ -80,15 +172,15 @@ const ChangeBtn = styled.button`
 
 `;
 
-const DeliveryReadyOrderStatusPiaarBody = (props) => {
+const DeliveryReadyPiaarReleasedStatusBoard = (props) => {
     const userRdx = useSelector(state => state.user);
 
-    const [checkedOrderStatusDataIdList, setCheckedOrderStatusDataIdList] = useState([]);
+    const [checkedReleasedStatusDataIdList, setCheckedReleasedStatusDataIdList] = useState([]);
     const [orderStatusExcelList, setOrderStatusExcelList] = useState(null);
 
     useEffect(() => {
         function setOrderData() {
-            let orderData = props.excelOrderList?.filter(rowData => rowData.soldYn === "n");
+            let orderData = props.excelOrderList?.filter(rowData => rowData.releasedYn === "y");
             
             setOrderStatusExcelList(orderData);
         }
@@ -96,63 +188,66 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
         setOrderData();
     }, [props.excelOrderList]);
 
-    const _checkAllOfOrderData = () => {
-        if (_isCheckedAllOfOrderData()) {
-            setCheckedOrderStatusDataIdList([]);
+    const _checkAllOfReleasedData = () => {
+        if (_isCheckedAllOfReleasedData()) {
+            setCheckedReleasedStatusDataIdList([]);
         } else {
             let checkedIdList = orderStatusExcelList?.map(rowData => rowData.id);
 
-            setCheckedOrderStatusDataIdList(checkedIdList);
+            setCheckedReleasedStatusDataIdList(checkedIdList);
         }
     }
 
-    const _isCheckedAllOfOrderData = () => {
+    const _isCheckedAllOfReleasedData = () => {
         if (orderStatusExcelList?.length) {
             let checkedIdList = orderStatusExcelList?.map(rowData => rowData.id).sort();
 
-            checkedOrderStatusDataIdList.sort();
+            checkedReleasedStatusDataIdList.sort();
 
-            return JSON.stringify(checkedIdList) === JSON.stringify(checkedOrderStatusDataIdList);
+            return JSON.stringify(checkedIdList) === JSON.stringify(checkedReleasedStatusDataIdList);
         } else return false;
     }
 
-    const _isCheckedOfOrderData = (dataId) => {
-        return checkedOrderStatusDataIdList.includes(dataId);
+    const _isCheckedOfReleasedData = (dataId) => {
+        return checkedReleasedStatusDataIdList.includes(dataId);
     }
 
-    const _checkOneOfOrderDataLi = (dataId) => {
-        if (checkedOrderStatusDataIdList.includes(dataId)) {
-            let checkedIdList = checkedOrderStatusDataIdList.filter(r => r !== dataId);
-            setCheckedOrderStatusDataIdList(checkedIdList);
+    const _checkOneLiOfReleasedData = (dataId) => {
+        if (checkedReleasedStatusDataIdList.includes(dataId)) {
+            let checkedIdList = checkedReleasedStatusDataIdList.filter(r => r !== dataId);
+            setCheckedReleasedStatusDataIdList(checkedIdList);
         } else {
-            let checkedIdList = checkedOrderStatusDataIdList.concat(dataId);
-            setCheckedOrderStatusDataIdList(checkedIdList);
+            let checkedIdList = checkedReleasedStatusDataIdList.concat(dataId);
+            setCheckedReleasedStatusDataIdList(checkedIdList);
         }
     }
 
-    const _chageOrderDataToSold = async () => {
-        if(!checkedOrderStatusDataIdList.length){
-            alert('선택된 데이터가 없습니다.');
-            return;
-        } 
+    const _getCombinedDeliveryItem = async () => {
+        let combinedDelivery = orderStatusExcelList?.filter(rowData => 
+            checkedReleasedStatusDataIdList.includes(rowData.id)
+        );
 
-        let orderData = orderStatusExcelList?.filter(rowData => {
-            if(checkedOrderStatusDataIdList.includes(rowData.id)){
-                return {
-                    ...rowData,
-                    soldYn: "y"
-                }
-            }
-        });
+        await props.changeReleasedDataToCombinedDeliveryControl(combinedDelivery);
+    }
 
-        setCheckedOrderStatusDataIdList([]);
-        await props.changeOrderDataToSoldControl(orderData);
+    const _getUnitCombinedDeliveryItem = async () => {
+        let unitCombinedDelivery = orderStatusExcelList?.filter(rowData => 
+            checkedReleasedStatusDataIdList.includes(rowData.id)
+        );
+
+        await props.changeReleasedDataToUnitCombinedDeliveryControl(unitCombinedDelivery);
     }
 
     return (
         <>
             {userRdx.isLoading === false &&
                 <Container>
+                    <BoardTitle>
+                        <span>피아르 출고 현황 데이터</span>
+                        {/* <DataOptionBox>
+                            <HeaderFormControlBtn type="button" onClick={(e) => excelFormControl().piaarViewExcelForm().open(e)}>view 양식 설정</HeaderFormControlBtn>
+                        </DataOptionBox> */}
+                    </BoardTitle>
                         <BoardContainer>
                             {(props.viewHeaderDetailList?.viewHeaderDetail.details.length > 0) &&
                                 <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
@@ -163,8 +258,8 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                                                     size="small"
                                                     color="primary"
                                                     inputProps={{ 'aria-label': '주문 데이터 전체 선택' }}
-                                                    onChange={() => _checkAllOfOrderData()}
-                                                    checked={_isCheckedAllOfOrderData()}
+                                                    onChange={() => _checkAllOfReleasedData()}
+                                                    checked={_isCheckedAllOfReleasedData()}
                                                 />
                                             </HeaderTh>
                                             {props.viewHeaderDetailList?.viewHeaderDetail.details.map((data, idx) => {
@@ -188,16 +283,16 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                                                         <Checkbox
                                                             color="default"
                                                             size="small"
-                                                            inputProps={{ 'aria-label': '주문 데이터 선택' }}
-                                                            onClick={() => _checkOneOfOrderDataLi(data.id)}
-                                                            checked={_isCheckedOfOrderData(data.id)}
+                                                            inputProps={{ 'aria-label': '출고 데이터 선택' }}
+                                                            onClick={() => _checkOneLiOfReleasedData(data.id)}
+                                                            checked={_isCheckedOfReleasedData(data.id)}
                                                         />
                                                     </BodyTd>
                                                     {props.viewHeaderDetailList?.viewHeaderDetail.details.map((detailData, detailIdx) => {
                                                         return (
                                                             <BodyTd key={'upload_excel_data_detail_idx' + detailIdx} className="col"
-                                                                onClick={() => _checkOneOfOrderDataLi(data.id)}
-                                                                checked={_isCheckedOfOrderData(data.id)}
+                                                                onClick={() => _checkOneLiOfReleasedData(data.id)}
+                                                                checked={_isCheckedOfReleasedData(data.id)}
                                                             >
                                                                 <span>{data[detailData.matchedColumnName]}</span>
                                                             </BodyTd>
@@ -212,11 +307,19 @@ const DeliveryReadyOrderStatusPiaarBody = (props) => {
                         </BoardContainer>
 
                         <DataControlBox>
-                            <ChangeBtn type="button" onClick={() => _chageOrderDataToSold()}>판매 처리</ChangeBtn>
+                            <ChangeBtn type="button" 
+                                onClick={() => _getCombinedDeliveryItem()}
+                            >(주문자) 합배송</ChangeBtn>
+                        </DataControlBox>
+
+                        <DataControlBox>
+                            <ChangeBtn type="button" 
+                                onClick={() => _getUnitCombinedDeliveryItem()}
+                            >(주문자+상품명+옵션명) 합배송</ChangeBtn>
                         </DataControlBox>
                 </Container>
             }
         </>
     );
 }
-export default withRouter(DeliveryReadyOrderStatusPiaarBody);
+export default withRouter(DeliveryReadyPiaarReleasedStatusBoard);

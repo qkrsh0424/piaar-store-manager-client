@@ -28,31 +28,6 @@ const FormBox = styled.div`
     }
 `;
 
-const DownloadButton = styled.button`
-    margin: 5px;
-    border: 1px solid transparent;
-    padding: 8px;
-    color: white;
-    border-radius: 3px;
-    font-weight: bold;
-    background-color: rgba(122, 146, 218, 0.88);
-    transition: opacity 0.1s linear;
-    &:hover {
-        opacity: 0.6;
-        cursor: pointer;
-    }
-
-    @media only screen and (max-width: 992px) {
-        padding: 5px;
-    }
-`;
-
-const StoreInfoText = styled.input`
-    margin: 5px;
-    border: 1px solid #a7a7a740;
-    text-align: center;
-`;
-
 const PageControlDiv = styled.div`
     width: 100%;
     overflow: auto;
@@ -77,39 +52,6 @@ const PageControlBtn = styled.button`
 
     @media only screen and (max-width:576px){
         padding: 10px 0px 0px 10px;
-    }
-`;
-
-const DataDownloadBtn = styled.button`
-    margin: 10px;
-    margin-right: 20px;
-    border: 1px solid transparent;
-    font-size: 16px;
-    padding: 6px;
-    color: white;
-    width: 150px;
-    float: right;
-    border-radius: 3px;
-    background-color: rgba(132, 149, 201, 0.8);
-    transition: opacity 0.1s linear;
-    &:hover {
-        opacity: 0.6;
-        cursor: pointer;
-    }
-
-    @media only screen and (max-width:992px){
-        width: 100px;
-    }
-
-    @media only screen and (max-width:768px){
-        font-size: 12px;
-        margin-right: 40px;
-    }
-
-    @media only screen and (max-width:576px){
-        width: 70px;
-        font-size: 10px;
-        margin: 10px 25px 10px 0px;
     }
 `;
 
