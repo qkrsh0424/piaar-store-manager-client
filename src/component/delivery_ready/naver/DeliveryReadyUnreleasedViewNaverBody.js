@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import Checkbox from '@material-ui/core/Checkbox';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import SearchBar from "material-ui-search-bar";
 
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';

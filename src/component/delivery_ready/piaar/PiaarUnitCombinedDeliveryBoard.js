@@ -93,6 +93,15 @@ const BodyTd = styled.td`
     border-right: 1px solid #a7a7a720;
 `;
 
+const CombinedDeliveryTd = styled.td`
+    vertical-align: middle !important;
+    text-align: center;
+    width: 150px;
+    border-right: 1px solid #a7a7a720;
+    color: #2C73D2;
+    font-weight: 600;
+`;
+
 const PiaarCombinedDeliveryBoard = (props) => {
     const userRdx = useSelector(state => state.user);
 
@@ -102,9 +111,6 @@ const PiaarCombinedDeliveryBoard = (props) => {
                 <Container>
                     <BoardTitle>
                         <span>'수령인+상품명+옵션명' 합배송 데이터</span>
-                        {/* <DataOptionBox>
-                            <HeaderFormControlBtn type="button" onClick={(e) => excelFormControl().piaarViewExcelForm().open(e)}>view 양식 설정</HeaderFormControlBtn>
-                        </DataOptionBox> */}
                     </BoardTitle>
                     <BoardContainer>
                         {(props.viewHeaderDetailList?.viewHeaderDetail.details.length > 0) &&
@@ -143,9 +149,9 @@ const PiaarCombinedDeliveryBoard = (props) => {
                                                             key={'combined_delivery_exel_data_idx' + idx}
                                                         >
                                                             {idx === 0 &&
-                                                                <BodyTd className="col" rowSpan={group.combinedDeliveryItems.length}>
+                                                                <CombinedDeliveryTd className="col" rowSpan={group.combinedDeliveryItems.length}>
                                                                     {combinedIdx + 1}.
-                                                                </BodyTd>
+                                                                </CombinedDeliveryTd>
                                                             }
                                                             <BodyTd className="col">
                                                                 <Checkbox

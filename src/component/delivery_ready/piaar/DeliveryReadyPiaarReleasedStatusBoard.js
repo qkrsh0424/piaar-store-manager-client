@@ -1,14 +1,10 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import React, { useEffect, useState } from "react";
+
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import { useSelector } from 'react-redux';
 
 import Checkbox from '@material-ui/core/Checkbox';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
 
 const Container = styled.div`
     padding: 0 2%;
@@ -201,14 +197,6 @@ const DeliveryReadyPiaarReleasedStatusBoard = (props) => {
 
         setOrderData();
     }, [props.excelOrderList]);
-    
-    useEffect(() => {
-        function clearCombinedDeliveryTargetBoard() {
-            props._onChangeCombinedDeliveryItemBoardControl('clear');
-        }
-
-        clearCombinedDeliveryTargetBoard();
-    }, [checkedReleasedStatusDataIdList])
 
     const _checkAllOfReleasedData = () => {
         if (_isCheckedAllOfReleasedData()) {
@@ -241,32 +229,6 @@ const DeliveryReadyPiaarReleasedStatusBoard = (props) => {
         } else {
             let checkedIdList = checkedReleasedStatusDataIdList.concat(dataId);
             setCheckedReleasedStatusDataIdList(checkedIdList);
-        }
-    }
-
-    const _getCombinedDeliveryItem = async () => {
-        let combinedDelivery = orderStatusExcelList?.filter(rowData => 
-            checkedReleasedStatusDataIdList.includes(rowData.id)
-        );
-
-        await props.changeReleasedDataToCombinedDeliveryControl(combinedDelivery);
-    }
-
-    const _getUnitCombinedDeliveryItem = async () => {
-        let unitCombinedDelivery = orderStatusExcelList?.filter(rowData => 
-            checkedReleasedStatusDataIdList.includes(rowData.id)
-        );
-
-        await props.changeReleasedDataToUnitCombinedDeliveryControl(unitCombinedDelivery);
-    }
-
-    const _onChangeCombinedDeliveryItemRadioButtons = (e) => {
-        props._onChangeCombinedDeliveryItemBoardControl(e.target.value);
-        
-        if(e.target.value === 'receiver'){
-            _getCombinedDeliveryItem();
-        }else{
-            _getUnitCombinedDeliveryItem();
         }
     }
 
@@ -331,19 +293,9 @@ const DeliveryReadyPiaarReleasedStatusBoard = (props) => {
                             </table>
                         }
                     </BoardContainer>
-
+                    
                     <DataControlBox>
-                        <FormControl>
-                            <RadioGroup
-                                aria-labelledby="demo-controlled-radio-buttons-group"
-                                name="controlled-radio-buttons-group"
-                                value={props.combinedDeliveryTargetBoardState}
-                                onChange={(e) => _onChangeCombinedDeliveryItemRadioButtons(e)}
-                            >
-                                <FormControlLabel value="receiver" control={<Radio disabled={checkedReleasedStatusDataIdList.length > 0 ? false : true}/>} label="'수령인' 묶음 [ 병합 항목 X ]" />
-                                <FormControlLabel value="receiverAndProdInfo" control={<Radio disabled={checkedReleasedStatusDataIdList.length > 0 ? false : true}/>} label="'수령인+상품명+옵션명' 묶음 [ 병합 항목 O ]" />
-                            </RadioGroup>
-                        </FormControl>
+                        <ChangeBtn type="button" onClick={() => props._onCreateCombinedColumnModalOpen(checkedReleasedStatusDataIdList)}>합배송 처리</ChangeBtn>
                     </DataControlBox>
                 </Container>
             }

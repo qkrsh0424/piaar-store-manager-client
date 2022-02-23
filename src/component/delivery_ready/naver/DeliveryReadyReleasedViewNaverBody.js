@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import Checkbox from '@material-ui/core/Checkbox';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import SearchBar from "material-ui-search-bar";
 
 import CloseIcon from '@material-ui/icons/Close';
 import EventAvailableTwoToneIcon from '@mui/icons-material/EventAvailableTwoTone';

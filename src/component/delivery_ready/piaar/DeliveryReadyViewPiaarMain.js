@@ -119,6 +119,7 @@ const DeliveryReadyViewPiaarMain = (props) => {
     const [createPiaarViewHeaderDetailModalOpen, setCreatePiaarViewHeaderDetailModalOpen] = useState(false);
     const [combinedDeliveryTargetBoardState, dispatchCombinedDeliveryTargetBoardState] = useReducer(combinedDeliveryTargetBoardStateReducer, initialCombinedDeliveryTargetBoard);
     const [createCombinedColumnModalOpen, setCreateCombinedColumnModalOpen] = useState(false);
+    const [checkedReleasedIdList, setCheckedReleasedIdList] = useState(null);
 
     useEffect(() => {
         async function initViewHeaderDetailList() {
@@ -139,7 +140,16 @@ const DeliveryReadyViewPiaarMain = (props) => {
         setCreatePiaarViewHeaderDetailModalOpen(false);
     }
 
-    const _onCreateCombinedColumnModalOpen = () => {
+    const _onCreateCombinedColumnModalOpen = (checkedIdList) => {
+        if(!(checkedIdList.length > 0)) {
+            alert('출고 데이터를 먼저 선택해주세요.');
+            return;
+        }
+
+        dispatchCombinedDeliveryTargetBoardState({
+            type: 'CLEAR'
+        })
+        setCheckedReleasedIdList(checkedIdList);
         setCreateCombinedColumnModalOpen(true);
     }
 
@@ -308,27 +318,35 @@ const DeliveryReadyViewPiaarMain = (props) => {
                     }
                 }
             },
-            piaarCombinedColumnData: function () {
+            piaarCombinedData: function () {
                 return {
                     submitCombinedColumn: async function(combinedData) {
                         await __handleDataConnect().changeViewExcelHeaderDetail(combinedData);
                         _onCreateCombinedColumnModalClose();
+                    },
+                    changeReleasedDataToCombinedDelivery: async function () {
+                        let combinedDelivery = excelOrderList?.filter(rowData => 
+                            checkedReleasedIdList.includes(rowData.id)
+                        );
+
+                        await __handleDataConnect().changeReleasedDataToCombinedDelivery(combinedDelivery);
+                    },
+                    changeReleasedDataToUnitCombinedDelivery: async function () {
+                        let unitCombinedDelivery = excelOrderList?.filter(rowData =>
+                            checkedReleasedIdList.includes(rowData.id)
+                        );
+
+                        await __handleDataConnect().changeReleasedDataToUnitCombinedDelivery(unitCombinedDelivery);
                     }
                 }
             }
         }
     }
 
-    const _onChangeCombinedDeliveryItemBoard = (targetBoard) => {
-        // 체크된 데이터가 변경된다면 합배송 보드 숨기기
-        if(targetBoard === 'clear') {
-            dispatchCombinedDeliveryTargetBoardState({
-                type: 'CLEAR'
-            })
-        }
+    const _onChangeCombinedDeliveryItemBoard = (target) => {
         dispatchCombinedDeliveryTargetBoardState({
             type: 'SET_DATA',
-            payload: targetBoard
+            payload: target
         });
     }
 
@@ -375,19 +393,12 @@ const DeliveryReadyViewPiaarMain = (props) => {
                 <div>
                     <BoardTitle>
                         <span>피아르 출고 현황 데이터</span>
-                        <DataOptionBox>
-                            <HeaderFormControlBtn type="button" onClick={(e) => _onCreateCombinedColumnModalOpen(e)}
-                            disabled={combinedDeliveryTargetBoardState === 'receiverAndProdInfo'? false : true}>병합 항목 설정</HeaderFormControlBtn>
-                        </DataOptionBox>
                     </BoardTitle>
                     <DeliveryReadyReleasedStatusPiaarBody
                         viewHeaderDetailList={viewHeaderDetailList}
                         excelOrderList={excelOrderList}
-                        combinedDeliveryTargetBoardState={combinedDeliveryTargetBoardState}
 
-                        changeReleasedDataToCombinedDeliveryControl={(releasedData) => __handleDataConnect().changeReleasedDataToCombinedDelivery(releasedData)}
-                        changeReleasedDataToUnitCombinedDeliveryControl={(releasedData) => __handleDataConnect().changeReleasedDataToUnitCombinedDelivery(releasedData)}
-                        _onChangeCombinedDeliveryItemBoardControl={(targetBoard) => _onChangeCombinedDeliveryItemBoard(targetBoard)}
+                        _onCreateCombinedColumnModalOpen={(checkedIdList) => _onCreateCombinedColumnModalOpen(checkedIdList)}
                     ></DeliveryReadyReleasedStatusPiaarBody>
                 </div>
 
@@ -435,14 +446,15 @@ const DeliveryReadyViewPiaarMain = (props) => {
             >
                 <CreateCombinedColumnComponent
                     viewHeaderDetailList={viewHeaderDetailList}
+                    combinedDeliveryTargetBoardState={combinedDeliveryTargetBoardState}
 
-                    _onCreateCombinedColumnModalOpen={() => _onCreateCombinedColumnModalOpen()}
+                    changeReleasedDataToCombinedDeliveryControl={() => __handleEventControl().piaarCombinedData().changeReleasedDataToCombinedDelivery()}
+                    changeReleasedDataToUnitCombinedDeliveryControl={() => __handleEventControl().piaarCombinedData().changeReleasedDataToUnitCombinedDelivery()}
                     _onCreateCombinedColumnModalClose={() => _onCreateCombinedColumnModalClose()}
-                    _onSubmitCombinedColumnDataControl={(combinedData)=>__handleEventControl().piaarCombinedColumnData().submitCombinedColumn(combinedData)}
-                    _onChangeCombinedDeliveryItemBoardControl={(targetBoard) => _onChangeCombinedDeliveryItemBoard(targetBoard)}
+                    _onSubmitCombinedColumnDataControl={(combinedData)=>__handleEventControl().piaarCombinedData().submitCombinedColumn(combinedData)}
+                    _onChangeCombinedDeliveryItemBoardControl={(target) => _onChangeCombinedDeliveryItemBoard(target)}
                 >
                 </CreateCombinedColumnComponent>
-
             </PiaarExcelViewCommonModal>
         </>
     )

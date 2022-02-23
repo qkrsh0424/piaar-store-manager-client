@@ -164,6 +164,15 @@ const BodyTd = styled.td`
     border-right: 1px solid #a7a7a720;
 `;
 
+const CombinedDeliveryTd = styled.td`
+    vertical-align: middle !important;
+    text-align: center;
+    width: 150px;
+    border-right: 1px solid #a7a7a720;
+    color: #2C73D2;
+    font-weight: 600;
+`;
+
 const PiaarCombinedDeliveryBoard = (props) => {
     const userRdx = useSelector(state => state.user);
 
@@ -214,9 +223,9 @@ const PiaarCombinedDeliveryBoard = (props) => {
                                                             key={'combined_delivery_exel_data_idx' + idx}
                                                         >
                                                             {idx === 0 &&
-                                                                <BodyTd className="col" rowSpan={group.combinedDeliveryItems.length}>
+                                                                <CombinedDeliveryTd className="col" rowSpan={group.combinedDeliveryItems.length}>
                                                                     {combinedIdx + 1}.
-                                                                </BodyTd>
+                                                                </CombinedDeliveryTd>
                                                             }
                                                             <BodyTd className="col">
                                                                 <Checkbox

@@ -4,6 +4,10 @@ import styled, { css } from "styled-components";
 import Checkbox from '@material-ui/core/Checkbox';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import ReplayIcon from '@mui/icons-material/Replay';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
 
 const Container = styled.div`
 `;
@@ -47,8 +51,6 @@ const InfoText = styled.span`
 const BodyContainer = styled.div`
     padding: 10px 20px;
     padding-bottom: 50px;
-    min-height: 40vh;
-    max-height: 40vh;
     background:white;
     display: grid;
     align-items: center;
@@ -168,6 +170,16 @@ const ControlBox = styled.div`
     float: right;
 `;
 
+const DataControlBox = styled.div`
+    width: 100%;
+    padding: 2%;
+`;
+
+const FormLabelGroup = styled.div`
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+`;
+
 const initialCreateCombinedColumnState = null;
 
 const createCombinedColumnStateReducer = (state, action) => {
@@ -191,6 +203,18 @@ const createCombinedColumnStateReducer = (state, action) => {
 const CreateCombinedColumnComponent = (props) => {
     const [createCombinedColumnState, dispatchCreateCombinedColumnState] = useReducer(createCombinedColumnStateReducer, initialCreateCombinedColumnState);
     const [checkedCellNumberListOfCombinedColumn, setCheckedCellNumberListOfCombinedColumn] = useState([]);
+    const [orderStatusExcelList, setOrderStatusExcelList] = useState(null);
+
+
+    useEffect(() => {
+        function setOrderData() {
+            let orderData = props.excelOrderList?.filter(rowData => rowData.releasedYn === "y");
+            
+            setOrderStatusExcelList(orderData);
+        }
+
+        setOrderData();
+    }, [props.excelOrderList]);
 
     useEffect(() => {
         function getViewHeader() {
@@ -246,7 +270,12 @@ const CreateCombinedColumnComponent = (props) => {
     const _storeCombinedColumnData = async (e) => {
         e.preventDefault();
         await props._onSubmitCombinedColumnDataControl(createCombinedColumnState);
-        props._onChangeCombinedDeliveryItemBoardControl('clear');
+        
+        if(props.combinedDeliveryTargetBoardState === 'receiver') {
+            await props.changeReleasedDataToCombinedDeliveryControl();
+        }else if(props.combinedDeliveryTargetBoardState === 'receiverAndProdInfo'){
+            await props.changeReleasedDataToUnitCombinedDeliveryControl();
+        }
     }
 
     const _resetViewExcelFormDetail =  async (e) => {
@@ -300,6 +329,10 @@ const CreateCombinedColumnComponent = (props) => {
         }
     }
 
+    const _onChangeCombinedDeliveryItemRadioButtons = (e) => {
+        props._onChangeCombinedDeliveryItemBoardControl(e.target.value);
+    }
+
     return (
         <>
             <Container>
@@ -316,7 +349,23 @@ const CreateCombinedColumnComponent = (props) => {
                         </ItemWrapper>
                     </ItemContainer>
                     <BodyContainer>
-                        <BodyWrapper>
+                        <DataControlBox>
+                            <FormControl>
+                                <RadioGroup
+                                    aria-labelledby="demo-controlled-radio-buttons-group"
+                                    name="controlled-radio-buttons-group"
+                                    value={props.combinedDeliveryTargetBoardState}
+                                    onChange={(e) => _onChangeCombinedDeliveryItemRadioButtons(e)}
+                                >
+                                    <FormLabelGroup>
+                                        <FormControlLabel value="receiver" control={<Radio />} label="'수령인' 묶음 [ 병합 항목 X ]" />
+                                        <FormControlLabel value="receiverAndProdInfo" control={<Radio />} label="'수령인+상품명+옵션명' 묶음 [ 병합 항목 O ]" />
+                                    </FormLabelGroup>
+                                </RadioGroup>
+                            </FormControl>
+                        </DataControlBox>
+
+                        <BodyWrapper hidden={props.combinedDeliveryTargetBoardState === 'receiverAndProdInfo' ? false : true}>
                             <InfoText>* 병합된 항목 중 구분자로 나열할 데이터 항목을 선택해주세요.</InfoText>
                             <AllCheckBox>
                                 <span>전체 선택</span>
@@ -338,8 +387,6 @@ const CreateCombinedColumnComponent = (props) => {
                                                             <Checkbox
                                                                 color="default"
                                                                 size="small"
-                                                                // onClick={() => _checkOneLiOfCombinedColumnData(data.cellNumber)}
-                                                                // checked={_isCheckedOfCombinedColumnData(data.cellNumber)}
                                                                 disabled
                                                             />
                                                         :
@@ -362,8 +409,6 @@ const CreateCombinedColumnComponent = (props) => {
                                                 if (data.matchedColumnName === 'unit') {
                                                     return (
                                                         <BodyTd key={'view_excel_data_detail_idx' + idx}
-                                                            // onClick={() => _checkOneLiOfCombinedColumnData(data.cellNumber)}
-                                                            // checked={_isCheckedOfCombinedColumnData(data.cellNumber)}
                                                             disabled
                                                         >
                                                             <span>{idx + 1}. {data.cellValue}</span>
