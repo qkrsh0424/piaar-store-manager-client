@@ -5,6 +5,10 @@ import { withRouter } from 'react-router';
 import { useSelector } from 'react-redux';
 
 import Checkbox from '@material-ui/core/Checkbox';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
 
 const Container = styled.div`
     padding: 0 2%;
@@ -165,18 +169,28 @@ const BodyTd = styled.td`
 `;
 
 const DataControlBox = styled.div`
-    
+    width: 100%;
+    display: grid;
+    padding: 2% 0;
 `;
 
 const ChangeBtn = styled.button`
-
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    background-color: #2C73D2;
+    border: 1px solid #2C73D2;
+    padding: 0.5% 0;
+    width:calc(50% - 100px);
 `;
+
 
 const DeliveryReadyPiaarReleasedStatusBoard = (props) => {
     const userRdx = useSelector(state => state.user);
 
     const [checkedReleasedStatusDataIdList, setCheckedReleasedStatusDataIdList] = useState([]);
     const [orderStatusExcelList, setOrderStatusExcelList] = useState(null);
+
 
     useEffect(() => {
         function setOrderData() {
@@ -187,6 +201,14 @@ const DeliveryReadyPiaarReleasedStatusBoard = (props) => {
 
         setOrderData();
     }, [props.excelOrderList]);
+    
+    useEffect(() => {
+        function clearCombinedDeliveryTargetBoard() {
+            props._onChangeCombinedDeliveryItemBoardControl('clear');
+        }
+
+        clearCombinedDeliveryTargetBoard();
+    }, [checkedReleasedStatusDataIdList])
 
     const _checkAllOfReleasedData = () => {
         if (_isCheckedAllOfReleasedData()) {
@@ -238,85 +260,91 @@ const DeliveryReadyPiaarReleasedStatusBoard = (props) => {
         await props.changeReleasedDataToUnitCombinedDeliveryControl(unitCombinedDelivery);
     }
 
+    const _onChangeCombinedDeliveryItemRadioButtons = (e) => {
+        props._onChangeCombinedDeliveryItemBoardControl(e.target.value);
+        
+        if(e.target.value === 'receiver'){
+            _getCombinedDeliveryItem();
+        }else{
+            _getUnitCombinedDeliveryItem();
+        }
+    }
+
     return (
         <>
             {userRdx.isLoading === false &&
                 <Container>
-                    <BoardTitle>
-                        <span>피아르 출고 현황 데이터</span>
-                        {/* <DataOptionBox>
-                            <HeaderFormControlBtn type="button" onClick={(e) => excelFormControl().piaarViewExcelForm().open(e)}>view 양식 설정</HeaderFormControlBtn>
-                        </DataOptionBox> */}
-                    </BoardTitle>
-                        <BoardContainer>
-                            {(props.viewHeaderDetailList?.viewHeaderDetail.details.length > 0) &&
-                                <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
-                                    <thead>
-                                        <tr>
-                                            <HeaderTh className="fixed-header xsmall-cell" scope="col">
-                                                <Checkbox
-                                                    size="small"
-                                                    color="primary"
-                                                    inputProps={{ 'aria-label': '주문 데이터 전체 선택' }}
-                                                    onChange={() => _checkAllOfReleasedData()}
-                                                    checked={_isCheckedAllOfReleasedData()}
-                                                />
-                                            </HeaderTh>
-                                            {props.viewHeaderDetailList?.viewHeaderDetail.details.map((data, idx) => {
-                                                return (
-                                                    <HeaderTh key={'piaar_excel_header_idx' + idx} className="fixed-header large-cell" scope="col">
-                                                        <span>{data.cellValue}</span>
-                                                    </HeaderTh>
-                                                )
-                                            })}
-                                        </tr>
-                                    </thead>
-
-                                    <tbody style={{ border: 'none' }}>
-
-                                        {orderStatusExcelList?.map((data, idx) => {
+                    <BoardContainer>
+                        {(props.viewHeaderDetailList?.viewHeaderDetail.details.length > 0) &&
+                            <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
+                                <thead>
+                                    <tr>
+                                        <HeaderTh className="fixed-header xsmall-cell" scope="col">
+                                            <Checkbox
+                                                size="small"
+                                                color="primary"
+                                                inputProps={{ 'aria-label': '주문 데이터 전체 선택' }}
+                                                onChange={() => _checkAllOfReleasedData()}
+                                                checked={_isCheckedAllOfReleasedData()}
+                                            />
+                                        </HeaderTh>
+                                        {props.viewHeaderDetailList?.viewHeaderDetail.details.map((data, idx) => {
                                             return (
-                                                <BodyTr
-                                                    key={'upload_exel_data_idx' + idx}
-                                                >
-                                                    <BodyTd className="col">
-                                                        <Checkbox
-                                                            color="default"
-                                                            size="small"
-                                                            inputProps={{ 'aria-label': '출고 데이터 선택' }}
-                                                            onClick={() => _checkOneLiOfReleasedData(data.id)}
-                                                            checked={_isCheckedOfReleasedData(data.id)}
-                                                        />
-                                                    </BodyTd>
-                                                    {props.viewHeaderDetailList?.viewHeaderDetail.details.map((detailData, detailIdx) => {
-                                                        return (
-                                                            <BodyTd key={'upload_excel_data_detail_idx' + detailIdx} className="col"
-                                                                onClick={() => _checkOneLiOfReleasedData(data.id)}
-                                                                checked={_isCheckedOfReleasedData(data.id)}
-                                                            >
-                                                                <span>{data[detailData.matchedColumnName]}</span>
-                                                            </BodyTd>
-                                                        )
-                                                    })}
-                                                </BodyTr>
+                                                <HeaderTh key={'piaar_excel_header_idx' + idx} className="fixed-header large-cell" scope="col">
+                                                    <span>{data.cellValue}</span>
+                                                </HeaderTh>
                                             )
                                         })}
-                                    </tbody>
-                                </table>
-                            }
-                        </BoardContainer>
+                                    </tr>
+                                </thead>
 
-                        <DataControlBox>
-                            <ChangeBtn type="button" 
-                                onClick={() => _getCombinedDeliveryItem()}
-                            >(주문자) 합배송</ChangeBtn>
-                        </DataControlBox>
+                                <tbody style={{ border: 'none' }}>
 
-                        <DataControlBox>
-                            <ChangeBtn type="button" 
-                                onClick={() => _getUnitCombinedDeliveryItem()}
-                            >(주문자+상품명+옵션명) 합배송</ChangeBtn>
-                        </DataControlBox>
+                                    {orderStatusExcelList?.map((data, idx) => {
+                                        return (
+                                            <BodyTr
+                                                key={'upload_exel_data_idx' + idx}
+                                            >
+                                                <BodyTd className="col">
+                                                    <Checkbox
+                                                        color="default"
+                                                        size="small"
+                                                        inputProps={{ 'aria-label': '출고 데이터 선택' }}
+                                                        onClick={() => _checkOneLiOfReleasedData(data.id)}
+                                                        checked={_isCheckedOfReleasedData(data.id)}
+                                                    />
+                                                </BodyTd>
+                                                {props.viewHeaderDetailList?.viewHeaderDetail.details.map((detailData, detailIdx) => {
+                                                    return (
+                                                        <BodyTd key={'upload_excel_data_detail_idx' + detailIdx} className="col"
+                                                            onClick={() => _checkOneLiOfReleasedData(data.id)}
+                                                            checked={_isCheckedOfReleasedData(data.id)}
+                                                        >
+                                                            <span>{data[detailData.matchedColumnName]}</span>
+                                                        </BodyTd>
+                                                    )
+                                                })}
+                                            </BodyTr>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        }
+                    </BoardContainer>
+
+                    <DataControlBox>
+                        <FormControl>
+                            <RadioGroup
+                                aria-labelledby="demo-controlled-radio-buttons-group"
+                                name="controlled-radio-buttons-group"
+                                value={props.combinedDeliveryTargetBoardState}
+                                onChange={(e) => _onChangeCombinedDeliveryItemRadioButtons(e)}
+                            >
+                                <FormControlLabel value="receiver" control={<Radio disabled={checkedReleasedStatusDataIdList.length > 0 ? false : true}/>} label="'수령인' 묶음 [ 병합 항목 X ]" />
+                                <FormControlLabel value="receiverAndProdInfo" control={<Radio disabled={checkedReleasedStatusDataIdList.length > 0 ? false : true}/>} label="'수령인+상품명+옵션명' 묶음 [ 병합 항목 O ]" />
+                            </RadioGroup>
+                        </FormControl>
+                    </DataControlBox>
                 </Container>
             }
         </>

@@ -482,7 +482,8 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
                     cellNumber : i,
                     cellValue : deliveryReadyPiaarHeaderName[i].headerName,
                     matchedColumnName : deliveryReadyPiaarHeaderName[i].matchedColumnName,
-                    cellSize: 'default'
+                    cellSize: 'default',
+                    mergeYn: 'n'
                 }
 
                 deliveryReadyPiaarCustomizedHeaderList.push({...data});

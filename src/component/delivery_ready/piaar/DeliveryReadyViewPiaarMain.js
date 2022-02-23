@@ -18,6 +18,7 @@ import PiaarExcelViewCommonModal from './modal/PiaarExcelViewCommonModal';
 import CreateExcelViewHeaderDetailComponent from './modal/CreateExcelViewHeaderDetailComponent';
 import PiaarCombinedDeliveryBoard from './PiaarCombinedDeliveryBoard';
 import PiaarUnitCombinedDeliveryBoard from './PiaarUnitCombinedDeliveryBoard';
+import CreateCombinedColumnComponent from './modal/CreateCombinedColumnComponent';
 
 const Container = styled.div`
     height: 100vh;
@@ -88,7 +89,26 @@ const HeaderFormControlBtn = styled.button`
         transition: 0s;
         transform: scale(1.05);
     }
+
+    &:disabled{
+        border: none;
+        background-color: #D8D8D8;
+    }
 `;
+
+const initialCombinedDeliveryTargetBoard = 'receiver';
+
+const combinedDeliveryTargetBoardStateReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
 
 const DeliveryReadyViewPiaarMain = (props) => {
     const [backdropLoading, setBackdropLoading] = useState(false);
@@ -97,10 +117,11 @@ const DeliveryReadyViewPiaarMain = (props) => {
     const [combinedDeliveryItemList, setCombinedDeliveryItemList] = useState(null);
     const [unitCombinedDeliveryItemList, setUnitCombinedDeliveryItemList] = useState(null);
     const [createPiaarViewHeaderDetailModalOpen, setCreatePiaarViewHeaderDetailModalOpen] = useState(false);
+    const [combinedDeliveryTargetBoardState, dispatchCombinedDeliveryTargetBoardState] = useReducer(combinedDeliveryTargetBoardStateReducer, initialCombinedDeliveryTargetBoard);
+    const [createCombinedColumnModalOpen, setCreateCombinedColumnModalOpen] = useState(false);
 
     useEffect(() => {
         async function initViewHeaderDetailList() {
-
             if (excelOrderList) return;
 
             await __handleDataConnect().getViewExcelHeaderDetail();
@@ -110,12 +131,20 @@ const DeliveryReadyViewPiaarMain = (props) => {
         initViewHeaderDetailList();
     }, []);
 
-    const onCreatePiaarViewHeaderDetailModalOpen = () => {
+    const _onCreatePiaarViewHeaderDetailModalOpen = () => {
         setCreatePiaarViewHeaderDetailModalOpen(true);
     }
 
-    const onCreatePiaarViewHeaderDetailModalClose = () => {
+    const _onCreatePiaarViewHeaderDetailModalClose = () => {
         setCreatePiaarViewHeaderDetailModalOpen(false);
+    }
+
+    const _onCreateCombinedColumnModalOpen = () => {
+        setCreateCombinedColumnModalOpen(true);
+    }
+
+    const _onCreateCombinedColumnModalClose = () => {
+        setCreateCombinedColumnModalOpen(false);
     }
 
     const __handleDataConnect = () => {
@@ -275,11 +304,32 @@ const DeliveryReadyViewPiaarMain = (props) => {
                         }else{
                             await __handleDataConnect().createViewExcelHeaderDetail(headerDetails);
                         }
-                        onCreatePiaarViewHeaderDetailModalClose();
+                        _onCreatePiaarViewHeaderDetailModalClose();
+                    }
+                }
+            },
+            piaarCombinedColumnData: function () {
+                return {
+                    submitCombinedColumn: async function(combinedData) {
+                        await __handleDataConnect().changeViewExcelHeaderDetail(combinedData);
+                        _onCreateCombinedColumnModalClose();
                     }
                 }
             }
         }
+    }
+
+    const _onChangeCombinedDeliveryItemBoard = (targetBoard) => {
+        // 체크된 데이터가 변경된다면 합배송 보드 숨기기
+        if(targetBoard === 'clear') {
+            dispatchCombinedDeliveryTargetBoardState({
+                type: 'CLEAR'
+            })
+        }
+        dispatchCombinedDeliveryTargetBoardState({
+            type: 'SET_DATA',
+            payload: targetBoard
+        });
     }
 
     return (
@@ -300,7 +350,7 @@ const DeliveryReadyViewPiaarMain = (props) => {
                     <BoardTitle>
                         <span>피아르 주문 현황 데이터</span>
                         <DataOptionBox>
-                            <HeaderFormControlBtn type="button" onClick={(e) => onCreatePiaarViewHeaderDetailModalOpen(e)}>view 양식 설정</HeaderFormControlBtn>
+                            <HeaderFormControlBtn type="button" onClick={(e) => _onCreatePiaarViewHeaderDetailModalOpen(e)}>view 양식 설정</HeaderFormControlBtn>
                         </DataOptionBox>
                     </BoardTitle>
 
@@ -322,44 +372,76 @@ const DeliveryReadyViewPiaarMain = (props) => {
                 ></DeliveryReadySoldStatusPiaarBody>
 
                 {/* 출고현황 데이터 보드 */}
-                <DeliveryReadyReleasedStatusPiaarBody
-                    viewHeaderDetailList={viewHeaderDetailList}
-                    excelOrderList={excelOrderList}
+                <div>
+                    <BoardTitle>
+                        <span>피아르 출고 현황 데이터</span>
+                        <DataOptionBox>
+                            <HeaderFormControlBtn type="button" onClick={(e) => _onCreateCombinedColumnModalOpen(e)}
+                            disabled={combinedDeliveryTargetBoardState === 'receiverAndProdInfo'? false : true}>병합 항목 설정</HeaderFormControlBtn>
+                        </DataOptionBox>
+                    </BoardTitle>
+                    <DeliveryReadyReleasedStatusPiaarBody
+                        viewHeaderDetailList={viewHeaderDetailList}
+                        excelOrderList={excelOrderList}
+                        combinedDeliveryTargetBoardState={combinedDeliveryTargetBoardState}
 
-                    changeReleasedDataToCombinedDeliveryControl={(releasedData) => __handleDataConnect().changeReleasedDataToCombinedDelivery(releasedData)}
-                    changeReleasedDataToUnitCombinedDeliveryControl={(releasedData) => __handleDataConnect().changeReleasedDataToUnitCombinedDelivery(releasedData)}
-                ></DeliveryReadyReleasedStatusPiaarBody>
+                        changeReleasedDataToCombinedDeliveryControl={(releasedData) => __handleDataConnect().changeReleasedDataToCombinedDelivery(releasedData)}
+                        changeReleasedDataToUnitCombinedDeliveryControl={(releasedData) => __handleDataConnect().changeReleasedDataToUnitCombinedDelivery(releasedData)}
+                        _onChangeCombinedDeliveryItemBoardControl={(targetBoard) => _onChangeCombinedDeliveryItemBoard(targetBoard)}
+                    ></DeliveryReadyReleasedStatusPiaarBody>
+                </div>
 
                 {/* 합배송 데이터 보드 */}
+                {combinedDeliveryTargetBoardState === 'receiver' &&
                 <PiaarCombinedDeliveryBoard
                     viewHeaderDetailList={viewHeaderDetailList}
                     combinedDeliveryItemList={combinedDeliveryItemList}
 
                 ></PiaarCombinedDeliveryBoard>
+                }
 
                 {/* 합배송 수량처리 데이터 보드 */}
+                {combinedDeliveryTargetBoardState === 'receiverAndProdInfo' &&
                 <PiaarUnitCombinedDeliveryBoard
                     viewHeaderDetailList={viewHeaderDetailList}
                     unitCombinedDeliveryItemList={unitCombinedDeliveryItemList}
-
                 ></PiaarUnitCombinedDeliveryBoard>
+                }
             </Container>
 
             {/* Create Piaar View Header Form Modal */}
             <PiaarExcelViewCommonModal
                 open={createPiaarViewHeaderDetailModalOpen}
-                onClose={() => onCreatePiaarViewHeaderDetailModalClose()}
+                onClose={() => _onCreatePiaarViewHeaderDetailModalClose()}
                 maxWidth={'lg'}
                 fullWidth={true}
             >
                 <CreateExcelViewHeaderDetailComponent
                     viewHeaderDetailList={viewHeaderDetailList}
 
-                    onCreatePiaarViewHeaderDetailModalOpen={() => onCreatePiaarViewHeaderDetailModalOpen()}
-                    onCreatePiaarViewHeaderDetailModalClose={() => onCreatePiaarViewHeaderDetailModalClose()}
+                    _onCreatePiaarViewHeaderDetailModalOpen={() => _onCreatePiaarViewHeaderDetailModalOpen()}
+                    _onCreatePiaarViewHeaderDetailModalClose={() => _onCreatePiaarViewHeaderDetailModalClose()}
                     _onSubmitPiaarCustomizedHeaderControl={(headerDetails)=>__handleEventControl().piaarCustomizedHeader().submitHeader(headerDetails)}
                 >
                 </CreateExcelViewHeaderDetailComponent>
+
+            </PiaarExcelViewCommonModal>
+
+            <PiaarExcelViewCommonModal
+                open={createCombinedColumnModalOpen}
+                onClose={() => _onCreateCombinedColumnModalClose()}
+                maxWidth={'lg'}
+                fullWidth={true}
+            >
+                <CreateCombinedColumnComponent
+                    viewHeaderDetailList={viewHeaderDetailList}
+
+                    _onCreateCombinedColumnModalOpen={() => _onCreateCombinedColumnModalOpen()}
+                    _onCreateCombinedColumnModalClose={() => _onCreateCombinedColumnModalClose()}
+                    _onSubmitCombinedColumnDataControl={(combinedData)=>__handleEventControl().piaarCombinedColumnData().submitCombinedColumn(combinedData)}
+                    _onChangeCombinedDeliveryItemBoardControl={(targetBoard) => _onChangeCombinedDeliveryItemBoard(targetBoard)}
+                >
+                </CreateCombinedColumnComponent>
 
             </PiaarExcelViewCommonModal>
         </>

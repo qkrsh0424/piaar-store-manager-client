@@ -94,7 +94,6 @@ const piaarExcelHeaderListStateReducer = (state, action) => {
 
 const DeliveryReadyUploadPiaarMain = (props) => {
     const [excelData, setExcelData] = useState(null);
-    const [formData, setFormData] = useState([]);
     const [backdropLoading, setBackdropLoading] = useState(false);
     const [piaarExcelHeaderListState, dispatchPiaarExcelHeaderListState] = useReducer(piaarExcelHeaderListStateReducer, initialPiaarExcelHeaderListState);
 
@@ -111,7 +110,8 @@ const DeliveryReadyUploadPiaarMain = (props) => {
                     id: uuidv4(),
                     cellNumber : i,
                     cellValue : deliveryReadyPiaarHeaderName[i],
-                    cellSize: 'default'
+                    cellSize: 'default',
+                    mergeYn: 'n'
                 }
 
                 headerList.push({...data});

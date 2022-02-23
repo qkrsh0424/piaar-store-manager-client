@@ -73,11 +73,19 @@ const BodyTd = styled.td`
 `;
 
 const DataControlBox = styled.div`
-    
+    width: 100%;
+    display: grid;
+    padding: 2% 0;
 `;
 
 const ChangeBtn = styled.button`
-
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    background-color: #2C73D2;
+    border: 1px solid #2C73D2;
+    padding: 0.5% 0;
+    width:calc(50% - 100px);
 `;
 
 const DeliveryReadyPiaarOrderStatusBoard = (props) => {

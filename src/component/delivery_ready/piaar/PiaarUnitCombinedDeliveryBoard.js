@@ -101,7 +101,7 @@ const PiaarCombinedDeliveryBoard = (props) => {
             {userRdx.isLoading === false &&
                 <Container>
                     <BoardTitle>
-                        <span>(주문자+상품명+옵션명) 합배송 데이터 - 주문수량 합치기</span>
+                        <span>'수령인+상품명+옵션명' 합배송 데이터</span>
                         {/* <DataOptionBox>
                             <HeaderFormControlBtn type="button" onClick={(e) => excelFormControl().piaarViewExcelForm().open(e)}>view 양식 설정</HeaderFormControlBtn>
                         </DataOptionBox> */}
