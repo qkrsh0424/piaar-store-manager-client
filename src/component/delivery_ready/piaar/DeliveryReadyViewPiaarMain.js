@@ -96,7 +96,7 @@ const HeaderFormControlBtn = styled.button`
     }
 `;
 
-const initialCombinedDeliveryTargetBoard = 'receiver';
+const initialCombinedDeliveryTargetBoard = null;
 
 const combinedDeliveryTargetBoardStateReducer = (state, action) => {
     switch (action.type) {
@@ -148,7 +148,7 @@ const DeliveryReadyViewPiaarMain = (props) => {
 
         dispatchCombinedDeliveryTargetBoardState({
             type: 'CLEAR'
-        })
+        });
         setCheckedReleasedIdList(checkedIdList);
         setCreateCombinedColumnModalOpen(true);
     }
@@ -287,6 +287,7 @@ const DeliveryReadyViewPiaarMain = (props) => {
                     })
                     .catch(err => {
                         let res = err.response;
+                        console.log(res);
                         if (res.status === 500) {
                             alert('undefined error.');
                             return;

@@ -234,214 +234,284 @@ class DeliveryReadyPiaarHeader {
     }
 }
 
-const DELIVERY_READY_PIAAR_HEADER_SIZE = 46;
-
-const deliveryReadyPiaarHeaderName = [
+const piaarDefaultHeaderList = [
     {
-        "headerName" : "피아르 고유번호",
-        "matchedColumnName" : "uniqueCode"
+        "cellNumber" : 0,
+        "cellValue" : "피아르 고유번호",
+        "matchedColumnName" : "uniqueCode",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "주문번호1",
-        "matchedColumnName" : "orderNumber1"
+        "cellNumber" : 1,
+        "cellValue" : "주문번호1",
+        "matchedColumnName" : "orderNumber1",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "주문번호2",
-        "matchedColumnName" : "orderNumber2"
+        "cellNumber" : 2,
+        "cellValue" : "주문번호2",
+        "matchedColumnName" : "orderNumber2",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "주문번호3",
-        "matchedColumnName" : "orderNumber3"
+        "cellNumber" : 3,
+        "cellValue" : "주문번호3",
+        "matchedColumnName" : "orderNumber3",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "상품명",
-        "matchedColumnName" : "prodName"
+        "cellNumber" : 4,
+        "cellValue" : "상품명",
+        "matchedColumnName" : "prodName",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "옵션명",
-        "matchedColumnName" : "optionName"
+        "cellNumber" : 5,
+        "cellValue" : "옵션명",
+        "matchedColumnName" : "optionName",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "수량",
-        "matchedColumnName" : "unit"
+        "cellNumber" : 6,
+        "cellValue" : "수량",
+        "matchedColumnName" : "unit",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "수취인명",
-        "matchedColumnName" : "receiver"
+        "cellNumber" : 7,
+        "cellValue" : "수취인명",
+        "matchedColumnName" : "receiver",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "전화번호1",
-        "matchedColumnName" : "receiverContact1"
+        "cellNumber" : 8,
+        "cellValue" : "전화번호1",
+        "matchedColumnName" : "receiverContact1",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "전화번호2",
-        "matchedColumnName" : "receiverContact2"
+        "cellNumber" : 9,
+        "cellValue" : "전화번호2",
+        "matchedColumnName" : "receiverContact2",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "주소",
-        "matchedColumnName" : "destination"
+        "cellNumber" : 10,
+        "cellValue" : "주소",
+        "matchedColumnName" : "destination",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "우편번호",
-        "matchedColumnName" : "zipCode"
+        "cellNumber" : 11,
+        "cellValue" : "우편번호",
+        "matchedColumnName" : "zipCode",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "배송방식",
-        "matchedColumnName" : "transportType"
+        "cellNumber" : 12,
+        "cellValue" : "배송방식",
+        "matchedColumnName" : "transportType",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "배송메세지",
-        "matchedColumnName" : "deliveryMessage"
+        "cellNumber" : 13,
+        "cellValue" : "배송메세지",
+        "matchedColumnName" : "deliveryMessage",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "상품고유번호1",
-        "matchedColumnName" : "prodUniqueNumber1"
+        "cellNumber" : 14,
+        "cellValue" : "상품고유번호1",
+        "matchedColumnName" : "prodUniqueNumber1",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "상품고유번호2",
-        "matchedColumnName" : "prodUniqueNumber2"
+        "cellNumber" : 15,
+        "cellValue" : "상품고유번호2",
+        "matchedColumnName" : "prodUniqueNumber2",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "옵션고유번호1",
-        "matchedColumnName" : "optionUniqueNumber1"
+        "cellNumber" : 16,
+        "cellValue" : "옵션고유번호1",
+        "matchedColumnName" : "optionUniqueNumber1",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "옵션고유번호2",
-        "matchedColumnName" : "optionUniqueNumber2"
+        "cellNumber" : 17,
+        "cellValue" : "옵션고유번호2",
+        "matchedColumnName" : "optionUniqueNumber2",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "피아르 상품코드",
-        "matchedColumnName" : "prodCode"
+        "cellNumber" : 18,
+        "cellValue" : "피아르 상품코드",
+        "matchedColumnName" : "prodCode",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "피아르 옵션코드",
-        "matchedColumnName" : "optionCode"
+        "cellNumber" : 19,
+        "cellValue" : "피아르 옵션코드",
+        "matchedColumnName" : "optionCode",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모1",
-        "matchedColumnName" : "managementMemo1"
+        "cellNumber" : 20,
+        "cellValue" : "관리메모1",
+        "matchedColumnName" : "managementMemo1",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모2",
-        "matchedColumnName" : "managementMemo2"
+        "cellNumber" : 21,
+        "cellValue" : "관리메모2",
+        "matchedColumnName" : "managementMemo2",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모3",
-        "matchedColumnName" : "managementMemo3"
+        "cellNumber" : 22,
+        "cellValue" : "관리메모3",
+        "matchedColumnName" : "managementMemo3",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모4",
-        "matchedColumnName" : "managementMemo4"
+        "cellNumber" : 23,
+        "cellValue" : "관리메모4",
+        "matchedColumnName" : "managementMemo4",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모5",
-        "matchedColumnName" : "managementMemo5"
+        "cellNumber" : 24,
+        "cellValue" : "관리메모5",
+        "matchedColumnName" : "managementMemo5",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모6",
-        "matchedColumnName" : "managementMemo6"
+        "cellNumber" : 25,
+        "cellValue" : "관리메모6",
+        "matchedColumnName" : "managementMemo6",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모7",
-        "matchedColumnName" : "managementMemo7"
+        "cellNumber" : 26,
+        "cellValue" : "관리메모7",
+        "matchedColumnName" : "managementMemo7",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모8",
-        "matchedColumnName" : "managementMemo8"
+        "cellNumber" : 27,
+        "cellValue" : "관리메모8",
+        "matchedColumnName" : "managementMemo8",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모9",
-        "matchedColumnName" : "managementMemo9"
+        "cellNumber" : 28,
+        "cellValue" : "관리메모9",
+        "matchedColumnName" : "managementMemo9",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모10",
-        "matchedColumnName" : "managementMemo10"
+        "cellNumber" : 29,
+        "cellValue" : "관리메모10",
+        "matchedColumnName" : "managementMemo10",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모11",
-        "matchedColumnName" : "managementMemo11"
+        "cellNumber" : 30,
+        "cellValue" : "관리메모11",
+        "matchedColumnName" : "managementMemo11",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모12",
-        "matchedColumnName" : "managementMemo12"
+        "cellNumber" : 31,
+        "cellValue" : "관리메모12",
+        "matchedColumnName" : "managementMemo12",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모13",
-        "matchedColumnName" : "managementMemo13"
+        "cellNumber" : 32,
+        "cellValue" : "관리메모13",
+        "matchedColumnName" : "managementMemo13",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모14",
-        "matchedColumnName" : "managementMemo14"
+        "cellNumber" : 33,
+        "cellValue" : "관리메모14",
+        "matchedColumnName" : "managementMemo14",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모15",
-        "matchedColumnName" : "managementMemo15"
+        "cellNumber" : 34,
+        "cellValue" : "관리메모15",
+        "matchedColumnName" : "managementMemo15",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모16",
-        "matchedColumnName" : "managementMemo16"
+        "cellNumber" : 35,
+        "cellValue" : "관리메모16",
+        "matchedColumnName" : "managementMemo16",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모17",
-        "matchedColumnName" : "managementMemo17"
+        "cellNumber" : 36,
+        "cellValue" : "관리메모17",
+        "matchedColumnName" : "managementMemo17",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모18",
-        "matchedColumnName" : "managementMemo18"
+        "cellNumber" : 37,
+        "cellValue" : "관리메모18",
+        "matchedColumnName" : "managementMemo18",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모19",
-        "matchedColumnName" : "managementMemo19"
+        "cellNumber" : 38,
+        "cellValue" : "관리메모19",
+        "matchedColumnName" : "managementMemo19",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "관리메모20",
-        "matchedColumnName" : "managementMemo20"
+        "cellNumber" : 39,
+        "cellValue" : "관리메모20",
+        "matchedColumnName" : "managementMemo20",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "*카테고리명",
-        "matchedColumnName" : "categoryName"
+        "cellNumber" : 40,
+        "cellValue" : "*카테고리명",
+        "matchedColumnName" : "categoryName",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "*상품명",
-        "matchedColumnName" : "prodDefaultName"
+        "cellNumber" : 41,
+        "cellValue" : "*상품명",
+        "matchedColumnName" : "prodDefaultName",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "*상품관리명",
-        "matchedColumnName" : "prodManagementName"
+        "cellNumber" : 42,
+        "cellValue" : "*상품관리명",
+        "matchedColumnName" : "prodManagementName",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "*옵션명",
-        "matchedColumnName" : "optionDefaultName"
+        "cellNumber" : 43,
+        "cellValue" : "*옵션명",
+        "matchedColumnName" : "optionDefaultName",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "*옵션관리명",
-        "matchedColumnName" : "optionManagementName"
+        "cellNumber" : 44,
+        "cellValue" : "*옵션관리명",
+        "matchedColumnName" : "optionManagementName",
+        "mergeYn": "n"
     },
     {
-        "headerName" : "*재고수량",
-        "matchedColumnName" : "optionStockUnit"
+        "cellNumber" : 45,
+        "cellValue" : "*재고수량",
+        "matchedColumnName" : "optionStockUnit",
+        "mergeYn": "n"
     }
 ];
-
-const initialPiaarDefaultHeaderListState = null;
-
-const piaarDefaultHeaderListStateReducer = (state, action) => {
-    switch (action.type) {
-        case 'INIT_DATA':
-            return {...action.payload};
-        case 'SET_HEADER_DETAIL_DATA':
-            return {
-                ...state,
-                viewHeaderDetail: {
-                    ...state.viewHeaderDetail,
-                    details: action.payload
-                }
-            }
-        case 'CLEAR':
-            return null;
-        default: return { ...state }
-    }
-}
 
 const initialCreateViewHeaderDetailState = null;
 
@@ -465,58 +535,26 @@ const createViewHeaderDetailStateReducer = (state, action) => {
 
 const CreateExcelViewHeaderDetailComponent = (props) => {
     const [createViewHeaderDetailState, dispatchCreateViewHeaderDetailState] = useReducer(createViewHeaderDetailStateReducer, initialCreateViewHeaderDetailState);
-    const [piaarDefaultHeaderListState, dispatchPiaarDefaultHeaderListState] = useReducer(piaarDefaultHeaderListStateReducer, initialPiaarDefaultHeaderListState);
     const [checkedViewHeaderCellNumberList, setCheckedViewHeaderCellNumberList] = useState([]);
-
-    // 피아르 기본 엑셀 양식 설정
-    useEffect(() => {
-        function fetchInit() {
-            let deliveryReadyPiaarCustomizedHeaderList = [];
-
-            // 피아르 엑셀 헤더 생성
-            for(var i = 0; i < DELIVERY_READY_PIAAR_HEADER_SIZE; i++) {
-                let data = new DeliveryReadyPiaarHeader().toJSON();
-                data = {
-                    ...data.viewHeaderDetail.details,
-                    id: uuidv4(),
-                    cellNumber : i,
-                    cellValue : deliveryReadyPiaarHeaderName[i].headerName,
-                    matchedColumnName : deliveryReadyPiaarHeaderName[i].matchedColumnName,
-                    cellSize: 'default',
-                    mergeYn: 'n'
-                }
-
-                deliveryReadyPiaarCustomizedHeaderList.push({...data});
-            }
-
-            let defaultViewHeader = new DeliveryReadyPiaarHeader();
-            defaultViewHeader = {
-                ...defaultViewHeader,
-                viewHeaderDetail: {
-                    details : deliveryReadyPiaarCustomizedHeaderList
-                }
-            };
-
-            dispatchPiaarDefaultHeaderListState({
-                type: 'INIT_DATA',
-                payload: defaultViewHeader
-            });
-        }
-
-        fetchInit();
-    }, []);
 
     useEffect(() => {
         function getViewHeader() {
             // 저장된 view header가 없다면 default값을 넣자
-            if (!piaarDefaultHeaderListState) {
+            if (!piaarDefaultHeaderList) {
                 return;
             }
 
-            if (!(props.viewHeaderDetailList && props.viewHeaderDetailList.viewHeaderDetail.details.length)) {
+            if (!(props.viewHeaderDetailList?.viewHeaderDetail.details.length)) {
+                let defaultData = {
+                    id : uuidv4(),
+                    viewHeaderDetail : {
+                        details: []
+                    }
+                }
+                
                 dispatchCreateViewHeaderDetailState({
                     type: 'INIT_DATA',
-                    payload: new DeliveryReadyPiaarHeader().toJSON()
+                    payload: defaultData
                 });
             } else {
                 dispatchCreateViewHeaderDetailState({
@@ -525,7 +563,7 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
                 });
 
                 let checkedCellNumberLi = props.viewHeaderDetailList?.viewHeaderDetail?.details.map(viewHeader => {
-                    let data = piaarDefaultHeaderListState?.viewHeaderDetail?.details.filter(defaultHeader => defaultHeader.cellNumber === viewHeader.cellNumber)[0];
+                    let data = piaarDefaultHeaderList?.filter(defaultHeader => defaultHeader.cellNumber === viewHeader.cellNumber)[0];
                     return data.cellNumber;
                 });
 
@@ -534,7 +572,7 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
         }
 
         getViewHeader();
-    }, [piaarDefaultHeaderListState]);
+    }, [piaarDefaultHeaderList]);
 
     const _storeViewExcelFormDetail = async (e) => {
         e.preventDefault();
@@ -616,7 +654,6 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
         });
 
         let checkedCellNumberLi = props.viewHeaderDetailList?.viewHeaderDetail?.details.map(r => r.cellNumber);
-
         setCheckedViewHeaderCellNumberList(checkedCellNumberLi);
     }
 
@@ -629,19 +666,19 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
                 payload: new DeliveryReadyPiaarHeader().toJSON()
             });
         } else {
-            let headerCellNumberList = piaarDefaultHeaderListState.viewHeaderDetail.details.map(r => r.cellNumber);
+            let headerCellNumberList = piaarDefaultHeaderList.map(r => r.cellNumber);
             setCheckedViewHeaderCellNumberList(headerCellNumberList);
 
             dispatchCreateViewHeaderDetailState({
                 type: 'SET_HEADER_DETAIL_DATA',
-                payload: piaarDefaultHeaderListState.viewHeaderDetail.details
+                payload: piaarDefaultHeaderList
             });
         }
     }
 
     const _isCheckedAllOfViewHeaderData = () => {
-        if (piaarDefaultHeaderListState && piaarDefaultHeaderListState?.viewHeaderDetail.details.length) {
-            let headerCellNumberList = piaarDefaultHeaderListState.viewHeaderDetail.details.map(r => r.cellNumber).sort(function (a, b) {
+        if (checkedViewHeaderCellNumberList) {
+            let headerCellNumberList = piaarDefaultHeaderList.map(r => r.cellNumber).sort(function (a, b) {
                 return a - b;
             });
 
@@ -671,7 +708,7 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
             let checkedCellNumberLi = checkedViewHeaderCellNumberList.concat(cellNumber);
             setCheckedViewHeaderCellNumberList(checkedCellNumberLi);
 
-            let headerData = piaarDefaultHeaderListState?.viewHeaderDetail?.details.filter(r => r.cellNumber === cellNumber)[0];
+            let headerData = piaarDefaultHeaderList?.filter(r => r.cellNumber === cellNumber)[0];
             checkedData = createViewHeaderDetailState?.viewHeaderDetail?.details.concat(headerData);
             // cellNumber에 따른 정렬
             checkedData.sort(function (a, b) {
@@ -717,7 +754,7 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
                                 <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%', marginBottom: '0rem' }}>
                                     <thead>
                                         <tr>
-                                            {piaarDefaultHeaderListState?.viewHeaderDetail?.details?.map((data, idx) => {
+                                            {piaarDefaultHeaderList?.map((data, idx) => {
                                                 return (
                                                     <HeaderTh key={'piaar_view_excel_header_idx' + idx} className="large-cell" scope="col">
                                                         <Checkbox
@@ -734,7 +771,7 @@ const CreateExcelViewHeaderDetailComponent = (props) => {
                                     </thead>
                                     <tbody style={{ border: 'none' }}>
                                         <tr height="45">
-                                            {piaarDefaultHeaderListState?.viewHeaderDetail?.details?.map((data, idx) => {
+                                            {piaarDefaultHeaderList?.map((data, idx) => {
                                                 return (
                                                     <BodyTd key={'view_excel_data_detail_idx' + idx}
                                                         onClick={() => _checkOneOfViewHeaderDataLi(data.cellNumber)}
