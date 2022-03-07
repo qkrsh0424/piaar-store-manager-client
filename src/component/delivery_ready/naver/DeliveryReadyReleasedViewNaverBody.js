@@ -57,16 +57,24 @@ const TableContainer = styled.div`
     }
 
     & .option-code-btn {
-         &:hover {
-             opacity: 0.8;
-             cursor: pointer;
-             background-color: #9bb6d170;
-         }
-     }
+        &:hover {
+            opacity: 0.8;
+            cursor: pointer;
+            background-color: #9bb6d170;
+        }
+    }
 
-     & .option-code-cell {
+    & .release-option-code-btn {
+        &:hover {
+            opacity: 0.8;
+            cursor: pointer;
+            background-color: #ffc99770;
+        }
+    }
+
+    & .option-code-cell {
         background-color: #eaeaea;
-     }
+    }
 
     @media only screen and (max-width:768px){
         font-size: 10px;
@@ -385,6 +393,9 @@ const DeliveryReadyReleasedView = (props) => {
                                         <HeaderTh className="fixed-header option-code-cell" scope="col">
                                             <span>옵션관리코드</span>
                                         </HeaderTh>
+                                        <HeaderTh className="fixed-header option-code-cell" scope="col">
+                                            <span>출고옵션코드</span>
+                                        </HeaderTh>
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>*상품명</span>
                                         </HeaderTh>
@@ -469,8 +480,11 @@ const DeliveryReadyReleasedView = (props) => {
                                                 <BodyTd>
                                                     <span>{data.optionStockUnit}</span>
                                                 </BodyTd>
-                                                <BodyTd className="col option-code-btn" onClick={(e) => props.__handleEventControl().deliveryReadyOptionInfo().open(e, data.deliveryReadyItem)}>
-                                                    <span>{data.deliveryReadyItem.optionManagementCode}</span>
+                                                <BodyTd id="optionManagementCode" className="col option-code-btn" onClick={(e) => props.__handleEventControl().deliveryReadyOptionInfo().open(e, data.deliveryReadyItem)}>
+                                                    <span id="optionManagementCode">{data.deliveryReadyItem.optionManagementCode}</span>
+                                                </BodyTd>
+                                                <BodyTd id="releaseOptionCode" className="col release-option-code-btn" onClick={(e) => props.__handleEventControl().deliveryReadyOptionInfo().open(e, data.deliveryReadyItem)}>
+                                                    <span id="releaseOptionCode">{data.deliveryReadyItem.releaseOptionCode}</span>
                                                 </BodyTd>
                                                 <BodyTd>
                                                     <span>{data.prodManagementName}</span>

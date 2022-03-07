@@ -147,6 +147,9 @@ const DeliveryReadyViewNaverMain = (props) => {
     // 검색 데이터 (수취인명, 비고)
     const [searchBarState, dispatchSearchBarState] = useReducer(searchBarStateReducer, initialSearchBarState);
 
+    // 옵션코드 or 출고옵션코드 중 선택된 컬럼이름
+    const [selectedOptionColumn, setSelectedOptionColumn] = useState(null);
+
     useEffect(() => {
         async function fetchInit() {
             __handleDataConnect().getDeliveryReadyUnreleasedData();
@@ -342,6 +345,20 @@ const DeliveryReadyViewNaverMain = (props) => {
             },
             changeItemsOptionManagementCode: async function (optionCode) {
                 await deliveryReadyNaverDataConnect().updateAllOptionInfo(deliveryReadyItem, optionCode)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            setDeliveryReadyOptionInfoModalOpen(false);
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        alert(res?.data?.memo);
+                    })
+            },
+            changeItemReleaseOptionCode: async function (releaseOptionCode) {
+                await deliveryReadyNaverDataConnect().updateReleaseOptionInfo(deliveryReadyItem, releaseOptionCode)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setDeliveryReadyOptionInfoModalOpen(false);
@@ -807,6 +824,9 @@ const DeliveryReadyViewNaverMain = (props) => {
                     open: function (e, deliveryReadyItem) {
                         e.stopPropagation();
 
+                        // 클릭된 컬럼이 옵션코드인지 출고옵션코드인지 구분
+                        setSelectedOptionColumn(e.target.id);
+
                         // 재고반영 시 옵션관리코드 변경하지 못하도록
                         if(deliveryReadyItem.releaseCompleted) {
                             alert('재고가 반영된 데이터들은 옵션관리코드를 변경할 수 없습니다.');
@@ -835,14 +855,27 @@ const DeliveryReadyViewNaverMain = (props) => {
                         return releaseCheckedOrderList.includes(optionCode);
                     },
                     changeItemOption: async function () {
-                        await __handleDataConnect().changeItemOptionManagementCode(changedOptionManagementCode);
+                        if(selectedOptionColumn === 'optionManagementCode') {
+                            if(window.confirm('옵션코드를 변경하시면 출고옵션코드도 함께 변경됩니다.\n변경하시겠습니까?')) {
+                                await __handleDataConnect().changeItemOptionManagementCode(changedOptionManagementCode);
+                            }
+                        }else if(selectedOptionColumn === 'releaseOptionCode') {
+                            if(window.confirm('출고옵션코드를 변경하시겠습니까?')) {
+                                await __handleDataConnect().changeItemReleaseOptionCode(changedOptionManagementCode);
+                            }
+                        }
                     },
                     changeItemsOption: async function () {
-                        if(window.confirm('일괄 변경하시겠습니까?')) {
-                            setBackdropLoading(true);
-                            await __handleDataConnect().changeItemsOptionManagementCode(changedOptionManagementCode);
-                            setBackdropLoading(false);
-
+                        if(selectedOptionColumn === 'optionManagementCode') {
+                            if(window.confirm('옵션코드를 변경하시면 출고옵션코드도 함께 변경됩니다.\n일괄 변경하시겠습니까?')) {
+                                setBackdropLoading(true);
+                                await __handleDataConnect().changeItemsOptionManagementCode(changedOptionManagementCode);
+                                setBackdropLoading(false);
+                                
+                            }
+                        }else if(selectedOptionColumn === 'releaseOptionCode') {
+                            alert('출고 옵션코드는 일괄변경이 불가능합니다.');
+                            return;
                         }
                     }
                 }
