@@ -334,7 +334,7 @@ const DeliveryReadyReleasedView = (props) => {
                     <TableContainer>
                         <BoardTitle>
                             <span><b>네이버</b> 출고 데이터</span>
-                            <CheckBodyTd>[✔️ : <span class="fixed-size-text">{props.releaseCheckedOrderList.length}</span> / <span class="fixed-size-text">{props.releasedData ? props.releasedData.length : 0}</span> 개]</CheckBodyTd>
+                            <CheckBodyTd>[✔️ : <span className="fixed-size-text">{props.releaseCheckedOrderList.length}</span> / <span className="fixed-size-text">{props.releasedData ? props.releasedData.length : 0}</span> 개]</CheckBodyTd>
                             <DataOptionBox>
                                 <ChangeListBtn onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeListToUnreleaseData(e)}>일괄 출고 취소</ChangeListBtn>
                                 <ChangeListBtn className="unitReflectBtn" onClick={(e) => props.__handleEventControl().deliveryReadyReleaseMemo().open(e)}>재고반영</ChangeListBtn>
@@ -442,6 +442,36 @@ const DeliveryReadyReleasedView = (props) => {
                                         <HeaderTh className="fixed-header" scope="col">
                                             <span>주문일시</span>
                                         </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>피아르 메모1</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>피아르 메모2</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>피아르 메모3</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>피아르 메모4</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>피아르 메모5</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>피아르 메모6</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>피아르 메모7</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>피아르 메모8</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>피아르 메모9</span>
+                                        </HeaderTh>
+                                        <HeaderTh className="fixed-header" scope="col">
+                                            <span>피아르 메모10</span>
+                                        </HeaderTh>
                                         <HeaderTh className="fixed-header cancel-btn small-cell" scope="col">
                                             <span></span>
                                         </HeaderTh>
@@ -518,6 +548,36 @@ const DeliveryReadyReleasedView = (props) => {
                                                 </BodyTd>
                                                 <BodyTd>
                                                     <span>{dateToYYMMDDhhmmss(data.deliveryReadyItem.orderDateTime)}</span>
+                                                </BodyTd>
+                                                <BodyTd>
+                                                    <span>{data.deliveryReadyItem.piaarMemo1}</span>
+                                                </BodyTd>
+                                                <BodyTd>
+                                                    <span>{data.deliveryReadyItem.piaarMemo2}</span>
+                                                </BodyTd>
+                                                <BodyTd>
+                                                    <span>{data.deliveryReadyItem.piaarMemo3}</span>
+                                                </BodyTd>
+                                                <BodyTd>
+                                                    <span>{data.deliveryReadyItem.piaarMemo4}</span>
+                                                </BodyTd>
+                                                <BodyTd>
+                                                    <span>{data.deliveryReadyItem.piaarMemo5}</span>
+                                                </BodyTd>
+                                                <BodyTd>
+                                                    <span>{data.deliveryReadyItem.piaarMemo6}</span>
+                                                </BodyTd>
+                                                <BodyTd>
+                                                    <span>{data.deliveryReadyItem.piaarMemo7}</span>
+                                                </BodyTd>
+                                                <BodyTd>
+                                                    <span>{data.deliveryReadyItem.piaarMemo8}</span>
+                                                </BodyTd>
+                                                <BodyTd>
+                                                    <span>{data.deliveryReadyItem.piaarMemo9}</span>
+                                                </BodyTd>
+                                                <BodyTd>
+                                                    <span>{data.deliveryReadyItem.piaarMemo10}</span>
                                                 </BodyTd>
                                                 <BodyTd>
                                                     <CancelBtn type="button" className="col cancel-btn small-cell" onClick={(e) => props.__handleEventControl().releaseCheckedOrderList().changeToUnreleaseData(e, data.deliveryReadyItem)}>
