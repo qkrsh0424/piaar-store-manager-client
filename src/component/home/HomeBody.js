@@ -109,6 +109,7 @@ const HomeBody = () => {
                         <CustomLink to='/commute-record'>출/퇴근 기록</CustomLink>
                         <CustomLink2 href='https://analytics.piaar.co.kr'>분석기</CustomLink2>
                         <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
+                        <CustomLink to='/sales-analysis'>판매 랭킹</CustomLink>
                     </LinkBox>
                 </LinkGroup>
 

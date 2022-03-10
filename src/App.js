@@ -48,6 +48,7 @@ import CommuteRecordMain from './component/commute_record/CommuteRecordMain';
 import ExcelTranslatorMain from './component/excel_translator/ExcelTranslatorMain';
 import DeliveryReadyUploadPiaarMain from './component/delivery_ready/piaar/DeliveryReadyUploadPiaarMain';
 import DeliveryReadyViewPiaarMain from './component/delivery_ready/piaar/DeliveryReadyViewPiaarMain';
+import SalesAnalysisMain from './component/sales_analysis/SalesAnalysisMain';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -189,6 +190,9 @@ function App(props) {
                                 </Route>
                                 <Route exact path='/excel-translator'>
                                     {userRdx.userInfo ? <ExcelTranslatorMain></ExcelTranslatorMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                <Route exact path='/sales-analysis'>
+                                    {userRdx.userInfo ? <SalesAnalysisMain></SalesAnalysisMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                             </Switch>
                         )

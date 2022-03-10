@@ -823,9 +823,10 @@ const DeliveryReadyViewNaverMain = (props) => {
                 return {
                     open: function (e, deliveryReadyItem) {
                         e.stopPropagation();
+                        let columnName = e.target.id;
 
                         // 클릭된 컬럼이 옵션코드인지 출고옵션코드인지 구분
-                        setSelectedOptionColumn(e.target.id);
+                        setSelectedOptionColumn(columnName);
 
                         // 재고반영 시 옵션관리코드 변경하지 못하도록
                         if(deliveryReadyItem.releaseCompleted) {
@@ -833,7 +834,7 @@ const DeliveryReadyViewNaverMain = (props) => {
                         } else {
                             setChangedOptionManagementCode(null);
                             setDeliveryReadyOptionInfoModalOpen(true);
-                            __handleEventControl().deliveryReadyOptionInfo().getOptionManagementCode(deliveryReadyItem)
+                            __handleEventControl().deliveryReadyOptionInfo().getOptionManagementCode(columnName, deliveryReadyItem)
                         }
                     },
                     close: function () {
@@ -842,9 +843,9 @@ const DeliveryReadyViewNaverMain = (props) => {
                     changeOptionInfo: function () {
                         setDeliveryReadyOptionInfo()
                     },
-                    getOptionManagementCode: async function (deliveryReadyItem) {
+                    getOptionManagementCode: async function (columnName, deliveryReadyItem) {
                         setDeliveryReadyItem(deliveryReadyItem);
-                        setOriginOptionManagementCode(deliveryReadyItem.optionManagementCode);
+                        setOriginOptionManagementCode(columnName === 'optionManagementCode' ? deliveryReadyItem.optionManagementCode : deliveryReadyItem.releaseOptionCode);
 
                         await __handleDataConnect().getOptionManagementCode();
                     },
