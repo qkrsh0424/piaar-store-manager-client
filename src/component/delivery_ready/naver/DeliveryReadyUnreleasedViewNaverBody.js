@@ -79,6 +79,10 @@ const BoardContainer = styled.div`
     background-color: white;
     overflow: auto;
     border-radius: 5px;
+
+    & .out-of-stock {
+        background-color: #ededed;
+    }
 `;
 
 const BoardTitle = styled.div`
@@ -420,6 +424,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                                             return (
                                                 <BodyTr
                                                     key={'unreleasedItem' + unreleasedDataIdx}
+                                                    className={data.optionStockUnit === 0 ? 'out-of-stock' : ''}
                                                     onClick={() => props.__handleEventControl().unreleaseCheckedOrderList().checkOneLi(data.deliveryReadyItem.id)}
                                                     checked={props.__handleEventControl().unreleaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
                                                 >
@@ -430,7 +435,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                                                             checked={props.__handleEventControl().unreleaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
                                                         />
                                                     </BodyTd>
-                                                    <BodyTd className={data.duplicationUser != null ? `duplication-user` : ''}>
+                                                    <BodyTd className={data.duplicationUser !== null ? `duplication-user` : ''}>
                                                         <span>{data.deliveryReadyItem.receiver}</span>
                                                     </BodyTd>
                                                     <BodyTd>

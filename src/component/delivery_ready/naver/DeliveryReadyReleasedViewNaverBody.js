@@ -87,6 +87,10 @@ const BoardContainer = styled.div`
     background-color: white;
     overflow: auto;
     border-radius: 5px;
+
+    & .out-of-stock {
+        background-color: #ededed;
+    }
 `;
 
 const BoardTitle = styled.div`
@@ -484,6 +488,7 @@ const DeliveryReadyReleasedView = (props) => {
                                         return (
                                             <BodyTr
                                                 key={'releasedItem' + releasedDataIdx}
+                                                className={data.optionStockUnit === 0 ? 'out-of-stock' : ''}
                                                 onClick={() => props.__handleEventControl().releaseCheckedOrderList().checkOneLi(data.deliveryReadyItem.id)}
                                                 checked={props.__handleEventControl().releaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
                                                 reflectedUnit={data.deliveryReadyItem.releaseCompleted}

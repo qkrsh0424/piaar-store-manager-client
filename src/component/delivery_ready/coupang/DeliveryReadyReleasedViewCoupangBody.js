@@ -87,6 +87,10 @@ const BoardContainer = styled.div`
     background-color: white;
     overflow: auto;
     border-radius: 5px;
+
+    & .out-of-stock {
+        background-color: #ededed;
+    }
 `;
 
 const BoardTitle = styled.div`
@@ -482,6 +486,7 @@ const DeliveryReadyReleasedViewCoupangBody = (props) => {
                                             && (releasedDataIdx >= props.releasedDataPagenate.postsPerPage * (props.releasedDataPagenate.currentPage-1)))
                                         return (
                                             <BodyTr
+                                                className={data.optionStockUnit === 0 ? 'out-of-stock' : ''}
                                                 key={'releasedItem' + releasedDataIdx}
                                                 onClick={() => props.__handleEventControl().releaseCheckedOrderList().checkOneLi(data.deliveryReadyItem.id)}
                                                 checked={props.__handleEventControl().releaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
