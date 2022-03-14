@@ -191,9 +191,9 @@ function App(props) {
                                 <Route exact path='/excel-translator'>
                                     {userRdx.userInfo ? <ExcelTranslatorMain></ExcelTranslatorMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
-                                <Route exact path='/sales-analysis'>
+                                {/* <Route exact path='/sales-analysis'>
                                     {userRdx.userInfo ? <SalesAnalysisMain></SalesAnalysisMain> : <Redirect to={'/login'}></Redirect>}
-                                </Route>
+                                </Route> */}
                             </Switch>
                         )
                             :
