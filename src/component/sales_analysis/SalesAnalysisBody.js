@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router';
+import EventAvailableTwoToneIcon from '@mui/icons-material/EventAvailableTwoTone';
 
 const Container = styled.div`
     height:100vh;
@@ -53,16 +54,13 @@ const DataContainer = styled.div`
 const ItemContainer = styled.div`
 	overflow: hidden;
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     align-items: center;
     border-bottom: 1px solid #eee;
 
     @media only screen and (max-width:576px){
         font-size: 10px;
     }
-`;
-
-const BodyWrapper = styled.div`
 `;
 
 const DataBody = styled.div`
@@ -129,6 +127,35 @@ const TitleGroup = styled.div`
     font-size: 1.2rem;
 `;
 
+const DateSelector = styled.button`
+    margin: 4px;
+    border-radius: 4px;
+    background-color: rgb(0 64 255 / 20%);
+    border: 1px solid transparent;
+    text-align: center;
+    float: right;
+    width: 300px;
+    padding: 6px 0px;
+    height: auto;
+    transition: opacity 0.1s linear;
+    font-size: 14px;
+    font-weight: 400;
+    border: 1px solid rgb(0 64 255 / 20%);
+
+    &:hover{
+        opacity: 0.6;
+    }
+
+    @media only screen and (max-width:576px){
+        font-size: 12px;
+    }
+
+    @media only screen and (max-width:320px){
+        width: 50%;
+        font-size: 10px;
+    }
+`;
+
 const SalesAnalysisBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
@@ -140,39 +167,39 @@ const SalesAnalysisBody = (props) => {
                         <div>피아르 판매 랭킹</div>
                     </TitleGroup>
                     <DataContainer>
-                        <BodyWrapper>
-                            <DataBody>
-                                <ItemContainer className="fixed-header">
-                                    <ItemHeader>
-                                        <span>통합 순위</span>
-                                    </ItemHeader>
-                                    <ItemHeader>
+                        <DateSelector type="button" onClick={() => props.dateRangePickerControl().open()}><EventAvailableTwoToneIcon fontSize="small" color="action" /> {props.selectedDateText}</DateSelector>
+                        <DataBody>
+                            <ItemContainer className="fixed-header">
+                                <ItemHeader>
+                                    <span>통합 순위</span>
+                                </ItemHeader>
+                                {/* <ItemHeader>
                                         <span>이미지</span>
-                                    </ItemHeader>
-                                    <ItemHeader>
-                                        <span>상품명</span>
-                                    </ItemHeader>
-                                    <ItemHeader>
-                                        <span>옵션명</span>
-                                    </ItemHeader>
-                                    <ItemHeader>
-                                        <span>옵션코드</span>
-                                    </ItemHeader>
-                                    <ItemHeader>
-                                        <span>네이버 판매 개수</span>
-                                    </ItemHeader>
-                                    <ItemHeader>
-                                        <span>쿠팡 판매 개수</span>
-                                    </ItemHeader>
-                                </ItemContainer>
-                                {props.salesAnalysisItems?.map((r, index) => {
-                                    return (
-                                        <div key={'sales-analysis-item' + index}>
-                                            <ItemContainer>
-                                                <ItemData>
-                                                    <span>{index + 1} 위</span>
-                                                </ItemData>
-                                                <ItemData>
+                                    </ItemHeader> */}
+                                <ItemHeader>
+                                    <span>상품명</span>
+                                </ItemHeader>
+                                <ItemHeader>
+                                    <span>옵션명</span>
+                                </ItemHeader>
+                                <ItemHeader>
+                                    <span>옵션코드</span>
+                                </ItemHeader>
+                                <ItemHeader>
+                                    <span>네이버 판매 개수</span>
+                                </ItemHeader>
+                                <ItemHeader>
+                                    <span>쿠팡 판매 개수</span>
+                                </ItemHeader>
+                            </ItemContainer>
+                            {props.salesAnalysisItems?.map((r, index) => {
+                                return (
+                                    <div key={'sales-analysis-item' + index}>
+                                        <ItemContainer>
+                                            <ItemData>
+                                                <span>{index + 1} 위</span>
+                                            </ItemData>
+                                            {/* <ItemData>
                                                     <ImageWrapper>
                                                         <ImageBox>
                                                             {r.salesProdImageUrl ?
@@ -182,30 +209,29 @@ const SalesAnalysisBody = (props) => {
                                                             }
                                                         </ImageBox>
                                                     </ImageWrapper>
-                                                </ItemData>
-                                                <ItemData>
-                                                    <span>{r.salesProdManagementName}</span>
-                                                </ItemData>
-                                                <ItemData>
-                                                    <span>{r.salesOptionManagementName}</span>
-                                                </ItemData>
-                                                <ItemData>
-                                                    <span>{r.salesOptionCode}</span>
-                                                </ItemData>
-                                                <ItemData>
-                                                    <span>{r.naverSalesUnit}</span>
-                                                </ItemData>
-                                                <ItemData>
-                                                    <span>{r.coupangSalesUnit}</span>
-                                                </ItemData>
-                                            </ItemContainer>
-                                        </div>
-                                    )
-                                })}
-                            </DataBody>
-                        </BodyWrapper>
+                                                </ItemData> */}
+                                            <ItemData>
+                                                <span>{r.salesProdManagementName}</span>
+                                            </ItemData>
+                                            <ItemData>
+                                                <span>{r.salesOptionManagementName}</span>
+                                            </ItemData>
+                                            <ItemData>
+                                                <span>{r.salesOptionCode}</span>
+                                            </ItemData>
+                                            <ItemData>
+                                                <span>{r.naverSalesUnit}</span>
+                                            </ItemData>
+                                            <ItemData>
+                                                <span>{r.coupangSalesUnit}</span>
+                                            </ItemData>
+                                        </ItemContainer>
+                                    </div>
+                                )
+                            })}
+                        </DataBody>
                     </DataContainer>
-            </Container>
+                </Container>
             }
         </>
     )

@@ -424,7 +424,7 @@ const DeliveryReadyUnreleasedView = (props) => {
                                             return (
                                                 <BodyTr
                                                     key={'unreleasedItem' + unreleasedDataIdx}
-                                                    className={data.optionStockUnit === 0 ? 'out-of-stock' : ''}
+                                                    className={data.optionStockUnit <= 0 ? 'out-of-stock' : ''}
                                                     onClick={() => props.__handleEventControl().unreleaseCheckedOrderList().checkOneLi(data.deliveryReadyItem.id)}
                                                     checked={props.__handleEventControl().unreleaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
                                                 >

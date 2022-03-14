@@ -488,7 +488,7 @@ const DeliveryReadyReleasedView = (props) => {
                                         return (
                                             <BodyTr
                                                 key={'releasedItem' + releasedDataIdx}
-                                                className={data.optionStockUnit === 0 ? 'out-of-stock' : ''}
+                                                className={data.optionStockUnit <= 0 ? 'out-of-stock' : ''}
                                                 onClick={() => props.__handleEventControl().releaseCheckedOrderList().checkOneLi(data.deliveryReadyItem.id)}
                                                 checked={props.__handleEventControl().releaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
                                                 reflectedUnit={data.deliveryReadyItem.releaseCompleted}
