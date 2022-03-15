@@ -29,9 +29,9 @@ const DateRangePickerModal = (props) => {
                     onChange={(date) => props.dateRangePickerControl().changeReleasedData(date)}
                     moveRangeOnFirstSelection={false}
                     local="ko"
-                    ranges={[props.selectionRange]}
+                    ranges={[props.selectedDateRangeState]}
                 />
-                <DatePickerButton onClick={() => props.dateRangePickerControl().selectDateRange(props.selectionRange.startDate, props.selectionRange.endDate)}>확인</DatePickerButton>
+                <DatePickerButton onClick={() => props.dateRangePickerControl().selectDateRange(props.selectedDateRangeState?.startDate, props.selectedDateRangeState?.endDate)}>확인</DatePickerButton>
             </Dialog>
         </>
     )

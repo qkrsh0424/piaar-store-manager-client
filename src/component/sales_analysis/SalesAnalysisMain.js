@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 
 import { withRouter } from 'react-router';
 
-import { getStartDate, getEndDate, dateToYYMMDD } from '../../handler/dateHandler';
+import { getStartDate, getEndDate, dateToYYMMDD, setStartDateOfPeriod } from '../../handler/dateHandler';
 
 import { salesAnalysisDataConnect } from '../../data_connect/salesAnalysisDataConnect';
 import BackdropLoading from '../loading/BackdropLoading';
@@ -10,42 +10,53 @@ import DrawerNavbarMain from '../nav/DrawerNavbarMain';
 import SalesAnalysisBody from './SalesAnalysisBody';
 import DateRangePickerModal from './modal/DateRangePickerModal';
 
+const initialDateRangeState = null;
+
+const selectedDateRangeReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return {
+                ...state,
+                startDate: new Date(),
+                endDate: new Date(),
+                key: 'selection'
+            }
+        case 'SET_DATA':
+            return {
+                ...state,
+                startDate: action.payload.startDate,
+                endDate: action.payload.endDate
+            }
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
+
 const SalesAnalysisMain = () => {
     const [salesAnalysisItems, setSalesAnalysisItems] = useState(null);
     const [backdropLoading, setBackdropLoading] = useState(false);
-    const [selectionRange, setSelectionRange] = useState(
-        {
-            startDate: new Date(),
-            endDate: new Date(),
-            key: 'selection'
-        }
-    );
-    const [exSelectionRange, setExSelectionRange] = useState(
-        {
-            startDate: new Date(),
-            endDate: new Date(),
-        }
-    );
     const [DateRangePickerModalOpen, setDateRangePickerModalOpen] = useState(false);
-    const [selectedDateText, setSelectedDateText] = useState("날짜 선택");
+    const [selectedDateRangeState, dispatchSelectedDateRangeState] = useReducer(selectedDateRangeReducer, initialDateRangeState);
 
     useEffect(() => {
-        async function fetchInit() {
-            setBackdropLoading(true);
-            await __handleDataConnect().searchSalesAnalysis(selectionRange.startDate, selectionRange.endDate);
-            setBackdropLoading(false);
+        function setInitDate() {
+            if(selectedDateRangeState) {
+                return;
+            }
 
-            let today = new Date();
-            setSelectedDateText(dateToYYMMDD(today) + " ~ " + dateToYYMMDD(today));
+            dispatchSelectedDateRangeState({
+                type: 'INIT_DATA'
+            });
         }
-        fetchInit();
+        setInitDate();
     }, []);
 
     const __handleDataConnect = () => {
         return {
-            searchSalesAnalysis: async function (startDate, endDate) {
-                var start = startDate ? new Date(getStartDate(startDate)).toUTCString() : null;
-                var end = endDate ? new Date(getEndDate(endDate)).toUTCString() : null;
+            searchSalesAnalysis: async function () {
+                var start = new Date(getStartDate(selectedDateRangeState?.startDate)).toUTCString() ?? null;
+                var end = new Date(getEndDate(selectedDateRangeState?.endDate)).toUTCString() ?? null;
 
                 await salesAnalysisDataConnect().searchAll(start, end)
                     .then(res => {
@@ -64,28 +75,42 @@ const SalesAnalysisMain = () => {
     const dateRangePickerControl = () => {
         return {
             open: function () {
-                setSelectionRange({
-                    ...selectionRange,
-                    startDate: exSelectionRange.startDate,
-                    endDate: exSelectionRange.endDate
-                })
                 setDateRangePickerModalOpen(true);
             },
             close: function () {
                 setDateRangePickerModalOpen(false);
             },
-            selectDateRange: async function (startDate, endDate) {
-                setExSelectionRange({
-                    ...exSelectionRange,
-                    startDate: selectionRange.startDate,
-                    endDate: selectionRange.endDate
-                })
-                __handleDataConnect().searchSalesAnalysis(startDate, endDate);
-                setSelectedDateText(dateToYYMMDD(startDate) + " ~ " + dateToYYMMDD(endDate));
+            selectDateRange: async function () {
+                setBackdropLoading(true);
+                await __handleDataConnect().searchSalesAnalysis();
+                setBackdropLoading(false);
                 this.close();
             },
             changeReleasedData: function (date) {
-                setSelectionRange(date.selection);
+                let startDate = date.selection.startDate;
+                let endDate = date.selection.endDate;
+
+                dispatchSelectedDateRangeState({
+                    type: 'SET_DATA',
+                    payload: {
+                        startDate: startDate,
+                        endDate: endDate
+                    }
+                });
+            },
+            setSelectedPeriod: function (year, month, day) {
+                let startDate = new Date(setStartDateOfPeriod(new Date(), year, month, day));
+                let endDate = new Date();
+
+                dispatchSelectedDateRangeState({
+                    type: 'SET_DATA',
+                    payload: {
+                        startDate: startDate,
+                        endDate: endDate
+                    }
+                });
+
+                this.selectDateRange();
             }
         }
     }
@@ -97,14 +122,14 @@ const SalesAnalysisMain = () => {
 
             <SalesAnalysisBody
                 salesAnalysisItems={salesAnalysisItems}
-                selectedDateText={selectedDateText}
+                selectedDateRangeState={selectedDateRangeState}
 
                 dateRangePickerControl={dateRangePickerControl}
             ></SalesAnalysisBody>
 
             <DateRangePickerModal
                 open={DateRangePickerModalOpen}
-                selectionRange={selectionRange}
+                selectedDateRangeState={selectedDateRangeState}
 
                 dateRangePickerControl={dateRangePickerControl}
             ></DateRangePickerModal>

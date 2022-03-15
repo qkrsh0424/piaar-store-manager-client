@@ -52,6 +52,15 @@ function dateToYYMMDD(idate){
     return moment(date).format("YY.MM.DD");
 }
 
+// 현재 달에서 prevMonth값을 뺀 달의 데이트값을 담는 데이터
+function setStartDateOfPeriod(idate, prevYear, prevMonth, prevDay){
+    var date = new Date(idate);
+    date.setFullYear(date.getFullYear() + prevYear)
+    date.setMonth(date.getMonth() + prevMonth);
+    date.setDate(date.getDate() + prevDay);
+    return moment(date);
+}
+
 export {
     getStartDate,
     getEndDate,
@@ -59,5 +68,6 @@ export {
     dateToYYYYMMDDhhmmss,
     dateToYYYYMMDDhhmmssFile,
     dateToYYMMDDhhmmss,
-    dateToYYMMDD
+    dateToYYMMDD,
+    setStartDateOfPeriod
 }
