@@ -153,11 +153,11 @@ const DateSelector = styled.button`
     display: inline;
     padding: 3px 0px;
     height: auto;
-    transition: opacity 0.1s linear;
     font-weight: 400;
+    transition: 0.25s;
 
-    &:hover{
-        opacity: 0.6;
+    &:hover {
+        background-color: rgb(0 64 255 / 40%);
     }
 
     @media only screen and (max-width:992px){
@@ -167,7 +167,12 @@ const DateSelector = styled.button`
 
 const DateSelectControl = styled.div`
     display: grid;
-    grid-template-columns: repeat(4, 10%);
+    grid-template-columns: repeat(4, 13%);
+
+    @media only screen and (max-width:992px){
+        width: 100%;
+        grid-template-columns: repeat(4, 1fr);
+    }
 `;
 
 const DateRangeBtn = styled.button`
@@ -175,6 +180,12 @@ const DateRangeBtn = styled.button`
     background-color: rgb(0 64 255 / 25%);
     padding: 3px 10px;
     margin: 3px;
+    border-radius: 5px;
+    transition: 0.25s;
+
+    &:hover {
+        background-color: rgb(0 64 255 / 40%);
+    }
 `;
 
 const SalesAnalysisBody = (props) => {

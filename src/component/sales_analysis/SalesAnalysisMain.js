@@ -54,9 +54,9 @@ const SalesAnalysisMain = () => {
 
     const __handleDataConnect = () => {
         return {
-            searchSalesAnalysis: async function () {
-                var start = new Date(getStartDate(selectedDateRangeState?.startDate)).toUTCString() ?? null;
-                var end = new Date(getEndDate(selectedDateRangeState?.endDate)).toUTCString() ?? null;
+            searchSalesAnalysis: async function (startDate, endDate) {
+                var start = startDate ? new Date(getStartDate(startDate)).toUTCString() : null;
+                var end = endDate ? new Date(getEndDate(endDate)).toUTCString() : null;
 
                 await salesAnalysisDataConnect().searchAll(start, end)
                     .then(res => {
@@ -80,9 +80,9 @@ const SalesAnalysisMain = () => {
             close: function () {
                 setDateRangePickerModalOpen(false);
             },
-            selectDateRange: async function () {
+            selectDateRange: async function (startDate, endDate) {
                 setBackdropLoading(true);
-                await __handleDataConnect().searchSalesAnalysis();
+                await __handleDataConnect().searchSalesAnalysis(startDate, endDate);
                 setBackdropLoading(false);
                 this.close();
             },
@@ -110,7 +110,7 @@ const SalesAnalysisMain = () => {
                     }
                 });
 
-                this.selectDateRange();
+                this.selectDateRange(startDate, endDate);
             }
         }
     }
@@ -119,7 +119,7 @@ const SalesAnalysisMain = () => {
         <>
             <DrawerNavbarMain></DrawerNavbarMain>
             <BackdropLoading open={backdropLoading} />
-
+            
             <SalesAnalysisBody
                 salesAnalysisItems={salesAnalysisItems}
                 selectedDateRangeState={selectedDateRangeState}
