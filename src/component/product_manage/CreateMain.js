@@ -29,6 +29,7 @@ class Product {
         this.defaultHeight = 0;
         this.defaultQuantity = 0;
         this.defaultWeight = 0;
+        this.defaultTotalPurchasePrice = 0;
         this.stockManagement = false;
         this.productCategoryCid = null;
         this.productOptions = [
@@ -55,6 +56,7 @@ class Product {
             defaultHeight: this.defaultHeight,
             defaultQuantity: this.defaultQuantity,
             defaultWeight: this.defaultWeight,
+            defaultTotalPurchasePrice: this.defaultTotalPurchasePrice,
             stockManagement: this.stockManagement,
             productCategoryCid: this.productCategoryCid,
             productOptions: this.productOptions
@@ -69,6 +71,7 @@ class ProductOption {
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
         this.salesPrice = 0;
+        this.totalPurchasePrice = 0;
         this.stockUnit = 0;
         this.status = '준비중';
         this.memo = '';
@@ -83,6 +86,7 @@ class ProductOption {
             defaultName: this.defaultName,
             managementName: this.managementName,
             salesPrice: this.salesPrice,
+            totalPurchasePrice: this.totalPurchasePrice,
             stockUnit: this.stockUnit,
             status: this.status,
             memo: this.memo,
@@ -130,7 +134,7 @@ const CreateMain = (props) => {
                     })
                     .catch(err=>{
                         let res = err.response;
-                        
+
                         if (res.status == 403) {
                             alert('권한이 없습니다.')
                         } else if(res?.data?.memo) {

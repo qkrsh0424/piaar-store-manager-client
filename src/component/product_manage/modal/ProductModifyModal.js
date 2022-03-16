@@ -216,7 +216,7 @@ const ProductModifyModal = (props) => {
                             </CategoryGroup>
                         </BodyWrapper>
                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
-                            <GroupTitle>상품명 <i className="icon-must" aria-label="필수항목"></i></GroupTitle>
+                            <GroupTitle>상품 정보 <i className="icon-must" aria-label="필수항목"></i></GroupTitle>
                             <NameGroup>
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">
@@ -267,6 +267,14 @@ const ProductModifyModal = (props) => {
                                         </span>
                                     </div>
                                     <CommonInputEl type="text" className='form-control' name='purchaseUrl' value={props.productModifyData.purchaseUrl ?? ''} onChange={(e) => props.__handleEventControl().product().modifyDataOnChangeInputValue(e)} />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
+                                            기본매입총합계 <span className="small">(매입가격 + 매입운송비용 + 관부가세 + 기타비용)</span>
+                                        </span>
+                                    </div>
+                                    <CommonInputEl type="number" className='form-control' name='defaultTotalPurchasePrice' value={props.productModifyData.defaultTotalPurchasePrice ?? ''} onChange={(e) => props.__handleEventControl().product().modifyDataOnChangeInputValue(e)} />
                                 </div>
                             </NameGroup>
                         </BodyWrapper>

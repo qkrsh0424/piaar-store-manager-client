@@ -198,7 +198,8 @@ const ProductManageBody = (props) => {
                                     <HeaderTh className='fixedHeader' scope="col" width='200'>옵션관리명</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='100'>재고수량</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='100'>현재상태</HeaderTh>
-                                    <HeaderTh className='fixedHeader' scope="col" width='200'>가격</HeaderTh>
+                                    <HeaderTh className='fixedHeader' scope="col" width='150'>가격</HeaderTh>
+                                    <HeaderTh className='fixedHeader' scope="col" width='150'>매입총합계</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='300'>비고</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='400'>옵션컨트롤</HeaderTh>
                                 </tr>
@@ -258,7 +259,7 @@ const ProductManageBody = (props) => {
                                                         <AddBtn type='button' onClick={() => props.__handleEventControl().productOption().addModalOpen(product.product.id)}>옵션추가</AddBtn>
                                                     </div>
                                                 </BodyTh>
-                                                <BodyTh colSpan={10} style={{background:'#7a7bda20', color:'#888'}}>
+                                                <BodyTh colSpan={11} style={{background:'#7a7bda20', color:'#888'}}>
                                                     <div>{product.product.managementName}-{product.product.code}-{product.product.manufacturingCode}</div>
                                                 </BodyTh>
                                             </RowSpanTr>
@@ -281,6 +282,7 @@ const ProductManageBody = (props) => {
                                                         <BodyTd style={{ fontWeight: '800' }}>{option.stockUnit}</BodyTd>
                                                         <BodyTd style={{ fontWeight: '800' }}>{option.status}</BodyTd>
                                                         <BodyTd style={{ fontWeight: '800' }}>{option.salesPrice}</BodyTd>
+                                                        <BodyTd style={{ fontWeight: '800' }}>{option.totalPurchasePrice}</BodyTd>
                                                         <BodyTd style={{ fontWeight: '800' }}>{option.memo}</BodyTd>
                                                         <BodyTd style={{ fontWeight: '800' }}>
                                                             <ModifyBtn

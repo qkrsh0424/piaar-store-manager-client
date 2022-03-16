@@ -781,12 +781,21 @@ const ProductDetailMain = (props) => {
 
                         // detail 데이터를 기본값으로 설정.
                         let detail = new ProductDetail(selectedOption.id);
-                        detail.productOptionCid = params.optionCid;
-                        detail.detailWidth = selectedProduct.defaultWidth;
-                        detail.detailLength = selectedProduct.defaultLength;
-                        detail.detailHeight = selectedProduct.defaultHeight;
-                        detail.detailQuantity = selectedProduct.defaultQuantity;
-                        detail.detailWeight = selectedProduct.defaultWeight;
+                        detail = {
+                            ...detail,
+                            productOptionCid: params.optionCid,
+                            detailWidth: selectedProduct.defaultWidth,
+                            detailLength: selectedProduct.defaultLength,
+                            detailHeight: selectedProduct.defaultHeight,
+                            detailQuantity: selectedProduct.defaultQuantity,
+                            detailWeight: selectedProduct.defaultWeight
+                        }
+                        // detail.productOptionCid = params.optionCid;
+                        // detail.detailWidth = selectedProduct.defaultWidth;
+                        // detail.detailLength = selectedProduct.defaultLength;
+                        // detail.detailHeight = selectedProduct.defaultHeight;
+                        // detail.detailQuantity = selectedProduct.defaultQuantity;
+                        // detail.detailWeight = selectedProduct.defaultWeight;
 
                         setProductDetailAddData(detail);
                         setProductDetailAddModalOpen(true);

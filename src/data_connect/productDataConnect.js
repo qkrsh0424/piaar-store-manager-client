@@ -27,6 +27,7 @@ const productDataConnect = () => {
                     defaultHeight: productListData[i].defaultHeight,
                     defaultQuantity: productListData[i].defaultQuantity,
                     defaultWeight: productListData[i].defaultWeight,
+                    defaultTotalPurchasePrice: productListData[i].defaultTotalPurchasePrice,
                     stockManagement: productListData[i].stockManagement,
                     productCategoryCid: productListData[i].productCategoryCid
                 }

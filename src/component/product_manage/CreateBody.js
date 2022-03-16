@@ -424,7 +424,7 @@ const CreateBody = (props) => {
                 <CreateBtn type='submit' disabled={props.isSubmit}>
                     <img className='button-img' src='/images/icon/add.png'></img>
                 </CreateBtn>
-                    {props.productListData && props.productListData.map(r => {
+                    {props.productListData?.map(r => {
                         return (
                             <ItemContainer key={r.id}>
                                 <ItemWrapper>
@@ -445,7 +445,7 @@ const CreateBody = (props) => {
                                             </CategoryGroup>
                                         </BodyWrapper>
                                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
-                                            <GroupTitle>상품명 <i className="icon-must" aria-label="필수항목"></i></GroupTitle>
+                                            <GroupTitle>상품 정보<i className="icon-must" aria-label="필수항목"></i></GroupTitle>
                                             <NameGroup>
                                                 <div className="input-group mb-3">
                                                     <div className="input-group-prepend">
@@ -483,6 +483,15 @@ const CreateBody = (props) => {
                                                         </span>
                                                     </div>
                                                     <CommonInputEl type="text" className='form-control' name='purchaseUrl' value={r.purchaseUrl} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)}/>
+                                                
+                                                </div>
+                                                <div className="input-group mb-3">
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text">
+                                                            기본매입총합계 <span className="small">(매입가격 + 매입운송비용 + 관부가세 + 기타비용)</span>
+                                                        </span>
+                                                    </div>
+                                                    <CommonInputEl type="number" className='form-control' name='defaultTotalPurchasePrice' value={r.defaultTotalPurchasePrice} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)}/>
                                                 
                                                 </div>
                                             </NameGroup>
@@ -664,6 +673,7 @@ const CreateBody = (props) => {
                                                                                 <OptionTableTh scope="col" width='200'>관리코드 <i className="icon-must" aria-label="필수항목"></i></OptionTableTh>
                                                                                 <OptionTableTh scope="col" width='200'>노스노스 고유코드</OptionTableTh>
                                                                                 <OptionTableTh scope="col" width='200'>판매가</OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>매입총합계</OptionTableTh>
                                                                                 <OptionTableTh scope="col" width='200'>상태</OptionTableTh>
                                                                                 <OptionTableTh scope="col" width='200'>비고</OptionTableTh>
                                                                                 <OptionTableTh scope="col" width='200'>색상</OptionTableTh>
@@ -691,6 +701,9 @@ const CreateBody = (props) => {
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
                                                                                     <OptionInput type='number' value={optionData.salesPrice} name='salesPrice' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
+                                                                                </OptionTableTd>
+                                                                                <OptionTableTd>
+                                                                                    <OptionInput type='number' value={optionData.totalPurchasePrice} name='totalPurchasePrice' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
                                                                                     <OptionInput type='text' value={optionData.status} disabled></OptionInput>

@@ -41,6 +41,7 @@ class ProductOption {
         this.nosUniqueCode = nosUniqueCode;
         this.salesPrice = 0;
         this.stockUnit = 0;
+        this.totalPurchasePrice = 0;
         this.status = '준비중';
         this.memo = '';
         this.imageUrl = '';
@@ -61,6 +62,7 @@ class ProductOption {
             managementName: this.managementName,
             nosUniqueCode: this.nosUniqueCode,
             salesPrice: this.salesPrice,
+            totalPurchasePrice: this.totalPurchasePrice,
             stockUnit: this.stockUnit,
             status: this.status,
             memo: this.memo,
@@ -603,6 +605,7 @@ const ProductManageMain = (props) => {
                         let product = productListData.filter(r => r.product.id === productId)[0];
                         let option = new ProductOption(productId);
                         option.productCid = product.product.cid;
+                        option.totalPurchasePrice = product.product.defaultTotalPurchasePrice;
 
                         setProductOptionAddData(option);
                         setProductOptionAddModalOpen(true);
