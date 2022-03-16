@@ -88,7 +88,7 @@ const BoardContainer = styled.div`
     border-radius: 5px;
 
     & .out-of-stock {
-        background-color: #ededed;
+        background-color: #edededa1;
     }
 `;
 
@@ -437,7 +437,7 @@ const DeliveryReadyUnreleasedViewCoupangBody = (props) => {
                                                             checked={props.__handleEventControl().unreleaseCheckedOrderList().isChecked(data.deliveryReadyItem.id)}
                                                         />
                                                     </BodyTd>
-                                                    <BodyTd className={data.duplicationUser != null ? `duplication-user` : ''}>
+                                                    <BodyTd className={data.duplicationUser ? 'duplication-user' : ''}>
                                                         <span>{data.deliveryReadyItem.receiver}</span>
                                                     </BodyTd>
                                                     <BodyTd>

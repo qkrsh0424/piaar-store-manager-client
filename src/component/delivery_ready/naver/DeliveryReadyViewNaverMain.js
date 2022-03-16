@@ -216,7 +216,7 @@ const DeliveryReadyViewNaverMain = (props) => {
                             
                             for(var i = 0; i < sortedData.length-1; i++){
                                 if((sortedData[i].deliveryReadyItem.receiver === sortedData[i+1].deliveryReadyItem.receiver)
-                                    && (sortedData[i].deliveryReadyItem.receiverContact1 === sortedData[i+1].deliveryReadyItem.receiverContact1)) {
+                                && (sortedData[i].deliveryReadyItem.receiverContact1 === sortedData[i+1].deliveryReadyItem.receiverContact1)) {
                                         sortedData[i] = {
                                             ...sortedData[i],
                                             duplicationUser : true
