@@ -2,10 +2,14 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router';
+import { useState } from 'react';
 
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import SalesAnalysisCommonModal from './modal/SalesAnalysisCommonModal';
+import ProductDetailSalesAnalysisComponent from './modal/ProductDetailSalesAnalysisComponent';
 
 const Container = styled.div`
+    padding-bottom: 6%;
 `;
 
 const ItemContainer = styled.div`
@@ -14,12 +18,14 @@ const ItemContainer = styled.div`
     grid-template-columns: repeat(6, 10% 25% 20% 20% 10% 15%);
     align-items: center;
     border-bottom: 1px solid #eee;
+    transition: 0.15s;
 
     @media only screen and (max-width:576px){
         font-size: 10px;
     }
 
     &:hover {
+        cursor: pointer;
         background-color: #dce3f6;
     }
 `;
@@ -64,25 +70,6 @@ const DataBody = styled.div`
     }
 `;
 
-const ImageBox = styled.div`
-   position: relative;
-   padding-bottom: 100%; // 1:1
-`;
-
-const ImageWrapper = styled.div`
-    width: 100%;
-    position: absolute;
-`;
-
-const ImageEl = styled.img`
-   position: absolute;
-   object-fit: cover;
-   width: 100%;
-   height: 100%;
-   transition: .5s;
-   border:1px solid #f1f1f1;
-`;
-
 const ItemHeader = styled.div`
     vertical-align: middle !important;
     text-align: center;
@@ -120,59 +107,85 @@ const RankIcon = styled.span`
 const SalesAnalysisBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
+    const [productDetailSalesAnalysisModalOpen, setProductDetailSalesAnalysisModalOpen] = useState(false);
+    const [selectedProductId, setSelectedProductId] = useState(null);
+
+    const onSearchProductDetailSalesAnalysisModalOpen = (productId) => {
+        setSelectedProductId(productId);
+        setProductDetailSalesAnalysisModalOpen(true);
+    }
+
+    const onSearchProductDetailSalesAnalysisModalClose = () => {
+        setProductDetailSalesAnalysisModalOpen(false);
+    }
+
     return (
         <>
             {userRdx.isLoading === false &&
                 <Container>
-                        <DataBody>
-                            <HeaderContainer>
-                                <ItemHeader>
-                                    <span>통합 순위</span>
-                                </ItemHeader>
-                                <ItemHeader>
-                                    <span>상품명</span>
-                                </ItemHeader>
-                                <ItemHeader>
-                                    <span>옵션명</span>
-                                </ItemHeader>
-                                <ItemHeader>
-                                    <span>옵션코드</span>
-                                </ItemHeader>
-                                <ItemHeader>
-                                    <span>판매 수량</span>
-                                </ItemHeader>
-                                <ItemHeader>
-                                    <span>판매 수익</span>
-                                </ItemHeader>
-                            </HeaderContainer>
-                            {props.salesAnalysisViewItems?.map((r, index) => {
-                                return (
-                                    <div key={'sales-analysis-item' + index}>
-                                        <ItemContainer>
-                                            <ItemData>
-                                                <span>{index + 1} 위</span>
-                                                {index < 3 && <RankIcon rank={index+1}><MilitaryTechIcon /></RankIcon>}
-                                            </ItemData>
-                                            <ItemData>
-                                                <span>{r.salesProdManagementName}</span>
-                                            </ItemData>
-                                            <ItemData>
-                                                <span>{r.salesOptionManagementName}</span>
-                                            </ItemData>
-                                            <ItemData>
-                                                <span>{r.salesOptionCode}</span>
-                                            </ItemData>
-                                             <ItemData>
-                                                <span>{r[props.selectedStoreInfoState?.storeSalesUnit]}</span>
-                                            </ItemData>
-                                            <ItemData>
-                                                <span>{(r.salesOptionPrice * r[props.selectedStoreInfoState?.storeSalesUnit]).toLocaleString()}원</span>
-                                            </ItemData>
-                                        </ItemContainer>
-                                    </div>
-                                )
-                            })}
-                        </DataBody>
+                    <DataBody>
+                        <HeaderContainer>
+                            <ItemHeader>
+                                <span>통합 순위</span>
+                            </ItemHeader>
+                            <ItemHeader>
+                                <span>상품명</span>
+                            </ItemHeader>
+                            <ItemHeader>
+                                <span>옵션명</span>
+                            </ItemHeader>
+                            <ItemHeader>
+                                <span>옵션코드</span>
+                            </ItemHeader>
+                            <ItemHeader>
+                                <span>판매 수량</span>
+                            </ItemHeader>
+                            <ItemHeader>
+                                <span>판매 수익</span>
+                            </ItemHeader>
+                        </HeaderContainer>
+                        {props.salesAnalysisViewItems?.map((r, index) => {
+                            return (
+                                <ItemContainer key={'sales-analysis-item' + index} onClick={() => onSearchProductDetailSalesAnalysisModalOpen(r.salesProductId)}>
+                                    <ItemData>
+                                        <span>{index + 1} 위</span>
+                                        {index < 3 && <RankIcon rank={index + 1}><MilitaryTechIcon /></RankIcon>}
+                                    </ItemData>
+                                    <ItemData>
+                                        <span>{r.salesProdManagementName}</span>
+                                    </ItemData>
+                                    <ItemData>
+                                        <span>{r.salesOptionManagementName}</span>
+                                    </ItemData>
+                                    <ItemData>
+                                        <span>{r.salesOptionCode}</span>
+                                    </ItemData>
+                                    <ItemData>
+                                        <span>{r[props.selectedStoreInfoState?.storeSalesUnit]}</span>
+                                    </ItemData>
+                                    <ItemData>
+                                        <span>{(r.salesOptionPrice * r[props.selectedStoreInfoState?.storeSalesUnit]).toLocaleString()}원</span>
+                                    </ItemData>
+                                </ItemContainer>
+                            )
+                        })}
+                    </DataBody>
+
+
+                    <SalesAnalysisCommonModal
+                        open={productDetailSalesAnalysisModalOpen}
+                        onClose={() => onSearchProductDetailSalesAnalysisModalClose()}
+                        maxWidth={'md'}
+                        fullWidth={true}
+                    >
+                        <ProductDetailSalesAnalysisComponent
+                            salesAnalysisViewItems={props.salesAnalysisViewItems}
+                            selectedProductId={selectedProductId}
+                            selectedStoreInfoState={props.selectedStoreInfoState}
+
+                            close={() => onSearchProductDetailSalesAnalysisModalClose()}
+                        ></ProductDetailSalesAnalysisComponent>
+                    </SalesAnalysisCommonModal>
                 </Container>
             }
         </>

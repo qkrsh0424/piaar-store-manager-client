@@ -278,8 +278,6 @@ const ProductDetailBody = (props) => {
                             })}
                         </CategoryGroup>
                     </CategoryContainer>
-
-
                     <DataContainer>
                         <BodyWrapper>
                             <ControlBox>

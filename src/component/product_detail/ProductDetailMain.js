@@ -790,12 +790,6 @@ const ProductDetailMain = (props) => {
                             detailQuantity: selectedProduct.defaultQuantity,
                             detailWeight: selectedProduct.defaultWeight
                         }
-                        // detail.productOptionCid = params.optionCid;
-                        // detail.detailWidth = selectedProduct.defaultWidth;
-                        // detail.detailLength = selectedProduct.defaultLength;
-                        // detail.detailHeight = selectedProduct.defaultHeight;
-                        // detail.detailQuantity = selectedProduct.defaultQuantity;
-                        // detail.detailWeight = selectedProduct.defaultWeight;
 
                         setProductDetailAddData(detail);
                         setProductDetailAddModalOpen(true);

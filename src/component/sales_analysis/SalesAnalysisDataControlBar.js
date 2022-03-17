@@ -114,6 +114,7 @@ const StoreSelect = styled.select`
 const SelectGroupTitle = styled.div`
     padding: 3px;
     font-weight: 600;
+    font-size: 1.1rem;
 `;
 
 const SelectGroup = styled.div`
