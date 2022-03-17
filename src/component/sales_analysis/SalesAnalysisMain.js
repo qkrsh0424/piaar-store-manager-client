@@ -2,7 +2,7 @@ import { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 
-import { getStartDate, getEndDate, dateToYYMMDD, setStartDateOfPeriod } from '../../handler/dateHandler';
+import { getStartDate, getEndDate, setStartDateOfPeriod } from '../../handler/dateHandler';
 
 import { salesAnalysisDataConnect } from '../../data_connect/salesAnalysisDataConnect';
 import { productCategoryDataConnect } from '../../data_connect/productCategoryDataConnect';
@@ -62,7 +62,7 @@ const selectedStoreInfoReducer = (state, action) => {
                 ...state,
                 storeName: action.payload.storeName ?? state.storeName,
                 storeSalesUnit: action.payload.storeSalesUnit ?? state.storeSalesUnit,
-                categoryName: action.payload.categoryname ?? state.categoryName,
+                categoryName: action.payload.categoryName ?? state.categoryName,
                 criterion: action.payload.criterion ?? state.criterion
             }
         case 'CELAR':
@@ -118,6 +118,17 @@ const SalesAnalysisMain = () => {
         setInitSelectValue();
     }, []);
 
+    useEffect(() => {
+        function changeSortingInfo() {
+            if(!(selectedStoreInfoState && salesAnalysisItems)) {
+                return;
+            }
+
+            storeDropdownControl().changeSalesAnalysisItem();
+        }
+        changeSortingInfo();
+    }, [selectedStoreInfoState, salesAnalysisItems]);
+
     const __handleDataConnect = () => {
         return {
             searchSalesAnalysis: async function (startDate, endDate) {
@@ -127,11 +138,7 @@ const SalesAnalysisMain = () => {
                 await salesAnalysisDataConnect().searchAll(start, end)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
-                            let result = res.data.data;
-                            let sortedResult = result?.sort((a, b) => b[selectedStoreInfoState?.storeSalesUnit] - a[selectedStoreInfoState?.storeSalesUnit]);
-
-                            setSalesAnalysisItems(sortedResult);
-                            setSalesAnalysisViewItems(sortedResult);
+                            setSalesAnalysisItems(res.data.data);
                         }
                     })
                     .catch(err => {
@@ -210,8 +217,6 @@ const SalesAnalysisMain = () => {
                         storeSalesUnit: salesUnitName
                     }
                 });
-
-                salesAnalysisItems?.sort((a, b) => b[salesUnitName] - a[salesUnitName]);
             },
             onChangeCategoryValue: function (e) {
                 let target = e.target.value;
@@ -222,14 +227,6 @@ const SalesAnalysisMain = () => {
                         categoryName: target
                     }
                 });
-                
-                let selectedData = [];
-                if(target === 'total') {
-                    selectedData = salesAnalysisItems
-                }else {
-                    selectedData = salesAnalysisItems?.filter(r => r.categoryName === target);
-                }
-                setSalesAnalysisViewItems(selectedData);
             },
             onChangeCriterionValue: function (e) {
                 let target = e.target.value;
@@ -240,15 +237,26 @@ const SalesAnalysisMain = () => {
                         criterion: target
                     }
                 });
-
-                let selectedData = [];
-                if(target === 'unit') {
-                    selectedData = salesAnalysisItems?.sort((a, b) => b[selectedStoreInfoState.storeSalesUnit] - a[selectedStoreInfoState.storeSalesUnit]);
-                }else if(target === 'revenue') {
-                    selectedData = salesAnalysisItems?.sort((a, b) => (b[selectedStoreInfoState.storeSalesUnit] * b.salesOptionPrice) - (a[selectedStoreInfoState.storeSalesUnit] * a.salesOptionPrice));
-                }
-                setSalesAnalysisViewItems(selectedData);
             },
+            changeSalesAnalysisItem: function () {
+                let selectedData = salesAnalysisItems;
+
+                // 카테고리 정렬
+                if(selectedStoreInfoState.categoryName !== 'total') {
+                    selectedData = selectedData?.filter(r => r.categoryName === selectedStoreInfoState?.categoryName);
+                }else {
+                    selectedData = selectedData?.filter(r => r);
+                }
+
+                // 랭킹 기준 - 스토어별 정렬
+                if(selectedStoreInfoState?.criterion === 'unit') {
+                    selectedData?.sort((a, b) => b[selectedStoreInfoState.storeSalesUnit] - a[selectedStoreInfoState.storeSalesUnit]);
+                } else if(selectedStoreInfoState?.criterion === 'revenue') {
+                    selectedData?.sort((a, b) => (b[selectedStoreInfoState.storeSalesUnit] * b.salesOptionPrice) - (a[selectedStoreInfoState.storeSalesUnit] * a.salesOptionPrice));
+                }
+
+                setSalesAnalysisViewItems(selectedData);
+            }
         }
     }
 

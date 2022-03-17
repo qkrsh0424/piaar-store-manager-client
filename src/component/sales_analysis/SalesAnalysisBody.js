@@ -1,8 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router';
 
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 
 const Container = styled.div`
 `;
@@ -98,6 +99,24 @@ const ItemData = styled.div`
     justify-content: center;
 `;
 
+const RankIcon = styled.span`
+    ${(props) => (props.rank === 1) &&
+        css`
+            color : #ffcb3f;
+        ` 
+        ||
+        (props.rank === 2) &&
+        css`
+            color : #aaaaaa;
+        `
+        ||
+        (props.rank === 3) &&
+        css`
+            color : #a5732a;
+        `
+    }
+`;
+
 const SalesAnalysisBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
@@ -132,6 +151,7 @@ const SalesAnalysisBody = (props) => {
                                         <ItemContainer>
                                             <ItemData>
                                                 <span>{index + 1} 위</span>
+                                                {index < 3 && <RankIcon rank={index+1}><MilitaryTechIcon /></RankIcon>}
                                             </ItemData>
                                             <ItemData>
                                                 <span>{r.salesProdManagementName}</span>
