@@ -175,10 +175,10 @@ const SalesAnalysisDataControlBar = (props) => {
                         </DateSelector>
                     </DataControlBox>
                     <DateSelectControl>
-                        <DateRangeBtn type="button" onClick={() => props.dateRangePickerControl().setSelectedPeriod(0, -1, 0)}>1개월</DateRangeBtn>
-                        <DateRangeBtn type="button" onClick={() => props.dateRangePickerControl().setSelectedPeriod(0, -3, 0)}>3개월</DateRangeBtn>
-                        <DateRangeBtn type="button" onClick={() => props.dateRangePickerControl().setSelectedPeriod(0, -6, 0)}>6개월</DateRangeBtn>
-                        <DateRangeBtn type="button" onClick={() => props.dateRangePickerControl().setSelectedPeriod(-1, 0, 0)}>1년</DateRangeBtn>
+                        <DateRangeBtn type="button" onClick={() => props.dateRangePickerControl().setSelectedPeriod(0, 0, -3)}>3일</DateRangeBtn>
+                        <DateRangeBtn type="button" onClick={() => props.dateRangePickerControl().setSelectedPeriod(0, 0, -7)}>1주</DateRangeBtn>
+                        <DateRangeBtn type="button" onClick={() => props.dateRangePickerControl().setSelectedPeriod(0, 0, -14)}>2주</DateRangeBtn>
+                        <DateRangeBtn type="button" onClick={() => props.dateRangePickerControl().setSelectedPeriod(0, -1, 0)}>한달</DateRangeBtn>
                     </DateSelectControl>
                 </div>
             </DataContainer>

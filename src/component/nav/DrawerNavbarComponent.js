@@ -34,6 +34,10 @@ const CustomLink = styled(Link)`
 const UserInfoText = styled.div`
     font-weight: 600;
     font-size: 16px;
+
+    @media only screen and (max-width:576px){
+        display: none;
+    }
 `;
 
 export default function DrawerNavbarComponent(props) {
