@@ -26,7 +26,7 @@ const ItemContainer = styled.div`
 
     &:hover {
         cursor: pointer;
-        background-color: #dce3f6;
+        background-color: rgb(185 190 211 / 40%)
     }
 `;
 
@@ -141,7 +141,7 @@ const SalesAnalysisBody = (props) => {
                                 <span>판매 수량</span>
                             </ItemHeader>
                             <ItemHeader>
-                                <span>판매 수익</span>
+                                <span>매출</span>
                             </ItemHeader>
                         </HeaderContainer>
                         {props.salesAnalysisViewItems?.map((r, index) => {

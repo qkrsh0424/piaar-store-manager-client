@@ -12,7 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import ClearIcon from '@mui/icons-material/Clear';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import CreateTranslatorHeaderTitleComponent from "./modal/CreateTranslatorHeaderTitleComponent";
 import ExcelTranslatorCommonModal from "./modal/ExcelTranslatorCommonModal";
@@ -482,7 +482,7 @@ const ExcelTranslatorControlBar = (props) => {
                                 <TitleControlBox>
                                     <TitleControlBtn type="button" onClick={() => onCreateTranslatorHeaderTitleModalOpen()}><AddIcon /></TitleControlBtn>
                                     <TitleControlBtn type="button" onClick={() => onModifyTranslatorHeaderTitleModalOpen()}><EditIcon /></TitleControlBtn>
-                                    <TitleControlBtn type="button" onClick={(e) => excelTranslatorHeaderControl().delete(e)}><ClearIcon /></TitleControlBtn>
+                                    <TitleControlBtn type="button" onClick={(e) => excelTranslatorHeaderControl().delete(e)}><DeleteForeverIcon /></TitleControlBtn>
                                 </TitleControlBox>
                             </TitleSelector>
                             <FromGroup>

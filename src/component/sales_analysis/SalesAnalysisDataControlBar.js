@@ -43,7 +43,8 @@ const TitleGroup = styled.div`
 
 const DateSelector = styled.button`
     border-radius: 4px;
-    background-color: rgb(0 64 255 / 20%);
+    /* background-color: rgb(0 64 255 / 20%); */
+    background-color: rgb(185 190 211);
     border: 1px solid transparent;
     text-align: center;
     width: 300px;
@@ -54,7 +55,7 @@ const DateSelector = styled.button`
     transition: 0.25s;
 
     &:hover {
-        background-color: rgb(0 64 255 / 40%);
+        background-color: rgb(185 190 211 / 40%);
     }
 
     @media only screen and (max-width:992px){
@@ -80,22 +81,23 @@ const DataControlBox = styled.div`
 
 const DateRangeBtn = styled.button`
     border: 1px solid transparent;
-    background-color: rgb(0 64 255 / 20%);
+    /* background-color: rgb(0 64 255 / 20%); */
+    background-color: rgb(185 190 211);
     padding: 3px 10px;
     margin: 2px;
     border-radius: 4px;
     transition: 0.25s;
 
     &:hover {
-        background-color: rgb(0 64 255 / 40%);
+        background-color: rgb(185 190 211 / 40%);
     }
 
     &:active {
-        background-color: rgb(0 64 255 / 60%);
+        background-color: rgb(185 190 211 / 60%);
     }
 `;
 
-const StoreSelect = styled.select`
+const SelectMenu = styled.select`
     padding: 5px 0px;
     border: 1px solid #e1e1e1;
     text-align: center;
@@ -144,27 +146,27 @@ const SalesAnalysisDataControlBar = (props) => {
                         <SelectGroupTitle>랭킹 기준 설정</SelectGroupTitle>
                         <SelectGroup>
                             {/* 스토어 select */}
-                            <StoreSelect onChange={(e) => props.storeDropdownControl().onChangeStoreValue(e)}>
+                            <SelectMenu onChange={(e) => props.storeDropdownControl().onChangeStoreValue(e)}>
                                 <option value='total'>스토어 전체</option>
                                 <option value='naver'>네이버</option>
                                 <option value='coupang'>쿠팡</option>
-                            </StoreSelect>
+                            </SelectMenu>
 
                             {/* 카테고리 select */}
-                            <StoreSelect onChange={(e) => props.storeDropdownControl().onChangeCategoryValue(e)}>
+                            <SelectMenu onChange={(e) => props.storeDropdownControl().onChangeCategoryValue(e)}>
                                 <option value='total'>카테고리 전체</option>
                                 {props.productCategoryList?.map((r, idx) => {
                                     return (
                                         <option key={'analysis-product-cateogry-idx' + idx} name='categoryName' value={r.name}>{r.name}</option>
                                     )
                                 })}
-                            </StoreSelect>
+                            </SelectMenu>
 
                             {/* 랭킹 기준 select */}
-                            <StoreSelect onChange={(e) => props.storeDropdownControl().onChangeCriterionValue(e)}>
+                            <SelectMenu onChange={(e) => props.storeDropdownControl().onChangeCriterionValue(e)}>
                                 <option value='unit'>수량</option>
                                 <option value='revenue'>수익</option>
-                            </StoreSelect>
+                            </SelectMenu>
                         </SelectGroup>
                     </SelectWrappper>
                     <DataControlBox>

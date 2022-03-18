@@ -75,7 +75,7 @@ const SalesAnalysisMain = () => {
     const [salesAnalysisItems, setSalesAnalysisItems] = useState(null);
     const [backdropLoading, setBackdropLoading] = useState(false);
     const [DateRangePickerModalOpen, setDateRangePickerModalOpen] = useState(false);
-    const [productCategoryList, setProdductCategoryList] = useState(null);
+    const [productCategoryList, setProductCategoryList] = useState(null);
     const [selectedDateRangeState, dispatchSelectedDateRangeState] = useReducer(selectedDateRangeReducer, initialDateRangeState);
     const [selectedStoreInfoState, dispatchSelectedStoreInfoState] = useReducer(selectedStoreInfoReducer, initialSelectedStoreInfo);
     const [salesAnalysisViewItems, setSalesAnalysisViewItems] = useState(null);
@@ -150,7 +150,7 @@ const SalesAnalysisMain = () => {
                 await productCategoryDataConnect().searchList()
                     .then(res => {
                         if(res.status === 200 && res.data && res.data.message === 'success') {
-                            setProdductCategoryList(res.data.data);
+                            setProductCategoryList(res.data.data);
                         }
                     })
                     .catch(err => {

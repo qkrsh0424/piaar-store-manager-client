@@ -195,6 +195,8 @@ const ProductManageMain = (props) => {
     const [selectedOptionReceiveStatusData, setSelectedOptionReceiveStatusData] = useState([]);
     const [selectedOptionReleaseStatusData, setSelectedOptionReleaseStatusData] = useState([]);
 
+    const [productListViewData, setProductListViewData] = useState(null);
+
     useEffect(() => {
         async function fetchInit() {
             __handleDataConnect().searchProductListFj();
@@ -213,6 +215,7 @@ const ProductManageMain = (props) => {
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setProductListData(res.data.data);
+                            setProductListViewData(res.data.data);
                         }
                     })
                     .catch(err => {
@@ -1202,6 +1205,20 @@ const ProductManageMain = (props) => {
                         setBackdropLoading(false);
                     }
                 }
+            },
+            category: function () {
+                return {
+                    onChangeCategoryValue: function (e) {
+                        let categoryId = e.target.value;
+
+                        let viewData = productListData;
+                        if(categoryId !== 'total') {
+                            viewData = productListData.filter(r => r.category.id === categoryId);
+                        }
+
+                        setProductListViewData(viewData);
+                    }
+                }
             }
         }
     }
@@ -1215,8 +1232,10 @@ const ProductManageMain = (props) => {
             ></ProductManageNav>
             {productListData && optionListData &&
                 <ProductManageBody
-                    productListData={productListData}
+                    // productListData={productListData}
                     checkedOptionList={checkedOptionList}
+                    categoryListData={categoryListData}
+                    productListData={productListViewData}
 
                     __handleEventControl={__handleEventControl}
                 ></ProductManageBody>

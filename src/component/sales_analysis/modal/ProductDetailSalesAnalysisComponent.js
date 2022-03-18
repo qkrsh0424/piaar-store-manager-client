@@ -8,8 +8,12 @@ const Container = styled.div`
 `;
 
 const TitleContainer = styled.div`
-    padding:10px;
+    /* padding:10px; */
     border-bottom: 1px solid #000;
+    padding: 7px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 const BodyContainer = styled.div`
@@ -23,13 +27,25 @@ const BodyWrapper = styled.div`
     background: white;
     border-radius: 5px;
     box-shadow: 2px 2px 15px #dde0e6;
+
+    @media only screen and (max-width:576px){
+        min-height: 20vh;
+        min-height: 20vh;
+    }
 `;
 
 const GroupTitle = styled.div`
     font-size: 1.3rem;
     font-weight: 700;
     padding: 7px 20px;
-    display: inline-block;
+
+    @media only screen and (max-width:576px){
+        font-size: 16px;
+    }
+
+    @media only screen and (max-width:320px){
+        font-size: 14px;
+    }
 `;
 
 const ProdRankDetailInfo = styled.div`
@@ -40,19 +56,17 @@ const ProdRankDetailInfo = styled.div`
     border-bottom: 1px solid #eee;
     transition: 0.15s;
 
-    @media only screen and (max-width:576px){
-        font-size: 10px;
-    }
-
     &:hover {
         background-color: #d3d3eb44;
+    }
+
+    @media only screen and (max-width:576px){
+        font-size: 10px;
     }
 `;
 
 const CloseBtn = styled.div`
-    float: right;
     color: #5c5c7e;
-    padding: 7px;
 
     &:hover {
         color: #7a7aff77;
@@ -102,6 +116,14 @@ const ImageBox = styled.div`
 
 const ImageWrapper = styled.div`
     width: 20%;
+
+    @media only screen and (max-width: 768px) {
+        width: 35%;
+    }
+
+    @media only screen and (max-width:320px){
+        width: 45%;
+    }
 `;
 
 const ImageEl = styled.img`
@@ -113,8 +135,23 @@ const ImageEl = styled.img`
    border:1px solid #f1f1f1;
 `;
 
+const TotalInfoBox = styled.div`
+    display: flex;
+    float: right;
+    font-weight: 600;
+
+    @media only screen and (max-width:576px){
+        font-size: 10px;
+    }
+`;
+
+const TotalInfoText = styled.div`
+    padding: 10px;
+`;
+
 const ProductDetailSalesAnalysisComponent = (props) => {
     const [prodDetailRankList, setProdDetailRankList] = useState(null);
+    const [prodTotalSales, setProdTotalSales] = useState(null);
 
     useEffect(() => {
         function getProdDetailRank () {
@@ -136,6 +173,37 @@ const ProductDetailSalesAnalysisComponent = (props) => {
 
         getProdDetailRank();
     }, []);
+
+    // Get product total sales unit & revenue.
+    useEffect(() => {
+        function getTotalSales() {
+            if(!prodDetailRankList) {
+                return;
+            }
+
+            let prodTotalSales = prodDetailRankList.map(r => {
+                return {
+                    ...r,
+                    unit : r[props.selectedStoreInfoState?.storeSalesUnit],
+                    revenue : r[props.selectedStoreInfoState?.storeSalesUnit] * r.salesOptionPrice
+                }
+            });
+            
+            let totalUnit = 0;
+            let totalRevenue = 0;
+            prodTotalSales.forEach(r => {
+                totalUnit += r.unit;
+                totalRevenue += r.revenue;
+            });
+
+            setProdTotalSales({
+                totalUnit : totalUnit,
+                totalRevenue : totalRevenue.toLocaleString()
+            });
+        }
+
+        getTotalSales();
+    }, [prodDetailRankList]);
 
     return (
         <>
@@ -180,7 +248,7 @@ const ProductDetailSalesAnalysisComponent = (props) => {
                                 <span>판매 수량</span>
                             </ItemHeader>
                             <ItemHeader>
-                                <span>판매 수익</span>
+                                <span>매출</span>
                             </ItemHeader>
                         </HeaderContainer>
 
@@ -209,6 +277,10 @@ const ProductDetailSalesAnalysisComponent = (props) => {
                             )
                         })}
                     </BodyWrapper>
+                    <TotalInfoBox>
+                        <TotalInfoText>수량 합계: {prodTotalSales?.totalUnit}</TotalInfoText>
+                        <TotalInfoText>매출 합계: {prodTotalSales?.totalRevenue}원</TotalInfoText>
+                    </TotalInfoBox>
                 </BodyContainer>
             </Container>
         </>
