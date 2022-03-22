@@ -731,7 +731,7 @@ const CreateBody = (props) => {
                                                         <CommonFunctionalBtn type='button' className='btn btn-sm btn-outline-secondary' onClick={() => props.__handleEventControl().productOptionListData().add(r.id)}>
                                                             <AddIcon />
                                                         </CommonFunctionalBtn>
-                                                    </OptionAddBtn>    
+                                                    </OptionAddBtn>
                                             </KeyGroup>
                                         </BodyWrapper>
                                     </BodyContainer>

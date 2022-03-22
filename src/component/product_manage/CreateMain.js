@@ -129,7 +129,6 @@ const CreateMain = (props) => {
                     .then(res=>{
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             props.history.replace(props.location.state.prevUrl);
-                            setIsSubmit(false);
                         }
                     })
                     .catch(err=>{
@@ -230,6 +229,7 @@ const CreateMain = (props) => {
                         if(this.checkFormData() && !isSubmit){
                             setIsSubmit(true);
                             await __handleDataConnect().postCreateProductList();
+                            setIsSubmit(false);
                         }
                     },
                     checkFormData: function () {
