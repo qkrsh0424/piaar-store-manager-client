@@ -25,7 +25,8 @@ const Container = styled.div`
 `;
 
 const initialDateRangeState = null;
-const initialSelectedStoreInfo = null;
+const initialSelectedStoreInfoState = null;
+const initialSearchInputValueState = null;
 
 const selectedDateRangeReducer = (state, action) => {
     switch(action.type) {
@@ -65,7 +66,26 @@ const selectedStoreInfoReducer = (state, action) => {
                 categoryName: action.payload.categoryName ?? state.categoryName,
                 criterion: action.payload.criterion ?? state.criterion
             }
-        case 'CELAR':
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
+
+const searchInputValueReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return { ...state,
+                searchColumn: 'total',
+                searchValue: ''
+            }
+        case 'SET_DATA':
+            return{
+                ...state,
+                searchColumn: action.payload.searchColumn ?? state.searchColumn,
+                [action.payload.name] : action.payload.value
+            }
+        case 'CLEAR':
             return null;
         default: return { ...state }
     }
@@ -77,7 +97,8 @@ const SalesAnalysisMain = () => {
     const [DateRangePickerModalOpen, setDateRangePickerModalOpen] = useState(false);
     const [productCategoryList, setProductCategoryList] = useState(null);
     const [selectedDateRangeState, dispatchSelectedDateRangeState] = useReducer(selectedDateRangeReducer, initialDateRangeState);
-    const [selectedStoreInfoState, dispatchSelectedStoreInfoState] = useReducer(selectedStoreInfoReducer, initialSelectedStoreInfo);
+    const [selectedStoreInfoState, dispatchSelectedStoreInfoState] = useReducer(selectedStoreInfoReducer, initialSelectedStoreInfoState);
+    const [searchInputValueState, dispatchSearchInputValueState] = useReducer(searchInputValueReducer, initialSearchInputValueState);
     const [salesAnalysisViewItems, setSalesAnalysisViewItems] = useState(null);
 
     useEffect(() => {
@@ -114,20 +135,24 @@ const SalesAnalysisMain = () => {
             dispatchSelectedStoreInfoState({
                 type: 'INIT_DATA'
             });
+
+            dispatchSearchInputValueState({
+                type: 'INIT_DATA'
+            });
         }
         setInitSelectValue();
     }, []);
 
     useEffect(() => {
         function changeSortingInfo() {
-            if(!(selectedStoreInfoState && salesAnalysisItems)) {
+            if(!(selectedStoreInfoState && salesAnalysisItems && searchInputValueState)) {
                 return;
             }
 
             storeDropdownControl().changeSalesAnalysisItem();
         }
         changeSortingInfo();
-    }, [selectedStoreInfoState, salesAnalysisItems]);
+    }, [selectedStoreInfoState, salesAnalysisItems, searchInputValueState]);
 
     const __handleDataConnect = () => {
         return {
@@ -238,6 +263,31 @@ const SalesAnalysisMain = () => {
                     }
                 });
             },
+            onChangeSearchColumn: function (e) {
+                let target = e.target.value;
+
+                dispatchSearchInputValueState({
+                    type: 'SET_DATA',
+                    payload: {
+                        searchColumn: target
+                    }
+                })
+            },
+            onChangeSearchInputValue: function (e) {
+                dispatchSearchInputValueState({
+                    type: 'SET_DATA',
+                    payload: {
+                        name: e.target.name,
+                        value: e.target.value
+                    }
+                });
+            },
+            onActionClearRoute: function () {
+                dispatchSearchInputValueState({
+                    type: 'INIT_DATA'
+                });
+                this.changeSalesAnalysisItem();
+            },
             changeSalesAnalysisItem: function () {
                 let selectedData = salesAnalysisItems;
 
@@ -255,6 +305,12 @@ const SalesAnalysisMain = () => {
                     selectedData?.sort((a, b) => (b[selectedStoreInfoState.storeSalesUnit] * b.salesOptionPrice) - (a[selectedStoreInfoState.storeSalesUnit] * a.salesOptionPrice));
                 }
 
+                if(searchInputValueState?.searchColumn !== 'total') {
+                    if(searchInputValueState?.searchValue) {
+                        selectedData = selectedData.filter(r => r[searchInputValueState?.searchColumn].includes(searchInputValueState?.searchValue));
+                    }
+                }
+
                 setSalesAnalysisViewItems(selectedData);
             }
         }
@@ -269,6 +325,7 @@ const SalesAnalysisMain = () => {
                 <SalesAnalysisDataControlBar
                     selectedDateRangeState={selectedDateRangeState}
                     productCategoryList={productCategoryList}
+                    searchInputValueState={searchInputValueState}
 
                     storeDropdownControl={storeDropdownControl}
                     dateRangePickerControl={dateRangePickerControl}

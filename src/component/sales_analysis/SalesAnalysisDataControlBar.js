@@ -12,16 +12,8 @@ const Container = styled.div`
 const DataContainer = styled.div`
 	overflow: hidden;
 
-    & .image-cell {
-        width: 50px;
-    }
-
-    & .small-cell {
-        width: 30px;
-    }
-
-    & .large-cell {
-        width: 50px;
+    .select-box {
+        padding-bottom: 3%;
     }
 
     @media only screen and (max-width:768px){
@@ -36,14 +28,13 @@ const DataContainer = styled.div`
 `;
 
 const TitleGroup = styled.div`
-    padding-top: 2%;
+    padding: 1% 023;
     font-weight: 700;
     font-size: 1.2rem;
 `;
 
 const DateSelector = styled.button`
     border-radius: 4px;
-    /* background-color: rgb(0 64 255 / 20%); */
     background-color: rgb(185 190 211);
     border: 1px solid transparent;
     text-align: center;
@@ -117,21 +108,45 @@ const SelectGroupTitle = styled.div`
     padding: 3px;
     font-weight: 600;
     font-size: 1.1rem;
+    
 `;
 
 const SelectGroup = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     column-gap: 20px;
-    padding: 3px;
+    padding: 5px 3px;
+
+    .search-input{
+        border: 1px solid #eee;
+        height: 100%;
+        width: 100%;
+
+        &:focus{
+            outline: none;
+        }
+    }
 
     @media only screen and (max-width: 992px) {
         grid-template-columns: 1fr;
     }
 `;
 
+const SearchInput = styled.input`
+    &:disabled {
+        background-color: #e7e7e7;
+    }
+`;
+
 const SelectWrappper = styled.div`
-    padding: 30px 0;
+    padding: 10px 0;
+
+    .search-value-reset {
+        background-color: white;
+        padding: 2px 8px;
+        border: 2px solid rgb(185 190 211);
+        border-radius: 2px;
+    }
 `;
 
 const SalesAnalysisDataControlBar = (props) => {
@@ -142,33 +157,56 @@ const SalesAnalysisDataControlBar = (props) => {
             </TitleGroup>
             <DataContainer>
                 <div>
-                    <SelectWrappper>
-                        <SelectGroupTitle>랭킹 기준 설정</SelectGroupTitle>
-                        <SelectGroup>
-                            {/* 스토어 select */}
-                            <SelectMenu onChange={(e) => props.storeDropdownControl().onChangeStoreValue(e)}>
-                                <option value='total'>스토어 전체</option>
-                                <option value='naver'>네이버</option>
-                                <option value='coupang'>쿠팡</option>
-                            </SelectMenu>
+                    <div className="select-box">
+                        <SelectWrappper>
+                            <SelectGroupTitle>랭킹 기준 설정</SelectGroupTitle>
+                            <SelectGroup>
+                                {/* 스토어 select */}
+                                <SelectMenu onChange={(e) => props.storeDropdownControl().onChangeStoreValue(e)}>
+                                    <option value='total'>스토어 전체</option>
+                                    <option value='naver'>네이버</option>
+                                    <option value='coupang'>쿠팡</option>
+                                </SelectMenu>
 
-                            {/* 카테고리 select */}
-                            <SelectMenu onChange={(e) => props.storeDropdownControl().onChangeCategoryValue(e)}>
-                                <option value='total'>카테고리 전체</option>
-                                {props.productCategoryList?.map((r, idx) => {
-                                    return (
-                                        <option key={'analysis-product-cateogry-idx' + idx} name='categoryName' value={r.name}>{r.name}</option>
-                                    )
-                                })}
-                            </SelectMenu>
+                                {/* 카테고리 select */}
+                                <SelectMenu onChange={(e) => props.storeDropdownControl().onChangeCategoryValue(e)}>
+                                    <option value='total'>카테고리 전체</option>
+                                    {props.productCategoryList?.map((r, idx) => {
+                                        return (
+                                            <option key={'analysis-product-cateogry-idx' + idx} name='categoryName' value={r.name}>{r.name}</option>
+                                        )
+                                    })}
+                                </SelectMenu>
 
-                            {/* 랭킹 기준 select */}
-                            <SelectMenu onChange={(e) => props.storeDropdownControl().onChangeCriterionValue(e)}>
-                                <option value='unit'>수량</option>
-                                <option value='revenue'>수익</option>
-                            </SelectMenu>
-                        </SelectGroup>
-                    </SelectWrappper>
+                                {/* 랭킹 기준 select */}
+                                <SelectMenu onChange={(e) => props.storeDropdownControl().onChangeCriterionValue(e)}>
+                                    <option value='unit'>수량</option>
+                                    <option value='revenue'>매출</option>
+                                </SelectMenu>
+                            </SelectGroup>
+                        </SelectWrappper>
+                        <SelectWrappper>
+                            <SelectGroup>
+                                <SelectMenu onChange={(e) => props.storeDropdownControl().onChangeSearchColumn(e)} value={props.searchInputValueState?.searchColumn}>
+                                    <option value="total">검색</option>
+                                    <option value="salesProdManagementName">상품명</option>
+                                    <option value="salesOptionManagementName">옵션명</option>
+                                    <option value="salesOptionCode">옵션코드</option>
+                                </SelectMenu>
+                                <div>
+                                    <SearchInput className="search-input"
+                                        onChange={(e) => props.storeDropdownControl().onChangeSearchInputValue(e)}
+                                        name="searchValue"
+                                        value={props.searchInputValueState?.searchValue || ''}
+                                        disabled={props.searchInputValueState?.searchColumn === 'total' ? true : false}
+                                        required />
+                                </div>
+                                <div>
+                                    <button type="button" className="search-value-reset" onClick={() => props.storeDropdownControl().onActionClearRoute()}>초기화</button>
+                                </div>
+                            </SelectGroup>
+                        </SelectWrappper>
+                    </div>
                     <DataControlBox>
                         <DateSelector type="button" onClick={() => props.dateRangePickerControl().open()}><EventAvailableTwoToneIcon fontSize="small" color="action" />
                             {dateToYYMMDD(props.selectedDateRangeState?.startDate)} ~ {dateToYYMMDD(props.selectedDateRangeState?.endDate)}
