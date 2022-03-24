@@ -48,6 +48,7 @@ import CommuteRecordMain from './component/commute_record/CommuteRecordMain';
 import ExcelTranslatorMain from './component/excel_translator/ExcelTranslatorMain';
 import DeliveryReadyUploadPiaarMain from './component/delivery_ready/piaar/DeliveryReadyUploadPiaarMain';
 import DeliveryReadyViewPiaarMain from './component/delivery_ready/piaar/DeliveryReadyViewPiaarMain';
+import SalesAnalysisPage from './pages/sales_analysis/SalesAnalysisPage';
 import SalesAnalysisMain from './component/sales_analysis/SalesAnalysisMain';
 
 
@@ -191,8 +192,12 @@ function App(props) {
                                 <Route exact path='/excel-translator'>
                                     {userRdx.userInfo ? <ExcelTranslatorMain></ExcelTranslatorMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
+                                {/* refactor page 1 */}
                                 <Route exact path='/sales-analysis'>
                                     {userRdx.userInfo ? <SalesAnalysisMain></SalesAnalysisMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                <Route exact path='/refactor/sales-analysis'>
+                                    {userRdx.userInfo ? <SalesAnalysisPage></SalesAnalysisPage> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                             </Switch>
                         )
