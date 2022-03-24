@@ -11,6 +11,7 @@ import CommonModalComponent from '../../module/modal/CommonModalComponent';
 const OperatorComponent = (props) => {
     const [selectedDateRangeState, dispatchSelectedDateRangeState] = useReducer(selectedDateRangeReducer, initialDateRangeState);
     const [selectedStoreInfoState, dispatchSelectedStoreInfoState] = useReducer(selectedStoreInfoReducer, initialSelectedStoreInfoState);
+    const [searchInputValueState, dispatchSearchInputValueState] = useReducer(searchInputValueReducer, initialSearchInputValueState);
     const [dateRangePickerModalOpen, setDateRangePickerModalOpen] = useState(false);
 
     useEffect(() => {
@@ -32,18 +33,24 @@ const OperatorComponent = (props) => {
             type: 'INIT_DATA'
         });
 
-        // dispatchSearchInputValueState({
-        //     type: 'INIT_DATA'
-        // });
+        dispatchSearchInputValueState({
+            type: 'INIT_DATA'
+        });
     }, []);
 
     useEffect(() => {
-        if (!(selectedStoreInfoState)) {
+        if (!selectedStoreInfoState) {
             return;
         }
         props._onAction_changeSearchInfo(selectedStoreInfoState);
-
     }, [selectedStoreInfoState]);
+
+    useEffect(() => {
+        if (!searchInputValueState) {
+            return;
+        }
+        props._onAction_changeSearchInput(searchInputValueState);
+    }, [searchInputValueState]);
 
     const onActionSelectDataRange = (year, month, day) => {
         let startDate = new Date(setStartDateOfPeriod(new Date(), year, month, day));
@@ -124,6 +131,33 @@ const OperatorComponent = (props) => {
         });
     }
 
+    const onChangeSearchColumn = (e) => {
+        let target = e.target.value;
+
+        dispatchSearchInputValueState({
+            type: 'SET_DATA',
+            payload: {
+                searchColumn: target
+            }
+        })
+    }
+
+    const onChangeSearchInputValue = (e) => {
+        dispatchSearchInputValueState({
+            type: 'SET_DATA',
+            payload: {
+                name: e.target.name,
+                value: e.target.value
+            }
+        });
+    }
+
+    const onActionClearRoute = () => {
+        dispatchSearchInputValueState({
+            type: 'INIT_DATA'
+        });
+    }
+
     return (
         <Container>
             <ConditionSelectorFieldView
@@ -135,6 +169,11 @@ const OperatorComponent = (props) => {
             ></ConditionSelectorFieldView>
 
             <ConditionSearchFieldView
+                searchInputValueState={searchInputValueState}
+
+                onChangeSearchColumn={(e) => onChangeSearchColumn(e)}
+                onChangeSearchInputValue={(e) => onChangeSearchInputValue(e)}
+                onActionClearRoute={() => onActionClearRoute()}
             ></ConditionSearchFieldView>
 
             <DateSelectorFieldView
@@ -168,6 +207,7 @@ export default OperatorComponent;
 
 const initialDateRangeState = null;
 const initialSelectedStoreInfoState = null;
+const initialSearchInputValueState = null;
 
 const selectedDateRangeReducer = (state, action) => {
     switch(action.type) {
@@ -206,6 +246,25 @@ const selectedStoreInfoReducer = (state, action) => {
                 storeSalesUnit: action.payload.storeSalesUnit ?? state.storeSalesUnit,
                 categoryName: action.payload.categoryName ?? state.categoryName,
                 criterion: action.payload.criterion ?? state.criterion
+            }
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
+
+const searchInputValueReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return { ...state,
+                searchColumn: 'total',
+                searchValue: ''
+            }
+        case 'SET_DATA':
+            return{
+                ...state,
+                searchColumn: action.payload.searchColumn ?? state.searchColumn,
+                [action.payload.name] : action.payload.value
             }
         case 'CLEAR':
             return null;

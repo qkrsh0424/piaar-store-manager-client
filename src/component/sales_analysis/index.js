@@ -25,6 +25,7 @@ const SalesAnalysisComponent = (props) => {
     const [productCategoryList, setProductCategoryList] = useState(null);
     const [salesAnalysisViewItems, setSalesAnalysisViewItems] = useState(null);
     const [searchInfoState, dispatchSearchInfoState] = useReducer(searchInfoReducer, initialSearchInfoState);
+    const [searchInputState, dispatchSearchInputState] = useReducer(searchInputReducer, initialSearchInputState);
 
     useEffect(async () => {
         await __reqSearchSalesAnalysis(new Date(), new Date());
@@ -33,14 +34,19 @@ const SalesAnalysisComponent = (props) => {
         dispatchSearchInfoState({
             type: 'INIT_DATA'
         })
+
+        dispatchSearchInputState({
+            type: 'INIT_DATA'
+        })
     }, []);
 
     useEffect(() => {
-        if(!searchInfoState && salesAnalysisItems) {
+        if(!(searchInfoState && salesAnalysisItems && searchInputState)) {
             return;
         }
+
         _onAction_searchSalesAnalysisViewItem();
-    }, [searchInfoState, salesAnalysisItems]);
+    }, [searchInfoState, salesAnalysisItems, searchInputState]);
 
     const __reqSearchSalesAnalysis = async (startDate, endDate) => {
         var start = startDate ? new Date(getStartDate(startDate)).toUTCString() : null;
@@ -92,11 +98,11 @@ const SalesAnalysisComponent = (props) => {
             selectedData?.sort((a, b) => (b[searchInfoState.storeSalesUnit] * b.salesOptionPrice) - (a[searchInfoState.storeSalesUnit] * a.salesOptionPrice));
         }
 
-        // if (searchInfoState?.searchColumn !== 'total') {
-        //     if (searchInfoState?.searchValue) {
-        //         selectedData = selectedData.filter(r => r[searchInfoState?.searchColumn].includes(searchInfoState?.searchValue));
-        //     }
-        // }
+        if (searchInputState?.searchColumn !== 'total') {
+            if (searchInputState?.searchValue) {
+                selectedData = selectedData.filter(r => r[searchInputState?.searchColumn].includes(searchInputState?.searchValue));
+            }
+        }
 
         setSalesAnalysisViewItems(selectedData);
     }
@@ -105,15 +111,24 @@ const SalesAnalysisComponent = (props) => {
         dispatchSearchInfoState({
             type: 'SET_DATA',
             payload: searchInfo
-        })
+        });
+    }
+
+    const _onAction_changeSearchInput = (searchInput) => {
+        dispatchSearchInputState({
+            type: 'SET_DATA',
+            payload: searchInput
+        });
     }
 
     return (
         <Container>
             <OperatorComponent
                 productCategoryList={productCategoryList}
+                searchInputState={searchInputState}
 
                 _onAction_changeSearchInfo={(searchInfo) => _onAction_changeSearchInfo(searchInfo)}
+                _onAction_changeSearchInput={(searchInput) => _onAction_changeSearchInput(searchInput)}
                 _onSubmit_searchSalesAnalysis={(start, end) => _onSubmit_searchSalesAnalysis(start, end)}
             >   
             </OperatorComponent>
@@ -136,6 +151,7 @@ const SalesAnalysisComponent = (props) => {
 export default SalesAnalysisComponent;
 
 const initialSearchInfoState = null;
+const initialSearchInputState = null;
 
 const searchInfoReducer = (state, action) => {
     switch(action.type) {
@@ -147,13 +163,22 @@ const searchInfoReducer = (state, action) => {
                 criterion: 'unit'
             }
         case 'SET_DATA':
-            return{
-                ...state,
-                storeName: action.payload.storeName ?? state.storeName,
-                storeSalesUnit: action.payload.storeSalesUnit ?? state.storeSalesUnit,
-                categoryName: action.payload.categoryName ?? state.categoryName,
-                criterion: action.payload.criterion ?? state.criterion
+            return action.payload;
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
+
+const searchInputReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return { ...state,
+                searchColumn: 'total',
+                searchValue: ''
             }
+        case 'SET_DATA':
+            return action.payload;
         case 'CLEAR':
             return null;
         default: return { ...state }
