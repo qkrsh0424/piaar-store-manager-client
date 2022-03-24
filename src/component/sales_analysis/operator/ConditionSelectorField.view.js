@@ -13,6 +13,11 @@ export default function ConditionSelectorFieldView(props) {
 
                 <select className="selector-style" onChange={(e) => props.onChangeCategorySelector(e)}>
                     <option value='total'>카테고리 전체</option>
+                    {props.productCategoryList?.map((r, idx) => {
+                        return (
+                            <option key={'analysis-product-cateogry-idx' + idx} name='categoryName' value={r.name}>{r.name}</option>
+                        )
+                    })}
                 </select>
 
                 <select className="selector-style" onChange={(e) => props.onChangeCriterionSelector(e)}>

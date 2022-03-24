@@ -127,6 +127,8 @@ const OperatorComponent = (props) => {
     return (
         <Container>
             <ConditionSelectorFieldView
+                productCategoryList={props.productCategoryList}
+
                 onChangeStoreSelector={(e) => onChangeStoreSelector(e)}
                 onChangeCategorySelector={(e) => onChangeCategorySelector(e)}
                 onChangeCriterionSelector={(e) => onChangeCriterionSelector(e)}
