@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const Container = styled.div`
 `;
@@ -6,25 +6,31 @@ const Container = styled.div`
 const TableFieldWrapper = styled.div`
     padding: 10px 0;
 
-    .table-box{
+    .table-box {
         height: 80vh;
         overflow: auto;
         border: 1px solid #e0e0e0;
+        background-color: white;
 
         @media only screen and (max-width:768px){
             font-size: 10px;
         }
     }
 
-    table{
+    table {
         position:relative;
         text-align: center;
-        width: fit-content;
+        /* width: fit-cont; */
         table-layout: fixed;
         border: none;
+        word-break: break-all;
     }
 
-    table thead tr th{
+    table thead {
+        width: 100%;
+    }
+
+    table thead tr th {
         vertical-align: middle !important;
         text-align: center;
         background: #e7e7e7;
@@ -35,6 +41,17 @@ const TableFieldWrapper = styled.div`
         /* width: 200px; */
     }
 
+    table tbody tr {
+        background: white;
+        border: 1px solid #eee;
+        transition: 0.2s;
+
+        :hover{
+            background-color: rgb(146 153 181 / 20%);
+            cursor: pointer;
+        }
+    }
+
     .table-box .fixed-header {
         position: sticky;
         top: 0;
@@ -42,8 +59,27 @@ const TableFieldWrapper = styled.div`
     }
 `;
 
+const RankIcon = styled.span`
+    ${(props) => (props.rank === 1) &&
+        css`
+            color : #ffcb3f;
+        `
+        ||
+        (props.rank === 2) &&
+        css`
+            color : #aaaaaa;
+        `
+        ||
+        (props.rank === 3) &&
+        css`
+            color : #a5732a;
+        `
+    }
+`;
+
 
 export {
     Container,
-    TableFieldWrapper
+    TableFieldWrapper,
+    RankIcon
 }

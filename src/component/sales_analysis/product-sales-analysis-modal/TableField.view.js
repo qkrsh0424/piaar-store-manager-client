@@ -1,11 +1,10 @@
-import { TableFieldWrapper, RankIcon } from "./RankTable.styled"
-import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import { TableFieldWrapper } from "./ProductSalesAnalysisModal.styled";
 
 export default function TableFieldView(props) {
     return (
         <TableFieldWrapper>
             <div className='table-box'>
-                <table cellSpacing="0" width="100%">
+                <table cellSpacing="0">
                     <colgroup>
                         <col width="10%" />
                         <col width="20%" />
@@ -16,23 +15,20 @@ export default function TableFieldView(props) {
                     </colgroup>
                     <thead>
                         <tr>
-                            <th className="fixed-header">통합순위</th>
-                            <th className="fixed-header">상품명</th>
-                            <th className="fixed-header">옵션명</th>
-                            <th className="fixed-header">옵션코드</th>
-                            <th className="fixed-header">판매 수량</th>
-                            <th className="fixed-header">매출</th>
+                            <th className="fixed-header" width='100'>통합순위</th>
+                            <th className="fixed-header" width='100'>상품명</th>
+                            <th className="fixed-header" width='100'>옵션명</th>
+                            <th className="fixed-header" width='100'>옵션코드</th>
+                            <th className="fixed-header" width='100'>판매 수량</th>
+                            <th className="fixed-header" width='100'>매출</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {props.salesAnalysisViewItems?.map((r, index) => {
+                        {props.prodDetailRankList?.map((r, index) => {
                             return (
-                                <tr key={'sales-analysis-item' + index}
-                                    onClick={() => props.onActionOpenProductSalesAnalysisModal(r.salesProductId)}
-                                >
+                                <tr key={'prod-sales-analysis' + index}>
                                     <td>
-                                        <span>{index + 1} 위</span>
-                                        {index < 3 && <RankIcon rank={index + 1}><MilitaryTechIcon /></RankIcon>}
+                                        <span>{r.optionRank} 위</span>
                                     </td>
                                     <td>
                                         <span>{r.salesProdManagementName}</span>
@@ -54,6 +50,10 @@ export default function TableFieldView(props) {
                         })}
                     </tbody>
                 </table>
+            </div>
+            <div className="total-info">
+                <div>수량 합계: {props.prodTotalSales?.totalUnit} 개</div>
+                <div>매출 합계: {props.prodTotalSales?.totalRevenue} 원</div>
             </div>
         </TableFieldWrapper>
     )

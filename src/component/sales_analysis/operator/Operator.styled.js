@@ -43,7 +43,7 @@ const ConditionSelectorFieldWrapper = styled.div`
 `;
 
 const ConditionSearchFieldWrapper = styled.div`
-    padding: 10px 0;
+    padding: 10px 0 50px 0;
     
     .grid-box{
         display: grid;
@@ -92,6 +92,7 @@ const ConditionSearchFieldWrapper = styled.div`
 `;
 
 const DateSelectorFieldWrapper = styled.div`
+
     .inline-box {
         display: inline;
     }
@@ -104,7 +105,6 @@ const DateSelectorFieldWrapper = styled.div`
         width: 300px;
         display: inline;
         padding: 3px;
-        height: auto;
         font-weight: 400;
         transition: 0.25s;
 
@@ -114,7 +114,6 @@ const DateSelectorFieldWrapper = styled.div`
 
         @media only screen and (max-width:992px){
             width: 100%;
-            margin: 3px;
         }
     }
 
@@ -135,8 +134,15 @@ const DateSelectorFieldWrapper = styled.div`
         }
     }
 
-    .float-right {
+    .date-control-box {
+        display: grid;
+        grid-template-columns: repeat(4, 80px);
         float: right;
+
+        @media only screen and (max-width:992px){
+            width: 100%;
+            grid-template-columns: repeat(4, 1fr);
+        }
     }
 `;
 

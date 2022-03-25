@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import OperatorComponent from "./operator/Operator.component";
 import RankBoardComponent from "./rank-table/RankTable.component";
 import { salesAnalysisDataConnect } from '../../data_connect/salesAnalysisDataConnect';
-import { getStartDate, getEndDate, setStartDateOfPeriod } from '../../handler/dateHandler';
+import { getStartDate, getEndDate } from '../../handler/dateHandler';
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
 import { productCategoryDataConnect } from '../../data_connect/productCategoryDataConnect';
 
 const Container = styled.div`
-    padding: 0 5%;
+    padding: 0 5% 5% 5%;
     overflow: auto;
     background: linear-gradient(to bottom right, #f0fcff, #dce3f6);
 `;
