@@ -73,7 +73,7 @@ const TableFieldWrapper = styled.div`
         border: 1px solid #e0e0e0;
         background-color: white;
 
-        @media only screen and (max-width:768px){
+        @media only screen and (max-width:576px){
             font-size: 10px;
         }
     }
@@ -100,6 +100,10 @@ const TableFieldWrapper = styled.div`
         font-weight: 700;
         border-bottom: 1px solid #e0e0e0;
         /* width: 200px; */
+
+        @media screen and (max-width:576px){
+            font-size: 10px;
+        }
     }
 
     table tbody tr {
