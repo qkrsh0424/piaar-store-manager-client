@@ -134,7 +134,6 @@ const SalesAnalysisComponent = (props) => {
             </OperatorComponent>
 
             <RankBoardComponent
-            // TODO:: change
                 searchInfoState={searchInfoState}
                 salesAnalysisViewItems={salesAnalysisViewItems}
             >

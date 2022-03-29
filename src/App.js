@@ -50,6 +50,7 @@ import DeliveryReadyUploadPiaarMain from './component/delivery_ready/piaar/Deliv
 import DeliveryReadyViewPiaarMain from './component/delivery_ready/piaar/DeliveryReadyViewPiaarMain';
 import SalesAnalysisPage from './pages/sales_analysis/SalesAnalysisPage';
 import SalesAnalysisMain from './component/sales_analysis/SalesAnalysisMain';
+import ProductDetailPage from './pages/product_detail/ProductDetailPage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -183,8 +184,12 @@ function App(props) {
                                 <Route exact path='/order-registration/naver'>
                                     {userRdx.userInfo ? <OrderRegistrationNaverMain></OrderRegistrationNaverMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
+                                {/* refactor page 2 - /product-detail -> /refactor/product-detail */}
                                 <Route exact path='/product-detail'>
                                     {userRdx.userInfo ? <ProductDetailMain></ProductDetailMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                <Route exact path='/refactor/product-detail'>
+                                    {userRdx.userInfo ? <ProductDetailPage></ProductDetailPage> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                                 <Route exact path='/commute-record'>
                                     {userRdx.userInfo ? <CommuteRecordMain></CommuteRecordMain> : <Redirect to={'/login'}></Redirect>}
@@ -192,7 +197,7 @@ function App(props) {
                                 <Route exact path='/excel-translator'>
                                     {userRdx.userInfo ? <ExcelTranslatorMain></ExcelTranslatorMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
-                                {/* refactor page 1 */}
+                                {/* refactor page 1 - /sales-analysis -> /refactor/sales-analysis */}
                                 <Route exact path='/sales-analysis'>
                                     {userRdx.userInfo ? <SalesAnalysisMain></SalesAnalysisMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>

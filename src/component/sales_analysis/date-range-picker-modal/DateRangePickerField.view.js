@@ -4,7 +4,7 @@ import "react-date-range/dist/theme/default.css";
 
 import { DateRangePickerWrapper } from "./DateRangePickerModal.styled";
 
-export default function  DateRangePickerFieldView(props) {
+export default function DateRangePickerFieldView(props) {
     return (
         <DateRangePickerWrapper>
             <DateRange
