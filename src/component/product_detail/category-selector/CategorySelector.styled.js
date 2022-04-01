@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
-    padding: 1%;
+    padding: 2%;
 `;
 
 const CategorySelectorWrapper = styled.div`
@@ -14,14 +14,8 @@ const CategorySelectorWrapper = styled.div`
         padding:0 10px;
         column-gap: 5px;
 
-        @media only screen and (max-width:768px){
+        @media only screen and (max-width:992px){
             font-size: 14px;
-            grid-template-columns: repeat(2, 1fr);
-            row-gap: 10px;
-        }
-
-        @media only screen and (max-width:576px){
-            font-size: 12px;
             grid-template-columns: repeat(1, 1fr);
             row-gap: 10px;
         }

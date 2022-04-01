@@ -20,8 +20,12 @@ const ItemSelectorComponent = (props) => {
     const [productModifyModalOpen, setProductModifyModalOpen] = useState(false);
     const [productModifyData, setProductModifyData] = useState(null);
 
+    // 카테고리 변경 시 product, option값 초기화
     useEffect(() => {
-        if(!query.productCid) {
+        if(query.productCid || query.productCid === 0) {
+            dispatchProductCid({
+                type: 'CLEAR'
+            });
             return;
         }
 
@@ -29,8 +33,13 @@ const ItemSelectorComponent = (props) => {
             type: 'SET_DATA',
             payload: query.productCid
         });
+    } ,[query.categoryCid]);
 
-        if(!query.optionCid) {
+    useEffect(() => {
+        if(query.optionCid || query.optionCid === 0) {
+            dispatchOptionCid({
+                type: 'CLEAR'
+            });
             return;
         }
 
@@ -38,7 +47,7 @@ const ItemSelectorComponent = (props) => {
             type: 'SET_DATA',
             payload: query.optionCid
         });
-    } ,[]);
+    } ,[query.productCid]);
 
     useEffect(() => {
         dispatchOptionCid({
@@ -70,9 +79,11 @@ const ItemSelectorComponent = (props) => {
         });
     }
 
+    // category 선택 시
     const onActionRouteToProductSearch = () => {
         delete query.productCid;
         delete query.optionCid;
+        delete query.detailCid;
 
         query.productCid = productCid;
 
@@ -82,8 +93,10 @@ const ItemSelectorComponent = (props) => {
         });
     }
 
+    // product 선택 시
     const onActionRouteToOptionSearch = () => {
         delete query.optionCid;
+        delete query.detailCid;
 
         query.optionCid = optionCid;
 
@@ -184,7 +197,7 @@ export default ItemSelectorComponent;
 
 const initialProductCid = '';
 const initialOptionCid = '';
-const initialModifyProduct = '';
+// const initialModifyProduct = '';
 
 const productCidReducer = (state, action) => {
     switch (action.type) {
@@ -206,12 +219,12 @@ const optionCidReducer = (state, action) => {
     }
 }
 
-const modifyProductReducer = (state, action) => {
-    switch (action.type) {
-        case 'SET_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return null;
-        default: return { ...state };
-    }
-}
+// const modifyProductReducer = (state, action) => {
+//     switch (action.type) {
+//         case 'SET_DATA':
+//             return action.payload;
+//         case 'CLEAR':
+//             return null;
+//         default: return { ...state };
+//     }
+// }

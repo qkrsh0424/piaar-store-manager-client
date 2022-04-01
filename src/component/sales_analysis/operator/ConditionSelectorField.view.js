@@ -3,7 +3,10 @@ import { ConditionSelectorFieldWrapper } from "./Operator.styled";
 export default function ConditionSelectorFieldView(props) {
     return (
         <ConditionSelectorFieldWrapper>
-            <div className="label-item">랭킹 기준 설정</div>
+            <div className="title-item">
+                <div>랭킹 기준 설정</div>
+                <div className="info-text">* 출고건이 아닌 주문건으로 기록됩니다.</div>
+            </div>
             <div className="grid-box">
                 <select className="selector-style" onChange={(e) => props.onChangeStoreSelector(e)}>
                     <option value='total'>스토어 전체</option>

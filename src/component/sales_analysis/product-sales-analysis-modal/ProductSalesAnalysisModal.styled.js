@@ -3,7 +3,6 @@ import styled from 'styled-components';
 const Container = styled.div`
     background: linear-gradient(to bottom right, #dce3f6, #f0fcff);
     padding-bottom: 4%;
-
 `;
 
 const HeaderFieldWrapper = styled.div`
@@ -26,8 +25,8 @@ const HeaderFieldWrapper = styled.div`
     .modal-close-btn {
         color: #5c5c7e;
 
-        &:hover {
-            color: #7a7aff77;
+		&:hover {
+	        color: #80808b;
         }
     }    
 `;

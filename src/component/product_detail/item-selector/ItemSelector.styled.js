@@ -1,10 +1,15 @@
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
-    /* padding: 20px; */
-	/* overflow: hidden; */
+    padding: 10px 0;
     display: grid;
     grid-template-columns: 45% 10% 45%;
+
+    @media only screen and (max-width:992px){
+        font-size: 12px;
+        grid-template-columns: repeat(1, 1fr);
+        row-gap: 10px;
+    }
 `;
 
 const DataListWrapper = styled.div`
@@ -13,23 +18,7 @@ const DataListWrapper = styled.div`
         float: right;
         padding: 5px;
         padding-right: 7%;
-    }
 
-    .control-box button {
-        padding:1px 3px;
-        background: rgb(179 199 219);
-        color:white;
-        border:1px solid rgb(179 199 219);
-        border-radius: 5px;
-        margin-left: 5px;
-
-        @media only screen and (max-width:576px ){
-            padding: 0;
-        }
-    }
-
-    .control-box {
-        
         .add-btn {
 
         }
@@ -42,6 +31,19 @@ const DataListWrapper = styled.div`
         .delete-btn {
             background: #868b9d;
             border:1px solid #868b9d;
+        }
+    }
+
+    .control-box button {
+        padding:2px 3px;
+        background: rgb(179 199 219);
+        color:white;
+        border:1px solid rgb(179 199 219);
+        border-radius: 5px;
+        margin-left: 5px;
+
+        @media only screen and (max-width:576px ){
+            padding: 0;
         }
     }
 
@@ -79,10 +81,6 @@ const DataListWrapper = styled.div`
         text-align: center;
     }
 
-    .image-wrapper {
-        width: 100%;
-    }
-
     .image-box {
         position: relative;
         padding-bottom: 100%; // 1:1
@@ -100,7 +98,7 @@ const DataListWrapper = styled.div`
     .item-list .data-active {
         background: #4360A3C9 !important;
         color:white !important;
-        font-weight: 700;
+        font-weight: 600;
     }
 
     .item-list .data-hover {
@@ -117,6 +115,10 @@ const ArrowWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @media only screen and (max-width:992px){
+        transform: rotate(90deg);
+    }
 `;
 
 

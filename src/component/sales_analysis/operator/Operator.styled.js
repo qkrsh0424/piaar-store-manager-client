@@ -6,7 +6,7 @@ const Container = styled.div`
 const ConditionSelectorFieldWrapper = styled.div`
     padding: 10px 0;
 
-    .label-item{
+    .title-item{
         padding: 10px;
         font-size: 1.2rem;
         font-weight: 600;
@@ -16,6 +16,12 @@ const ConditionSelectorFieldWrapper = styled.div`
             margin: 10px 0 0 0;
             width: 100%;
         }
+    }
+
+    .title-item .info-text {
+        font-size: 14px;
+        color: #ff5d5d;
+        padding: 5px 0;
     }
 
     .grid-box{
