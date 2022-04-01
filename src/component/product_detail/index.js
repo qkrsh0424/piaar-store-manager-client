@@ -12,7 +12,7 @@ import ItemSelectorComponent from './item-selector/ItemSelector.component';
 import DetailTableComponent from './detail-table/DetailTable.component';
 
 const Container = styled.div`
-    background: linear-gradient(to bottom right, #f0fcff, #dce3f6);
+    background: linear-gradient(to bottom right,#f0fffa,#839edfad);
     padding-bottom: 100px;
 `;
 

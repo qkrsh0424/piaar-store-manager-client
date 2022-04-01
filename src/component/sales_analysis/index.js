@@ -11,7 +11,7 @@ import { productCategoryDataConnect } from '../../data_connect/productCategoryDa
 const Container = styled.div`
     padding: 0 5% 5% 5%;
     overflow: auto;
-    background: linear-gradient(to bottom right, #f0fcff, #dce3f6);
+    background: linear-gradient(to bottom right,#f0fffa,#839edfad);
 `;
 
 const SalesAnalysisComponent = (props) => {
