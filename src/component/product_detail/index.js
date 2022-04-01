@@ -87,12 +87,18 @@ const ProductDetailComponent = (props) => {
         await _reqSearchProductDetail();
     }, [query.optionCid]);
 
-    // 새로고침 시
     useEffect(() => {
         if(!productList){
             return;
         }
-        
+
+        if(query.categoryCid !== '0' && !query.categoryCid) {
+            dispatchProductViewList({
+                type: 'CLEAR'
+            });
+            return;
+        }
+
         if(query.categoryCid === '0') {
             dispatchProductViewList({
                 type: 'SET_DATA',
@@ -104,11 +110,10 @@ const ProductDetailComponent = (props) => {
             dispatchProductViewList({
                 type: 'SET_DATA',
                 payload: viewList
-            }); 
+            });
         }
     }, [productList, query.categoryCid]);
 
-    // 새로고침 시
     useEffect(() => {
         if(!(optionList && productViewList)) {
             return;
@@ -118,6 +123,8 @@ const ProductDetailComponent = (props) => {
             dispatchOptionViewList({
                 type: 'CLEAR'
             });
+            setSelectedProduct(null);
+            setSelectedOption(null);
             return;
         }
 
@@ -134,7 +141,6 @@ const ProductDetailComponent = (props) => {
         }
     }, [optionList, productViewList, query.productCid]);
 
-    // 새로고침 시
     useEffect(() => {
         if(!(optionList && detailList)) {
             return;
@@ -144,6 +150,7 @@ const ProductDetailComponent = (props) => {
             dispatchDetailViewList({
                 type: 'CLEAR'
             });
+            setSelectedOption(null);
             return;
         }
 
@@ -159,6 +166,8 @@ const ProductDetailComponent = (props) => {
             setSelectedOption(selectedOpt);
         }
     }, [optionList, detailList, query.optionCid]);
+
+
 
     const _reqSearchProductCategory = async () => {
         await productCategoryDataConnect().searchList()

@@ -20,7 +20,7 @@ const ItemSelectorComponent = (props) => {
     const [productModifyModalOpen, setProductModifyModalOpen] = useState(false);
     const [productModifyData, setProductModifyData] = useState(null);
 
-    // 카테고리 변경 시 product, option값 초기화
+    // category 변경 시 product 초기화
     useEffect(() => {
         if(query.productCid || query.productCid === 0) {
             dispatchProductCid({
@@ -35,6 +35,7 @@ const ItemSelectorComponent = (props) => {
         });
     } ,[query.categoryCid]);
 
+    // product 변경 시 option값 초기화
     useEffect(() => {
         if(query.optionCid || query.optionCid === 0) {
             dispatchOptionCid({
@@ -49,6 +50,7 @@ const ItemSelectorComponent = (props) => {
         });
     } ,[query.productCid]);
 
+    // productCid reducer가 변경되면 상품검색
     useEffect(() => {
         dispatchOptionCid({
             type: 'CLEAR'
@@ -59,6 +61,7 @@ const ItemSelectorComponent = (props) => {
         }
     }, [productCid]);
 
+    // optionCid reducer가 변경되면 옵션검색
     useEffect(() => {
         if(optionCid || optionCid === 0) {
             onActionRouteToOptionSearch();
