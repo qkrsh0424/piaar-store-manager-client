@@ -13,20 +13,22 @@ const CategorySelectorComponent = (props) => {
     const [categoryCid, dispatchCategoryCid] = useReducer(categoryCidReducer, initialCategoryCid);
 
     useEffect(() => {
-        if(!query.categoryCid) {
+        if(query.categoryCid !== 0 && !query.categoryCid) {
             return;
         }
 
         dispatchCategoryCid({
             type: 'SET_DATA',
             payload: query.categoryCid
-        })
-    } ,[]);
+        });
+    }, []);
 
     useEffect(() => {
-        if(categoryCid || categoryCid === 0) {
-            onActionRouteToCategorySearch();
+        if(!(categoryCid === '0' || categoryCid)) {
+            return;
         }
+
+        onActionRouteToCategorySearch();
     }, [categoryCid]);
 
     const onChangeCategoryCidValue = (value) => {

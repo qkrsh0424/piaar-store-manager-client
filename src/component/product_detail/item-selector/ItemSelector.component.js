@@ -20,53 +20,50 @@ const ItemSelectorComponent = (props) => {
     const [productModifyModalOpen, setProductModifyModalOpen] = useState(false);
     const [productModifyData, setProductModifyData] = useState(null);
 
-    // category 변경 시 product 초기화
+    // 카테고리 변경된 경우
     useEffect(() => {
-        if(query.productCid || query.productCid === 0) {
+        if(query.productCid !== 0 && !query.productCid) {
             dispatchProductCid({
                 type: 'CLEAR'
             });
+        }else {
+            dispatchProductCid({
+                type: 'SET_DATA',
+                payload: query.productCid
+            })
+        }
+    }, [query.categoryCid])
+
+    // 상품선택이 변경된 경우
+    useEffect(() => {
+        if(!(productCid === '0' || productCid)) {
             return;
         }
+        onActionRouteToProductSearch();
+    }, [productCid])
 
-        dispatchProductCid({
-            type: 'SET_DATA',
-            payload: query.productCid
-        });
-    } ,[query.categoryCid]);
-
-    // product 변경 시 option값 초기화
+    // 상품이 변경된 경우
     useEffect(() => {
-        if(query.optionCid || query.optionCid === 0) {
+        if(query.optionCid !== 0 && !query.optionCid) {
             dispatchOptionCid({
                 type: 'CLEAR'
             });
+        }else {
+            dispatchOptionCid({
+                type: 'SET_DATA',
+                payload: query.optionCid
+            })
+        }
+    }, [query.productCid])
+
+    // 옵션선택이 변경된 경우
+    useEffect(() => {
+        if(!(optionCid === '0' || optionCid)) {
             return;
         }
 
-        dispatchOptionCid({
-            type: 'SET_DATA',
-            payload: query.optionCid
-        });
-    } ,[query.productCid]);
-
-    // productCid reducer가 변경되면 상품검색
-    useEffect(() => {
-        dispatchOptionCid({
-            type: 'CLEAR'
-        });
-
-        if(productCid || productCid === 0) {
-            onActionRouteToProductSearch();
-        }
-    }, [productCid]);
-
-    // optionCid reducer가 변경되면 옵션검색
-    useEffect(() => {
-        if(optionCid || optionCid === 0) {
-            onActionRouteToOptionSearch();
-        }
-    }, [optionCid]);
+        onActionRouteToOptionSearch();
+    }, [optionCid])
 
     const onChangeProductCidValue = (value) => {
         dispatchProductCid({

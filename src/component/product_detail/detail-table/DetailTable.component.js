@@ -52,19 +52,28 @@ const DetailTableComponent = (props) => {
     const [modifyProductDetailModalOpen, setModifyProductDetailModalOpen] = useState(false);
     const [modifyProductDetailData, setModifyProductDetailData] = useState(null);
 
+    // 옵션이 변경된 경우
     useEffect(() => {
-        if(query.optionCid || query.optionCid === 0) {
+        if(query.detailCid !== 0 && !query.detailCid) {
             dispatchDetailCid({
                 type: 'CLEAR'
-            });
+            });    
+        }else {
+            dispatchDetailCid({
+                type: 'SET_DATA',
+                payload: query.detailCid
+            })
         }
-    }, [query.optionCid]);
+    }, [query.optionCid])
 
+    // 상세 선택이 변경된 경우
     useEffect(() => {
-        if(detailCid || detailCid === 0) {
-            onActionRouteToDetailSearch();
+        if(!(detailCid === '0' || detailCid)) {
+            return;
         }
-    }, [detailCid]);
+
+        onActionRouteToDetailSearch();
+    }, [detailCid])
 
     const onChangeDetailCidValue = (value) => {
         dispatchDetailCid({

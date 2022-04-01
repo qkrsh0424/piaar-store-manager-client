@@ -54,7 +54,7 @@ const ProductDetailComponent = (props) => {
             return;
         }
 
-        if(query.categoryCid != '0' && !query.categoryCid) {
+        if(query.categoryCid !== '0' && !query.categoryCid) {
             return;
         }
 
@@ -67,7 +67,7 @@ const ProductDetailComponent = (props) => {
             return;
         }
 
-        if(query.productCid != '0' && !query.productCid) {
+        if(query.productCid !== '0' && !query.productCid) {
             return;
         }
 
@@ -80,57 +80,57 @@ const ProductDetailComponent = (props) => {
             return;
         }
 
-        if(query.optionCid != '0' && !query.optionCid) {
+        if(query.optionCid !== '0' && !query.optionCid) {
             return;
         }
 
         await _reqSearchProductDetail();
     }, [query.optionCid]);
 
+    // query에 categoryCid가 변경되면 productViewList 변경
     useEffect(() => {
-        if(!productList){
+        if(!productList) {
             return;
         }
 
-        if(query.categoryCid !== '0' && !query.categoryCid) {
+        if (query.categoryCid !== '0' && !query.categoryCid) {
             dispatchProductViewList({
                 type: 'CLEAR'
             });
             return;
         }
 
-        if(query.categoryCid === '0') {
+        if (query.categoryCid === '0') {
             dispatchProductViewList({
                 type: 'SET_DATA',
                 payload: productList
             });
-        }else if(query.categoryCid) {
+        } else if (query.categoryCid) {
             let viewList = productList.filter(r => r.productCategoryCid === parseInt(query.categoryCid));
-            
+
             dispatchProductViewList({
                 type: 'SET_DATA',
                 payload: viewList
             });
         }
-    }, [productList, query.categoryCid]);
+    }, [productList, query.categoryCid])
 
+    // query에 productCid가 변경되면 optionViewList 변경
     useEffect(() => {
-        if(!(optionList && productViewList)) {
+        if (!(optionList && productList)) {
             return;
         }
 
-        if(query.productCid !== '0' && !query.productCid) {
+        if (query.productCid !== '0' && !query.productCid) {
             dispatchOptionViewList({
                 type: 'CLEAR'
             });
             setSelectedProduct(null);
             setSelectedOption(null);
             return;
-        }
-
-        if(query.productCid) {
+        }else {
             let viewList = optionList.filter(r => r.productCid === parseInt(query.productCid));
-            
+
             dispatchOptionViewList({
                 type: 'SET_DATA',
                 payload: viewList
@@ -139,22 +139,21 @@ const ProductDetailComponent = (props) => {
             let selectedProd = productList.filter(r => r.cid === parseInt(query.productCid))[0];
             setSelectedProduct(selectedProd);
         }
-    }, [optionList, productViewList, query.productCid]);
+    }, [optionList, productList, query.productCid])
 
+    // query에 optionCid가 변경되면  변경
     useEffect(() => {
-        if(!(optionList && detailList)) {
+        if(!(detailList && optionList)) {
             return;
         }
 
-        if(query.optionCid !== '0' && !query.optionCid) {
+        if (query.optionCid !== '0' && !query.optionCid) {
             dispatchDetailViewList({
                 type: 'CLEAR'
             });
             setSelectedOption(null);
             return;
-        }
-
-        if(query.optionCid) {
+        }else {
             let viewList = detailList.filter(r => r.productOptionCid === parseInt(query.optionCid));
 
             dispatchDetailViewList({
@@ -165,8 +164,7 @@ const ProductDetailComponent = (props) => {
             let selectedOpt = optionList.filter(r => r.cid === parseInt(query.optionCid))[0];
             setSelectedOption(selectedOpt);
         }
-    }, [optionList, detailList, query.optionCid]);
-
+    }, [detailList, optionList, query.optionCid])
 
 
     const _reqSearchProductCategory = async () => {
