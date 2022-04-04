@@ -29,7 +29,7 @@ const SalesAnalysisComponent = (props) => {
 
     useEffect(async () => {
         await __reqSearchSalesAnalysis(new Date(), new Date());
-        await _reqSearchProductCategory();
+        await __reqSearchProductCategory();
 
         dispatchSearchInfoState({
             type: 'INIT_DATA'
@@ -63,7 +63,7 @@ const SalesAnalysisComponent = (props) => {
             })
     }
 
-    const _reqSearchProductCategory = async () => {
+    const __reqSearchProductCategory = async () => {
         await productCategoryDataConnect().searchList()
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {

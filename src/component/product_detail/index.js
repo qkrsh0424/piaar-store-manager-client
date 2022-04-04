@@ -35,15 +35,15 @@ const ProductDetailComponent = (props) => {
     const [dataChangedTrigger, setDataChangedTrigger] = useState(false);
 
     useEffect(async () => {
-        await _reqSearchProductCategory();
+        await __reqSearchProductCategory();
     }, []);
 
     // 데이터 생성, 수정, 삭제 시 즉시 반영
     useEffect(async () => {
         if (dataChangedTrigger) {
-            await _reqSearchProduct();
-            await _reqSearchOption();
-            await _reqSearchProductDetail();
+            await __reqSearchProduct();
+            await __reqSearchOption();
+            await __reqSearchProductDetail();
         }
         setDataChangedTrigger(false);
     }, [dataChangedTrigger]);
@@ -58,7 +58,7 @@ const ProductDetailComponent = (props) => {
             return;
         }
 
-        await _reqSearchProduct();
+        await __reqSearchProduct();
     }, [query.categoryCid]);
 
     // 상품 처음 선택 시
@@ -71,7 +71,7 @@ const ProductDetailComponent = (props) => {
             return;
         }
 
-        await _reqSearchOption();
+        await __reqSearchOption();
     }, [query.productCid]);
 
     // 옵션 처음 선택 시
@@ -84,7 +84,7 @@ const ProductDetailComponent = (props) => {
             return;
         }
 
-        await _reqSearchProductDetail();
+        await __reqSearchProductDetail();
     }, [query.optionCid]);
 
     // query에 categoryCid가 변경되면 productViewList 변경
@@ -167,7 +167,7 @@ const ProductDetailComponent = (props) => {
     }, [detailList, optionList, query.optionCid])
 
 
-    const _reqSearchProductCategory = async () => {
+    const __reqSearchProductCategory = async () => {
         await productCategoryDataConnect().searchList()
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {
@@ -180,7 +180,7 @@ const ProductDetailComponent = (props) => {
             })
     }
 
-    const _reqSearchProduct = async () => {
+    const __reqSearchProduct = async () => {
         await productDataConnect().getList()
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
@@ -193,7 +193,7 @@ const ProductDetailComponent = (props) => {
             })
     }
 
-    const _reqSearchOption = async () => {
+    const __reqSearchOption = async () => {
         await productOptionDataConnect().getList()
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
@@ -206,7 +206,7 @@ const ProductDetailComponent = (props) => {
             })
     }
 
-    const _reqSearchProductDetail = async () => {
+    const __reqSearchProductDetail = async () => {
         await productDetailDataConnect().searchAll()
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
@@ -219,7 +219,7 @@ const ProductDetailComponent = (props) => {
             })
     }
 
-    const _onSubmit_deleteProduct = async (productCid) => {
+    const __reqDeleteProduct = async (productCid) => {
         await productDataConnect().deleteOne(productCid)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
@@ -233,7 +233,7 @@ const ProductDetailComponent = (props) => {
             })
     }
 
-    const _onSubmit_deleteProductOption = async (productCid) => {
+    const __reqDeleteProductOption = async (productCid) => {
         await productOptionDataConnect().deleteOne(productCid)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
@@ -247,7 +247,7 @@ const ProductDetailComponent = (props) => {
             })
     }
 
-    const _onSubmit_deleteProductDetail = async (detailCid) => {
+    const __reqDeleteProductDetail = async (detailCid) => {
         await productDetailDataConnect().deleteOne(detailCid)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
@@ -261,7 +261,7 @@ const ProductDetailComponent = (props) => {
             })
     }
 
-    const _onSubmit_createProductDetail = async (detailData) => {
+    const __reqCreateProductDetail = async (detailData) => {
         await productDetailDataConnect().postOne(detailData)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
@@ -279,7 +279,7 @@ const ProductDetailComponent = (props) => {
             });
     }
     
-    const _onSubmit_modifyProductDetail = async (modifyDetailData) => {
+    const __reqModifyProductDetail = async (modifyDetailData) => {
         await productDetailDataConnect().putOne(modifyDetailData)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
@@ -291,6 +291,26 @@ const ProductDetailComponent = (props) => {
                 let res = err.response;
                 alert(res?.data?.memo);
             })
+    }
+
+    const _onSubmit_deleteProduct = async (productCid) => {
+        await __reqDeleteProduct(productCid);
+    }
+
+    const _onSubmit_deleteProductOption = async (optionCid) => {
+        await __reqDeleteProductOption(optionCid);
+    }
+
+    const _onSubmit_deleteProductDetail = async (detailCid) => {
+        await __reqDeleteProductDetail(detailCid);
+    }
+
+    const _onSubmit_createProductDetail = async (detailData) => {
+        await __reqCreateProductDetail(detailData);
+    }
+
+    const _onSubmit_modifyProductDetail = async (detailData) => {
+        await __reqModifyProductDetail(detailData);
     }
 
     return (

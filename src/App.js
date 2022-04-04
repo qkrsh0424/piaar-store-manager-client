@@ -48,9 +48,12 @@ import CommuteRecordMain from './component/commute_record/CommuteRecordMain';
 import ExcelTranslatorMain from './component/excel_translator/ExcelTranslatorMain';
 import DeliveryReadyUploadPiaarMain from './component/delivery_ready/piaar/DeliveryReadyUploadPiaarMain';
 import DeliveryReadyViewPiaarMain from './component/delivery_ready/piaar/DeliveryReadyViewPiaarMain';
-import SalesAnalysisPage from './pages/sales_analysis/SalesAnalysisPage';
 import SalesAnalysisMain from './component/sales_analysis/SalesAnalysisMain';
+
+// refactor
+import SalesAnalysisPage from './pages/sales_analysis/SalesAnalysisPage';
 import ProductDetailPage from './pages/product_detail/ProductDetailPage';
+import ProductCreatePage from './pages/product_create/ProductCreatePage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -131,8 +134,12 @@ function App(props) {
                                 <Route exact path='/products'>
                                     {userRdx.userInfo ? <ProductManageMain></ProductManageMain> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
+                                 {/* refactor page 3 - /product/create -> /refactor/product/create */}
                                 <Route exact path='/products/create'>
                                     {userRdx.userInfo ? <CreateMain></CreateMain> : <Redirect to={'/login'}></Redirect>}
+                                </Route>
+                                <Route exact path='/refactor/products/create'>
+                                    {userRdx.userInfo ? <ProductCreatePage></ProductCreatePage> : <Redirect to={'/login'}></Redirect>}
                                 </Route>
                                 {/* Shipment */}
                                 <Route exact path='/shipment/packing-list/naver'>

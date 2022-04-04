@@ -13,7 +13,7 @@ const CategorySelectorComponent = (props) => {
     const [categoryCid, dispatchCategoryCid] = useReducer(categoryCidReducer, initialCategoryCid);
 
     useEffect(() => {
-        if(query.categoryCid !== 0 && !query.categoryCid) {
+        if(query.categoryCid !== '0' && !query.categoryCid) {
             return;
         }
 
@@ -24,7 +24,7 @@ const CategorySelectorComponent = (props) => {
     }, []);
 
     useEffect(() => {
-        if(!(categoryCid === '0' || categoryCid)) {
+        if(categoryCid !== 0 && !categoryCid) {
             return;
         }
 

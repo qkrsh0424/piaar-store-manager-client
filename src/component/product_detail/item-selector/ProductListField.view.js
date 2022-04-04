@@ -19,7 +19,7 @@ export default function ProductListFieldView(props) {
                 <button className="add-btn"
                     type='button'
                     onClick={() => history.push({
-                        pathname:'/products/create',
+                        pathname:'/refactor/products/create',
                         state:routerState
                     })}
                 >
