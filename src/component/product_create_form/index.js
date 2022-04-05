@@ -1,14 +1,15 @@
 import { useState, useEffect, useReducer } from 'react';
+import { withRouter } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import styled from 'styled-components'; 
 
 import { productCategoryDataConnect } from '../../data_connect/productCategoryDataConnect';
 import { productDataConnect } from '../../data_connect/productDataConnect';
-import CategorySelectorComponent from './category-selector/CategorySelector.component';
-import HeaderComponent from './header/Header.component';
-import ProductInfoInputComponent from './product-info-input/ProductInfoInput.component';
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
-import OptionInfoInputComponent from './option-info-input/OptionInfoInput.component';
+import ProductCreateFormComponent from './ProductCreateForm.component';
+
+const Container = styled.div`
+`;
 
 class Product {
     constructor(optionDefaultName = '', optionManagementName = '') {
@@ -108,25 +109,10 @@ class ProductOption {
     }
 }
 
-const Container = styled.div`
-    margin-top: 80px;
-    margin-bottom: 120px;
-    padding-bottom: 100px;
-
-    animation: scaleOutToIn 0.8s;
-    -moz-animation: scaleOutToIn 0.8s; /* Firefox */
-    -webkit-animation: scaleOutToIn 0.8s; /* Safari and Chrome */
-    -o-animation: scaleOutToIn 0.8s; /* Opera */
-
-    background:white;
-    border: 1px solid #4360A3C9;
-    border-radius: 5px;
-    padding-bottom: 15px;
-`;
-
-const ProductCreateComponent = () => {
+const ProductCreateComponent = (props) => {
     const [categoryList, setCategoryList] = useState(null);
     const [createProductData, dispatchCreateProductData] = useReducer(createProductDataReducer, initialCreateProductData);
+    const [isSubmit, setIsSubmit] = useState(false);
 
     const {
         open: backdropOpen,
@@ -200,11 +186,22 @@ const ProductCreateComponent = () => {
                     });
 
                     dispatchCreateProductData({
-                        type: 'SET_DATA',
-                        payload: {
-                            productOptions: optionDataList
-                        }
+                        type: 'SET_OPTION',
+                        payload: optionDataList
                     });
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                alert(res?.data?.memo);
+            })
+    }
+
+    const __reqCreateProductAndOptions = async () => {
+        await productDataConnect().postCreate(createProductData)
+            .then(res => {
+                if (res.status == 200 && res.data && res.data.message == 'success') {
+                    props.history.replace(props.location.state.prevUrl);
                 }
             })
             .catch(err => {
@@ -225,8 +222,22 @@ const ProductCreateComponent = () => {
         onActionCloseBackdrop();
     }
 
+    const _onSubmit_createProductAndOptions = async () => {
+        if(!isSubmit){
+            setIsSubmit(true);
+            await __reqCreateProductAndOptions();
+            setIsSubmit(false);
+        }
+    }
+
     const _onAction_createProductOption = () => {
-        return new ProductOption(createProductData.id).toJSON();
+        let data = createProductData.productOptions;
+        data.push(new ProductOption(createProductData.id).toJSON());
+
+        dispatchCreateProductData({
+            type: 'SET_OPTION',
+            payload: data
+        });
     }
 
     const _onAction_stockReflectedSelector = () => {
@@ -238,7 +249,7 @@ const ProductCreateComponent = () => {
                 name: "stockManagement",
                 value: stockManagement
             }
-        })
+        });
     }
 
     const _onAction_selectProductCategory = (categoryCid) => {
@@ -248,40 +259,54 @@ const ProductCreateComponent = () => {
                 name: "productCategoryCid",
                 value: categoryCid
             }
-        })
+        });
+    }
+
+    const _onAction_changeProductInputValue = (target) => {
+        const {name, value} = target;
+
+        dispatchCreateProductData({
+            type: 'CHANGE_DATA',
+            payload: {
+                name,
+                value
+            }
+        });
+    }
+
+    const _onAction_deleteProductOption = (optionId) => {
+        let productOptions = createProductData.productOptions?.filter(option => option.id !== optionId);;
+
+        dispatchCreateProductData({
+            type: 'SET_OPTION',
+            payload: productOptions
+        });
+    }
+
+    const _onAction_changeProductOption = (option) => {
+        dispatchCreateProductData({
+            type: 'SET_OPTION',
+            payload: option
+        });
     }
 
     return (
-        <Container className="container">
-            {/* <TopLayerComponent
-            ></TopLayerComponent> */}
-            
-            <HeaderComponent
-                createProductData={createProductData}
-
-                _onAction_stockReflectedSelector={() => _onAction_stockReflectedSelector()}
-            ></HeaderComponent>
-
-            <CategorySelectorComponent
+        <Container>
+            <ProductCreateFormComponent
                 createProductData={createProductData}
                 categoryList={categoryList}
+                isSubmit={isSubmit}
 
+                _onAction_stockReflectedSelector={() => _onAction_stockReflectedSelector()}
                 _onAction_selectProductCategory={(categoryCid) => _onAction_selectProductCategory(categoryCid)}
-            ></CategorySelectorComponent>
-
-            <ProductInfoInputComponent
-                createProductData={createProductData}
-
                 _onSubmit_uploadProdImageFile={(e) => _onSubmit_uploadProdImageFile(e)}
-            ></ProductInfoInputComponent>
-
-            <OptionInfoInputComponent
-                createProductData={createProductData}
-
                 _onSubmit_uploadOptionImageFile={(e, optionId) => _onSubmit_uploadOptionImageFile(e, optionId)}
                 _onAction_createProductOption={() => _onAction_createProductOption()}
-                ProductOption={ProductOption}
-            ></OptionInfoInputComponent>
+                _onAction_changeProductInputValue={(e) => _onAction_changeProductInputValue(e)}
+                _onAction_deleteProductOption={(optionId) => _onAction_deleteProductOption(optionId)}
+                _onAction_changeProductOption={(option) => _onAction_changeProductOption(option)}
+                _onSubmit_createProductAndOptions={() => _onSubmit_createProductAndOptions()}
+            ></ProductCreateFormComponent>
 
             {/* Backdrop */}
             <BackdropHookComponent
@@ -291,7 +316,7 @@ const ProductCreateComponent = () => {
     )
 }
 
-export default ProductCreateComponent;
+export default withRouter(ProductCreateComponent);
 
 const initialCreateProductData = new Product('단일상품', '단일상품').toJSON();
 
@@ -299,10 +324,15 @@ const createProductDataReducer = (state, action) => {
     switch(action.type) {
         case 'SET_DATA':
             return action.payload;
-        case 'CHANGE_DATA' :
+        case 'CHANGE_DATA':
             return {
                 ...state,
                 [action.payload.name] : action.payload.value
+            }
+        case 'SET_OPTION':
+            return {
+                ...state,
+                productOptions: action.payload
             }
         case 'CLEAR':
             return initialCreateProductData;

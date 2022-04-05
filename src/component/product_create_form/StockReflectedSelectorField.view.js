@@ -1,8 +1,8 @@
-import { HeaderWrapper } from "./Header.styled";
+import { StockReflectedSelectorWrapper } from "./ProductCreateForm.styled";
 
-export default function HeaderFieldView(props) {
+export default function StockReflectedSelectorFieldView(props) {
     return (
-        <HeaderWrapper>
+        <StockReflectedSelectorWrapper>
             <button type='button'
                 className={props.createProductData.stockManagement ? `btn-active` : ''} 
                 onClick={() => props.onChangeStockReflectedSelector()}
@@ -10,6 +10,6 @@ export default function HeaderFieldView(props) {
                     재고반영
                     {props.createProductData.stockManagement ? ' O' : ' X'}
             </button>
-        </HeaderWrapper>
+        </StockReflectedSelectorWrapper>
     )
 }

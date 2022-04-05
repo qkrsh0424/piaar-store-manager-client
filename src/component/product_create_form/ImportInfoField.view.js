@@ -1,4 +1,4 @@
-import { ProductInfoInputWrapper } from "./ProductInfoInput.styled";
+import { ProductInfoInputWrapper } from "./ProductCreateForm.styled";
 
 export default function ImportInfoFieldView(props) {
     return (
@@ -9,21 +9,21 @@ export default function ImportInfoFieldView(props) {
                     <div className="input-group-prepend">
                         <span className="input-group-text">HS CODE</span>
                     </div>
-                    <input type="text" className='form-control' name='hsCode' value={props.productData.hsCode} onChange={(e) => props.onChangeInputValue(e)} />
+                    <input type="text" className='form-control' name='hsCode' value={props.createProductData.hsCode} onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
 
                 <div className="input-group mb-3">
                     <div className="input-group-prepend">
                         <span className="input-group-text">STYLE</span>
                     </div>
-                    <input type="text" className='form-control' name='style'value={props.productData.style} onChange={(e) => props.onChangeInputValue(e)} />
+                    <input type="text" className='form-control' name='style'value={props.createProductData.style} onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
 
                 <div className="input-group mb-3">
                     <div className="input-group-prepend">
                         <span className="input-group-text">관세율</span>
                     </div>
-                    <input type="text" className='form-control' name='tariffRate' value={props.productData.tariffRate} onChange={(e) => props.onChangeInputValue(e)} />
+                    <input type="text" className='form-control' name='tariffRate' value={props.createProductData.tariffRate} onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
             </div>
         </ProductInfoInputWrapper>

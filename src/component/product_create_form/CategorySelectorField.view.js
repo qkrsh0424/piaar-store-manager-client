@@ -1,4 +1,4 @@
-import { CategorySelectorWrapper, CategoryBtn } from "./CategorySelector.styled";
+import { CategorySelectorWrapper, CategoryBtn } from "./ProductCreateForm.styled";
 
 export default function CategorySelectorFieldView(props) {
     return (

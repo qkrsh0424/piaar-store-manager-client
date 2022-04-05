@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import qs from 'query-string';
 import { useLocation } from 'react-router-dom';
 
+import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
 import CategorySelectorComponent from './category-selector/CategorySelector.component';
 import { productCategoryDataConnect } from '../../data_connect/productCategoryDataConnect';
 import { productDataConnect } from '../../data_connect/productDataConnect';
@@ -34,8 +35,16 @@ const ProductDetailComponent = (props) => {
 
     const [dataChangedTrigger, setDataChangedTrigger] = useState(false);
 
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
+
     useEffect(async () => {
+        onActionOpenBackdrop();
         await __reqSearchProductCategory();
+        onActionCloseBackdrop();
     }, []);
 
     // 데이터 생성, 수정, 삭제 시 즉시 반영

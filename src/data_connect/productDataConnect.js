@@ -42,6 +42,42 @@ const productDataConnect = () => {
                 withCredentials: true
             })
         },
+        postCreate: async function (productListData) {
+            let jsonArr = [];
+
+                let productDto = {
+                    id: productListData.id,
+                    code: productListData.code,
+                    naverProductCode: productListData.naverProductCode,
+                    defaultName: productListData.defaultName,
+                    imageFileName: productListData.imageFileName,
+                    imageUrl: productListData.imageUrl,
+                    purchaseUrl: productListData.purchaseUrl,
+                    managementName: productListData.managementName,
+                    manufacturingCode: productListData.manufacturingCode,
+                    memo: productListData.memo,
+                    hsCode: productListData.hsCode,
+                    style: productListData.style,
+                    tariffRate: productListData.tariffRate,
+                    defaultWidth: productListData.defaultWidth,
+                    defaultLength: productListData.defaultLength,
+                    defaultHeight: productListData.defaultHeight,
+                    defaultQuantity: productListData.defaultQuantity,
+                    defaultWeight: productListData.defaultWeight,
+                    defaultTotalPurchasePrice: productListData.defaultTotalPurchasePrice,
+                    stockManagement: productListData.stockManagement,
+                    productCategoryCid: productListData.productCategoryCid
+                }
+                let optionDtos = productListData.productOptions
+                let json = {
+                    productDto: productDto,
+                    optionDtos: optionDtos
+                }
+                jsonArr.push(json)
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product/list`, jsonArr, {
+                withCredentials: true
+            })
+        },
         getStockListFj: async function () {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list-fj/stock`, {
                 withCredentials: true

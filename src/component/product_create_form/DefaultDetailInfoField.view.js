@@ -1,4 +1,4 @@
-import { ProductInfoInputWrapper } from "./ProductInfoInput.styled";
+import { ProductInfoInputWrapper } from "./ProductCreateForm.styled";
 
 export default function DefaultDetailInfoFieldView(props) {
     return (
@@ -11,7 +11,7 @@ export default function DefaultDetailInfoFieldView(props) {
                             SIZE_가로(cm)
                         </span>
                     </div>
-                    <input type="number" className='form-control' name='defaultWidth' value={props.productData.defaultWidth} onChange={(e) => props.onChangeInputValue(e)} />
+                    <input type="number" className='form-control' name='defaultWidth' value={props.createProductData.defaultWidth} onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
                 <div className="input-group mb-3">
 
@@ -20,7 +20,7 @@ export default function DefaultDetailInfoFieldView(props) {
                             SIZE_세로(cm)
                         </span>
                     </div>
-                    <input type="number" className='form-control' name='defaultLength' value={props.productData.defaultLength} onChange={(e) => props.onChangeInputValue(e)} />
+                    <input type="number" className='form-control' name='defaultLength' value={props.createProductData.defaultLength} onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
                 <div className="input-group mb-3">
 
@@ -29,7 +29,7 @@ export default function DefaultDetailInfoFieldView(props) {
                             SIZE_높이(cm)
                         </span>
                     </div>
-                    <input type="number" className='form-control' name='defaultHeight' value={props.productData.defaultHeight} onChange={(e) => props.onChangeInputValue(e)} />
+                    <input type="number" className='form-control' name='defaultHeight' value={props.createProductData.defaultHeight} onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
                 <div className="input-group mb-3">
                     <div className="input-group-prepend">
@@ -37,7 +37,7 @@ export default function DefaultDetailInfoFieldView(props) {
                             내품수량
                         </span>
                     </div>
-                    <input type="number" className='form-control' name='defaultQuantity' value={props.productData.defaultQuantity} onChange={(e) => props.onChangeInputValue(e)} />
+                    <input type="number" className='form-control' name='defaultQuantity' value={props.createProductData.defaultQuantity} onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
                 <div className="input-group mb-3">
                     <div className="input-group-prepend">
@@ -45,7 +45,7 @@ export default function DefaultDetailInfoFieldView(props) {
                             무게(kg)
                         </span>
                     </div>
-                    <input type="number" className='form-control' name='defaultWeight' value={props.productData.defaultWeight} onChange={(e) => props.onChangeInputValue(e)} />
+                    <input type="number" className='form-control' name='defaultWeight' value={props.createProductData.defaultWeight} onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
             </div>
         </ProductInfoInputWrapper>

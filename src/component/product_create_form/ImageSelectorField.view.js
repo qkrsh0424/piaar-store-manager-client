@@ -1,4 +1,4 @@
-import { ImageSelectorWrapper } from "./ProductInfoInput.styled";
+import { ImageSelectorWrapper } from "./ProductCreateForm.styled";
 
 export default function ImageSelectorFieldView(props) {
     return (
@@ -9,13 +9,13 @@ export default function ImageSelectorFieldView(props) {
                     <input type="file" accept="image/*"
                         id={`i_pm_cb_uploader`}
                         onClick={(e) => e.target.value=''}
-                        onChange={(e) => props.onActionUploadProdImageFile(e)}
+                        onChange={(e) => props.onActionUploadProductImageFile(e)}
                     />
-                    {props.productData.imageUrl ?
+                    {props.createProductData.imageUrl ?
                         <div className="input-group-prepend">
                             <button className="btn btn-outline-secondary delete-btn"
                                 type="button"
-                                onClick={() => props.onActionDeleteImageFile()}
+                                onClick={() => props.onActionDeleteProductImageFile()}
                             >
                                 삭제</button>
                         </div>
@@ -25,13 +25,13 @@ export default function ImageSelectorFieldView(props) {
                 </div>
                 <div className="image-wrapper">
                     <div className="image-box">
-                        {props.productData.imageUrl ?
-                            <img name='imageFile' type="file" src={props.productData.imageUrl} title={props.productData.imageFileName}
-                                onClick={() => props.onActionClickImageButton()}
+                        {props.createProductData.imageUrl ?
+                            <img name='imageFile' type="file" src={props.createProductData.imageUrl} title={props.createProductData.imageFileName}
+                                onClick={() => props.onActionClickProductImageButton()}
                             />
                             :
                             <img name='imageFile' src='/images/icon/no-image.jpg' title='no-image'
-                                onClick={() => props.onActionClickImageButton()}
+                                onClick={() => props.onActionClickProductImageButton()}
                             />
                         }
                     </div>

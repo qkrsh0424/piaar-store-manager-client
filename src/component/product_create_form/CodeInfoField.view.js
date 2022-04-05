@@ -1,4 +1,4 @@
-import { ProductInfoInputWrapper } from "./ProductInfoInput.styled";
+import { ProductInfoInputWrapper } from "./ProductCreateForm.styled";
 
 export default function CodeInfoFieldView(props) {
     return (
@@ -9,21 +9,21 @@ export default function CodeInfoFieldView(props) {
                     <div className="input-group-prepend">
                         <span className="input-group-text">상품코드</span>
                     </div>
-                    <input type="text" className='form-control' name='code' value={props.productData.code} onChange={(e) => props.onChangeInputValue(e)} />
+                    <input type="text" className='form-control' name='code' value={props.createProductData.code} onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
 
                 <div className="input-group mb-3">
                     <div className="input-group-prepend">
                         <span className="input-group-text">제조번호</span>
                     </div>
-                    <input type="text" className='form-control' name='manufacturingCode' value={props.productData.manufacturingCode} onChange={(e) => props.onChangeInputValue(e)} />
+                    <input type="text" className='form-control' name='manufacturingCode' value={props.createProductData.manufacturingCode} onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
 
                 <div className="input-group mb-3">
                     <div className="input-group-prepend">
                         <span className="input-group-text">네이버 상품번호</span>
                     </div>
-                    <input type="text" className='form-control' name='naverProductCode' value={props.productData.naverProductCode} onChange={(e) => props.onChangeInputValue(e)} />
+                    <input type="text" className='form-control' name='naverProductCode' value={props.createProductData.naverProductCode} onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
             </div>
         </ProductInfoInputWrapper>

@@ -1,4 +1,4 @@
-import { ProductInfoInputWrapper } from "./ProductInfoInput.styled";
+import { ProductInfoInputWrapper } from "./ProductCreateForm.styled";
 
 export default function DefaultInfoFieldView(props) {
     return (
@@ -13,8 +13,8 @@ export default function DefaultInfoFieldView(props) {
                         </span>
                     </div>
                     <input type="text" className='form-control' name='defaultName' 
-                        value={props.productData.defaultName}
-                        onChange={(e) => props.onChangeInputValue(e)}
+                        value={props.createProductData.defaultName}
+                        onChange={(e) => props.onChangeProductInputValue(e)}
                     />
                 </div>
 
@@ -26,8 +26,8 @@ export default function DefaultInfoFieldView(props) {
                         </span>
                     </div>
                     <input type="text" className='form-control' name='managementName'
-                        value={props.productData.managementName}
-                        onChange={(e) => props.onChangeInputValue(e)}
+                        value={props.createProductData.managementName}
+                        onChange={(e) => props.onChangeProductInputValue(e)}
                     />
                 </div>
 
@@ -38,8 +38,8 @@ export default function DefaultInfoFieldView(props) {
                         </span>
                     </div>
                     <input type="text" className='form-control' name='memo'
-                        value={props.productData.memo} 
-                        onChange={(e) => props.onChangeInputValue(e)}
+                        value={props.createProductData.memo} 
+                        onChange={(e) => props.onChangeProductInputValue(e)}
                     />
                 </div>
 
@@ -50,8 +50,8 @@ export default function DefaultInfoFieldView(props) {
                         </span>
                     </div>
                     <input type="text" className='form-control' name='purchaseUrl'
-                        value={props.productData.purchaseUrl} 
-                        onChange={(e) => props.onChangeInputValue(e)} />
+                        value={props.createProductData.purchaseUrl} 
+                        onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
 
                 <div className="input-group mb-3">
@@ -61,8 +61,8 @@ export default function DefaultInfoFieldView(props) {
                         </span>
                     </div>
                     <input type="number" className='form-control' name='defaultTotalPurchasePrice'
-                        value={props.productData.defaultTotalPurchasePrice}
-                        onChange={(e) => props.onChangeInputValue(e)} />
+                        value={props.createProductData.defaultTotalPurchasePrice}
+                        onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
             </div>
         </ProductInfoInputWrapper>
