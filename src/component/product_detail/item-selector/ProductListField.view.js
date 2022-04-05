@@ -26,7 +26,7 @@ export default function ProductListFieldView(props) {
                     <AddIcon />
                 </button>
                 <button className="modify-btn"
-                    onClick={() => props.onActionOpenProductModifyModal()}
+                    onClick={() => props.onActionOpenModifyProductModal()}
                 >
                     <EditIcon />
                 </button>

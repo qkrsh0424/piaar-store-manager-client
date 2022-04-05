@@ -8,6 +8,7 @@ import ProductListFieldView from './ProductListField.view';
 import OptionListFieldView from './OptionListField.view';
 import ProductModifyModal from '../../product_manage/modal/ProductModifyModal';
 import CommonModalComponent from '../../module/modal/CommonModalComponent';
+import ModifyProductModalComponent from '../modify-product-modal/ModifyProductModal.component';
 
 const ItemSelectorComponent = (props) => {
     const location = useLocation();
@@ -17,8 +18,21 @@ const ItemSelectorComponent = (props) => {
     const [productCid, dispatchProductCid] = useReducer(productCidReducer, initialProductCid);
     const [optionCid, dispatchOptionCid] = useReducer(optionCidReducer, initialOptionCid);
     
-    const [productModifyModalOpen, setProductModifyModalOpen] = useState(false);
-    const [productModifyData, setProductModifyData] = useState(null);
+    const [modifyProductModalOpen, setModifyProductModalOpen] = useState(false);
+    const [modifyProductData, setModifyProductData] = useState(null);
+
+    const [uploadedImageData, dispatchUploadedImageData] = useReducer(uploadedImageDataReducer, initialUploadedImageData);
+
+    useEffect(() => {
+        if(!props.uploadedImage) {
+            return;
+        }
+
+        dispatchUploadedImageData({
+            type: 'SET_DATA',
+            payload: props.uploadedImage
+        })
+    }, [props.uploadedImage])
 
     // 카테고리 변경된 경우
     useEffect(() => {
@@ -106,19 +120,21 @@ const ItemSelectorComponent = (props) => {
         });
     }
 
-    const onActionOpenProductModifyModal = () => {
+    const onActionOpenModifyProductModal = () => {
         if (!query.productCid) {
             alert('상품을 먼저 선택해주세요.');
             return;
         }
 
         let data = props.productViewList.filter(r => r.cid === parseInt(query.productCid))[0];
-        setProductModifyData(data);
-        setProductModifyModalOpen(true);
+        setModifyProductData(data);
+        setModifyProductModalOpen(true);
     }
 
-    const onActionCloseProductModifyModal = () => {
-        setProductModifyModalOpen(false);
+    const onActionCloseModifyProductModal = () => {
+        dispatchUploadedImageData({ type: 'CLEAR' });
+        setModifyProductData(null);
+        setModifyProductModalOpen(false);
     }
 
     const onActionDeleteProduct = async () => {
@@ -143,6 +159,15 @@ const ItemSelectorComponent = (props) => {
         }
     }
 
+    const onActionUploadImage = async (e) => {
+        await props._onSubmit_uploadProdImageFile(e);
+    }
+
+    const onActionModifyProduct = async (modifyProductData) => {
+        await props._onSubmit_modifyProduct(modifyProductData);
+        onActionCloseModifyProductModal();
+    }
+    
     return(
         <Container>
             <ProductListFieldView
@@ -150,7 +175,7 @@ const ItemSelectorComponent = (props) => {
                 productViewList={props.productViewList}
 
                 onChangeProductCidValue={(value) => onChangeProductCidValue(value)}
-                onActionOpenProductModifyModal={() => onActionOpenProductModifyModal()}
+                onActionOpenModifyProductModal={() => onActionOpenModifyProductModal()}
                 onActionDeleteProduct={() => onActionDeleteProduct()}
             ></ProductListFieldView>
 
@@ -164,19 +189,23 @@ const ItemSelectorComponent = (props) => {
                 onActionDeleteProductOption={() => onActionDeleteProductOption()}
             ></OptionListFieldView>
 
-            {/* TODO :: 모달 컨트롤 */}
-            {/* Modal */}
+            {/* Product Modify Modal */}
             <CommonModalComponent
-                open={productModifyModalOpen}
+                open={modifyProductModalOpen}
                 maxWidth={'md'}
                 fullWidth={true}
 
-                onClose={onActionCloseProductModifyModal}
+                onClose={onActionCloseModifyProductModal}
             >
-                <ProductModifyModal
+                <ModifyProductModalComponent
                     categoryList={props.categoryList}
-                    productModifyData={productModifyData}
-                ></ProductModifyModal>
+                    uploadedImageData={uploadedImageData}
+
+                    modifyProductData={modifyProductData}
+                    onActionCloseModifyProductModal={() => onActionCloseModifyProductModal()}
+                    onActionUploadImage={(e) => onActionUploadImage(e)}
+                    onActionModifyProduct={(data) => onActionModifyProduct(data)}
+                ></ModifyProductModalComponent>
             </CommonModalComponent>
 
             {/* <CommonModalComponent
@@ -197,7 +226,7 @@ export default ItemSelectorComponent;
 
 const initialProductCid = '';
 const initialOptionCid = '';
-// const initialModifyProduct = '';
+const initialUploadedImageData = '';
 
 const productCidReducer = (state, action) => {
     switch (action.type) {
@@ -219,12 +248,12 @@ const optionCidReducer = (state, action) => {
     }
 }
 
-// const modifyProductReducer = (state, action) => {
-//     switch (action.type) {
-//         case 'SET_DATA':
-//             return action.payload;
-//         case 'CLEAR':
-//             return null;
-//         default: return { ...state };
-//     }
-// }
+const uploadedImageDataReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return null;
+        default: return { ...state };
+    }
+}

@@ -33,6 +33,8 @@ const ProductDetailComponent = (props) => {
     const [optionViewList, dispatchOptionViewList] = useReducer(optionViewListReducer, initialOptionViewList);
     const [detailViewList, dispatchDetailViewList] = useReducer(detailViewListReducer, initialDetailViewList);
 
+    const [uploadedImage, dispatchUploadedImage] = useReducer(uploadedImageReducer, initialUploadedImage);
+
     const [dataChangedTrigger, setDataChangedTrigger] = useState(false);
 
     const {
@@ -302,6 +304,46 @@ const ProductDetailComponent = (props) => {
             })
     }
 
+    const __reqUploadProdImageFile = async (e) => {
+        await productDataConnect().postUploadImageFileToCloud(e)
+            .then(res => {
+                if (res.status === 200 && res.data && res.data.message === 'success') {
+                    let imageData = res.data.data[0];
+                    
+                    dispatchUploadedImage({
+                        type: 'SET_DATA',
+                        payload: {
+                            imageFileName: imageData.fileName,
+                            imageUrl: imageData.fileUploadUri
+                        }
+                    });
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                alert(res?.data?.memo);
+            })
+    }
+
+    const __reqModifyProduct = async function (productModifyData) {
+        await productDataConnect().putOne(productModifyData)
+            .then(res => {
+                if (res.status == 200 && res.data && res.data.message == 'success') {
+                    alert('정상적으로 수정되었습니다.');
+                    setDataChangedTrigger(true);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (res.status === 401) {
+                    alert('접근 권한이 없습니다.')
+                } else {
+                    alert('undefined error. : changeProductOne');
+                }
+            })
+    }
+
     const _onSubmit_deleteProduct = async (productCid) => {
         await __reqDeleteProduct(productCid);
     }
@@ -322,6 +364,18 @@ const ProductDetailComponent = (props) => {
         await __reqModifyProductDetail(detailData);
     }
 
+    const _onSubmit_uploadProdImageFile = async (e) => {
+        onActionOpenBackdrop();
+        await __reqUploadProdImageFile(e);
+        onActionCloseBackdrop();
+    }
+
+    const _onSubmit_modifyProduct = async (modifyProductData) => {
+        onActionOpenBackdrop();
+        await __reqModifyProduct(modifyProductData);
+        onActionCloseBackdrop();
+    } 
+
     return (
         <Container>
             <CategorySelectorComponent
@@ -332,9 +386,12 @@ const ProductDetailComponent = (props) => {
                 categoryList={categoryList}
                 productViewList={productViewList}
                 optionViewList={optionViewList}
+                uploadedImage={uploadedImage}
 
                 _onSubmit_deleteProduct={(productCid) => _onSubmit_deleteProduct(productCid)}
                 _onSubmit_deleteProductOption={(optionCid) => _onSubmit_deleteProductOption(optionCid)}
+                _onSubmit_uploadProdImageFile={(e) => _onSubmit_uploadProdImageFile(e)}
+                _onSubmit_modifyProduct={(modifyProductData) => _onSubmit_modifyProduct(modifyProductData)}
             ></ItemSelectorComponent>
 
             <DetailTableComponent
@@ -355,6 +412,7 @@ export default ProductDetailComponent;
 const initialProductViewList = null;
 const initialOptionViewList = null;
 const initialDetailViewList = null;
+const initialUploadedImage = null;
 
 const productViewListReducer = (state, action) => {
     switch (action.type) {
@@ -380,6 +438,20 @@ const detailViewListReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
             return action.payload;
+        case 'CLEAR':
+            return null;
+        default: return { ...state };
+    }
+}
+
+const uploadedImageReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return {
+                ...state,
+                imageFileName: action.payload.imageFileName,
+                imageUrl: action.payload.imageUrl
+            };
         case 'CLEAR':
             return null;
         default: return { ...state };
