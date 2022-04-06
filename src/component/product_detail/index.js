@@ -35,6 +35,7 @@ const ProductDetailComponent = (props) => {
 
     const [uploadedImage, dispatchUploadedImage] = useReducer(uploadedImageReducer, initialUploadedImage);
 
+    const [submitCheck, dispatchSubmitCheck] = useReducer(submitCheckReducer, initialSubmitCheck);
     const [dataChangedTrigger, setDataChangedTrigger] = useState(false);
 
     const {
@@ -47,6 +48,13 @@ const ProductDetailComponent = (props) => {
         onActionOpenBackdrop();
         await __reqSearchProductCategory();
         onActionCloseBackdrop();
+        
+        dispatchSubmitCheck({
+            type: 'INIT_DATA',
+            payload: {
+                isSubmit: false
+            }
+        })
     }, []);
 
     // 데이터 생성, 수정, 삭제 시 즉시 반영
@@ -55,6 +63,8 @@ const ProductDetailComponent = (props) => {
             await __reqSearchProduct();
             await __reqSearchOption();
             await __reqSearchProductDetail();
+
+            dispatchUploadedImage({ type: 'CLEAR' })
         }
         setDataChangedTrigger(false);
     }, [dataChangedTrigger]);
@@ -278,10 +288,6 @@ const ProductDetailComponent = (props) => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('해당 상품상세가 정상적으로 추가되었습니다.');
                     setDataChangedTrigger(true);
-                    // setIsObjectSubmitted({
-                    //     ...isObjectSubmitted,
-                    //     detailAdd: false
-                    // });
                 }
             })
             .catch(err => {
@@ -335,13 +341,22 @@ const ProductDetailComponent = (props) => {
             })
             .catch(err => {
                 let res = err.response;
+                alert(res?.data?.memo);
+            })
+    }
 
-                if (res.status === 401) {
-                    alert('접근 권한이 없습니다.')
-                } else {
-                    alert('undefined error. : changeProductOne');
+    const __reqCreateOption = async function (createOptionData) {
+        await productOptionDataConnect().postOne(createOptionData)
+            .then(res => {
+                if (res.status == 200 && res.data && res.data.message == 'success') {
+                    alert('해당 옵션이 정상적으로 추가되었습니다.');
+                    setDataChangedTrigger(true);
                 }
             })
+            .catch(err => {
+                let res = err.response;
+                alert(res?.data?.memo);
+            });
     }
 
     const _onSubmit_deleteProduct = async (productCid) => {
@@ -372,9 +387,31 @@ const ProductDetailComponent = (props) => {
 
     const _onSubmit_modifyProduct = async (modifyProductData) => {
         onActionOpenBackdrop();
+        dispatchSubmitCheck({ 
+            type: 'SET_IS_SUBMIT',
+            payload: true
+        });
         await __reqModifyProduct(modifyProductData);
         onActionCloseBackdrop();
-    } 
+        dispatchSubmitCheck({ 
+            type: 'SET_IS_SUBMIT',
+            payload: false
+        });
+    }
+
+    const _onSubmit_createProductOption = async (createOptionData) => {
+        onActionOpenBackdrop();
+        dispatchSubmitCheck({ 
+            type: 'SET_IS_SUBMIT',
+            payload: true
+        });
+        await __reqCreateOption(createOptionData);
+        onActionCloseBackdrop();
+        dispatchSubmitCheck({ 
+            type: 'SET_IS_SUBMIT',
+            payload: false
+        });
+    }
 
     return (
         <Container>
@@ -387,11 +424,13 @@ const ProductDetailComponent = (props) => {
                 productViewList={productViewList}
                 optionViewList={optionViewList}
                 uploadedImage={uploadedImage}
+                submitCheck={submitCheck}
 
                 _onSubmit_deleteProduct={(productCid) => _onSubmit_deleteProduct(productCid)}
                 _onSubmit_deleteProductOption={(optionCid) => _onSubmit_deleteProductOption(optionCid)}
                 _onSubmit_uploadProdImageFile={(e) => _onSubmit_uploadProdImageFile(e)}
                 _onSubmit_modifyProduct={(modifyProductData) => _onSubmit_modifyProduct(modifyProductData)}
+                _onSubmit_createProductOption={(createOptionData) => _onSubmit_createProductOption(createOptionData)}
             ></ItemSelectorComponent>
 
             <DetailTableComponent
@@ -413,6 +452,7 @@ const initialProductViewList = null;
 const initialOptionViewList = null;
 const initialDetailViewList = null;
 const initialUploadedImage = null;
+const initialSubmitCheck = null;
 
 const productViewListReducer = (state, action) => {
     switch (action.type) {
@@ -451,6 +491,21 @@ const uploadedImageReducer = (state, action) => {
                 ...state,
                 imageFileName: action.payload.imageFileName,
                 imageUrl: action.payload.imageUrl
+            };
+        case 'CLEAR':
+            return null;
+        default: return { ...state };
+    }
+}
+
+const submitCheckReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload
+        case 'SET_IS_SUBMIT':
+            return {
+                ...state,
+                isSubmit: action.payload
             };
         case 'CLEAR':
             return null;

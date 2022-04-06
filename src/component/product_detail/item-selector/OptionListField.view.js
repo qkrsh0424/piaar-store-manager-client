@@ -8,7 +8,9 @@ export default function OptionListFieldView(props) {
     return (
         <DataListWrapper>
             <div className="control-box">
-                <button className="add-btn">
+                <button className="add-btn"
+                    onClick={() => props.onActionOpenCreateProductOptionModal()}
+                >
                     <AddIcon />
                 </button>
                 <button className="modify-btn">

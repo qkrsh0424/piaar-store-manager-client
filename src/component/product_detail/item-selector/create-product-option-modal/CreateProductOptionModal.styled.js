@@ -33,6 +33,15 @@ const Container = styled.div`
         }
     }
 
+    .group-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        padding:15px;
+        
+        @media only screen and (max-width:425px){
+            padding: 15px 0;
+        }
+    }
 `;
 
 const HeaderFieldWrapper = styled.div`
@@ -116,16 +125,6 @@ const StockReflectedSelectorWrapper = styled.div`
 const CategorySelectorWrapper = styled.div`
     padding: 10px 0;
     border-bottom: 1px solid #b9c2d8c9;
-
-    .group-title {
-        font-size: 1.3rem;
-        font-weight: 700;
-        padding:15px;
-        
-        @media only screen and (max-width:425px){
-            padding: 15px 0;
-        }
-    }
 
     .category-box {
         font-size: 1rem;

@@ -1,5 +1,6 @@
 import { useState, useEffect, useReducer } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import qs from 'query-string';
 import ArrowField from './ArrowField.view';
 
@@ -9,6 +10,51 @@ import OptionListFieldView from './OptionListField.view';
 import ProductModifyModal from '../../product_manage/modal/ProductModifyModal';
 import CommonModalComponent from '../../module/modal/CommonModalComponent';
 import ModifyProductModalComponent from '../modify-product-modal/ModifyProductModal.component';
+import CreateProductOptionModalComponent from './create-product-option-modal/CreateProductOptionModal.component';
+
+class ProductOption {
+    constructor(productId, optionDefaultName = '', optionManagementName = '') {
+        this.id = uuidv4();
+        this.code = '';
+        this.defaultName = optionDefaultName;
+        this.managementName = optionManagementName;
+        this.salesPrice = 0;
+        this.totalPurchasePrice = 0;
+        this.stockUnit = 0;
+        this.status = '준비중';
+        this.memo = '';
+        this.imageUrl = '';
+        this.imageFileName = '';
+        this.color = '';
+        this.unit_cny = '';
+        this.unit_krw = '';
+        this.totalPurchasePrice = 0;
+        this.productCid = null;
+        this.productId = productId;
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            code: this.code,
+            defaultName: this.defaultName,
+            managementName: this.managementName,
+            salesPrice: this.salesPrice,
+            totalPurchasePrice: this.totalPurchasePrice,
+            stockUnit: this.stockUnit,
+            status: this.status,
+            memo: this.memo,
+            imageUrl: this.imageUrl,
+            imageFileName: this.imageFileName,
+            color: this.color,
+            unitCny: this.unitCny,
+            unitKrw: this.unitKrw,
+            totalPurchasePrice: this.totalPurchasePrice,
+            productCid: this.productCid,
+            productId: this.productId
+        }
+    }
+}
 
 const ItemSelectorComponent = (props) => {
     const location = useLocation();
@@ -20,6 +66,9 @@ const ItemSelectorComponent = (props) => {
     
     const [modifyProductModalOpen, setModifyProductModalOpen] = useState(false);
     const [modifyProductData, setModifyProductData] = useState(null);
+
+    const [createProductOptionModalOpen, setCreateProductOptionModalOpen] = useState(false);
+    const [createProductOptionData, setCreateProductOptionData] = useState(null);
 
     const [uploadedImageData, dispatchUploadedImageData] = useReducer(uploadedImageDataReducer, initialUploadedImageData);
 
@@ -137,6 +186,26 @@ const ItemSelectorComponent = (props) => {
         setModifyProductModalOpen(false);
     }
 
+    const onActionOpenCreateProductOptionModal = () => {
+        if (!query.productCid) {
+            alert('상품을 먼저 선택해주세요.');
+            return;
+        }
+
+        let selectedProduct = props.productViewList.filter(r => r.cid === parseInt(query.productCid))[0];
+        let option = new ProductOption(selectedProduct.id);
+        option.productCid = selectedProduct.cid;
+
+        setCreateProductOptionData(option);
+        setCreateProductOptionModalOpen(true);
+    }
+    
+    const onActionCloseCreateProductOptionModal = () => {
+        dispatchUploadedImageData({ type: 'CLEAR' });
+        setCreateProductOptionData(null);
+        setCreateProductOptionModalOpen(false);
+    }
+
     const onActionDeleteProduct = async () => {
         if(!query.productCid) {
             alert('상품을 먼저 선택해주세요.');
@@ -164,8 +233,17 @@ const ItemSelectorComponent = (props) => {
     }
 
     const onActionModifyProduct = async (modifyProductData) => {
-        await props._onSubmit_modifyProduct(modifyProductData);
+        if(!props.submitCheck.isSubmit) {
+            await props._onSubmit_modifyProduct(modifyProductData);
+        }
         onActionCloseModifyProductModal();
+    }
+
+    const onActionCreateProductOption = async (createOptionData) => {
+        if(!props.submitCheck.isSubmit) {
+            await props._onSubmit_createProductOption(createOptionData);
+        }
+        onActionCloseCreateProductOptionModal();
     }
     
     return(
@@ -187,6 +265,7 @@ const ItemSelectorComponent = (props) => {
 
                 onChangeOptionCidValue={(value) => onChangeOptionCidValue(value)}
                 onActionDeleteProductOption={() => onActionDeleteProductOption()}
+                onActionOpenCreateProductOptionModal={() => onActionOpenCreateProductOptionModal()}
             ></OptionListFieldView>
 
             {/* Product Modify Modal */}
@@ -200,6 +279,7 @@ const ItemSelectorComponent = (props) => {
                 <ModifyProductModalComponent
                     categoryList={props.categoryList}
                     uploadedImageData={uploadedImageData}
+                    isSubmit={props.submitCheck}
 
                     modifyProductData={modifyProductData}
                     onActionCloseModifyProductModal={() => onActionCloseModifyProductModal()}
@@ -208,16 +288,24 @@ const ItemSelectorComponent = (props) => {
                 ></ModifyProductModalComponent>
             </CommonModalComponent>
 
-            {/* <CommonModalComponent
-                open={optionModifyModalOpen}
+            {/* ProductOption Create Modal */}
+            <CommonModalComponent
+                open={createProductOptionModalOpen}
                 maxWidth={'md'}
                 fullWidth={true}
 
-                onClose={onActionCloseOptionModifyModal}
+                onClose={onActionCloseCreateProductOptionModal}
             >
-                <ProductOptionModifyModal
-                ></ProductOptionModifyModal>
-            </CommonModalComponent> */}
+                <CreateProductOptionModalComponent
+                    createProductOptionData={createProductOptionData}
+                    uploadedImageData={uploadedImageData}
+                    isSubmit={props.submitCheck}
+
+                    onActionCloseCreateProductOptionModal={() => onActionCloseCreateProductOptionModal()}
+                    onActionUploadImage={(e) => onActionUploadImage(e)}
+                    onActionCreateProductOption={(data) => onActionCreateProductOption(data)}
+                ></CreateProductOptionModalComponent>
+            </CommonModalComponent>
         </Container>
     )
 }

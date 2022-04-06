@@ -182,7 +182,7 @@ const ModifyProductModalComponent = (props) => {
                     onChangeProductInputValue={(e) => onChangeProductInputValue(e)}
                 ></DefaultDetailInfoFieldView>
                 <div>
-                    <button type="submit" className="submit-btn">등록</button>
+                    <button type="submit" className="submit-btn" disabled={props.submitCheck}>등록</button>
                 </div>
             </form>
         </Container>
