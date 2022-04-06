@@ -10,7 +10,8 @@ import OptionListFieldView from './OptionListField.view';
 import ProductModifyModal from '../../product_manage/modal/ProductModifyModal';
 import CommonModalComponent from '../../module/modal/CommonModalComponent';
 import ModifyProductModalComponent from '../modify-product-modal/ModifyProductModal.component';
-import CreateProductOptionModalComponent from './create-product-option-modal/CreateProductOptionModal.component';
+import CreateProductOptionModalComponent from '../create-product-option-modal/CreateProductOptionModal.component';
+import ModifyProductOptionModalComponent from '../modify-product-option-modal/ModifyProductOptionModal.component';
 
 class ProductOption {
     constructor(productId, optionDefaultName = '', optionManagementName = '') {
@@ -69,6 +70,9 @@ const ItemSelectorComponent = (props) => {
 
     const [createProductOptionModalOpen, setCreateProductOptionModalOpen] = useState(false);
     const [createProductOptionData, setCreateProductOptionData] = useState(null);
+
+    const [modifyProductOptionModalOpen, setModifyProductOptionModalOpen] = useState(false);
+    const [modifyProductOptionData, setModifyProductOptionData] = useState(null);
 
     const [uploadedImageData, dispatchUploadedImageData] = useReducer(uploadedImageDataReducer, initialUploadedImageData);
 
@@ -206,6 +210,23 @@ const ItemSelectorComponent = (props) => {
         setCreateProductOptionModalOpen(false);
     }
 
+    const onActionOpenModifyProductOptionModal = () => {
+        if (!query.optionCid) {
+            alert('옵션을 먼저 선택해주세요.');
+            return;
+        }
+
+        let selectedOption = props.optionViewList.filter(r => r.cid === parseInt(query.optionCid))[0];
+        setModifyProductOptionData(selectedOption);
+        setModifyProductOptionModalOpen(true);
+    }
+    
+    const onActionCloseModifyProductOptionModal = () => {
+        dispatchUploadedImageData({ type: 'CLEAR' });
+        setModifyProductOptionData(null);
+        setModifyProductOptionModalOpen(false);
+    }
+
     const onActionDeleteProduct = async () => {
         if(!query.productCid) {
             alert('상품을 먼저 선택해주세요.');
@@ -222,6 +243,7 @@ const ItemSelectorComponent = (props) => {
             alert('옵션을 먼저 선택해주세요.');
             return;
         }
+        
 
         if (window.confirm('옵션을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
             await props._onSubmit_deleteProductOption(query.optionCid);
@@ -245,6 +267,13 @@ const ItemSelectorComponent = (props) => {
         }
         onActionCloseCreateProductOptionModal();
     }
+
+    const onActionModifyProductOption = async (modifyOptionData) => {
+        if(!props.submitCheck.isSubmit) {
+            await props._onSubmit_modifyProductOption(modifyOptionData);
+        }
+        onActionCloseModifyProductOptionModal();
+    }
     
     return(
         <Container>
@@ -266,6 +295,7 @@ const ItemSelectorComponent = (props) => {
                 onChangeOptionCidValue={(value) => onChangeOptionCidValue(value)}
                 onActionDeleteProductOption={() => onActionDeleteProductOption()}
                 onActionOpenCreateProductOptionModal={() => onActionOpenCreateProductOptionModal()}
+                onActionOpenModifyProductOptionModal={() => onActionOpenModifyProductOptionModal()}
             ></OptionListFieldView>
 
             {/* Product Modify Modal */}
@@ -305,6 +335,25 @@ const ItemSelectorComponent = (props) => {
                     onActionUploadImage={(e) => onActionUploadImage(e)}
                     onActionCreateProductOption={(data) => onActionCreateProductOption(data)}
                 ></CreateProductOptionModalComponent>
+            </CommonModalComponent>
+
+            {/* ProductOption Modify Modal */}
+            <CommonModalComponent
+                open={modifyProductOptionModalOpen}
+                maxWidth={'md'}
+                fullWidth={true}
+
+                onClose={onActionCloseModifyProductOptionModal}
+            >
+                <ModifyProductOptionModalComponent
+                    modifyProductOptionData={modifyProductOptionData}
+                    uploadedImageData={uploadedImageData}
+                    isSubmit={props.submitCheck}
+
+                    onActionCloseModifyProductOptionModal={() => onActionCloseModifyProductOptionModal()}
+                    onActionUploadImage={(e) => onActionUploadImage(e)}
+                    onActionModifyProductOption={(data) => onActionModifyProductOption(data)}
+                ></ModifyProductOptionModalComponent>
             </CommonModalComponent>
         </Container>
     )

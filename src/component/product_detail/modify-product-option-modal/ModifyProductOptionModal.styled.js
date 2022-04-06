@@ -78,50 +78,6 @@ const HeaderFieldWrapper = styled.div`
     }
 `;
 
-const ModifyFormWrapper = styled.div`
-    padding: 20px;
-
-    button {
-        float: right;
-        background:#7a7bda;
-        border:1px solid #7a7bda;
-        border-radius:3px;
-        color:white;
-        font-weight:700;
-        padding: 1% 3%;
-
-        @media only screen and (max-width:992px){
-            padding: 15px 0;
-        }
-    }
-`;
-
-const StockReflectedSelectorWrapper = styled.div`
-    padding:10px;
-    overflow: auto;
-    border-bottom: 1px solid #b9c2d8c9;
-
-    button{
-        width: 100%;
-        margin:0 auto;
-        padding:5px;
-        background: white;
-        border:1px solid #4682B4;
-        border-radius: 5px;
-        font-weight: 550;
-        
-        :hover{
-            background: #4682B4C9;
-            color: white;
-        }
-    }
-    
-    .btn-active {
-        background-color: #4682B4 !important;
-        color: white;
-    }
-`;
-
 const CategorySelectorWrapper = styled.div`
     padding: 10px 0;
     border-bottom: 1px solid #b9c2d8c9;
@@ -227,7 +183,7 @@ const ImageSelectorWrapper = styled.div`
     }
 `;
 
-const ProductInfoInputWrapper = styled.div`
+const OptionInfoInputWrapper = styled.div`
     padding: 10px 0;
     border-bottom: 1px solid #b9c2d8c9;
 `;
@@ -235,10 +191,8 @@ const ProductInfoInputWrapper = styled.div`
 export {
     Container,
     HeaderFieldWrapper,
-    ModifyFormWrapper,
-    StockReflectedSelectorWrapper,
     CategorySelectorWrapper,
     CategoryBtn,
     ImageSelectorWrapper,
-    ProductInfoInputWrapper
+    OptionInfoInputWrapper
 }

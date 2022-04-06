@@ -13,7 +13,9 @@ export default function OptionListFieldView(props) {
                 >
                     <AddIcon />
                 </button>
-                <button className="modify-btn">
+                <button className="modify-btn"
+                    onClick={() => props.onActionOpenModifyProductOptionModal()}
+                >
                     <EditIcon />
                 </button>
                 <button className="delete-btn"

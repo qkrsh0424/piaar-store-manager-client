@@ -359,6 +359,20 @@ const ProductDetailComponent = (props) => {
             });
     }
 
+    const __reqModifyOption = async function (modifyOptionData) {
+        await productOptionDataConnect().putOne(modifyOptionData)
+            .then(res => {
+                if (res.status == 200 && res.data && res.data.message == 'success') {
+                    alert('정상적으로 수정되었습니다.');
+                    setDataChangedTrigger(true);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                alert(res?.data?.memo);
+            })
+    }
+
     const _onSubmit_deleteProduct = async (productCid) => {
         await __reqDeleteProduct(productCid);
     }
@@ -413,6 +427,20 @@ const ProductDetailComponent = (props) => {
         });
     }
 
+    const _onSubmit_modifyProductOption = async (modifyOptionData) => {
+        onActionOpenBackdrop();
+        dispatchSubmitCheck({ 
+            type: 'SET_IS_SUBMIT',
+            payload: true
+        });
+        await __reqModifyOption(modifyOptionData);
+        onActionCloseBackdrop();
+        dispatchSubmitCheck({ 
+            type: 'SET_IS_SUBMIT',
+            payload: false
+        });
+    }
+
     return (
         <Container>
             <CategorySelectorComponent
@@ -431,6 +459,7 @@ const ProductDetailComponent = (props) => {
                 _onSubmit_uploadProdImageFile={(e) => _onSubmit_uploadProdImageFile(e)}
                 _onSubmit_modifyProduct={(modifyProductData) => _onSubmit_modifyProduct(modifyProductData)}
                 _onSubmit_createProductOption={(createOptionData) => _onSubmit_createProductOption(createOptionData)}
+                _onSubmit_modifyProductOption={(modifyOptionData) => _onSubmit_modifyProductOption(modifyOptionData)}
             ></ItemSelectorComponent>
 
             <DetailTableComponent

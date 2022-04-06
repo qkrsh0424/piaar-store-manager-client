@@ -1,4 +1,4 @@
-import { ImageSelectorWrapper } from "./CreateProductOptionModal.styled";
+import { ImageSelectorWrapper } from "./ModifyProductOptionModal.styled";
 
 export default function ImageSelectorFieldView(props) {
     return (
@@ -6,11 +6,11 @@ export default function ImageSelectorFieldView(props) {
             <div className="input-box">
                 <div className="image-delete-box">
                     <input type="file" accept="image/*"
-                        id={`cpom_i_uploader`}
+                        id={`mpom_i_uploader`}
                         onClick={(e) => e.target.value=''}
                         onChange={(e) => props.onActionUploadProductImageFile(e)}
                     />
-                    {props.createOption.imageUrl ?
+                    {props.modifyOption.imageUrl ?
                         <div className="input-group-prepend">
                             <button className="btn btn-outline-secondary delete-btn"
                                 type="button"
@@ -24,8 +24,8 @@ export default function ImageSelectorFieldView(props) {
                 </div>
                 <div className="image-wrapper">
                     <div className="image-box">
-                        {props.createOption.imageUrl ?
-                            <img name='imageFile' type="file" src={props.createOption.imageUrl} title={props.createOption.imageFileName}
+                        {props.modifyOption.imageUrl ?
+                            <img name='imageFile' type="file" src={props.modifyOption.imageUrl} title={props.modifyOption.imageFileName}
                                 onClick={() => props.onActionClickProductImageButton()}
                             />
                             :

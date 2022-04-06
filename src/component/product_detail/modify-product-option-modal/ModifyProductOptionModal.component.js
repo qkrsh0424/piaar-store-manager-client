@@ -1,26 +1,26 @@
 import { useEffect, useReducer } from "react";
 
-import { Container } from "./CreateProductOptionModal.styled";
+import { Container } from "./ModifyProductOptionModal.styled";
 import HeaderFieldView from "./HeaderField.view";
 import ImageSelectorFieldView from "./ImageSelectorField.view";
 import OptionInfoFormFieldView from "./OptionInfoFormField.view";
 
-const CreateProductOptionModalComponent = (props) => {
-    const [createOption, dispatchCreateOption] = useReducer(createOptionReducer, initialCreateOption);
+const ModifyProductOptionModalComponent = (props) => {
+    const [modifyOption, dispatchModifyOption] = useReducer(modifyOptionReducer, initialModifyOption);
 
     useEffect(() => {
-        if(props.createProductOptionData) {
-            dispatchCreateOption({
+        if(props.modifyProductOptionData) {
+            dispatchModifyOption({
                 type: 'INIT_DATA',
-                payload: props.createProductOptionData
+                payload: props.modifyProductOptionData
             });
         }
 
-    }, [props.createProductOptionData])
+    }, [props.modifyProductOptionData])
 
     useEffect(() => {
         if(props.uploadedImageData) {
-            dispatchCreateOption({
+            dispatchModifyOption({
                 type: 'SET_DATA',
                 payload: {
                     name: "imageFileName",
@@ -28,7 +28,7 @@ const CreateProductOptionModalComponent = (props) => {
                 }
             });
     
-            dispatchCreateOption({
+            dispatchModifyOption({
                 type: 'SET_DATA',
                 payload: {
                     name: "imageUrl",
@@ -39,7 +39,7 @@ const CreateProductOptionModalComponent = (props) => {
     }, [props.uploadedImageData]);
 
     const onChangeInputValue = (e) => {
-        dispatchCreateOption({
+        dispatchModifyOption({
             type: 'SET_DATA',
             payload: {
                 name: e.target.name,
@@ -49,7 +49,7 @@ const CreateProductOptionModalComponent = (props) => {
     }
 
     const onActionClickProductImageButton = () => {
-        document.getElementById("cpom_i_uploader").click();
+        document.getElementById("mpom_i_uploader").click();
     }
 
     const onActionUploadProductImageFile = async (e) => {
@@ -61,7 +61,7 @@ const CreateProductOptionModalComponent = (props) => {
     }
 
     const onActionDeleteProductImageFile = () => {
-        dispatchCreateOption({
+        dispatchModifyOption({
             type: "SET_DATA",
             payload: {
                 name : "imageFileName",
@@ -69,7 +69,7 @@ const CreateProductOptionModalComponent = (props) => {
             }
         });
 
-        dispatchCreateOption({
+        dispatchModifyOption({
             type: "SET_DATA",
             payload: {
                 name : "imageUrl",
@@ -78,28 +78,28 @@ const CreateProductOptionModalComponent = (props) => {
         });
     }
 
-    const onSubmitCreateProductOption = async (e) => {
+    const onSubmitModifyProductOption = async (e) => {
         e.preventDefault();
 
         if (checkRequiredData()) {
-            await props.onActionCreateProductOption(createOption);
+            await props.onActionModifyProductOption(modifyOption);
         } else {
             return;
         }
     }
 
     const checkRequiredData = () => {
-        if (createOption.defaultName == null || createOption.defaultName == undefined || createOption.defaultName == '') {
+        if (modifyOption.defaultName == null || modifyOption.defaultName == undefined || modifyOption.defaultName == '') {
             alert('상품명은 필수항목입니다.');
             return false;
         }
 
-        if (createOption.managementName == null || createOption.managementName == undefined || createOption.managementName == '') {
+        if (modifyOption.managementName == null || modifyOption.managementName == undefined || modifyOption.managementName == '') {
             alert('관리상품명은 필수항목입니다.');
             return false;
         }
 
-        if (createOption.code == null || createOption.code == undefined || createOption.code == '') {
+        if (modifyOption.code == null || modifyOption.code == undefined || modifyOption.code == '') {
             alert('관리코드는 필수항목입니다.');
             return false;
         }
@@ -108,15 +108,15 @@ const CreateProductOptionModalComponent = (props) => {
 
 
     return (
-        createOption &&
+        modifyOption &&
         <Container>
             <HeaderFieldView
                 onActionCloseCreateProductOptionModal={() => props.onActionCloseCreateProductOptionModal()}
             ></HeaderFieldView>
 
-            <form onSubmit={(e) => onSubmitCreateProductOption(e)}>
+            <form onSubmit={(e) => onSubmitModifyProductOption(e)}>
                 <ImageSelectorFieldView
-                    createOption={createOption}
+                    modifyOption={modifyOption}
 
                     onActionClickProductImageButton={() => onActionClickProductImageButton()}
                     onActionUploadProductImageFile={(e) => onActionUploadProductImageFile(e)}
@@ -124,7 +124,7 @@ const CreateProductOptionModalComponent = (props) => {
                 ></ImageSelectorFieldView>
 
                 <OptionInfoFormFieldView
-                    createOption={createOption}
+                    modifyOption={modifyOption}
 
                     onChangeInputValue={(e) => onChangeInputValue(e)}
                 ></OptionInfoFormFieldView>
@@ -136,11 +136,11 @@ const CreateProductOptionModalComponent = (props) => {
     )
 }
 
-export default CreateProductOptionModalComponent;
+export default ModifyProductOptionModalComponent;
 
-const initialCreateOption = null;
+const initialModifyOption = null;
 
-const createOptionReducer = (state, action) => {
+const modifyOptionReducer = (state, action) => {
     switch(action.type) {
         case 'INIT_DATA':
             return action.payload;
@@ -150,7 +150,7 @@ const createOptionReducer = (state, action) => {
                 [action.payload.name] : action.payload.value
             }
         case 'CLEAR':
-            return initialCreateOption;
-        default: return initialCreateOption;
+            return initialModifyOption;
+        default: return initialModifyOption;
     }
 }
