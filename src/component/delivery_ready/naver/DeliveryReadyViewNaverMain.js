@@ -558,8 +558,10 @@ const DeliveryReadyViewNaverMain = (props) => {
                         e.stopPropagation();
 
                         if(window.confirm('정말 삭제하시겠습니까?')) {
+                            setBackdropLoading(true);
                             await __handleDataConnect().deleteOrderData(itemCid);
                             setUnreleaseCheckedOrderList([]);
+                            setBackdropLoading(false);
                         }
                     },
                     deleteList: async function (e) {
@@ -569,8 +571,10 @@ const DeliveryReadyViewNaverMain = (props) => {
 
                         if (checkedUnreleaseData.length > 0) {
                             if(window.confirm('선택 항목(' + checkedUnreleaseData.length +'개)을 모두 삭제하시겠습니까?')) {
+                                setBackdropLoading(true);
                                 await __handleDataConnect().deleteOrderListData(checkedUnreleaseData);
                                 setUnreleaseCheckedOrderList([]);
+                                setBackdropLoading(false);
                             }
                         }
                         else {
@@ -658,7 +662,9 @@ const DeliveryReadyViewNaverMain = (props) => {
                         }
                 
                         if(window.confirm('출고를 취소하시겠습니까?')) {
+                            setBackdropLoading(true);
                             await __handleDataConnect().changeToUnreleaseData(deliveryReadyItem);
+                            setBackdropLoading(false);
                         }
                     },
                     changeListToUnreleaseData: async function (e) {
@@ -858,11 +864,15 @@ const DeliveryReadyViewNaverMain = (props) => {
                     changeItemOption: async function () {
                         if(selectedOptionColumn === 'optionManagementCode') {
                             if(window.confirm('옵션코드를 변경하시면 출고옵션코드도 함께 변경됩니다.\n변경하시겠습니까?')) {
+                                setBackdropLoading(true);
                                 await __handleDataConnect().changeItemOptionManagementCode(changedOptionManagementCode);
+                                setBackdropLoading(false);
                             }
                         }else if(selectedOptionColumn === 'releaseOptionCode') {
                             if(window.confirm('출고옵션코드를 변경하시겠습니까?')) {
+                                setBackdropLoading(true);
                                 await __handleDataConnect().changeItemReleaseOptionCode(changedOptionManagementCode);
+                                setBackdropLoading(false);
                             }
                         }
                     },
