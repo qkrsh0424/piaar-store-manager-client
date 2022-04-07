@@ -8,7 +8,7 @@ export default function HeaderFieldView(props) {
             <div className="header-top">
                 <div className="modal-title">옵션 수정</div>
                 <div className="modal-close-btn">
-                    <CancelIcon type="button" sx={{ fontSize: 33 }} onClick={() => props.onActionCloseCreateProductOptionModal()} />
+                    <CancelIcon type="button" sx={{ fontSize: 33 }} onClick={() => props.onActionCloseModifyProductOptionModal()} />
                 </div>
             </div>
         </HeaderFieldWrapper>

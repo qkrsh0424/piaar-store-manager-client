@@ -111,7 +111,7 @@ const ModifyProductOptionModalComponent = (props) => {
         modifyOption &&
         <Container>
             <HeaderFieldView
-                onActionCloseCreateProductOptionModal={() => props.onActionCloseCreateProductOptionModal()}
+                onActionCloseModifyProductOptionModal={() => props.onActionCloseModifyProductOptionModal()}
             ></HeaderFieldView>
 
             <form onSubmit={(e) => onSubmitModifyProductOption(e)}>
