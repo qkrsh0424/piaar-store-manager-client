@@ -97,12 +97,12 @@ const ProductCreateFormComponent = (props) => {
         }
     }
 
-    const onChangeProductInputValue = useCallback((e) => {
+    const onChangeProductInputValue = (e) => {
         let value = e.target;
         props._onAction_changeProductInputValue(value);
-    });
+    };
 
-    const onChangeOptionInputValue = useCallback((e, optionId) => {
+    const onChangeOptionInputValue = (e, optionId) => {
         let productOptions = props.createProductData.productOptions?.map(option => {
             if(option.id === optionId){
                 return {
@@ -115,7 +115,7 @@ const ProductCreateFormComponent = (props) => {
         });
 
         props._onAction_changeProductOption(productOptions);
-    });
+    };
 
     const checkFormData = () => {
         if (props.createProductData.productCategoryCid == null) {

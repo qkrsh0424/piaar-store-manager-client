@@ -33,6 +33,16 @@ const Container = styled.div`
         }
     }
 
+    .group-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        padding:15px;
+        
+        @media only screen and (max-width:425px){
+            padding: 15px 0;
+        }
+    }
+
 `;
 
 const HeaderFieldWrapper = styled.div`

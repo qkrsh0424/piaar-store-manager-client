@@ -15,7 +15,7 @@ export default function OptionInfoFormFieldView(props) {
                         type="text"
                         className='form-control'
                         name='defaultName'
-                        value={props.modifyOption.defaultName}
+                        value={props.modifyOption.defaultName ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                         required
                     />
@@ -32,7 +32,7 @@ export default function OptionInfoFormFieldView(props) {
                         type="text"
                         className='form-control'
                         name='managementName'
-                        value={props.modifyOption.managementName}
+                        value={props.modifyOption.managementName ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                         required
                     />
@@ -49,7 +49,7 @@ export default function OptionInfoFormFieldView(props) {
                         type="text"
                         className='form-control'
                         name='code'
-                        value={props.modifyOption.code}
+                        value={props.modifyOption.code ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                         required
                     />
@@ -65,7 +65,7 @@ export default function OptionInfoFormFieldView(props) {
                         type="text"
                         className='form-control'
                         name='nosUniqueCode'
-                        value={props.modifyOption.nosUniqueCode}
+                        value={props.modifyOption.nosUniqueCode ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                     />
                 </div>
@@ -79,7 +79,7 @@ export default function OptionInfoFormFieldView(props) {
                         type="number"
                         className='form-control'
                         name='salesPrice'
-                        value={props.modifyOption.salesPrice}
+                        value={props.modifyOption.salesPrice ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                     />
                 </div>
@@ -93,7 +93,7 @@ export default function OptionInfoFormFieldView(props) {
                         type="number"
                         className='form-control'
                         name='totalPurchasePrice'
-                        value={props.modifyOption.totalPurchasePrice}
+                        value={props.modifyOption.totalPurchasePrice ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                     />
                 </div>
@@ -107,7 +107,7 @@ export default function OptionInfoFormFieldView(props) {
                         type="number"
                         className='form-control'
                         name='stockUnit'
-                        value={props.modifyOption.stockUnit}
+                        value={props.modifyOption.stockUnit ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                     />
                 </div>
@@ -121,7 +121,7 @@ export default function OptionInfoFormFieldView(props) {
                         type="text"
                         className='form-control'
                         name='status'
-                        value={props.modifyOption.status}
+                        value={props.modifyOption.status ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                     />
                 </div>
@@ -135,7 +135,7 @@ export default function OptionInfoFormFieldView(props) {
                         type="text"
                         className='form-control'
                         name='memo'
-                        value={props.modifyOption.memo}
+                        value={props.modifyOption.memo ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                     />
                 </div>
@@ -149,7 +149,7 @@ export default function OptionInfoFormFieldView(props) {
                         type="text"
                         className='form-control'
                         name='color'
-                        value={props.modifyOption.color}
+                        value={props.modifyOption.color ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                     />
                 </div>
@@ -163,7 +163,7 @@ export default function OptionInfoFormFieldView(props) {
                         type="text"
                         className='form-control'
                         name='unitCny'
-                        value={props.modifyOption.unitCny}
+                        value={props.modifyOption.unitCny ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                     />
                 </div>
@@ -177,7 +177,7 @@ export default function OptionInfoFormFieldView(props) {
                         type="text"
                         className='form-control'
                         name='unitKrw'
-                        value={props.modifyOption.unitKrw}
+                        value={props.modifyOption.unitKrw ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                     />
                 </div>

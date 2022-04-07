@@ -15,7 +15,6 @@ const ModifyProductOptionModalComponent = (props) => {
                 payload: props.modifyProductOptionData
             });
         }
-
     }, [props.modifyProductOptionData])
 
     useEffect(() => {
