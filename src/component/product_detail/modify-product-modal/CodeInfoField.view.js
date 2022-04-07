@@ -9,7 +9,7 @@ export default function CodeInfoFieldView(props) {
                     <div className="input-group-prepend">
                         <span className="input-group-text">상품코드</span>
                     </div>
-                    <input type="text" className='form-control' name='code' value={props.modifyProductData.code ?? ''} onChange={(e) => props.onChangeProductInputValue(e)} />
+                    <input type="text" className='form-control' name='code' value={props.modifyProductData.code ?? ''} disabled/>
                 </div>
 
                 <div className="input-group mb-3">

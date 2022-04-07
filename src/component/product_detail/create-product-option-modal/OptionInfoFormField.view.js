@@ -50,8 +50,7 @@ export default function OptionInfoFormFieldView(props) {
                         className='form-control'
                         name='code'
                         value={props.createOption.code}
-                        onChange={(e) => props.onChangeInputValue(e)}
-                        required
+                        disabled
                     />
 
                 </div>

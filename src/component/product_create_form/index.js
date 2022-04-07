@@ -7,14 +7,15 @@ import { productCategoryDataConnect } from '../../data_connect/productCategoryDa
 import { productDataConnect } from '../../data_connect/productDataConnect';
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
 import ProductCreateFormComponent from './ProductCreateForm.component';
+import { generateOptionManagementCode, generateProdCode } from '../../utils/keyGeneratorUtils'
 
 const Container = styled.div`
 `;
 
 class Product {
-    constructor(optionDefaultName = '', optionManagementName = '') {
+    constructor(code = '', optionDefaultName = '', optionManagementName = '') {
         this.id = uuidv4();
-        this.code = '';
+        this.code = code;
         this.manufacturingCode = '';
         this.naverProductCode = '';
         this.defaultName = '';
@@ -34,7 +35,7 @@ class Product {
         this.stockManagement = false;
         this.productCategoryCid = null;
         this.productOptions = [
-            new ProductOption(this.id, optionDefaultName, optionManagementName).toJSON()
+            new ProductOption(this.id, generateOptionManagementCode(), optionDefaultName, optionManagementName).toJSON()
         ]
     }
 
@@ -66,9 +67,9 @@ class Product {
 }
 
 class ProductOption {
-    constructor(productId, optionDefaultName = '', optionManagementName = '') {
+    constructor(productId, code = '', optionDefaultName = '', optionManagementName = '') {
         this.id = uuidv4();
-        this.code = '';
+        this.code = code;
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
         this.salesPrice = 0;
@@ -232,7 +233,7 @@ const ProductCreateComponent = (props) => {
 
     const _onAction_createProductOption = () => {
         let data = createProductData.productOptions;
-        data.push(new ProductOption(createProductData.id).toJSON());
+        data.push(new ProductOption(createProductData.id, generateOptionManagementCode()).toJSON());
 
         dispatchCreateProductData({
             type: 'SET_OPTION',
@@ -318,7 +319,7 @@ const ProductCreateComponent = (props) => {
 
 export default withRouter(ProductCreateComponent);
 
-const initialCreateProductData = new Product('단일상품', '단일상품').toJSON();
+const initialCreateProductData = new Product(generateProdCode(), '단일상품', '단일상품').toJSON();
 
 const createProductDataReducer = (state, action) => {
     switch(action.type) {

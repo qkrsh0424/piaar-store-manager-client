@@ -74,7 +74,7 @@ export default function OptionInfoFieldView(props) {
                                             <input type='text' value={optionData.managementName} name='managementName' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>
                                         </td>
                                         <td>
-                                            <input type='text' value={optionData.code} name='code' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>
+                                            <input type='text' value={optionData.code} name='code' disabled></input>
                                         </td>
                                         <td>
                                             <input type='text' value={optionData.nosUniqueCode} name='nosUniqueCode' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>
