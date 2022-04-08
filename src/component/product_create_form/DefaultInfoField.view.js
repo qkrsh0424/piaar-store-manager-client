@@ -57,7 +57,8 @@ export default function DefaultInfoFieldView(props) {
                 <div className="input-group mb-3">
                     <div className="input-group-prepend">
                         <span className="input-group-text">
-                            기본매입총합계 <span className="small">(매입가격 + 매입운송비용 + 관부가세 + 기타비용)</span>
+                            기본매입총합계
+                            <span className="small">(매입가격 + 매입운송비용 + 관부가세 + 기타비용)</span>
                         </span>
                     </div>
                     <input type="number" className='form-control' name='defaultTotalPurchasePrice'

@@ -43,38 +43,43 @@ const productDataConnect = () => {
             })
         },
         postCreate: async function (productListData) {
-            let jsonArr = [];
+            let json = {};
+            
+            let productDto = {
+                id: productListData.id,
+                code: productListData.code,
+                naverProductCode: productListData.naverProductCode,
+                defaultName: productListData.defaultName,
+                imageFileName: productListData.imageFileName,
+                imageUrl: productListData.imageUrl,
+                purchaseUrl: productListData.purchaseUrl,
+                managementName: productListData.managementName,
+                manufacturingCode: productListData.manufacturingCode,
+                memo: productListData.memo,
+                hsCode: productListData.hsCode,
+                style: productListData.style,
+                tariffRate: productListData.tariffRate,
+                defaultWidth: productListData.defaultWidth,
+                defaultLength: productListData.defaultLength,
+                defaultHeight: productListData.defaultHeight,
+                defaultQuantity: productListData.defaultQuantity,
+                defaultWeight: productListData.defaultWeight,
+                defaultTotalPurchasePrice: productListData.defaultTotalPurchasePrice,
+                stockManagement: productListData.stockManagement,
+                productCategoryCid: productListData.productCategoryCid
+            }
+            let optionDtos = productListData.productOptions
 
-                let productDto = {
-                    id: productListData.id,
-                    code: productListData.code,
-                    naverProductCode: productListData.naverProductCode,
-                    defaultName: productListData.defaultName,
-                    imageFileName: productListData.imageFileName,
-                    imageUrl: productListData.imageUrl,
-                    purchaseUrl: productListData.purchaseUrl,
-                    managementName: productListData.managementName,
-                    manufacturingCode: productListData.manufacturingCode,
-                    memo: productListData.memo,
-                    hsCode: productListData.hsCode,
-                    style: productListData.style,
-                    tariffRate: productListData.tariffRate,
-                    defaultWidth: productListData.defaultWidth,
-                    defaultLength: productListData.defaultLength,
-                    defaultHeight: productListData.defaultHeight,
-                    defaultQuantity: productListData.defaultQuantity,
-                    defaultWeight: productListData.defaultWeight,
-                    defaultTotalPurchasePrice: productListData.defaultTotalPurchasePrice,
-                    stockManagement: productListData.stockManagement,
-                    productCategoryCid: productListData.productCategoryCid
-                }
-                let optionDtos = productListData.productOptions
-                let json = {
+            for (let i = 0; i < optionDtos.length; i++) {
+                let packageDtos = optionDtos[i].optionPackages ?? [];
+
+                json = {
                     productDto: productDto,
-                    optionDtos: optionDtos
+                    optionDtos: optionDtos,
+                    packageDtos: packageDtos
                 }
-                jsonArr.push(json)
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product/list`, jsonArr, {
+            }
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product/one`, json, {
                 withCredentials: true
             })
         },

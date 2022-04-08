@@ -8,6 +8,7 @@ import { productDataConnect } from '../../data_connect/productDataConnect';
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
 import ProductCreateFormComponent from './ProductCreateForm.component';
 import { generateOptionManagementCode, generateProdCode } from '../../utils/keyGeneratorUtils'
+import { productOptionDataConnect } from '../../data_connect/productOptionDataConnect';
 
 const Container = styled.div`
 `;
@@ -80,8 +81,8 @@ class ProductOption {
         this.imageUrl = '';
         this.imageFileName = '';
         this.color = '';
-        this.unit_cny = '';
-        this.unit_krw = '';
+        this.unitCny = '';
+        this.unitKrw = '';
         this.totalPurchasePrice = 0;
         this.productCid = null;
         this.productId = productId;
@@ -110,8 +111,29 @@ class ProductOption {
     }
 }
 
+class OptionPackage {
+    constructor(parentOptionId) {
+        this.id = uuidv4();
+        this.packageUnit = 0;
+        this.originOptionCode = '';
+        this.originOptionId = '';
+        this.parentOptionId = parentOptionId;
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            packageUnit: this.packageUnit,
+            originOptionCode: this.originOptionCode,
+            originOptionId: this.originOptionId,
+            parentOptionId: this.parentOptionId,
+        }
+    }
+}
+
 const ProductCreateComponent = (props) => {
     const [categoryList, setCategoryList] = useState(null);
+    const [optionList, setOptionList] = useState(null);
     const [createProductData, dispatchCreateProductData] = useReducer(createProductDataReducer, initialCreateProductData);
     const [isSubmit, setIsSubmit] = useState(false);
 
@@ -123,6 +145,7 @@ const ProductCreateComponent = (props) => {
 
     useEffect(async () => {
         await __reqSearchProductCategory();
+        await __reqSearchProductOption();
     }, []);
 
     const __reqSearchProductCategory = async () => {
@@ -201,8 +224,21 @@ const ProductCreateComponent = (props) => {
     const __reqCreateProductAndOptions = async () => {
         await productDataConnect().postCreate(createProductData)
             .then(res => {
-                if (res.status == 200 && res.data && res.data.message == 'success') {
+                if (res.status === 200 && res.data && res.data.message === 'success') {
                     props.history.replace(props.location.state.prevUrl);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                alert(res?.data?.memo);
+            })
+    }
+
+    const __reqSearchProductOption = async () => {
+        await productOptionDataConnect().getList()
+            .then(res => {
+                if (res.status === 200 && res.data && res.data.message === 'success') {
+                    setOptionList(res.data.data);
                 }
             })
             .catch(err => {
@@ -291,11 +327,96 @@ const ProductCreateComponent = (props) => {
         });
     }
 
+    const _onAction_createOptionPackage = (optionId) => {
+        let optionData = createProductData.productOptions.filter(r => r.id === optionId)[0];
+        
+        let packageList = optionData.optionPackages ?? [];
+
+        optionData = {
+            ...optionData,
+            optionPackages: packageList
+        }
+
+        let data = optionData.optionPackages;
+        data.push(new OptionPackage(optionData.id).toJSON());
+
+        let addData = createProductData.productOptions.map(r => {
+            if(r.id === optionId) {
+                return{
+                    ...r,
+                    optionPackages: data
+                }
+            }else{
+                return r;
+            }
+        });
+
+        dispatchCreateProductData({
+            type: 'SET_OPTION',
+            payload: addData
+        });
+    }
+
+    const _onAction_changeOptionPackage = (optionId, optionPackages) => {
+        let data = optionPackages.map(r => {
+            optionList.forEach(option => {
+                if(r.originOptionId === option.id) {
+                    r = {
+                        ...r,
+                        originOptionCode : option.code
+                    }
+                }
+            });
+            return r;
+        });
+
+        let changedData = createProductData.productOptions.map(r => {
+            if(r.id === optionId) {
+                return {
+                    ...r,
+                    optionPackages: data
+                }
+            }else {
+                return r;
+            }
+        });
+
+        dispatchCreateProductData({
+            type: 'SET_OPTION',
+            payload: changedData
+        });
+    }
+
+    const _onAction_deleteOptionPakcage = (optionId, packageId) => {
+        let changedData = createProductData.productOptions.map(option => {
+            if(option.id === optionId) {
+                let data = option.optionPackages?.filter(r => r.id !== packageId);
+                if(data.length === 0) {
+                    delete option.optionPackages;
+                    return option;
+                }else{
+                    return{
+                        ...option,
+                        optionPackages: data
+                    }
+                }
+            }else {
+                return option;
+            }
+        });
+
+        dispatchCreateProductData({
+            type: 'SET_OPTION',
+            payload: changedData
+        });
+    }
+
     return (
         <Container>
             <ProductCreateFormComponent
                 createProductData={createProductData}
                 categoryList={categoryList}
+                optionList={optionList}
                 isSubmit={isSubmit}
 
                 _onAction_stockReflectedSelector={() => _onAction_stockReflectedSelector()}
@@ -307,6 +428,9 @@ const ProductCreateComponent = (props) => {
                 _onAction_deleteProductOption={(optionId) => _onAction_deleteProductOption(optionId)}
                 _onAction_changeProductOption={(option) => _onAction_changeProductOption(option)}
                 _onSubmit_createProductAndOptions={() => _onSubmit_createProductAndOptions()}
+                _onAction_createOptionPackage={(optionId) => _onAction_createOptionPackage(optionId)}
+                _onAction_changeOptionPackage={(optionId, optionPackages) => _onAction_changeOptionPackage(optionId, optionPackages)}
+                _onAction_deleteOptionPakcage={(optionId, packageId) => _onAction_deleteOptionPakcage(optionId, packageId)}
             ></ProductCreateFormComponent>
 
             {/* Backdrop */}

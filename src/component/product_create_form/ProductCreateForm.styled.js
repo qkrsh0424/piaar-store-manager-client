@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
+    padding-bottom: 5%;
+
     .back-btn {
         position: fixed;
         top:10px;
@@ -105,6 +107,13 @@ const FormContainer = styled.div`
         width: 6px;
         height: 6px;
     }
+`;
+
+const OptionContainer = styled.div`
+    /* padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background-color: #4682B418; */
 `;
 
 const StockReflectedSelectorWrapper = styled.div`
@@ -277,13 +286,12 @@ const ProductInfoInputWrapper = styled.div`
 const OptionInfoWrapper = styled.div`
     padding: 10px;
 
-    .data-container{
+    .data-container {
         padding: 20px;
         border-radius: 10px;
         margin-bottom: 10px;
         background-color: #4682B418;
     }
-
     .option-delete-btn {
         border:1px solid #ef5350;
         color: #ef5350;
@@ -370,6 +378,10 @@ const OptionInfoWrapper = styled.div`
         font-weight: 700;
         width:100%;
         padding:5px;
+
+        :disabled { 
+            background-color: #f0f0f0;
+        }
     }
 
     .option-add-box {
@@ -396,6 +408,99 @@ const OptionInfoWrapper = styled.div`
     }
 `;
 
+const OptionPackageWrapper = styled.div`
+    padding-bottom: 50px;
+
+    .create-btn {
+        padding: 8px 25px;
+        margin: 10px;
+        background-color: #4c85b4bd;
+        border-radius: 5px;
+        border: 1px solid #4c85b4bd;
+        color: white;
+        font-weight: 600;
+
+        :hover {
+            transition: 0.15s;
+            background-color: #4682B4;
+        }
+    }
+
+    .package-delete-btn {
+        border: none;
+        color: #dc3545;
+        background-color: white;
+
+        :hover {
+            transition: 0.2s;
+            transform: scale(1.05);
+            color: red;
+        }
+    }
+
+    .option-package-box{
+        padding: 20px 0;
+    }
+
+    .package-list{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 20px;
+        padding: 5px 3px;
+
+        @media screen and (max-width: 992px) {
+            grid-template-columns: 1fr;
+            row-gap: 5px;
+        }
+    }
+
+    .selector-style{
+        padding: 5px 0px;
+        border: none;
+        text-align: center;
+        display: inline-block;
+        transition: 0.15s;
+
+        :hover {
+            background-color: #4c85b433;
+        }
+        
+        :focus{
+            outline: none;
+        }
+
+        @media only screen and (max-width: 992px) {
+            width: 100%;
+        }
+    }
+
+    table {
+        overflow: auto;
+
+        margin-bottom: 0;
+    }
+
+    table tr {
+        padding:5px !important;
+        border: 1px solid #dee2e6;
+        text-align: center;
+    }
+
+    table td, th {
+        padding:5px !important;
+        border: 1px solid #dee2e6;
+        text-align: center;
+    }
+
+    table td input {
+        border: none;
+        text-align: center;
+        font-weight: 700;
+        width:100%;
+        padding:5px;
+    }
+`;
+
 export {
     Container,
     FormContainer,
@@ -405,5 +510,7 @@ export {
     CategoryBtn,
     ImageSelectorWrapper,
     ProductInfoInputWrapper,
-    OptionInfoWrapper
+    OptionInfoWrapper,
+    OptionContainer,
+    OptionPackageWrapper
 }

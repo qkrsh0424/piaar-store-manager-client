@@ -331,6 +331,7 @@ const ItemSelectorComponent = (props) => {
                     createProductOptionData={createProductOptionData}
                     uploadedImageData={uploadedImageData}
                     isSubmit={props.submitCheck}
+                    optionList={props.optionList}
 
                     onActionCloseCreateProductOptionModal={() => onActionCloseCreateProductOptionModal()}
                     onActionUploadImage={(e) => onActionUploadImage(e)}

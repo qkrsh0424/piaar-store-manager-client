@@ -346,7 +346,7 @@ const ProductDetailComponent = (props) => {
     }
 
     const __reqCreateOption = async function (createOptionData) {
-        await productOptionDataConnect().postOne(createOptionData)
+        await productOptionDataConnect().postOptionAndPackages(createOptionData)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('해당 옵션이 정상적으로 추가되었습니다.');
@@ -453,6 +453,7 @@ const ProductDetailComponent = (props) => {
                 optionViewList={optionViewList}
                 uploadedImage={uploadedImage}
                 submitCheck={submitCheck}
+                optionList={optionList}
 
                 _onSubmit_deleteProduct={(productCid) => _onSubmit_deleteProduct(productCid)}
                 _onSubmit_deleteProductOption={(optionCid) => _onSubmit_deleteProductOption(optionCid)}
