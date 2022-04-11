@@ -101,7 +101,7 @@ const CreateBtn = styled.button`
     }
 `;
 
-const CreateTranslatorHeaderTitleComponent = (props) => {
+const CreateTranslatorHeaderTitleModalComponent = (props) => {
     return (
         <>
             <Container>
@@ -147,4 +147,4 @@ const CreateTranslatorHeaderTitleComponent = (props) => {
     )
 }
 
-export default CreateTranslatorHeaderTitleComponent;
+export default CreateTranslatorHeaderTitleModalComponent;

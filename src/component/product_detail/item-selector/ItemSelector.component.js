@@ -7,7 +7,6 @@ import ArrowField from './ArrowField.view';
 import { Container } from "./ItemSelector.styled";
 import ProductListFieldView from './ProductListField.view';
 import OptionListFieldView from './OptionListField.view';
-import ProductModifyModal from '../../product_manage/modal/ProductModifyModal';
 import CommonModalComponent from '../../module/modal/CommonModalComponent';
 import ModifyProductModalComponent from '../modify-product-modal/ModifyProductModal.component';
 import CreateProductOptionModalComponent from '../create-product-option-modal/CreateProductOptionModal.component';
