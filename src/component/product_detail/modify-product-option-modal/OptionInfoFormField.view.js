@@ -1,4 +1,5 @@
-import { OptionInfoInputWrapper } from "./ModifyProductOptionModal.styled";
+import { OptionInfoInputWrapper, OptionPackageWrapper } from "./ModifyProductOptionModal.styled";
+import DoDisturbOnOutlinedIcon from '@mui/icons-material/DoDisturbOnOutlined';
 
 export default function OptionInfoFormFieldView(props) {
     return (
@@ -180,6 +181,54 @@ export default function OptionInfoFormFieldView(props) {
                         onChange={(e) => props.onChangeInputValue(e)}
                     />
                 </div>
+
+                <OptionPackageWrapper>
+                    <div>
+                        <button type="button" className="create-btn"
+                            onClick={() => props.onActionCreateOptionPackage()}
+                        >옵션 패키지 추가</button>
+                    </div>
+
+                    {props.modifyOption.optionPackages && props.modifyOption.optionPackages.length > 0 && 
+                        <div className="table-container">
+                            <table className="table" style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width='200'>패키지 구성 옵션</th>
+                                        <th scope="col" width='100'>수량</th>
+                                        <th scope="col" width='40'>삭제</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {props.modifyOption.optionPackages?.map((packageOption, index) => {
+                                        return (
+                                            <tr key={`option-package-list-index` + index}>
+                                                <th>
+                                                    <select className="selector-style" name="originOptionId" onChange={(e) => props.onChangePackageInputValue(e, packageOption.id)}>
+                                                        <option>옵션선택</option>
+                                                        {props.optionList?.map((option, index) => {
+                                                            return (
+                                                                <option key={`co-option-package-name-idx` + index} value={option.id} selected={option.id === packageOption.originOptionId}>{option.managementName} ({option.code})</option>
+                                                            )
+                                                        })}
+                                                    </select>
+                                                </th>
+                                                <td>
+                                                    <input type="number" name="packageUnit" onChange={(e) => props.onChangePackageInputValue(e, packageOption.id)} value={packageOption.packageUnit ?? ''} min="0" />
+                                                </td>
+                                                <td>
+                                                    <button type="button" className="package-delete-btn" onClick={() => props.onActionDeleteOptionPackage(packageOption.id)}>
+                                                        <DoDisturbOnOutlinedIcon />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </OptionPackageWrapper>
             </div>
         </OptionInfoInputWrapper>
     )

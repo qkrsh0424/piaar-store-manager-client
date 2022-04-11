@@ -11,6 +11,7 @@ import { productOptionDataConnect } from '../../data_connect/productOptionDataCo
 import { productDetailDataConnect } from '../../data_connect/productDetailDataConnect';
 import ItemSelectorComponent from './item-selector/ItemSelector.component';
 import DetailTableComponent from './detail-table/DetailTable.component';
+import { optionPackageDataConnect } from '../../data_connect/optionPackageDataConnect';
 
 const Container = styled.div`
     background: linear-gradient(to bottom right,#f0fffa,#839edfad);
@@ -28,6 +29,7 @@ const ProductDetailComponent = (props) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [selectedOption, setSelectedOption] = useState(null);
     const [detailList, setDetailList] = useState(null);
+    const [optionPackage, setOptionPackage] = useState(null);
 
     const [productViewList, dispatchProductViewList] = useReducer(productViewListReducer, initialProductViewList);
     const [optionViewList, dispatchOptionViewList] = useReducer(optionViewListReducer, initialOptionViewList);
@@ -360,11 +362,24 @@ const ProductDetailComponent = (props) => {
     }
 
     const __reqModifyOption = async function (modifyOptionData) {
-        await productOptionDataConnect().putOne(modifyOptionData)
+        await productOptionDataConnect().putOptionAndPackages(modifyOptionData)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('정상적으로 수정되었습니다.');
                     setDataChangedTrigger(true);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                alert(res?.data?.memo);
+            })
+    }
+
+    const __reqSearchOptionPackage = async (optionId) => {
+        await optionPackageDataConnect().searchListByParentOptionId(optionId)
+            .then(res => {
+                if (res.status == 200 && res.data && res.data.message == 'success') {
+                    setOptionPackage(res.data.data);
                 }
             })
             .catch(err => {
@@ -441,6 +456,10 @@ const ProductDetailComponent = (props) => {
         });
     }
 
+    const _onAction_searchOptionPackage = async (optionId) => {
+        await __reqSearchOptionPackage(optionId);
+    }
+
     return (
         <Container>
             <CategorySelectorComponent
@@ -454,6 +473,7 @@ const ProductDetailComponent = (props) => {
                 uploadedImage={uploadedImage}
                 submitCheck={submitCheck}
                 optionList={optionList}
+                optionPackage={optionPackage}
 
                 _onSubmit_deleteProduct={(productCid) => _onSubmit_deleteProduct(productCid)}
                 _onSubmit_deleteProductOption={(optionCid) => _onSubmit_deleteProductOption(optionCid)}
@@ -461,6 +481,7 @@ const ProductDetailComponent = (props) => {
                 _onSubmit_modifyProduct={(modifyProductData) => _onSubmit_modifyProduct(modifyProductData)}
                 _onSubmit_createProductOption={(createOptionData) => _onSubmit_createProductOption(createOptionData)}
                 _onSubmit_modifyProductOption={(modifyOptionData) => _onSubmit_modifyProductOption(modifyOptionData)}
+                _onAction_searchOptionPackage={(optionId) => _onAction_searchOptionPackage(optionId)}
             ></ItemSelectorComponent>
 
             <DetailTableComponent

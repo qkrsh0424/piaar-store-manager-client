@@ -1,9 +1,30 @@
 import { useEffect, useReducer } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 import { Container } from "./ModifyProductOptionModal.styled";
 import HeaderFieldView from "./HeaderField.view";
 import ImageSelectorFieldView from "./ImageSelectorField.view";
 import OptionInfoFormFieldView from "./OptionInfoFormField.view";
+
+class OptionPackage {
+    constructor(parentOptionId) {
+        this.id = uuidv4();
+        this.packageUnit = 0;
+        this.originOptionCode = '';
+        this.originOptionId = '';
+        this.parentOptionId = parentOptionId;
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            packageUnit: this.packageUnit,
+            originOptionCode: this.originOptionCode,
+            originOptionId: this.originOptionId,
+            parentOptionId: this.parentOptionId,
+        }
+    }
+}
 
 const ModifyProductOptionModalComponent = (props) => {
     const [modifyOption, dispatchModifyOption] = useReducer(modifyOptionReducer, initialModifyOption);
@@ -11,16 +32,24 @@ const ModifyProductOptionModalComponent = (props) => {
     useEffect(() => {
         if(props.modifyProductOptionData) {
             dispatchModifyOption({
-                type: 'INIT_DATA',
+                type: 'SET_DATA',
                 payload: props.modifyProductOptionData
             });
+
+            dispatchModifyOption({
+                type: 'CHANGE_DATA',
+                payload: {
+                    name: 'optionPackages',
+                    value: props.optionPackage
+                }
+            })
         }
     }, [props.modifyProductOptionData])
 
     useEffect(() => {
         if(props.uploadedImageData) {
             dispatchModifyOption({
-                type: 'SET_DATA',
+                type: 'CHANGE_DATA',
                 payload: {
                     name: "imageFileName",
                     value: props.uploadedImageData.imageFileName,
@@ -28,7 +57,7 @@ const ModifyProductOptionModalComponent = (props) => {
             });
     
             dispatchModifyOption({
-                type: 'SET_DATA',
+                type: 'CHANGE_DATA',
                 payload: {
                     name: "imageUrl",
                     value: props.uploadedImageData.imageUrl
@@ -39,7 +68,7 @@ const ModifyProductOptionModalComponent = (props) => {
 
     const onChangeInputValue = (e) => {
         dispatchModifyOption({
-            type: 'SET_DATA',
+            type: 'CHANGE_DATA',
             payload: {
                 name: e.target.name,
                 value: e.target.value
@@ -61,7 +90,7 @@ const ModifyProductOptionModalComponent = (props) => {
 
     const onActionDeleteProductImageFile = () => {
         dispatchModifyOption({
-            type: "SET_DATA",
+            type: "CHANGE_DATA",
             payload: {
                 name : "imageFileName",
                 value: ""
@@ -69,7 +98,7 @@ const ModifyProductOptionModalComponent = (props) => {
         });
 
         dispatchModifyOption({
-            type: "SET_DATA",
+            type: "CHANGE_DATA",
             payload: {
                 name : "imageUrl",
                 value: ""
@@ -105,6 +134,73 @@ const ModifyProductOptionModalComponent = (props) => {
         return true;
     }
 
+    const onActionCreateOptionPackage = () => {
+        let optionData = modifyOption;
+        let packageList = optionData.optionPackages ?? [];
+        packageList.push(new OptionPackage(optionData.id).toJSON());
+
+        optionData = {
+            ...optionData,
+            optionPackages: packageList
+        }
+
+        dispatchModifyOption({
+            type: 'SET_DATA',
+            payload: optionData
+        });
+    }
+
+    const onChangePackageInputValue = (e, packageId) => {
+        let optionData = modifyOption;
+
+        let changedPackage = optionData.optionPackages?.map(r => {
+            if(r.id === packageId) {
+                return {
+                    ...r,
+                    [e.target.name] : e.target.value
+                }
+            }else {
+                return r;
+            }
+        });
+
+        // set option code of option package
+        if(e.target.name === "originOptionId"){
+            changedPackage.forEach(r => {
+                let code = props.optionList.filter(option => option.id === r.originOptionId)[0]?.code;
+                r.originOptionCode = code;
+            });
+        }
+
+        optionData = {
+            ...optionData,
+            optionPackages: changedPackage
+        }
+
+        dispatchModifyOption({
+            type: 'SET_DATA',
+            payload: optionData
+        });
+    }
+
+    const onActionDeleteOptionPackage = (packageId) => {
+        let optionData = {...modifyOption};
+        let data = optionData.optionPackages?.filter(r => r.id !== packageId);
+    
+        if(data.length === 0) {
+            delete optionData.optionPackages;
+        } else {
+            optionData = {
+                ...optionData,
+                optionPackages: data
+            }
+        }
+
+        dispatchModifyOption({
+            type: 'SET_DATA',
+            payload: optionData
+        });
+    }
 
     return (
         modifyOption &&
@@ -124,8 +220,12 @@ const ModifyProductOptionModalComponent = (props) => {
 
                 <OptionInfoFormFieldView
                     modifyOption={modifyOption}
+                    optionList={props.optionList}
 
                     onChangeInputValue={(e) => onChangeInputValue(e)}
+                    onActionCreateOptionPackage={() => onActionCreateOptionPackage()}
+                    onChangePackageInputValue={(e, packageId) => onChangePackageInputValue(e, packageId)}
+                    onActionDeleteOptionPackage={(packageId) => onActionDeleteOptionPackage(packageId)}
                 ></OptionInfoFormFieldView>
                 <div>
                     <button type="submit" className="submit-btn" disabled={props.submitCheck}>등록</button>
@@ -141,9 +241,9 @@ const initialModifyOption = null;
 
 const modifyOptionReducer = (state, action) => {
     switch(action.type) {
-        case 'INIT_DATA':
-            return action.payload;
         case 'SET_DATA':
+            return action.payload;
+        case 'CHANGE_DATA':
             return {
                 ...state,
                 [action.payload.name] : action.payload.value
