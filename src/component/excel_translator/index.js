@@ -1,6 +1,8 @@
 import { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
+import queryString from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
+import { withRouter } from 'react-router';
 
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
 import { excelTranslatorDataConnect } from '../../data_connect/excelTranslatorDataConnect';
@@ -29,7 +31,8 @@ class TranslatedData {
     }
 }
 
-const ExcelTranslatorComponent = () => {
+const ExcelTranslatorComponent = (props) => {
+    let params = queryString.parse(props.location.search);
 
     const [excelTranslatorHeaderList, setExcelTranslatorHeaderList] = useState(null);
     const [uploadedExcelData, setUploadedExcelData] = useState(null);
@@ -57,6 +60,14 @@ const ExcelTranslatorComponent = () => {
         }
         setDataChangedTrigger(false);
     }, [dataChangedTrigger]);
+
+    useEffect(() => {
+        if(!params.headerId) {
+            return;
+        }
+
+        setUploadedExcelData(null);
+    }, [params.headerId])
 
     const __reqSearchExcelTranslatorHeader = async () => {
         await excelTranslatorDataConnect().searchList()
@@ -117,7 +128,6 @@ const ExcelTranslatorComponent = () => {
         await excelTranslatorDataConnect().postFile(formData)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
-                    console.log(res.data.data);
                     setUploadedExcelData(res.data.data);
                 }
             })
@@ -141,7 +151,8 @@ const ExcelTranslatorComponent = () => {
                 link.click();
             })
             .catch(err => {
-                console.log(err);
+                let res = err.response;
+                alert(res?.data?.message);
             })
     }
 
@@ -240,4 +251,4 @@ const ExcelTranslatorComponent = () => {
     )
 }
 
-export default ExcelTranslatorComponent;
+export default withRouter(ExcelTranslatorComponent);

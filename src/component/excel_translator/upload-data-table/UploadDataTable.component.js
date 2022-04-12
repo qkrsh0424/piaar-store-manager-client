@@ -62,7 +62,7 @@ const UploadDataTableComponent = (props) => {
             });
             dispatchUploadedExcelDataState({
                 type: 'CLEAR'
-            })
+            });
             
             let headerId = params.headerId;
             let headerTitleState = props.excelTranslatorHeaderList?.filter(r => r.id === headerId)[0];
