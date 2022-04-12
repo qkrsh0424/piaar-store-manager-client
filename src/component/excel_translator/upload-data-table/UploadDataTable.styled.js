@@ -12,26 +12,9 @@ const ControlFieldWrapper = styled.div`
     align-items: center;
     padding: 10px;
 
-    .table-title {
-        font-size: large;
-        color: rgba(000, 102, 153, 0.9);
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        align-items: center;
-        padding: 10px;
-
-        @media only screen and (max-width: 992px){
-            grid-template-columns: 1fr;
-            row-gap: 10px;
-        }
-
-        @media only screen and (max-width:576px){
-            font-size: 16px;
-        }
-
-        @media only screen and (max-width:320px){
-            font-size: 14px;
-        }
+    @media only screen and (max-width: 992px){
+        grid-template-columns: 1fr;
+        row-gap: 10px;
     }
 
     .control-box {

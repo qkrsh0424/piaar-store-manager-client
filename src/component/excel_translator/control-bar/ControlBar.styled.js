@@ -7,15 +7,40 @@ const Container = styled.div`
 const HeaderContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+
+    @media screen and (max-width: 992px){
+        grid-template-columns: repeat(1, 1fr);
+    }
 `;
 
 const TitleSelectorWrapper = styled.div`
-    display: flex;
-    text-align: center;
+    display: grid;
+    grid-template-columns: 50% auto;
+    padding: 20px 0px;
     align-items: center;
 
+    @media only screen and (max-width: 992px) {
+        padding: 10px;
+        grid-template-columns: 100%;
+        row-gap: 20px;
+        place-content: center;
+    }
+
     .selector {
-        width: 50%;
+        text-align: center;
+
+        @media only screen and (max-width: 992px) {
+            font-size: 10px;
+            grid-row: end;
+        }
+    }
+
+    .button-box {
+        display: flex;
+        
+        @media only screen and (max-width: 992px) {
+            justify-content: flex-end;
+        }
     }
 
     div button {

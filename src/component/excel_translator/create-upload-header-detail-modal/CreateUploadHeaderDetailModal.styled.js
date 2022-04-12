@@ -82,7 +82,7 @@ const CreateFormFieldWrapper = styled.div`
         background-color: white;
         border-radius: 30px;
         align-items: center;
-
+        
         @media only screen and (max-width:425px){
             padding: 15px 0;
         }

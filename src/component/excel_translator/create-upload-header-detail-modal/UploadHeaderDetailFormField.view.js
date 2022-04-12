@@ -20,7 +20,7 @@ export default function UploadHeaderDetailFormFieldView(props) {
                     <div className="detail-list">
                         {props.createUploadHeaderDetailState?.uploadedData.details?.map((data, idx) => {
                             return (
-                                <div key={'create_header_detail_idx' + idx} className="input-group mb-3 list-group">
+                                <div key={'create_header_detail_idx' + idx} className="mb-3 list-group">
                                     <div className="data-text">
                                         <div>
                                             <div onClick={(e) => props.onActionMoveHeaderFormUp(e, data.id)}>

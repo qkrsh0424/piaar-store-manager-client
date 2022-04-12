@@ -35,7 +35,7 @@ export default function DownloadHeaderDetailFormFieldView(props) {
                                         <div className="form-selector">
                                             <div>{idx + 1}.</div>
                                             <div style={{ width: '100%' }}>
-                                                <Box sx={{ display: 'flex' }}>
+                                                <Box sx={{ display: 'flex', backgroundColor: 'white' }}>
                                                     <FormControl fullWidth>
                                                         <InputLabel id="header-select-id" size="small">Title</InputLabel>
                                                         <Select
