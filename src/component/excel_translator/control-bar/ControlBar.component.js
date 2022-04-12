@@ -205,6 +205,23 @@ const ControlBarComponent = (props) => {
         await props._onSubmit_uploadExcelFile(uploadedFormData);
     }
 
+    const onActionDownloadExcelFile = async (e) => {
+        e.preventDefault();
+
+        if (!props.uploadedExcelData) {
+            alert('엑셀 파일을 먼저 업로드 해주세요.');
+            return;
+        } else if (!(selectedHeaderTitleState.uploadHeaderDetail.details.length > 0)) {
+            alert('업로드 엑셀 양식을 설정해주세요.');
+            return;
+        } else if (!(selectedHeaderTitleState.downloadHeaderDetail.details.length > 0)) {
+            alert('다운로드 엑셀 양식을 설정해주세요.');
+            return;
+        }
+
+        await props._onSubmit_downloadExcelFile(selectedHeaderTitleState.downloadHeaderTitle, selectedHeaderTitleState.downloadHeaderDetail.details);
+
+    }
     return (
         <Container>
             <HeaderContainer>
@@ -222,6 +239,7 @@ const ControlBarComponent = (props) => {
 
                 <ExcelDataControlFieldView
                     onActionUploadExcelFile={(e) => onActionUploadExcelFile(e)}
+                    onActionDownloadExcelFile={(e) => onActionDownloadExcelFile(e)}
                 ></ExcelDataControlFieldView>
             </HeaderContainer>
 

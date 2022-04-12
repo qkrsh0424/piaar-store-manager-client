@@ -155,7 +155,6 @@ const ExcelTranslatorMain = (props) => {
                         link.href = url;
 
                         let date = dateToYYMMDDhhmmss(new Date());
-                        console.log(headerTitle);
 
                         link.setAttribute('download', '[' + date + ']' + headerTitle + ' 다운로드.xlsx');
                         document.body.appendChild(link);

@@ -12,7 +12,7 @@ export default function UploadHeaderDetailFormFieldView(props) {
             <form onSubmit={(e) => props.onActionStoreUploadHeaderForm(e)}>
                 <div>
                     <div className="header-field">
-                        <div>엑셀 양식 저장</div>
+                        <div>업로드 엑셀 양식 등록</div>
                         <button type='submit'><AddTaskIcon /></button>
                     </div>
                 </div>

@@ -9,6 +9,7 @@ import { excelTranslatorDataConnect } from '../../data_connect/excelTranslatorDa
 import ControlBarComponent from './control-bar/ControlBar.component';
 import UploadDataTableComponent from './upload-data-table/UploadDataTable.component';
 import { dateToYYMMDDhhmmss } from './../../handler/dateHandler'
+import DownloadDataTableComponent from './download-header-table/DownloadDataTable.component';
 
 const Container = styled.div`
     background: linear-gradient(to bottom right,#f0fffa,#839edfad);
@@ -137,6 +138,24 @@ const ExcelTranslatorComponent = (props) => {
             })
     }
 
+    const __reqDownloadExcelFile = async (headerTitle, translatedDetails) => {
+        await excelTranslatorDataConnect().downloadTranslatedExcelFile(translatedDetails)
+            .then(res => {
+                const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
+                const link = document.createElement('a');
+                link.href = url;
+
+                let date = dateToYYMMDDhhmmss(new Date());
+
+                link.setAttribute('download', '[' + date + ']' + headerTitle + ' 다운로드.xlsx');
+                document.body.appendChild(link);
+                link.click();
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
     const __reqDownloadUploadHeaderDetails = async (headerTitle, uploadedDetails) => {
         await excelTranslatorDataConnect().downloadUploadedHeaderDetails(uploadedDetails)
             .then(res => {
@@ -163,6 +182,20 @@ const ExcelTranslatorComponent = (props) => {
                     alert('완료되었습니다.');
                     setDataChangedTrigger(true);
                     setUploadedExcelData(null);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                alert(res?.data?.message);
+            })
+    }
+
+    const __reqCreateDownloadHeaderDetails = async (downloadHeaderDetails) => {
+        await excelTranslatorDataConnect().createDownloadHeaderDetails(downloadHeaderDetails)
+            .then(res => {
+                if (res.status === 200 && res.data && res.data.message === 'success') {
+                    alert('저장되었습니다.');
+                    setDataChangedTrigger(true);
                 }
             })
             .catch(err => {
@@ -215,6 +248,56 @@ const ExcelTranslatorComponent = (props) => {
         }
     }
 
+    const _onSubmit_downloadExcelFile = async (headerTitle, downloadHeaderDetail) => {
+        // 다운로드 양식으로 변경
+        let excelData = downloadHeaderDetail.map(r => {
+            return uploadedExcelData.map((data, idx) => {
+                if (idx === 0) {
+                    // 다운로드 헤더 이름 설정
+                    let details = {
+                        colData: r.headerName,
+                        cellType: 'String'
+                    }
+                    return details;
+                } else {
+                    // 고정값 컬럼이라면
+                    if (r.targetCellNumber === -1) {
+                        let details = {
+                            colData: r.fixedValue,
+                            cellType: 'String'
+                        };
+                        return details;
+                    } else {
+                        return data.uploadedData.details[r.targetCellNumber];
+                    }
+                }
+            });
+        });
+
+        // dto로 변경
+        let translatedDetail = excelData.map(r => {
+            let data = new TranslatedData().toJSON();
+            data.translatedData.details = r;
+            return data;
+        })
+
+        if(!isObjectSubmitted.createdDownloadHeader) {
+            onActionOpenBackdrop();
+            setIsObjectSubmitted({
+                ...isObjectSubmitted,
+                createdDownloadHeader: true
+            });
+
+            await __reqDownloadExcelFile(headerTitle, translatedDetail);
+
+            onActionCloseBackdrop();
+            setIsObjectSubmitted({
+                ...isObjectSubmitted,
+                createdDownloadHeader: false
+            });
+        }
+    }
+
     const _onAction_downloadUploadHeaderDetails =  async (headerTitle, uploadHeaderDetails) => {
         onActionOpenBackdrop();
         await __reqDownloadUploadHeaderDetails(headerTitle, uploadHeaderDetails);
@@ -227,15 +310,23 @@ const ExcelTranslatorComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    const _onSubmit_storeDownloadHeaderDetail = async (downloadHeaderDetails) => {
+        onActionOpenBackdrop();
+        await __reqCreateDownloadHeaderDetails(downloadHeaderDetails);
+        onActionCloseBackdrop();
+    }
+
     return (
         <Container>
             <ControlBarComponent
                 excelTranslatorHeaderList={excelTranslatorHeaderList}
+                uploadedExcelData={uploadedExcelData}
 
                 _onSubmit_createTranslatorHeaderTitle={(headerTitle) => _onSubmit_createTranslatorHeaderTitle(headerTitle)}
                 _onSubmit_modifyTranslatorHeaderTitle={(headerTitle) => _onSubmit_modifyTranslatorHeaderTitle(headerTitle)}
                 _onAction_deleteTranslatorHeaderTitle={(headerId) => _onAction_deleteTranslatorHeaderTitle(headerId)}
                 _onSubmit_uploadExcelFile={(formData) => _onSubmit_uploadExcelFile(formData)}
+                _onSubmit_downloadExcelFile={(title, details) => _onSubmit_downloadExcelFile(title, details)}
             ></ControlBarComponent>
 
             <UploadDataTableComponent
@@ -246,7 +337,11 @@ const ExcelTranslatorComponent = (props) => {
                 _onSubmit_createUploadHeaderDetails={(uploadHeaderDetails) => _onSubmit_createUploadHeaderDetails(uploadHeaderDetails)}
             ></UploadDataTableComponent>
 
-            {/* <DownloadExcelTableComponent></DownloadExcelTableComponent> */}
+            <DownloadDataTableComponent
+                excelTranslatorHeaderList={excelTranslatorHeaderList}
+
+                _onSubmit_storeDownloadHeaderDetail={(downloadHeaderDetails) => _onSubmit_storeDownloadHeaderDetail(downloadHeaderDetails)}
+            ></DownloadDataTableComponent>
         </Container>
     )
 }

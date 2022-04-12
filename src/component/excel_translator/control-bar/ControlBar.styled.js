@@ -23,7 +23,7 @@ const TitleSelectorWrapper = styled.div`
         color:white;
         border:1px solid #989fb7;
         border-radius: 3px;
-        margin-left: 10px;
+        margin-left: 5px;
         padding: 10px;
 
         &:hover {
