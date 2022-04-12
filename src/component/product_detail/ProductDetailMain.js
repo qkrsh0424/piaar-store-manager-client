@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { withRouter } from 'react-router';
 import queryString from 'query-string';
 
 // data connect
@@ -19,6 +18,7 @@ import ProductDetailAddModal from './modal/ProductDetailAddModal';
 import ProductDetailModifyModal from './modal/ProductDetailModifyModal';
 import { productDataConnect } from '../../data_connect/productDataConnect';
 import { productOptionDataConnect } from '../../data_connect/productOptionDataConnect';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 
 
@@ -93,8 +93,11 @@ class ProductDetail {
 }
 
 const ProductDetailMain = (props) => {
-    let pathname = props.location.pathname;
-    let params = queryString.parse(props.location.search);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const pathname = location.pathname;
+    const params = queryString.parse(location.search);
 
     const [categoryListData, setCategoryListData] = useState(null);
     const [productViewData, setProductViewData] = useState([]);
@@ -467,7 +470,7 @@ const ProductDetailMain = (props) => {
 
                         params.categoryCid = categoryCid;
 
-                        props.history.replace({
+                        navigate({
                             pathname: pathname,
                             search: `?${queryString.stringify(params)}`
                         })
@@ -479,7 +482,7 @@ const ProductDetailMain = (props) => {
 
                         params.productCid = productCid;
 
-                        props.history.replace({
+                        navigate({
                             pathname: pathname,
                             search: `?${queryString.stringify(params)}`
                         })
@@ -490,7 +493,7 @@ const ProductDetailMain = (props) => {
 
                         params.optionCid = optionCid;
 
-                        props.history.replace({
+                        navigate({
                             pathname: pathname,
                             search: `?${queryString.stringify(params)}`
                         })
@@ -500,7 +503,7 @@ const ProductDetailMain = (props) => {
 
                         params.detailCid = detailCid;
 
-                        props.history.replace({
+                        navigate({
                             pathname: pathname,
                             search: `?${queryString.stringify(params)}`
                         })
@@ -1005,4 +1008,4 @@ const ProductDetailMain = (props) => {
     )
 }
 
-export default withRouter(ProductDetailMain);
+export default ProductDetailMain;

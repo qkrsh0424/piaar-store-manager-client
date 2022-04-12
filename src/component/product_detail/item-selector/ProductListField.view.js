@@ -1,13 +1,13 @@
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DataListWrapper } from "./ItemSelector.styled";
 
 export default function ProductListFieldView(props) {
     const location = useLocation();
-    const history = useHistory();
+  const navigate = useNavigate();
 
     let routerState = {
         prevUrl: location.pathname
@@ -18,7 +18,7 @@ export default function ProductListFieldView(props) {
             <div className="control-box">
                 <button className="add-btn"
                     type='button'
-                    onClick={() => history.push({
+                    onClick={() => navigate({
                         pathname:'/refactor/products/create',
                         state:routerState
                     })}

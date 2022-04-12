@@ -1,6 +1,5 @@
 import {useEffect, useState, useReducer} from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { withRouter } from 'react-router';
 
 // data connect
 import { deliveryReadyPiaarDataConnect } from '../../../data_connect/deliveryReadyPiaarDataConnect';
@@ -10,6 +9,7 @@ import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
 import BackdropLoading from '../../loading/BackdropLoading';
 import DeliveryReadyUploadPiaarBody from './DeliveryReadyUploadPiaarBody';
 import { de } from 'date-fns/locale';
+import { useNavigate } from 'react-router-dom';
 
 class DeliveryReadyPiaarHeader {
     constructor() {
@@ -92,7 +92,9 @@ const piaarExcelHeaderListStateReducer = (state, action) => {
     }
 }
 
-const DeliveryReadyUploadPiaarMain = (props) => {
+const DeliveryReadyUploadPiaarMain = () => {
+    const navigate = useNavigate();
+
     const [excelData, setExcelData] = useState(null);
     const [backdropLoading, setBackdropLoading] = useState(false);
     const [piaarExcelHeaderListState, dispatchPiaarExcelHeaderListState] = useReducer(piaarExcelHeaderListStateReducer, initialPiaarExcelHeaderListState);
@@ -211,7 +213,7 @@ const DeliveryReadyUploadPiaarMain = (props) => {
             movePage: function () {
                 return {
                     deliveryReadyView: async function () {
-                        props.history.replace('/delivery-ready/piaar/view');
+                        navigate('/delivery-ready/piaar/view');
                     }
                 }
             }
@@ -234,4 +236,4 @@ const DeliveryReadyUploadPiaarMain = (props) => {
     )
 }
 
-export default withRouter(DeliveryReadyUploadPiaarMain);
+export default DeliveryReadyUploadPiaarMain;

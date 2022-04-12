@@ -1,4 +1,5 @@
-import { withRouter } from 'react-router';
+// import { withRouter } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 // handler
@@ -193,9 +194,11 @@ const MoneyInputEl = styled.input`
     }
 `;
 const IncomeBody = (props) => {
+    const navigate = useNavigate();
+    
     return (
         <>
-            <BackBtn type='button' onClick={() => props.history.replace('/account-book')}>
+            <BackBtn type='button' onClick={() => navigate('/account-book')}>
                 <img className='back-button-img' src='/images/icon/back-button.png'></img>
             </BackBtn>
             <Container className='container'>
@@ -256,4 +259,4 @@ const IncomeBody = (props) => {
     );
 }
 
-export default withRouter(IncomeBody);
+export default IncomeBody;

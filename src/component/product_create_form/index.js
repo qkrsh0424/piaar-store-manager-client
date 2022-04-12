@@ -1,5 +1,4 @@
 import { useState, useEffect, useReducer } from 'react';
-import { withRouter } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import styled from 'styled-components'; 
 
@@ -9,6 +8,7 @@ import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/use
 import ProductCreateFormComponent from './ProductCreateForm.component';
 import { generateOptionManagementCode, generateProdCode } from '../../utils/keyGeneratorUtils'
 import { productOptionDataConnect } from '../../data_connect/productOptionDataConnect';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
 `;
@@ -131,7 +131,10 @@ class OptionPackage {
     }
 }
 
-const ProductCreateComponent = (props) => {
+const ProductCreateComponent = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
     const [categoryList, setCategoryList] = useState(null);
     const [optionList, setOptionList] = useState(null);
     const [createProductData, dispatchCreateProductData] = useReducer(createProductDataReducer, initialCreateProductData);
@@ -143,9 +146,12 @@ const ProductCreateComponent = (props) => {
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
 
-    useEffect(async () => {
-        await __reqSearchProductCategory();
-        await __reqSearchProductOption();
+    useEffect(() => {
+        async function fetchInit() {
+            await __reqSearchProductCategory();
+            await __reqSearchProductOption();
+        }
+        fetchInit();
     }, []);
 
     const __reqSearchProductCategory = async () => {
@@ -225,7 +231,7 @@ const ProductCreateComponent = (props) => {
         await productDataConnect().postCreate(createProductData)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
-                    props.history.replace(props.location.state.prevUrl);
+                    navigate(location.state.prevUrl);
                 }
             })
             .catch(err => {
@@ -441,7 +447,7 @@ const ProductCreateComponent = (props) => {
     )
 }
 
-export default withRouter(ProductCreateComponent);
+export default ProductCreateComponent;
 
 const initialCreateProductData = new Product(generateProdCode(), '단일상품', '단일상품').toJSON();
 

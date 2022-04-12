@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { withRouter } from 'react-router';
 import queryString from 'query-string';
 
 // handler
@@ -17,10 +16,14 @@ import AccountBookNav from './AccountBookNav';
 import DateRangePickerModal from './modal/DateRangePickerModal';
 import ExpenditureTypeSetModal from './modal/ExpenditureTypeSetModal';
 import ExpenditureTypeViewModal from './modal/ExpenditureTypeViewModal';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 const AccountBookMain = (props) => {
-    let pathname = window.location.pathname;
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    let pathname =location.pathname;
     let query = queryString.parse(window.location.search);
 
     const [itemDataList, setItemDataList] = useState(null);
@@ -54,7 +57,7 @@ const AccountBookMain = (props) => {
             window.scrollTo(0, 0);
         }
         fetchInit();
-    }, [props.location]);
+    }, [location]);
 
     const __handleDataConnect = () => {
         return {
@@ -175,14 +178,14 @@ const AccountBookMain = (props) => {
                     accountBookType: function (type) {
                         switch (type) {
                             case '전체':
-                                props.history.replace(`${pathname}?${queryString.stringify({ ...query, accbType: 'income' })}`);
+                                navigate(`${pathname}?${queryString.stringify({ ...query, accbType: 'income' })}`);
                                 break;
                             case '수입':
-                                props.history.replace(`${pathname}?${queryString.stringify({ ...query, accbType: 'expenditure' })}`)
+                                navigate(`${pathname}?${queryString.stringify({ ...query, accbType: 'expenditure' })}`)
                                 break;
                             case '지출':
                                 delete query.accbType
-                                props.history.replace(`${pathname}?${queryString.stringify({ ...query })}`)
+                                navigate(`${pathname}?${queryString.stringify({ ...query })}`)
                                 break;
                             default:
 
@@ -193,7 +196,7 @@ const AccountBookMain = (props) => {
                     bankType: function (type) {
                         let index = 0;
                         if (type == '전체') {
-                            props.history.replace(`${pathname}?${queryString.stringify({ ...query, bankType: bankTypeList[index].bankType })}`)
+                            navigate(`${pathname}?${queryString.stringify({ ...query, bankType: bankTypeList[index].bankType })}`)
                             return;
                         }
                         for (let i = 0; i < bankTypeList.length; i++) {
@@ -204,11 +207,11 @@ const AccountBookMain = (props) => {
 
                         let next = bankTypeList[index + 1];
                         if (next) {
-                            props.history.replace(`${pathname}?${queryString.stringify({ ...query, bankType: next.bankType })}`)
+                            navigate(`${pathname}?${queryString.stringify({ ...query, bankType: next.bankType })}`)
                             return;
                         } else {
                             delete query.bankType
-                            props.history.replace(`${pathname}?${queryString.stringify({ ...query })}`)
+                            navigate(`${pathname}?${queryString.stringify({ ...query })}`)
                             return;
                         }
                     }
@@ -224,13 +227,13 @@ const AccountBookMain = (props) => {
                     },
                     adapt: function (data) {
                         this.close();
-                        props.history.replace(`${pathname}?${queryString.stringify({ ...query, startDate: getStartDate(data.startDate), endDate: getEndDate(data.endDate) })}`)
+                        navigate(`${pathname}?${queryString.stringify({ ...query, startDate: getStartDate(data.startDate), endDate: getEndDate(data.endDate) })}`)
                     },
                     searchAll: function () {
                         this.close();
                         delete query.startDate
                         delete query.endDate
-                        props.history.replace(`${pathname}?${queryString.stringify({ ...query })}`)
+                        navigate(`${pathname}?${queryString.stringify({ ...query })}`)
                     }
                 }
             },
@@ -307,4 +310,4 @@ const AccountBookMain = (props) => {
     );
 }
 
-export default withRouter(AccountBookMain);
+export default AccountBookMain;

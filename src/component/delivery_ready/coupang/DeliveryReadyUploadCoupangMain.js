@@ -1,5 +1,4 @@
 import {useState} from 'react';
-import { useHistory } from 'react-router';
 
 // data connect
 import { deliveryReadyCoupangDataConnect } from '../../../data_connect/deliveryReadyCoupangDataConnect';
@@ -8,9 +7,10 @@ import { deliveryReadyCoupangDataConnect } from '../../../data_connect/deliveryR
 import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
 import DeliveryReadyUploadCoupangBody from './DeliveryReadyUploadCoupangBody';
 import BackdropLoading from '../../loading/BackdropLoading';
+import { useNavigate } from 'react-router-dom';
 
-const DeliveryReadyUploadCoupangMain = () => {
-    let history = useHistory();
+const DeliveryReadyUploadCoupangMain = (props) => {
+   const navigate = useNavigate();
 
     const [excelData, setExcelData] = useState(null);
     const [formData, setFormData] = useState([]);
@@ -84,7 +84,7 @@ const DeliveryReadyUploadCoupangMain = () => {
             movePage: function () {
                 return {
                     deliveryReadyView: async function () {
-                        history.push('/delivery-ready/coupang/view');
+                        navigate('/delivery-ready/coupang/view');
                     }
                 }
             }

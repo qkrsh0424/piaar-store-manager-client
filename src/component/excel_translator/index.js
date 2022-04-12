@@ -2,7 +2,7 @@ import { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import queryString from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
-import { withRouter } from 'react-router';
+// import { withRouter } from 'react-router';
 
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
 import { excelTranslatorDataConnect } from '../../data_connect/excelTranslatorDataConnect';
@@ -10,6 +10,7 @@ import ControlBarComponent from './control-bar/ControlBar.component';
 import UploadDataTableComponent from './upload-data-table/UploadDataTable.component';
 import { dateToYYMMDDhhmmss } from './../../handler/dateHandler'
 import DownloadDataTableComponent from './download-header-table/DownloadDataTable.component';
+import { useLocation } from 'react-router-dom';
 
 const Container = styled.div`
     background: linear-gradient(to bottom right,#f0fffa,#839edfad);
@@ -32,8 +33,9 @@ class TranslatedData {
     }
 }
 
-const ExcelTranslatorComponent = (props) => {
-    let params = queryString.parse(props.location.search);
+const ExcelTranslatorComponent = () => {
+    const location = useLocation();
+    let params = queryString.parse(location.search);
 
     const [excelTranslatorHeaderList, setExcelTranslatorHeaderList] = useState(null);
     const [uploadedExcelData, setUploadedExcelData] = useState(null);
@@ -51,15 +53,21 @@ const ExcelTranslatorComponent = (props) => {
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
 
-    useEffect(async () => {
-        await __reqSearchExcelTranslatorHeader();
-    }, [])
-
-    useEffect(async () => {
-        if (dataChangedTrigger) {
+    useEffect(() => {
+        async function fetchInit(){
             await __reqSearchExcelTranslatorHeader();
         }
-        setDataChangedTrigger(false);
+        fetchInit();
+    }, [])
+
+    useEffect(() => {
+        async function searchHeader() {
+            if (dataChangedTrigger) {
+                await __reqSearchExcelTranslatorHeader();
+            }
+            setDataChangedTrigger(false);
+        }
+        searchHeader();
     }, [dataChangedTrigger]);
 
     useEffect(() => {
@@ -346,4 +354,4 @@ const ExcelTranslatorComponent = (props) => {
     )
 }
 
-export default withRouter(ExcelTranslatorComponent);
+export default ExcelTranslatorComponent;

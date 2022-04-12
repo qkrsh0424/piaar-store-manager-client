@@ -2,7 +2,7 @@ import { Container } from "./UploadDataTable.styled";
 import { useEffect, useReducer, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import queryString from 'query-string';
-import { withRouter } from 'react-router';
+import { useLocation } from "react-router-dom";
 import { useSelector } from 'react-redux';
 
 import DataControlFieldView from "./DataControlField.view";
@@ -30,7 +30,8 @@ class UploadHeaderDetail {
 
 const UploadDataTableComponent = (props) => {
     const userRdx = useSelector(state => state.user);
-    let params = queryString.parse(props.location.search);
+    const location = useLocation();
+    let params = queryString.parse(location.search);
 
     const [createTranslatorUploadHeaderDetailModalOpen, setCreateTranslatorUploadHeaderDetailModalOpen] = useState(false);
     const [selectedHeaderTitleState, dispatchSelectedHeaderTitleState] = useReducer(selectedHeaderTitleStateReducer, initialSelectedHeaderTitleState);
@@ -349,7 +350,7 @@ const UploadDataTableComponent = (props) => {
     )
 }
 
-export default withRouter(UploadDataTableComponent);
+export default UploadDataTableComponent;
 
 const initialSelectedHeaderTitleState = null;
 const initialCreateUploadHeaderDetailState = null;

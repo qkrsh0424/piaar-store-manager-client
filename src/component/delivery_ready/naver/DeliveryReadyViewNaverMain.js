@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useReducer} from 'react';
-import { withRouter } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 // handler
 import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
@@ -63,7 +63,9 @@ const releasedDataReflectedStateReducer = (state, action) => {
     }
 }
 
-const DeliveryReadyViewNaverMain = (props) => {
+const DeliveryReadyViewNaverMain = () => {
+    const navigate = useNavigate();
+
     const [unreleasedData, setUnreleasedData] = useState(null);
     const [releasedData, setReleasedData] = useState(null);
     const [unreleaseCheckedOrderList, setUnreleaseCheckedOrderList] = useState([]);
@@ -1018,7 +1020,7 @@ const DeliveryReadyViewNaverMain = (props) => {
             movePage: function () {
                 return {
                     deliveryReadyUpload: async function () {
-                        props.history.replace('/delivery-ready/naver');
+                        navigate('/delivery-ready/naver');
                     }
                 }
             },
@@ -1314,4 +1316,4 @@ const DeliveryReadyViewNaverMain = (props) => {
     )
 }
 
-export default withRouter(DeliveryReadyViewNaverMain);
+export default DeliveryReadyViewNaverMain;

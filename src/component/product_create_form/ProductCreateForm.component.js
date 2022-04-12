@@ -1,6 +1,4 @@
-import { useCallback, useState, useEffect, useReducer } from 'react';
-import { withRouter } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
 import CategorySelectorFieldView from './CategorySelectorField.view';
 import CodeInfoFieldView from './CodeInfoField.view';
@@ -15,6 +13,7 @@ import { Container, FormContainer, OptionContainer} from "./ProductCreateForm.st
 import StockReflectedSelectorFieldView from './StockReflectedSelectorField.view';
 
 const ProductCreateFormComponent = (props) => {
+    const navigate = useNavigate();
 
     const onActionClickProductImageButton = () => {
         document.getElementById("i_pm_cb_uploader").click();
@@ -194,7 +193,7 @@ const ProductCreateFormComponent = (props) => {
 
     return (
         <Container>
-            <button className="back-btn" onClick={() => props.history.goBack()}>
+            <button className="back-btn" onClick={() => navigate(-1)}>
                 <img className='back-button-img' src='/images/icon/back-button.png'></img>
             </button>
             <FormContainer className="container">
@@ -269,4 +268,4 @@ const ProductCreateFormComponent = (props) => {
     )
 }
 
-export default withRouter(ProductCreateFormComponent);
+export default ProductCreateFormComponent;

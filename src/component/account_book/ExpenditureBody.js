@@ -1,4 +1,4 @@
-import { withRouter } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 // handler
@@ -194,9 +194,11 @@ const MoneyInputEl = styled.input`
 `;
 
 const ExpenditureBody = (props) => {
+    const navigate = useNavigate();
+
     return (
         <>
-            <BackBtn type='button' onClick={() => props.history.replace('/account-book')}>
+            <BackBtn type='button' onClick={() => navigate('/account-book')}>
                 <img className='back-button-img' src='/images/icon/back-button.png'></img>
             </BackBtn>
 
@@ -256,4 +258,4 @@ const ExpenditureBody = (props) => {
     );
 }
 
-export default withRouter(ExpenditureBody);
+export default ExpenditureBody;

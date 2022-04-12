@@ -1,14 +1,14 @@
 import { useState, useEffect, useReducer } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
 import qs from 'query-string';
 
 import { Container } from "./CategorySelector.styled";
 import CategorySelectorFieldView from './CategorySelectorField.view';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const CategorySelectorComponent = (props) => {
     const location = useLocation();
+    const navigate = useNavigate();
     const query = qs.parse(location.search);
-    const history = useHistory();
 
     const [categoryCid, dispatchCategoryCid] = useReducer(categoryCidReducer, initialCategoryCid);
 
@@ -45,7 +45,7 @@ const CategorySelectorComponent = (props) => {
 
         query.categoryCid = categoryCid;
 
-        history.replace({
+        navigate({
             pathname: query.pathname,
             search: `?${qs.stringify(query)}`
         });

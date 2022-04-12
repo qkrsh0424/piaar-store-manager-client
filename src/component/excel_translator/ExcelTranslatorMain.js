@@ -11,6 +11,7 @@ import BackdropLoading from '../loading/BackdropLoading';
 import ExcelTranslatorDownloadExcelDataBoard from './ExcelTranslatorDownloadExcelDataBoard';
 import ExcelTranslatorUploadDataBoard from './ExcelTranslatorUploadDataBoard';
 import DrawerNavbarMain from '../nav/DrawerNavbarMain';
+import { useLocation } from 'react-router-dom';
 
 const Container = styled.div`
     height: 100vh;
@@ -33,7 +34,9 @@ class TranslatedData {
     }
 }
 
-const ExcelTranslatorMain = (props) => {
+const ExcelTranslatorMain = () => {
+    const location = useLocation();
+
     const [excelTranslatorHeaderList, setExcelTranslatorHeaderList] = useState(null);
     const [uploadedExcelData, setUploadedExcelData] = useState(null);
     const [isObjectSubmitted, setIsObjectSubmitted] = useState({
@@ -53,7 +56,7 @@ const ExcelTranslatorMain = (props) => {
 
     useEffect(()=>{
         setUploadedExcelData(null);
-    },[props.location])
+    },[location])
 
     const __handleDataConnect = () => {
         return {

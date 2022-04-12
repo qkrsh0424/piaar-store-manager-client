@@ -1,5 +1,4 @@
 import {useState, useEffect, useReducer} from 'react';
-import { withRouter } from 'react-router';
 
 // handler
 import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
@@ -17,6 +16,7 @@ import DeliveryReadyUnreleasedViewCoupangBody from './DeliveryReadyUnreleasedVie
 import DeliveryReadyReleasedViewCoupangBody from './DeliveryReadyReleasedViewCoupangBody';
 import DeliveryReadyReleaseMemoModal from '../modal/DeliveryReadyReleaseMemoModal';
 import DeliveryReadyReceiveMemoModal from '../modal/DeliveryReadyReceiveMemoModal';
+import { useNavigate } from 'react-router-dom';
 
 // 한페이지에 보여지는 데이터
 const POSTS_PER_PAGE = 50;
@@ -63,7 +63,9 @@ const releasedDataReflectedStateReducer = (state, action) => {
     }
 }
 
-const DeliveryReadyViewCoupnagMain = (props) => {
+const DeliveryReadyViewCoupnagMain = () => {
+    const navigate = useNavigate();
+
     const [unreleasedData, setUnreleasedData] = useState(null);
     const [releasedData, setReleasedData] = useState(null);
     const [unreleaseCheckedOrderList, setUnreleaseCheckedOrderList] = useState([]);
@@ -1023,7 +1025,7 @@ const DeliveryReadyViewCoupnagMain = (props) => {
             movePage: function () {
                 return {
                     deliveryReadyUpload: async function () {
-                        props.history.replace('/delivery-ready/coupang');
+                        navigate('/delivery-ready/coupang');
                     }
                 }
             },
@@ -1303,4 +1305,4 @@ const DeliveryReadyViewCoupnagMain = (props) => {
     )
 }
 
-export default withRouter(DeliveryReadyViewCoupnagMain);
+export default DeliveryReadyViewCoupnagMain;

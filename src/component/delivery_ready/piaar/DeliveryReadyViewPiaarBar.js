@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router';
+// import { withRouter } from 'react-router';
 import { useSelector } from 'react-redux';
 
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
@@ -81,4 +81,4 @@ const DeliveryReadyViewPiaarBar = (props) => {
     )
 }
 
-export default withRouter(DeliveryReadyViewPiaarBar);
+export default DeliveryReadyViewPiaarBar;

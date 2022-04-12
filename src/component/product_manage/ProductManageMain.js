@@ -1,6 +1,5 @@
 import { useEffect, useState, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { withRouter } from 'react-router-dom';
 
 // handler
 import { getStartDate, getEndDate, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../handler/dateHandler';
@@ -131,7 +130,7 @@ const stockStatusStateReducer = (state, action) => {
     }
 }
 
-const ProductManageMain = (props) => {
+const ProductManageMain = () => {
     const [productListData, setProductListData] = useState(null);
     const [optionListData, setOptionListData] = useState(null);
     const [categoryListData, setCategoryListData] = useState(null);
@@ -1344,4 +1343,4 @@ const ProductManageMain = (props) => {
     );
 }
 
-export default withRouter(ProductManageMain);
+export default ProductManageMain;

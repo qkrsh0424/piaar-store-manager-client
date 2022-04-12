@@ -18,7 +18,7 @@ const Container = styled.div`
     padding-bottom: 100px;
 `;
 
-const ProductDetailComponent = (props) => {
+const ProductDetailComponent = () => {
     const location = useLocation();
     const query = qs.parse(location.search);
 
@@ -46,68 +46,84 @@ const ProductDetailComponent = (props) => {
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
 
-    useEffect(async () => {
-        onActionOpenBackdrop();
-        await __reqSearchProductCategory();
-        onActionCloseBackdrop();
-        
-        dispatchSubmitCheck({
-            type: 'INIT_DATA',
-            payload: {
-                isSubmit: false
-            }
-        })
+    useEffect(() => {
+        async function fetchInit() {
+            onActionOpenBackdrop();
+            await __reqSearchProductCategory();
+            onActionCloseBackdrop();
+            
+            dispatchSubmitCheck({
+                type: 'INIT_DATA',
+                payload: {
+                    isSubmit: false
+                }
+            })
+        }
+        fetchInit();
     }, []);
 
     // 데이터 생성, 수정, 삭제 시 즉시 반영
-    useEffect(async () => {
-        if (dataChangedTrigger) {
-            await __reqSearchProduct();
-            await __reqSearchOption();
-            await __reqSearchProductDetail();
-
-            dispatchUploadedImage({ type: 'CLEAR' })
+    useEffect(() => {
+        async function searchAll() {
+            if (dataChangedTrigger) {
+                await __reqSearchProduct();
+                await __reqSearchOption();
+                await __reqSearchProductDetail();
+    
+                dispatchUploadedImage({ type: 'CLEAR' })
+            }
+            setDataChangedTrigger(false);
         }
-        setDataChangedTrigger(false);
+        searchAll();
     }, [dataChangedTrigger]);
 
     // 카테고리 처음 선택 시
-    useEffect(async () => {
-        if(productList) {
-            return;
+    useEffect(() => {
+        async function searchProduct() {
+            if(productList) {
+                return;
+            }
+    
+            if(query.categoryCid !== '0' && !query.categoryCid) {
+                return;
+            }
+    
+            await __reqSearchProduct();
         }
-
-        if(query.categoryCid !== '0' && !query.categoryCid) {
-            return;
-        }
-
-        await __reqSearchProduct();
+        searchProduct();
     }, [query.categoryCid]);
 
     // 상품 처음 선택 시
-    useEffect(async () => {
-        if(optionList) {
-            return;
-        }
+    useEffect(() => {
+        async function searchOption() {
+            if (optionList) {
+                return;
+            }
 
-        if(query.productCid !== '0' && !query.productCid) {
-            return;
-        }
+            if (query.productCid !== '0' && !query.productCid) {
+                return;
+            }
 
-        await __reqSearchOption();
+            await __reqSearchOption();
+        }
+        searchOption();
     }, [query.productCid]);
 
     // 옵션 처음 선택 시
-    useEffect(async () => {
-        if(detailList) {
-            return;
-        }
+    useEffect(() => {
+        async function searchDetail() {
 
-        if(query.optionCid !== '0' && !query.optionCid) {
-            return;
-        }
+            if (detailList) {
+                return;
+            }
 
-        await __reqSearchProductDetail();
+            if (query.optionCid !== '0' && !query.optionCid) {
+                return;
+            }
+
+            await __reqSearchProductDetail();
+        }
+        searchDetail();
     }, [query.optionCid]);
 
     // query에 categoryCid가 변경되면 productViewList 변경

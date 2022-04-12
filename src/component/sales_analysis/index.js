@@ -27,17 +27,20 @@ const SalesAnalysisComponent = (props) => {
     const [searchInfoState, dispatchSearchInfoState] = useReducer(searchInfoReducer, initialSearchInfoState);
     const [searchInputState, dispatchSearchInputState] = useReducer(searchInputReducer, initialSearchInputState);
 
-    useEffect(async () => {
-        await __reqSearchSalesAnalysis(new Date(), new Date());
-        await __reqSearchProductCategory();
-
-        dispatchSearchInfoState({
-            type: 'INIT_DATA'
-        })
-
-        dispatchSearchInputState({
-            type: 'INIT_DATA'
-        })
+    useEffect(() => {
+        async function fetchInit() {
+            await __reqSearchSalesAnalysis(new Date(), new Date());
+            await __reqSearchProductCategory();
+            
+            dispatchSearchInfoState({
+                type: 'INIT_DATA'
+            });
+            
+            dispatchSearchInputState({
+                type: 'INIT_DATA'
+            });
+        }
+        fetchInit();
     }, []);
 
     useEffect(() => {

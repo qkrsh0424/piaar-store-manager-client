@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import styled from 'styled-components';
-import { withRouter } from 'react-router';
+// import { withRouter } from 'react-router';
 import { useSelector } from 'react-redux';
 
 import Checkbox from '@material-ui/core/Checkbox';
@@ -302,4 +302,4 @@ const DeliveryReadyPiaarReleasedStatusBoard = (props) => {
         </>
     );
 }
-export default withRouter(DeliveryReadyPiaarReleasedStatusBoard);
+export default DeliveryReadyPiaarReleasedStatusBoard;

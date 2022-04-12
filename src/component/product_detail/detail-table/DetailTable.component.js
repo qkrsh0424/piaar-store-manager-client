@@ -1,7 +1,6 @@
 import { useState, useEffect, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import qs from 'query-string';
-import { useLocation, useHistory } from 'react-router-dom';
 
 import DetailInfoTableFieldView from './DetailInfoTableField.view';
 import { Container, DataBox } from "./DetailTable.styled";
@@ -11,6 +10,7 @@ import CommonModalComponent from '../../module/modal/CommonModalComponent';
 import CreateProductDetailModalComponent from '../create-product-detail-modal/CreateProductDetailModal.component';
 import { PanoramaSharp } from '@material-ui/icons';
 import ModifyProductDetailModalComponent from '../modify-product-detail-modal/ModifyProductDetailModal.component';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 class ProductDetail {
     constructor(productOptionId) {
@@ -42,8 +42,8 @@ class ProductDetail {
 
 const DetailTableComponent = (props) => {
     const location = useLocation();
+    const navigate = useNavigate();
     const query = qs.parse(location.search);
-    const history = useHistory();
     
     const [detailCid, dispatchDetailCid] = useReducer(detailCidReducer, initialDetailCid);
     const [createProductDetailModalOpen, setCreateProductDetailModalOpen] = useState(false);
@@ -88,7 +88,7 @@ const DetailTableComponent = (props) => {
 
         query.detailCid = detailCid;
 
-        history.replace({
+        navigate({
             pathname: query.pathname,
             search: `?${qs.stringify(query)}`
         });

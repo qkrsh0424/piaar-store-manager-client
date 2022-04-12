@@ -1,8 +1,8 @@
 import { useState, useEffect, useReducer } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import qs from 'query-string';
 import ArrowField from './ArrowField.view';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Container } from "./ItemSelector.styled";
 import ProductListFieldView from './ProductListField.view';
@@ -60,7 +60,7 @@ class ProductOption {
 const ItemSelectorComponent = (props) => {
     const location = useLocation();
     const query = qs.parse(location.search);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [productCid, dispatchProductCid] = useReducer(productCidReducer, initialProductCid);
     const [optionCid, dispatchOptionCid] = useReducer(optionCidReducer, initialOptionCid);
@@ -154,7 +154,7 @@ const ItemSelectorComponent = (props) => {
 
         query.productCid = productCid;
 
-        history.replace({
+        navigate({
             pathname: query.pathname,
             search: `?${qs.stringify(query)}`
         });
@@ -167,7 +167,7 @@ const ItemSelectorComponent = (props) => {
 
         query.optionCid = optionCid;
 
-        history.replace({
+        navigate({
             pathname: query.pathname,
             search: `?${qs.stringify(query)}`
         });

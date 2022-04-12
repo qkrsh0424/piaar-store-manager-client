@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { withRouter } from 'react-router';
 
 // data connect
 import { productCategoryDataConnect } from "../../data_connect/productCategoryDataConnect";
@@ -8,7 +7,7 @@ import { productDataConnect } from '../../data_connect/productDataConnect';
 // component
 import CreateBody from "./CreateBody";
 import BackdropLoading from "../loading/BackdropLoading";
-import { formControlClasses } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 
 class Product {
     constructor(optionDefaultName = '', optionManagementName = '') {
@@ -95,7 +94,10 @@ class ProductOption {
         }
     }
 }
-const CreateMain = (props) => {
+const CreateMain = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
     const [categoryListSample, setCategoryListSample] = useState(null);
     const [productListData, setProductListData] = useState([
         new Product('단일상품', '단일상품').toJSON()
@@ -128,7 +130,7 @@ const CreateMain = (props) => {
                 await productDataConnect().postCreateList(productListData)
                     .then(res=>{
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            props.history.replace(props.location.state.prevUrl);
+                            navigate(location.state.prevUrl);
                         }
                     })
                     .catch(err=>{
@@ -470,4 +472,4 @@ const CreateMain = (props) => {
     );
 }
 
-export default withRouter(CreateMain);
+export default CreateMain;

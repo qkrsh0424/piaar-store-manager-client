@@ -2,7 +2,7 @@ import { Container } from "./DownloadDataTable.styled";
 import { useEffect, useReducer, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import queryString from 'query-string';
-import { withRouter } from 'react-router';
+import { useLocation } from "react-router-dom";
 import { useSelector } from 'react-redux';
 
 import DataControlFieldView from "./DataControlField.view";
@@ -32,8 +32,8 @@ class DownloadHeaderDetail {
 }
 
 const DownloadDataTableComponent = (props) => {
-    const userRdx = useSelector(state => state.user);
-    let params = queryString.parse(props.location.search);
+    const location = useLocation();
+    let params = queryString.parse(location.search);
 
     const [createTranslatorDownloadHeaderDetailModalOpen, setCreateTranslatorDownloadHeaderDetailModalOpen] = useState(false);
     const [fixedValueCheckList, setFixedValueCheckList] = useState([]);
@@ -273,7 +273,7 @@ const DownloadDataTableComponent = (props) => {
     )
 }
 
-export default withRouter(DownloadDataTableComponent);
+export default DownloadDataTableComponent;
 
 const initialSelectedHeaderTitleState = null;
 const initialUpdateDownloadHeaderForm = null;
