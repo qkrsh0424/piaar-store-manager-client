@@ -8,7 +8,7 @@ import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/use
 import { excelTranslatorDataConnect } from '../../data_connect/excelTranslatorDataConnect';
 import ControlBarComponent from './control-bar/ControlBar.component';
 import UploadDataTableComponent from './upload-data-table/UploadDataTable.component';
-import { dateToYYMMDDhhmmss } from './../../handler/dateHandler'
+import { dateToYYMMDDhhmmss } from './../../utils/dateFormatUtils'
 import DownloadDataTableComponent from './download-header-table/DownloadDataTable.component';
 import { useLocation } from 'react-router-dom';
 

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useSelector } from 'react-redux';
 
 import ExcelTranslatorCommonModal from "./modal/ExcelTranslatorCommonModal";
-import { dateToYYMMDDhhmmss } from "../../handler/dateHandler"
+import { dateToYYMMDDhhmmss } from "../../utils/dateFormatUtils"
 import CreateTranslatorUploadHeaderDetailComponent from "./modal/CreateTranslatorUploadHeaderDetailComponent";
 import { useLocation } from "react-router-dom";
 

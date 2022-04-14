@@ -1,5 +1,5 @@
 import { TableFieldWrapper } from "./UploadDataTable.styled"
-import { dateToYYMMDDhhmmss } from "../../../handler/dateHandler"
+import { dateToYYMMDDhhmmss } from "../../../utils/dateFormatUtils"
 
 export default function TableFieldView(props) {
     return (

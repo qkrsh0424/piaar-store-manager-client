@@ -1,6 +1,6 @@
 import EventAvailableTwoToneIcon from '@mui/icons-material/EventAvailableTwoTone';
 
-import { dateToYYMMDD } from "../../../handler/dateHandler";
+import { dateToYYMMDD } from "../../../utils/dateFormatUtils";
 import { DateSelectorFieldWrapper } from "./Operator.styled";
 
 export default function DateSelectorFieldView(props) {

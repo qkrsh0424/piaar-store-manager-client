@@ -19,6 +19,15 @@ const CustomDialog = styled(Dialog)`
     }
 `;
 
+/**
+ * 
+ * @param {Object} props
+ * @param {boolean} props.open
+ * @param {boolean} props.fullWidth
+ * @param {string} props.maxWidth
+ * @param {function} props.onClose
+ * @returns 
+ */
 const CommonModalComponent = (props) => {
     return (
         <>

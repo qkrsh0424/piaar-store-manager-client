@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import queryString from 'query-string';
 
 // handler
-import { getStartDate, getEndDate, dateToYYMMDD } from '../../handler/dateHandler';
+import { getStartDate, getEndDate, dateToYYMMDD } from '../../utils/dateFormatUtils';
 
 // data connect
 import { accountBookDataConnect } from '../../data_connect/accountBookDataConnect';

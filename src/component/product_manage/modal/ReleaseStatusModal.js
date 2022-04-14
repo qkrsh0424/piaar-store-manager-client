@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 
-import { dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
+import { dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../utils/dateFormatUtils';
 
 const Container = styled.div`
 `;

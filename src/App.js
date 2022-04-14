@@ -55,6 +55,11 @@ import SalesAnalysisPage from './pages/sales_analysis/SalesAnalysisPage';
 import ProductDetailPage from './pages/product_detail/ProductDetailPage';
 import ProductCreatePage from './pages/product_create/ProductCreatePage';
 import ExcelTranslatorPage from './pages/excel-translator/ExcelTranslatorPage';
+import ErpManagementOrderUploadPage from './pages/erp/management/order-upload/ErpManagementOrderUploadPage';
+import ErpManagementOrderPage from './pages/erp/management/order/ErpManagementOrderPage';
+import ErpManagementSalesPage from './pages/erp/management/sales/ErpManagementSalesPage';
+import ErpManagementReleaseCompletePage from './pages/erp/management/release-complete/ErpManagementReleaseCompletePage';
+import ErpManagementExcelFormPage from './pages/erp/management/excel/ErpManagementExcelFormPage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -167,6 +172,13 @@ function App(props) {
                                 {/* refactor page 1 - /sales-analysis -> /refactor/sales-analysis */}
                                 <Route path='/sales-analysis' element={<SalesAnalysisMain />} />
                                 <Route path='/refactor/sales-analysis' element={<SalesAnalysisPage />} />
+
+                                {/* PiaarErpManagement */}
+                                <Route path='/erp/management/order-upload' element={<ErpManagementOrderUploadPage />} />
+                                <Route path='/erp/management/order' element={<ErpManagementOrderPage />} />
+                                <Route path='/erp/management/sales' element={<ErpManagementSalesPage />} />
+                                <Route path='/erp/management/release-complete' element={<ErpManagementReleaseCompletePage />} />
+                                <Route path='/erp/management/excel' element={<ErpManagementExcelFormPage />} />
                             </Routes>
                         ):
                         <>

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import OperatorComponent from "./operator/Operator.component";
 import RankBoardComponent from "./rank-table/RankTable.component";
 import { salesAnalysisDataConnect } from '../../data_connect/salesAnalysisDataConnect';
-import { getStartDate, getEndDate } from '../../handler/dateHandler';
+import { getStartDate, getEndDate } from '../../utils/dateFormatUtils';
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
 import { productCategoryDataConnect } from '../../data_connect/productCategoryDataConnect';
 

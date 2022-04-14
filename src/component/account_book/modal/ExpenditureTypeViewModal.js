@@ -2,7 +2,7 @@ import { useState } from 'react';
 import queryString from 'query-string';
 import styled from 'styled-components';
 import Dialog from '@material-ui/core/Dialog';
-import { numberWithCommas2 } from '../../../handler/numberHandler';
+import { numberWithCommas2 } from '../../../utils/numberFormatUtils';
 const Container = styled.div`
 `;
 

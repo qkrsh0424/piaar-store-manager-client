@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 // import { withRouter } from 'react-router';
 import EventAvailableTwoToneIcon from '@mui/icons-material/EventAvailableTwoTone';
-import { dateToYYMMDD } from '../../handler/dateHandler';
+import { dateToYYMMDD } from '../../utils/dateFormatUtils';
 
 
 const Container = styled.div`

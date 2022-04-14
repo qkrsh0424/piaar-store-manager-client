@@ -6,7 +6,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import React from 'react';
 
-import { dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
+import { dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../utils/dateFormatUtils';
 
 const Container = styled.div`
 `;

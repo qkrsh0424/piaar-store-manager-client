@@ -2,7 +2,7 @@ import { useEffect, useState, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 // handler
-import { getStartDate, getEndDate, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../handler/dateHandler';
+import { getStartDate, getEndDate, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../utils/dateFormatUtils';
 
 // data connect
 import { productCategoryDataConnect } from '../../data_connect/productCategoryDataConnect';

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 // handler
-import { numberWithCommas } from '../../handler/numberHandler';
+import { numberWithCommas } from '../../utils/numberFormatUtils';
 
 const BackBtn = styled.button`
     position: fixed;

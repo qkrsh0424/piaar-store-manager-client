@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import queryString from 'query-string';
 import styled from "styled-components";
 
-import { dateToYYMMDDhhmmss } from '../../handler/dateHandler';
+import { dateToYYMMDDhhmmss } from '../../utils/dateFormatUtils';
 
 import { excelTranslatorDataConnect } from '../../data_connect/excelTranslatorDataConnect';
 import ExcelTranslatorControlBar from './ExcelTranslatorControlBar';

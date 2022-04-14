@@ -1,7 +1,7 @@
 import {useState, useEffect, useReducer} from 'react';
 
 // handler
-import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
+import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../utils/dateFormatUtils';
 
 // data connect
 import { deliveryReadyCoupangDataConnect } from '../../../data_connect/deliveryReadyCoupangDataConnect';

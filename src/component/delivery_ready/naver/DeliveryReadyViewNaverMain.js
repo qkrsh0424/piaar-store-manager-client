@@ -2,7 +2,7 @@ import React, {useState, useEffect, useReducer} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // handler
-import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
+import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../utils/dateFormatUtils';
 
 // data connect
 import { deliveryReadyNaverDataConnect } from '../../../data_connect/deliveryReadyNaverDataConnect';

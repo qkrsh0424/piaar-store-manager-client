@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { browserName, CustomView, isMobile, isIOS, isSafari } from 'react-device-detect';
 
-import { numberWithCommas } from '../../handler/numberHandler';
+import { numberWithCommas } from '../../utils/numberFormatUtils';
 import { ContactPhoneOutlined, PersonPin } from '@material-ui/icons';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
