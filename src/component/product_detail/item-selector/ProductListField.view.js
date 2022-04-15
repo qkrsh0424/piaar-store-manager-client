@@ -18,8 +18,7 @@ export default function ProductListFieldView(props) {
             <div className="control-box">
                 <button className="add-btn"
                     type='button'
-                    onClick={() => navigate({
-                        pathname:'/refactor/products/create',
+                    onClick={() => navigate('/refactor/products/create', {
                         state:routerState
                     })}
                 >
