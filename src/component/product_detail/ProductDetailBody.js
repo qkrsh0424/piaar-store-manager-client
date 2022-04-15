@@ -287,8 +287,7 @@ const ProductDetailBody = (props) => {
                                 <span>
                                     <AddBtn
                                         type='button'
-                                        onClick={() => navigate({
-                                            pathname:'/products/create',
+                                        onClick={() => navigate('/products/create', {
                                             state:routerState
                                         })}
                                     ><AddIcon /></AddBtn>

@@ -73,8 +73,8 @@ class ProductOption {
         this.code = code;
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
+        this.nosUniqueCode = '';
         this.salesPrice = 0;
-        this.totalPurchasePrice = 0;
         this.stockUnit = 0;
         this.status = '준비중';
         this.memo = '';
@@ -84,6 +84,7 @@ class ProductOption {
         this.unitCny = '';
         this.unitKrw = '';
         this.totalPurchasePrice = 0;
+        this.packageYn = 'n';
         this.productCid = null;
         this.productId = productId;
     }
@@ -94,8 +95,8 @@ class ProductOption {
             code: this.code,
             defaultName: this.defaultName,
             managementName: this.managementName,
+            nosUniqueCode: this.nosUniqueCode,
             salesPrice: this.salesPrice,
-            totalPurchasePrice: this.totalPurchasePrice,
             stockUnit: this.stockUnit,
             status: this.status,
             memo: this.memo,
@@ -105,6 +106,7 @@ class ProductOption {
             unitCny: this.unitCny,
             unitKrw: this.unitKrw,
             totalPurchasePrice: this.totalPurchasePrice,
+            packageYn: this.packageYn,
             productCid: this.productCid,
             productId: this.productId
         }
@@ -116,6 +118,7 @@ class OptionPackage {
         this.id = uuidv4();
         this.packageUnit = 0;
         this.originOptionCode = '';
+        this.originOptionCid = null;
         this.originOptionId = '';
         this.parentOptionId = parentOptionId;
     }
@@ -125,6 +128,7 @@ class OptionPackage {
             id: this.id,
             packageUnit: this.packageUnit,
             originOptionCode: this.originOptionCode,
+            originOptionCid: this.originOptionCid,
             originOptionId: this.originOptionId,
             parentOptionId: this.parentOptionId,
         }
@@ -350,6 +354,7 @@ const ProductCreateComponent = () => {
             if(r.id === optionId) {
                 return{
                     ...r,
+                    packageYn: 'y',
                     optionPackages: data
                 }
             }else{
@@ -369,7 +374,8 @@ const ProductCreateComponent = () => {
                 if(r.originOptionId === option.id) {
                     r = {
                         ...r,
-                        originOptionCode : option.code
+                        originOptionCode: option.code,
+                        originOptionCid: option.cid
                     }
                 }
             });
@@ -399,6 +405,10 @@ const ProductCreateComponent = () => {
                 let data = option.optionPackages?.filter(r => r.id !== packageId);
                 if(data.length === 0) {
                     delete option.optionPackages;
+                    option = {
+                        ...option,
+                        packageYn: 'n'
+                    }
                     return option;
                 }else{
                     return{

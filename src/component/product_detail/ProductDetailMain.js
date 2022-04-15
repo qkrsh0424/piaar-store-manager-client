@@ -23,12 +23,12 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 
 class ProductOption {
-    constructor(productId, optionDefaultName = '', optionManagementName = '', nosUniqueCode = '') {
+    constructor(productId, optionDefaultName = '', optionManagementName = '') {
         this.id = uuidv4();
         this.code = ''
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
-        this.nosUniqueCode = nosUniqueCode;
+        this.nosUniqueCode = '';
         this.salesPrice = 0;
         this.stockUnit = 0;
         this.status = '준비중';
@@ -38,6 +38,8 @@ class ProductOption {
         this.color = '';
         this.unitCny = '';
         this.unitKrw = '';
+        this.totalPurchasePrice = 0;
+        this.packageYn = 'n';
         this.productCid = null;
         this.productId = productId;
     }
@@ -57,7 +59,9 @@ class ProductOption {
             imageFileName: this.imageFileName,
             color: this.color,
             unitCny: this.unitCny,
-            unitKrw: this.Krw,
+            unitKrw: this.unitKrw,
+            totalPurchasePrice: this.totalPurchasePrice,
+            packageYn: this.packageYn,
             productCid: this.productCid,
             productId: this.productId
         }

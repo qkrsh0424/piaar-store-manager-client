@@ -68,6 +68,7 @@ const productDataConnect = () => {
                 stockManagement: productData.stockManagement,
                 productCategoryCid: productData.productCategoryCid
             }
+            // 이미 option안에는 packageDtos가 존재함.
             let optionDtos = productData.productOptions
 
             for (let i = 0; i < optionDtos.length; i++) {

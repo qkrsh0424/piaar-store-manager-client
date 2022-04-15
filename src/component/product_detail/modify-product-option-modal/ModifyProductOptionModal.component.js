@@ -11,6 +11,7 @@ class OptionPackage {
         this.id = uuidv4();
         this.packageUnit = 0;
         this.originOptionCode = '';
+        this.originOptionCid = null;
         this.originOptionId = '';
         this.parentOptionId = parentOptionId;
     }
@@ -20,6 +21,7 @@ class OptionPackage {
             id: this.id,
             packageUnit: this.packageUnit,
             originOptionCode: this.originOptionCode,
+            originOptionCid: this.originOptionCid,
             originOptionId: this.originOptionId,
             parentOptionId: this.parentOptionId,
         }
@@ -141,6 +143,7 @@ const ModifyProductOptionModalComponent = (props) => {
 
         optionData = {
             ...optionData,
+            packageYn: 'y',
             optionPackages: packageList
         }
 
@@ -166,9 +169,13 @@ const ModifyProductOptionModalComponent = (props) => {
 
         // set option code of option package
         if(e.target.name === "originOptionId"){
-            changedPackage.forEach(r => {
-                let code = props.optionList.filter(option => option.id === r.originOptionId)[0]?.code;
-                r.originOptionCode = code;
+            changedPackage = changedPackage.map(r => {
+                let option = props.optionList.filter(option => option.id === r.originOptionId)[0];
+                return {
+                    ...r,
+                    originOptionCode: option.code,
+                    originOptionCid: option.cid
+                }
             });
         }
 
@@ -189,6 +196,10 @@ const ModifyProductOptionModalComponent = (props) => {
     
         if(data.length === 0) {
             delete optionData.optionPackages;
+            optionData = {
+                ...optionData,
+                packageYn: 'n'
+            }
         } else {
             optionData = {
                 ...optionData,

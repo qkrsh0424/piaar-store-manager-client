@@ -36,6 +36,7 @@ const productOptionDataConnect = () => {
                 unitCny: productOption.unitCny,
                 unitKrw: productOption.unitKrw,
                 totalPurchasePrice: productOption.totalPurchasePrice,
+                packageYn: productOption.packageYn,
                 productCid: productOption.productCid,
                 productId: productOption.productId
             }
@@ -72,6 +73,7 @@ const productOptionDataConnect = () => {
                 unitCny: productOption.unitCny,
                 unitKrw: productOption.unitKrw,
                 totalPurchasePrice: productOption.totalPurchasePrice,
+                packageYn: productOption.packageYn,
                 productCid: productOption.productCid,
                 productId: productOption.productId
             }

@@ -19,17 +19,18 @@ class ProductOption {
         this.code = code;
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
+        this.nosUniqueCode = '';
         this.salesPrice = 0;
-        this.totalPurchasePrice = 0;
         this.stockUnit = 0;
         this.status = '준비중';
         this.memo = '';
         this.imageUrl = '';
         this.imageFileName = '';
         this.color = '';
-        this.unit_cny = '';
-        this.unit_krw = '';
+        this.unitCny = '';
+        this.unitKrw = '';
         this.totalPurchasePrice = 0;
+        this.packageYn = 'n';
         this.productCid = null;
         this.productId = productId;
     }
@@ -40,8 +41,8 @@ class ProductOption {
             code: this.code,
             defaultName: this.defaultName,
             managementName: this.managementName,
+            nosUniqueCode: this.nosUniqueCode,
             salesPrice: this.salesPrice,
-            totalPurchasePrice: this.totalPurchasePrice,
             stockUnit: this.stockUnit,
             status: this.status,
             memo: this.memo,
@@ -51,6 +52,7 @@ class ProductOption {
             unitCny: this.unitCny,
             unitKrw: this.unitKrw,
             totalPurchasePrice: this.totalPurchasePrice,
+            packageYn: this.packageYn,
             productCid: this.productCid,
             productId: this.productId
         }
