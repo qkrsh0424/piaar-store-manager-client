@@ -54,12 +54,13 @@ import SalesAnalysisMain from './component/sales_analysis/SalesAnalysisMain';
 import SalesAnalysisPage from './pages/sales_analysis/SalesAnalysisPage';
 import ProductDetailPage from './pages/product_detail/ProductDetailPage';
 import ProductCreatePage from './pages/product_create/ProductCreatePage';
-import ExcelTranslatorPage from './pages/excel-translator/ExcelTranslatorPage';
+import ExcelTranslatorPage from './pages/excel_translator/ExcelTranslatorPage';
 import ErpManagementOrderUploadPage from './pages/erp/management/order-upload/ErpManagementOrderUploadPage';
 import ErpManagementOrderPage from './pages/erp/management/order/ErpManagementOrderPage';
 import ErpManagementSalesPage from './pages/erp/management/sales/ErpManagementSalesPage';
 import ErpManagementReleaseCompletePage from './pages/erp/management/release-complete/ErpManagementReleaseCompletePage';
 import ErpManagementExcelFormPage from './pages/erp/management/excel/ErpManagementExcelFormPage';
+import ProductManagePage from './pages/product_manage/ProductManagePage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -128,8 +129,10 @@ function App(props) {
                                 {/* Sales Rate */}
                                 <Route path='/sales-rate/naver' element={<SalesRateNaverMain />} />
 
+                                {/* refactor page 5 - /products -> /refactor/products */}
                                 {/* Product Manage */}
                                 <Route path='/products' element={<ProductManageMain />} />
+                                <Route path='/refactor/products' element={<ProductManagePage />} />
 
                                  {/* refactor page 3 - /product/create -> /refactor/product/create */}
                                 <Route path='/products/create' element={<CreateMain />} />
@@ -165,7 +168,7 @@ function App(props) {
 
                                 <Route path='/commute-record' element={<CommuteRecordMain />} />
 
-                                {/* refactor page 3 - /excel-translator -> /refactor/excel-translator */}
+                                {/* refactor page 4 - /excel-translator -> /refactor/excel-translator */}
                                 <Route path='/excel-translator' element={<ExcelTranslatorMain />} />
                                 <Route path='/refactor/excel-translator' element={<ExcelTranslatorPage />} />
                                 
