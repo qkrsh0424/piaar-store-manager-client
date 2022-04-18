@@ -21,11 +21,12 @@ export default function ProductManageTableFieldView(props) {
                         <th className='fixedHeader' scope="col" width='200'>상품관리명</th>
                         <th className='fixedHeader' scope="col" width='50'>
                             <input type='checkbox' 
-                                onChange={() => props.__handleEventControl().checkedOptionList().checkAll()} 
+                                // onChange={() => props.__handleEventControl().checkedOptionList().checkAll()} 
                                 // checked={props.__handleEventControl().checkedOptionList().isCheckedAll()}
                             ></input>
                         </th>
                         <th className='fixedHeader' scope="col" width='200'>옵션식별코드</th>
+                        <th className='fixedHeader' scope="col" width='100'>세트상품 여부</th>
                         <th className='fixedHeader' scope="col" width='150'>노스노스 고유코드</th>
                         <th className='fixedHeader' scope="col" width='200'>옵션명</th>
                         <th className='fixedHeader' scope="col" width='200'>옵션관리명</th>
@@ -37,7 +38,6 @@ export default function ProductManageTableFieldView(props) {
                         <th className='fixedHeader' scope="col" width='400'>옵션컨트롤</th>
                     </tr>
                 </thead>
-                {console.log(props.productViewList)}
                 <tbody>
                     {props.productViewList && props.productViewList.map((product, productIdx) => {
                         return (
@@ -49,7 +49,7 @@ export default function ProductManageTableFieldView(props) {
                                                 <button
                                                     type='button'
                                                     className="modify-btn"
-                                                    onClick={() => props.__handleEventControl().product().modifyModalOpen(product.product.id)}
+                                                    onClick={() => props.onActionOpenModifyProductModal(product.product.id)}
                                                 >상품수정</button>
                                             </div>
                                             <div>
@@ -57,7 +57,7 @@ export default function ProductManageTableFieldView(props) {
                                                 <button
                                                     type='button'
                                                     className="delete-btn"
-                                                    onClick={() => props.__handleEventControl().product().deleteOne(product.product.id)}
+                                                    onClick={() => props.onActionDeleteProduct(product.product.id)}
                                                 >상품삭제</button>
                                             </div>
                                         </th>
@@ -92,12 +92,14 @@ export default function ProductManageTableFieldView(props) {
                                         <div style={{ color: 'green' }}>[{product.category.name}]</div>
                                         <div>{product.product.imageFileUri}</div>
                                         <div>
-                                            <button type='button' className="add-btn" onClick={() => props.__handleEventControl().productOption().addModalOpen(product.product.id)}>옵션추가</button>
+                                            <button type='button' className="add-btn" onClick={() => props.onActionOpenCreateProductOptionModal(product.product.id)}>옵션추가</button>
                                         </div>
                                     </th>
-                                    <th colSpan={11} style={{ background: '#7a7bda20', color: '#888' }}>
+
+                                    <th colSpan={12} style={{ background: '#7a7bda20', color: '#888' }}>
                                         <div>{product.product.managementName}-{product.product.code}-{product.product.manufacturingCode}</div>
                                     </th>
+
                                 </tr>
                                 {product.options && product.options.map((option, index2) => {
                                     return (
@@ -114,6 +116,7 @@ export default function ProductManageTableFieldView(props) {
                                                 ></div>
                                             </td>
                                             <td>{option.code}</td>
+                                            <td style={{ fontWeight: '800' }}>{option.packageYn === 'y' ? 'O' : 'X'}</td>
                                             <td>{option.nosUniqueCode}</td>
                                             <td>{option.defaultName}</td>
                                             <td>{option.managementName}</td>
@@ -126,17 +129,17 @@ export default function ProductManageTableFieldView(props) {
                                                 <button
                                                     type='button'
                                                     className="modify-btn"
-                                                    onClick={(e) => props.__handleEventControl().productOption().modifyModalOpen(e, product.product.id, option.id)}
+                                                    onClick={(e) => props.onActionOpenModifyProductOptionModal(e, product.product.id, option.id)}
                                                 >옵션수정</button>
                                                 <button
                                                     type='button'
                                                     className="delete-btn"
-                                                    onClick={(e) => props.__handleEventControl().productOption().deleteOne(e, product.product.id, option.id)}
+                                                    onClick={(e) => props.onActionDeleteProductOption(e, product.product.id, option.id)}
                                                 >옵션삭제</button>
                                                 <button
                                                     type='button'
                                                     className="status-btn"
-                                                    onClick={(e) => props.__handleEventControl().productOption().stockStatusModalOpen(e, product.product.id, option.id)}
+                                                    onClick={(e) => props.onActionOpenStockStatusModal(e, product.product.id, option.id)}
                                                 >입출고현황</button>
                                             </td>
                                         </tr>

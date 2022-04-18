@@ -57,7 +57,7 @@ const ProductDetailComponent = () => {
                 payload: {
                     isSubmit: false
                 }
-            })
+            });
         }
         fetchInit();
     }, []);
