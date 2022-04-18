@@ -74,29 +74,6 @@ const ProductManageTableWrapper = styled.div`
         font-weight: 600;
     }
 
-    .option-check-list {
-        ${(props) => props.checked ?
-        css`
-            background:#7a7bda80;
-        `
-        :
-        css`
-            &:hover{
-                background:#f1f1f1;
-            }
-        `
-        }
-    }
-
-    .check-box {
-        width:14px;
-        height:14px;
-        border:1px solid gray;
-        border-radius:50%;
-        background:${props => props.checked ? '#007bff' : 'white'};
-        display:inline-block;
-    }
-
     .option-control button {
         padding:3px 8px;
         background: #7a7bda;
@@ -118,8 +95,33 @@ const ProductManageTableWrapper = styled.div`
     }
 `;
 
+const OptionTr = styled.tr`
+    ${(props) => props.checked ?
+        css`
+            background:#7a7bda80;
+        `
+        :
+        css`
+            &:hover{
+                background:#f1f1f1;
+            }
+        `
+    }
+`;
+
+const CheckCircle = styled.div`
+    width:14px;
+    height:14px;
+    border:1px solid gray;
+    border-radius:50%;
+    background:${props => props.checked ? '#007bff' : 'white'};
+    display:inline-block;
+`;
+
 
 export {
     Container,
-    ProductManageTableWrapper
+    ProductManageTableWrapper,
+    OptionTr,
+    CheckCircle
 }

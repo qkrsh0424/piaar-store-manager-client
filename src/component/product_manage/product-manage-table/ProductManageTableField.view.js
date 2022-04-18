@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import LinkIcon from '@mui/icons-material/Link';
 import LinkOffIcon from '@mui/icons-material/LinkOff';
 
-import { ProductManageTableWrapper } from "./ProductManageTable.styled";
+import { ProductManageTableWrapper, OptionTr, CheckCircle } from "./ProductManageTable.styled";
 
 export default function ProductManageTableFieldView(props) {
     const userRdx = useSelector(state => state.user);
@@ -21,8 +21,8 @@ export default function ProductManageTableFieldView(props) {
                         <th className='fixedHeader' scope="col" width='200'>상품관리명</th>
                         <th className='fixedHeader' scope="col" width='50'>
                             <input type='checkbox' 
-                                // onChange={() => props.__handleEventControl().checkedOptionList().checkAll()} 
-                                // checked={props.__handleEventControl().checkedOptionList().isCheckedAll()}
+                                onChange={() => props.checkAll()} 
+                                checked={props.isCheckedAll()}
                             ></input>
                         </th>
                         <th className='fixedHeader' scope="col" width='200'>옵션식별코드</th>
@@ -103,17 +103,17 @@ export default function ProductManageTableFieldView(props) {
                                 </tr>
                                 {product.options && product.options.map((option, index2) => {
                                     return (
-                                        <tr
+                                        <OptionTr
                                             key={'subitem' + index2}
                                             className="option-check-list"
-                                            // onClick={() => props.__handleEventControl().checkedOptionList().checkOneTr(option.id)}
-                                            // checked={props.__handleEventControl().checkedOptionList().isChecked(option.id)}
+                                            onClick={() => props.checkOneTr(option.id)}
+                                            checked={props.isChecked(option.id)}
                                         >
                                             <td>
-                                                <div
+                                                <CheckCircle
                                                     className="check-box"
-                                                    // checked={props.__handleEventControl().checkedOptionList().isChecked(option.id)}
-                                                ></div>
+                                                    checked={props.isChecked(option.id)}
+                                                ></CheckCircle>
                                             </td>
                                             <td>{option.code}</td>
                                             <td style={{ fontWeight: '800' }}>{option.packageYn === 'y' ? 'O' : 'X'}</td>
@@ -142,7 +142,7 @@ export default function ProductManageTableFieldView(props) {
                                                     onClick={(e) => props.onActionOpenStockStatusModal(e, product.product.id, option.id)}
                                                 >입출고현황</button>
                                             </td>
-                                        </tr>
+                                        </OptionTr>
                                     )
                                 })}
                             </React.Fragment>

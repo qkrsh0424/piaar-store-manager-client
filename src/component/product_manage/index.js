@@ -25,8 +25,9 @@ const ProductManageComponent = () => {
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
     const [productViewList, setProductViewList] = useState(null);
     const [stockStatusList, setStockStatusList] = useState(null);
-
     const [optionPackage, setOptionPackage] = useState(null);
+
+    const [checkedOptionList, setCheckedOptionList] = useState([]);
 
     const [uploadedImage, dispatchUploadedImage] = useReducer(uploadedImageReducer, initialUploadedImage);
 
@@ -272,6 +273,32 @@ const ProductManageComponent = () => {
             })
     }
 
+    const __reqCreateProductReleaseList = async (data) => {
+        await productReleaseDataConnect().postList(data)
+            .then(res => {
+                if (res.status == 200 && res.data && res.data.message == 'success') {
+                    alert('출고등록 되었습니다.');
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                alert(res?.data?.memo);
+            })
+    }
+    
+    const __reqCreateProductReceiveList = async (data) => {
+        await productReceiveDataConnect().postList(data)
+            .then(res => {
+                if (res.status == 200 && res.data && res.data.message == 'success') {
+                    alert('입고등록 되었습니다.');
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                alert(res?.data?.memo);
+            })
+    }
+
     const _onAction_changeCategory = (categoryId) => {
         setSelectedCategoryId(categoryId);
     }
@@ -348,6 +375,62 @@ const ProductManageComponent = () => {
         await __reqModifyReleaseMemo(data);
     }
 
+    const _onAction_checkOneTr = (optionId) => {
+        if(checkedOptionList.includes(optionId)){
+            setCheckedOptionList(checkedOptionList.filter(r => r !== optionId));
+            
+        }else{
+            setCheckedOptionList(checkedOptionList.concat(optionId));
+        }
+    }
+
+    const _onAction_checkAll = () => {
+        if (_onAction_isCheckedAll()) {
+            setCheckedOptionList([])
+        } else {
+            let optionIdList = optionList?.map(r => r.id);
+            setCheckedOptionList(optionIdList);
+        }
+    }
+
+    const _onAction_isCheckedAll = () => {
+        let optionIdList = optionList?.map(r => r.id).sort();
+        checkedOptionList.sort();
+        return JSON.stringify(optionIdList) === JSON.stringify(checkedOptionList);
+    }
+
+    const _onAction_isChecked = (optionId) => {
+        return checkedOptionList.includes(optionId);
+    }
+
+    const _onSubmit_createProductReleaseList = async (data) => {
+        onActionOpenBackdrop();
+        dispatchSubmitCheck({ 
+            type: 'SET_IS_SUBMIT',
+            payload: true
+        });
+        await __reqCreateProductReleaseList(data);
+        onActionCloseBackdrop();
+        dispatchSubmitCheck({ 
+            type: 'SET_IS_SUBMIT',
+            payload: false
+        });
+    }
+
+    const _onSubmit_createProductReceiveList = async (data) => {
+        onActionOpenBackdrop();
+        dispatchSubmitCheck({ 
+            type: 'SET_IS_SUBMIT',
+            payload: true
+        });
+        await __reqCreateProductReceiveList(data);
+        onActionCloseBackdrop();
+        dispatchSubmitCheck({ 
+            type: 'SET_IS_SUBMIT',
+            payload: false
+        });
+    }
+
     return (
         <Container>
             <CategorySelectorComponent
@@ -375,9 +458,19 @@ const ProductManageComponent = () => {
                 _onAction_searchStockStatus={(optionCid) => _onAction_searchStockStatus(optionCid)}
                 _onAction_modifyReceiveMemo={(data) => _onAction_modifyReceiveMemo(data)}
                 _onAction_modifyReleaseMemo={(data) => _onAction_modifyReleaseMemo(data)}
+                _onAction_checkOneTr={(optionId) => _onAction_checkOneTr(optionId)}
+                _onAction_checkAll={() => _onAction_checkAll()}
+                _onAction_isCheckedAll={() => _onAction_isCheckedAll()}
+                _onAction_isChecked={(optionId) => _onAction_isChecked(optionId)}
             ></ProductManageTableComponent>
 
             <ProductManageNavComponent
+                productViewList={productViewList}
+                checkedOptionList={checkedOptionList}
+                submitCheck={submitCheck}
+
+                _onSubmit_createProductReleaseList={(data) => _onSubmit_createProductReleaseList(data)}
+                _onSubmit_createProductReceiveList={(data) => _onSubmit_createProductReceiveList(data)}
             ></ProductManageNavComponent>
         </Container>
     )

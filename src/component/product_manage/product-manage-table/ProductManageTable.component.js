@@ -226,6 +226,7 @@ const ProductManageTableComponent = (props) => {
     const onActionModifyReleaseStockStatusMemo = async (data) => {
         await props._onAction_modifyReleaseMemo(data);
     }
+
     return (
         <Container>
             <ProductManageTableFieldView
@@ -237,6 +238,10 @@ const ProductManageTableComponent = (props) => {
                 onActionOpenModifyProductOptionModal={(e, productId, optionId) => onActionOpenModifyProductOptionModal(e, productId, optionId)}
                 onActionDeleteProductOption={(e, productId, optionId) => onActionDeleteProductOption(e, productId, optionId)}
                 onActionOpenStockStatusModal={(e, productId, optionId) => onActionOpenStockStatusModal(e, productId, optionId)}
+                checkOneTr={(optionId) => props._onAction_checkOneTr(optionId)}
+                checkAll={() => props._onAction_checkAll()}
+                isCheckedAll={() => props._onAction_isCheckedAll()}
+                isChecked={(optionId) => props._onAction_isChecked(optionId)}
             ></ProductManageTableFieldView>
 
             {/* Product Modify Modal */}

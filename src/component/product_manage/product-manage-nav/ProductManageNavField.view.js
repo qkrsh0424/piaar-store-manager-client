@@ -15,7 +15,7 @@ const ProductManageNavFieldView = (props) => {
                     <Link
                         className="nav-btn"
                         to={{
-                            pathname: '/products/create',
+                            pathname: '/refactor/products/create',
                             state: routerState
                         }}
                     >상품등록</Link>
@@ -23,13 +23,13 @@ const ProductManageNavFieldView = (props) => {
                 <div>
                     <button
                         type='button'
-                        onClick={() => props.__handleEventControl().release().addModalOpen()}
+                        onClick={() => props.onActionOpenCreateReleaseModal()}
                     >출고등록</button>
                 </div>
                 <div>
                     <button
                         type='button'
-                        onClick={() => props.__handleEventControl().receive().addModalOpen()}
+                        onClick={() => props.onActionOpenCreateReceiveModal()}
                     >입고등록</button>
                 </div>
                 <div>
