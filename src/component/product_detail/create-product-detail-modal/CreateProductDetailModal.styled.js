@@ -5,11 +5,10 @@ const Container = styled.div`
 `;
 
 const HeaderFieldWrapper = styled.div`
-    align-items: center;
-
     .header-top {
         display: flex;
         justify-content: space-between;
+        align-items: center
     }
 
     .modal-title {
@@ -27,7 +26,7 @@ const HeaderFieldWrapper = styled.div`
         &:hover {
             color: #80808b;
         }
-    }
+    }   
 
     .info-text {
         color: red;

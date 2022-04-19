@@ -45,14 +45,14 @@ const Container = styled.div`
 `;
 
 const HeaderFieldWrapper = styled.div`
-    padding: 2%;
-    align-items: center;
+    padding: 1% 2%;
     padding-bottom: 10px;
     border-bottom: 1px solid #000;
 
     .header-top {
         display: flex;
         justify-content: space-between;
+        align-items: center
     }
 
     .modal-title {
@@ -70,11 +70,6 @@ const HeaderFieldWrapper = styled.div`
         &:hover {
             color: #80808b;
         }
-    }   
-
-    .info-text {
-        color: red;
-        padding: 10px 0;
     }
 `;
 

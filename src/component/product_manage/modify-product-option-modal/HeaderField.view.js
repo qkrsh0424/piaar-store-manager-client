@@ -1,4 +1,5 @@
-import CancelIcon from '@mui/icons-material/Cancel';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { HeaderFieldWrapper } from "./ModifyProductOptionModal.styled"
 
@@ -7,9 +8,9 @@ export default function HeaderFieldView(props) {
         <HeaderFieldWrapper>
             <div className="header-top">
                 <div className="modal-title">옵션 수정</div>
-                <div className="modal-close-btn">
-                    <CancelIcon type="button" sx={{ fontSize: 33 }} onClick={() => props.onActionCloseModifyProductOptionModal()} />
-                </div>
+                <IconButton className="modal-close-btn" aria-label="close" onClick={() => props.onActionCloseModifyProductOptionModal()}>
+                    <CloseIcon />
+                </IconButton>
             </div>
         </HeaderFieldWrapper>
     )

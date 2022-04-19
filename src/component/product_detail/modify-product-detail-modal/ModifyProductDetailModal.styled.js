@@ -5,11 +5,11 @@ const Container = styled.div`
 `;
 
 const HeaderFieldWrapper = styled.div`
-    align-items: center;
 
     .header-top {
         display: flex;
         justify-content: space-between;
+        align-items: center
     }
 
     .modal-title {

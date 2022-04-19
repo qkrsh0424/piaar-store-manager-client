@@ -30,11 +30,6 @@ const HeaderFieldWrapper = styled.div`
         &:hover {
             color: #80808b;
         }
-    }   
-
-    .info-text {
-        color: red;
-        padding: 10px 0;
     }
 `;
 
