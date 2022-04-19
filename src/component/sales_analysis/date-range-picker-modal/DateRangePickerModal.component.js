@@ -12,7 +12,7 @@ const DateRangePickerModalComponent = (props) => {
                 selectedDateRangeState={props.selectedDateRangeState}
 
                 onChangeSelectedDate={(date) => props.onChangeSelectedDate(date)}
-                onActionSearchSalesAnalysis={(startDate, endDate) => props.onActionSearchSalesAnalysis(startDate, endDate)}
+                onActionSearchSalesAnalysis={() => props.onActionSearchSalesAnalysis()}
             ></DateRangePickerFieldView>
         </Container>
     )

@@ -10,6 +10,7 @@ import CommonModalComponent from '../../module/modal/CommonModalComponent';
 
 const OperatorComponent = (props) => {
     const [selectedDateRangeState, dispatchSelectedDateRangeState] = useReducer(selectedDateRangeReducer, initialDateRangeState);
+    const [dateRangeInfo, setDateRangeInfo] = useState(null);
     const [selectedStoreInfoState, dispatchSelectedStoreInfoState] = useReducer(selectedStoreInfoReducer, initialSelectedStoreInfoState);
     const [searchInputValueState, dispatchSearchInputValueState] = useReducer(searchInputValueReducer, initialSearchInputValueState);
     const [dateRangePickerModalOpen, setDateRangePickerModalOpen] = useState(false);
@@ -21,6 +22,10 @@ const OperatorComponent = (props) => {
 
         dispatchSelectedDateRangeState({
             type: 'INIT_DATA'
+        });
+        setDateRangeInfo({
+            startDate: new Date(),
+            endDate: new Date()
         });
     }, []);
 
@@ -52,27 +57,29 @@ const OperatorComponent = (props) => {
         props._onAction_changeSearchInput(searchInputValueState);
     }, [searchInputValueState]);
 
-    const onActionSelectDataRange = (year, month, day) => {
+    const onActionSelectDataRange = async (year, month, day) => {
         let startDate = new Date(setStartDateOfPeriod(new Date(), year, month, day));
         let endDate = new Date();
+        let dateInfo = { startDate, endDate };
 
         dispatchSelectedDateRangeState({
             type: 'SET_DATA',
             payload: {
-                startDate: startDate,
-                endDate: endDate
+                startDate,
+                endDate
             }
         });
-
-        onActionSearchSalesAnalysis(startDate, endDate);
+        setDateRangeInfo(dateInfo);
+        await props._onSubmit_searchSalesAnalysis(dateInfo);
     }
     
-    const onActionSearchSalesAnalysis = async (startDate, endDate) => {
-        await props._onSubmit_searchSalesAnalysis(startDate, endDate);
+    const onActionSearchSalesAnalysis = async () => {
+        let dateInfo = {...selectedDateRangeState};
+        setDateRangeInfo(dateInfo);
 
-        if(dateRangePickerModalOpen) {
-            setDateRangePickerModalOpen(false);
-        }
+        await props._onSubmit_searchSalesAnalysis(dateInfo);
+
+        setDateRangePickerModalOpen(false);
     }
 
     const onActionOpenDatePickerModal = () => {
@@ -177,7 +184,7 @@ const OperatorComponent = (props) => {
             ></ConditionSearchFieldView>
 
             <DateSelectorFieldView
-                selectedDateRangeState={selectedDateRangeState}
+                dateRangeInfo={dateRangeInfo}
 
                 onActionSelectDataRange={(year, month, day) => onActionSelectDataRange(year, month, day)}
                 onActionOpenDatePickerModal={() => onActionOpenDatePickerModal()}
@@ -196,7 +203,7 @@ const OperatorComponent = (props) => {
                     selectedDateRangeState={selectedDateRangeState}
 
                     onChangeSelectedDate={(date) => onChangeSelectedDate(date)}
-                    onActionSearchSalesAnalysis={(startDate, endDate) => onActionSearchSalesAnalysis(startDate, endDate)}
+                    onActionSearchSalesAnalysis={() => onActionSearchSalesAnalysis()}
                 ></DateRangePickerModalComponent>
             </CommonModalComponent>
         </Container>

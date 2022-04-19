@@ -78,9 +78,9 @@ const SalesAnalysisComponent = (props) => {
             })
     }
 
-    const _onSubmit_searchSalesAnalysis = async (startDate, endDate) => {
+    const _onSubmit_searchSalesAnalysis = async (date) => {
         onActionOpenBackdrop();
-        await __reqSearchSalesAnalysis(startDate, endDate);
+        await __reqSearchSalesAnalysis(date.startDate, date.endDate);
         onActionCloseBackdrop();
     }
 
@@ -132,7 +132,7 @@ const SalesAnalysisComponent = (props) => {
 
                 _onAction_changeSearchInfo={(searchInfo) => _onAction_changeSearchInfo(searchInfo)}
                 _onAction_changeSearchInput={(searchInput) => _onAction_changeSearchInput(searchInput)}
-                _onSubmit_searchSalesAnalysis={(start, end) => _onSubmit_searchSalesAnalysis(start, end)}
+                _onSubmit_searchSalesAnalysis={(date) => _onSubmit_searchSalesAnalysis(date)}
             >   
             </OperatorComponent>
 

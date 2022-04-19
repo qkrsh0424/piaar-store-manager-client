@@ -24,7 +24,7 @@ const ReceiveAndReleaseModalComponent = (props) => {
         setDateRangeInfo({
             startDate: new Date(),
             endDate: new Date()
-        })
+        });
     }, []);
 
     const onActionOpenDatePickerModal = () => {

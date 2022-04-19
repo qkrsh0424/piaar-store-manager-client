@@ -9,7 +9,7 @@ export default function DateSelectorFieldView(props) {
             <div className="inline-box">
                 <button type="button" className="date-selector-box" onClick={() => props.onActionOpenDatePickerModal()}>
                     <EventAvailableTwoToneIcon fontSize="small" color="action" />
-                    {dateToYYMMDD(props.selectedDateRangeState?.startDate)} ~ {dateToYYMMDD(props.selectedDateRangeState?.endDate)}
+                    {dateToYYMMDD(props.dateRangeInfo?.startDate)} ~ {dateToYYMMDD(props.dateRangeInfo?.endDate)}
                 </button>
             </div>
             <div className="date-control-box">
