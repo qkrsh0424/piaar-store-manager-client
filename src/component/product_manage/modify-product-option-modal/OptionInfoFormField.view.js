@@ -189,7 +189,7 @@ export default function OptionInfoFormFieldView(props) {
                         >옵션 패키지 추가</button>
                     </div>
 
-                    {props.modifyOption.optionPackages && props.modifyOption.optionPackages.length > 0 && 
+                    {props.modifyOption?.optionPackages && props.modifyOption?.optionPackages.length > 0 && 
                         <div className="table-container">
                             <table className="table" style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                                 <thead>

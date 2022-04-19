@@ -1,15 +1,22 @@
 
-// const NUMBER_BOUND = [49, 57];     // asci 49~57 => number 1~9
-// const UPPER_CASE_BOUND = [65, 90];      // asci 65~90 => upper case A~Z
-// const LOWER_CASE_BOUND = [97, 122];     // asci 97~122 => lower case a~z
-
+const POSSIBLE_CHARACTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 function generateProdCode() {
-    return Math.random().toString(36).substring(2, 8); 
+    let splitCode = "g";
+    let randomTimeStr = (new Date().getTime()).toString(36).substring(0,8);
+    let randomStr = [...Array(9)].reduce(a=>a+POSSIBLE_CHARACTER[~~(Math.random()*POSSIBLE_CHARACTER.length)],'');
+    
+    let resultRandomStr = splitCode + randomTimeStr + randomStr;
+    return resultRandomStr;
 }
 
 function generateOptionManagementCode() {
-    return Math.random().toString(36).substring(2, 10); 
+    let splitCode = "o";
+    let randomTimeStr = (new Date().getTime()).toString(36).substring(0,8);
+    let randomStr = [...Array(9)].reduce(a=>a+POSSIBLE_CHARACTER[~~(Math.random()*POSSIBLE_CHARACTER.length)],'');
+    
+    let resultRandomStr = splitCode + randomTimeStr + randomStr;
+    return resultRandomStr;
 }
 
 export {

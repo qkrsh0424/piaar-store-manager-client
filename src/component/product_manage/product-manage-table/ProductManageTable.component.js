@@ -5,10 +5,10 @@ import ProductManageTableFieldView from "./ProductManageTableField.view";
 import { Container } from "./ProductManageTable.styled"
 import ModifyProductModalComponent from '../modify-product-modal/ModifyProductModal.component';
 import CommonModalComponent from '../../module/modal/CommonModalComponent';
-import CreateProductOptionModalComponent from '../../product_detail/create-product-option-modal/CreateProductOptionModal.component';
 import { generateOptionManagementCode } from '../../../utils/keyGeneratorUtils';
 import ModifyProductOptionModalComponent from '../modify-product-option-modal/ModifyProductOptionModal.component';
 import StockStatusModalComponent from '../stock-status-modal/StockStatusModal.component';
+import CreateProductOptionModalComponent from '../create-product-option-modal/CreateProductOptionModal.component';
 
 class ProductOption {
     constructor(productId, code = '', optionDefaultName = '', optionManagementName = '') {
