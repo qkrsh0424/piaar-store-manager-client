@@ -90,7 +90,7 @@ const ProductManageNavComponent = (props) => {
     }
 
     const onActionChangeReleaseInputValue = (e, releaseAddDataId) => {
-        setReceiveAddData(releaseAddData.map(data => {
+        setReleaseAddData(releaseAddData.map(data => {
             if (data.productRelease.id === releaseAddDataId) {
                 return {
                     ...data,
@@ -102,7 +102,7 @@ const ProductManageNavComponent = (props) => {
             } else {
                 return data;
             }
-        }))
+        }));
     }
 
     const onActionChangeReleaseMemoInputValue = (e) => {
