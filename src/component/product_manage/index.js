@@ -8,6 +8,7 @@ import { productReceiveDataConnect } from '../../data_connect/productReceiveData
 import { productReleaseDataConnect } from '../../data_connect/productReleaseDataConnect';
 
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
+import { dateToYYYYMMDD, getEndDate, getStartDate } from '../../utils/dateFormatUtils';
 import CategorySelectorComponent from './category-selector/CategorySelector.component';
 import ProductManageNavComponent from './product-manage-nav/ProductManageNav.component';
 import ProductManageTableComponent from './product-manage-table/ProductManageTable.component';
@@ -33,6 +34,9 @@ const ProductManageComponent = () => {
 
     const [submitCheck, dispatchSubmitCheck] = useReducer(submitCheckReducer, initialSubmitCheck);
     const [dataChangedTrigger, setDataChangedTrigger] = useState(false);
+
+    const [optionReceiveStatusData, setOptionReceiveStatusData] = useState(null);
+    const [optionReleaseStatusData, setOptionReleaseStatusData] = useState(null);
 
     const {
         open: backdropOpen,
@@ -299,6 +303,22 @@ const ProductManageComponent = () => {
             })
     }
 
+    const __reqSearchReceiveAndRelease = async (startDate, endDate) => {
+        var start = startDate ? getStartDate(new Date(startDate)) : null;
+        var end = endDate ? getEndDate(new Date(endDate)) : null;
+
+        await productOptionDataConnect().searchListStockStatus(start, end)
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    setOptionReceiveStatusData(res.data.data.productReceive);
+                    setOptionReleaseStatusData(res.data.data.productRelease);
+                }
+            })
+            .catch(err => {
+                console.log(err.response);
+            })
+    }
+
     const _onAction_changeCategory = (categoryId) => {
         setSelectedCategoryId(categoryId);
     }
@@ -431,6 +451,11 @@ const ProductManageComponent = () => {
         });
     }
 
+    const _onAction_searchReceiveAndRelease = async (date) => {
+        onActionOpenBackdrop();
+        await __reqSearchReceiveAndRelease(date.startDate, date.endDate);
+        onActionCloseBackdrop();
+    }
     return (
         <Container>
             <CategorySelectorComponent
@@ -468,9 +493,12 @@ const ProductManageComponent = () => {
                 productViewList={productViewList}
                 checkedOptionList={checkedOptionList}
                 submitCheck={submitCheck}
+                optionReceiveStatusData={optionReceiveStatusData}
+                optionReleaseStatusData={optionReleaseStatusData}
 
                 _onSubmit_createProductReleaseList={(data) => _onSubmit_createProductReleaseList(data)}
                 _onSubmit_createProductReceiveList={(data) => _onSubmit_createProductReceiveList(data)}
+                _onAction_searchReceiveAndRelease={(date) => _onAction_searchReceiveAndRelease(date)}
             ></ProductManageNavComponent>
         </Container>
     )

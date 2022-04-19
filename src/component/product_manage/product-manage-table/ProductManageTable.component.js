@@ -133,8 +133,6 @@ const ProductManageTableComponent = (props) => {
         let option = new ProductOption(selectedProduct.id, generateOptionManagementCode());
         option.productCid = selectedProduct.cid;
 
-        console.log(option);
-
         setCreateProductOptionData(option);
         setCreateProductOptionModalOpen(true);
     }

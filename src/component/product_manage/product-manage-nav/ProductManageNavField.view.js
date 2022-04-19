@@ -35,8 +35,8 @@ const ProductManageNavFieldView = (props) => {
                 <div>
                     <button
                         type='button'
-                        onClick={() => props.__handleEventControl().receiveAndRelease().receiveAndReleaseStatusModalOpen()}
-                    >입출고확인</button>
+                        onClick={() => props.onActionOpenReceiveAndReleaseModal()}
+                    >입출고현황</button>
                 </div>
             {/* </div> */}
         </ProductManageNavWrapper>

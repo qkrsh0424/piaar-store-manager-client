@@ -103,6 +103,15 @@ const productOptionDataConnect = () => {
                 withCredentials: true
             })
         },
+        searchListStockStatus: async function(startDate, endDate) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status`, {
+                params: {
+                    startDate: startDate,
+                    endDate: endDate
+                },
+                withCredentials: true
+            })
+        },
         searchList: async function () {
             return await axios.get(`http://localhost:8081/api/v1/product-option/list-m2oj`, {
                 withCredentials: true
