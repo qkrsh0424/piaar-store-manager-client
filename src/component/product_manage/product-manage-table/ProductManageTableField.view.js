@@ -116,7 +116,7 @@ export default function ProductManageTableFieldView(props) {
                                                 ></CheckCircle>
                                             </td>
                                             <td>{option.code}</td>
-                                            <td style={{ fontWeight: '800' }}>{option.packageYn === 'y' ? 'O' : 'X'}</td>
+                                            <td style={{ fontWeight: '800' }}>{option.packageYn === 'y' ? 'O' : '-'}</td>
                                             <td>{option.nosUniqueCode}</td>
                                             <td>{option.defaultName}</td>
                                             <td>{option.managementName}</td>

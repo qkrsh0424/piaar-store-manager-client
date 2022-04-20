@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
+    padding: 1% 5%;
     padding-bottom: 5%;
 
     .back-btn {

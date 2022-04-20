@@ -52,7 +52,11 @@ export default function OptionInfoTableFieldView(props) {
                             <span>KRW :</span>
                             <span className="into-text">{props.selectedOption.unitKrw}</span>
                         </div>
-                        <div className="grid-span-6">
+                        <div className="grid-span-2">
+                            <span>세트상품 :</span>
+                            <span className="into-text">{props.selectedOption.packageYn === 'y' ? 'O' : 'X'}</span>
+                        </div>
+                        <div className="grid-span-4">
                             <span>현재상태 :</span>
                             <span className="into-text">{props.selectedOption.status}</span>
                         </div>

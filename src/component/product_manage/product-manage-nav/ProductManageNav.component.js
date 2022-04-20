@@ -49,11 +49,11 @@ const ProductManageNavComponent = (props) => {
 
     const [createReleaseModalOpen, setCreateReleaseModalOpen] = useState(false);
     const [releaseAddData, setReleaseAddData] = useState(null);
-    const [releaseAddMemo, setReleaseAddMemo] = useState('');
+    const [releaseAddMemo, setReleaseAddMemo] = useState(null);
 
     const [createReceiveModalOpen, setCreateReceiveModalOpen] = useState(false);
     const [receiveAddData, setReceiveAddData] = useState(null);
-    const [receiveAddMemo, setReceiveAddMemo] = useState('');
+    const [receiveAddMemo, setReceiveAddMemo] = useState(null);
 
     const [receiveAndReleaseModalOpen, setReceiveAndReleaseModalOpen] = useState(false);
 
@@ -87,6 +87,7 @@ const ProductManageNavComponent = (props) => {
     const onActionCloseCreateReleaseModal = () => {
         setCreateReleaseModalOpen(false);
         setReleaseAddData(null);
+        setReleaseAddMemo(null);
     }
 
     const onActionChangeReleaseInputValue = (e, releaseAddDataId) => {
@@ -155,13 +156,14 @@ const ProductManageNavComponent = (props) => {
             alert('입고할 데이터를 선택해주세요.');
             return;
         }
-        setCreateReceiveModalOpen(true);
         setReceiveAddData(receiveAddData);
+        setCreateReceiveModalOpen(true);
     }
 
     const onActionCloseCreateReceiveModal = () => {
         setCreateReceiveModalOpen(false);
         setReceiveAddData(null);
+        setReceiveAddMemo(null);
     }
 
     const onActionChangeReceiveInputValue = (e, receiveAddDataId) => {

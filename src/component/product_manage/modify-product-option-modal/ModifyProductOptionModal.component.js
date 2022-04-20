@@ -216,7 +216,7 @@ const ModifyProductOptionModalComponent = (props) => {
             payload: optionData
         });
     }
-
+    
     return (
         modifyOption &&
         <Container>

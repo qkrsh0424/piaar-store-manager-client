@@ -204,11 +204,11 @@ export default function OptionInfoFormFieldView(props) {
                                         return (
                                             <tr key={`option-package-list-index` + index}>
                                                 <th>
-                                                    <select className="selector-style" name="originOptionId" onChange={(e) => props.onChangePackageInputValue(e, packageOption.id)}>
+                                                    <select className="selector-style" name="originOptionId" value={packageOption.originOptionId} onChange={(e) => props.onChangePackageInputValue(e, packageOption.id)}>
                                                         <option>옵션선택</option>
                                                         {props.optionList?.map((option, index) => {
                                                             return (
-                                                                <option key={`co-option-package-name-idx` + index} value={option.id} selected={option.id === packageOption.originOptionId}>{option.managementName} ({option.code})</option>
+                                                                <option key={`co-option-package-name-idx` + index} value={option.id}>{option.managementName} ({option.code})</option>
                                                             )
                                                         })}
                                                     </select>

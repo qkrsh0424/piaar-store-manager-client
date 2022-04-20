@@ -194,8 +194,6 @@ const CreateProductOptionModalComponent = (props) => {
             optionPackages: changedPackage
         }
 
-        console.log(optionData);
-
         dispatchCreateOption({
             type: 'SET_DATA',
             payload: optionData
