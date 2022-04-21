@@ -6,7 +6,6 @@ import { productCategoryDataConnect } from '../../data_connect/productCategoryDa
 import { productDataConnect } from '../../data_connect/productDataConnect';
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
 import ProductCreateFormComponent from './ProductCreateForm.component';
-import { generateOptionManagementCode, generateProdCode } from '../../utils/keyGeneratorUtils'
 import { productOptionDataConnect } from '../../data_connect/productOptionDataConnect';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -14,9 +13,9 @@ const Container = styled.div`
 `;
 
 class Product {
-    constructor(code = '', optionDefaultName = '', optionManagementName = '') {
+    constructor(optionDefaultName = '', optionManagementName = '') {
         this.id = uuidv4();
-        this.code = code;
+        this.code = '';
         this.manufacturingCode = '';
         this.naverProductCode = '';
         this.defaultName = '';
@@ -32,11 +31,12 @@ class Product {
         this.defaultHeight = 0;
         this.defaultQuantity = 0;
         this.defaultWeight = 0;
+        this.purchaseUrl = '';
         this.defaultTotalPurchasePrice = 0;
         this.stockManagement = false;
         this.productCategoryCid = null;
         this.productOptions = [
-            new ProductOption(this.id, generateOptionManagementCode(), optionDefaultName, optionManagementName).toJSON()
+            new ProductOption(this.id, optionDefaultName, optionManagementName).toJSON()
         ]
     }
 
@@ -59,6 +59,7 @@ class Product {
             defaultHeight: this.defaultHeight,
             defaultQuantity: this.defaultQuantity,
             defaultWeight: this.defaultWeight,
+            purchaseUrl: this.purchaseUrl,
             defaultTotalPurchasePrice: this.defaultTotalPurchasePrice,
             stockManagement: this.stockManagement,
             productCategoryCid: this.productCategoryCid,
@@ -68,9 +69,9 @@ class Product {
 }
 
 class ProductOption {
-    constructor(productId, code = '', optionDefaultName = '', optionManagementName = '') {
+    constructor(productId, optionDefaultName = '', optionManagementName = '') {
         this.id = uuidv4();
-        this.code = code;
+        this.code = '';
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
         this.nosUniqueCode = '';
@@ -279,7 +280,7 @@ const ProductCreateComponent = () => {
 
     const _onAction_createProductOption = () => {
         let data = createProductData.productOptions;
-        data.push(new ProductOption(createProductData.id, generateOptionManagementCode()).toJSON());
+        data.push(new ProductOption(createProductData.id).toJSON());
 
         dispatchCreateProductData({
             type: 'SET_OPTION',
@@ -459,7 +460,7 @@ const ProductCreateComponent = () => {
 
 export default ProductCreateComponent;
 
-const initialCreateProductData = new Product(generateProdCode(), '단일상품', '단일상품').toJSON();
+const initialCreateProductData = new Product('단일상품', '단일상품').toJSON();
 
 const createProductDataReducer = (state, action) => {
     switch(action.type) {

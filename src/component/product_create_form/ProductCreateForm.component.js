@@ -147,12 +147,6 @@ const ProductCreateFormComponent = (props) => {
                 return false;
             }
 
-            if (option.code == '' || option.code == null || option.code == undefined) {
-                alert('옵션관리코드를 한번더 확인해 주세요.')
-                return false;
-            }
-
-
             for(var j = 0; i < option.optionPackages?.length; i++) {
                 if(option.optionPackages[j].originOptionCode === null || option.optionPackages[j].originOptionCode ===undefined || option.optionPackages[j].originOptionCode === '') {
                     alert('옵션패키지 구성상품을 선택해주세요.');

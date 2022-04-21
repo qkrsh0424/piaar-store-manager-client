@@ -128,11 +128,7 @@ const ModifyProductOptionModalComponent = (props) => {
             alert('관리상품명은 필수항목입니다.');
             return false;
         }
-
-        if (modifyOption.code == null || modifyOption.code == undefined || modifyOption.code == '') {
-            alert('관리코드는 필수항목입니다.');
-            return false;
-        }
+        
         return true;
     }
 

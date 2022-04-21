@@ -51,7 +51,7 @@ export default function OptionInfoFieldView(props) {
                                         <th scope="col" width='50'>#</th>
                                         <th scope="col" width='200'>옵션명 <i className="icon-must" aria-label="필수항목"></i></th>
                                         <th scope="col" width='200'>관리옵션명 <i className="icon-must" aria-label="필수항목"></i></th>
-                                        <th scope="col" width='200'>관리코드 <i className="icon-must" aria-label="필수항목"></i></th>
+                                        <th scope="col" width='200'>관리코드</th>
                                         <th scope="col" width='200'>노스노스 고유코드</th>
                                         <th scope="col" width='200'>판매가</th>
                                         <th scope="col" width='200'>매입총합계</th>

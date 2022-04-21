@@ -7,7 +7,7 @@ import { DataListWrapper } from "./ItemSelector.styled";
 
 export default function ProductListFieldView(props) {
     const location = useLocation();
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
     let routerState = {
         prevUrl: location.pathname

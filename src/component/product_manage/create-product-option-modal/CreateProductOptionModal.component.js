@@ -122,11 +122,6 @@ const CreateProductOptionModalComponent = (props) => {
             return false;
         }
 
-        if (createOption.code === null || createOption.code === undefined || createOption.code === '') {
-            alert('관리코드는 필수항목입니다.');
-            return false;
-        }
-
         for(var i = 0; i < createOption.optionPackages?.length; i++) {
             if(createOption.optionPackages[i].originOptionCode === null || createOption.optionPackages[i].originOptionCode ===undefined || createOption.optionPackages[i].originOptionCode === '') {
                 alert('옵션패키지 구성상품을 선택해주세요.');

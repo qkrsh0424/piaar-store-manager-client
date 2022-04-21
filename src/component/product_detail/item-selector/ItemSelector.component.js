@@ -11,12 +11,11 @@ import CommonModalComponent from '../../module/modal/CommonModalComponent';
 import ModifyProductModalComponent from '../modify-product-modal/ModifyProductModal.component';
 import CreateProductOptionModalComponent from '../create-product-option-modal/CreateProductOptionModal.component';
 import ModifyProductOptionModalComponent from '../modify-product-option-modal/ModifyProductOptionModal.component';
-import { generateOptionManagementCode } from '../../../utils/keyGeneratorUtils';
 
 class ProductOption {
-    constructor(productId, code = '', optionDefaultName = '', optionManagementName = '') {
+    constructor(productId, optionDefaultName = '', optionManagementName = '') {
         this.id = uuidv4();
-        this.code = code;
+        this.code = '';
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
         this.nosUniqueCode = '';
@@ -199,7 +198,7 @@ const ItemSelectorComponent = (props) => {
         }
 
         let selectedProduct = props.productViewList.filter(r => r.cid === parseInt(query.productCid))[0];
-        let option = new ProductOption(selectedProduct.id, generateOptionManagementCode());
+        let option = new ProductOption(selectedProduct.id);
         option.productCid = selectedProduct.cid;
 
         setCreateProductOptionData(option);
