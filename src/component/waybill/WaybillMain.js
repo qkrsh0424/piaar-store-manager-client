@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 // handler
-import {dateToYYYYMMDDhhmmssFile} from '../../handler/dateHandler';
+import {dateToYYYYMMDDhhmmssFile} from '../../utils/dateFormatUtils';
 // component
 import DrawerNavbarMain from '../nav/DrawerNavbarMain';
 import WaybillBodyComponent from './WaybillBodyComponent';

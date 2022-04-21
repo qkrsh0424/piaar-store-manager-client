@@ -15,6 +15,7 @@ const productDataConnect = () => {
                     defaultName: productListData[i].defaultName,
                     imageFileName: productListData[i].imageFileName,
                     imageUrl: productListData[i].imageUrl,
+                    purchaseUrl: productListData[i].purchaseUrl,
                     managementName: productListData[i].managementName,
                     manufacturingCode: productListData[i].manufacturingCode,
                     memo: productListData[i].memo,
@@ -26,6 +27,7 @@ const productDataConnect = () => {
                     defaultHeight: productListData[i].defaultHeight,
                     defaultQuantity: productListData[i].defaultQuantity,
                     defaultWeight: productListData[i].defaultWeight,
+                    defaultTotalPurchasePrice: productListData[i].defaultTotalPurchasePrice,
                     stockManagement: productListData[i].stockManagement,
                     productCategoryCid: productListData[i].productCategoryCid
                 }
@@ -37,6 +39,49 @@ const productDataConnect = () => {
                 jsonArr.push(json)
             }
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product/list`, jsonArr, {
+                withCredentials: true
+            })
+        },
+        postCreate: async function (productData) {
+            let json = {};
+            
+            let productDto = {
+                id: productData.id,
+                code: productData.code,
+                naverProductCode: productData.naverProductCode,
+                defaultName: productData.defaultName,
+                imageFileName: productData.imageFileName,
+                imageUrl: productData.imageUrl,
+                purchaseUrl: productData.purchaseUrl,
+                managementName: productData.managementName,
+                manufacturingCode: productData.manufacturingCode,
+                memo: productData.memo,
+                hsCode: productData.hsCode,
+                style: productData.style,
+                tariffRate: productData.tariffRate,
+                defaultWidth: productData.defaultWidth,
+                defaultLength: productData.defaultLength,
+                defaultHeight: productData.defaultHeight,
+                defaultQuantity: productData.defaultQuantity,
+                defaultWeight: productData.defaultWeight,
+                defaultTotalPurchasePrice: productData.defaultTotalPurchasePrice,
+                stockManagement: productData.stockManagement,
+                productCategoryCid: productData.productCategoryCid
+            }
+            // 이미 option안에는 packageDtos가 존재함.
+            let optionDtos = productData.productOptions
+
+            for (let i = 0; i < optionDtos.length; i++) {
+                let packageDtos = optionDtos[i].optionPackages ?? [];
+
+                json = {
+                    productDto: productDto,
+                    optionDtos: optionDtos,
+                    packageDtos: packageDtos
+                }
+            }
+
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product/one`, json, {
                 withCredentials: true
             })
         },

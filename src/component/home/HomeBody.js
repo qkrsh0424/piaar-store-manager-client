@@ -11,28 +11,45 @@ const Container = styled.div`
 
 const LinkGroup = styled.div`
     position: absolute;
-    width: 80%;
+    width: 90%;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,10%);
+    transform: translate(-50%, 5%);
     padding-bottom: 100px;
 `;
 
+const GroupBox = styled.div`
+    padding-bottom: 20px;
+`;
+
+const GroupTitle = styled.div`
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 20px;
+    color: #0500af;
+`;
+
 const LinkBox = styled.div`
-    margin:10px 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* grid-template-rows: minmax(10vh, 10vh); */
+    grid-gap: 15px;
+
+    @media only screen and (max-width: 992px){
+        grid-template-columns: 1fr;
+    }
 `;
 
 const CustomLink = styled(Link)`
-    margin-bottom: 30px;
-    display: inline-block;
-    width: 100%;
     border:3px double #7d7ada;
-    border-radius: 5px;
+    border-radius: 10px;
     padding:5px;
+    padding: 25px 0;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color:#7d7ada;
     font-weight: 600;
+    background: linear-gradient(to bottom right, #f0fcff, #ecf1ff);
     box-shadow: 5px 5px 5px -1px #00000020;
 
     &:hover{
@@ -45,6 +62,38 @@ const CustomLink = styled(Link)`
     
     @media only screen and (max-width:992px){
         font-size: 1.3rem;
+        padding: 0;
+    }
+
+    @media only screen and (max-width:335px){
+        font-size: 1rem;
+    }
+    
+`;
+
+const CustomLink2 = styled.a`
+    border:3px double #7d7ada;
+    border-radius: 10px;
+    padding:5px;
+    padding: 25px 0;
+    text-align: center;
+    font-size: 1.2rem;
+    color:#7d7ada;
+    font-weight: 600;
+    background: linear-gradient(to bottom right, #f0fcff, #ecf1ff);
+    box-shadow: 5px 5px 5px -1px #00000020;
+
+    &:hover{
+        text-decoration: none;
+        border:3px double white;
+        background: rgba(122, 123, 218, 0.88);
+        transition-duration: 0.2s;
+        color:white;
+    }
+    
+    @media only screen and (max-width:992px){
+        font-size: 1.3rem;
+        padding: 0;
     }
 
     @media only screen and (max-width:335px){
@@ -60,22 +109,54 @@ const HomeBody = () => {
         <>
             <Container>
                 <LinkGroup>
-                    <LinkBox>
-                        {
-                            userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
-                                <CustomLink to='/account-book'>부기관리</CustomLink>
-                                :
-                                <></>
-                        }
-                        <CustomLink to='/products'>상품 재고관리</CustomLink>
-                        <CustomLink to='/product-detail'>상품 상세정보</CustomLink>
-                        <CustomLink to='/shipment/packing-list/naver'>네이버 배송준비 데이터 추출기</CustomLink>
-                        <CustomLink to='/shipment/packing-list/coupang'>쿠팡 배송준비 데이터 추출기</CustomLink>
-                        <CustomLink to='/sales-rate/naver'>네이버 주문통합검색 판매량 추출기</CustomLink>
-                        <CustomLink to='/delivery-ready/naver'>네이버 배송준비 발주서 다운로드</CustomLink>
-                        <CustomLink to='/delivery-ready/coupang'>쿠팡 배송준비 발주서 다운로드</CustomLink>
-                        <CustomLink to='/order-registration/naver'>네이버 대량등록 엑셀 다운로드</CustomLink>
-                    </LinkBox>
+                    <GroupBox>
+                        <GroupTitle>상품 관리</GroupTitle>
+                        <LinkBox>
+                            <CustomLink to='/products'>상품 재고관리</CustomLink>
+                            <CustomLink to='/product-detail'>상품 상세정보</CustomLink>
+                            <CustomLink2 href='https://analytics.piaar.co.kr'>분석기</CustomLink2>
+                            <CustomLink to='/sales-analysis'>판매 랭킹</CustomLink>
+                        </LinkBox>
+                    </GroupBox>
+
+                    <GroupBox>
+                        <GroupTitle>피아르</GroupTitle>
+                        <LinkBox>
+                            <CustomLink to='/erp/management/order-upload'>피아르 주문 & 출고 관리</CustomLink>
+                        </LinkBox>
+                    </GroupBox>
+
+                    <GroupBox>
+                        <GroupTitle>네이버</GroupTitle>
+                        <LinkBox>
+                            <CustomLink to='/delivery-ready/naver'>네이버 배송준비 발주서 다운로드</CustomLink>
+                            <CustomLink to='/order-registration/naver'>네이버 대량등록 엑셀 다운로드</CustomLink>
+                            <CustomLink to='/shipment/packing-list/naver'>네이버 배송준비 데이터 추출기</CustomLink>
+                            <CustomLink to='/sales-rate/naver'>네이버 주문통합검색 판매량 추출기</CustomLink>
+                        </LinkBox>
+                    </GroupBox>
+
+                    <GroupBox>
+                        <GroupTitle>쿠팡</GroupTitle>
+                        <LinkBox>
+                            <CustomLink to='/delivery-ready/coupang'>쿠팡 배송준비 발주서 다운로드</CustomLink>
+                            <CustomLink to='/shipment/packing-list/coupang'>쿠팡 배송준비 데이터 추출기</CustomLink>
+                        </LinkBox>
+                    </GroupBox>
+
+                    <GroupBox>
+                        <GroupTitle>기타</GroupTitle>
+                        <LinkBox>
+                            {
+                                userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
+                                    <CustomLink to='/account-book'>부기관리</CustomLink>
+                                    :
+                                    <></>
+                            }
+                            <CustomLink to='/commute-record'>출/퇴근 기록</CustomLink>
+                            <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
+                        </LinkBox>
+                    </GroupBox>
                 </LinkGroup>
 
             </Container>

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
+import { dateToYYMMDDhhmmss } from '../../../utils/dateFormatUtils';
 
 const Container = styled.div`
     overflow:hidden;
@@ -198,6 +198,16 @@ const DeliveryReadyUploadBody = (props) => {
                                 <HeaderTh className="fiexed-header xlarge-cell" scope="col">배송메세지</HeaderTh>
                                 <HeaderTh className="fiexed-header xlarge-cell" scope="col">출고지</HeaderTh>
                                 <HeaderTh className="fiexed-header" scope="col">주문일시</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">피아르 메모1</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">피아르 메모2</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">피아르 메모3</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">피아르 메모4</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">피아르 메모5</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">피아르 메모6</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">피아르 메모7</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">피아르 메모8</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">피아르 메모9</HeaderTh>
+                                <HeaderTh className="fiexed-header" scope="col">피아르 메모10</HeaderTh>
                             </tr>
                         </thead>
                         <tbody>
@@ -232,6 +242,16 @@ const DeliveryReadyUploadBody = (props) => {
                                         <BodyTd className="col">{data.deliveryMessage}</BodyTd>
                                         <BodyTd className="col">{data.releaseArea}</BodyTd>
                                         <BodyTd className="col">{dateToYYMMDDhhmmss(data.orderDateTime)}</BodyTd>
+                                        <BodyTd className="col">{data.piaarMemo1}</BodyTd>
+                                        <BodyTd className="col">{data.piaarMemo2}</BodyTd>
+                                        <BodyTd className="col">{data.piaarMemo3}</BodyTd>
+                                        <BodyTd className="col">{data.piaarMemo4}</BodyTd>
+                                        <BodyTd className="col">{data.piaarMemo5}</BodyTd>
+                                        <BodyTd className="col">{data.piaarMemo6}</BodyTd>
+                                        <BodyTd className="col">{data.piaarMemo7}</BodyTd>
+                                        <BodyTd className="col">{data.piaarMemo8}</BodyTd>
+                                        <BodyTd className="col">{data.piaarMemo9}</BodyTd>
+                                        <BodyTd className="col">{data.piaarMemo10}</BodyTd>
                                     </BodyTr>
                                 )
                             })}

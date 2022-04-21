@@ -373,7 +373,7 @@ const ProductDetailTableBody = (props) => {
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>재고수량 :</DataHeader>
-                                        <DataText>{props.selectedOption.stockUnit}</DataText>
+                                        <DataText>{props.selectedOption.stockSumUnit}</DataText>
                                     </DataDiv>
                                     <DataDiv className="grid-span-2">
                                         <DataHeader>색상 :</DataHeader>

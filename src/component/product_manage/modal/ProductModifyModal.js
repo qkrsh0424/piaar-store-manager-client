@@ -47,14 +47,20 @@ const CategoryGroup = styled.div`
     font-size: 1rem;
     padding:0 10px;
     column-gap: 5px;
-    @media only screen and (max-width:425px){
-        font-size: 12px;
-        padding: 0;
-    }
 
     & .category-btn-active{
         background: #4682B4;
         color:white;
+    }
+
+    @media only screen and (max-width:992px){
+        grid-template-columns: 1fr;
+        row-gap: 10px;
+    }
+
+    @media only screen and (max-width:425px){
+        font-size: 12px;
+        padding: 0;
     }
 `;
 
@@ -210,7 +216,7 @@ const ProductModifyModal = (props) => {
                             </CategoryGroup>
                         </BodyWrapper>
                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
-                            <GroupTitle>상품명 <i className="icon-must" aria-label="필수항목"></i></GroupTitle>
+                            <GroupTitle>상품 정보 <i className="icon-must" aria-label="필수항목"></i></GroupTitle>
                             <NameGroup>
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">
@@ -253,6 +259,22 @@ const ProductModifyModal = (props) => {
                                         </span>
                                     </div>
                                     <CommonInputEl type="text" className='form-control' name='memo' value={props.productModifyData.memo ?? ''} onChange={(e) => props.__handleEventControl().product().modifyDataOnChangeInputValue(e)} />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
+                                            구매링크
+                                        </span>
+                                    </div>
+                                    <CommonInputEl type="text" className='form-control' name='purchaseUrl' value={props.productModifyData.purchaseUrl ?? ''} onChange={(e) => props.__handleEventControl().product().modifyDataOnChangeInputValue(e)} />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
+                                            기본매입총합계 <span className="small">(매입가격 + 매입운송비용 + 관부가세 + 기타비용)</span>
+                                        </span>
+                                    </div>
+                                    <CommonInputEl type="number" className='form-control' name='defaultTotalPurchasePrice' value={props.productModifyData.defaultTotalPurchasePrice ?? ''} onChange={(e) => props.__handleEventControl().product().modifyDataOnChangeInputValue(e)} />
                                 </div>
                             </NameGroup>
                         </BodyWrapper>
@@ -339,21 +361,24 @@ const ProductModifyModal = (props) => {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">
                                             SIZE_가로(cm)
-                                            {/* <i className="icon-must" aria-label="필수항목"></i> */}
                                         </span>
                                     </div>
                                     <CommonInputEl type="number" className='form-control' name='defaultWidth' value={props.productModifyData.defaultWidth ?? ''} onChange={(e) => props.__handleEventControl().product().modifyDataOnChangeInputValue(e)} />
+                                </div>
+                                <div className="input-group mb-3">
+
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">
                                             SIZE_세로(cm)
-                                            {/* <i className="icon-must" aria-label="필수항목"></i> */}
                                         </span>
                                     </div>
                                     <CommonInputEl type="number" className='form-control' name='defaultLength' value={props.productModifyData.defaultLength ?? ''} onChange={(e) => props.__handleEventControl().product().modifyDataOnChangeInputValue(e)} />
+                                </div>
+                                <div className="input-group mb-3">
+
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">
                                             SIZE_높이(cm)
-                                            {/* <i className="icon-must" aria-label="필수항목"></i> */}
                                         </span>
                                     </div>
                                     <CommonInputEl type="number" className='form-control' name='defaultHeight' value={props.productModifyData.defaultHeight ?? ''} onChange={(e) => props.__handleEventControl().product().modifyDataOnChangeInputValue(e)} />
@@ -362,7 +387,6 @@ const ProductModifyModal = (props) => {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">
                                             내품수량
-                                            {/* <i className="icon-must" aria-label="필수항목"></i> */}
                                         </span>
                                     </div>
                                     <CommonInputEl type="number" className='form-control' name='defaultQuantity' value={props.productModifyData.defaultQuantity ?? ''} onChange={(e) => props.__handleEventControl().product().modifyDataOnChangeInputValue(e)} />
@@ -371,7 +395,6 @@ const ProductModifyModal = (props) => {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">
                                             무게(kg)
-                                            {/* <i className="icon-must" aria-label="필수항목"></i> */}
                                         </span>
                                     </div>
                                     <CommonInputEl type="number" className='form-control' name='defaultWeight' value={props.productModifyData.defaultWeight ?? ''} onChange={(e) => props.__handleEventControl().product().modifyDataOnChangeInputValue(e)} />

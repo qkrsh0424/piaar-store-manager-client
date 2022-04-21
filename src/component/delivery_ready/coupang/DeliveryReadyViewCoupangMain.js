@@ -1,8 +1,7 @@
-import {useState, useEffect} from 'react';
-import { withRouter } from 'react-router';
+import {useState, useEffect, useReducer} from 'react';
 
 // handler
-import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
+import { getStartDate, getEndDate, dateToYYYYMMDDhhmmss, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../../utils/dateFormatUtils';
 
 // data connect
 import { deliveryReadyCoupangDataConnect } from '../../../data_connect/deliveryReadyCoupangDataConnect';
@@ -17,16 +16,63 @@ import DeliveryReadyUnreleasedViewCoupangBody from './DeliveryReadyUnreleasedVie
 import DeliveryReadyReleasedViewCoupangBody from './DeliveryReadyReleasedViewCoupangBody';
 import DeliveryReadyReleaseMemoModal from '../modal/DeliveryReadyReleaseMemoModal';
 import DeliveryReadyReceiveMemoModal from '../modal/DeliveryReadyReceiveMemoModal';
+import { useNavigate } from 'react-router-dom';
 
 // 한페이지에 보여지는 데이터
 const POSTS_PER_PAGE = 50;
 
-const DeliveryReadyViewCoupnagMain = (props) => {
+const initialSearchBarState = null;
+const initialReleasedDataReflectedState = null;
+
+const searchBarStateReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'SET_DATA':
+            return {
+                ...state,
+                [action.payload.name] : action.payload.value
+            }
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
+
+const releasedDataReflectedStateReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return {
+                ...state,
+                controlValue : 0,
+                controlText : '재고반영여부 선택'
+            }
+        case 'REFLECTED':
+            return {
+                ...state,
+                controlValue : 1,
+                controlText : '재고반영 O'
+            }
+        case 'NOT_REFLECTED':
+            return {
+                ...state,
+                controlValue : 2,
+                controlText : '재고반영 X'
+            }
+        default: return { ...state }
+    }
+}
+
+const DeliveryReadyViewCoupnagMain = () => {
+    const navigate = useNavigate();
+
     const [unreleasedData, setUnreleasedData] = useState(null);
     const [releasedData, setReleasedData] = useState(null);
     const [unreleaseCheckedOrderList, setUnreleaseCheckedOrderList] = useState([]);
     const [releaseCheckedOrderList, setReleaseCheckedOrderList] = useState([]);
     const [backdropLoading, setBackdropLoading] = useState(false);
+    const [originUnreleasedData, setOriginUnreleasedData] = useState(null);
+    const [originReleasedData, setOriginReleasedData] = useState(null);
     
     // date picker
     const [selectionRange, setSelectionRange] = useState(
@@ -51,7 +97,19 @@ const DeliveryReadyViewCoupnagMain = (props) => {
     
     const [originOptionManagementCode, setOriginOptionManagementCode] = useState(null);
     const [changedOptionManagementCode, setChangedOptionManagementCode] = useState(null);
+
+    // 수취인명 검색
+    const [receiverSearchBarData, setReceiverSearchBarData] = useState({
+        isOpenForUnreleased: true,
+        isOpenForReleased: true,
+    });
     
+    // 비고(창고) 검색
+    const [storageSearchBarData, setStorageSearchBarData] = useState({
+        isOpenForUnreleased: true,
+        isOpenForReleased: true,
+    });
+
     // 스토어 정보
     const [storeInfoData, setStoreInfoData] = useState({
         storeName: '',
@@ -79,11 +137,20 @@ const DeliveryReadyViewCoupnagMain = (props) => {
     const [deliveryReadyReceiveMemoModalOpen, setDeliveryReadyReceiveMemoModalOpen] = useState(false);
     const [releaseCompletedCancelMemo, setReleaseCompletedCancelMemo] = useState({ receiveMemo: ''});
 
+    // 재고반영 여부 컨트롤
+    const [releasedDataReflectedState, dispatchReleasedDataReflectedState] = useReducer(releasedDataReflectedStateReducer, initialReleasedDataReflectedState);
+    
     // 클릭 이벤트 여부
     const [isObjectSubmitted, setIsObjectSubmitted] = useState({
         reflectedUnit: false,
         cancelReflectedUnit: false, 
     });
+
+    // 검색 데이터 (수취인명, 비고)
+    const [searchBarState, dispatchSearchBarState] = useReducer(searchBarStateReducer, initialSearchBarState);
+
+    // 옵션코드 or 출고옵션코드 중 선택된 컬럼이름
+    const [selectedOptionColumn, setSelectedOptionColumn] = useState(null);
 
     useEffect(() => {
         async function fetchInit() {
@@ -99,8 +166,27 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                 await deliveryReadyCoupangDataConnect().getUnreleasedData()
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
-                            setUnreleasedData(res.data.data);
-                        
+                            let data = res.data.data;
+                            let sortedData = data.sort((a, b) => a.deliveryReadyItem.receiver.localeCompare(b.deliveryReadyItem.receiver));
+                            
+                            for(var i = 0; i < sortedData.length-1; i++){
+                                if((sortedData[i].deliveryReadyItem.receiver === sortedData[i+1].deliveryReadyItem.receiver)
+                                    && (sortedData[i].deliveryReadyItem.receiverContact1 === sortedData[i+1].deliveryReadyItem.receiverContact1)) {
+                                        sortedData[i] = {
+                                            ...sortedData[i],
+                                            duplicationUser : true
+                                        };
+
+                                        sortedData[i+1] = {
+                                            ...sortedData[i+1],
+                                            duplicationUser : true
+                                        };
+                                }
+                            }
+
+                            setUnreleasedData(sortedData);
+                            setOriginUnreleasedData(res.data.data);
+                            
                             let unreleasedDataLength = res.data.data.length;
                             let pageNum = Math.ceil(unreleasedDataLength / POSTS_PER_PAGE);
 
@@ -116,20 +202,44 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                     })
             },
             getDeliveryReadyReleasedData: async function (start, end) {
-                var date1 = new Date(start);
-                date1 = getStartDate(date1);
-                date1 = dateToYYYYMMDDhhmmss(date1);
+                var date1 = start ? new Date(getStartDate(start)).toUTCString() : null;
+                var date2 = end ? new Date(getEndDate(end)).toUTCString() : null;
+                // var date1 = new Date(start);
+                // date1 = getStartDate(date1);
+                // date1 = dateToYYYYMMDDhhmmss(date1);
 
-                var date2 = new Date(end);
-                date2 = getEndDate(date2);
-                date2 = dateToYYYYMMDDhhmmss(date2);
+                // var date2 = new Date(end);
+                // date2 = getEndDate(date2);
+                // date2 = dateToYYYYMMDDhhmmss(date2);
 
                 setReleaseCheckedOrderList([]);
+                dispatchReleasedDataReflectedState({
+                    type: 'INIT_DATA'
+                });
 
                 await deliveryReadyCoupangDataConnect().getSelectedReleasedData(date1, date2)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            setReleasedData(res.data.data);
+                            let data = res.data.data;
+                            let sortedData = data.sort((a, b) => a.deliveryReadyItem.receiver.localeCompare(b.deliveryReadyItem.receiver));
+                            
+                            for(var i = 0; i < sortedData.length-1; i++){
+                                if((sortedData[i].deliveryReadyItem.receiver === sortedData[i+1].deliveryReadyItem.receiver)
+                                    && (sortedData[i].deliveryReadyItem.receiverContact1 === sortedData[i+1].deliveryReadyItem.receiverContact1)) {
+                                        sortedData[i] = {
+                                            ...sortedData[i],
+                                            duplicationUser : true
+                                        };
+
+                                        sortedData[i+1] = {
+                                            ...sortedData[i+1],
+                                            duplicationUser : true
+                                        };
+                                }
+                            }
+
+                            setReleasedData(sortedData);
+                            setOriginReleasedData(res.data.data);
                         }
                         setSelectedDateText(dateToYYMMDD(date1) + " ~ " + dateToYYMMDD(date2));
                     
@@ -244,6 +354,20 @@ const DeliveryReadyViewCoupnagMain = (props) => {
             },
             changeItemsOptionManagementCode: async function (optionCode) {
                 await deliveryReadyCoupangDataConnect().updateAllOptionInfo(deliveryReadyItem, optionCode)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            setDeliveryReadyOptionInfoModalOpen(false);
+                            __handleDataConnect().getDeliveryReadyUnreleasedData();
+                            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        alert(res?.data?.memo);
+                    })
+            },
+            changeItemReleaseOptionCode: async function (releaseOptionCode) {
+                await deliveryReadyCoupangDataConnect().updateReleaseOptionInfo(deliveryReadyItem, releaseOptionCode)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setDeliveryReadyOptionInfoModalOpen(false);
@@ -455,7 +579,7 @@ const DeliveryReadyViewCoupnagMain = (props) => {
 
 
                         if (checkedUnreleaseData.length > 0) {
-                            if(window.confirm('선택 항목을 모두 삭제하시겠습니까?')) {
+                            if(window.confirm('선택 항목(' + checkedUnreleaseData.length +'개)을 모두 삭제하시겠습니까?')) {
                                 await __handleDataConnect().deleteOrderListData(checkedUnreleaseData);
                                 setUnreleaseCheckedOrderList([]);
                             }
@@ -476,7 +600,7 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                         let checkedUnreleaseData = __handleEventControl().unreleaseCheckedOrderList().getCheckedData();
                         
                         if (checkedUnreleaseData.length > 0) {
-                            if(window.confirm('선택 항목을 모두 출고 처리 하시겠습니까?')) {
+                            if(window.confirm('선택 항목(' + checkedUnreleaseData.length +'개)을 모두 출고 처리 하시겠습니까?')) {
                                 await __handleDataConnect().changeListToReleaseData(checkedUnreleaseData);
                                 setUnreleaseCheckedOrderList([]);
                             }
@@ -560,7 +684,7 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                                 return;
                             }
                             
-                            if(window.confirm('선택 항목을 모두 출고 취소하시겠습니까?')) {
+                            if(window.confirm('선택 항목(' + checkedReleaseData.length +'개)을 모두 출고 취소하시겠습니까?')) {
                                 await __handleDataConnect().changeListToUnreleaseData(checkedReleaseData);
                             }
                         }
@@ -580,7 +704,7 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                         // 아직 재고 반영이 되지 않은 데이터들만 추출
                         let nonReflectedData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => !item.deliveryReadyItem.releaseCompleted);
             
-                        if(window.confirm('선택 항목의 수량을 재고에 반영하시겠습니까?')) {
+                        if(window.confirm('선택 항목(' + nonReflectedData.length +'개)의 수량을 재고에 반영하시겠습니까?')) {
                             if(!isObjectSubmitted.reflectedUnit){
                                 setBackdropLoading(true);
                                 setIsObjectSubmitted({
@@ -599,12 +723,12 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                         // 재고 반영된 데이터들만 추출
                         let reflectedData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => item.deliveryReadyItem.releaseCompleted);
 
-                        if(window.confirm('반영된 재고수량을 취소하시겠습니까?')) {
-                            if(!isObjectSubmitted.cancelreflectedUnit){
+                        if(window.confirm('선택 항목(' + reflectedData.length +'개)에 반영된 재고수량을 취소하시겠습니까?')) {
+                            if(!isObjectSubmitted.cancelReflectedUnit){
                                 setBackdropLoading(true);
                                 setIsObjectSubmitted({
                                     ...isObjectSubmitted,
-                                    cancelreflectedUnit: true
+                                    cancelReflectedUnit: true
                                 });
                                 await __handleDataConnect().cancelReflectedStockUnit(reflectedData, releaseCompletedCancelMemo.receiveMemo);
                                 setBackdropLoading(false);
@@ -624,7 +748,7 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                         let reflectedData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => item.deliveryReadyItem.releaseCompleted);
 
                         if(reflectedData.length > 0) {
-                            alert("선택항목 중 이미 재고가 반영된 데이터가 존재합니다.");
+                            alert('선택 항목 중 이미 재고가 반영된 데이터(' + reflectedData.length +'개)가 존재합니다.');
                         } else if(nonReflectedData.length > 0) {
                             setDeliveryReadyReleaseMemoModalOpen(true);
                         } else if(releaseCheckedOrderList.length === 0) {
@@ -656,7 +780,7 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                         let nonReflectedData = __handleEventControl().releaseCheckedOrderList().getCheckedData().filter(item => !item.deliveryReadyItem.releaseCompleted);
 
                         if(nonReflectedData.length > 0) {
-                            alert("선택항목 중 재고반영이 선행되지 않은 데이터가 존재합니다.");
+                            alert('선택 항목 중 재고반영이 선행되지 않은 데이터(' + nonReflectedData.length +'개)가 존재합니다.');
                         } else if(reflectedData.length > 0) {
                             setDeliveryReadyReceiveMemoModalOpen(true);
                         } else if(releaseCheckedOrderList.length === 0) {
@@ -706,6 +830,10 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                 return {
                     open: function (e, deliveryReadyItem) {
                         e.stopPropagation();
+                        let columnName = e.target.id;
+
+                        // 클릭된 컬럼이 옵션코드인지 출고옵션코드인지 구분
+                        setSelectedOptionColumn(columnName);
 
                         // 재고반영 시 옵션관리코드 변경하지 못하도록
                         if(deliveryReadyItem.releaseCompleted) {
@@ -713,7 +841,7 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                         } else {
                             setChangedOptionManagementCode(null);
                             setDeliveryReadyOptionInfoModalOpen(true);
-                            __handleEventControl().deliveryReadyOptionInfo().getOptionManagementCode(deliveryReadyItem)
+                            __handleEventControl().deliveryReadyOptionInfo().getOptionManagementCode(columnName, deliveryReadyItem)
                         }
                     },
                     close: function () {
@@ -722,9 +850,9 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                     changeOptionInfo: function () {
                         setDeliveryReadyOptionInfo()
                     },
-                    getOptionManagementCode: async function (deliveryReadyItem) {
+                    getOptionManagementCode: async function (columnName, deliveryReadyItem) {
                         setDeliveryReadyItem(deliveryReadyItem);
-                        setOriginOptionManagementCode(deliveryReadyItem.optionManagementCode);
+                        setOriginOptionManagementCode(columnName === 'optionManagementCode' ? deliveryReadyItem.optionManagementCode : deliveryReadyItem.releaseOptionCode);
 
                         await __handleDataConnect().getOptionManagementCode();
                     },
@@ -735,14 +863,27 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                         return releaseCheckedOrderList.includes(optionCode);
                     },
                     changeItemOption: async function () {
-                        await __handleDataConnect().changeItemOptionManagementCode(changedOptionManagementCode);
+                        if(selectedOptionColumn === 'optionManagementCode') {
+                            if(window.confirm('업체상품코드를 변경하시면 출고옵션코드도 함께 변경됩니다.\n변경하시겠습니까?')) {
+                                await __handleDataConnect().changeItemOptionManagementCode(changedOptionManagementCode);
+                            }
+                        }else if(selectedOptionColumn === 'releaseOptionCode') {
+                            if(window.confirm('업체상품코드를 변경하시겠습니까?')) {
+                                await __handleDataConnect().changeItemReleaseOptionCode(changedOptionManagementCode);
+                            }
+                        }
                     },
                     changeItemsOption: async function () {
-                        if(window.confirm('일괄 변경하시겠습니까?')) {
-                            setBackdropLoading(true);
-                            await __handleDataConnect().changeItemsOptionManagementCode(changedOptionManagementCode);
-                            setBackdropLoading(false);
-
+                        if(selectedOptionColumn === 'optionManagementCode') {
+                            if(window.confirm('업체상품코드를 변경하시면 출고옵션코드도 함께 변경됩니다.\n일괄 변경하시겠습니까?')) {
+                                setBackdropLoading(true);
+                                await __handleDataConnect().changeItemsOptionManagementCode(changedOptionManagementCode);
+                                setBackdropLoading(false);
+    
+                            }
+                        }else if(selectedOptionColumn === 'releaseOptionCode') {
+                            alert('출고 옵션코드는 일괄변경이 불가능합니다.');
+                            return;
                         }
                     }
                 }
@@ -816,6 +957,13 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                             ...checkedUnreleaseData
                         ]
 
+                        for(var i = 0; i < downloadData.length; i++) {
+                            if(downloadData[i].prodManagementName === null) {
+                                alert('모든 상품의 옵션관리코드를 설정해주세요.')
+                                return;
+                            }
+                        }
+
                         if(!storeInfoData.storeName || !storeInfoData.storeContact){
                             alert('스토어명과 스토어 전화번호를 모두 입력해 주세요.')
                             return;
@@ -877,7 +1025,210 @@ const DeliveryReadyViewCoupnagMain = (props) => {
             movePage: function () {
                 return {
                     deliveryReadyUpload: async function () {
-                        props.history.replace('/delivery-ready/coupang');
+                        navigate('/delivery-ready/coupang');
+                    }
+                }
+            },
+            sortDataList: function () {
+                return {
+                    unreleasedDataSortedByReceiver: function () {
+                        let sortedData = unreleasedData.sort((a, b) => a.deliveryReadyItem.receiver.localeCompare(b.deliveryReadyItem.receiver));
+                        setUnreleasedData([...unreleasedData], sortedData);
+                    },
+                    unreleasedDataSortedByProdName: function () {
+                        let sortedData = unreleasedData.sort((a, b) => a.deliveryReadyItem.prodName.localeCompare(b.deliveryReadyItem.prodName));
+                        setUnreleasedData([...unreleasedData], sortedData);
+                    },
+                    releasedDataSortedByReceiver: function () {
+                        let sortedData = releasedData.sort((a, b) => a.deliveryReadyItem.receiver.localeCompare(b.deliveryReadyItem.receiver));
+                        setReleasedData([...releasedData], sortedData);
+                    },
+                    releasedDataSortedByProdName: function () {
+                        let sortedData = releasedData.sort((a, b) => a.deliveryReadyItem.prodName.localeCompare(b.deliveryReadyItem.prodName));
+                        setReleasedData([...releasedData], sortedData);
+                    }
+                }
+            },
+            searchUnreleasedDataList: function () {
+                return {
+                    openSearchBarForReceiver: function (e) {
+                        e.preventDefault();
+
+                        if(receiverSearchBarData.isOpenForUnreleased) {
+                            setReceiverSearchBarData({
+                                ...receiverSearchBarData,
+                                isOpenForUnreleased: false
+                            });
+                        }
+                        else{
+                            setReceiverSearchBarData({
+                                ...receiverSearchBarData,
+                                isOpenForUnreleased: true
+                            });
+                        }
+                    },
+                    openSearchBarForStorageMemo: function (e) {
+                        e.preventDefault();
+
+                        if(storageSearchBarData.isOpenForUnreleased) {
+                            setStorageSearchBarData({
+                                ...storageSearchBarData,
+                                isOpenForUnreleased: false
+                            });
+                        }
+                        else{
+                            setStorageSearchBarData({
+                                ...storageSearchBarData,
+                                isOpenForUnreleased: true
+                            });
+                        }
+                    },
+                    onChangeInputValue: function (e) {
+                        e.preventDefault();
+
+                        dispatchSearchBarState({
+                            type: 'SET_DATA',
+                            payload: {
+                                name: e.target.name,
+                                value: e.target.value
+                            }
+                        });
+                    },
+                    searchForReceiver: function (e) {
+                        e.preventDefault();
+
+                        let searchedResultData = originUnreleasedData.filter(data => data.deliveryReadyItem.receiver.includes(searchBarState.searchedUnreleasedReceiverData));
+                        setUnreleasedData(searchedResultData);
+                        
+                        let unreleasedDataLength = searchedResultData.length;
+                        let pageNum = Math.ceil(unreleasedDataLength / POSTS_PER_PAGE);
+
+                        setUnReleasedDataPagenate({
+                            ...unreleasedDataPagenate,
+                            totalPageNumber: pageNum
+                        });
+                    },
+                    searchForStorage: function (e) {
+                        e.preventDefault();
+
+                        let searchedResultData = originUnreleasedData.filter(data => data.optionMemo?.includes(searchBarState.searchedUnreleasedStorageData));
+                        setUnreleasedData(searchedResultData);
+                        
+                        let unreleasedDataLength = searchedResultData.length;
+                        let pageNum = Math.ceil(unreleasedDataLength / POSTS_PER_PAGE);
+
+                        setUnReleasedDataPagenate({
+                            ...unreleasedDataPagenate,
+                            totalPageNumber: pageNum
+                        });
+                    }
+                }
+            },
+            searchReleasedDataList: function () {
+                return {
+                    openSearchBarForReceiver: function (e) {
+                        e.preventDefault();
+
+                        if(receiverSearchBarData.isOpenForReleased) {
+                            setReceiverSearchBarData({
+                                ...receiverSearchBarData,
+                                isOpenForReleased: false
+                            });
+                        }
+                        else{
+                            setReceiverSearchBarData({
+                                ...receiverSearchBarData,
+                                isOpenForReleased: true
+                            });
+                        }
+                    },
+                    openSearchBarForStorageMemo: function (e) {
+                        e.preventDefault();
+
+                        if(storageSearchBarData.isOpenForReleased) {
+                            setStorageSearchBarData({
+                                ...storageSearchBarData,
+                                isOpenForReleased: false
+                            });
+                        }
+                        else{
+                            setStorageSearchBarData({
+                                ...storageSearchBarData,
+                                isOpenForReleased: true
+                            });
+                        }
+                    },
+                    onChangeInputValue: function (e) {
+                        e.preventDefault();
+
+                        dispatchSearchBarState({
+                            type: 'SET_DATA',
+                            payload: {
+                                name: e.target.name,
+                                value: e.target.value
+                            }
+                        });
+                    },
+                    searchForReceiver: function (e) {
+                        e.preventDefault();
+
+                        let searchedResultData = originReleasedData.filter(data => data.deliveryReadyItem.receiver.includes(searchBarState.searchedReleasedReceiverData));
+                        setReleasedData(searchedResultData);
+                        
+                        let releasedDataLength = searchedResultData.length;
+                        let pageNum = Math.ceil(releasedDataLength / POSTS_PER_PAGE);
+
+                        setReleasedDataPagenate({
+                            ...releasedDataPagenate,
+                            totalPageNumber: pageNum
+                        });
+                    },
+                    searchForStorage: function (e) {
+                        e.preventDefault();
+
+                        let searchedResultData = originReleasedData.filter(data => data.optionMemo?.includes(searchBarState.searchedReleasedStorageData));
+                        setReleasedData(searchedResultData);
+                        
+                        let releasedDataLength = searchedResultData.length;
+                        let pageNum = Math.ceil(releasedDataLength / POSTS_PER_PAGE);
+
+                        setReleasedDataPagenate({
+                            ...releasedDataPagenate,
+                            totalPageNumber: pageNum
+                        });
+
+                    },
+                    controlReflectedData: function (e) {
+                        e.preventDefault();
+
+                        // 0:전체, 1:반영O, 2:반영X
+                        let refelctedData = null;
+                        if(releasedDataReflectedState.controlValue === 0) {
+                            dispatchReleasedDataReflectedState({
+                                type: 'REFLECTED'
+                            });
+                            refelctedData = originReleasedData.filter(data => data.deliveryReadyItem.releaseCompleted === true);
+                        } else if(releasedDataReflectedState.controlValue == 1) {
+                            dispatchReleasedDataReflectedState({
+                                type: 'NOT_REFLECTED'
+                            });
+                            refelctedData = originReleasedData.filter(data => data.deliveryReadyItem.releaseCompleted === false);
+                        } else{
+                            dispatchReleasedDataReflectedState({
+                                type: 'INIT_DATA'
+                            });
+                            refelctedData = originReleasedData;
+                        }
+
+                        setReleasedData(refelctedData);
+                        
+                        let releasedDataLength = refelctedData.length;
+                        let pageNum = Math.ceil(releasedDataLength / POSTS_PER_PAGE);
+
+                        setReleasedDataPagenate({
+                            ...releasedDataPagenate,
+                            totalPageNumber: pageNum
+                        });
                     }
                 }
             }
@@ -932,6 +1283,9 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                 unreleasedData={unreleasedData}
                 unreleaseCheckedOrderList={unreleaseCheckedOrderList}
                 unreleasedDataPagenate={unreleasedDataPagenate}
+                receiverSearchBarData={receiverSearchBarData}
+                storageSearchBarData={storageSearchBarData}
+                searchBarState={searchBarState}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyUnreleasedViewCoupangBody>
@@ -940,6 +1294,10 @@ const DeliveryReadyViewCoupnagMain = (props) => {
                 releaseCheckedOrderList={releaseCheckedOrderList}
                 selectedDateText={selectedDateText}
                 releasedDataPagenate={releasedDataPagenate}
+                receiverSearchBarData={receiverSearchBarData}
+                storageSearchBarData={storageSearchBarData}
+                searchBarState={searchBarState}
+                releasedDataReflectedState={releasedDataReflectedState}
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReleasedViewCoupangBody>
@@ -947,4 +1305,4 @@ const DeliveryReadyViewCoupnagMain = (props) => {
     )
 }
 
-export default withRouter(DeliveryReadyViewCoupnagMain);
+export default DeliveryReadyViewCoupnagMain;

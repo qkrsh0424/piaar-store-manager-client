@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { withRouter } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userDataConnect } from '../../data_connect/userDataConnect';
 
@@ -44,7 +44,9 @@ const ButtonEl = styled.button`
     color:white;
     font-weight: 600;
 `;
-const LoginMain = ({ history }) => {
+const LoginMain = () => {
+    const navigate = useNavigate();
+
     const [loginData, setLoginData] = useState({
         username: '',
         password: ''
@@ -57,7 +59,7 @@ const LoginMain = ({ history }) => {
                 await userDataConnect().postLogin(loginData)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            history.replace('/')
+                            navigate('/')
                         }
                     })
                     .catch(err => {
@@ -110,4 +112,4 @@ const LoginMain = ({ history }) => {
     );
 }
 
-export default withRouter(LoginMain);
+export default LoginMain;

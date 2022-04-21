@@ -84,6 +84,16 @@ const deliveryReadyCoupangDataConnect = () => {
                 withCredentials:true
             })
         },
+        updateReleaseOptionInfo: async function (deliveryReadyItem, releaseOptionCode) {
+            let json = {
+                ...deliveryReadyItem,
+                releaseOptionCode: releaseOptionCode
+            };
+
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/update/release-option`, json, {
+                withCredentials: true
+            })
+        },
         downloadHansanOrderForm: async function (data) {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/delivery-ready/coupang/view/download/hansan`, data, {
                 responseType: 'blob',

@@ -250,6 +250,22 @@ const ProductOptionModifyModal = (props) => {
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">
+                                            매입총합계
+                                        </span>
+                                    </div>
+                                    <CommonInputEl
+                                        type="number"
+                                        className='form-control'
+                                        name='totalPurchasePrice'
+                                        value={props.productOptionModifyData.totalPurchasePrice ?? ''}
+                                        onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
+                                        required
+                                    />
+
+                                </div>
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">
                                             현재상태
                                         </span>
                                     </div>

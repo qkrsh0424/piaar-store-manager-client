@@ -1,11 +1,13 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
-// components
+
+import LinkIcon from '@mui/icons-material/Link';
+import LinkOffIcon from '@mui/icons-material/LinkOff';
 
 const Container = styled.div`
     overflow:hidden;
-    margin-bottom: 200px;
+    margin-bottom: 80px;
 
 `;
 
@@ -118,13 +120,12 @@ const DeleteProductBtn = styled.button`
 
 const AddBtn = styled.button`
     padding:0 8px;
-    background: #4682B4e0;
+    background: rgba(70, 130, 180, 0.88);
     color:white;
-    border:1px solid #4682B4e0;
+    border:1px solid rgba(70, 130, 180, 0.88);
     border-radius: 3px;
     font-weight: 600;
     margin-left: 5px;
-
 `;
 
 const CheckboxShape = styled.div`
@@ -161,13 +162,56 @@ const ImageEl = styled.img`
    border-radius: 8px;
 `;
 
+const ImageLink = styled.a`
+    display: inline;
+    background-color: red;
+
+    & .hover {
+        background-color: red;
+    }
+`;
+
+const SelectMenu = styled.select`
+    padding: 3px;
+    margin: 10px;
+    /* border: 1px solid #e1e1e1; */
+    border: 1px solid rgb(122, 123, 218);
+    color: rgb(77 77 116);
+    text-align: center;
+    display: inline-block;
+    transition: 0.25s;
+    width: 20%;
+
+    &:focus{
+        outline: none;
+    }
+
+    @media only screen and (max-width: 992px) {
+        width: 50%;
+    }
+
+    @media only screen and (max-width:768px){
+        font-size: 10px;
+    }
+`;
+
 const ProductManageBody = (props) => {
     const userRdx = useSelector(state => state.user);
 
     return (
         <>
             {userRdx.isLoading === false &&
-                <Container className='mt-3'>
+                <Container>
+                    {/* 카테고리 select */}
+                    <SelectMenu onChange={(e) => props.__handleEventControl().category().onChangeCategoryValue(e)}>
+                        <option value='total'>카테고리 전체</option>
+                        {props.categoryListData?.map((r, idx) => {
+                            return (
+                                <option key={'analysis-product-cateogry-idx' + idx} value={r.id}>{r.name}</option>
+                            )
+                        })}
+                    </SelectMenu>
+
                     <TableContainer>
                         <table className="table table-sm" style={{ tableLayout: 'fixed' }}>
                             <thead>
@@ -187,7 +231,8 @@ const ProductManageBody = (props) => {
                                     <HeaderTh className='fixedHeader' scope="col" width='200'>옵션관리명</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='100'>재고수량</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='100'>현재상태</HeaderTh>
-                                    <HeaderTh className='fixedHeader' scope="col" width='200'>가격</HeaderTh>
+                                    <HeaderTh className='fixedHeader' scope="col" width='150'>가격</HeaderTh>
+                                    <HeaderTh className='fixedHeader' scope="col" width='150'>매입총합계</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='300'>비고</HeaderTh>
                                     <HeaderTh className='fixedHeader' scope="col" width='400'>옵션컨트롤</HeaderTh>
                                 </tr>
@@ -223,22 +268,31 @@ const ProductManageBody = (props) => {
                                                 <BodyTh style={{ textAlign: 'left' }} rowSpan={product.options.length + 1}>
                                                     <ImageWrapper>
                                                         <ImageBox>
-                                                            {product.product.imageUrl ? 
-                                                                <ImageEl src={product.product.imageUrl} title={product.product.imageFileName} />
+                                                            {product.product.imageUrl ?
+                                                                <ImageEl src={product.product.imageUrl} title={product.product.imageFileName}/>
                                                                 :
-                                                                <ImageEl src='/images/icon/no-image.jpg' title='no-image' />
+                                                                <ImageEl src='/images/icon/no-image.jpg' title='no-image'/>
                                                             }
                                                         </ImageBox>
                                                     </ImageWrapper>
                                                 </BodyTh>
                                                 <BodyTh rowSpan={product.options.length + 1}>
+                                                    <div>
+                                                        {product.product.purchaseUrl ?
+                                                            <a href={product.product.purchaseUrl} target='_blank'>
+                                                                <LinkIcon type='button'>구매링크</LinkIcon>
+                                                            </a>
+                                                            :
+                                                            <LinkOffIcon type='button' onClick={() => alert('구매링크를 먼저 등록해주세요.')}>구매링크</LinkOffIcon>
+                                                        }
+                                                    </div>
                                                     <div style={{ color: 'green' }}>[{product.category.name}]</div>
                                                     <div>{product.product.imageFileUri}</div>
                                                     <div>
                                                         <AddBtn type='button' onClick={() => props.__handleEventControl().productOption().addModalOpen(product.product.id)}>옵션추가</AddBtn>
                                                     </div>
                                                 </BodyTh>
-                                                <BodyTh colSpan={10} style={{background:'#7a7bda20', color:'#888'}}>
+                                                <BodyTh colSpan={11} style={{background:'#7a7bda20', color:'#888'}}>
                                                     <div>{product.product.managementName}-{product.product.code}-{product.product.manufacturingCode}</div>
                                                 </BodyTh>
                                             </RowSpanTr>
@@ -253,12 +307,6 @@ const ProductManageBody = (props) => {
                                                             <CheckboxShape
                                                                 checked={props.__handleEventControl().checkedOptionList().isChecked(option.id)}
                                                             ></CheckboxShape>
-                                                            {/* 체크박스를 클릭해서 선택하게할때 사용가능 */}
-                                                            {/* <input
-                                                                type='checkbox'
-                                                                onChange={(e) => props.__handleEventControl().checkedOptionList().checkOne(e, option.id)}
-                                                                checked={props.__handleEventControl().checkedOptionList().isChecked(option.id)}
-                                                            ></input> */}
                                                         </BodyTd>
                                                         <BodyTd>{option.code}</BodyTd>
                                                         <BodyTd>{option.nosUniqueCode}</BodyTd>
@@ -267,6 +315,7 @@ const ProductManageBody = (props) => {
                                                         <BodyTd style={{ fontWeight: '800' }}>{option.stockUnit}</BodyTd>
                                                         <BodyTd style={{ fontWeight: '800' }}>{option.status}</BodyTd>
                                                         <BodyTd style={{ fontWeight: '800' }}>{option.salesPrice}</BodyTd>
+                                                        <BodyTd style={{ fontWeight: '800' }}>{option.totalPurchasePrice}</BodyTd>
                                                         <BodyTd style={{ fontWeight: '800' }}>{option.memo}</BodyTd>
                                                         <BodyTd style={{ fontWeight: '800' }}>
                                                             <ModifyBtn
@@ -277,14 +326,6 @@ const ProductManageBody = (props) => {
                                                                 type='button'
                                                                 onClick={(e) => props.__handleEventControl().productOption().deleteOne(e, product.product.id, option.id)}
                                                             >옵션삭제</DeleteBtn>
-                                                            {/* <ReceiveBtn
-                                                                type='button'
-                                                                onClick={(e) => props.__handleEventControl().receive().receiveStatusModalOpen(e, product.product.id, option.id)}
-                                                            >입고현황</ReceiveBtn>
-                                                            <ReleaseBtn
-                                                                type='button'
-                                                                onClick={(e) => props.__handleEventControl().release().releaseStatusModalOpen(e, product.product.id, option.id)}
-                                                            >출고현황</ReleaseBtn> */}
                                                             <StockStatusBtn
                                                                 type='button'
                                                                 onClick={(e) => props.__handleEventControl().productOption().stockStatusModalOpen(e, product.product.id, option.id)}
@@ -293,10 +334,6 @@ const ProductManageBody = (props) => {
                                                     </BodyTr>
                                                 )
                                             })}
-                                            {/* <tr style={{ background: '#ff000010' }}>
-                                                    <td colSpan={2} style={{ fontWeight: '800', borderBottom: '2px solid black' }}>총 개수</td>
-                                                    <td style={{ fontWeight: '800', borderBottom: '2px solid black', color: 'red' }}>{product.unitSum}</td>
-                                                </tr> */}
                                         </React.Fragment>
                                     );
 
@@ -307,31 +344,6 @@ const ProductManageBody = (props) => {
                         </table>
 
                     </TableContainer>
-                    {/* <table style={{ border: '1px solid black' }}>
-                        <tr>
-                            <th style={{ border: '1px solid black' }}>Month</th>
-                            <th style={{ border: '1px solid black' }}>Savings</th>
-                            <th style={{ border: '1px solid black' }}>Savings for holiday!</th>
-                        </tr>
-                        <tr>
-                            <td style={{ border: '1px solid black' }} rowSpan="2">
-                                <div>hello</div>
-                                <div>hello</div>
-                                <div>hello</div>
-                                <div>hello</div>
-                                <div>hello</div>
-                                <div>hello</div>
-                                <div>hello</div>
-                            </td>
-                            <td style={{ border: '1px solid black' }}>January</td>
-                            <td style={{ border: '1px solid black' }}>$100</td>
-                        </tr>
-                        <tr>
-                            <td style={{ border: '1px solid black' }}>February</td>
-                            <td style={{ border: '1px solid black' }}>$80</td>
-                        </tr>
-                    </table> */}
-
                 </Container>
             }
 

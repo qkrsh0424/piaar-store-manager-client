@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 
-import {dateToYYMMDD} from '../../../handler/dateHandler';
+import {dateToYYMMDD} from '../../../utils/dateFormatUtils';
 
 // data connect
 import { orderRegistrationNaverDataConnect } from '../../../data_connect/orderRegistrationNaverDataConnect';

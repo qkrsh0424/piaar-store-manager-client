@@ -38,12 +38,9 @@ const OptionLi = styled.li`
     }
 `;
 
-const OptionInfoTitleList = styled.li`
-    list-style: none;
-    border-radius: 10px;
-    margin-bottom: 5px;
-    height: auto;
-    display:flex;
+const OptionInfoTitleList = styled.div`
+    display: grid;
+    grid-template-columns: repeat(1, 1fr 3fr);
 
     .option-code{
         font-weight: 600;
@@ -91,9 +88,8 @@ const ModalTitleText = styled.div`
     min-height: 30px;
     height: auto;
     font-size: 15px;
-    border: 1px solid #ced4da;
-    background: rgb(255, 253, 226);
-    width: 25%;
+    border: 1px solid #b3c1d457;
+    background: rgb(155 164 189 / 49%);
     padding: 2px;
     text-align: center;
     margin-bottom: 2px;
@@ -111,8 +107,10 @@ const ChangeBtn = styled.button`
     vertical-align: middle;
     font-size: 15px;
     border-radius: 3px;
-    background-color: #a7a7a780;
-    border: 1px solid #a7a7a760;
+    background-color: #9ba4bd;
+    border: 1px solid #9ba4bd;
+    color: white;
+    font-weight: 600;
     overflow: hidden;
     height: auto;
     transition: opacity 0.1s linear;
@@ -163,13 +161,25 @@ const DeliveryReadyOptionInfoModal = (props) => {
                             <OptionInfoTitle>
                                 <OptionInfoTitleList>
                                     <ModalTitleText>
-                                        <span>현재</span>
+                                        <span>상품명</span>
+                                    </ModalTitleText>
+                                    <ModalTitleText>
+                                        <span>{props.deliveryReadyItem?.prodName}</span>
+                                    </ModalTitleText>
+                                    <ModalTitleText>
+                                        <span>옵션명</span>
+                                    </ModalTitleText>
+                                    <ModalTitleText>
+                                        <span>{props.deliveryReadyItem?.optionInfo}</span>
+                                    </ModalTitleText>
+                                    <ModalTitleText>
+                                        <span>현재코드</span>
                                     </ModalTitleText>
                                     <ModalTitleText className="option-code">
                                         <span>{props.originOptionManagementCode}</span>
                                     </ModalTitleText>
                                     <ModalTitleText>
-                                        <span>변경</span>
+                                        <span>변경코드</span>
                                     </ModalTitleText>
                                     <ModalTitleText className="option-code">
                                         <span>{props.changedOptionManagementCode}</span>

@@ -1,5 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+
+// handler
+import { getStartDate, getEndDate, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../utils/dateFormatUtils';
 
 // data connect
 import { productCategoryDataConnect } from '../../data_connect/productCategoryDataConnect';
@@ -24,11 +27,14 @@ import BackdropLoading from '../loading/BackdropLoading';
 import { formControlClasses } from '@mui/material';
 import { data } from 'jquery';
 import { subMilliseconds } from 'date-fns';
+import ReceiveAndReleaseStatusModal from './modal/ReceiveAndReleaseStatusModal';
+import ModifyStatusMemoModal from './modal/ModifyStatusMemoModal';
+import ReceiveAndReleaseDateRangePickerModal from './modal/ReceiveAndReleaseDateRangePickerModal';
 
 class ProductOption {
     constructor(productId, optionDefaultName = '', optionManagementName = '', nosUniqueCode = '') {
         this.id = uuidv4();
-        this.code = ''
+        this.code = '';
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
         this.nosUniqueCode = nosUniqueCode;
@@ -41,6 +47,8 @@ class ProductOption {
         this.color = '';
         this.unitCny = '';
         this.unitKrw = '';
+        this.totalPurchasePrice = 0;
+        this.packageYn = 'n';
         this.productCid = null;
         this.productId = productId;
     }
@@ -60,7 +68,9 @@ class ProductOption {
             imageFileName: this.imageFileName,
             color: this.color,
             unitCny: this.unitCny,
-            unitKrw: this.Krw,
+            unitKrw: this.unitKrw,
+            totalPurchasePrice: this.totalPurchasePrice,
+            packageYn: this.packageYn,
             productCid: this.productCid,
             productId: this.productId
         }
@@ -103,6 +113,23 @@ class ProductReceive {
     }
 }
 
+const initialStockStatusState = null;
+
+const stockStatusStateReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'SET_DATA':
+            return {
+                ...state,
+                [action.payload.name] : action.payload.value
+            }
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
+
 const ProductManageMain = () => {
     const [productListData, setProductListData] = useState(null);
     const [optionListData, setOptionListData] = useState(null);
@@ -133,8 +160,16 @@ const ProductManageMain = () => {
     const [receiveStatusModalOpen, setReceiveStatusModalOpen] = useState(false);
     const [receiveStatusData, setReceiveStatusData] = useState(null);
 
+    const [modifyStatusMemoModalOpen, setModifyStatusMemoModalOpen] = useState(false);
+
     const [stockStatusModalOpen, setStockStatusModalOpen] = useState(false);
     const [stockStatusData, setStockStatusData] = useState(null);
+
+    const [stockStatusState, dispatchStockStatusState] = useReducer(stockStatusStateReducer, initialStockStatusState);
+
+    const [receiveAndReleaseStatusModalOpen, setReceiveAndReleaseStatusModalOpen] = useState(false);
+    const [optionReceiveStatusData, setOptionReceiveStatusData] = useState(null);
+    const [optionReleaseStatusData, setOptionReleaseStatusData] = useState(null);
 
     const [backdropLoading, setBackdropLoading] = useState(false);
 
@@ -143,6 +178,23 @@ const ProductManageMain = () => {
         releaseAdd: false,
         receiveAdd: false
     })
+
+    const [selectedDateText, setSelectedDateText] = useState("날짜 선택");
+    const [receiveAndReleaseDateRangePickerMdoalOpen, setReceiveAndReleaseDateRangePickerMdoalOpen] = useState(false);
+
+    // date picker
+    const [selectionRange, setSelectionRange] = useState(
+        {
+            startDate: new Date(),
+            endDate: new Date(),
+            key: 'selection'
+        }
+    );
+
+    const [selectedOptionReceiveStatusData, setSelectedOptionReceiveStatusData] = useState([]);
+    const [selectedOptionReleaseStatusData, setSelectedOptionReleaseStatusData] = useState([]);
+
+    const [productListViewData, setProductListViewData] = useState(null);
 
     useEffect(() => {
         async function fetchInit() {
@@ -157,16 +209,18 @@ const ProductManageMain = () => {
     const __handleDataConnect = () => {
         return {
             searchProductListFj: async function () {
+                __handleEventControl().backdropLoading().open();
                 await productDataConnect().getStockListFj()
                     .then(res => {
-                        console.log(res)
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setProductListData(res.data.data);
+                            setProductListViewData(res.data.data);
                         }
                     })
                     .catch(err => {
                         alert('undefined error. : searchProductListFj');
-                    })
+                    });
+                __handleEventControl().backdropLoading().close();
             },
             searchOptionList: async function () {
                 await productOptionDataConnect().getList()
@@ -223,6 +277,17 @@ const ProductManageMain = () => {
                         alert('undefined error.')
                     })
             },
+            searchAllStockStatusList: async function () {
+                await productOptionDataConnect().searchAllStockStatus()
+                    .then(res => {
+                        if (res.status == 200 && res.data && res.data.message == 'success') {
+                            __handleEventControl().receiveAndRelease().setAllStockStatusList(res.data.data);
+                        }
+                    })
+                    .catch(err => {
+                        alert('undefined error.')
+                    })
+            },
             changeProductOne: async function () {
                 await productDataConnect().putOne(productModifyData)
                     .then(res => {
@@ -250,10 +315,12 @@ const ProductManageMain = () => {
                     .catch(err => {
                         let res = err.response;
 
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
-                        } else {
-                            alert('undefined error. : changeProductOne');
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else if(res?.data?.memo) {
+                            alert(res.data.memo);
+                        }else{
+                            alert('undefined error. : changeProductOptionOne');
                         }
                     })
             },
@@ -266,9 +333,9 @@ const ProductManageMain = () => {
                     })
                     .catch(err => {
                         let res = err.response;
-
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
+                        
+                        if (res.status === 403) {
+                            alert('권한이 없습니다.')
                         } else {
                             alert('undefined error. : deleteProductOne');
                         }
@@ -284,8 +351,8 @@ const ProductManageMain = () => {
                     .catch(err => {
                         let res = err.response;
 
-                        if (res.status === 401) {
-                            alert('접근 권한이 없습니다.')
+                        if (res.status === 403) {
+                            alert('권한이 없습니다.')
                         } else {
                             alert('undefined error. : changeProductOne');
                         }
@@ -307,6 +374,8 @@ const ProductManageMain = () => {
 
                         if (res.status === 401) {
                             alert('접근 권한이 없습니다.')
+                        } else if(res?.data?.memo) {
+                            alert(res.data.memo)
                         } else {
                             alert('undefined error. : changeProductOne');
                         }
@@ -406,6 +475,40 @@ const ProductManageMain = () => {
 
                         __handleEventControl().backdropLoading().close();
                     })
+            },
+            changeReceiveStockStatusMemo: async function (data) {
+                await productReceiveDataConnect().putOne(data)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            this.searchStockStatusList(data.productOptionCid);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else {
+                            console.log(err);
+                            alert('undefined error. : changeStockStatusMemo');
+                        }
+                    })
+            },
+            changeReleaseStockStatusMemo: async function (data) {
+                await productReleaseDataConnect().putOne(data)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            this.searchStockStatusList(data.productOptionCid);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else {
+                            console.log(err);
+                            alert('undefined error. : changeStockStatusMemo');
+                        }
+                    })
             }
         }
     }
@@ -504,6 +607,7 @@ const ProductManageMain = () => {
                         let product = productListData.filter(r => r.product.id === productId)[0];
                         let option = new ProductOption(productId);
                         option.productCid = product.product.cid;
+                        option.totalPurchasePrice = product.product.defaultTotalPurchasePrice;
 
                         setProductOptionAddData(option);
                         setProductOptionAddModalOpen(true);
@@ -983,6 +1087,114 @@ const ProductManageMain = () => {
                     }
                 }
             },
+            stockStatus: function () {
+                return {
+                    modifyModalOpen: function (e, data) {
+                        e.stopPropagation();
+
+                        dispatchStockStatusState({
+                            type: 'INIT_DATA',
+                            payload: data
+                        });
+                        setModifyStatusMemoModalOpen(true);
+                    },
+                    modifyModalClose: function () {
+                        setModifyStatusMemoModalOpen(false);
+                    },
+                    onChangeInputValue: function (e) {
+                        dispatchStockStatusState({
+                            type: 'SET_DATA',
+                            payload: {
+                                name: e.target.name,
+                                value: e.target.value
+                            }
+                        })
+                    },
+                    modifyStockStatusMemo: async function (e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+
+                        if(stockStatusState.receiveUnit) {
+                            await __handleDataConnect().changeReceiveStockStatusMemo(stockStatusState);
+                        }else{
+                            await __handleDataConnect().changeReleaseStockStatusMemo(stockStatusState);
+                        }
+                        
+                        setModifyStatusMemoModalOpen(false);
+                    }
+                }
+            },
+            receiveAndRelease: function () {
+                return {
+                    receiveAndReleaseStatusModalOpen: async function () {
+                        __handleEventControl().backdropLoading().open();
+                        await __handleDataConnect().searchAllStockStatusList();
+                        setReceiveAndReleaseStatusModalOpen(true);
+                        __handleEventControl().backdropLoading().close();
+                    },
+                    receiveAndReleaseStatusModalClose: function () {
+                        setSelectionRange({...selectionRange,
+                            startDate: new Date(),
+                            endDate: new Date()
+                        });
+                        setSelectedDateText("날짜 선택");
+                        setSelectedOptionReceiveStatusData([]);
+                        setSelectedOptionReleaseStatusData([]);
+
+                        setReceiveAndReleaseStatusModalOpen(false);
+                    },
+                    setAllStockStatusList: function (data) {
+                        // 입출고 데이터를 포함하는 배열 생성
+                        let sortedReceiveData = [...data.productReceive];
+                        let sortedReleaseData = [...data.productRelease];
+
+                        // createdAt 내림차순 정렬
+                        sortedReceiveData.sort((b, a) => a.receive.createdAt.localeCompare(b.receive.createdAt));
+                        sortedReleaseData.sort((b, a) => a.release.createdAt.localeCompare(b.release.createdAt));
+
+                        setOptionReceiveStatusData(sortedReceiveData);
+                        setOptionReleaseStatusData(sortedReleaseData);
+                    },
+                    datePickerOpen: function () {
+                        setReceiveAndReleaseDateRangePickerMdoalOpen(true);
+                    },
+                    datePickerClose: function () {
+                        setReceiveAndReleaseDateRangePickerMdoalOpen(false);
+                    },
+                    selectDateRange: async function (startDate, endDate) {
+                        this.getStockStatusDataOfSelectedDate(startDate, endDate);
+                    },
+                    changeReleasedData: function (date) {
+                        setSelectionRange(date.selection);
+                    },
+                    getStockStatusDataOfSelectedDate: function (start, end) {
+                        let date1 = dateToYYMMDDhhmmss(getStartDate(start));
+                        let date2 = dateToYYMMDDhhmmss(getEndDate(end));
+                        setSelectedDateText(dateToYYMMDD(start) + " ~ " + dateToYYMMDD(end));
+                        
+                        // 선택된 날짜의 입고데이터
+                        let selectedReceiveData = optionReceiveStatusData.filter(r => {
+                            var createdAt = dateToYYMMDDhhmmss(r.receive.createdAt);
+                            if(date1 <= createdAt && createdAt <= date2) {
+                                return r;
+                            }
+                        });
+
+                        // 선택된 날짜의 출고데이터
+                        let selectedReleaseData = optionReleaseStatusData.filter(r => {
+                            var createdAt = dateToYYMMDDhhmmss(r.release.createdAt);
+                            if(date1 <= createdAt && createdAt <= date2) {
+                                return r;
+                            }
+                        });
+
+                        setSelectedOptionReceiveStatusData(selectedReceiveData);
+                        setSelectedOptionReleaseStatusData(selectedReleaseData);
+
+                        setReceiveAndReleaseDateRangePickerMdoalOpen(false);
+                    }
+                }
+            },
             backdropLoading: function () {
                 return {
                     open: function () {
@@ -990,6 +1202,20 @@ const ProductManageMain = () => {
                     },
                     close: function () {
                         setBackdropLoading(false);
+                    }
+                }
+            },
+            category: function () {
+                return {
+                    onChangeCategoryValue: function (e) {
+                        let categoryId = e.target.value;
+
+                        let viewData = productListData;
+                        if(categoryId !== 'total') {
+                            viewData = productListData.filter(r => r.category.id === categoryId);
+                        }
+
+                        setProductListViewData(viewData);
                     }
                 }
             }
@@ -1005,8 +1231,10 @@ const ProductManageMain = () => {
             ></ProductManageNav>
             {productListData && optionListData &&
                 <ProductManageBody
-                    productListData={productListData}
+                    // productListData={productListData}
                     checkedOptionList={checkedOptionList}
+                    categoryListData={categoryListData}
+                    productListData={productListViewData}
 
                     __handleEventControl={__handleEventControl}
                 ></ProductManageBody>
@@ -1082,6 +1310,35 @@ const ProductManageMain = () => {
                     __handleEventControl={__handleEventControl}
                 ></StockStatusModal>
             }
+            {receiveAndReleaseStatusModalOpen && optionReceiveStatusData && optionReleaseStatusData && 
+                <ReceiveAndReleaseStatusModal
+                    open={receiveAndReleaseStatusModalOpen}
+                    optionReceiveStatusData={optionReceiveStatusData}
+                    optionReleaseStatusData={optionReleaseStatusData}
+                    selectedOptionReceiveStatusData={selectedOptionReceiveStatusData}
+                    selectedOptionReleaseStatusData={selectedOptionReleaseStatusData}
+                    selectedDateText={selectedDateText}
+
+                    __handleEventControl={__handleEventControl}
+                ></ReceiveAndReleaseStatusModal>
+            }
+            {modifyStatusMemoModalOpen && stockStatusState && 
+                <ModifyStatusMemoModal
+                    open={modifyStatusMemoModalOpen}
+                    stockStatusState={stockStatusState}
+
+                    __handleEventControl={__handleEventControl}
+                ></ModifyStatusMemoModal>
+            }
+            {receiveAndReleaseDateRangePickerMdoalOpen &&
+                <ReceiveAndReleaseDateRangePickerModal
+                    open={receiveAndReleaseDateRangePickerMdoalOpen}
+                    selectionRange={selectionRange}
+
+                    __handleEventControl={__handleEventControl}
+                ></ReceiveAndReleaseDateRangePickerModal>
+            }
+
         </>
     );
 }

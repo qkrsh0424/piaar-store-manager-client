@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { withRouter } from 'react-router';
 
 // data connect
 import { productCategoryDataConnect } from "../../data_connect/productCategoryDataConnect";
@@ -8,7 +7,7 @@ import { productDataConnect } from '../../data_connect/productDataConnect';
 // component
 import CreateBody from "./CreateBody";
 import BackdropLoading from "../loading/BackdropLoading";
-import { formControlClasses } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 
 class Product {
     constructor(optionDefaultName = '', optionManagementName = '') {
@@ -29,6 +28,7 @@ class Product {
         this.defaultHeight = 0;
         this.defaultQuantity = 0;
         this.defaultWeight = 0;
+        this.defaultTotalPurchasePrice = 0;
         this.stockManagement = false;
         this.productCategoryCid = null;
         this.productOptions = [
@@ -55,6 +55,7 @@ class Product {
             defaultHeight: this.defaultHeight,
             defaultQuantity: this.defaultQuantity,
             defaultWeight: this.defaultWeight,
+            defaultTotalPurchasePrice: this.defaultTotalPurchasePrice,
             stockManagement: this.stockManagement,
             productCategoryCid: this.productCategoryCid,
             productOptions: this.productOptions
@@ -68,10 +69,18 @@ class ProductOption {
         this.code = '';
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
+        this.nosUniqueCode = '';
         this.salesPrice = 0;
         this.stockUnit = 0;
         this.status = '준비중';
         this.memo = '';
+        this.imageUrl = '';
+        this.imageFileName = '';
+        this.color = '';
+        this.unitCny = '';
+        this.unitKrw = '';
+        this.totalPurchasePrice = 0;
+        this.packageYn = 'n';
         this.productCid = null;
         this.productId = productId;
     }
@@ -82,16 +91,27 @@ class ProductOption {
             code: this.code,
             defaultName: this.defaultName,
             managementName: this.managementName,
+            nosUniqueCode: this.nosUniqueCode,
             salesPrice: this.salesPrice,
             stockUnit: this.stockUnit,
             status: this.status,
             memo: this.memo,
+            imageUrl: this.imageUrl,
+            imageFileName: this.imageFileName,
+            color: this.color,
+            unitCny: this.unitCny,
+            unitKrw: this.unitKrw,
+            totalPurchasePrice: this.totalPurchasePrice,
+            packageYn: this.packageYn,
             productCid: this.productCid,
             productId: this.productId
         }
     }
 }
-const CreateMain = (props) => {
+const CreateMain = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
     const [categoryListSample, setCategoryListSample] = useState(null);
     const [productListData, setProductListData] = useState([
         new Product('단일상품', '단일상품').toJSON()
@@ -124,13 +144,19 @@ const CreateMain = (props) => {
                 await productDataConnect().postCreateList(productListData)
                     .then(res=>{
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            props.history.replace(props.location.state.prevUrl);
-                            setIsSubmit(false);
+                            navigate(location.state.prevUrl);
                         }
                     })
                     .catch(err=>{
-                        console.log(err);
-                        alert('undefined error. : postCreateProductList');
+                        let res = err.response;
+
+                        if (res.status == 403) {
+                            alert('권한이 없습니다.')
+                        } else if(res?.data?.memo) {
+                            alert(res.data.memo);
+                        }else{
+                            alert('undefined error. : postCreateProductList');
+                        }
                     })
                 ;
             },
@@ -202,7 +228,6 @@ const CreateMain = (props) => {
                     },
                     onChangeInputValue: function (productId, e) {
                         setProductListData(productListData.map(r => {
-                            console.log(r);
                             return (
                                 r.id === productId ?
                                     {
@@ -220,6 +245,7 @@ const CreateMain = (props) => {
                         if(this.checkFormData() && !isSubmit){
                             setIsSubmit(true);
                             await __handleDataConnect().postCreateProductList();
+                            setIsSubmit(false);
                         }
                     },
                     checkFormData: function () {
@@ -460,4 +486,4 @@ const CreateMain = (props) => {
     );
 }
 
-export default withRouter(CreateMain);
+export default CreateMain;

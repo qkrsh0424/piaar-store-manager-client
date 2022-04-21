@@ -1,11 +1,11 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { browserName, CustomView, isMobile, isIOS, isSafari } from 'react-device-detect';
 
-import { numberWithCommas } from '../../handler/numberHandler';
+import { numberWithCommas } from '../../utils/numberFormatUtils';
 import { ContactPhoneOutlined, PersonPin } from '@material-ui/icons';
 import AddIcon from '@mui/icons-material/Add';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     margin-top: 80px;
@@ -230,14 +230,20 @@ const CategoryGroup = styled.div`
     font-size: 1rem;
     padding:0 10px;
     column-gap: 5px;
-    @media only screen and (max-width:425px){
-        font-size: 12px;
-        padding: 0;
-    }
 
     & .category-btn-active{
         background: #4682B4;
         color:white;
+    }
+
+    @media only screen and (max-width:992px){
+        grid-template-columns: 1fr;
+        row-gap: 10px;
+    }
+
+    @media only screen and (max-width:425px){
+        font-size: 12px;
+        padding: 0;
     }
 `;
 
@@ -406,10 +412,12 @@ const OptionDeleteBtn = styled.button`
 `;
 
 const CreateBody = (props) => {
+    const navigate = useNavigate();
+
     return (
         <>
             <BackBtn type='button'
-                onClick={() => props.history.goBack()}
+                onClick={() => navigate(-1)}
             >
                 <img className='back-button-img' src='/images/icon/back-button.png'></img>
             </BackBtn>
@@ -418,7 +426,7 @@ const CreateBody = (props) => {
                 <CreateBtn type='submit' disabled={props.isSubmit}>
                     <img className='button-img' src='/images/icon/add.png'></img>
                 </CreateBtn>
-                    {props.productListData && props.productListData.map(r => {
+                    {props.productListData?.map(r => {
                         return (
                             <ItemContainer key={r.id}>
                                 <ItemWrapper>
@@ -431,15 +439,15 @@ const CreateBody = (props) => {
                                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
                                             <GroupTitle>카테고리 <i className="icon-must" aria-label="필수항목"></i></GroupTitle>
                                             <CategoryGroup className='mb-3' categorySize={props.categoryList != null ? props.categoryList.length : 0}>
-                                                {props.categoryList && props.categoryList.map(r2 => {
+                                                {props.categoryList && props.categoryList.map(category => {
                                                     return (
-                                                        <CategorySelectBtn key={r2.cid} type='button' className={r.productCategoryCid === r2.cid ? `category-btn-active` : ''} onClick={() => { props.__handleEventControl().productListData().onChangeCategoryValue(r.id, r2.id) }}>{r2.name}</CategorySelectBtn>
+                                                        <CategorySelectBtn key={category.cid} type='button' className={r.productCategoryCid === category.cid ? `category-btn-active` : ''} onClick={() => { props.__handleEventControl().productListData().onChangeCategoryValue(r.id, category.id) }}>{category.name}</CategorySelectBtn>
                                                     )
                                                 })}
                                             </CategoryGroup>
                                         </BodyWrapper>
                                         <BodyWrapper style={{ borderBottom: '2px solid #f1f1f1' }}>
-                                            <GroupTitle>상품명 <i className="icon-must" aria-label="필수항목"></i></GroupTitle>
+                                            <GroupTitle>상품 정보<i className="icon-must" aria-label="필수항목"></i></GroupTitle>
                                             <NameGroup>
                                                 <div className="input-group mb-3">
                                                     <div className="input-group-prepend">
@@ -468,6 +476,24 @@ const CreateBody = (props) => {
                                                         </span>
                                                     </div>
                                                     <CommonInputEl type="text" className='form-control' name='memo' value={r.memo} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)}/>
+                                                
+                                                </div>
+                                                <div className="input-group mb-3">
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text">
+                                                            구매링크
+                                                        </span>
+                                                    </div>
+                                                    <CommonInputEl type="text" className='form-control' name='purchaseUrl' value={r.purchaseUrl} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)}/>
+                                                
+                                                </div>
+                                                <div className="input-group mb-3">
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text">
+                                                            기본매입총합계 <span className="small">(매입가격 + 매입운송비용 + 관부가세 + 기타비용)</span>
+                                                        </span>
+                                                    </div>
+                                                    <CommonInputEl type="number" className='form-control' name='defaultTotalPurchasePrice' value={r.defaultTotalPurchasePrice} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)}/>
                                                 
                                                 </div>
                                             </NameGroup>
@@ -563,12 +589,18 @@ const CreateBody = (props) => {
                                                         </span>
                                                     </div>
                                                     <CommonInputEl type="number" className='form-control' name='defaultWidth' value={r.defaultWidth} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+                                                </div>
+                                                <div className="input-group mb-3">
+
                                                     <div className="input-group-prepend">
                                                         <span className="input-group-text">
                                                             SIZE_세로(cm)
                                                         </span>
                                                     </div>
                                                     <CommonInputEl type="number" className='form-control' name='defaultLength' value={r.defaultLength} onChange={(e) => props.__handleEventControl().productListData().onChangeInputValue(r.id, e)} />
+                                                </div>
+                                                <div className="input-group mb-3">
+
                                                     <div className="input-group-prepend">
                                                         <span className="input-group-text">
                                                             SIZE_높이(cm)
@@ -643,6 +675,7 @@ const CreateBody = (props) => {
                                                                                 <OptionTableTh scope="col" width='200'>관리코드 <i className="icon-must" aria-label="필수항목"></i></OptionTableTh>
                                                                                 <OptionTableTh scope="col" width='200'>노스노스 고유코드</OptionTableTh>
                                                                                 <OptionTableTh scope="col" width='200'>판매가</OptionTableTh>
+                                                                                <OptionTableTh scope="col" width='200'>매입총합계</OptionTableTh>
                                                                                 <OptionTableTh scope="col" width='200'>상태</OptionTableTh>
                                                                                 <OptionTableTh scope="col" width='200'>비고</OptionTableTh>
                                                                                 <OptionTableTh scope="col" width='200'>색상</OptionTableTh>
@@ -672,6 +705,9 @@ const CreateBody = (props) => {
                                                                                     <OptionInput type='number' value={optionData.salesPrice} name='salesPrice' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
+                                                                                    <OptionInput type='number' value={optionData.totalPurchasePrice} name='totalPurchasePrice' onChange={(e) => props.__handleEventControl().productOptionListData().onChangeInputValue(e, r.id, optionData.id)}></OptionInput>
+                                                                                </OptionTableTd>
+                                                                                <OptionTableTd>
                                                                                     <OptionInput type='text' value={optionData.status} disabled></OptionInput>
                                                                                 </OptionTableTd>
                                                                                 <OptionTableTd>
@@ -697,7 +733,7 @@ const CreateBody = (props) => {
                                                         <CommonFunctionalBtn type='button' className='btn btn-sm btn-outline-secondary' onClick={() => props.__handleEventControl().productOptionListData().add(r.id)}>
                                                             <AddIcon />
                                                         </CommonFunctionalBtn>
-                                                    </OptionAddBtn>    
+                                                    </OptionAddBtn>
                                             </KeyGroup>
                                         </BodyWrapper>
                                     </BodyContainer>
@@ -716,4 +752,4 @@ const CreateBody = (props) => {
     );
 }
 
-export default withRouter(CreateBody);
+export default CreateBody;
