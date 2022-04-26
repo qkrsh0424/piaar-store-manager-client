@@ -591,6 +591,7 @@ const ReleaseCompleteComponent = (props) => {
     // 출고 취소
     const _onSubmit_changeReleaseYnForOrderItemList = async (body) => {
         onActionOpenBackdrop();
+        console.log(body);
         await __reqChangeReleaseYnForOrderItemListSocket(body);
         onActionCloseBackdrop();
     }
