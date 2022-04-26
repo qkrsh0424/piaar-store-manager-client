@@ -100,6 +100,12 @@ const CheckedOperatorComponent = (props) => {
     }
 
     const onActionConfirmRelease = () => {
+        let alreadyReflected = props.checkedOrderItemList.filter(r => r.stockReflectYn === 'y');
+        if (alreadyReflected && alreadyReflected.length > 0) {
+            alert('이미 재고에 반영된 데이터가 있습니다. 해당 데이터의 재고 반영을 취소 후 진행해 주시기 바랍니다.');
+            onActionCloseReleaseConfirmModal();
+            return;
+        }
         let data = props.checkedOrderItemList.map(r => {
             return {
                 ...r,

@@ -61,16 +61,6 @@ const erpOrderItemDataConnect = () => {
                 withCredentials: true
             })
         },
-        fetchFirstMerge: async function (firstMergeHeaderId, body) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/erp-first-merge-headers/${firstMergeHeaderId}/action-merge`, body, {
-                withCredentials: true
-            })
-        },
-        fetchSecondMerge: async function (secondMergeHeaderId, body) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/erp-second-merge-headers/${secondMergeHeaderId}/action-merge`, body, {
-                withCredentials: true
-            })
-        },
         changeWaybillForList: async function (formData) {
             return await axios.patch(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/batch/waybill`, formData, {
                 withCredentials: true
