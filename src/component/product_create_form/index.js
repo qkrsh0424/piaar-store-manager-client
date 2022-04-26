@@ -152,6 +152,13 @@ const ProductCreateComponent = () => {
     } = useBackdropHook();
 
     useEffect(() => {
+        dispatchCreateProductData({
+            type: 'SET_DATA',
+            payload: new Product('단일상품', '단일상품').toJSON()
+        });
+    }, []);
+
+    useEffect(() => {
         async function fetchInit() {
             await __reqSearchProductCategory();
             await __reqSearchProductOption();
@@ -355,7 +362,6 @@ const ProductCreateComponent = () => {
             if(r.id === optionId) {
                 return{
                     ...r,
-                    packageYn: 'y',
                     optionPackages: data
                 }
             }else{
@@ -406,10 +412,6 @@ const ProductCreateComponent = () => {
                 let data = option.optionPackages?.filter(r => r.id !== packageId);
                 if(data.length === 0) {
                     delete option.optionPackages;
-                    option = {
-                        ...option,
-                        packageYn: 'n'
-                    }
                     return option;
                 }else{
                     return{
@@ -429,6 +431,7 @@ const ProductCreateComponent = () => {
     }
 
     return (
+        createProductData && 
         <Container>
             <ProductCreateFormComponent
                 createProductData={createProductData}
@@ -449,7 +452,7 @@ const ProductCreateComponent = () => {
                 _onAction_changeOptionPackage={(optionId, optionPackages) => _onAction_changeOptionPackage(optionId, optionPackages)}
                 _onAction_deleteOptionPakcage={(optionId, packageId) => _onAction_deleteOptionPakcage(optionId, packageId)}
             ></ProductCreateFormComponent>
-
+            
             {/* Backdrop */}
             <BackdropHookComponent
                 open={backdropOpen}
@@ -458,9 +461,9 @@ const ProductCreateComponent = () => {
     )
 }
 
-export default ProductCreateComponent;
+export default ProductCreateComponent; 
 
-const initialCreateProductData = new Product('단일상품', '단일상품').toJSON();
+const initialCreateProductData = null;
 
 const createProductDataReducer = (state, action) => {
     switch(action.type) {

@@ -144,7 +144,6 @@ const CreateProductOptionModalComponent = (props) => {
 
         optionData = {
             ...optionData,
-            packageYn: 'y',
             optionPackages: packageList
         }
 
@@ -201,10 +200,6 @@ const CreateProductOptionModalComponent = (props) => {
     
         if(data.length === 0) {
             delete optionData.optionPackages;
-            optionData = {
-                ...optionData,
-                packageYn: 'n'
-            }
         } else {
             optionData = {
                 ...optionData,

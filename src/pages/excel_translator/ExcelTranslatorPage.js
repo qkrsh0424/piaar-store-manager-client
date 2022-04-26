@@ -6,7 +6,7 @@ const Container = styled.div`
 
 `;
 
-const ExcelTranslatorPage = (props) => {
+const ExcelTranslatorPage = () => {
     return(
         <>
             <Container>
