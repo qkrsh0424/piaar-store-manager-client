@@ -120,7 +120,7 @@ export default function ProductManageTableFieldView(props) {
                                             <td>{option.nosUniqueCode}</td>
                                             <td>{option.defaultName}</td>
                                             <td>{option.managementName}</td>
-                                            <td style={{ fontWeight: '800' }}>{option.stockUnit}</td>
+                                            <td style={{ fontWeight: '800' }}>{option.stockSumUnit}</td>
                                             <td style={{ fontWeight: '800' }}>{option.status}</td>
                                             <td style={{ fontWeight: '800' }}>{option.salesPrice}</td>
                                             <td style={{ fontWeight: '800' }}>{option.totalPurchasePrice}</td>

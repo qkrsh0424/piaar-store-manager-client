@@ -12,6 +12,10 @@ const ContentContainer = styled.div`
 const LinkContainer = styled.div`
     padding:10px;
     width:100%;
+
+    button {
+        width: 100%;
+    }
 `;
 
 const LinkEl = styled(Link)`
@@ -81,7 +85,6 @@ const DrawerNavbarSiderComponent = (props) => {
                             <LinkContainer>
                                 <CustomLink to='/'>메인페이지</CustomLink>
                             </LinkContainer>
-                            
                             {
                                 userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
                                     <LinkContainer>
@@ -90,13 +93,37 @@ const DrawerNavbarSiderComponent = (props) => {
                                     :
                                     <></>
                             }
-
                             <LinkContainer>
-                                <CustomLink to='/order-confirm'>발주확인건</CustomLink>
+                                <CustomLink to='/products'>상품 재고관리</CustomLink>
                             </LinkContainer>
                             <LinkContainer>
-                                <CustomLink to='/waybill'>오늘보낼것</CustomLink>
+                                <CustomLink to='/product-detail'>상품 상세정보</CustomLink>
                             </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink to='/erp/management/order-upload'>피아르 주문&출고 관리</CustomLink>
+                            </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink to='/delivery-ready/naver'>네이버 배송준비</CustomLink>
+                            </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink to='/delivery-ready/coupang'>쿠팡 배송준비</CustomLink>
+                            </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink to='/order-registration/naver'>네이버 대량등록</CustomLink>
+                            </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink to='/commute-record'>출퇴근기록</CustomLink>
+                            </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink2 href='https://analytics.piaar.co.kr'>분석기</CustomLink2>
+                            </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
+                            </LinkContainer>
+                            <LinkContainer>
+                                <CustomLink to='/sales-analysis'>판매 랭킹</CustomLink>
+                            </LinkContainer>
+                        
                             <LinkContainer>
                                 <CustomLink to='/shipment/packing-list/naver'>네이버 배송준비<br />데이터 추출기</CustomLink>
                             </LinkContainer>
@@ -107,28 +134,10 @@ const DrawerNavbarSiderComponent = (props) => {
                                 <CustomLink to='/sales-rate/naver'>네이버 주문통합검색<br />판매량 추출기</CustomLink>
                             </LinkContainer>
                             <LinkContainer>
-                                <CustomLink to='/products'>상품 재고관리</CustomLink>
+                                <CustomLink to='/order-confirm'>발주확인건</CustomLink>
                             </LinkContainer>
                             <LinkContainer>
-                                <CustomLink to='/product-detail'>상품 상세정보</CustomLink>
-                            </LinkContainer>
-                            <LinkContainer>
-                                <CustomLink to='/delivery-ready/naver'>네이버 배송준비<br />발주서 다운로드</CustomLink>
-                            </LinkContainer>
-                            <LinkContainer>
-                                <CustomLink to='/delivery-ready/coupang'>쿠팡 배송준비<br />발주서 다운로드</CustomLink>
-                            </LinkContainer>
-                            <LinkContainer>
-                                <CustomLink to='/order-registration/naver'>네이버 대량등록<br />엑셀 다운로드</CustomLink>
-                            </LinkContainer>
-                            <LinkContainer>
-                                <CustomLink to='/commute-record'>출퇴근기록</CustomLink>
-                            </LinkContainer>
-                            <LinkContainer>
-                                <CustomLink2 href='https://analytics.piaar.co.kr'>분석기</CustomLink2>
-                            </LinkContainer>
-                            <LinkContainer>
-                                <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
+                                <CustomLink to='/waybill'>오늘보낼것</CustomLink>
                             </LinkContainer>
                             <LinkContainer>
                                 <form onSubmit={(e) => props.__handleEventControl().logoutSubmit(e)}>

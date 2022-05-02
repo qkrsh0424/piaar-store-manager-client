@@ -282,6 +282,7 @@ const ProductManageComponent = () => {
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('출고등록 되었습니다.');
+                    setDataChangedTrigger(true);
                 }
             })
             .catch(err => {
@@ -295,6 +296,7 @@ const ProductManageComponent = () => {
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('입고등록 되었습니다.');
+                    setDataChangedTrigger(true);
                 }
             })
             .catch(err => {
