@@ -99,7 +99,7 @@ const productOptionDataConnect = () => {
             })
         },
         searchAllStockStatus: async function() {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/statusList`, {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/list`, {
                 withCredentials: true
             })
         },

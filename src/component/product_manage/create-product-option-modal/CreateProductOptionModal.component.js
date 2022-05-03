@@ -123,13 +123,20 @@ const CreateProductOptionModalComponent = (props) => {
         }
 
         for(var i = 0; i < createOption.optionPackages?.length; i++) {
-            if(createOption.optionPackages[i].originOptionCode === null || createOption.optionPackages[i].originOptionCode ===undefined || createOption.optionPackages[i].originOptionCode === '') {
+            let optionPackages = createOption.optionPackages[i];
+
+            if(optionPackages.originOptionCode === null || optionPackages.originOptionCode ===undefined || optionPackages.originOptionCode === '') {
                 alert('옵션패키지 구성상품을 선택해주세요.');
                 return false;
             }
     
-            if(createOption.optionPackages[i].originOptionId === null || createOption.optionPackages[i].originOptionId === undefined || createOption.optionPackages[i].originOptionId === '') {
+            if(optionPackages.originOptionId === null || optionPackages.originOptionId === undefined || optionPackages.originOptionId === '') {
                 alert('옵션패키지 구성상품을 선택해주세요.');
+                return false;
+            }
+
+            if(!optionPackages.packageUnit) {
+                alert('옵션패키지 구성상품의 수량을 정확하게 입력해주세요.');
                 return false;
             }
         }

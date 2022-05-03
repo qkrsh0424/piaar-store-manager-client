@@ -128,6 +128,25 @@ const ModifyProductOptionModalComponent = (props) => {
             alert('관리상품명은 필수항목입니다.');
             return false;
         }
+
+        for(var i = 0; i < modifyOption.optionPackages?.length; i++) {
+            let optionPackages = modifyOption.optionPackages[i];
+
+            if(optionPackages.originOptionCode === null || optionPackages.originOptionCode ===undefined || optionPackages.originOptionCode === '') {
+                alert('옵션패키지 구성상품을 선택해주세요.');
+                return false;
+            }
+    
+            if(optionPackages.originOptionId === null || optionPackages.originOptionId === undefined || optionPackages.originOptionId === '') {
+                alert('옵션패키지 구성상품을 선택해주세요.');
+                return false;
+            }
+
+            if(!optionPackages.packageUnit) {
+                alert('옵션패키지 구성상품의 수량을 정확하게 입력해주세요.');
+                return false;
+            }
+        }
         
         return true;
     }
