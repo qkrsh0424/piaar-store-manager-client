@@ -13,7 +13,7 @@ const ProductManageNavFieldView = (props) => {
             <div>
                 <Link
                     className="nav-btn"
-                    to={{ pathname: '/refactor/products/create' }}
+                    to={{ pathname: '/products/create' }}
                     state={routerState}
                 >상품등록</Link>
             </div>
