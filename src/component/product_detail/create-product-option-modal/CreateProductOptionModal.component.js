@@ -1,5 +1,6 @@
 import { useEffect, useReducer } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
 
 import { Container } from "./CreateProductOptionModal.styled";
 import HeaderFieldView from "./HeaderField.view";
@@ -31,6 +32,10 @@ class OptionPackage {
 const CreateProductOptionModalComponent = (props) => {
     const [createOption, dispatchCreateOption] = useReducer(createOptionReducer, initialCreateOption);
 
+    const {
+        __reqUploadImageFile: __reqUploadImageFile
+    } = useImageFileUploaderHook();
+
     useEffect(() => {
         if(props.createProductOptionData) {
             dispatchCreateOption({
@@ -40,26 +45,6 @@ const CreateProductOptionModalComponent = (props) => {
         }
 
     }, [props.createProductOptionData])
-
-    useEffect(() => {
-        if(props.uploadedImageData) {
-            dispatchCreateOption({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: "imageFileName",
-                    value: props.uploadedImageData.imageFileName,
-                }
-            });
-    
-            dispatchCreateOption({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: "imageUrl",
-                    value: props.uploadedImageData.imageUrl
-                }
-            });
-        }
-    }, [props.uploadedImageData]);
 
     const onChangeInputValue = (e) => {
         dispatchCreateOption({
@@ -80,7 +65,26 @@ const CreateProductOptionModalComponent = (props) => {
 
         // 파일을 선택하지 않은 경우
         if (e.target.files.length === 0) return;
-        await props.onActionUploadImage(e);
+        
+        props.onActionOpenBackdrop();
+        let imageInfo = await __reqUploadImageFile(e);
+        props.onActionCloseBackdrop();
+
+        dispatchCreateOption({
+            type: 'CHANGE_DATA',
+            payload: {
+                name : "imageFileName",
+                value: imageInfo.imageFileName
+            }
+        });
+
+        dispatchCreateOption({
+            type: 'CHANGE_DATA',
+            payload: {
+                name : "imageUrl",
+                value: imageInfo.imageUrl
+            }
+        });
     }
 
     const onActionDeleteProductImageFile = () => {

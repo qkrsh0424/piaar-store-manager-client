@@ -68,19 +68,6 @@ const ProductManageTableComponent = (props) => {
     const [stockStatusModalOpen, setStockStatusModalOpen] = useState(false);
     const [stockStatusListData, setStockStatusListData] = useState(null);
 
-    const [uploadedImageData, dispatchUploadedImageData] = useReducer(uploadedImageDataReducer, initialUploadedImageData);
-
-    useEffect(() => {
-        if(!props.uploadedImage) {
-            return;
-        }
-
-        dispatchUploadedImageData({
-            type: 'SET_DATA',
-            payload: props.uploadedImage
-        })
-    }, [props.uploadedImage]);
-
     useEffect(() => {
         if(!props.stockStatusList) {
             return;
@@ -122,7 +109,6 @@ const ProductManageTableComponent = (props) => {
     }
 
     const onActionCloseModifyProductModal = () => {
-        dispatchUploadedImageData({ type: 'CLEAR' });
         setModifyProductData(null);
         setModifyProductModalOpen(false);
     }
@@ -137,7 +123,6 @@ const ProductManageTableComponent = (props) => {
     }
     
     const onActionCloseCreateProductOptionModal = () => {
-        dispatchUploadedImageData({ type: 'CLEAR' });
         setCreateProductOptionData(null);
         setCreateProductOptionModalOpen(false);
     }
@@ -154,7 +139,6 @@ const ProductManageTableComponent = (props) => {
     }
     
     const onActionCloseModifyProductOptionModal = () => {
-        dispatchUploadedImageData({ type: 'CLEAR' });
         setModifyProductOptionData(null);
         setModifyProductOptionModalOpen(false);
     }
@@ -164,10 +148,6 @@ const ProductManageTableComponent = (props) => {
             await props._onSubmit_modifyProduct(modifyProductData);
         }
         onActionCloseModifyProductModal();
-    }
-
-    const onActionUploadImage = async (e) => {
-        await props._onSubmit_uploadProdImageFile(e);
     }
 
     const onActionDeleteProduct = async (productId) => {
@@ -252,11 +232,11 @@ const ProductManageTableComponent = (props) => {
                 <ModifyProductModalComponent
                     modifyProductData={modifyProductData}
                     categoryList={props.categoryList}
-                    uploadedImageData={uploadedImageData}
                     isSubmit={props.submitCheck}
+                    onActionOpenBackdrop={props.onActionOpenBackdrop}
+                    onActionCloseBackdrop={props.onActionCloseBackdrop}
 
                     onActionCloseModifyProductModal={() => onActionCloseModifyProductModal()}
-                    onActionUploadImage={(e) => onActionUploadImage(e)}
                     onActionModifyProduct={(data) => onActionModifyProduct(data)}
                 ></ModifyProductModalComponent>
             </CommonModalComponent>
@@ -271,12 +251,12 @@ const ProductManageTableComponent = (props) => {
             >
                 <CreateProductOptionModalComponent
                     createProductOptionData={createProductOptionData}
-                    uploadedImageData={uploadedImageData}
                     isSubmit={props.submitCheck}
                     optionList={props.optionList}
+                    onActionOpenBackdrop={props.onActionOpenBackdrop}
+                    onActionCloseBackdrop={props.onActionCloseBackdrop}
 
                     onActionCloseCreateProductOptionModal={() => onActionCloseCreateProductOptionModal()}
-                    onActionUploadImage={(e) => onActionUploadImage(e)}
                     onActionCreateProductOption={(data) => onActionCreateProductOption(data)}
                 ></CreateProductOptionModalComponent>
             </CommonModalComponent>
@@ -291,13 +271,13 @@ const ProductManageTableComponent = (props) => {
             >
                 <ModifyProductOptionModalComponent
                     modifyProductOptionData={modifyProductOptionData}
-                    uploadedImageData={uploadedImageData}
                     isSubmit={props.submitCheck}
                     optionPackage={props.optionPackage}
                     optionList={props.optionList}
+                    onActionOpenBackdrop={props.onActionOpenBackdrop}
+                    onActionCloseBackdrop={props.onActionCloseBackdrop}
 
                     onActionCloseModifyProductOptionModal={() => onActionCloseModifyProductOptionModal()}
-                    onActionUploadImage={(e) => onActionUploadImage(e)}
                     onActionModifyProductOption={(data) => onActionModifyProductOption(data)}
                 ></ModifyProductOptionModalComponent>
             </CommonModalComponent>
@@ -323,15 +303,3 @@ const ProductManageTableComponent = (props) => {
 }
 
 export default ProductManageTableComponent;
-
-const initialUploadedImageData = '';
-
-const uploadedImageDataReducer = (state, action) => {
-    switch (action.type) {
-        case 'SET_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return null;
-        default: return { ...state };
-    }
-}

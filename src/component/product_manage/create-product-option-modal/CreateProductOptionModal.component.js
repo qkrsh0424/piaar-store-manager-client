@@ -1,5 +1,6 @@
 import { useEffect, useReducer } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
 
 import { Container } from "./CreateProductOptionModal.styled";
 import HeaderFieldView from "./HeaderField.view";
@@ -31,6 +32,10 @@ class OptionPackage {
 const CreateProductOptionModalComponent = (props) => {
     const [createOption, dispatchCreateOption] = useReducer(createOptionReducer, initialCreateOption);
 
+    const {
+        __reqUploadImageFile: __reqUploadImageFile
+    } = useImageFileUploaderHook();
+
     useEffect(() => {
         if(props.createProductOptionData) {
             dispatchCreateOption({
@@ -40,26 +45,6 @@ const CreateProductOptionModalComponent = (props) => {
         }
 
     }, [props.createProductOptionData])
-
-    useEffect(() => {
-        if(props.uploadedImageData) {
-            dispatchCreateOption({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: "imageFileName",
-                    value: props.uploadedImageData.imageFileName,
-                }
-            });
-    
-            dispatchCreateOption({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: "imageUrl",
-                    value: props.uploadedImageData.imageUrl
-                }
-            });
-        }
-    }, [props.uploadedImageData]);
 
     const onChangeInputValue = (e) => {
         dispatchCreateOption({
@@ -71,19 +56,38 @@ const CreateProductOptionModalComponent = (props) => {
         })
     }
 
-    const onActionClickProductImageButton = () => {
+    const onActionClickOptionImageButton = () => {
         document.getElementById("cpom_i_uploader").click();
     }
 
-    const onActionUploadProductImageFile = async (e) => {
+    const onActionUploadOptionImageFile = async (e) => {
         e.preventDefault();
 
         // 파일을 선택하지 않은 경우
         if (e.target.files.length === 0) return;
-        await props.onActionUploadImage(e);
+        
+        props.onActionOpenBackdrop();
+        let imageInfo = await __reqUploadImageFile(e);
+        props.onActionCloseBackdrop();
+
+        dispatchCreateOption({
+            type: "CHANGE_DATA",
+            payload: {
+                name : "imageFileName",
+                value: imageInfo.imageFileName
+            }
+        });
+
+        dispatchCreateOption({
+            type: "CHANGE_DATA",
+            payload: {
+                name : "imageUrl",
+                value: imageInfo.imageUrl
+            }
+        });
     }
 
-    const onActionDeleteProductImageFile = () => {
+    const onActionDeleteOptionImageFile = () => {
         dispatchCreateOption({
             type: "CHANGE_DATA",
             payload: {
@@ -195,6 +199,7 @@ const CreateProductOptionModalComponent = (props) => {
             optionPackages: changedPackage
         }
 
+
         dispatchCreateOption({
             type: 'SET_DATA',
             payload: optionData
@@ -231,9 +236,9 @@ const CreateProductOptionModalComponent = (props) => {
                 <ImageSelectorFieldView
                     createOption={createOption}
 
-                    onActionClickProductImageButton={() => onActionClickProductImageButton()}
-                    onActionUploadProductImageFile={(e) => onActionUploadProductImageFile(e)}
-                    onActionDeleteProductImageFile={() => onActionDeleteProductImageFile()}
+                    onActionClickOptionImageButton={() => onActionClickOptionImageButton()}
+                    onActionUploadOptionImageFile={(e) => onActionUploadOptionImageFile(e)}
+                    onActionDeleteOptionImageFile={() => onActionDeleteOptionImageFile()}
                 ></ImageSelectorFieldView>
 
                 <OptionInfoFormFieldView

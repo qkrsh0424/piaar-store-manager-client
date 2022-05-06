@@ -75,19 +75,6 @@ const ItemSelectorComponent = (props) => {
     const [modifyProductOptionModalOpen, setModifyProductOptionModalOpen] = useState(false);
     const [modifyProductOptionData, setModifyProductOptionData] = useState(null);
 
-    const [uploadedImageData, dispatchUploadedImageData] = useReducer(uploadedImageDataReducer, initialUploadedImageData);
-
-    useEffect(() => {
-        if(!props.uploadedImage) {
-            return;
-        }
-
-        dispatchUploadedImageData({
-            type: 'SET_DATA',
-            payload: props.uploadedImage
-        })
-    }, [props.uploadedImage])
-
     // 카테고리 변경된 경우
     useEffect(() => {
         if(query.productCid !== 0 && !query.productCid) {
@@ -186,7 +173,6 @@ const ItemSelectorComponent = (props) => {
     }
 
     const onActionCloseModifyProductModal = () => {
-        dispatchUploadedImageData({ type: 'CLEAR' });
         setModifyProductData(null);
         setModifyProductModalOpen(false);
     }
@@ -206,7 +192,6 @@ const ItemSelectorComponent = (props) => {
     }
     
     const onActionCloseCreateProductOptionModal = () => {
-        dispatchUploadedImageData({ type: 'CLEAR' });
         setCreateProductOptionData(null);
         setCreateProductOptionModalOpen(false);
     }
@@ -225,7 +210,6 @@ const ItemSelectorComponent = (props) => {
     }
     
     const onActionCloseModifyProductOptionModal = () => {
-        dispatchUploadedImageData({ type: 'CLEAR' });
         setModifyProductOptionData(null);
         setModifyProductOptionModalOpen(false);
     }
@@ -251,10 +235,6 @@ const ItemSelectorComponent = (props) => {
         if (window.confirm('옵션을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
             await props._onSubmit_deleteProductOption(query.optionCid);
         }
-    }
-
-    const onActionUploadImage = async (e) => {
-        await props._onSubmit_uploadProdImageFile(e);
     }
 
     const onActionModifyProduct = async (modifyProductData) => {
@@ -311,12 +291,12 @@ const ItemSelectorComponent = (props) => {
             >
                 <ModifyProductModalComponent
                     categoryList={props.categoryList}
-                    uploadedImageData={uploadedImageData}
                     isSubmit={props.submitCheck}
+                    onActionOpenBackdrop={props.onActionOpenBackdrop}
+                    onActionCloseBackdrop={props.onActionCloseBackdrop}
 
                     modifyProductData={modifyProductData}
                     onActionCloseModifyProductModal={() => onActionCloseModifyProductModal()}
-                    onActionUploadImage={(e) => onActionUploadImage(e)}
                     onActionModifyProduct={(data) => onActionModifyProduct(data)}
                 ></ModifyProductModalComponent>
             </CommonModalComponent>
@@ -331,12 +311,12 @@ const ItemSelectorComponent = (props) => {
             >
                 <CreateProductOptionModalComponent
                     createProductOptionData={createProductOptionData}
-                    uploadedImageData={uploadedImageData}
                     isSubmit={props.submitCheck}
                     optionList={props.optionList}
+                    onActionOpenBackdrop={props.onActionOpenBackdrop}
+                    onActionCloseBackdrop={props.onActionCloseBackdrop}
 
                     onActionCloseCreateProductOptionModal={() => onActionCloseCreateProductOptionModal()}
-                    onActionUploadImage={(e) => onActionUploadImage(e)}
                     onActionCreateProductOption={(data) => onActionCreateProductOption(data)}
                 ></CreateProductOptionModalComponent>
             </CommonModalComponent>
@@ -351,13 +331,13 @@ const ItemSelectorComponent = (props) => {
             >
                 <ModifyProductOptionModalComponent
                     modifyProductOptionData={modifyProductOptionData}
-                    uploadedImageData={uploadedImageData}
                     isSubmit={props.submitCheck}
                     optionPackage={props.optionPackage}
                     optionList={props.optionList}
+                    onActionOpenBackdrop={props.onActionOpenBackdrop}
+                    onActionCloseBackdrop={props.onActionCloseBackdrop}
 
                     onActionCloseModifyProductOptionModal={() => onActionCloseModifyProductOptionModal()}
-                    onActionUploadImage={(e) => onActionUploadImage(e)}
                     onActionModifyProductOption={(data) => onActionModifyProductOption(data)}
                 ></ModifyProductOptionModalComponent>
             </CommonModalComponent>
@@ -369,7 +349,6 @@ export default ItemSelectorComponent;
 
 const initialProductCid = '';
 const initialOptionCid = '';
-const initialUploadedImageData = '';
 
 const productCidReducer = (state, action) => {
     switch (action.type) {
@@ -382,16 +361,6 @@ const productCidReducer = (state, action) => {
 }
 
 const optionCidReducer = (state, action) => {
-    switch (action.type) {
-        case 'SET_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return null;
-        default: return { ...state };
-    }
-}
-
-const uploadedImageDataReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
             return action.payload;

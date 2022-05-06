@@ -8,10 +8,15 @@ import CodeInfoFieldView from "./CodeInfoField.view";
 import ImportInfoFieldView from "./ImportInfoField.view";
 import DefaultDetailInfoFieldView from "./DefaultDetailInfoField.view";
 import DefaultInfoFieldView from "./DefaultInfoField.view";
+import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
 
 const ModifyProductModalComponent = (props) => {
     const [modifyProductData, dispatchModifyProductData] = useReducer(modifyProductDataReducer, initialModifyProductData);
 
+    const {
+        __reqUploadImageFile: __reqUploadImageFile
+    } = useImageFileUploaderHook();
+    
     useEffect(() => {
         if(!props.modifyProductData) {
             return;
@@ -23,26 +28,6 @@ const ModifyProductModalComponent = (props) => {
         });
     }, [props.modifyProductData]);
 
-    useEffect(() => {
-        if(props.uploadedImageData) {
-            dispatchModifyProductData({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: "imageFileName",
-                    value: props.uploadedImageData.imageFileName,
-                }
-            });
-    
-            dispatchModifyProductData({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: "imageUrl",
-                    value: props.uploadedImageData.imageUrl
-                }
-            });
-        }
-    }, [props.uploadedImageData]);
-
     const onChangeStockReflectedSelector = () => {
         let stockManagement = !modifyProductData.stockManagement;
 
@@ -53,16 +38,6 @@ const ModifyProductModalComponent = (props) => {
                 value: stockManagement
             }
         });
-    }
-
-    const onChangeCategoryCidValue = (categoryCid) => {
-        dispatchModifyProductData({
-            type: 'CHANGE_DATA',
-            payload: {
-                name: "productCategoryCid",
-                value: categoryCid
-            }
-        })
     }
 
     const onChangeProductInputValue = (e) => {
@@ -84,7 +59,26 @@ const ModifyProductModalComponent = (props) => {
 
         // 파일을 선택하지 않은 경우
         if (e.target.files.length == 0) return;
-        await props.onActionUploadImage(e);
+
+        props.onActionOpenBackdrop();
+        let imageInfo = await __reqUploadImageFile(e);
+        props.onActionCloseBackdrop();
+
+        dispatchModifyProductData({
+            type: 'CHANGE_DATA',
+            payload: {
+                name : "imageFileName",
+                value: imageInfo.imageFileName
+            }
+        });
+
+        dispatchModifyProductData({
+            type: 'CHANGE_DATA',
+            payload: {
+                name : "imageUrl",
+                value: imageInfo.imageUrl
+            }
+        });
     }
 
     const onActionDeleteProductImageFile = () => {
@@ -151,7 +145,7 @@ const ModifyProductModalComponent = (props) => {
                     modifyProductData={modifyProductData}
                     categoryList={props.categoryList}
 
-                    onChangeCategoryCidValue={(categoryCid) => onChangeCategoryCidValue(categoryCid)}
+                    onChangeProductInputValue={(e) => onChangeProductInputValue(e)}
                 ></CategorySelectorFieldView>
                 <ImageSelectorFieldView
                     modifyProductData={modifyProductData}
