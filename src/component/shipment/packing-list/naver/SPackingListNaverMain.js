@@ -15,7 +15,6 @@ const SPackingListNaverMain = () => {
             postReadNaverExcel: async function () {
                 await axios.post(`${process.env.REACT_APP_API_HOST}/api/v1/shipment/packing-list/naver/excel/read`, fileFormData)
                     .then(res => {
-                        console.log(res);
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setSalesRateDataList(res.data.data);
                         }

@@ -2,12 +2,12 @@ import { useEffect, useReducer, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import queryString from 'query-string';
 import styled from "styled-components";
-import { withRouter } from 'react-router';
 import { useSelector } from 'react-redux';
 
 import ExcelTranslatorCommonModal from "./modal/ExcelTranslatorCommonModal";
-import { dateToYYMMDDhhmmss } from "../../handler/dateHandler"
+import { dateToYYMMDDhhmmss } from "../../utils/dateFormatUtils"
 import CreateTranslatorUploadHeaderDetailComponent from "./modal/CreateTranslatorUploadHeaderDetailComponent";
+import { useLocation } from "react-router-dom";
 
 const Container = styled.div`
     padding: 0 2%;
@@ -236,7 +236,8 @@ const uploadExcelDataStateReducer = (state, action) => {
 
 const ExcelTranslatorUploadDataBoard = (props) => {
     const userRdx = useSelector(state => state.user);
-    let params = queryString.parse(props.location.search);
+    const location = useLocation();
+    let params = queryString.parse(location.search);
 
     const [createTranslatorUploadHeaderDetailModalOpen, setCreateTranslatorUploadHeaderDetailModalOpen] = useState(false);
     const [selectedHeaderTitleState, dispatchSelectedHeaderTitleState] = useReducer(selectedHeaderTitleStateReducer, initialSelectedHeaderTitleState);
@@ -599,4 +600,4 @@ const ExcelTranslatorUploadDataBoard = (props) => {
     )
 }
 
-export default withRouter(ExcelTranslatorUploadDataBoard);
+export default ExcelTranslatorUploadDataBoard;

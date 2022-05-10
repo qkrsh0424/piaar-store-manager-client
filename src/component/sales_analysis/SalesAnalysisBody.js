@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
-import { withRouter } from 'react-router';
+// import { withRouter } from 'react-router';
 import { useState } from 'react';
 
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
@@ -192,4 +192,4 @@ const SalesAnalysisBody = (props) => {
     )
 }
 
-export default withRouter(SalesAnalysisBody);
+export default SalesAnalysisBody;

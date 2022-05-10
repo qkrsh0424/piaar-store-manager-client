@@ -1,6 +1,6 @@
 import { useEffect, useState, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { withRouter } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 
 // data connect
@@ -110,7 +110,9 @@ const combinedDeliveryTargetBoardStateReducer = (state, action) => {
     }
 }
 
-const DeliveryReadyViewPiaarMain = (props) => {
+const DeliveryReadyViewPiaarMain = () => {
+    const navigate = useNavigate();
+
     const [backdropLoading, setBackdropLoading] = useState(false);
     const [viewHeaderDetailList, setViewHeaderDetailList] = useState(null);
     const [excelOrderList, setExcelOrderList] = useState(null);
@@ -303,7 +305,7 @@ const DeliveryReadyViewPiaarMain = (props) => {
             movePage: function () {
                 return {
                     deliveryReadyUpload: function () {
-                        props.history.replace('/delivery-ready/piaar');
+                        navigate('/delivery-ready/piaar');
                     }
                 }
             },
@@ -461,4 +463,4 @@ const DeliveryReadyViewPiaarMain = (props) => {
     )
 }
 
-export default withRouter(DeliveryReadyViewPiaarMain);
+export default DeliveryReadyViewPiaarMain;

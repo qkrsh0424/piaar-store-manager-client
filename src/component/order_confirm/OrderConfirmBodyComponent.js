@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { dateToYYYYMMDD, dateToYYYYMMDDhhmmss } from '../../handler/dateHandler';
+import { dateToYYYYMMDD, dateToYYYYMMDDhhmmss } from '../../utils/dateFormatUtils';
 const Container = styled.div`
     margin-top:30px;
     .myFocus{

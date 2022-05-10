@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import styled from 'styled-components';
-import { withRouter } from 'react-router';
+// import { withRouter } from 'react-router';
 import { useSelector } from 'react-redux';
 
 import Checkbox from '@material-ui/core/Checkbox';
@@ -187,4 +187,4 @@ const PiaarCombinedDeliveryBoard = (props) => {
         </>
     );
 }
-export default withRouter(PiaarCombinedDeliveryBoard);
+export default PiaarCombinedDeliveryBoard;

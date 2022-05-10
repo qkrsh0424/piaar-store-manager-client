@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Pagination from '@material-ui/lab/Pagination';
-import { withRouter } from 'react-router';
 import queryString from 'query-string';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     margin-top: 2rem;
@@ -12,12 +12,14 @@ const Container = styled.div`
 `;
 
 const PagenationComponent1 = (props) => {
-    let pathname = window.location.pathname;
-    let query = queryString.parse(window.location.search);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    let pathname = location.pathname;
+    let query = queryString.parse(location.search);
 
     const handleChange = (event, value) => {
-        // console.log(value);
-        props.history.push(`${pathname}?${queryString.stringify({ ...query, currPage: value })}`)
+        navigate(`${pathname}?${queryString.stringify({ ...query, currPage: value })}`)
     };
 
     return (
@@ -29,4 +31,4 @@ const PagenationComponent1 = (props) => {
     );
 }
 
-export default withRouter(PagenationComponent1);
+export default PagenationComponent1;

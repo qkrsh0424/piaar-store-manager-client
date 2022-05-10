@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Container = styled.div`
 `;
@@ -74,8 +74,10 @@ const NavControlBtn = styled.button`
 `;
 
 const ProductManageNav = (props) => {
+    let location = useLocation();
+
     let routerState = {
-        prevUrl: props.location.pathname
+        prevUrl: location.pathname
     }
 
     return (
@@ -120,4 +122,4 @@ const ProductManageNav = (props) => {
     );
 }
 
-export default withRouter(ProductManageNav);
+export default ProductManageNav;

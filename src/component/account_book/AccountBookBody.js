@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 // handler
-import { dateToYYMMDDhhmmss, dateToYYMMDD } from '../../handler/dateHandler';
-import { numberWithCommas2 } from '../../handler/numberHandler';
+import { dateToYYMMDDhhmmss, dateToYYMMDD } from '../../utils/dateFormatUtils';
+import { numberWithCommas2 } from '../../utils/numberFormatUtils';
 
 // component
 import PagenationComponent1 from '../pagenation/PagenationComponent1';

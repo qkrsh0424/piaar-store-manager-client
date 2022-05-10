@@ -1,8 +1,8 @@
 import { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router';
+// import { withRouter } from 'react-router';
 
-import { getStartDate, getEndDate, setStartDateOfPeriod } from '../../handler/dateHandler';
+import { getStartDate, getEndDate, setStartDateOfPeriod } from '../../utils/dateFormatUtils';
 
 import { salesAnalysisDataConnect } from '../../data_connect/salesAnalysisDataConnect';
 import { productCategoryDataConnect } from '../../data_connect/productCategoryDataConnect';
@@ -351,4 +351,4 @@ const SalesAnalysisMain = () => {
     )
 }
 
-export default withRouter(SalesAnalysisMain);
+export default SalesAnalysisMain;

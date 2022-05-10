@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import queryString from 'query-string';
 import styled from "styled-components";
 
-import { dateToYYMMDDhhmmss } from '../../handler/dateHandler';
+import { dateToYYMMDDhhmmss } from '../../utils/dateFormatUtils';
 
 import { excelTranslatorDataConnect } from '../../data_connect/excelTranslatorDataConnect';
 import ExcelTranslatorControlBar from './ExcelTranslatorControlBar';
@@ -11,6 +11,7 @@ import BackdropLoading from '../loading/BackdropLoading';
 import ExcelTranslatorDownloadExcelDataBoard from './ExcelTranslatorDownloadExcelDataBoard';
 import ExcelTranslatorUploadDataBoard from './ExcelTranslatorUploadDataBoard';
 import DrawerNavbarMain from '../nav/DrawerNavbarMain';
+import { useLocation } from 'react-router-dom';
 
 const Container = styled.div`
     height: 100vh;
@@ -33,7 +34,9 @@ class TranslatedData {
     }
 }
 
-const ExcelTranslatorMain = (props) => {
+const ExcelTranslatorMain = () => {
+    const location = useLocation();
+
     const [excelTranslatorHeaderList, setExcelTranslatorHeaderList] = useState(null);
     const [uploadedExcelData, setUploadedExcelData] = useState(null);
     const [isObjectSubmitted, setIsObjectSubmitted] = useState({
@@ -53,7 +56,7 @@ const ExcelTranslatorMain = (props) => {
 
     useEffect(()=>{
         setUploadedExcelData(null);
-    },[props.location])
+    },[location])
 
     const __handleDataConnect = () => {
         return {
@@ -155,7 +158,6 @@ const ExcelTranslatorMain = (props) => {
                         link.href = url;
 
                         let date = dateToYYMMDDhhmmss(new Date());
-                        console.log(headerTitle);
 
                         link.setAttribute('download', '[' + date + ']' + headerTitle + ' 다운로드.xlsx');
                         document.body.appendChild(link);

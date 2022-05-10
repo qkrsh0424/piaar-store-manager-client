@@ -2,12 +2,11 @@ import { useState, useReducer, useEffect } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from 'uuid';
 import queryString from 'query-string';
-import { withRouter } from 'react-router';
 import { useSelector } from 'react-redux';
+import { useLocation } from "react-router-dom";
 
 import CreateTranslatorDownloadHeaderDetailComponent from "./modal/CreateTranslatorDownloadHeaderDetailComponent";
 import ExcelTranslatorCommonModal from "./modal/ExcelTranslatorCommonModal";
-import { parse } from "date-fns";
 
 const Container = styled.div`
     padding: 2%;
@@ -183,7 +182,8 @@ const updateDownloadHeaderFormReducer = (state, action) => {
 
 const ExcelTranslatorDownloadDataBoard = (props) => {
     const userRdx = useSelector(state => state.user);
-    let params = queryString.parse(props.location.search);
+    const location = useLocation();
+    let params = queryString.parse(location.search);
 
     const [createTranslatorDownloadHeaderDetailModalOpen, setCreateTranslatorDownloadHeaderDetailModalOpen] = useState(false);
     const [fixedValueCheckList, setFixedValueCheckList] = useState([]);
@@ -448,4 +448,4 @@ const ExcelTranslatorDownloadDataBoard = (props) => {
     )
 }
 
-export default withRouter(ExcelTranslatorDownloadDataBoard);
+export default ExcelTranslatorDownloadDataBoard;

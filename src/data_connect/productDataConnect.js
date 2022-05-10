@@ -42,6 +42,49 @@ const productDataConnect = () => {
                 withCredentials: true
             })
         },
+        postCreate: async function (productData) {
+            let json = {};
+            
+            let productDto = {
+                id: productData.id,
+                code: productData.code,
+                naverProductCode: productData.naverProductCode,
+                defaultName: productData.defaultName,
+                imageFileName: productData.imageFileName,
+                imageUrl: productData.imageUrl,
+                purchaseUrl: productData.purchaseUrl,
+                managementName: productData.managementName,
+                manufacturingCode: productData.manufacturingCode,
+                memo: productData.memo,
+                hsCode: productData.hsCode,
+                style: productData.style,
+                tariffRate: productData.tariffRate,
+                defaultWidth: productData.defaultWidth,
+                defaultLength: productData.defaultLength,
+                defaultHeight: productData.defaultHeight,
+                defaultQuantity: productData.defaultQuantity,
+                defaultWeight: productData.defaultWeight,
+                defaultTotalPurchasePrice: productData.defaultTotalPurchasePrice,
+                stockManagement: productData.stockManagement,
+                productCategoryCid: productData.productCategoryCid
+            }
+            // 이미 option안에는 packageDtos가 존재함.
+            let optionDtos = productData.productOptions
+
+            for (let i = 0; i < optionDtos.length; i++) {
+                let packageDtos = optionDtos[i].optionPackages ?? [];
+
+                json = {
+                    productDto: productDto,
+                    optionDtos: optionDtos,
+                    packageDtos: packageDtos
+                }
+            }
+
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product/one`, json, {
+                withCredentials: true
+            })
+        },
         getStockListFj: async function () {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list-fj/stock`, {
                 withCredentials: true
@@ -69,18 +112,6 @@ const productDataConnect = () => {
         },
         deleteOne: async function (productCid) {
             return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product/one/${productCid}`, {
-                withCredentials: true
-            })
-        },
-        postUploadImageFileToCloud: async function (e) {
-            const formData = new FormData();
-
-            formData.append('files', e.target.files[0]);
-
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/file-upload/cloud`, formData, {
-                headers: {
-                    "content-types": "multipart/form-data"
-                },
                 withCredentials: true
             })
         }

@@ -7,9 +7,11 @@ import { accountBookDataConnect } from '../../data_connect/accountBookDataConnec
 
 // component
 import ExpenditureBody from './ExpenditureBody';
-import { withRouter } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 const ExpenditureMain = (props) => {
+    const navigate = useNavigate();
+
     const [bankTypes, setBankTypes] = useState(null);
     const [itemData, setItemData] = useState([
         {
@@ -46,7 +48,7 @@ const ExpenditureMain = (props) => {
                 await accountBookDataConnect().postAccountBookList(itemData)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            props.history.replace('/account-book');
+                            navigate('/account-book');
                         }
                     })
                     .catch(err => {
@@ -164,4 +166,4 @@ const ExpenditureMain = (props) => {
     );
 }
 
-export default withRouter(ExpenditureMain);
+export default ExpenditureMain;

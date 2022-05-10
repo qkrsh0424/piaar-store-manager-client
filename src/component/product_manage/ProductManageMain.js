@@ -1,9 +1,8 @@
 import { useEffect, useState, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { withRouter } from 'react-router-dom';
 
 // handler
-import { getStartDate, getEndDate, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../handler/dateHandler';
+import { getStartDate, getEndDate, dateToYYMMDD, dateToYYMMDDhhmmss } from '../../utils/dateFormatUtils';
 
 // data connect
 import { productCategoryDataConnect } from '../../data_connect/productCategoryDataConnect';
@@ -35,21 +34,21 @@ import ReceiveAndReleaseDateRangePickerModal from './modal/ReceiveAndReleaseDate
 class ProductOption {
     constructor(productId, optionDefaultName = '', optionManagementName = '', nosUniqueCode = '') {
         this.id = uuidv4();
-        this.code = ''
+        this.code = '';
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
         this.nosUniqueCode = nosUniqueCode;
         this.salesPrice = 0;
         this.stockUnit = 0;
-        this.totalPurchasePrice = 0;
         this.status = '준비중';
         this.memo = '';
         this.imageUrl = '';
         this.imageFileName = '';
-        this.purchaseUrl = '';
         this.color = '';
         this.unitCny = '';
         this.unitKrw = '';
+        this.totalPurchasePrice = 0;
+        this.packageYn = 'n';
         this.productCid = null;
         this.productId = productId;
     }
@@ -62,16 +61,16 @@ class ProductOption {
             managementName: this.managementName,
             nosUniqueCode: this.nosUniqueCode,
             salesPrice: this.salesPrice,
-            totalPurchasePrice: this.totalPurchasePrice,
             stockUnit: this.stockUnit,
             status: this.status,
             memo: this.memo,
             imageUrl: this.imageUrl,
             imageFileName: this.imageFileName,
-            purchaseUrl: this.purchaseUrl,
             color: this.color,
             unitCny: this.unitCny,
-            unitKrw: this.Krw,
+            unitKrw: this.unitKrw,
+            totalPurchasePrice: this.totalPurchasePrice,
+            packageYn: this.packageYn,
             productCid: this.productCid,
             productId: this.productId
         }
@@ -131,7 +130,7 @@ const stockStatusStateReducer = (state, action) => {
     }
 }
 
-const ProductManageMain = (props) => {
+const ProductManageMain = () => {
     const [productListData, setProductListData] = useState(null);
     const [optionListData, setOptionListData] = useState(null);
     const [categoryListData, setCategoryListData] = useState(null);
@@ -286,7 +285,14 @@ const ProductManageMain = (props) => {
                         }
                     })
                     .catch(err => {
-                        alert('undefined error.')
+                        let res = err.response;
+
+                        if(res?.status === 500){
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data?.memo);
                     })
             },
             changeProductOne: async function () {
@@ -1344,4 +1350,4 @@ const ProductManageMain = (props) => {
     );
 }
 
-export default withRouter(ProductManageMain);
+export default ProductManageMain;

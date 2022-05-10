@@ -9,6 +9,11 @@ const productDetailDataConnect = () => {
                 withCredentials: true
             })
         },
+        searchAll: async function () {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-detail/list`, {
+                withCredentials: true
+            })
+        },
         postOne: async function (productDetail) {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-detail/one`, productDetail, {
                 withCredentials: true

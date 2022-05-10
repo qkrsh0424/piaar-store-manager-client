@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import queryString from 'query-string';
-import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
+// import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import { useSelector } from 'react-redux';
 
 import styled from "styled-components";
@@ -17,6 +17,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import CreateTranslatorHeaderTitleComponent from "./modal/CreateTranslatorHeaderTitleComponent";
 import ExcelTranslatorCommonModal from "./modal/ExcelTranslatorCommonModal";
 import ModifyTranslatorHeaderTitleComponent from "./modal/ModifyTranslatorHeaderTitleComponent";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
 `;
@@ -241,8 +242,11 @@ const selectedHeaderTitleStateReducer = (state, action) => {
 
 const ExcelTranslatorControlBar = (props) => {
     const userRdx = useSelector(state => state.user);
-    let pathname = props.location.pathname;
-    let params = queryString.parse(props.location.search);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    let pathname = location.pathname;
+    let params = queryString.parse(location.search);
 
     const [excelTitleInfo, dispatchExcelTitleInfo] = useReducer(excelTitleInfoReducer, initialExcelTitle);
     const [selectedHeaderTitleState, dispatchSelectedHeaderTitleState] = useReducer(selectedHeaderTitleStateReducer, initialSelectedHeaderTitleState);
@@ -335,7 +339,7 @@ const ExcelTranslatorControlBar = (props) => {
                 await props.createTranslatorHeaderTitleControl(excelHeader);
                 
                 // 새로 생성된 타이틀 형식이 선택되도록 설정.
-                props.history.replace({
+                navigate({
                     pathname: pathname,
                     search: `?${queryString.stringify({
                         ...params,
@@ -366,7 +370,7 @@ const ExcelTranslatorControlBar = (props) => {
 
                 let selectedHeader = props.excelTranslatorHeaderList.filter(r => r.id === e.target.value)[0];
 
-                props.history.replace({
+                navigate({
                     pathname: pathname,
                     search: `?${queryString.stringify({
                         ...params,
@@ -384,7 +388,7 @@ const ExcelTranslatorControlBar = (props) => {
 
                 await props.deleteTranslatorHeaderTitleControl(selectedHeaderTitleState.id);
 
-                props.history.replace({
+                navigate({
                     pathname: pathname
                 })
             }
@@ -532,4 +536,4 @@ const ExcelTranslatorControlBar = (props) => {
     )
 }
 
-export default withRouter(ExcelTranslatorControlBar);
+export default ExcelTranslatorControlBar;

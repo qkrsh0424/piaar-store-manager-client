@@ -54,7 +54,6 @@ const SalesRateNaverMain = () => {
             postReadNaverExcel: async function () {
                 await axios.post(`${process.env.REACT_APP_API_HOST}/api/v1/sales-rate/excel/naver/read`, fileFormData)
                     .then(res => {
-                        console.log(res);
                         if (res.status == 200 && res.data && res.data.message == 'success') {
                             setSalesRateDataList(res.data.data);
                         }

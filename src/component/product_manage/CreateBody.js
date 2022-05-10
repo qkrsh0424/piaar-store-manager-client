@@ -1,11 +1,11 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { browserName, CustomView, isMobile, isIOS, isSafari } from 'react-device-detect';
 
-import { numberWithCommas } from '../../handler/numberHandler';
+import { numberWithCommas } from '../../utils/numberFormatUtils';
 import { ContactPhoneOutlined, PersonPin } from '@material-ui/icons';
 import AddIcon from '@mui/icons-material/Add';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     margin-top: 80px;
@@ -412,10 +412,12 @@ const OptionDeleteBtn = styled.button`
 `;
 
 const CreateBody = (props) => {
+    const navigate = useNavigate();
+
     return (
         <>
             <BackBtn type='button'
-                onClick={() => props.history.goBack()}
+                onClick={() => navigate(-1)}
             >
                 <img className='back-button-img' src='/images/icon/back-button.png'></img>
             </BackBtn>
@@ -750,4 +752,4 @@ const CreateBody = (props) => {
     );
 }
 
-export default withRouter(CreateBody);
+export default CreateBody;

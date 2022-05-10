@@ -11,7 +11,7 @@ import EventAvailableTwoToneIcon from '@mui/icons-material/EventAvailableTwoTone
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
-import { dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
+import { dateToYYMMDDhhmmss } from '../../../utils/dateFormatUtils';
 
 const DataContainer = styled.div`
     padding-bottom: 100px;

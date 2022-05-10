@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { withRouter } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userDataConnect } from '../../data_connect/userDataConnect';
 
@@ -13,9 +13,22 @@ const FormGroupContainer = styled.div`
 const FormGroupWrapper = styled.div`
     position: absolute;
     left: 50%;
-    top: 30%;
+    top: 40%;
     transform: translate(-50%,-50%);
-    width: 80%;
+    width: 50%;
+
+    .login-title {
+        width: 100%;
+        color: #7d7ada;
+        font-weight: 700;
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    @media screen and (max-width: 992px) {
+        width: 100%;
+    }
 `;
 
 const FormElContainer = styled.div`
@@ -44,7 +57,9 @@ const ButtonEl = styled.button`
     color:white;
     font-weight: 600;
 `;
-const LoginMain = ({ history }) => {
+const LoginMain = () => {
+    const navigate = useNavigate();
+
     const [loginData, setLoginData] = useState({
         username: '',
         password: ''
@@ -57,7 +72,7 @@ const LoginMain = ({ history }) => {
                 await userDataConnect().postLogin(loginData)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            history.replace('/')
+                            navigate('/')
                         }
                     })
                     .catch(err => {
@@ -90,6 +105,7 @@ const LoginMain = ({ history }) => {
                 <form onSubmit={(e) => __handleEventControl().loginSubmit(e)}>
                     <FormGroupContainer>
                         <FormGroupWrapper>
+                            <div className='login-title'>Piaar Login</div>
                             <FormElContainer>
                                 <LabelEl>아이디</LabelEl>
                                 <InputEl type='text' name='username' value={loginData.username} onChange={(e) => __handleEventControl().loginDataChange().input(e)}></InputEl>
@@ -110,4 +126,4 @@ const LoginMain = ({ history }) => {
     );
 }
 
-export default withRouter(LoginMain);
+export default LoginMain;

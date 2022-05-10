@@ -1,6 +1,5 @@
 
 import { useEffect, useState } from 'react';
-import { withRouter } from 'react-router';
 import { v4 as uuidv4 } from 'uuid';
 
 // data connect
@@ -8,8 +7,11 @@ import { bankTypeDataConnect } from '../../data_connect/bankTypeDataConnect';
 import { accountBookDataConnect } from '../../data_connect/accountBookDataConnect';
 // components
 import IncomeBody from './IncomeBody';
+import { useNavigate } from 'react-router-dom';
 
-const IncomeMain = (props) => {
+const IncomeMain = () => {
+    const navigate = useNavigate();
+
     const [bankTypes, setBankTypes] = useState(null);
     const [itemData, setItemData] = useState([
         {
@@ -47,7 +49,7 @@ const IncomeMain = (props) => {
                 await accountBookDataConnect().postAccountBookList(itemData)
                     .then(res => {
                         if (res.status == 200 && res.data && res.data.message == 'success') {
-                            props.history.replace('/account-book');
+                            navigate('/account-book');
                         }
                     })
                     .catch(err => {
@@ -170,4 +172,4 @@ const IncomeMain = (props) => {
     );
 }
 
-export default withRouter(IncomeMain);
+export default IncomeMain;

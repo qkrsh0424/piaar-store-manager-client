@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { useSelector } from 'react-redux';
-import { withRouter } from 'react-router';
 
 import LinkIcon from '@mui/icons-material/Link';
 import LinkOffIcon from '@mui/icons-material/LinkOff';
@@ -352,4 +351,4 @@ const ProductManageBody = (props) => {
     );
 }
 
-export default withRouter(ProductManageBody);
+export default ProductManageBody;

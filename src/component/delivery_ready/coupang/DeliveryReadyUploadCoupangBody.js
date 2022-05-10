@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
-import { dateToYYMMDDhhmmss } from '../../../handler/dateHandler';
+import { dateToYYMMDDhhmmss } from '../../../utils/dateFormatUtils';
 
 const Container = styled.div`
     overflow:hidden;

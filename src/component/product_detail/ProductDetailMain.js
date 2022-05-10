@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { withRouter } from 'react-router';
 import queryString from 'query-string';
 
 // data connect
@@ -19,16 +18,17 @@ import ProductDetailAddModal from './modal/ProductDetailAddModal';
 import ProductDetailModifyModal from './modal/ProductDetailModifyModal';
 import { productDataConnect } from '../../data_connect/productDataConnect';
 import { productOptionDataConnect } from '../../data_connect/productOptionDataConnect';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 
 
 class ProductOption {
-    constructor(productId, optionDefaultName = '', optionManagementName = '', nosUniqueCode = '') {
+    constructor(productId, optionDefaultName = '', optionManagementName = '') {
         this.id = uuidv4();
         this.code = ''
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
-        this.nosUniqueCode = nosUniqueCode;
+        this.nosUniqueCode = '';
         this.salesPrice = 0;
         this.stockUnit = 0;
         this.status = '준비중';
@@ -38,6 +38,8 @@ class ProductOption {
         this.color = '';
         this.unitCny = '';
         this.unitKrw = '';
+        this.totalPurchasePrice = 0;
+        this.packageYn = 'n';
         this.productCid = null;
         this.productId = productId;
     }
@@ -57,7 +59,9 @@ class ProductOption {
             imageFileName: this.imageFileName,
             color: this.color,
             unitCny: this.unitCny,
-            unitKrw: this.Krw,
+            unitKrw: this.unitKrw,
+            totalPurchasePrice: this.totalPurchasePrice,
+            packageYn: this.packageYn,
             productCid: this.productCid,
             productId: this.productId
         }
@@ -93,8 +97,11 @@ class ProductDetail {
 }
 
 const ProductDetailMain = (props) => {
-    let pathname = props.location.pathname;
-    let params = queryString.parse(props.location.search);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const pathname = location.pathname;
+    const params = queryString.parse(location.search);
 
     const [categoryListData, setCategoryListData] = useState(null);
     const [productViewData, setProductViewData] = useState([]);
@@ -467,7 +474,7 @@ const ProductDetailMain = (props) => {
 
                         params.categoryCid = categoryCid;
 
-                        props.history.replace({
+                        navigate({
                             pathname: pathname,
                             search: `?${queryString.stringify(params)}`
                         })
@@ -479,7 +486,7 @@ const ProductDetailMain = (props) => {
 
                         params.productCid = productCid;
 
-                        props.history.replace({
+                        navigate({
                             pathname: pathname,
                             search: `?${queryString.stringify(params)}`
                         })
@@ -490,7 +497,7 @@ const ProductDetailMain = (props) => {
 
                         params.optionCid = optionCid;
 
-                        props.history.replace({
+                        navigate({
                             pathname: pathname,
                             search: `?${queryString.stringify(params)}`
                         })
@@ -500,7 +507,7 @@ const ProductDetailMain = (props) => {
 
                         params.detailCid = detailCid;
 
-                        props.history.replace({
+                        navigate({
                             pathname: pathname,
                             search: `?${queryString.stringify(params)}`
                         })
@@ -1005,4 +1012,4 @@ const ProductDetailMain = (props) => {
     )
 }
 
-export default withRouter(ProductDetailMain);
+export default ProductDetailMain;

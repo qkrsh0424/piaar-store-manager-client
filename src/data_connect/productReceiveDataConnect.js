@@ -15,6 +15,7 @@ const productReceiveDataConnect = () => {
                 withCredentials: true
             })
         },
+        // memo 수정 <- TODO::path로 변경해도 될듯
         putOne: async function (data) {
             return await axios.put(`${API_SERVER_ADDRESS}/api/v1/product-receive/one`, data, {
                 withCredentials: true

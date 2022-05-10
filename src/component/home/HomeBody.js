@@ -120,21 +120,30 @@ const HomeBody = () => {
                     </GroupBox>
 
                     <GroupBox>
-                        <GroupTitle>네이버</GroupTitle>
+                        <GroupTitle>피아르</GroupTitle>
                         <LinkBox>
-                            <CustomLink to='/delivery-ready/naver'>네이버 배송준비 발주서 다운로드</CustomLink>
-                            <CustomLink to='/order-registration/naver'>네이버 대량등록 엑셀 다운로드</CustomLink>
-                            <CustomLink to='/shipment/packing-list/naver'>네이버 배송준비 데이터 추출기</CustomLink>
-                            <CustomLink to='/sales-rate/naver'>네이버 주문통합검색 판매량 추출기</CustomLink>
+                            <CustomLink to='/erp/management/order-upload'>피아르 주문 & 출고 관리</CustomLink>
                         </LinkBox>
                     </GroupBox>
+
+                    <GroupBox>
+                        <GroupTitle>네이버</GroupTitle>
+                        <LinkBox>
+                            <CustomLink to='/delivery-ready/naver'>배송준비</CustomLink>
+                            <CustomLink to='/order-registration/naver'>대량등록</CustomLink>
+                            <CustomLink to='/shipment/packing-list/naver'>데이터 추출기</CustomLink>
+                            <CustomLink to='/sales-rate/naver'>주문통합검색 판매량 추출기</CustomLink>
+                        </LinkBox>
+                    </GroupBox>
+
                     <GroupBox>
                         <GroupTitle>쿠팡</GroupTitle>
                         <LinkBox>
-                            <CustomLink to='/delivery-ready/coupang'>쿠팡 배송준비 발주서 다운로드</CustomLink>
-                            <CustomLink to='/shipment/packing-list/coupang'>쿠팡 배송준비 데이터 추출기</CustomLink>
+                            <CustomLink to='/delivery-ready/coupang'>배송준비</CustomLink>
+                            <CustomLink to='/shipment/packing-list/coupang'>배송준비 데이터 추출기</CustomLink>
                         </LinkBox>
                     </GroupBox>
+
                     <GroupBox>
                         <GroupTitle>기타</GroupTitle>
                         <LinkBox>
