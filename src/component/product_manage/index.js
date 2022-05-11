@@ -102,7 +102,8 @@ const ProductManageComponent = () => {
                 }
             })
             .catch(err => {
-                alert('undefined error. : searchProductListFj');
+                let res = err.response;
+                alert(res?.data?.memo);
             });
     }
 
@@ -114,7 +115,8 @@ const ProductManageComponent = () => {
                 }
             })
             .catch(err => {
-                alert('undefined error. : searchOptionList');
+                let res = err.response;
+                alert(res?.data?.memo);
             })
     }
 
@@ -126,7 +128,8 @@ const ProductManageComponent = () => {
                 }
             })
             .catch(err => {
-                alert('undefined error. : searchCategoryList');
+                let res = err.response;
+                alert(res?.data?.memo);
             })
     }
 
@@ -292,7 +295,8 @@ const ProductManageComponent = () => {
                 }
             })
             .catch(err => {
-                console.log(err.response);
+                let res = err.response;
+                alert(res?.data?.memo);
             })
     }
 

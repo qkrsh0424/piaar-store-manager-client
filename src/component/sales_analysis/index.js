@@ -64,7 +64,8 @@ const SalesAnalysisComponent = (props) => {
                 }
             })
             .catch(err => {
-                console.log(err.response);
+                let res = err.response;
+                alert(res?.data?.memo);
             })
     }
 
@@ -76,7 +77,8 @@ const SalesAnalysisComponent = (props) => {
                 }
             })
             .catch(err => {
-                console.log(err.response);
+                let res = err.response;
+                alert(res?.data?.memo);
             })
     }
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import DrawerNavbarComponent from "../../component/nav/DrawerNavbarComponent";
+import DrawerNavbarMain from '../../component/nav/DrawerNavbarMain';
 import ProductManageComponent from '../../component/product_manage';
 
 const Container = styled.div`
@@ -10,7 +10,7 @@ const ProductManagePage = (props) => {
     return(
         <>
             <Container>
-                <DrawerNavbarComponent></DrawerNavbarComponent>
+                <DrawerNavbarMain></DrawerNavbarMain>
                 <ProductManageComponent></ProductManageComponent>
             </Container>
         </>
