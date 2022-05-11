@@ -396,7 +396,7 @@ const DeliveryReadyViewCoupnagMain = () => {
 
                         let date = dateToYYMMDDhhmmss(new Date());
 
-                        link.setAttribute('download', '[' + date + ']한산 발주서양식_쿠팡.xlsx');
+                        link.setAttribute('download', '[' + date + ']한산 발주서양식_쿠팡(' + storeInfoData.storeName + ').xlsx');
                         document.body.appendChild(link);
                         link.click();
 
@@ -422,7 +422,7 @@ const DeliveryReadyViewCoupnagMain = () => {
 
                         let date = dateToYYMMDDhhmmss(new Date());
 
-                        link.setAttribute('download', '[' + date + ']테일로 발주서양식_쿠팡.xlsx');
+                        link.setAttribute('download', '[' + date + ']테일로 발주서양식_쿠팡(' + storeInfoData.storeName + ').xlsx');
                         document.body.appendChild(link);
                         link.click();
 
@@ -448,7 +448,7 @@ const DeliveryReadyViewCoupnagMain = () => {
 
                         let date = dateToYYMMDDhhmmss(new Date());
 
-                        link.setAttribute('download', '[' + date + ']롯데 발주서양식_쿠팡.xlsx');
+                        link.setAttribute('download', '[' + date + ']롯데 발주서양식_쿠팡(' + storeInfoData.storeName + ').xlsx');
                         document.body.appendChild(link);
                         link.click();
 
@@ -467,7 +467,7 @@ const DeliveryReadyViewCoupnagMain = () => {
 
                         let date = dateToYYMMDD(new Date());
 
-                        link.setAttribute('download', '[' + date + ']배송준비 데이터_쿠팡.xlsx');
+                        link.setAttribute('download', '[' + date + ']배송준비 데이터_쿠팡(' + storeInfoData.storeName + ').xlsx');
                         document.body.appendChild(link);
                         link.click();
 
