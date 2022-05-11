@@ -45,9 +45,9 @@ const ProductManageComponent = () => {
     useEffect(() => {
         async function fetchInit() {
             onActionOpenBackdrop();
-            __reqSearchProductListFj();
-            __reqSearchOptionList();
-            __reqSearchCategoryList();
+            await __reqSearchCategoryList();
+            await __reqSearchProductListFj();
+            await __reqSearchOptionList();
             onActionCloseBackdrop();
 
             dispatchSubmitCheck({

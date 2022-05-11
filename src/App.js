@@ -86,7 +86,7 @@ function App(props) {
                         dispatch(setUserInfo(res.data.data))
                     }
                 })
-                .catch(err => {
+                .catch(err => { 
                     console.log(err.response);
                 })
             dispatch(setUserLoadingFalse());

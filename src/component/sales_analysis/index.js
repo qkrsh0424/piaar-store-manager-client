@@ -29,8 +29,10 @@ const SalesAnalysisComponent = (props) => {
 
     useEffect(() => {
         async function fetchInit() {
+            onActionOpenBackdrop();
             await __reqSearchSalesAnalysis(new Date(), new Date());
             await __reqSearchProductCategory();
+            onActionCloseBackdrop();
             
             dispatchSearchInfoState({
                 type: 'INIT_DATA'
