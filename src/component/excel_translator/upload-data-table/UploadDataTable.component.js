@@ -260,6 +260,10 @@ const UploadDataTableComponent = (props) => {
     const onActionStoreUploadHeaderForm = async (e) => {
         e.preventDefault();
 
+        if(!window.confirm('업로드 엑셀헤더 양식을 변경하면 다운로드 엑셀헤더 양식은 초기화됩니다.')) {
+            return;
+        }
+
         let uploadedHeader = createUploadHeaderDetailState.uploadedData;
 
         let uploadDetails = uploadedHeader.details.map((r, idx) => {
