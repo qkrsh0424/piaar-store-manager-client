@@ -38,8 +38,8 @@ const ReleaseCompleteComponent = (props) => {
     const {
         connected,
         onPublish,
-        onSubscribe,
-        onUnsubscribe,
+        onSubscribes,
+        onUnsubscribes
     } = useSocketClient();
 
     const {
@@ -415,39 +415,50 @@ const ReleaseCompleteComponent = (props) => {
     }, [location]);
 
     useEffect(() => {
-        async function subscribeSockets() {
-            onActionOpenSocketConnectLoading();
-            if (!connected) {
-                return;
-            }
+        let subscribes = [];
 
-            onSubscribe([
-                {
-                    subscribeUrl: '/topic/erp.erp-order-item',
-                    callback: async (e) => {
-                        let body = JSON.parse(e.body);
-                        if (body?.statusCode === 200) {
-                            await __reqSearchOrderItemList();
-                            if (body?.socketMemo) {
-                                onActionOpenSnackbar(body?.socketMemo)
+        const __effect = {
+            mount: async () => {
+                onActionOpenSocketConnectLoading();
+                if (!connected) {
+                    return;
+                }
+
+                subscribes = await onSubscribes([
+                    {
+                        subscribeUrl: '/topic/erp.erp-order-item',
+                        callback: async (e) => {
+                            let body = JSON.parse(e.body);
+                            if (body?.statusCode === 200) {
+                                await __reqSearchOrderItemList();
+                                if (body?.socketMemo) {
+                                    onActionOpenSnackbar(body?.socketMemo)
+                                }
+                            }
+                        }
+                    },
+                    {
+                        subscribeUrl: '/topic/erp.erp-release-complete-header',
+                        callback: async (e) => {
+                            let body = JSON.parse(e.body);
+                            if (body?.statusCode === 200) {
+                                await __reqSearchViewHeaderOne();
                             }
                         }
                     }
-                },
-                {
-                    subscribeUrl: '/topic/erp.erp-release-complete-header',
-                    callback: async (e) => {
-                        let body = JSON.parse(e.body);
-                        if (body?.statusCode === 200) {
-                            await __reqSearchViewHeaderOne();
-                        }
-                    }
-                }
-            ]);
-            onActionCloseSocketConnectLoading();
+                ]);
+                onActionCloseSocketConnectLoading();
+            },
+            unmount: async () => {
+                onUnsubscribes(subscribes);
+            }
         }
-        subscribeSockets();
-        return () => onUnsubscribe();
+
+        __effect.mount();
+
+        return () => {
+            __effect.unmount();
+        };
     }, [connected]);
 
     useEffect(() => {

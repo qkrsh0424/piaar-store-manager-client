@@ -38,8 +38,8 @@ const OrderComponent = (props) => {
     const {
         connected,
         onPublish,
-        onSubscribe,
-        onUnsubscribe,
+        onSubscribes,
+        onUnsubscribes
     } = useSocketClient();
 
     const {
@@ -325,41 +325,50 @@ const OrderComponent = (props) => {
     }, [location]);
 
     useEffect(() => {
-        async function subscribeSockets() {
-            onActionOpenSocketConnectLoading();
-            if (!connected) {
-                return;
-            }
+        let subscribes = [];
 
-            onSubscribe([
-                {
-                    subscribeUrl: '/topic/erp.erp-order-item',
-                    callback: async (e) => {
-                        console.log(e);
-                        let body = JSON.parse(e.body);
-                        if (body?.statusCode === 200) {
-                            await __reqSearchOrderItemList();
-                            if (body?.socketMemo) {
-                                onActionOpenSnackbar(body?.socketMemo)
+        const __effect = {
+            mount: async () => {
+                onActionOpenSocketConnectLoading();
+                if (!connected) {
+                    return;
+                }
+
+                subscribes = await onSubscribes([
+                    {
+                        subscribeUrl: '/topic/erp.erp-order-item',
+                        callback: async (e) => {
+                            console.log(e);
+                            let body = JSON.parse(e.body);
+                            if (body?.statusCode === 200) {
+                                await __reqSearchOrderItemList();
+                                if (body?.socketMemo) {
+                                    onActionOpenSnackbar(body?.socketMemo)
+                                }
+                            }
+                        }
+                    },
+                    {
+                        subscribeUrl: '/topic/erp.erp-order-header',
+                        callback: async (e) => {
+                            let body = JSON.parse(e.body);
+                            if (body?.statusCode === 200) {
+                                await __reqSearchViewHeaderOne();
                             }
                         }
                     }
-                },
-                {
-                    subscribeUrl: '/topic/erp.erp-order-header',
-                    callback: async (e) => {
-                        let body = JSON.parse(e.body);
-                        if (body?.statusCode === 200) {
-                            await __reqSearchViewHeaderOne();
-                        }
-                    }
-                }
-            ]);
-            onActionCloseSocketConnectLoading();
+                ]);
+                onActionCloseSocketConnectLoading();
+            },
+            unmount: async () => {
+                onUnsubscribes(subscribes);
+            }
         }
-        subscribeSockets();
+
+        __effect.mount();
+
         return () => {
-            onUnsubscribe();
+            __effect.unmount();
         };
     }, [connected]);
 

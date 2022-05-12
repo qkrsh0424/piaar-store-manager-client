@@ -53,27 +53,9 @@ const useSocketClient = () => {
         client.current.deactivate();
     };
 
-    // @Deprecated
-    // const onSubscribe = ({ subscribes, callback }) => {
-    //     if (!client.current.connected) {
-    //         return;
-    //     }
-
-    //     dispatchSubscribeItems({
-    //         type: 'SET_DATA',
-    //         payload: [
-    //             ...subscribeItems,
-    //             ...subscribes.map(r => {
-    //                 return client.current.subscribe(
-    //                     r,
-    //                     async (e) => {
-    //                         callback(e);
-    //                     }
-    //                 )
-    //             })
-    //         ]
-    //     })
-    // };
+    /**
+     * @deprecated
+     */
     const onSubscribe = (subscribes) => {
         if (!client.current.connected) {
             return;
@@ -93,6 +75,24 @@ const useSocketClient = () => {
         })
     }
 
+    const onSubscribes = async (subscribes) => {
+        if (!client.current.connected) {
+            return;
+        }
+
+        return subscribes.map(r => {
+            return client.current.subscribe(
+                r.subscribeUrl,
+                async (e) => {
+                    r.callback(e);
+                }
+            )
+        });
+    }
+
+    /**
+     * @deprecated
+     */
     const onUnsubscribe = () => {
         subscribeItems.forEach(r => {
             r.unsubscribe();
@@ -100,6 +100,14 @@ const useSocketClient = () => {
 
         dispatchSubscribeItems({
             type: 'CLEAR'
+        })
+    }
+
+    const onUnsubscribes = (subscribes) => {
+        if (!subscribes) return;
+
+        subscribes.forEach(r => {
+            r.unsubscribe();
         })
     }
 
@@ -117,7 +125,9 @@ const useSocketClient = () => {
     return {
         connected: connected,
         onSubscribe: onSubscribe,
+        onSubscribes: onSubscribes,
         onUnsubscribe: onUnsubscribe,
+        onUnsubscribes: onUnsubscribes,
         onPublish: onPublish,
     }
 }

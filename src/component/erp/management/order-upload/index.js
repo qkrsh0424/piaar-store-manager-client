@@ -13,8 +13,8 @@ const ErpOrderUploadComponent = (props) => {
     const {
         connected,
         onPublish,
-        onSubscribe,
-        onUnsubscribe,
+        onSubscribes,
+        onUnsubscribes
     } = useSocketClient();
 
     const {
@@ -112,25 +112,37 @@ const ErpOrderUploadComponent = (props) => {
     }
 
     useEffect(() => {
-        async function subscribeSockets() {
-            onActionOpenSocketConnectLoading();
-            if (!connected) {
-                return;
-            }
-            onSubscribe([
-                {
-                    subscribeUrl: '/topic/erp.erp-order-item',
-                    callback: async (e) => {
-                        let body = JSON.parse(e.body);
-                        if (body?.statusCode === 200) {
+        let subscribes = [];
+
+        const __effect = {
+            mount: async () => {
+                onActionOpenSocketConnectLoading();
+                if (!connected) {
+                    return;
+                }
+
+                subscribes = await onSubscribes([
+                    {
+                        subscribeUrl: `/topic/erp.erp-order-item`,
+                        callback: async (e) => {
+                            let body = JSON.parse(e.body);
+                            if (body?.statusCode === 200) {
+                            }
                         }
                     }
-                }
-            ]);
-            onActionCloseSocketConnectLoading();
+                ]);
+                onActionCloseSocketConnectLoading();
+            },
+            unmount: async () => {
+                onUnsubscribes(subscribes);
+            }
         }
-        subscribeSockets();
-        return () => onUnsubscribe();
+
+        __effect.mount();
+
+        return () => {
+            __effect.unmount();
+        };
     }, [connected]);
 
     const _onSubmit_uploadExcelFile = async (formData) => {
@@ -204,7 +216,7 @@ const ErpOrderUploadComponent = (props) => {
             <BackdropHookComponent
                 open={backdropOpen}
             />
-            
+
             <SocketConnectLoadingHookComponent
                 open={socketConnectLoadingOpen}
             ></SocketConnectLoadingHookComponent>
