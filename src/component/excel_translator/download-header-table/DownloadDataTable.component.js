@@ -109,6 +109,14 @@ const DownloadDataTableComponent = (props) => {
         setCreateTranslatorDownloadHeaderDetailModalOpen(false);
     }
 
+    const onActionAddFormCell = (e) => {
+        e.preventDefault();
+
+        dispatchUpdateDownloadHeaderForm({
+            type: 'ADD_DATA'
+        });
+    }
+
     const onActionDeleteCell = (e, headerId) => {
         e.preventDefault();
 
@@ -260,6 +268,7 @@ const DownloadDataTableComponent = (props) => {
                 <CreateDownloadHeaderDetailModalComponent
                     updateDownloadHeaderForm={updateDownloadHeaderForm}
 
+                    onActionAddFormCell={(e) => onActionAddFormCell(e)}
                     onActionDeleteCell={(e, headerId) => onActionDeleteCell(e, headerId)}
                     onActionSelectUploadHeader={(e, headerId) => onActionSelectUploadHeader(e, headerId)}
                     onChangeInputValue={(e, headerId) => onChangeInputValue(e, headerId)}

@@ -89,7 +89,7 @@ export default function DownloadHeaderDetailFormFieldView(props) {
                     })}
                 </div>
                 <div className="add-btn-box">
-                    <AddCircleOutlineIcon type="button" sx={{ fontSize: 30 }}
+                    <AddCircleOutlineIcon type="button" sx={{ fontSize: 30 }} className="add-btn-icon"
                         onClick={(e) => props.onActionAddFormCell(e)}
                     />
                 </div>

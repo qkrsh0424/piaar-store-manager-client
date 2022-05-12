@@ -188,7 +188,9 @@ const CreateFormFieldWrapper = styled.div`
         text-align: center;
         width: 100%;
         padding: 10px;
-        
+    }
+
+    .add-btn-box .add-btn-icon {
         &:hover{
             transform: scale(1.1);
         }

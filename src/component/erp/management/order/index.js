@@ -81,7 +81,13 @@ const OrderComponent = (props) => {
                 }
             })
             .catch(err => {
-                console.log(err);
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -96,7 +102,13 @@ const OrderComponent = (props) => {
                 }
             })
             .catch(err => {
-                console.log(err.response)
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -136,7 +148,12 @@ const OrderComponent = (props) => {
             })
             .catch(err => {
                 let res = err.response;
-                console.log(res);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -158,7 +175,12 @@ const OrderComponent = (props) => {
             })
             .catch(err => {
                 let res = err.response;
-                console.log(res);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 

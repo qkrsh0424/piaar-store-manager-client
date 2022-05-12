@@ -396,7 +396,13 @@ const DeliveryReadyViewNaverMain = () => {
                         setUnreleaseCheckedOrderList([]);
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
                     });
             },
             downloadTailoOrderForm: async function (data, sender, senderContact1) {
@@ -422,7 +428,13 @@ const DeliveryReadyViewNaverMain = () => {
                         setUnreleaseCheckedOrderList([]);
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
                     });
             },
             downloadLotteOrderForm: async function (data, sender, senderContact1) {
@@ -448,7 +460,13 @@ const DeliveryReadyViewNaverMain = () => {
                         setUnreleaseCheckedOrderList([]);
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
                     });
             },
             downloadNaverExcelOrderForm: async function (data) {
@@ -467,7 +485,13 @@ const DeliveryReadyViewNaverMain = () => {
                         setUnreleaseCheckedOrderList([]);
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
                     });
             },
             reflectStockUnit: async function (data, memo) {
