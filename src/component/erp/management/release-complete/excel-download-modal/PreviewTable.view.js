@@ -66,7 +66,7 @@ const TableBody = ({ viewHeader, downloadOrderItemList, isCheckedItem, _onAction
                                     </td>
                                     {viewHeader?.headerDetail.details.map(r3 => {
                                         let matchedColumnName = r3.matchedColumnName;
-                                        if (matchedColumnName === 'createdAt') {
+                                        if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt') {
                                             return (
                                                 <td key={r3.cellNumber}>{dateToYYYYMMDDhhmmss(r2[matchedColumnName] || new Date())}</td>
                                             )

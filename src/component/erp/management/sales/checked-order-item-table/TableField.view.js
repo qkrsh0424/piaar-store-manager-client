@@ -37,7 +37,7 @@ export default function TableFieldView(props) {
                                         >
                                             {props.viewHeader?.headerDetail.details?.map(r2 => {
                                                 let matchedColumnName = r2.matchedColumnName;
-                                                if (matchedColumnName === 'createdAt') {
+                                                if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt') {
                                                     return (
                                                         <td key={r2.cellNumber}>{dateToYYYYMMDDhhmmss(r1[matchedColumnName] || new Date())}</td>
                                                     )
