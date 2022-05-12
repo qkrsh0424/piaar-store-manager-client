@@ -22,7 +22,7 @@ const ControlFieldWrapper = styled.div`
         grid-template-columns: 1fr 1fr;
         column-gap: 10px;
 
-        & .upload-header-excel-download {
+        & .upload-header-form-download {
             background: #c0bff3;
             border: 1px solid #c0bff3;
 
@@ -59,7 +59,6 @@ const ControlFieldWrapper = styled.div`
         font-weight: 500;
         border:1px solid #a9b3d5;
         border-radius: 20px;
-        float: right;
 
         @media only screen and (max-width: 992px){
             display: inline-block;

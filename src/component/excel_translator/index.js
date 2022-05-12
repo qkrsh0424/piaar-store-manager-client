@@ -39,6 +39,7 @@ const ExcelTranslatorComponent = () => {
 
     const [excelTranslatorHeaderList, setExcelTranslatorHeaderList] = useState(null);
     const [uploadedExcelData, setUploadedExcelData] = useState(null);
+    const [uploadedDownloadHeaderExcelData, setUploadedDownloadHeaderExcelData] = useState(null);
 
     const [dataChangedTrigger, setDataChangedTrigger] = useState(false);
     const [isObjectSubmitted, setIsObjectSubmitted] = useState({
@@ -212,6 +213,19 @@ const ExcelTranslatorComponent = () => {
             })
     }
 
+    const __reqUploadDownloadHeaderFormExcelFile = async (formData) => {
+        await excelTranslatorDataConnect().postDownloadHeaderFile(formData)
+            .then(res => {
+                if (res.status === 200 && res.data && res.data.message === 'success') {
+                    setUploadedDownloadHeaderExcelData(res.data.data);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                alert(res?.data?.message);
+            })
+    }
+
     const _onSubmit_createTranslatorHeaderTitle = async (headerTitle) => {
         if(!isObjectSubmitted.createdHeader) {
             onActionOpenBackdrop();
@@ -324,6 +338,22 @@ const ExcelTranslatorComponent = () => {
         onActionCloseBackdrop();
     }
 
+    const _onSubmit_uploadDownloadHeaderFormExcelFile = async (formData) => {
+        if (!isObjectSubmitted.createdDownloadHeader) {
+            onActionOpenBackdrop();
+            setIsObjectSubmitted({
+                ...isObjectSubmitted,
+                createdDownloadHeader: true
+            });
+            await __reqUploadDownloadHeaderFormExcelFile(formData);
+            onActionCloseBackdrop();
+            setIsObjectSubmitted({
+                ...isObjectSubmitted,
+                createdDownloadHeader: false
+            });
+        }
+    }
+
     return (
         <Container>
             <ControlBarComponent
@@ -347,7 +377,9 @@ const ExcelTranslatorComponent = () => {
 
             <DownloadDataTableComponent
                 excelTranslatorHeaderList={excelTranslatorHeaderList}
-
+                uploadedDownloadHeaderExcelData={uploadedDownloadHeaderExcelData}
+                
+                _onSubmit_uploadDownloadHeaderFormExcelFile={(formData) => _onSubmit_uploadDownloadHeaderFormExcelFile(formData)}
                 _onSubmit_storeDownloadHeaderDetail={(downloadHeaderDetails) => _onSubmit_storeDownloadHeaderDetail(downloadHeaderDetails)}
             ></DownloadDataTableComponent>
 

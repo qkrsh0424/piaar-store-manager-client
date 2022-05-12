@@ -6,7 +6,7 @@ const Container = styled.div`
 const CreateFormFieldWrapper = styled.div`
     
     .header-field {
-        border-bottom: 1px solid #5961c788;
+        border-bottom: 1px solid;
         padding:10px;
         align-items: center;
         overflow: auto;
@@ -75,12 +75,6 @@ const CreateFormFieldWrapper = styled.div`
     }
 
     .detail-list {
-        /* background: linear-gradient(to bottom right,#dce3f6,#f0fcff);
-        border: 1px solid #dce3f6;
-        height: 40vh;
-        overflow: auto;
-        padding: 10px;
-        border-radius: 5px; */
         display: grid;
         grid-template-columns: 40% 7% 50%;
         padding: 5px;
@@ -188,6 +182,7 @@ const CreateFormFieldWrapper = styled.div`
         text-align: center;
         width: 100%;
         padding: 10px;
+        border-top: 1px solid;
     }
 
     .add-btn-box .add-btn-icon {

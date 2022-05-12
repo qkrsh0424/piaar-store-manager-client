@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import DataControlFieldView from "./DataControlField.view";
 import TableFieldView from "./TableField.view";
 import CommonModalComponent from "../../module/modal/CommonModalComponent";
-import CreateUploadHeaderDetailModalComponent from "../create-upload-header-detail-modal/CreateUploadHeaderDetailModal.component";
 import CreateDownloadHeaderDetailModalComponent from "../create-download-header-detail-modal/CreateDownloadHeaderDetailModal.component";
 
 class DownloadHeaderDetail {
@@ -40,6 +39,8 @@ const DownloadDataTableComponent = (props) => {
 
     const [selectedHeaderTitleState, dispatchSelectedHeaderTitleState] = useReducer(selectedHeaderTitleStateReducer, initialSelectedHeaderTitleState);
     const [updateDownloadHeaderForm, dispatchUpdateDownloadHeaderForm] = useReducer(updateDownloadHeaderFormReducer, initialUpdateDownloadHeaderForm);
+    const [downloadHeaderExcelDataState, dispatchDownloadHeaderExcelDataState] = useReducer(downloadHeaderExcelDataStateReducer, initialDownloadHeaderExcelDataState);
+
 
     useEffect(() => {
         function initHeaderTitleState() {
@@ -51,8 +52,15 @@ const DownloadDataTableComponent = (props) => {
                 dispatchSelectedHeaderTitleState({
                     type: 'CLEAR'
                 });
+                dispatchDownloadHeaderExcelDataState({
+                    type: 'CLEAR'
+                });
                 return;
             }
+
+            dispatchDownloadHeaderExcelDataState({
+                type: 'CLEAR'
+            });
 
             let headerId = params.headerId;
             let headerTitleState = props.excelTranslatorHeaderList?.filter(r => r.id === headerId)[0];
@@ -65,6 +73,42 @@ const DownloadDataTableComponent = (props) => {
         initHeaderTitleState();
     }, [params.headerId, props.excelTranslatorHeaderList]);
 
+    useEffect(() => {
+        if (!selectedHeaderTitleState) {
+            return;
+        }
+
+        if (selectedHeaderTitleState?.downloadHeaderDetail?.details.length) {
+            let data = selectedHeaderTitleState.downloadHeaderDetail.details.map(r => {
+                    return {
+                        ...r,
+                        colData: r.headerName
+                    }
+                });
+
+            dispatchDownloadHeaderExcelDataState({
+                type: 'INIT_DATA',
+                payload: data
+            });
+            return;
+        }
+    }, [selectedHeaderTitleState]);
+
+    useEffect(() => {
+        if(!props.uploadedDownloadHeaderExcelData) {
+            dispatchDownloadHeaderExcelDataState({
+                type: 'CLEAR'
+            });
+            return;
+        }
+
+        // 헤더 데이터 설정
+        dispatchDownloadHeaderExcelDataState({
+            type: 'INIT_DATA',
+            payload: props.uploadedDownloadHeaderExcelData.uploadedData.details
+        });
+    }, [props.uploadedDownloadHeaderExcelData])
+
     const onCreateTranslatorDownloadHeaderDetailModalOpen = (e) => {
         e.preventDefault();
 
@@ -75,11 +119,7 @@ const DownloadDataTableComponent = (props) => {
             alert('업로드 엑셀 양식을 먼저 설정해주세요.');
             return;
         }
-
-        dispatchUpdateDownloadHeaderForm({
-            type: 'CLEAR'
-        });
-
+        
         dispatchUpdateDownloadHeaderForm({
             type: 'INIT_DATA',
             payload: { ...selectedHeaderTitleState }
@@ -91,21 +131,48 @@ const DownloadDataTableComponent = (props) => {
             }
         }));
 
-        if (!(selectedHeaderTitleState.downloadHeaderDetail.details.length > 0)) {
-            dispatchUpdateDownloadHeaderForm({
-                type: 'INIT_DATA',
-                payload: {
-                    ...selectedHeaderTitleState,
-                    downloadHeaderDetail: {
-                        details: [new DownloadHeaderDetail().toJSON()]
+        if(!(selectedHeaderTitleState.downloadHeaderDetail.details.length > 0)) {
+            // 다운로드헤더 엑셀파일이 업로드 되었다면 이 데이터로 헤더 설정
+            if(downloadHeaderExcelDataState) {
+                let dataArr = [];
+                for(let i = 0; i< downloadHeaderExcelDataState.length; i++) {
+                    let data = new DownloadHeaderDetail().toJSON();
+                    data = {
+                        ...data,
+                        headerName : downloadHeaderExcelDataState[i].colData,
                     }
+                    dataArr.push(data);
                 }
-            });
+    
+                dispatchUpdateDownloadHeaderForm({
+                    type: 'INIT_DATA',
+                    payload: {
+                        ...selectedHeaderTitleState,
+                        downloadHeaderDetail: {
+                            details: dataArr
+                        }
+                    }
+                });
+
+            }else {
+                dispatchUpdateDownloadHeaderForm({
+                    type: 'INIT_DATA',
+                    payload: {
+                        ...selectedHeaderTitleState,
+                        downloadHeaderDetail: {
+                            details: [new DownloadHeaderDetail().toJSON()]
+                        }
+                    }
+                });
+            }
         }
         setCreateTranslatorDownloadHeaderDetailModalOpen(true);
     }
 
     const onCreateTranslatorDownloadHeaderDetailModalClose = () => {
+        dispatchUpdateDownloadHeaderForm({
+            type: 'CLEAR'
+        });
         setCreateTranslatorDownloadHeaderDetailModalOpen(false);
     }
 
@@ -120,16 +187,12 @@ const DownloadDataTableComponent = (props) => {
     const onActionDeleteCell = (e, headerId) => {
         e.preventDefault();
 
-        if (updateDownloadHeaderForm.downloadHeaderDetail.details.length > 1) {
-            let newDetails = updateDownloadHeaderForm.downloadHeaderDetail.details.filter(r => r.id !== headerId);
+        let newDetails = updateDownloadHeaderForm.downloadHeaderDetail.details.filter(r => r.id !== headerId);
 
-            dispatchUpdateDownloadHeaderForm({
-                type: 'SET_DOWNLOAD_HEADER_DETAIL_DATA',
-                payload: newDetails
-            });
-        } else {
-            alert('삭제할 수 없습니다.');
-        }
+        dispatchUpdateDownloadHeaderForm({
+            type: 'SET_DOWNLOAD_HEADER_DETAIL_DATA',
+            payload: newDetails
+        });
     }
 
     const onActionSelectUploadHeader = (e, headerId) => {
@@ -248,14 +311,42 @@ const DownloadDataTableComponent = (props) => {
         onCreateTranslatorDownloadHeaderDetailModalClose();
     }
 
+    const onActionUploadDownloadHeaderFormExcelFile = async (e) => {
+        e.preventDefault();
+
+        // 헤더 타이틀을 선택하지 않은 경우
+        if (!selectedHeaderTitleState) {
+            alert('헤더 형식을 먼저 선택해주세요.');
+            return;
+        }
+
+        // 파일을 선택하지 않은 경우
+        if (e.target.files.length === 0) return;
+
+        let addFiles = e.target.files;
+
+        var uploadedFormData = new FormData();
+        uploadedFormData.append('file', addFiles[0]);
+        uploadedFormData.append(
+            "dto",
+            new Blob([JSON.stringify(selectedHeaderTitleState)], { type: "application/json" })
+        );
+
+        await props._onSubmit_uploadDownloadHeaderFormExcelFile(uploadedFormData);
+    }
+
     return (
         <Container>
             <DataControlFieldView
+                selectedHeaderTitleState={selectedHeaderTitleState}
+
+                onActionUploadDownloadHeaderFormExcelFile={(e) => onActionUploadDownloadHeaderFormExcelFile(e)}
                 onCreateTranslatorDownloadHeaderDetailModalOpen={(e) => onCreateTranslatorDownloadHeaderDetailModalOpen(e)}
             ></DataControlFieldView>
 
             <TableFieldView
                 selectedHeaderTitleState={selectedHeaderTitleState}
+                downloadHeaderExcelDataState={downloadHeaderExcelDataState}
             ></TableFieldView>
 
             {/* ExcelTranslator Donwload Header Create Modal */}
@@ -286,6 +377,7 @@ export default DownloadDataTableComponent;
 
 const initialSelectedHeaderTitleState = null;
 const initialUpdateDownloadHeaderForm = null;
+const initialDownloadHeaderExcelDataState = null;
 
 const selectedHeaderTitleStateReducer = (state, action) => {
     switch (action.type) {
@@ -317,6 +409,16 @@ const updateDownloadHeaderFormReducer = (state, action) => {
                     details: state.downloadHeaderDetail.details.concat(new DownloadHeaderDetail().toJSON())
                 }
             }
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
+
+const downloadHeaderExcelDataStateReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
         case 'CLEAR':
             return null;
         default: return { ...state }

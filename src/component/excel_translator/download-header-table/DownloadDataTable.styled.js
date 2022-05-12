@@ -22,29 +22,6 @@ const ControlFieldWrapper = styled.div`
         grid-template-columns: 1fr 1fr;
         column-gap: 10px;
 
-        & .upload-header-excel-download {
-            background: #c0bff3;
-            border: 1px solid #c0bff3;
-
-            &:hover{
-                cursor: pointer;
-                transition: 0.2s;
-                transform: scale(1.05);
-                background: #a5a3ff;
-            }
-
-            &:active{
-                transition: 0s;
-                transform: scale(1.05);
-            }
-
-            &:disabled{
-                background: #d3d3d3;
-                cursor: not-allowed;
-                border: 1px solid #c5c5c5;
-            }
-        }
-
         @media only screen and (max-width: 992px) {
             padding: 1% 0%;
             column-gap: 20px;
@@ -59,14 +36,10 @@ const ControlFieldWrapper = styled.div`
         font-weight: 500;
         border:1px solid #a9b3d5;
         border-radius: 20px;
-        float: right;
-        grid-column-start: 2;
 
         @media only screen and (max-width: 992px){
             display: inline-block;
             padding: 4px;
-            grid-column-start: 1;
-            grid-column-end: 3;
         }
 
         @media only screen and (max-width:576px ){
@@ -83,6 +56,51 @@ const ControlFieldWrapper = styled.div`
             transition: 0s;
             transform: scale(1.05);
         }
+    }
+
+    .download-header-upload-btn .form-label {
+        padding: 2%;
+        font-size: 1rem;
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        vertical-align: middle;
+        padding: 2%;
+        background: #c0bff3;
+        color: white;
+        font-size: 1em;
+        font-weight: 500;
+        border:1px solid #c0bff3;
+        border-radius: 20px;
+
+        &:hover {
+            opacity: 0.8;
+            cursor: pointer;
+        }
+
+        &:disabled{
+            background: #d3d3d3;
+            cursor: not-allowed;
+            border: 1px solid #c5c5c5;
+        }
+
+        @media only screen and (max-width:992px){
+            padding: 1.5% 0%;
+        }
+
+        @media only screen and (max-width:768px){
+            font-size: 14px;
+        }
+
+        @media only screen and (max-width:576px){
+            font-size: 12px;
+        }
+    }
+
+    .download-header-upload-btn input {
+        font-size: 20px;
+        width: 100%;
+        display: none;
     }
 `;
 
