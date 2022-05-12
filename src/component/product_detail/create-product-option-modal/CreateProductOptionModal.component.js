@@ -1,5 +1,6 @@
 import { useEffect, useReducer } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
 
 import { Container } from "./CreateProductOptionModal.styled";
 import HeaderFieldView from "./HeaderField.view";
@@ -31,6 +32,10 @@ class OptionPackage {
 const CreateProductOptionModalComponent = (props) => {
     const [createOption, dispatchCreateOption] = useReducer(createOptionReducer, initialCreateOption);
 
+    const {
+        __reqUploadImageFile: __reqUploadImageFile
+    } = useImageFileUploaderHook();
+
     useEffect(() => {
         if(props.createProductOptionData) {
             dispatchCreateOption({
@@ -40,26 +45,6 @@ const CreateProductOptionModalComponent = (props) => {
         }
 
     }, [props.createProductOptionData])
-
-    useEffect(() => {
-        if(props.uploadedImageData) {
-            dispatchCreateOption({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: "imageFileName",
-                    value: props.uploadedImageData.imageFileName,
-                }
-            });
-    
-            dispatchCreateOption({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: "imageUrl",
-                    value: props.uploadedImageData.imageUrl
-                }
-            });
-        }
-    }, [props.uploadedImageData]);
 
     const onChangeInputValue = (e) => {
         dispatchCreateOption({
@@ -80,7 +65,26 @@ const CreateProductOptionModalComponent = (props) => {
 
         // 파일을 선택하지 않은 경우
         if (e.target.files.length === 0) return;
-        await props.onActionUploadImage(e);
+        
+        props.onActionOpenBackdrop();
+        let imageInfo = await __reqUploadImageFile(e);
+        props.onActionCloseBackdrop();
+
+        dispatchCreateOption({
+            type: 'CHANGE_DATA',
+            payload: {
+                name : "imageFileName",
+                value: imageInfo.imageFileName
+            }
+        });
+
+        dispatchCreateOption({
+            type: 'CHANGE_DATA',
+            payload: {
+                name : "imageUrl",
+                value: imageInfo.imageUrl
+            }
+        });
     }
 
     const onActionDeleteProductImageFile = () => {
@@ -123,13 +127,20 @@ const CreateProductOptionModalComponent = (props) => {
         }
 
         for(var i = 0; i < createOption.optionPackages?.length; i++) {
-            if(createOption.optionPackages[i].originOptionCode === null || createOption.optionPackages[i].originOptionCode ===undefined || createOption.optionPackages[i].originOptionCode === '') {
+            let optionPackages = createOption.optionPackages[i];
+
+            if(optionPackages.originOptionCode === null || optionPackages.originOptionCode ===undefined || optionPackages.originOptionCode === '') {
                 alert('옵션패키지 구성상품을 선택해주세요.');
                 return false;
             }
     
-            if(createOption.optionPackages[i].originOptionId === null || createOption.optionPackages[i].originOptionId === undefined || createOption.optionPackages[i].originOptionId === '') {
+            if(optionPackages.originOptionId === null || optionPackages.originOptionId === undefined || optionPackages.originOptionId === '') {
                 alert('옵션패키지 구성상품을 선택해주세요.');
+                return false;
+            }
+
+            if(!optionPackages.packageUnit) {
+                alert('옵션패키지 구성상품의 수량을 정확하게 입력해주세요.');
                 return false;
             }
         }
@@ -144,7 +155,6 @@ const CreateProductOptionModalComponent = (props) => {
 
         optionData = {
             ...optionData,
-            packageYn: 'y',
             optionPackages: packageList
         }
 
@@ -201,10 +211,6 @@ const CreateProductOptionModalComponent = (props) => {
     
         if(data.length === 0) {
             delete optionData.optionPackages;
-            optionData = {
-                ...optionData,
-                packageYn: 'n'
-            }
         } else {
             optionData = {
                 ...optionData,

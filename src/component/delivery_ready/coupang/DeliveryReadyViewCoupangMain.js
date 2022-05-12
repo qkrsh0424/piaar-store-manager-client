@@ -396,14 +396,20 @@ const DeliveryReadyViewCoupnagMain = () => {
 
                         let date = dateToYYMMDDhhmmss(new Date());
 
-                        link.setAttribute('download', '[' + date + ']한산 발주서양식_쿠팡.xlsx');
+                        link.setAttribute('download', '[' + date + ']한산 발주서양식_쿠팡(' + storeInfoData.storeName + ').xlsx');
                         document.body.appendChild(link);
                         link.click();
 
                         setUnreleaseCheckedOrderList([]);
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
                     });
             },
             downloadTailoOrderForm: async function (data, sender, senderContact1) {
@@ -422,14 +428,20 @@ const DeliveryReadyViewCoupnagMain = () => {
 
                         let date = dateToYYMMDDhhmmss(new Date());
 
-                        link.setAttribute('download', '[' + date + ']테일로 발주서양식_쿠팡.xlsx');
+                        link.setAttribute('download', '[' + date + ']테일로 발주서양식_쿠팡(' + storeInfoData.storeName + ').xlsx');
                         document.body.appendChild(link);
                         link.click();
 
                         setUnreleaseCheckedOrderList([]);
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
                     });
             },
             downloadLotteOrderForm: async function (data, sender, senderContact1) {
@@ -448,14 +460,20 @@ const DeliveryReadyViewCoupnagMain = () => {
 
                         let date = dateToYYMMDDhhmmss(new Date());
 
-                        link.setAttribute('download', '[' + date + ']롯데 발주서양식_쿠팡.xlsx');
+                        link.setAttribute('download', '[' + date + ']롯데 발주서양식_쿠팡(' + storeInfoData.storeName + ').xlsx');
                         document.body.appendChild(link);
                         link.click();
 
                         setUnreleaseCheckedOrderList([]);
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
                     });
             },
             downloadCoupangExcelOrderForm: async function (data) {
@@ -467,14 +485,20 @@ const DeliveryReadyViewCoupnagMain = () => {
 
                         let date = dateToYYMMDD(new Date());
 
-                        link.setAttribute('download', '[' + date + ']배송준비 데이터_쿠팡.xlsx');
+                        link.setAttribute('download', '[' + date + ']배송준비 데이터_쿠팡(' + storeInfoData.storeName + ').xlsx');
                         document.body.appendChild(link);
                         link.click();
 
                         setUnreleaseCheckedOrderList([]);
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
                     });
             },
             reflectStockUnit: async function (data, memo) {
@@ -567,8 +591,10 @@ const DeliveryReadyViewCoupnagMain = () => {
                         e.stopPropagation();
 
                         if(window.confirm('정말 삭제하시겠습니까?')) {
+                            setBackdropLoading(true);
                             await __handleDataConnect().deleteOrderData(itemCid);
                             setUnreleaseCheckedOrderList([]);
+                            setBackdropLoading(false);
                         }
                     },
                     deleteList: async function (e) {
@@ -580,8 +606,10 @@ const DeliveryReadyViewCoupnagMain = () => {
 
                         if (checkedUnreleaseData.length > 0) {
                             if(window.confirm('선택 항목(' + checkedUnreleaseData.length +'개)을 모두 삭제하시겠습니까?')) {
+                                setBackdropLoading(true);
                                 await __handleDataConnect().deleteOrderListData(checkedUnreleaseData);
                                 setUnreleaseCheckedOrderList([]);
+                                setBackdropLoading(false);
                             }
                         }
                         else {
@@ -601,8 +629,10 @@ const DeliveryReadyViewCoupnagMain = () => {
                         
                         if (checkedUnreleaseData.length > 0) {
                             if(window.confirm('선택 항목(' + checkedUnreleaseData.length +'개)을 모두 출고 처리 하시겠습니까?')) {
+                                setBackdropLoading(true);
                                 await __handleDataConnect().changeListToReleaseData(checkedUnreleaseData);
                                 setUnreleaseCheckedOrderList([]);
+                                setBackdropLoading(false);
                             }
                         }
                         else {
@@ -667,7 +697,9 @@ const DeliveryReadyViewCoupnagMain = () => {
                         }
 
                         if(window.confirm('출고를 취소하시겠습니까?')) {
+                            setBackdropLoading(true);
                             await __handleDataConnect().changeToUnreleaseData(deliveryReadyItem);
+                            setBackdropLoading(false);
                         }
                     },
                     changeListToUnreleaseData: async function (e) {
@@ -685,7 +717,9 @@ const DeliveryReadyViewCoupnagMain = () => {
                             }
                             
                             if(window.confirm('선택 항목(' + checkedReleaseData.length +'개)을 모두 출고 취소하시겠습니까?')) {
+                                setBackdropLoading(true);
                                 await __handleDataConnect().changeListToUnreleaseData(checkedReleaseData);
+                                setBackdropLoading(false);
                             }
                         }
                         else {
@@ -865,7 +899,9 @@ const DeliveryReadyViewCoupnagMain = () => {
                     changeItemOption: async function () {
                         if(selectedOptionColumn === 'optionManagementCode') {
                             if(window.confirm('업체상품코드를 변경하시면 출고옵션코드도 함께 변경됩니다.\n변경하시겠습니까?')) {
+                                setBackdropLoading(true);
                                 await __handleDataConnect().changeItemOptionManagementCode(changedOptionManagementCode);
+                                setBackdropLoading(false);
                             }
                         }else if(selectedOptionColumn === 'releaseOptionCode') {
                             if(window.confirm('업체상품코드를 변경하시겠습니까?')) {

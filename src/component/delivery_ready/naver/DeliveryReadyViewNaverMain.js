@@ -389,14 +389,20 @@ const DeliveryReadyViewNaverMain = () => {
 
                         let date = dateToYYMMDDhhmmss(new Date());
 
-                        link.setAttribute('download', '[' + date + ']한산 발주서양식_네이버.xlsx');
+                        link.setAttribute('download', '[' + date + ']한산 발주서양식_네이버(' + storeInfoData.storeName + ').xlsx');
                         document.body.appendChild(link);
                         link.click();
 
                         setUnreleaseCheckedOrderList([]);
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
                     });
             },
             downloadTailoOrderForm: async function (data, sender, senderContact1) {
@@ -415,14 +421,20 @@ const DeliveryReadyViewNaverMain = () => {
 
                         let date = dateToYYMMDDhhmmss(new Date());
 
-                        link.setAttribute('download', '[' + date + ']테일로 발주서양식_네이버.xlsx');
+                        link.setAttribute('download', '[' + date + ']테일로 발주서양식_네이버(' + storeInfoData.storeName + ').xlsx');
                         document.body.appendChild(link);
                         link.click();
 
                         setUnreleaseCheckedOrderList([]);
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
                     });
             },
             downloadLotteOrderForm: async function (data, sender, senderContact1) {
@@ -441,14 +453,20 @@ const DeliveryReadyViewNaverMain = () => {
 
                         let date = dateToYYMMDDhhmmss(new Date());
 
-                        link.setAttribute('download', '[' + date + ']롯데 발주서양식_네이버.xlsx');
+                        link.setAttribute('download', '[' + date + ']롯데 발주서양식_네이버(' + storeInfoData.storeName + ').xlsx');
                         document.body.appendChild(link);
                         link.click();
 
                         setUnreleaseCheckedOrderList([]);
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
                     });
             },
             downloadNaverExcelOrderForm: async function (data) {
@@ -460,14 +478,20 @@ const DeliveryReadyViewNaverMain = () => {
 
                         let date = dateToYYMMDD(new Date());
 
-                        link.setAttribute('download', '[' + date + ']배송준비 데이터_네이버.xlsx');
+                        link.setAttribute('download', '[' + date + ']배송준비 데이터_네이버(' + storeInfoData.storeName + ').xlsx');
                         document.body.appendChild(link);
                         link.click();
 
                         setUnreleaseCheckedOrderList([]);
                     })
                     .catch(err => {
-                        console.log(err);
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
                     });
             },
             reflectStockUnit: async function (data, memo) {
@@ -560,8 +584,10 @@ const DeliveryReadyViewNaverMain = () => {
                         e.stopPropagation();
 
                         if(window.confirm('정말 삭제하시겠습니까?')) {
+                            setBackdropLoading(true);
                             await __handleDataConnect().deleteOrderData(itemCid);
                             setUnreleaseCheckedOrderList([]);
+                            setBackdropLoading(false);
                         }
                     },
                     deleteList: async function (e) {
@@ -571,8 +597,10 @@ const DeliveryReadyViewNaverMain = () => {
 
                         if (checkedUnreleaseData.length > 0) {
                             if(window.confirm('선택 항목(' + checkedUnreleaseData.length +'개)을 모두 삭제하시겠습니까?')) {
+                                setBackdropLoading(true);
                                 await __handleDataConnect().deleteOrderListData(checkedUnreleaseData);
                                 setUnreleaseCheckedOrderList([]);
+                                setBackdropLoading(false);
                             }
                         }
                         else {
@@ -660,7 +688,9 @@ const DeliveryReadyViewNaverMain = () => {
                         }
                 
                         if(window.confirm('출고를 취소하시겠습니까?')) {
+                            setBackdropLoading(true);
                             await __handleDataConnect().changeToUnreleaseData(deliveryReadyItem);
+                            setBackdropLoading(false);
                         }
                     },
                     changeListToUnreleaseData: async function (e) {
@@ -860,11 +890,15 @@ const DeliveryReadyViewNaverMain = () => {
                     changeItemOption: async function () {
                         if(selectedOptionColumn === 'optionManagementCode') {
                             if(window.confirm('옵션코드를 변경하시면 출고옵션코드도 함께 변경됩니다.\n변경하시겠습니까?')) {
+                                setBackdropLoading(true);
                                 await __handleDataConnect().changeItemOptionManagementCode(changedOptionManagementCode);
+                                setBackdropLoading(false);
                             }
                         }else if(selectedOptionColumn === 'releaseOptionCode') {
                             if(window.confirm('출고옵션코드를 변경하시겠습니까?')) {
+                                setBackdropLoading(true);
                                 await __handleDataConnect().changeItemReleaseOptionCode(changedOptionManagementCode);
+                                setBackdropLoading(false);
                             }
                         }
                     },

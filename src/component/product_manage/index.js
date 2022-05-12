@@ -30,8 +30,6 @@ const ProductManageComponent = () => {
 
     const [checkedOptionList, setCheckedOptionList] = useState([]);
 
-    const [uploadedImage, dispatchUploadedImage] = useReducer(uploadedImageReducer, initialUploadedImage);
-
     const [submitCheck, dispatchSubmitCheck] = useReducer(submitCheckReducer, initialSubmitCheck);
     const [dataChangedTrigger, setDataChangedTrigger] = useState(false);
 
@@ -47,9 +45,9 @@ const ProductManageComponent = () => {
     useEffect(() => {
         async function fetchInit() {
             onActionOpenBackdrop();
-            __reqSearchProductListFj();
-            __reqSearchOptionList();
-            __reqSearchCategoryList();
+            await __reqSearchCategoryList();
+            await __reqSearchProductListFj();
+            await __reqSearchOptionList();
             onActionCloseBackdrop();
 
             dispatchSubmitCheck({
@@ -71,8 +69,6 @@ const ProductManageComponent = () => {
                 await __reqSearchProductListFj();
                 await __reqSearchOptionList();
                 onActionCloseBackdrop();
-    
-                dispatchUploadedImage({ type: 'CLEAR' })
             }
             setDataChangedTrigger(false);
         }
@@ -106,7 +102,8 @@ const ProductManageComponent = () => {
                 }
             })
             .catch(err => {
-                alert('undefined error. : searchProductListFj');
+                let res = err.response;
+                alert(res?.data?.memo);
             });
     }
 
@@ -118,7 +115,8 @@ const ProductManageComponent = () => {
                 }
             })
             .catch(err => {
-                alert('undefined error. : searchOptionList');
+                let res = err.response;
+                alert(res?.data?.memo);
             })
     }
 
@@ -127,26 +125,6 @@ const ProductManageComponent = () => {
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     setCategoryList(res.data.data);
-                }
-            })
-            .catch(err => {
-                alert('undefined error. : searchCategoryList');
-            })
-    }
-
-    const __reqUploadProdImageFile = async (e) => {
-        await productDataConnect().postUploadImageFileToCloud(e)
-            .then(res => {
-                if (res.status === 200 && res.data && res.data.message === 'success') {
-                    let imageData = res.data.data[0];
-                    
-                    dispatchUploadedImage({
-                        type: 'SET_DATA',
-                        payload: {
-                            imageFileName: imageData.fileName,
-                            imageUrl: imageData.fileUploadUri
-                        }
-                    });
                 }
             })
             .catch(err => {
@@ -282,6 +260,7 @@ const ProductManageComponent = () => {
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('출고등록 되었습니다.');
+                    setDataChangedTrigger(true);
                 }
             })
             .catch(err => {
@@ -295,6 +274,7 @@ const ProductManageComponent = () => {
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('입고등록 되었습니다.');
+                    setDataChangedTrigger(true);
                 }
             })
             .catch(err => {
@@ -315,18 +295,13 @@ const ProductManageComponent = () => {
                 }
             })
             .catch(err => {
-                console.log(err.response);
+                let res = err.response;
+                alert(res?.data?.memo);
             })
     }
 
     const _onAction_changeCategory = (categoryId) => {
         setSelectedCategoryId(categoryId);
-    }
-
-    const _onSubmit_uploadProdImageFile = async (e) => {
-        onActionOpenBackdrop();
-        await __reqUploadProdImageFile(e);
-        onActionCloseBackdrop();
     }
 
     const _onSubmit_modifyProduct = async (modifyProductData) => {
@@ -469,11 +444,11 @@ const ProductManageComponent = () => {
                 categoryList={categoryList}
                 optionList={optionList}
                 submitCheck={submitCheck}
-                uploadedImage={uploadedImage}
                 optionPackage={optionPackage}
                 stockStatusList={stockStatusList}
 
-                _onSubmit_uploadProdImageFile={(e) => _onSubmit_uploadProdImageFile(e)}
+                onActionOpenBackdrop={onActionOpenBackdrop}
+                onActionCloseBackdrop={onActionCloseBackdrop}
                 _onSubmit_modifyProduct={(productData) => _onSubmit_modifyProduct(productData)}
                 _onSubmit_deleteProduct={(productCid) => _onSubmit_deleteProduct(productCid)}
                 _onSubmit_createProductOption={(optionData) => _onSubmit_createProductOption(optionData)}
@@ -500,28 +475,18 @@ const ProductManageComponent = () => {
                 _onSubmit_createProductReceiveList={(data) => _onSubmit_createProductReceiveList(data)}
                 _onAction_searchReceiveAndRelease={(date) => _onAction_searchReceiveAndRelease(date)}
             ></ProductManageNavComponent>
+
+            {/* Backdrop */}
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
         </Container>
     )
 }
 
 export default ProductManageComponent;
 
-const initialUploadedImage = null;
 const initialSubmitCheck = null;
-
-const uploadedImageReducer = (state, action) => {
-    switch (action.type) {
-        case 'SET_DATA':
-            return {
-                ...state,
-                imageFileName: action.payload.imageFileName,
-                imageUrl: action.payload.imageUrl
-            };
-        case 'CLEAR':
-            return null;
-        default: return { ...state };
-    }
-}
 
 const submitCheckReducer = (state, action) => {
     switch (action.type) {

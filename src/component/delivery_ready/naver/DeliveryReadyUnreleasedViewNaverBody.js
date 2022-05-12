@@ -13,14 +13,14 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import { dateToYYMMDDhhmmss } from '../../../utils/dateFormatUtils';
 
 const DataContainer = styled.div`
-    padding-bottom: 50px;
+    padding: 50px 0;
     height:auto;
     background-color: rgba(122, 123, 218, 0.125);
 `;
 
 const TableContainer = styled.div`
     margin: 0 20px;
-    height: 50vh;
+    height: 60vh;
 	overflow: hidden;
     font-size: 14px;
     

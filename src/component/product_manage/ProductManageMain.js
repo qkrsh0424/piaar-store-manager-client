@@ -285,7 +285,14 @@ const ProductManageMain = () => {
                         }
                     })
                     .catch(err => {
-                        alert('undefined error.')
+                        let res = err.response;
+
+                        if(res?.status === 500){
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data?.memo);
                     })
             },
             changeProductOne: async function () {

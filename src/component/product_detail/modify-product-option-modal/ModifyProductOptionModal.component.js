@@ -5,6 +5,7 @@ import { Container } from "./ModifyProductOptionModal.styled";
 import HeaderFieldView from "./HeaderField.view";
 import ImageSelectorFieldView from "./ImageSelectorField.view";
 import OptionInfoFormFieldView from "./OptionInfoFormField.view";
+import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
 
 class OptionPackage {
     constructor(parentOptionId) {
@@ -31,6 +32,10 @@ class OptionPackage {
 const ModifyProductOptionModalComponent = (props) => {
     const [modifyOption, dispatchModifyOption] = useReducer(modifyOptionReducer, initialModifyOption);
 
+    const {
+        __reqUploadImageFile: __reqUploadImageFile
+    } = useImageFileUploaderHook();
+
     useEffect(() => {
         if(props.modifyProductOptionData) {
             dispatchModifyOption({
@@ -47,26 +52,6 @@ const ModifyProductOptionModalComponent = (props) => {
             })
         }
     }, [props.modifyProductOptionData])
-
-    useEffect(() => {
-        if(props.uploadedImageData) {
-            dispatchModifyOption({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: "imageFileName",
-                    value: props.uploadedImageData.imageFileName,
-                }
-            });
-    
-            dispatchModifyOption({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: "imageUrl",
-                    value: props.uploadedImageData.imageUrl
-                }
-            });
-        }
-    }, [props.uploadedImageData]);
 
     const onChangeInputValue = (e) => {
         dispatchModifyOption({
@@ -87,7 +72,26 @@ const ModifyProductOptionModalComponent = (props) => {
 
         // 파일을 선택하지 않은 경우
         if (e.target.files.length == 0) return;
-        await props.onActionUploadImage(e);
+        
+        props.onActionOpenBackdrop();
+        let imageInfo = await __reqUploadImageFile(e);
+        props.onActionCloseBackdrop();
+
+        dispatchModifyOption({
+            type: 'CHANGE_DATA',
+            payload: {
+                name : "imageFileName",
+                value: imageInfo.imageFileName
+            }
+        });
+
+        dispatchModifyOption({
+            type: 'CHANGE_DATA',
+            payload: {
+                name : "imageUrl",
+                value: imageInfo.imageUrl
+            }
+        });
     }
 
     const onActionDeleteProductImageFile = () => {
@@ -129,6 +133,25 @@ const ModifyProductOptionModalComponent = (props) => {
             return false;
         }
 
+        for(var i = 0; i < modifyOption.optionPackages?.length; i++) {
+            let optionPackages = modifyOption.optionPackages[i];
+
+            if(optionPackages.originOptionCode === null || optionPackages.originOptionCode ===undefined || optionPackages.originOptionCode === '') {
+                alert('옵션패키지 구성상품을 선택해주세요.');
+                return false;
+            }
+    
+            if(optionPackages.originOptionId === null || optionPackages.originOptionId === undefined || optionPackages.originOptionId === '') {
+                alert('옵션패키지 구성상품을 선택해주세요.');
+                return false;
+            }
+
+            if(!optionPackages.packageUnit) {
+                alert('옵션패키지 구성상품의 수량을 정확하게 입력해주세요.');
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -139,7 +162,6 @@ const ModifyProductOptionModalComponent = (props) => {
 
         optionData = {
             ...optionData,
-            packageYn: 'y',
             optionPackages: packageList
         }
 
@@ -196,10 +218,6 @@ const ModifyProductOptionModalComponent = (props) => {
     
         if(data.length === 0) {
             delete optionData.optionPackages;
-            optionData = {
-                ...optionData,
-                packageYn: 'n'
-            }
         } else {
             optionData = {
                 ...optionData,

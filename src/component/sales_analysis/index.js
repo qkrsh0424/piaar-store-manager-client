@@ -29,8 +29,10 @@ const SalesAnalysisComponent = (props) => {
 
     useEffect(() => {
         async function fetchInit() {
+            onActionOpenBackdrop();
             await __reqSearchSalesAnalysis(new Date(), new Date());
             await __reqSearchProductCategory();
+            onActionCloseBackdrop();
             
             dispatchSearchInfoState({
                 type: 'INIT_DATA'
@@ -62,7 +64,8 @@ const SalesAnalysisComponent = (props) => {
                 }
             })
             .catch(err => {
-                console.log(err.response);
+                let res = err.response;
+                alert(res?.data?.memo);
             })
     }
 
@@ -74,7 +77,8 @@ const SalesAnalysisComponent = (props) => {
                 }
             })
             .catch(err => {
-                console.log(err.response);
+                let res = err.response;
+                alert(res?.data?.memo);
             })
     }
 

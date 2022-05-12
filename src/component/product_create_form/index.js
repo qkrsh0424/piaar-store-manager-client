@@ -114,28 +114,6 @@ class ProductOption {
     }
 }
 
-class OptionPackage {
-    constructor(parentOptionId) {
-        this.id = uuidv4();
-        this.packageUnit = 0;
-        this.originOptionCode = '';
-        this.originOptionCid = null;
-        this.originOptionId = '';
-        this.parentOptionId = parentOptionId;
-    }
-
-    toJSON() {
-        return {
-            id: this.id,
-            packageUnit: this.packageUnit,
-            originOptionCode: this.originOptionCode,
-            originOptionCid: this.originOptionCid,
-            originOptionId: this.originOptionId,
-            parentOptionId: this.parentOptionId,
-        }
-    }
-}
-
 const ProductCreateComponent = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -150,6 +128,13 @@ const ProductCreateComponent = () => {
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
+
+    useEffect(() => {
+        dispatchCreateProductData({
+            type: 'SET_DATA',
+            payload: new Product('단일상품', '단일상품').toJSON()
+        });
+    }, []);
 
     useEffect(() => {
         async function fetchInit() {
@@ -172,68 +157,8 @@ const ProductCreateComponent = () => {
             })
     }
 
-    const __reqUploadProdImageFile = async (e) => {
-        await productDataConnect().postUploadImageFileToCloud(e)
-            .then(res => {
-                if (res.status === 200 && res.data && res.data.message === 'success') {
-                    let imageData = res.data.data[0];
-
-                    dispatchCreateProductData({
-                        type: 'CHANGE_DATA',
-                        payload: {
-                            name : "imageFileName",
-                            value: imageData.fileName
-                        }
-                    });
-
-                    dispatchCreateProductData({
-                        type: 'CHANGE_DATA',
-                        payload: {
-                            name : "imageUrl",
-                            value: imageData.fileUploadUri
-                        }
-                    });
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-                alert(res?.data?.memo);
-            })
-    }
-
-    const __reqUploadOptionImageFile = async (e, optionId) => {
-        await productDataConnect().postUploadImageFileToCloud(e)
-            .then(res => {
-                if (res.status === 200 && res.data && res.data.message === 'success') {
-                    let imageData = res.data.data[0];
-
-                    let optionDataList = createProductData?.productOptions;
-                    optionDataList = optionDataList?.map(option => {
-                        if (option.id === optionId) {
-                            return {
-                                ...option,
-                                imageFileName: imageData.fileName,
-                                imageUrl: imageData.fileUploadUri
-                            }
-                        } else {
-                            return option;
-                        }
-                    });
-
-                    dispatchCreateProductData({
-                        type: 'SET_OPTION',
-                        payload: optionDataList
-                    });
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-                alert(res?.data?.memo);
-            })
-    }
-
-    const __reqCreateProductAndOptions = async () => {
-        await productDataConnect().postCreate(createProductData)
+    const __reqCreateProductAndOptions = async (data) => {
+        await productDataConnect().postCreate(data)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
                     navigate(location.state.prevUrl);
@@ -258,177 +183,16 @@ const ProductCreateComponent = () => {
             })
     }
 
-    const _onSubmit_uploadProdImageFile = async (e) => {
-        onActionOpenBackdrop();
-        await __reqUploadProdImageFile(e);
-        onActionCloseBackdrop();
-    }
-
-    const _onSubmit_uploadOptionImageFile = async (e, optionId) => {
-        onActionOpenBackdrop();
-        await __reqUploadOptionImageFile(e, optionId);
-        onActionCloseBackdrop();
-    }
-
-    const _onSubmit_createProductAndOptions = async () => {
+    const _onSubmit_createProductAndOptions = async (data) => {
         if(!isSubmit){
             setIsSubmit(true);
-            await __reqCreateProductAndOptions();
+            await __reqCreateProductAndOptions(data);
             setIsSubmit(false);
         }
     }
 
-    const _onAction_createProductOption = () => {
-        let data = createProductData.productOptions;
-        data.push(new ProductOption(createProductData.id).toJSON());
-
-        dispatchCreateProductData({
-            type: 'SET_OPTION',
-            payload: data
-        });
-    }
-
-    const _onAction_stockReflectedSelector = () => {
-        let stockManagement = !createProductData.stockManagement;
-
-        dispatchCreateProductData({
-            type: 'CHANGE_DATA',
-            payload: {
-                name: "stockManagement",
-                value: stockManagement
-            }
-        });
-    }
-
-    const _onAction_selectProductCategory = (categoryCid) => {
-        dispatchCreateProductData({
-            type: 'CHANGE_DATA',
-            payload: {
-                name: "productCategoryCid",
-                value: categoryCid
-            }
-        });
-    }
-
-    const _onAction_changeProductInputValue = (target) => {
-        const {name, value} = target;
-
-        dispatchCreateProductData({
-            type: 'CHANGE_DATA',
-            payload: {
-                name,
-                value
-            }
-        });
-    }
-
-    const _onAction_deleteProductOption = (optionId) => {
-        let productOptions = createProductData.productOptions?.filter(option => option.id !== optionId);;
-
-        dispatchCreateProductData({
-            type: 'SET_OPTION',
-            payload: productOptions
-        });
-    }
-
-    const _onAction_changeProductOption = (option) => {
-        dispatchCreateProductData({
-            type: 'SET_OPTION',
-            payload: option
-        });
-    }
-
-    const _onAction_createOptionPackage = (optionId) => {
-        let optionData = createProductData.productOptions.filter(r => r.id === optionId)[0];
-        
-        let packageList = optionData.optionPackages ?? [];
-
-        optionData = {
-            ...optionData,
-            optionPackages: packageList
-        }
-
-        let data = optionData.optionPackages;
-        data.push(new OptionPackage(optionData.id).toJSON());
-
-        let addData = createProductData.productOptions.map(r => {
-            if(r.id === optionId) {
-                return{
-                    ...r,
-                    packageYn: 'y',
-                    optionPackages: data
-                }
-            }else{
-                return r;
-            }
-        });
-
-        dispatchCreateProductData({
-            type: 'SET_OPTION',
-            payload: addData
-        });
-    }
-
-    const _onAction_changeOptionPackage = (optionId, optionPackages) => {
-        let data = optionPackages.map(r => {
-            optionList.forEach(option => {
-                if(r.originOptionId === option.id) {
-                    r = {
-                        ...r,
-                        originOptionCode: option.code,
-                        originOptionCid: option.cid
-                    }
-                }
-            });
-            return r;
-        });
-
-        let changedData = createProductData.productOptions.map(r => {
-            if(r.id === optionId) {
-                return {
-                    ...r,
-                    optionPackages: data
-                }
-            }else {
-                return r;
-            }
-        });
-
-        dispatchCreateProductData({
-            type: 'SET_OPTION',
-            payload: changedData
-        });
-    }
-
-    const _onAction_deleteOptionPakcage = (optionId, packageId) => {
-        let changedData = createProductData.productOptions.map(option => {
-            if(option.id === optionId) {
-                let data = option.optionPackages?.filter(r => r.id !== packageId);
-                if(data.length === 0) {
-                    delete option.optionPackages;
-                    option = {
-                        ...option,
-                        packageYn: 'n'
-                    }
-                    return option;
-                }else{
-                    return{
-                        ...option,
-                        optionPackages: data
-                    }
-                }
-            }else {
-                return option;
-            }
-        });
-
-        dispatchCreateProductData({
-            type: 'SET_OPTION',
-            payload: changedData
-        });
-    }
-
     return (
+        createProductData && 
         <Container>
             <ProductCreateFormComponent
                 createProductData={createProductData}
@@ -436,20 +200,11 @@ const ProductCreateComponent = () => {
                 optionList={optionList}
                 isSubmit={isSubmit}
 
-                _onAction_stockReflectedSelector={() => _onAction_stockReflectedSelector()}
-                _onAction_selectProductCategory={(categoryCid) => _onAction_selectProductCategory(categoryCid)}
-                _onSubmit_uploadProdImageFile={(e) => _onSubmit_uploadProdImageFile(e)}
-                _onSubmit_uploadOptionImageFile={(e, optionId) => _onSubmit_uploadOptionImageFile(e, optionId)}
-                _onAction_createProductOption={() => _onAction_createProductOption()}
-                _onAction_changeProductInputValue={(e) => _onAction_changeProductInputValue(e)}
-                _onAction_deleteProductOption={(optionId) => _onAction_deleteProductOption(optionId)}
-                _onAction_changeProductOption={(option) => _onAction_changeProductOption(option)}
-                _onSubmit_createProductAndOptions={() => _onSubmit_createProductAndOptions()}
-                _onAction_createOptionPackage={(optionId) => _onAction_createOptionPackage(optionId)}
-                _onAction_changeOptionPackage={(optionId, optionPackages) => _onAction_changeOptionPackage(optionId, optionPackages)}
-                _onAction_deleteOptionPakcage={(optionId, packageId) => _onAction_deleteOptionPakcage(optionId, packageId)}
+                onActionOpenBackdrop={onActionOpenBackdrop}
+                onActionCloseBackdrop={onActionCloseBackdrop}
+                _onSubmit_createProductAndOptions={(data) => _onSubmit_createProductAndOptions(data)}
             ></ProductCreateFormComponent>
-
+            
             {/* Backdrop */}
             <BackdropHookComponent
                 open={backdropOpen}
@@ -458,9 +213,9 @@ const ProductCreateComponent = () => {
     )
 }
 
-export default ProductCreateComponent;
+export default ProductCreateComponent; 
 
-const initialCreateProductData = new Product('단일상품', '단일상품').toJSON();
+const initialCreateProductData = null;
 
 const createProductDataReducer = (state, action) => {
     switch(action.type) {

@@ -18,14 +18,12 @@ import rootReducer from './redux/reducers/rootReducer';
 const store = createStore(rootReducer);
 const rootNode = document.getElementById('root');
 
-ReactDOM.createRoot(rootNode).render( 
-    <React.StrictMode>
-        <Provider store={store}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </Provider>
-    </React.StrictMode>
+ReactDOM.createRoot(rootNode).render(
+    <Provider store={store}>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

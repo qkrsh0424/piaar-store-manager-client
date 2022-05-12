@@ -13,9 +13,22 @@ const FormGroupContainer = styled.div`
 const FormGroupWrapper = styled.div`
     position: absolute;
     left: 50%;
-    top: 30%;
+    top: 40%;
     transform: translate(-50%,-50%);
-    width: 80%;
+    width: 50%;
+
+    .login-title {
+        width: 100%;
+        color: #7d7ada;
+        font-weight: 700;
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    @media screen and (max-width: 992px) {
+        width: 100%;
+    }
 `;
 
 const FormElContainer = styled.div`
@@ -92,6 +105,7 @@ const LoginMain = () => {
                 <form onSubmit={(e) => __handleEventControl().loginSubmit(e)}>
                     <FormGroupContainer>
                         <FormGroupWrapper>
+                            <div className='login-title'>Piaar Login</div>
                             <FormElContainer>
                                 <LabelEl>아이디</LabelEl>
                                 <InputEl type='text' name='username' value={loginData.username} onChange={(e) => __handleEventControl().loginDataChange().input(e)}></InputEl>

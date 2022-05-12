@@ -13,7 +13,9 @@ export default function CategorySelectorFieldView(props) {
                     return (
                         <button key={`category-selector-idx` + index} type="button"
                             className={parseInt(props.modifyProductData.productCategoryCid) === r.cid ? `category-btn-active` : ''}
-                            onClick={() => props.onChangeCategoryCidValue(r.cid)}
+                            name="productCategoryCid"
+                            value={r.cid}
+                            onClick={(e) => props.onChangeProductInputValue(e)}
                         >{r.name}</button>
                     )
                 })}

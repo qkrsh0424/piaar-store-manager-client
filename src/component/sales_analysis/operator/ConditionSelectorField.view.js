@@ -12,6 +12,7 @@ export default function ConditionSelectorFieldView(props) {
                     <option value='total'>스토어 전체</option>
                     <option value='naver'>네이버</option>
                     <option value='coupang'>쿠팡</option>
+                    <option value='erp'>피아르(ERP)</option>
                 </select>
 
                 <select className="selector-style" onChange={(e) => props.onChangeCategorySelector(e)}>

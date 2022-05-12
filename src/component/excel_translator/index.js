@@ -350,6 +350,11 @@ const ExcelTranslatorComponent = () => {
 
                 _onSubmit_storeDownloadHeaderDetail={(downloadHeaderDetails) => _onSubmit_storeDownloadHeaderDetail(downloadHeaderDetails)}
             ></DownloadDataTableComponent>
+
+            {/* Backdrop Loading */}
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
         </Container>
     )
 }

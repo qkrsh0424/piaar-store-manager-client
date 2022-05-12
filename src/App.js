@@ -86,7 +86,7 @@ function App(props) {
                         dispatch(setUserInfo(res.data.data))
                     }
                 })
-                .catch(err => {
+                .catch(err => { 
                     console.log(err.response);
                 })
             dispatch(setUserLoadingFalse());
@@ -129,14 +129,14 @@ function App(props) {
                                 {/* Sales Rate */}
                                 <Route path='/sales-rate/naver' element={<SalesRateNaverMain />} />
 
-                                {/* refactor page 5 - /products -> /refactor/products */}
+                                {/* refactor page 5 - /products -> /ex/products */}
                                 {/* Product Manage */}
-                                <Route path='/products' element={<ProductManageMain />} />
-                                <Route path='/refactor/products' element={<ProductManagePage />} />
+                                <Route path='/ex/products' element={<ProductManageMain />} />
+                                <Route path='/products' element={<ProductManagePage />} />
 
-                                 {/* refactor page 3 - /product/create -> /refactor/product/create */}
-                                <Route path='/products/create' element={<CreateMain />} />
-                                <Route path='/refactor/products/create' element={<ProductCreatePage />} />
+                                 {/* refactor page 3 - /product/create -> /ex/product/create */}
+                                <Route path='/ex/products/create' element={<CreateMain />} />
+                                <Route path='/products/create' element={<ProductCreatePage />} />
                                 
                                 {/* Shipment */}
                                 <Route path='/shipment/packing-list/naver' element={<SPackingListNaverMain />} />
@@ -162,19 +162,19 @@ function App(props) {
 
                                 <Route path='/order-registration/naver' element={<OrderRegistrationNaverMain />} />
 
-                                {/* refactor page 2 - /product-detail -> /refactor/product-detail */}
-                                <Route path='/product-detail' element={<ProductDetailMain />} />
-                                <Route path='/refactor/product-detail' element={<ProductDetailPage />} />
+                                {/* refactor page 2 - /product-detail -> /ex/product-detail */}
+                                <Route path='/ex/product-detail' element={<ProductDetailMain />} />
+                                <Route path='/product-detail' element={<ProductDetailPage />} />
 
                                 <Route path='/commute-record' element={<CommuteRecordMain />} />
 
-                                {/* refactor page 4 - /excel-translator -> /refactor/excel-translator */}
-                                <Route path='/excel-translator' element={<ExcelTranslatorMain />} />
-                                <Route path='/refactor/excel-translator' element={<ExcelTranslatorPage />} />
+                                {/* refactor page 4 - /excel-translator -> /ex/excel-translator */}
+                                <Route path='/ex/excel-translator' element={<ExcelTranslatorMain />} />
+                                <Route path='/excel-translator' element={<ExcelTranslatorPage />} />
                                 
-                                {/* refactor page 1 - /sales-analysis -> /refactor/sales-analysis */}
-                                <Route path='/sales-analysis' element={<SalesAnalysisMain />} />
-                                <Route path='/refactor/sales-analysis' element={<SalesAnalysisPage />} />
+                                {/* refactor page 1 - /sales-analysis -> /ex/sales-analysis */}
+                                <Route path='/ex/sales-analysis' element={<SalesAnalysisMain />} />
+                                <Route path='/sales-analysis' element={<SalesAnalysisPage />} />
 
                                 {/* PiaarErpManagement */}
                                 <Route path='/erp/management/order-upload' element={<ErpManagementOrderUploadPage />} />
