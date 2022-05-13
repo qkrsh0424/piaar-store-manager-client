@@ -59,7 +59,7 @@ const CreateFormFieldWrapper = styled.div`
     .data-wrapper {
         margin-bottom: 10px;
         border-radius: 10px;
-        padding: 10px 16px 30px 16px;
+        padding: 10px 16px;
         height: auto;
         background-color: #e8ecf7;
 
@@ -78,6 +78,7 @@ const CreateFormFieldWrapper = styled.div`
         display: grid;
         grid-template-columns: 40% 7% 50%;
         padding: 5px;
+        padding-bottom: 20px;
         text-align: center;
         align-items: center;
 
@@ -196,6 +197,16 @@ const CreateFormFieldWrapper = styled.div`
         
             color: #8e90e3;
         }
+    }
+
+    .form-move-btn-box{
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    .form-move-btn-box button {
+        border: none;
+        background-color: inherit;
     }
 `;
 

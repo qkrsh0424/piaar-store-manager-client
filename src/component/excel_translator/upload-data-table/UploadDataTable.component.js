@@ -260,9 +260,13 @@ const UploadDataTableComponent = (props) => {
     const onActionStoreUploadHeaderForm = async (e) => {
         e.preventDefault();
 
-        if(!window.confirm('업로드 엑셀헤더 양식을 변경하면 다운로드 엑셀헤더 양식은 초기화됩니다.')) {
-            return;
+        if(selectedHeaderTitleState.downloadHeaderDetail.details.length > 0) {
+            // 다운로드헤더 형식이 설정되어있다면 형식초기화
+            if(!window.confirm('업로드 엑셀헤더 양식을 변경하면 다운로드 엑셀헤더 양식은 초기화됩니다.')) {
+                return;
+            }
         }
+
 
         let uploadedHeader = createUploadHeaderDetailState.uploadedData;
 
@@ -292,7 +296,6 @@ const UploadDataTableComponent = (props) => {
         });
 
         await props._onSubmit_createUploadHeaderDetails(excelHeader);
-
         onCreateTranslatorUploadHeaderDetailModalClose();
     }
 

@@ -131,40 +131,37 @@ const DownloadDataTableComponent = (props) => {
             }
         }));
 
-        if(!(selectedHeaderTitleState.downloadHeaderDetail.details.length > 0)) {
-            // 다운로드헤더 엑셀파일이 업로드 되었다면 이 데이터로 헤더 설정
-            if(downloadHeaderExcelDataState) {
-                let dataArr = [];
-                for(let i = 0; i< downloadHeaderExcelDataState.length; i++) {
-                    let data = new DownloadHeaderDetail().toJSON();
-                    data = {
-                        ...data,
-                        headerName : downloadHeaderExcelDataState[i].colData,
-                    }
-                    dataArr.push(data);
+        // 다운로드헤더 엑셀파일이 업로드 되었다면 이 데이터로 헤더 설정
+        if (downloadHeaderExcelDataState) {
+            let dataArr = [];
+            for (let i = 0; i < downloadHeaderExcelDataState.length; i++) {
+                let data = new DownloadHeaderDetail().toJSON();
+                data = {
+                    ...data,
+                    headerName: downloadHeaderExcelDataState[i].colData,
                 }
-    
-                dispatchUpdateDownloadHeaderForm({
-                    type: 'INIT_DATA',
-                    payload: {
-                        ...selectedHeaderTitleState,
-                        downloadHeaderDetail: {
-                            details: dataArr
-                        }
-                    }
-                });
-
-            }else {
-                dispatchUpdateDownloadHeaderForm({
-                    type: 'INIT_DATA',
-                    payload: {
-                        ...selectedHeaderTitleState,
-                        downloadHeaderDetail: {
-                            details: [new DownloadHeaderDetail().toJSON()]
-                        }
-                    }
-                });
+                dataArr.push(data);
             }
+
+            dispatchUpdateDownloadHeaderForm({
+                type: 'INIT_DATA',
+                payload: {
+                    ...selectedHeaderTitleState,
+                    downloadHeaderDetail: {
+                        details: dataArr
+                    }
+                }
+            });
+        } else {
+            dispatchUpdateDownloadHeaderForm({
+                type: 'INIT_DATA',
+                payload: {
+                    ...selectedHeaderTitleState,
+                    downloadHeaderDetail: {
+                        details: [new DownloadHeaderDetail().toJSON()]
+                    }
+                }
+            });
         }
         setCreateTranslatorDownloadHeaderDetailModalOpen(true);
     }
@@ -335,6 +332,52 @@ const DownloadDataTableComponent = (props) => {
         await props._onSubmit_uploadDownloadHeaderFormExcelFile(uploadedFormData);
     }
 
+    const onActionMoveHeaderFormUp = (e, detailId) => {
+        e.preventDefault();
+
+        let targetIdx = -1;
+
+        updateDownloadHeaderForm.downloadHeaderDetail.details.forEach((detail, idx) => {
+            if (detail.id === detailId) {
+                targetIdx = idx;
+                return;
+            }
+        });
+
+        onChangeArrayContorl(targetIdx, parseInt(targetIdx) - 1);
+    }
+
+    const onActionMoveHeaderFormDown = (e, detailId) => {
+        e.preventDefault();
+
+        let targetIdx = -1;
+
+        updateDownloadHeaderForm.downloadHeaderDetail.details.forEach((detail, idx) => {
+            if (detail.id === detailId) {
+                targetIdx = idx;
+                return;
+            }
+        });
+
+        onChangeArrayContorl(targetIdx, parseInt(targetIdx) + 1);
+    }
+
+    const onChangeArrayContorl = (targetIdx, moveValue) => {
+        if (!(updateDownloadHeaderForm.downloadHeaderDetail.details.length > 1)) return;
+
+        let newPosition = parseInt(moveValue);
+        if (newPosition < 0 || newPosition >= updateDownloadHeaderForm.downloadHeaderDetail.details.length) return;
+
+        let headerDetailList = updateDownloadHeaderForm.downloadHeaderDetail.details;
+        let target = headerDetailList.splice(targetIdx, 1)[0];
+        headerDetailList.splice(newPosition, 0, target);
+
+        dispatchUpdateDownloadHeaderForm({
+            type: 'SET_DOWNLOAD_HEADER_DETAIL_DATA',
+            payload: headerDetailList
+        });
+    }
+
     return (
         <Container>
             <DataControlFieldView
@@ -359,6 +402,8 @@ const DownloadDataTableComponent = (props) => {
                 <CreateDownloadHeaderDetailModalComponent
                     updateDownloadHeaderForm={updateDownloadHeaderForm}
 
+                    onActionMoveHeaderFormUp={(e, detailId) => onActionMoveHeaderFormUp(e, detailId)}
+                    onActionMoveHeaderFormDown={(e, detailId) => onActionMoveHeaderFormDown(e, detailId)}
                     onActionAddFormCell={(e) => onActionAddFormCell(e)}
                     onActionDeleteCell={(e, headerId) => onActionDeleteCell(e, headerId)}
                     onActionSelectUploadHeader={(e, headerId) => onActionSelectUploadHeader(e, headerId)}

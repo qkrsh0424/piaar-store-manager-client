@@ -9,7 +9,6 @@ const ControlFieldWrapper = styled.div`
     color: rgba(000, 102, 153, 0.9);
     display: grid;
     grid-template-columns: 2fr 1fr;
-    align-items: center;
     padding: 10px;
 
     @media only screen and (max-width: 992px){
@@ -19,8 +18,10 @@ const ControlFieldWrapper = styled.div`
 
     .control-box {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
         column-gap: 10px;
+        text-align: center;
+        align-items: center;
 
         @media only screen and (max-width: 992px) {
             padding: 1% 0%;
@@ -28,7 +29,7 @@ const ControlFieldWrapper = styled.div`
         }
     }
 
-    .control-box button {
+    .header-modify-btn {
         padding: 2%;
         background: #a9b3d5;
         color: white;
@@ -58,24 +59,25 @@ const ControlFieldWrapper = styled.div`
         }
     }
 
-    .download-header-upload-btn .form-label {
-        padding: 2%;
-        font-size: 1rem;
+    .form-label {
+        font-size: 1em;
         display: inline-block;
+        margin: 0 auto;
         width: 100%;
+        padding: 2%;
+        color: white;
         text-align: center;
         vertical-align: middle;
-        padding: 2%;
-        background: #c0bff3;
-        color: white;
-        font-size: 1em;
-        font-weight: 500;
-        border:1px solid #c0bff3;
+        background-color: #a5a3ff;
+        border: 1px solid #a5a3ff;
         border-radius: 20px;
+        transition: 0.15s linear;
+        font-weight: 500;
 
         &:hover {
-            opacity: 0.8;
             cursor: pointer;
+            transition: 0.2s;
+            transform: scale(1.05);
         }
 
         &:disabled{
@@ -85,21 +87,11 @@ const ControlFieldWrapper = styled.div`
         }
 
         @media only screen and (max-width:992px){
-            padding: 1.5% 0%;
-        }
-
-        @media only screen and (max-width:768px){
-            font-size: 14px;
-        }
-
-        @media only screen and (max-width:576px){
-            font-size: 12px;
+            padding: 1% 0%;
         }
     }
 
     .download-header-upload-btn input {
-        font-size: 20px;
-        width: 100%;
         display: none;
     }
 `;

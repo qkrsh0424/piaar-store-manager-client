@@ -351,6 +351,7 @@ const ExcelTranslatorComponent = () => {
                 ...isObjectSubmitted,
                 createdDownloadHeader: false
             });
+            alert("양식이 성공적으로 업로드되었습니다. 양식 설정을 완료해주세요.");
         }
     }
 

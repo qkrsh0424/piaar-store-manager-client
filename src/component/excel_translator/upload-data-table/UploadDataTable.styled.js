@@ -23,14 +23,13 @@ const ControlFieldWrapper = styled.div`
         column-gap: 10px;
 
         & .upload-header-form-download {
-            background: #c0bff3;
-            border: 1px solid #c0bff3;
+            background: #a5a3ff;
+            border: 1px solid #a5a3ff;
 
             &:hover{
                 cursor: pointer;
                 transition: 0.2s;
                 transform: scale(1.05);
-                background: #a5a3ff;
             }
 
             &:active{
