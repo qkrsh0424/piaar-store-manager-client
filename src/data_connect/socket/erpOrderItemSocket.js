@@ -44,8 +44,11 @@ const erpOrderItemSocket = () => {
                 withCredentials: true
             })
         },
-        actionReflectStock: async function (body) {
+        actionReflectStock: async function (body, memo) {
             return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-order-items/batch/stock/action-reflect`, body, {
+                params: {
+                    memo
+                },
                 withCredentials: true
             })
         },
