@@ -59,9 +59,11 @@ export default function TableFieldView(props) {
                         {props.checkedOrderItemList &&
                             <>
                                 {props.checkedOrderItemList?.slice(0, props.viewSize).map((r1, rowIndex) => {
+                                    let isOutOfStock = r1.optionStockUnit !== null && r1.optionStockUnit < 0;
                                     return (
                                         <tr
                                             key={rowIndex}
+                                            className={`${isOutOfStock && 'tr-highlight'}`}
                                         >
                                             <td className={`fixed-col-left`}>
                                                 {r1.stockReflectYn === 'y' &&
@@ -79,7 +81,11 @@ export default function TableFieldView(props) {
                                                     )
                                                 }
                                                 return (
-                                                    <td key={r2.cellNumber}>{r1[matchedColumnName]}</td>
+                                                    <td key={r2.cellNumber}
+                                                        className={`${r2.matchedColumnName === 'receiver' && r1[`duplicationUser`] && 'user-duplication'}`}
+                                                    >
+                                                        {r1[matchedColumnName]}
+                                                    </td>
                                                 )
                                             })}
                                         </tr>

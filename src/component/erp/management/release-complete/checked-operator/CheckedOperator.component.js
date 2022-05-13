@@ -316,6 +316,7 @@ const CheckedOperatorComponent = (props) => {
                 open={reflectStockConfirmModalOpen}
                 title={'재고 반영 확인 메세지'}
                 message={`[ ${props.checkedOrderItemList?.length || 0} ] 건의 데이터를 재고 반영 하시겠습니까?`}
+                memo={true}
 
                 onConfirm={onSubmitReflectStock}
                 onClose={onActionCloseReflectStockConfirmModal}

@@ -21,6 +21,7 @@ function Tip() {
 const OrderItemTableComponent = (props) => {
     const tableScrollRef = useRef();
 
+    const [orderItemList, dispatchOrderItemList] = useReducer(orderItemListReducer, initialOrderItemList);
     const [viewSize, dispatchViewSize] = useReducer(viewSizeReducer, initialViewSize);
     const [fixTargetItem, dispatchFixTargetItem] = useReducer(fixTargetItemReducer, initialFixTargetItem);
 
@@ -34,6 +35,38 @@ const OrderItemTableComponent = (props) => {
         if (tableScrollRef && tableScrollRef.current) {
             tableScrollRef.current.scrollTop = 0;
         }
+
+        let data = [...props.orderItemList];
+        let sortedData = data.sort((a, b) => a.receiver.localeCompare(b.receiver));
+
+        // 수령인+수취인전화번호 동일하다면 수령인 duplicationUser값 true로 변경
+        for (var i = 0; i < sortedData.length-1; i++) {
+            if ((sortedData[i].receiver === sortedData[i + 1].receiver)
+                && sortedData[i].receiverContact1 === sortedData[i + 1].receiverContact1) {
+                sortedData[i] = {
+                    ...sortedData[i],
+                    duplicationUser: true
+                };
+
+                sortedData[i + 1] = {
+                    ...sortedData[i + 1],
+                    duplicationUser: true
+                };
+            }
+        }
+
+        let orderItemViewData = props.orderItemList.map(r1 => {
+            let data = sortedData.filter(r2 => r1.id === r2.id)[0];
+            return {
+                ...r1,
+                duplicationUser: data.duplicationUser
+            }
+        });
+        
+        dispatchOrderItemList({
+            type: 'SET_DATA',
+            payload: orderItemViewData
+        });
 
         dispatchViewSize({
             type: 'SET_DATA',
@@ -139,7 +172,7 @@ const OrderItemTableComponent = (props) => {
     return (
         <>
             <Container>
-                {(props.viewHeader && props.orderItemList) &&
+                {(props.viewHeader && orderItemList) &&
                     <>
                         <Tip></Tip>
                         <SelectorButtonFieldView
@@ -150,7 +183,7 @@ const OrderItemTableComponent = (props) => {
                             tableScrollRef={tableScrollRef}
 
                             viewHeader={props.viewHeader}
-                            orderItemList={props.orderItemList}
+                            orderItemList={orderItemList}
                             viewSize={viewSize}
                             isCheckedOne={isCheckedOne}
 
@@ -190,6 +223,7 @@ export default OrderItemTableComponent;
 
 const initialViewSize = 50;
 const initialFixTargetItem = null;
+const initialOrderItemList = null;
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
@@ -211,5 +245,15 @@ const fixTargetItemReducer = (state, action) => {
         case 'CLEAR':
             return initialFixTargetItem;
         default: return initialFixTargetItem;
+    }
+}
+
+const orderItemListReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialOrderItemList;
+        default: return initialOrderItemList;
     }
 }
