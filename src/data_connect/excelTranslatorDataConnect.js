@@ -20,10 +20,7 @@ const excelTranslatorDataConnect = () => {
             })
         },
         deleteOne: async function (headerId) {
-            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/excel-translator/one`, {
-                params: {
-                    headerId: headerId
-                },
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/excel-translator/one/${headerId}`, {
                 withCredentials: true
             })
         },
