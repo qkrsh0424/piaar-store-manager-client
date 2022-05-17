@@ -9,6 +9,7 @@ import ViewDetailSelectModal from "./ViewDetailSelectModal.view";
 import UpdateButtonFieldView from './UpdateButtonField.view';
 import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
 import HeaderFieldView from "./HeaderField.view";
+import _ from 'lodash';
 
 function Layout({ children }) {
     return (
@@ -43,7 +44,7 @@ export default function EditFieldComponent(props) {
 
         dispatchUpdateHeader({
             type: 'SET_DATA',
-            payload: props.selectedHeader
+            payload: _.cloneDeep(props.selectedHeader)
         })
 
     }, [props.selectedHeader]);
