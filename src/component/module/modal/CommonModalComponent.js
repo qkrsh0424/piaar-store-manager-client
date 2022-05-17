@@ -14,7 +14,7 @@ const CustomDialog = styled(Dialog)`
         border-radius: 10px;
     }
     .MuiPaper-root::-webkit-scrollbar-thumb{
-        background-color: #309FFF;
+        background-color: #00000020;
         border-radius: 10px;
     }
 `;

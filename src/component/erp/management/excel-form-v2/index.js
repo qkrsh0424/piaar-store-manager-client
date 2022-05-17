@@ -11,7 +11,7 @@ const Container = styled.div`
 
 `;
 
-const ErpManagementExcelForm = (props) => {
+const ErpManagementExcelFormV2 = (props) => {
     const [headerList, dispatchHeaderList] = useReducer(headerListReducer, initialHeaderList);
     const [selectedHeader, dispatchSelectedHeader] = useReducer(selectedHeaderReducer, initialSelectedHeader);
 
@@ -132,7 +132,7 @@ const ErpManagementExcelForm = (props) => {
     );
 }
 
-export default ErpManagementExcelForm;
+export default ErpManagementExcelFormV2;
 
 const initialHeaderList = null;
 const initialSelectedHeader = null;
