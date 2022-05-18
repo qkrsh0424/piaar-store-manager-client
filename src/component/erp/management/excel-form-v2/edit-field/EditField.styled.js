@@ -611,88 +611,6 @@ const DownloadFormWrapper = styled.div`
     }
 `;
 
-const ChangeHeaderOrderModalWrapper = styled.div`
-    .head-wrapper{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        border-bottom: 1px solid #e0e0e0;
-    }
-
-    .head-wrapper .title{
-        font-size: 18px;
-        font-weight: 500;
-    }
-
-    .head-wrapper .button-el{
-        margin-left: 5px;
-        line-height: 1;
-        padding:5px 10px;
-        border: 1px solid #e0e0e0;
-        background: white;
-        font-size: 16px;
-    }
-
-    .head-wrapper .button-confirm{
-        background:#2c73d2;
-        border:1px solid #2c73d2;
-        color:white;
-    }
-`;
-
-const ChangeHeaderOrderList = styled.div`
-    margin-top: 10px;
-    margin-bottom: 10px;
-
-    .order-item-wrapper {
-        padding:5px 10px;
-    
-    
-        cursor: grab;
-
-        &:active{
-            cursor: not-allowed;
-        }
-        
-        .item-box{
-            padding:10px;
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-
-        }
-
-        .order{
-            margin-right: 5px;
-        }
-    }
-`;
-
-const ChangeHeaderOrderItem = styled.div`
-    padding:5px 10px;
-    
-    
-    cursor: grab;
-
-    &:active{
-        cursor: not-allowed;
-    }
-    
-    .item-box{
-        padding:10px;
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 5px;
-
-    }
-
-    .order{
-        margin-right: 5px;
-    }
-`;
-
-
 export {
     Container,
     Wrapper,
@@ -707,7 +625,4 @@ export {
     UpdateButtonFieldWrapper,
 
     DownloadFormWrapper,
-    ChangeHeaderOrderModalWrapper,
-    ChangeHeaderOrderList,
-    ChangeHeaderOrderItem,
 }

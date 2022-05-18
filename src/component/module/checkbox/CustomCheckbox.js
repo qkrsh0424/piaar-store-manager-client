@@ -67,9 +67,19 @@ const Label = styled.span`
  */
 
 const CustomCheckbox = ({ className, checked, label, size, labelSize, ...props }) => (
-    <label>
-        
-        <CheckboxContainer className={className}>
+    <label
+        style={{
+            display: 'flex',
+            alignItems: 'center'
+
+        }}
+    >
+        <CheckboxContainer
+            style={{
+                flex: !label && 1
+            }}
+            className={className}
+        >
             <HiddenCheckbox
                 checked={checked}
                 {...props}
@@ -85,6 +95,9 @@ const CustomCheckbox = ({ className, checked, label, size, labelSize, ...props }
         </CheckboxContainer>
         {label &&
             <Label
+                style={{
+                    flex: 1
+                }}
                 labelSize={labelSize}
             >{label}</Label>
         }

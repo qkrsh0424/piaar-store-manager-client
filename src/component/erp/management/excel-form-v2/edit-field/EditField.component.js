@@ -1,4 +1,4 @@
-import { ChangeHeaderOrderItem, ChangeHeaderOrderList, ChangeHeaderOrderModalWrapper, Container, DownloadFormWrapper, Wrapper } from "./EditField.styled";
+import { Container, DownloadFormWrapper, Wrapper } from "./EditField.styled";
 import { useEffect, useReducer, useState } from "react";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
@@ -11,529 +11,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import valueUtils from "../../../../../utils/valueUtils";
 import SingleBlockButton from "../../../../module/button/SingleBlockButton";
-
-function Layout({ children }) {
-    return (
-        <Container>
-            <Wrapper>
-                {children}
-            </Wrapper>
-        </Container>
-    );
-}
-
-function Splitter({ splitter }) {
-
-    switch (splitter) {
-        case '\n':
-            return (
-                <img
-                    src='/assets/icon/keyboard_return_icon.png'
-                    width={15}
-                    height={15}
-                    alt='keyboard return icon'
-                    loading="lazy"
-                ></img>
-            )
-        case '\t':
-            return (
-                <img
-                    src='/assets/icon/keyboard_tab_icon.png'
-                    width={15}
-                    height={15}
-                    alt='keyboard tab icon'
-                    loading="lazy"
-                ></img>
-            )
-        case ' ':
-            return (
-
-                <img
-                    src='/assets/icon/keyboard_space_icon.png'
-                    width={15}
-                    height={15}
-                    alt='keyboard space icon'
-                    loading="lazy"
-                ></img>
-            )
-        default:
-            return (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 15 }}>
-                    {splitter}
-                </div>
-            )
-    }
-}
-
-function SplitterModal({
-    headerDetail,
-    onChangeValueOfNameWithClick,
-    name,
-    onClose
-}) {
-
-    return (
-        <>
-            <div style={{ padding: '10px' }}>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '\n' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '\n' && '#2c73d240',
-                        border: headerDetail[name] === '\n' && '1px solid #2c73d240'
-                    }}
-                >
-                    <img
-                        src='/assets/icon/keyboard_return_icon.png'
-                        width={25}
-                        height={25}
-                        alt='keyboard space icon'
-                        loading="lazy"
-                    ></img>
-                    <span>(줄바꿈)</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '\t' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '\t' && '#2c73d240',
-                        border: headerDetail[name] === '\t' && '1px solid #2c73d240'
-                    }}
-                >
-                    <img
-                        src='/assets/icon/keyboard_tab_icon.png'
-                        width={25}
-                        height={25}
-                        alt='keyboard space icon'
-                        loading="lazy"
-                    ></img>
-                    <span>(들여쓰기)</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: ' ' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === ' ' && '#2c73d240',
-                        border: headerDetail[name] === ' ' && '1px solid #2c73d240'
-                    }}
-                >
-                    <img
-                        src='/assets/icon/keyboard_space_icon.png'
-                        width={25}
-                        height={25}
-                        alt='keyboard space icon'
-                        loading="lazy"
-                    ></img>
-                    <span>(띄어쓰기)</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '-' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '-' && '#2c73d240',
-                        border: headerDetail[name] === '-' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>-</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '--' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '--' && '#2c73d240',
-                        border: headerDetail[name] === '--' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>--</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: ',' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === ',' && '#2c73d240',
-                        border: headerDetail[name] === ',' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>,</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: ',,' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === ',,' && '#2c73d240',
-                        border: headerDetail[name] === ',,' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>,,</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '/' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '/' && '#2c73d240',
-                        border: headerDetail[name] === '/' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>/</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '//' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '//' && '#2c73d240',
-                        border: headerDetail[name] === '//' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>//</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '|' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '|' && '#2c73d240',
-                        border: headerDetail[name] === '|' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>|</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '||' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '||' && '#2c73d240',
-                        border: headerDetail[name] === '||' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>||</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '&' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '&' && '#2c73d240',
-                        border: headerDetail[name] === '&' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>&</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '&&' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '&&' && '#2c73d240',
-                        border: headerDetail[name] === '&&' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>&&</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '|&&|' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '|&&|' && '#2c73d240',
-                        border: headerDetail[name] === '|&&|' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>|&&|</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '$' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '$' && '#2c73d240',
-                        border: headerDetail[name] === '$' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>$</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '$$' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '$$' && '#2c73d240',
-                        border: headerDetail[name] === '$$' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>$$</span>
-                </SingleBlockButton>
-                <SingleBlockButton
-                    type='button'
-                    onClick={() => {
-                        onChangeValueOfNameWithClick({ name: name, value: '|$$|' });
-                        onClose();
-                    }}
-                    style={{
-                        background: headerDetail[name] === '|$$|' && '#2c73d240',
-                        border: headerDetail[name] === '|$$|' && '1px solid #2c73d240'
-                    }}
-                >
-                    <span>|$$|</span>
-                </SingleBlockButton>
-            </div>
-        </>
-    );
-}
-function DownloadFormView({
-    updateHeader,
-    onActionAddField,
-    onActionAddViewDetailModal,
-    onChangeValueOfName,
-    onChangeDetailsOrder,
-    onActionOpenMergeSplitterModal,
-    onActionOpenValueSplitterModal,
-    onActionOpenChangeFieldTypeModal,
-    onActionDeleteHeaderDetail
-}) {
-    return (
-        <DownloadFormWrapper>
-            <div className='head-wrapper'>
-                <div className='title'>다운로드 양식</div>
-                <div>
-                    <button
-                        type='button'
-                        className='add-field-button'
-                        onClick={onActionAddField}
-                    >
-                        헤더 추가
-                    </button>
-                </div>
-            </div>
-            <div className='body-wrapper'>
-                <div className='list-wrapper'>
-                    {valueUtils.isEmptyValues(updateHeader?.headerDetail?.details) &&
-                        <div style={{ textAlign: 'center', margin: '100px 0', fontWeight: '500' }}>헤더를 추가해 주세요.</div>
-                    }
-                    {!valueUtils.isEmptyValues(updateHeader?.headerDetail?.details) &&
-                        <DragDropContext onDragEnd={onChangeDetailsOrder}>
-                            <Droppable droppableId={uuidv4()}>
-                                {(provided, snapshot) => (
-                                    <div
-                                        className='list-box'
-                                        {...provided.droppableProps}
-                                        ref={provided.innerRef}
-                                    >
-                                        <div className='list-item'>
-                                            <div className='w-4p list-item-content bold-600'>순서</div>
-                                            <div className='w-18p list-item-content bold-600'>헤더명</div>
-                                            <div className='w-9p list-item-content bold-600'>필드 타입</div>
-                                            <div className='w-18p list-item-content bold-600'>필드값</div>
-                                            <div className='w-9p list-item-content bold-600'>필드 구분자</div>
-                                            <div className='w-18p list-item-content bold-600'>고정값</div>
-                                            <div className='w-9p list-item-content bold-600'>병합 사용</div>
-                                            <div className='w-9p list-item-content bold-600'>병합 구분자</div>
-                                            <div className='w-6p list-item-content bold-600'>삭제</div>
-                                        </div>
-                                        {updateHeader?.headerDetail?.details?.map((r, index) => {
-                                            return (
-                                                <Draggable
-                                                    key={r.id}
-                                                    draggableId={r.id}
-                                                    index={index}
-                                                >
-                                                    {(provided, snapshot) => (
-                                                        <div
-                                                            key={r.id}
-                                                            className='list-item'
-                                                            ref={provided.innerRef}
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                            style={{ ...provided.draggableProps.style }}
-                                                        >
-                                                            <div className='w-4p list-item-content'>{index + 1}</div>
-                                                            <div className='w-18p list-item-content'>
-                                                                <input
-                                                                    type='text'
-                                                                    className='table-input-el'
-                                                                    name={`headerDetail.details[${index}].customCellName`}
-                                                                    value={r.customCellName || ''}
-                                                                    onChange={onChangeValueOfName}
-                                                                ></input>
-                                                            </div>
-                                                            <div className='w-9p list-item-content'>
-                                                                <SingleBlockButton
-                                                                    onClick={() => onActionOpenChangeFieldTypeModal(r)}
-                                                                    style={{ padding: '6px 0', margin: '0', fontSize: 12 }}
-                                                                >
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 15 }}>
-                                                                        {r.fieldType}
-                                                                    </div>
-                                                                </SingleBlockButton>
-                                                            </div>
-                                                            <div className='w-18p list-item-content'>
-                                                                {r.fieldType === '일반' ?
-                                                                    <>
-                                                                        <div>
-                                                                            {r.viewDetails.map(viewDetail => {
-                                                                                return (
-                                                                                    <div style={{
-                                                                                        color: '#2c73d2',
-                                                                                        borderLeft: '3px solid #e0e0e0',
-                                                                                        marginBottom: '8px'
-                                                                                    }}>
-                                                                                        {defaultHeaderDetails.filter(r => r.matchedColumnName === viewDetail.matchedColumnName)[0].originCellName}
-                                                                                    </div>
-                                                                                );
-                                                                            })}
-                                                                        </div>
-                                                                        <div>
-                                                                            <SingleBlockButton
-                                                                                onClick={() => onActionAddViewDetailModal(r)}
-                                                                                style={{ padding: '6px 0', margin: '0', fontSize: 12, width: 50, marginLeft: 'auto', marginRight: 'auto' }}
-                                                                            >
-                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 15 }}>
-                                                                                    설정
-                                                                                </div>
-                                                                            </SingleBlockButton>
-                                                                        </div>
-                                                                    </>
-                                                                    :
-                                                                    <div className='item-content-blind'></div>
-                                                                }
-                                                            </div>
-                                                            <div className='w-9p list-item-content'>
-                                                                {r.fieldType === '일반' ?
-                                                                    <SingleBlockButton
-                                                                        type='button'
-                                                                        style={{ padding: '6px 0', margin: '0', fontSize: 12, width: 60, marginLeft: 'auto', marginRight: 'auto' }}
-                                                                        onClick={() => onActionOpenValueSplitterModal(r)}
-                                                                    >
-                                                                        <Splitter
-                                                                            splitter={r.valueSplitter}
-                                                                        />
-                                                                    </SingleBlockButton>
-                                                                    :
-                                                                    <div className='item-content-blind'></div>
-                                                                }
-                                                            </div>
-                                                            <div className='w-18p list-item-content'>
-                                                                {r.fieldType === '고정값' ?
-                                                                    <>
-                                                                        <input
-                                                                            type='text'
-                                                                            className='table-input-el'
-                                                                            name={`headerDetail.details[${index}].fixedValue`}
-                                                                            value={r.fixedValue || ''}
-                                                                            onChange={onChangeValueOfName}
-                                                                        ></input>
-                                                                    </>
-                                                                    :
-                                                                    <div className='item-content-blind'></div>
-                                                                }
-                                                            </div>
-                                                            <div className='w-9p list-item-content'>
-                                                                {r.fieldType === '운송코드' ?
-                                                                    <div className='item-content-blind'></div>
-                                                                    :
-                                                                    <button
-                                                                        type='button'
-                                                                        className={`switch-button ${r.mergeYn === 'y' ? 'switch-button-on' : 'switch-button-off'}`}
-                                                                        name={`headerDetail.details[${index}].mergeYn`}
-                                                                        value={r.mergeYn === 'y' ? 'n' : 'y'}
-                                                                        onClick={onChangeValueOfName}
-                                                                    >
-                                                                        {r.mergeYn === 'y' ? 'ON' : 'OFF'}
-                                                                    </button>
-                                                                }
-                                                            </div>
-                                                            <div className='w-9p list-item-content'>
-                                                                {r.fieldType === '운송코드' ?
-                                                                    <div className='item-content-blind'></div>
-                                                                    :
-                                                                    <>
-                                                                        {r.mergeYn === 'y' ?
-                                                                            <SingleBlockButton
-                                                                                type='button'
-                                                                                style={{ padding: '6px 0', margin: '0', fontSize: 12, width: 60, marginLeft: 'auto', marginRight: 'auto' }}
-                                                                                onClick={() => onActionOpenMergeSplitterModal(r)}
-                                                                            >
-                                                                                <Splitter
-                                                                                    splitter={r.mergeSplitter}
-                                                                                />
-                                                                            </SingleBlockButton>
-                                                                            :
-                                                                            <div className='item-content-blind'></div>
-                                                                        }
-                                                                    </>
-                                                                }
-                                                            </div>
-                                                            <div className='w-6p list-item-content'>
-                                                                <button
-                                                                    type='button'
-                                                                    className={`delete-button-el`}
-                                                                    onClick={() => onActionDeleteHeaderDetail(r)}
-                                                                >
-                                                                    <img
-                                                                        src='/assets/icon/delete_icon.png'
-                                                                        className='delete-button-icon'
-                                                                        alt='delete icon'
-                                                                    ></img>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                    }
-                                                </Draggable>
-                                            );
-                                        })}
-                                        {provided.placeholder}
-                                    </div>
-                                )}
-                            </Droppable>
-                        </DragDropContext>
-                    }
-                </div>
-            </div>
-        </DownloadFormWrapper >
-    );
-}
 
 const defaultHeaderDetails = getDefaultHeaderDetails();
 const __ext_newHeaderDetail = {
@@ -549,7 +26,8 @@ const __ext_newHeaderDetail = {
             viewDetails: [],
         }
     }
-}
+};
+const splitters = ['\n', '\t', ' ', '-', '--', ',', ',,', '/', '//', '|', '||', '&', '&&', '|&&|', '$', '$$', '|$$|'];
 
 export default function EditFieldComponent(props) {
     const [updateHeader, dispatchUpdateHeader] = useReducer(updateHeaderReducer, initialUpdateHeader);
@@ -565,10 +43,6 @@ export default function EditFieldComponent(props) {
             return;
         }
         let header = _.cloneDeep(props.selectedHeader);
-        // header.headerDetail.details = [
-        //     __ext_newHeaderDetail.generate(),
-        //     __ext_newHeaderDetail.generate()
-        // ];
 
         dispatchUpdateHeader({
             type: 'SET_DATA',
@@ -609,7 +83,6 @@ export default function EditFieldComponent(props) {
                     alert(err.message);
                     return;
                 }
-                console.log(updateHeader)
                 props._onSubmit_updateOne(updateHeader);
             }
         },
@@ -859,22 +332,22 @@ export default function EditFieldComponent(props) {
                 <Layout>
                     <HeaderFieldView
                         onActionDeleteHeaderConfirmModalOpen={__updateHeader.action.openDeleteHeaderConfirmModal}
-                    ></HeaderFieldView>
+                    />
                     {/* Body */}
                     <DownloadFormView
                         updateHeader={updateHeader}
                         onActionAddField={__updateHeader.action.addField}
-                        onActionAddViewDetailModal={__updateHeader.action.openAddViewDetailModal}
-                        onActionOpenMergeSplitterModal={__updateHeader.action.openMergeSplitterModal}
-                        onActionOpenChangeFieldTypeModal={__updateHeader.action.openChangeFieldTypeModal}
                         onChangeValueOfName={__updateHeader.change.onChangeValueOfName}
                         onChangeDetailsOrder={__updateHeader.change.detailsOrder}
-                        onActionOpenValueSplitterModal={__updateHeader.action.openValueSplitterModal}
                         onActionDeleteHeaderDetail={__updateHeader.action.deleteHeaderDetail}
+                        onActionOpenAddViewDetailModal={__updateHeader.action.openAddViewDetailModal}
+                        onActionOpenMergeSplitterModal={__updateHeader.action.openMergeSplitterModal}
+                        onActionOpenChangeFieldTypeModal={__updateHeader.action.openChangeFieldTypeModal}
+                        onActionOpenValueSplitterModal={__updateHeader.action.openValueSplitterModal}
                     />
                     <UpdateButtonFieldView
                         onSubmitUpdateHeader={__updateHeader.submit.updateHeader}
-                    ></UpdateButtonFieldView>
+                    />
                 </Layout>
             }
 
@@ -911,7 +384,7 @@ export default function EditFieldComponent(props) {
                 </CommonModalComponent>
             }
 
-            {/* Select Merge Splitter Modal */}
+            {/* Select Value Splitter Modal */}
             {valueSplitterModalOpen && selectedHeaderDetail &&
                 <CommonModalComponent
                     open={valueSplitterModalOpen}
@@ -925,54 +398,22 @@ export default function EditFieldComponent(props) {
                     />
                 </CommonModalComponent>
             }
+
+            {/* Select Field Type Modal */}
             {changeFieldTypeModalOpen && selectedHeaderDetail &&
                 <CommonModalComponent
                     open={changeFieldTypeModalOpen}
                     onClose={__updateHeader.action.closeChangeFieldTypeModal}
                 >
-                    <div style={{ padding: 10 }}>
-                        <SingleBlockButton
-                            type='button'
-                            style={{
-                                background: selectedHeaderDetail.fieldType === '일반' && '#2c73d240',
-                                border: selectedHeaderDetail.fieldType === '일반' && '1px solid #2c73d240'
-                            }}
-                            onClick={() => {
-                                __selectedHeaderDetail.change.fieldType('일반');
-                                __updateHeader.action.closeChangeFieldTypeModal();
-                            }}
-                        >
-                            일반
-                        </SingleBlockButton>
-                        <SingleBlockButton
-                            type='button'
-                            style={{
-                                background: selectedHeaderDetail.fieldType === '고정값' && '#2c73d240',
-                                border: selectedHeaderDetail.fieldType === '고정값' && '1px solid #2c73d240'
-                            }}
-                            onClick={() => {
-                                __selectedHeaderDetail.change.fieldType('고정값');
-                                __updateHeader.action.closeChangeFieldTypeModal();
-                            }}
-                        >
-                            고정값
-                        </SingleBlockButton>
-                        <SingleBlockButton
-                            type='button'
-                            style={{
-                                background: selectedHeaderDetail.fieldType === '운송코드' && '#2c73d240',
-                                border: selectedHeaderDetail.fieldType === '운송코드' && '1px solid #2c73d240'
-                            }}
-                            onClick={() => {
-                                __selectedHeaderDetail.change.fieldType('운송코드');
-                                __updateHeader.action.closeChangeFieldTypeModal();
-                            }}
-                        >
-                            운송코드
-                        </SingleBlockButton>
-                    </div>
+                    <FieldTypeModal
+                        selectedHeaderDetail={selectedHeaderDetail}
+                        onChangeValueOfNameWithClick={__selectedHeaderDetail.change.valueOfNameWithClick}
+                        onClose={__updateHeader.action.closeChangeFieldTypeModal}
+                    />
                 </CommonModalComponent>
             }
+
+            {/* Delete Header Confirm Modal */}
             <ConfirmModalComponent
                 open={deleteHeaderConfirmModalOpen}
                 message={`정말로 해당 양식을 삭제 하시겠습니까?`}
@@ -1003,4 +444,407 @@ const selectedHeaderDetailReducer = (state, action) => {
             return null;
         default: return null;
     }
+}
+
+function Layout({ children }) {
+    return (
+        <Container>
+            <Wrapper>
+                {children}
+            </Wrapper>
+        </Container>
+    );
+}
+
+function Splitter({ splitter }) {
+    switch (splitter) {
+        case '\n':
+            return (
+                <img
+                    src='/assets/icon/keyboard_return_icon.png'
+                    width={15}
+                    height={15}
+                    alt='keyboard return icon'
+                    loading="lazy"
+                ></img>
+            )
+        case '\t':
+            return (
+                <img
+                    src='/assets/icon/keyboard_tab_icon.png'
+                    width={15}
+                    height={15}
+                    alt='keyboard tab icon'
+                    loading="lazy"
+                ></img>
+            )
+        case ' ':
+            return (
+
+                <img
+                    src='/assets/icon/keyboard_space_icon.png'
+                    width={15}
+                    height={15}
+                    alt='keyboard space icon'
+                    loading="lazy"
+                ></img>
+            )
+        default:
+            return (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 15 }}>
+                    {splitter}
+                </div>
+            )
+    }
+}
+
+function SplitterModal({
+    headerDetail,
+    onChangeValueOfNameWithClick,
+    name,
+    onClose
+}) {
+
+    return (
+        <>
+            <div style={{ padding: '10px' }}>
+                {splitters.map(splitter => {
+                    switch (splitter) {
+                        case '\n':
+                        case '\t':
+                        case ' ':
+                            return (
+                                <SingleBlockButton
+                                    type='button'
+                                    onClick={() => {
+                                        onChangeValueOfNameWithClick({ name: name, value: splitter });
+                                        onClose();
+                                    }}
+                                    style={{
+                                        background: headerDetail[name] === splitter && '#2c73d240',
+                                        border: headerDetail[name] === splitter && '1px solid #2c73d240'
+                                    }}
+                                >
+                                    {splitter === '\n' &&
+                                        <>
+                                            <img
+                                                src='/assets/icon/keyboard_return_icon.png'
+                                                width={25}
+                                                height={25}
+                                                alt='keyboard space icon'
+                                                loading="lazy"
+                                            ></img>
+                                            <span>(줄바꿈)</span>
+                                        </>
+                                    }
+                                    {splitter === '\t' &&
+                                        <>
+                                            <img
+                                                src='/assets/icon/keyboard_tab_icon.png'
+                                                width={25}
+                                                height={25}
+                                                alt='keyboard space icon'
+                                                loading="lazy"
+                                            ></img>
+                                            <span>(들여쓰기)</span>
+                                        </>
+                                    }
+                                    {splitter === ' ' &&
+                                        <>
+                                            <img
+                                                src='/assets/icon/keyboard_space_icon.png'
+                                                width={25}
+                                                height={25}
+                                                alt='keyboard space icon'
+                                                loading="lazy"
+                                            ></img>
+                                            <span>(띄어쓰기)</span>
+                                        </>
+                                    }
+                                </SingleBlockButton>
+                            );
+                        default:
+                            return (
+                                <SingleBlockButton
+                                    type='button'
+                                    onClick={() => {
+                                        onChangeValueOfNameWithClick({ name: name, value: splitter });
+                                        onClose();
+                                    }}
+                                    style={{
+                                        background: headerDetail[name] === splitter && '#2c73d240',
+                                        border: headerDetail[name] === splitter && '1px solid #2c73d240'
+                                    }}
+                                >
+                                    <span>{splitter}</span>
+                                </SingleBlockButton>
+                            );
+                    }
+                })}
+            </div>
+        </>
+    );
+}
+
+function FieldTypeModal({
+    selectedHeaderDetail,
+    onChangeValueOfNameWithClick,
+    onClose
+}) {
+    return (
+        <div style={{ padding: 10 }}>
+            <SingleBlockButton
+                type='button'
+                style={{
+                    background: selectedHeaderDetail.fieldType === '일반' && '#2c73d240',
+                    border: selectedHeaderDetail.fieldType === '일반' && '1px solid #2c73d240'
+                }}
+                onClick={() => {
+                    onChangeValueOfNameWithClick({ name: 'fieldType', value: '일반' });
+                    onClose();
+                }}
+            >
+                일반
+            </SingleBlockButton>
+            <SingleBlockButton
+                type='button'
+                style={{
+                    background: selectedHeaderDetail.fieldType === '고정값' && '#2c73d240',
+                    border: selectedHeaderDetail.fieldType === '고정값' && '1px solid #2c73d240'
+                }}
+                onClick={() => {
+                    onChangeValueOfNameWithClick({ name: 'fieldType', value: '고정값' });
+                    onClose();
+                }}
+            >
+                고정값
+            </SingleBlockButton>
+            <SingleBlockButton
+                type='button'
+                style={{
+                    background: selectedHeaderDetail.fieldType === '운송코드' && '#2c73d240',
+                    border: selectedHeaderDetail.fieldType === '운송코드' && '1px solid #2c73d240'
+                }}
+                onClick={() => {
+                    onChangeValueOfNameWithClick({ name: 'fieldType', value: '운송코드' });
+                    onClose();
+                }}
+            >
+                운송코드
+            </SingleBlockButton>
+        </div>
+    );
+}
+function DownloadFormView({
+    updateHeader,
+    onActionAddField,
+    onActionOpenAddViewDetailModal,
+    onChangeValueOfName,
+    onChangeDetailsOrder,
+    onActionOpenMergeSplitterModal,
+    onActionOpenValueSplitterModal,
+    onActionOpenChangeFieldTypeModal,
+    onActionDeleteHeaderDetail
+}) {
+    return (
+        <DownloadFormWrapper>
+            <div className='head-wrapper'>
+                <div className='title'>다운로드 양식</div>
+                <div>
+                    <button
+                        type='button'
+                        className='add-field-button'
+                        onClick={onActionAddField}
+                    >
+                        헤더 추가
+                    </button>
+                </div>
+            </div>
+            <div className='body-wrapper'>
+                <div className='list-wrapper'>
+                    {valueUtils.isEmptyValues(updateHeader?.headerDetail?.details) &&
+                        <div style={{ textAlign: 'center', margin: '100px 0', fontWeight: '500' }}>헤더를 추가해 주세요.</div>
+                    }
+                    {!valueUtils.isEmptyValues(updateHeader?.headerDetail?.details) &&
+                        <DragDropContext onDragEnd={onChangeDetailsOrder}>
+                            <Droppable droppableId={uuidv4()}>
+                                {(provided, snapshot) => (
+                                    <div
+                                        className='list-box'
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                    >
+                                        <div className='list-item'>
+                                            <div className='w-4p list-item-content bold-600'>순서</div>
+                                            <div className='w-18p list-item-content bold-600'>헤더명</div>
+                                            <div className='w-9p list-item-content bold-600'>필드 타입</div>
+                                            <div className='w-18p list-item-content bold-600'>필드값</div>
+                                            <div className='w-9p list-item-content bold-600'>필드 구분자</div>
+                                            <div className='w-18p list-item-content bold-600'>고정값</div>
+                                            <div className='w-9p list-item-content bold-600'>병합 사용</div>
+                                            <div className='w-9p list-item-content bold-600'>병합 구분자</div>
+                                            <div className='w-6p list-item-content bold-600'>삭제</div>
+                                        </div>
+                                        {updateHeader?.headerDetail?.details?.map((r, index) => {
+                                            return (
+                                                <Draggable
+                                                    key={r.id}
+                                                    draggableId={r.id}
+                                                    index={index}
+                                                >
+                                                    {(provided, snapshot) => (
+                                                        <div
+                                                            key={r.id}
+                                                            className='list-item'
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                            style={{ ...provided.draggableProps.style }}
+                                                        >
+                                                            <div className='w-4p list-item-content'>{index + 1}</div>
+                                                            <div className='w-18p list-item-content'>
+                                                                <input
+                                                                    type='text'
+                                                                    className='table-input-el'
+                                                                    name={`headerDetail.details[${index}].customCellName`}
+                                                                    value={r.customCellName || ''}
+                                                                    onChange={onChangeValueOfName}
+                                                                ></input>
+                                                            </div>
+                                                            <div className='w-9p list-item-content'>
+                                                                <SingleBlockButton
+                                                                    onClick={() => onActionOpenChangeFieldTypeModal(r)}
+                                                                    style={{ padding: '6px 0', margin: '0', fontSize: 12 }}
+                                                                >
+                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 15 }}>
+                                                                        {r.fieldType}
+                                                                    </div>
+                                                                </SingleBlockButton>
+                                                            </div>
+                                                            <div className='w-18p list-item-content'>
+                                                                {r.fieldType === '일반' ?
+                                                                    <>
+                                                                        <div>
+                                                                            {r.viewDetails.map(viewDetail => {
+                                                                                return (
+                                                                                    <div style={{
+                                                                                        color: '#2c73d2',
+                                                                                        borderLeft: '3px solid #2c73d260',
+                                                                                        marginBottom: '8px'
+                                                                                    }}>
+                                                                                        {defaultHeaderDetails.filter(r => r.matchedColumnName === viewDetail.matchedColumnName)[0].originCellName}
+                                                                                    </div>
+                                                                                );
+                                                                            })}
+                                                                        </div>
+                                                                        <div>
+                                                                            <SingleBlockButton
+                                                                                onClick={() => onActionOpenAddViewDetailModal(r)}
+                                                                                style={{ padding: '6px 0', margin: '0', fontSize: 12, width: 50, marginLeft: 'auto', marginRight: 'auto' }}
+                                                                            >
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 15 }}>
+                                                                                    설정
+                                                                                </div>
+                                                                            </SingleBlockButton>
+                                                                        </div>
+                                                                    </>
+                                                                    :
+                                                                    <div className='item-content-blind'></div>
+                                                                }
+                                                            </div>
+                                                            <div className='w-9p list-item-content'>
+                                                                {r.fieldType === '일반' ?
+                                                                    <SingleBlockButton
+                                                                        type='button'
+                                                                        style={{ padding: '6px 0', margin: '0', fontSize: 12, width: 60, marginLeft: 'auto', marginRight: 'auto' }}
+                                                                        onClick={() => onActionOpenValueSplitterModal(r)}
+                                                                    >
+                                                                        <Splitter
+                                                                            splitter={r.valueSplitter}
+                                                                        />
+                                                                    </SingleBlockButton>
+                                                                    :
+                                                                    <div className='item-content-blind'></div>
+                                                                }
+                                                            </div>
+                                                            <div className='w-18p list-item-content'>
+                                                                {r.fieldType === '고정값' ?
+                                                                    <>
+                                                                        <input
+                                                                            type='text'
+                                                                            className='table-input-el'
+                                                                            name={`headerDetail.details[${index}].fixedValue`}
+                                                                            value={r.fixedValue || ''}
+                                                                            onChange={onChangeValueOfName}
+                                                                        ></input>
+                                                                    </>
+                                                                    :
+                                                                    <div className='item-content-blind'></div>
+                                                                }
+                                                            </div>
+                                                            <div className='w-9p list-item-content'>
+                                                                {r.fieldType === '운송코드' ?
+                                                                    <div className='item-content-blind'></div>
+                                                                    :
+                                                                    <button
+                                                                        type='button'
+                                                                        className={`switch-button ${r.mergeYn === 'y' ? 'switch-button-on' : 'switch-button-off'}`}
+                                                                        name={`headerDetail.details[${index}].mergeYn`}
+                                                                        value={r.mergeYn === 'y' ? 'n' : 'y'}
+                                                                        onClick={onChangeValueOfName}
+                                                                    >
+                                                                        {r.mergeYn === 'y' ? 'ON' : 'OFF'}
+                                                                    </button>
+                                                                }
+                                                            </div>
+                                                            <div className='w-9p list-item-content'>
+                                                                {r.fieldType === '운송코드' ?
+                                                                    <div className='item-content-blind'></div>
+                                                                    :
+                                                                    <>
+                                                                        {r.mergeYn === 'y' ?
+                                                                            <SingleBlockButton
+                                                                                type='button'
+                                                                                style={{ padding: '6px 0', margin: '0', fontSize: 12, width: 60, marginLeft: 'auto', marginRight: 'auto' }}
+                                                                                onClick={() => onActionOpenMergeSplitterModal(r)}
+                                                                            >
+                                                                                <Splitter
+                                                                                    splitter={r.mergeSplitter}
+                                                                                />
+                                                                            </SingleBlockButton>
+                                                                            :
+                                                                            <div className='item-content-blind'></div>
+                                                                        }
+                                                                    </>
+                                                                }
+                                                            </div>
+                                                            <div className='w-6p list-item-content'>
+                                                                <button
+                                                                    type='button'
+                                                                    className={`delete-button-el`}
+                                                                    onClick={() => onActionDeleteHeaderDetail(r)}
+                                                                >
+                                                                    <img
+                                                                        src='/assets/icon/delete_icon.png'
+                                                                        className='delete-button-icon'
+                                                                        alt='delete icon'
+                                                                    ></img>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                    }
+                                                </Draggable>
+                                            );
+                                        })}
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
+                    }
+                </div>
+            </div>
+        </DownloadFormWrapper >
+    );
 }
