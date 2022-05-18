@@ -610,7 +610,7 @@ export default function EditFieldComponent(props) {
                     return;
                 }
                 console.log(updateHeader)
-                // props._onSubmit_updateOne(updateHeader);
+                props._onSubmit_updateOne(updateHeader);
             }
         },
         action: {
