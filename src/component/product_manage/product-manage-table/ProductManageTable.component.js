@@ -116,7 +116,11 @@ const ProductManageTableComponent = (props) => {
     const onActionOpenCreateProductOptionModal = (productId) => {
         let selectedProduct = props.productViewList.filter(r => r.product.id === productId)[0].product;
         let option = new ProductOption(selectedProduct.id);
-        option.productCid = selectedProduct.cid;
+        option = {
+            ...option,
+            productCid: selectedProduct.cid,
+            totalPurchasePrice: selectedProduct.defaultTotalPurchasePrice
+        }
 
         setCreateProductOptionData(option);
         setCreateProductOptionModalOpen(true);

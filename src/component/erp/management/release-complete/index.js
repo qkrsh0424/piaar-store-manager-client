@@ -357,8 +357,8 @@ const ReleaseCompleteComponent = (props) => {
             ;
     }
 
-    const __reqActionReflectStock = async (body) => {
-        await erpOrderItemSocket().actionReflectStock(body)
+    const __reqActionReflectStock = async (body, memo) => {
+        await erpOrderItemSocket().actionReflectStock(body, memo)
             .then(res => {
                 if (res.status === 200) {
                     alert(res.data.memo);
@@ -602,7 +602,6 @@ const ReleaseCompleteComponent = (props) => {
     // 출고 취소
     const _onSubmit_changeReleaseYnForOrderItemList = async (body) => {
         onActionOpenBackdrop();
-        console.log(body);
         await __reqChangeReleaseYnForOrderItemListSocket(body);
         onActionCloseBackdrop();
     }
@@ -629,9 +628,9 @@ const ReleaseCompleteComponent = (props) => {
     }
 
     // 선택된 데이터 재고 반영
-    const _onAction_reflectStock = async () => {
+    const _onAction_reflectStock = async (memo) => {
         onActionOpenBackdrop();
-        await __reqActionReflectStock(checkedOrderItemList);
+        await __reqActionReflectStock(checkedOrderItemList, memo);
         onActionCloseBackdrop();
     }
 

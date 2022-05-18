@@ -72,6 +72,10 @@ const TableFieldWrapper = styled.div`
         background: #2C73D230 !important;
     }
 
+    table tbody .tr-highlight{
+        background: #ececec;
+    }
+
     table tbody tr td{
         position:relative;
         padding: 7px 5px;
@@ -103,6 +107,10 @@ const TableFieldWrapper = styled.div`
         position: sticky;
         top: 0;
         z-index:11;
+    }
+
+    table tbody tr .user-duplication {
+        color: #ff0000;
     }
     
     .table-box .fixed-col-left {

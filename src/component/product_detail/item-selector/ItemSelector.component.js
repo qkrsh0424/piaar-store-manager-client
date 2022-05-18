@@ -185,7 +185,11 @@ const ItemSelectorComponent = (props) => {
 
         let selectedProduct = props.productViewList.filter(r => r.cid === parseInt(query.productCid))[0];
         let option = new ProductOption(selectedProduct.id);
-        option.productCid = selectedProduct.cid;
+        option = {
+            ...option,
+            productCid: selectedProduct.cid,
+            totalPurchasePrice: selectedProduct.defaultTotalPurchasePrice
+        }
 
         setCreateProductOptionData(option);
         setCreateProductOptionModalOpen(true);

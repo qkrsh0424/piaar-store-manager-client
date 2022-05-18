@@ -6,7 +6,7 @@ const Container = styled.div`
 const CreateFormFieldWrapper = styled.div`
     
     .header-field {
-        border-bottom: 1px solid #5961c788;
+        border-bottom: 1px solid;
         padding:10px;
         align-items: center;
         overflow: auto;
@@ -59,7 +59,7 @@ const CreateFormFieldWrapper = styled.div`
     .data-wrapper {
         margin-bottom: 10px;
         border-radius: 10px;
-        padding: 10px 16px 30px 16px;
+        padding: 10px 16px;
         height: auto;
         background-color: #e8ecf7;
 
@@ -75,15 +75,10 @@ const CreateFormFieldWrapper = styled.div`
     }
 
     .detail-list {
-        /* background: linear-gradient(to bottom right,#dce3f6,#f0fcff);
-        border: 1px solid #dce3f6;
-        height: 40vh;
-        overflow: auto;
-        padding: 10px;
-        border-radius: 5px; */
         display: grid;
         grid-template-columns: 40% 7% 50%;
         padding: 5px;
+        padding-bottom: 20px;
         text-align: center;
         align-items: center;
 
@@ -188,6 +183,7 @@ const CreateFormFieldWrapper = styled.div`
         text-align: center;
         width: 100%;
         padding: 10px;
+        border-top: 1px solid;
     }
 
     .add-btn-box .add-btn-icon {
@@ -201,6 +197,16 @@ const CreateFormFieldWrapper = styled.div`
         
             color: #8e90e3;
         }
+    }
+
+    .form-move-btn-box{
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    .form-move-btn-box button {
+        border: none;
+        background-color: inherit;
     }
 `;
 

@@ -63,7 +63,6 @@ const productOptionDataConnect = () => {
                 defaultName: productOption.defaultName,
                 managementName: productOption.managementName,
                 salesPrice: productOption.salesPrice,
-                totalPurchasePrice: productOption.totalPurchasePrice,
                 stockUnit: productOption.stockUnit,
                 status: productOption.status,
                 memo: productOption.memo,

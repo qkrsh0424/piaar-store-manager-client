@@ -9,6 +9,8 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
             <DownloadHeaderDetailFormFieldView
                 updateDownloadHeaderForm={props.updateDownloadHeaderForm}
 
+                onActionMoveHeaderFormUp={(e, detailId) => props.onActionMoveHeaderFormUp(e, detailId)}
+                onActionMoveHeaderFormDown={(e, detailId) => props.onActionMoveHeaderFormDown(e, detailId)}
                 onActionAddFormCell={(e) => props.onActionAddFormCell(e)}
                 onActionDeleteCell={(e, headerId) => props.onActionDeleteCell(e, headerId)}
                 onActionSelectUploadHeader={(e, headerId) => props.onActionSelectUploadHeader(e, headerId)}

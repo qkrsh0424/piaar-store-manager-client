@@ -176,12 +176,15 @@ const CheckedOperatorComponent = (props) => {
     }
 
     // 재고 반영 모달 CLOSE
-    const onActionCloseReflectStockConfirmModal = () => {
+    const onActionCloseReflectStockConfirmModal = (e) => {
+        e.preventDefault();
         setReflectStockConfirmModalOpen(false);
     }
 
     // 재고 반영 서밋
-    const onSubmitReflectStock = () => {
+    const onSubmitReflectStock = (e, memo) => {
+        e.preventDefault();
+
         let uniqueCodes = [];
         props.checkedOrderItemList.forEach(r => {
             if (r.stockReflectYn === 'y') {
@@ -191,12 +194,11 @@ const CheckedOperatorComponent = (props) => {
 
         if (uniqueCodes.length > 0) {
             alert(`이미 재고 반영된 데이터가 있습니다.\n재고에 반영된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
-            onActionCloseReflectStockConfirmModal();
+            onActionCloseReflectStockConfirmModal(e);
             return;
         }
-
-        props._onAction_reflectStock();
-        onActionCloseReflectStockConfirmModal();
+        props._onAction_reflectStock(memo);
+        onActionCloseReflectStockConfirmModal(e);
     }
 
     // 재고 취소 모달 OPEN
@@ -316,8 +318,9 @@ const CheckedOperatorComponent = (props) => {
                 open={reflectStockConfirmModalOpen}
                 title={'재고 반영 확인 메세지'}
                 message={`[ ${props.checkedOrderItemList?.length || 0} ] 건의 데이터를 재고 반영 하시겠습니까?`}
+                memo={true}
 
-                onConfirm={onSubmitReflectStock}
+                _onSubmit={(e, memo) => onSubmitReflectStock(e, memo)}
                 onClose={onActionCloseReflectStockConfirmModal}
             />
             {/* 재고 취소 모달 */}
