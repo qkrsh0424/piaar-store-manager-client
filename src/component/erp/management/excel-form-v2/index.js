@@ -107,7 +107,7 @@ const ErpManagementExcelFormV2 = (props) => {
     return (
         <>
             <Container>
-                <PageHeaderComponent></PageHeaderComponent>
+                <PageHeaderComponent />
                 {headerList &&
                     <MainLayout>
                         <HeaderListComponent
@@ -116,14 +116,14 @@ const ErpManagementExcelFormV2 = (props) => {
 
                             _onSet_selectedHeader={_onSet_selectedHeader}
                             _onSubmit_create={_onSubmit_create}
-                        ></HeaderListComponent>
+                        />
                         {selectedHeader &&
                             <EditFieldComponent
                                 selectedHeader={selectedHeader}
 
                                 _onSubmit_updateOne={_onSubmit_updateOne}
                                 _onSubmit_deleteOne={_onSubmit_deleteOne}
-                            ></EditFieldComponent>
+                            />
                         }
                     </MainLayout>
                 }
