@@ -119,7 +119,7 @@ const BodyTr = styled.tr`
 
     ${(props) => props.checked ?
         css`
-            background-color: #9bb6d150;
+            background-color: #9bb6d150 !important;
         `
         :
         css`

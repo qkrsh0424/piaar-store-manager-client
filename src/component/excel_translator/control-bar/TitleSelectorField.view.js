@@ -27,7 +27,7 @@ export default function TitleSelectorFieldView(props) {
                             {props.excelTranslatorHeaderList?.map((data, idx) => {
                                 return (
                                     <MenuItem key={'excel_translator_title' + idx} value={data.id}>
-                                        {data.uploadHeaderTitle + ' > ' + data.downloadHeaderTitle + ' (' + data.rowStartNumber + ')'}
+                                        {data.uploadHeaderTitle + ' > ' + data.downloadHeaderTitle + ' (헤더:' + data.rowStartNumber + ')'}
                                     </MenuItem>
                                 )
                             })}

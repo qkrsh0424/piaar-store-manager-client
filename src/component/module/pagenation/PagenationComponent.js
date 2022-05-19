@@ -28,10 +28,17 @@ const Wrapper = styled.div`
         margin:0 3px;
         font-size: 14px;
         font-weight: 600;
-
+        
         @media all and (max-width:992px){
             font-size: 12px;
         }
+    }
+
+    .page-box {
+        display: flex;
+        align-items: center;
+        width: 120px;
+        justify-content: center;
     }
 
     .button-box{
@@ -86,8 +93,11 @@ const Wrapper = styled.div`
     }
 
     .select-el{
-        width: 70px;
-        height: 23px;
+        /* width: 70px;
+        height: 23px; */
+        width: 80px;
+        height: 30px;
+        text-align: center;
         padding: 5px;
         border: 1px solid #e1e1e1;
         border-radius: 0;
@@ -181,34 +191,36 @@ const PagenationComponent = (props) => {
                                 </select>
                             </div>
                         }
-                        <div className='button-box' >
-                            {(!props.isFirst) &&
-                                <button className={`circle-button-el`} onClick={onActionPrev}>
-                                    <img
-                                        src='/assets/icon/left_navigation_icon.png'
-                                        className='button-icon-el'
-                                        alt='left navigation icon'
-                                        loading='lazy'
-                                    ></img>
-                                    <Ripple color={'#e0e0e0'} duration={800}></Ripple>
-                                </button>
-                            }
-                        </div>
-                        <div className='number-box'>
-                            <span>{props.pageIndex + 1 || ''}</span> / <span>{props.totalPages || ''}</span>
-                        </div>
-                        <div className='button-box'>
-                            {(!props.isLast) &&
-                                <button className={`circle-button-el`} onClick={onActionNext}>
-                                    <img
-                                        src='/assets/icon/right_navigation_icon.png'
-                                        className='button-icon-el'
-                                        alt='right navigation icon'
-                                        loading='lazy'
-                                    ></img>
-                                    <Ripple color={'#e0e0e0'} duration={800}></Ripple>
-                                </button>
-                            }
+                        <div className='page-box'>
+                            <div className='button-box' >
+                                {(!props.isFirst) &&
+                                    <button className={`circle-button-el`} onClick={onActionPrev}>
+                                        <img
+                                            src='/assets/icon/left_navigation_icon.png'
+                                            className='button-icon-el'
+                                            alt='left navigation icon'
+                                            loading='lazy'
+                                        ></img>
+                                        <Ripple color={'#e0e0e0'} duration={800}></Ripple>
+                                    </button>
+                                }
+                            </div>
+                            <div className='number-box'>
+                                <span>{props.pageIndex + 1 || ''}</span> / <span>{props.totalPages || ''}</span>
+                            </div>
+                            <div className='button-box'>
+                                {(!props.isLast) &&
+                                    <button className={`circle-button-el`} onClick={onActionNext}>
+                                        <img
+                                            src='/assets/icon/right_navigation_icon.png'
+                                            className='button-icon-el'
+                                            alt='right navigation icon'
+                                            loading='lazy'
+                                        ></img>
+                                        <Ripple color={'#e0e0e0'} duration={800}></Ripple>
+                                    </button>
+                                }
+                            </div>
                         </div>
                         {props.totalElements &&
                             <div className='number-box'>

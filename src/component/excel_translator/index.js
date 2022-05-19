@@ -88,7 +88,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             })
     }
 
@@ -102,7 +106,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             });
     }
 
@@ -116,7 +124,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             });
     }
 
@@ -130,7 +142,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             });
     }
 
@@ -143,7 +159,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             })
     }
 
@@ -161,7 +181,12 @@ const ExcelTranslatorComponent = () => {
                 link.click();
             })
             .catch(err => {
-                console.log(err);
+                let res = err.response;
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             });
     }
 
@@ -180,7 +205,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             })
     }
 
@@ -195,7 +224,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             })
     }
 
@@ -209,7 +242,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             })
     }
 
@@ -222,7 +259,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             })
     }
 
