@@ -54,8 +54,8 @@ const SalesAnalysisComponent = (props) => {
     }, [searchInfoState, salesAnalysisItems, searchInputState]);
 
     const __reqSearchSalesAnalysis = async (startDate, endDate) => {
-        var start = startDate ? new Date(getStartDate(startDate)).toUTCString() : null;
-        var end = endDate ? new Date(getEndDate(endDate)).toUTCString() : null;
+        let start = startDate ? getStartDate(startDate) : null;
+        let end = endDate ? getEndDate(endDate) : null;
 
         await salesAnalysisDataConnect().searchAll(start, end)
             .then(res => {

@@ -125,7 +125,7 @@ const BodyTr = styled.tr`
         :
         css`
             &:hover{
-                background: #9bb6d125;
+                background: #9bb6d125 !important;
             }
         `
     }

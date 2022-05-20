@@ -132,7 +132,7 @@ const BodyTr = styled.tr`
 
     ${(props) => props.reflectedUnit ?
         css`
-            background-color: #99cccc60;
+            background-color: #99cccc60 !important;
         `
         :
         css``
