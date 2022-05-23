@@ -1,14 +1,13 @@
-import { Container } from "./DownloadDataTable.styled";
+import { Container } from "./DownloadHeaderTable.styled";
 import { useEffect, useReducer, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import queryString from 'query-string';
 import { useLocation } from "react-router-dom";
-import { useSelector } from 'react-redux';
 
 import DataControlFieldView from "./DataControlField.view";
 import TableFieldView from "./TableField.view";
 import CommonModalComponent from "../../module/modal/CommonModalComponent";
-import CreateDownloadHeaderDetailModalComponent from "../create-download-header-detail-modal/CreateDownloadHeaderDetailModal.component";
+import CreateDownloadHeaderDetailModalComponent from '../create-download-header-detail-modal/CreateDownloadHeaderDetailModal.component'
 
 class DownloadHeaderDetail {
     constructor() {
@@ -30,7 +29,7 @@ class DownloadHeaderDetail {
     }
 }
 
-const DownloadDataTableComponent = (props) => {
+const DownloadHeaderTableComponent = (props) => {
     const location = useLocation();
     let params = queryString.parse(location.search);
 
@@ -40,7 +39,7 @@ const DownloadDataTableComponent = (props) => {
     const [selectedHeaderTitleState, dispatchSelectedHeaderTitleState] = useReducer(selectedHeaderTitleStateReducer, initialSelectedHeaderTitleState);
     const [updateDownloadHeaderForm, dispatchUpdateDownloadHeaderForm] = useReducer(updateDownloadHeaderFormReducer, initialUpdateDownloadHeaderForm);
     const [downloadHeaderExcelDataState, dispatchDownloadHeaderExcelDataState] = useReducer(downloadHeaderExcelDataStateReducer, initialDownloadHeaderExcelDataState);
-
+    const [uploadedDownloadHeaderFile, setUploadedDownloadHeaderFile] = useState(false);
 
     useEffect(() => {
         function initHeaderTitleState() {
@@ -58,10 +57,6 @@ const DownloadDataTableComponent = (props) => {
                 return;
             }
 
-            dispatchDownloadHeaderExcelDataState({
-                type: 'CLEAR'
-            });
-
             let headerId = params.headerId;
             let headerTitleState = props.excelTranslatorHeaderList?.filter(r => r.id === headerId)[0];
 
@@ -69,6 +64,10 @@ const DownloadDataTableComponent = (props) => {
                 type: 'INIT_DATA',
                 payload: headerTitleState
             });
+
+            dispatchDownloadHeaderExcelDataState({
+                type: 'CLEAR'
+            })
         }
         initHeaderTitleState();
     }, [params.headerId, props.excelTranslatorHeaderList]);
@@ -96,13 +95,12 @@ const DownloadDataTableComponent = (props) => {
 
     useEffect(() => {
         if(!props.uploadedDownloadHeaderExcelData) {
-            dispatchDownloadHeaderExcelDataState({
-                type: 'CLEAR'
-            });
+            setUploadedDownloadHeaderFile(false);
             return;
         }
 
-        // 헤더 데이터 설정
+        setUploadedDownloadHeaderFile(true);
+
         dispatchDownloadHeaderExcelDataState({
             type: 'INIT_DATA',
             payload: props.uploadedDownloadHeaderExcelData.uploadedData.details
@@ -119,20 +117,25 @@ const DownloadDataTableComponent = (props) => {
             alert('업로드 엑셀 양식을 먼저 설정해주세요.');
             return;
         }
-        
-        dispatchUpdateDownloadHeaderForm({
-            type: 'INIT_DATA',
-            payload: { ...selectedHeaderTitleState }
-        });
 
-        setFixedValueCheckList(selectedHeaderTitleState.downloadHeaderDetail.details.map(r => {
-            if (r.targetCellNumber === -1) {
-                return r.id;
-            }
-        }));
+        if(!uploadedDownloadHeaderFile) {
+            dispatchUpdateDownloadHeaderForm({
+                type: 'INIT_DATA',
+                payload: { ...selectedHeaderTitleState }
+            });
+    
+            setFixedValueCheckList(selectedHeaderTitleState.downloadHeaderDetail.details.map(r => {
+                if (r.targetCellNumber === -1) {
+                    return r.id;
+                }
+            }));
+
+            setCreateTranslatorDownloadHeaderDetailModalOpen(true);
+            return;
+        }
 
         // 다운로드헤더 엑셀파일이 업로드 되었다면 이 데이터로 헤더 설정
-        if (downloadHeaderExcelDataState) {
+        if (uploadedDownloadHeaderFile) {
             let dataArr = [];
             for (let i = 0; i < downloadHeaderExcelDataState.length; i++) {
                 let data = new DownloadHeaderDetail().toJSON();
@@ -303,7 +306,7 @@ const DownloadDataTableComponent = (props) => {
         dispatchSelectedHeaderTitleState({
             type: 'INIT_DATA',
             payload: updateDownloadHeaderForm
-        })
+        });
 
         onCreateTranslatorDownloadHeaderDetailModalClose();
     }
@@ -377,12 +380,26 @@ const DownloadDataTableComponent = (props) => {
             payload: headerDetailList
         });
     }
+    
+    const onActionDownloadExcelForm = async (e) => {
+        e.preventDefault();
+
+        let downloadDetail = selectedHeaderTitleState.downloadHeaderDetail.details.map(r => {
+            return {
+                ...r,
+                colData: r.headerName
+            }
+        });
+
+        await props._onAction_downloadUploadHeaderDetails(selectedHeaderTitleState.downloadHeaderTitle, downloadDetail);
+    }
 
     return (
         <Container>
             <DataControlFieldView
                 selectedHeaderTitleState={selectedHeaderTitleState}
 
+                onActionDownloadExcelForm={(e) => onActionDownloadExcelForm(e)}
                 onActionUploadDownloadHeaderFormExcelFile={(e) => onActionUploadDownloadHeaderFormExcelFile(e)}
                 onCreateTranslatorDownloadHeaderDetailModalOpen={(e) => onCreateTranslatorDownloadHeaderDetailModalOpen(e)}
             ></DataControlFieldView>
@@ -418,19 +435,20 @@ const DownloadDataTableComponent = (props) => {
     )
 }
 
-export default DownloadDataTableComponent;
+export default DownloadHeaderTableComponent;
 
 const initialSelectedHeaderTitleState = null;
 const initialUpdateDownloadHeaderForm = null;
 const initialDownloadHeaderExcelDataState = null;
+const initialUploadedDownloadHeaderState = null;
 
 const selectedHeaderTitleStateReducer = (state, action) => {
     switch (action.type) {
         case 'INIT_DATA':
             return {...action.payload};
         case 'CLEAR':
-            return null;
-        default: return { ...state }
+            return initialSelectedHeaderTitleState;
+        default: return initialSelectedHeaderTitleState
     }
 }
 
@@ -455,8 +473,8 @@ const updateDownloadHeaderFormReducer = (state, action) => {
                 }
             }
         case 'CLEAR':
-            return null;
-        default: return { ...state }
+            return initialUpdateDownloadHeaderForm;
+        default: return initialUpdateDownloadHeaderForm
     }
 }
 
@@ -465,7 +483,18 @@ const downloadHeaderExcelDataStateReducer = (state, action) => {
         case 'INIT_DATA':
             return action.payload;
         case 'CLEAR':
-            return null;
-        default: return { ...state }
+            return initialDownloadHeaderExcelDataState;
+        default: return initialDownloadHeaderExcelDataState
+    }
+}
+
+
+const uploadedDownloadHeaderStateReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialUploadedDownloadHeaderState;
+        default: return initialUploadedDownloadHeaderState
     }
 }

@@ -29,6 +29,19 @@ const ControlFieldWrapper = styled.div`
         }
     }
 
+    .flex-box {
+        display: flex;
+    }
+
+    .flex-box .excel-download {
+        padding: 0 10px;
+        
+        :hover{
+            cursor: pointer;
+            opacity: 0.6;
+        }
+    }
+
     .header-modify-btn {
         padding: 2%;
         background: #a9b3d5;
@@ -91,7 +104,7 @@ const ControlFieldWrapper = styled.div`
         }
     }
 
-    .download-header-upload-btn input {
+    .header-upload-btn input {
         display: none;
     }
 `;
@@ -100,7 +113,7 @@ const TableFieldWrapper = styled.div`
     background-color: white;
     overflow: auto;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 12px;
     box-shadow: 1px 1px 15px #a9b3d599;
 
     & .fixed-header {

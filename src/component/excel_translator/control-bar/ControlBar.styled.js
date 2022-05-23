@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
-    padding: 15px 20px;
+    padding: 10px 20px;
 `;
 
 const HeaderContainer = styled.div`
@@ -37,7 +37,7 @@ const TitleSelectorWrapper = styled.div`
 
     .button-box {
         display: flex;
-        
+
         @media only screen and (max-width: 992px) {
             justify-content: flex-end;
         }
@@ -49,7 +49,7 @@ const TitleSelectorWrapper = styled.div`
         border:1px solid #989fb7;
         border-radius: 3px;
         margin-left: 5px;
-        padding: 10px;
+        padding: 8px;
 
         &:hover {
             opacity: 0.8;
@@ -63,9 +63,8 @@ const TitleSelectorWrapper = styled.div`
 `;
 
 const DataControlFieldWrapper = styled.div`
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    column-gap: 20px;
+    padding-top: 4%;
+    display: flex;
     text-align: center;
     align-items: center;
 
@@ -88,7 +87,7 @@ const DataControlFieldWrapper = styled.div`
         font-size: 1rem;
         display: inline-block;
         margin: 4px;
-        width: 100%;
+        width: 300px;
         padding: 3% 0%;
         color: white;
         text-align: center;
@@ -124,7 +123,7 @@ const DataControlFieldWrapper = styled.div`
 
     form button {
         font-size: 1rem;
-        width: 100%;
+        width: 300px;
         padding: 3% 0%;
         margin: 4px;
         color: white;

@@ -183,48 +183,7 @@ const ControlBarComponent = (props) => {
             pathname: pathname
         });
     }
-    
-    const onActionUploadExcelFile = async (e) => {
-        e.preventDefault();
 
-        // 헤더 타이틀을 선택하지 않은 경우
-        if (!selectedHeaderTitleState) {
-            alert('헤더 형식을 먼저 선택해주세요.');
-            return;
-        }
-
-        // 파일을 선택하지 않은 경우
-        if (e.target.files.length === 0) return;
-
-        let addFiles = e.target.files;
-
-        var uploadedFormData = new FormData();
-        uploadedFormData.append('file', addFiles[0]);
-        uploadedFormData.append(
-            "dto",
-            new Blob([JSON.stringify(selectedHeaderTitleState)], { type: "application/json" })
-        );
-
-        await props._onSubmit_uploadExcelFile(uploadedFormData);
-    }
-
-    const onActionDownloadExcelFile = async (e) => {
-        e.preventDefault();
-
-        if (!props.uploadedExcelData) {
-            alert('엑셀 파일을 먼저 업로드 해주세요.');
-            return;
-        } else if (!(selectedHeaderTitleState.uploadHeaderDetail.details.length > 0)) {
-            alert('업로드 엑셀 양식을 설정해주세요.');
-            return;
-        } else if (!(selectedHeaderTitleState.downloadHeaderDetail.details.length > 0)) {
-            alert('다운로드 엑셀 양식을 설정해주세요.');
-            return;
-        }
-
-        await props._onSubmit_downloadExcelFile(selectedHeaderTitleState.downloadHeaderTitle, selectedHeaderTitleState.downloadHeaderDetail.details);
-
-    }
     return (
         <Container>
             <HeaderContainer>
@@ -239,11 +198,6 @@ const ControlBarComponent = (props) => {
                     onModifyTranslatorHeaderTitleModalClose={() => onModifyTranslatorHeaderTitleModalClose()}
                     onActionDeleteTranslatorHeaderTitle={(e) => onActionDeleteTranslatorHeaderTitle(e)}
                 ></TitleSelectorFieldView>
-
-                <ExcelDataControlFieldView
-                    onActionUploadExcelFile={(e) => onActionUploadExcelFile(e)}
-                    onActionDownloadExcelFile={(e) => onActionDownloadExcelFile(e)}
-                ></ExcelDataControlFieldView>
             </HeaderContainer>
 
             {/* ExcelTranslatorHeader Create Modal */}

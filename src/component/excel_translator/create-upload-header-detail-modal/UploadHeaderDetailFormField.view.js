@@ -18,24 +18,24 @@ export default function UploadHeaderDetailFormFieldView(props) {
                 </div>
                 <div className="header-detail-box">
                     <div className="detail-list">
-                        {props.createUploadHeaderDetailState?.uploadedData.details?.map((data, idx) => {
+                        {props.createUploadHeaderDetailState?.uploadHeaderDetail?.details.map((uploadHeader, idx) => {
                             return (
                                 <div key={'create_header_detail_idx' + idx} className="mb-3 list-group">
                                     <div className="data-text">
                                         <div>
-                                            <div onClick={(e) => props.onActionMoveHeaderFormUp(e, data.id)}>
+                                            <div onClick={(e) => props.onActionMoveHeaderFormUp(e, uploadHeader.id)}>
                                                 <ExpandLessIcon />
                                             </div>
-                                            <div onClick={(e) => props.onActionMoveHeaderFormDown(e, data.id)}>
+                                            <div onClick={(e) => props.onActionMoveHeaderFormDown(e, uploadHeader.id)}>
                                                 <ExpandMoreIcon />
                                             </div>
                                         </div>
                                         <span>{idx + 1}.</span>
-                                        <input type="text" name='headerName' placeholder='업로드 엑셀 항목명' onChange={(e) => props.onChangeUploadHeaderDetail(e, data.id)} value={data.headerName || data.colData || ''} required />
+                                        <input type="text" name='headerName' placeholder='업로드 엑셀 항목명' onChange={(e) => props.onChangeUploadHeaderDetail(e, uploadHeader.id)} value={uploadHeader.headerName || uploadHeader.colData || ''} required />
                                     </div>
                                     <div className="delete-box">
                                         <CancelIcon type="button" sx={{ fontSize: 33 }}
-                                            onClick={(e) => props.onActionDeleteFormCell(e, data.id)}
+                                            onClick={(e) => props.onActionDeleteFormCell(e, uploadHeader.id)}
                                         />
                                     </div>
                                 </div>
