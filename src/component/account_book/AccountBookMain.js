@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import queryString from 'query-string';
 
 // handler
-import { getStartDate, getEndDate, dateToYYMMDD } from '../../utils/dateFormatUtils';
+import { getStartDate, getEndDate, dateToYYMMDD, dateToYYYYMMDD } from '../../utils/dateFormatUtils';
 
 // data connect
 import { accountBookDataConnect } from '../../data_connect/accountBookDataConnect';
@@ -64,8 +64,10 @@ const AccountBookMain = (props) => {
             searchAccountBookList: async function () {
                 let accountBookType = query.accbType ? query.accbType : '';
                 let bankType = query.bankType ? query.bankType : '';
-                let startDate = query.startDate ? new Date(query.startDate).toUTCString() : null;
-                let endDate = query.endDate ? new Date(query.endDate).toUTCString() : null;
+                
+                let startDate = query.startDate ? getStartDate(query.startDate) : null;
+                let endDate = query.endDate ? getEndDate(query.endDate) : null;
+
                 let currPage = query.currPage ? query.currPage : 1;
 
                 await accountBookDataConnect().getAccountBookList(accountBookType, bankType, startDate, endDate, currPage)
@@ -94,8 +96,8 @@ const AccountBookMain = (props) => {
                     })
             },
             searchExpenditureTypeList: async function () {
-                let startDate = query.startDate ? new Date(query.startDate).toUTCString() : null;
-                let endDate = query.endDate ? new Date(query.endDate).toUTCString() : null;
+                let startDate = query.startDate ? getStartDate(query.startDate) : null;
+                let endDate = query.endDate ? getEndDate(query.endDate) : null;
 
                 await expenditureTypeDataConnect().getExpenditureTypeList(startDate, endDate)
                     .then(res => {
@@ -110,8 +112,9 @@ const AccountBookMain = (props) => {
             searchSumOfIncome: async function () {
                 let accountBookType = query.accbType ? query.accbType : '';
                 let bankType = query.bankType ? query.bankType : '';
-                let startDate = query.startDate ? new Date(query.startDate).toUTCString() : null;
-                let endDate = query.endDate ? new Date(query.endDate).toUTCString() : null;
+
+                let startDate = query.startDate ? getStartDate(query.startDate) : null;
+                let endDate = query.endDate ? getEndDate(query.endDate) : null;
 
                 await accountBookDataConnect().getSumOfIncome(accountBookType, bankType, startDate, endDate)
                     .then(res => {
@@ -126,8 +129,9 @@ const AccountBookMain = (props) => {
             searchSumOfExpenditure: async function () {
                 let accountBookType = query.accbType ? query.accbType : '';
                 let bankType = query.bankType ? query.bankType : '';
-                let startDate = query.startDate ? new Date(query.startDate).toUTCString() : null;
-                let endDate = query.endDate ? new Date(query.endDate).toUTCString() : null;
+
+                let startDate = query.startDate ? getStartDate(query.startDate) : null;
+                let endDate = query.endDate ? getEndDate(query.endDate) : null;
 
                 await accountBookDataConnect().getSumOfExpenditure(accountBookType, bankType, startDate, endDate)
                     .then(res => {
@@ -227,7 +231,7 @@ const AccountBookMain = (props) => {
                     },
                     adapt: function (data) {
                         this.close();
-                        navigate(`${pathname}?${queryString.stringify({ ...query, startDate: getStartDate(data.startDate), endDate: getEndDate(data.endDate) })}`)
+                        navigate(`${pathname}?${queryString.stringify({ ...query, startDate: dateToYYYYMMDD(data.startDate), endDate: dateToYYYYMMDD(data.endDate) })}`)
                     },
                     searchAll: function () {
                         this.close();

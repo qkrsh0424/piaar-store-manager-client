@@ -3,13 +3,15 @@ import styled from "styled-components";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import CancelIcon from '@mui/icons-material/Cancel';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Checkbox } from '@mui/material';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 
 import { CreateFormFieldWrapper } from './CreateDownloadHeaderDetailModal.styled';
 
@@ -28,6 +30,11 @@ export default function DownloadHeaderDetailFormFieldView(props) {
                         return (
                             <React.Fragment key={downloadHeader.id}>
                                 <div className="data-wrapper">
+                                    <div className="form-move-btn-box">
+                                        <button onClick={(e) => props.onActionMoveHeaderFormUp(e, downloadHeader.id)}>
+                                            <ArrowCircleUpIcon sx={{ fontSize: 30 }} />
+                                        </button>
+                                    </div>
                                     <div className="delete-box">
                                         <button type="button" onClick={(e) => props.onActionDeleteCell(e, downloadHeader.id)}><CancelIcon type="button" sx={{ fontSize: 33 }} /></button>
                                     </div>
@@ -59,7 +66,7 @@ export default function DownloadHeaderDetailFormFieldView(props) {
                                                 </Box>
                                             </div>
                                         </div>
-                                        <div className="arrow-img"><ArrowForwardIosIcon /></div>
+                                        <div className="arrow-img"><ArrowRightIcon sx={{ fontSize: 30 }}/></div>
                                         <div className="download-form-info">
                                             <div>
                                                 <div>설정 헤더명<i className="icon-must" aria-label="필수항목"></i></div>
@@ -82,6 +89,11 @@ export default function DownloadHeaderDetailFormFieldView(props) {
                                                     value={downloadHeader.fixedValue || ''} />
                                             </div>
                                         </div>
+                                    </div>
+                                    <div className="form-move-btn-box">
+                                        <button onClick={(e) => props.onActionMoveHeaderFormDown(e, downloadHeader.id)}>
+                                            <ArrowCircleDownIcon sx={{ fontSize: 30 }} />
+                                        </button>
                                     </div>
                                 </div>
                             </React.Fragment>
