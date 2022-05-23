@@ -7,6 +7,7 @@ import DetailSearchFieldView from "./DetailSearchField.view";
 import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
 import ButtonFieldView from "./ButtonField.view";
 import { dateToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
+import ReleaseSelectorFieldView from "./ReleaseSelectorField.view";
 
 const defaultHeaderDetails = getDefaultHeaderDetails();
 
@@ -20,6 +21,7 @@ const SearchOperatorComponent = (props) => {
     const [endDate, dispatchEndDate] = useReducer(endDateReducer, initialEndDate);
     const [searchColumnName, dispatchSearchColumnName] = useReducer(searchColumnNameReducer, initialSearchColumnName);
     const [searchQuery, dispatchSearchQuery] = useReducer(searchQueryReducer, initialSearchQuery);
+    const [releaseYn, dispatchReleaseYn] = useReducer(releaseYnReducer, initialReleaseYn);
 
     useEffect(() => {
         let periodType = query.periodType;
@@ -64,6 +66,17 @@ const SearchOperatorComponent = (props) => {
             })
         }
     }, [query.searchColumnName, query.searchQuery])
+
+    useEffect(() => {
+        let releaseYn = query.releaseYn;
+
+        if (releaseYn) {
+            dispatchReleaseYn({
+                type: 'SET_DATA',
+                payload: releaseYn
+            });
+        }
+    }, [query.releaseYn])
 
     const onChangePeriodType = (e) => {
         let value = e.target.value;
@@ -151,7 +164,13 @@ const SearchOperatorComponent = (props) => {
         if (searchColumnName && searchQuery) {
             query.searchQuery = searchQuery;
         }
-        
+
+        if (releaseYn) {
+            query.releaseYn = releaseYn;
+        } else {
+            delete query.releaseYn;
+        }
+
         delete query.page;
 
         navigate(qs.stringifyUrl({
@@ -177,6 +196,10 @@ const SearchOperatorComponent = (props) => {
         dispatchSearchQuery({
             type: 'CLEAR'
         })
+        dispatchReleaseYn({
+            type: 'CLEAR'
+        })
+
         navigate(location.pathname, {
             replace: true
         })
@@ -208,7 +231,7 @@ const SearchOperatorComponent = (props) => {
         let today = new Date();
 
         let eDate = dateToYYYYMMDD(today);
-        
+
         today.setDate(today.getDate() - 6);
         let sDate = dateToYYYYMMDD(today);
 
@@ -228,6 +251,14 @@ const SearchOperatorComponent = (props) => {
         )
     }
 
+    const onChangeReleaseYn = (e) => {
+        let value = e.target.value;
+        dispatchReleaseYn({
+            type: 'SET_DATA',
+            payload: value
+        });
+    }
+
     return (
         <>
             <Container>
@@ -241,7 +272,7 @@ const SearchOperatorComponent = (props) => {
                     onChangeEndDateValue={onChangeEndDateValue}
                     onActionSetDateToday={onActionSetDateToday}
                     onActionSetDate7Days={onActionSetDate7Days}
-                ></DateSelectorFieldView>
+                />
                 <form onSubmit={(e) => onActionRouteToSearch(e)}>
                     <DetailSearchFieldView
                         viewHeader={props.viewHeader}
@@ -251,11 +282,15 @@ const SearchOperatorComponent = (props) => {
 
                         onChangeSearchColumnNameValue={onChangeSearchColumnNameValue}
                         onChangeSearchQueryValue={onChangeSearchQueryValue}
-                    ></DetailSearchFieldView>
+                    />
+                    <ReleaseSelectorFieldView
+                        releaseYn={releaseYn}
+                        onChangeReleaseYn={onChangeReleaseYn}
+                    />
                     <ButtonFieldView
                         onActionRouteToSearch={onActionRouteToSearch}
                         onActionClearRoute={onActionClearRoute}
-                    ></ButtonFieldView>
+                    />
                 </form>
             </Container>
         </>
@@ -268,6 +303,7 @@ const initialStartDate = null;
 const initialEndDate = null;
 const initialSearchColumnName = null;
 const initialSearchQuery = '';
+const initialReleaseYn = null;
 
 const periodTypeReducer = (state, action) => {
     switch (action.type) {
@@ -316,5 +352,15 @@ const searchQueryReducer = (state, action) => {
         case 'CLEAR':
             return '';
         default: return '';
+    }
+}
+
+const releaseYnReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return null;
+        default: return null;
     }
 }
