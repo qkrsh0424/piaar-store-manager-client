@@ -182,6 +182,52 @@ const SearchOperatorComponent = (props) => {
         })
     }
 
+    const onActionSetDateToday = () => {
+        let pType = periodType || 'sales';
+        let sDate = dateToYYYYMMDD(new Date());
+        let eDate = dateToYYYYMMDD(new Date());
+
+        query.periodType = pType;
+        query.startDate = sDate;
+        query.endDate = eDate;
+
+        delete query.page;
+
+        navigate(qs.stringifyUrl({
+            url: location.pathname,
+            query: { ...query }
+        }),
+            {
+                replace: true
+            }
+        )
+    }
+
+    const onActionSetDate7Days = () => {
+        let pType = periodType || 'sales';
+        let today = new Date();
+
+        let eDate = dateToYYYYMMDD(today);
+        
+        today.setDate(today.getDate() - 6);
+        let sDate = dateToYYYYMMDD(today);
+
+        query.periodType = pType;
+        query.startDate = sDate;
+        query.endDate = eDate;
+
+        delete query.page;
+
+        navigate(qs.stringifyUrl({
+            url: location.pathname,
+            query: { ...query }
+        }),
+            {
+                replace: true
+            }
+        )
+    }
+
     return (
         <>
             <Container>
@@ -193,6 +239,8 @@ const SearchOperatorComponent = (props) => {
                     onChangePeriodType={onChangePeriodType}
                     onChangeStartDateValue={onChangeStartDateValue}
                     onChangeEndDateValue={onChangeEndDateValue}
+                    onActionSetDateToday={onActionSetDateToday}
+                    onActionSetDate7Days={onActionSetDate7Days}
                 ></DateSelectorFieldView>
                 <form onSubmit={(e) => onActionRouteToSearch(e)}>
                     <DetailSearchFieldView

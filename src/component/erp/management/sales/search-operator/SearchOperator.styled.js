@@ -26,6 +26,23 @@ const DateSelectorFieldWrapper = styled.div`
             width: 100%;
         }
     }
+    
+    .quick-select-box{
+        margin-top: 10px;
+        padding: 0 10px;
+
+        @media all and (max-width:992px) {
+            padding:0;
+        }
+    }
+
+    .quick-select-box .quick-select-button-el{
+        line-height: 1;
+        border: 1px solid #e0e0e0;
+        background: white;
+        padding: 5px 10px;
+        font-size: 14px;
+    }
 
     .flex-box{
         margin-top: 5px;

@@ -7,6 +7,7 @@ import DetailSearchFieldView from "./DetailSearchField.view";
 import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
 import ButtonFieldView from "./ButtonField.view";
 import { dateToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
+import moment from "moment";
 
 const defaultHeaderDetails = getDefaultHeaderDetails();
 
@@ -153,6 +154,52 @@ const SearchOperatorComponent = (props) => {
         })
     }
 
+    const onActionSetDateToday = () => {
+        let pType = 'registration';
+        let sDate = dateToYYYYMMDD(new Date());
+        let eDate = dateToYYYYMMDD(new Date());
+
+        query.periodType = pType;
+        query.startDate = sDate;
+        query.endDate = eDate;
+
+        delete query.page;
+
+        navigate(qs.stringifyUrl({
+            url: location.pathname,
+            query: { ...query }
+        }),
+            {
+                replace: true
+            }
+        )
+    }
+
+    const onActionSetDate7Days = () => {
+        let pType = 'registration';
+        let today = new Date();
+
+        let eDate = dateToYYYYMMDD(today);
+
+        today.setDate(today.getDate() - 6);
+        let sDate = dateToYYYYMMDD(today);
+
+        query.periodType = pType;
+        query.startDate = sDate;
+        query.endDate = eDate;
+
+        delete query.page;
+
+        navigate(qs.stringifyUrl({
+            url: location.pathname,
+            query: { ...query }
+        }),
+            {
+                replace: true
+            }
+        )
+    }
+
     return (
         <>
             <Container>
@@ -162,6 +209,8 @@ const SearchOperatorComponent = (props) => {
 
                     onChangeStartDateValue={onChangeStartDateValue}
                     onChangeEndDateValue={onChangeEndDateValue}
+                    onActionSetDateToday={onActionSetDateToday}
+                    onActionSetDate7Days={onActionSetDate7Days}
                 ></DateSelectorFieldView>
                 <form onSubmit={(e) => onActionRouteToSearch(e)}>
                     <DetailSearchFieldView

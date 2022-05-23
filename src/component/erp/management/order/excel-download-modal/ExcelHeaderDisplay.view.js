@@ -32,13 +32,39 @@ const TableBody = ({ defaultHeaderDetails, header }) => {
         <tbody>
             <tr>
                 {header.headerDetail.details.map((detail, index) => {
+                    if (detail.fieldType === '고정값') {
+                        return (
+                            <td>
+                                <div>
+                                    [고정값]
+                                </div>
+                                <div>
+                                    {detail.fixedValue}
+                                </div>
+                            </td>
+                        );
+                    }
+                    if (detail.fieldType === '운송코드') {
+                        return (
+                            <td>
+                                <div>
+                                    [운송코드]
+                                </div>
+                            </td>
+                        );
+                    }
                     let name = detail.viewDetails.map(r => {
                         let originCellName = defaultHeaderDetails.filter(dr => dr.matchedColumnName === r.matchedColumnName)[0].originCellName;
                         return originCellName;
                     });
                     return (
-                        <td key={detail.matchedColumnName}>
-                            {name.join(detail.splitter)}
+                        <td key={detail.id}>
+                            <div>
+                                [일반]
+                            </div>
+                            <div>
+                                {name.join(detail.splitter)}
+                            </div>
                         </td>
                     );
                 })}
