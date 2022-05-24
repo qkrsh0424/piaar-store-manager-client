@@ -16,6 +16,9 @@ const CheckedOrderItemTableComponent = (props) => {
 
     useEffect(() => {
         if(!props.checkedOrderItemList || props.checkedOrderItemList?.length <= 0) {
+            dispatchCheckedOrderItemList({
+                type: 'CLEAR'
+            });
             return;
         }
 
