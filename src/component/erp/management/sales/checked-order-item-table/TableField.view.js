@@ -1,5 +1,6 @@
 import { dateToYYYYMMDDhhmmss } from '../../../../../utils/dateFormatUtils';
 import InfiniteScrollObserver from '../../../../module/observer/InfiniteScrollObserver';
+import ResizableTh from '../../../../module/table/ResizableTh';
 import { TableFieldWrapper } from './CheckedOrderItemTable.styled';
 
 export default function TableFieldView(props) {
@@ -9,19 +10,26 @@ export default function TableFieldView(props) {
                 className='table-box'
             >
                 <table cellSpacing="0">
-                    <colgroup>
+                    {/* <colgroup>
                         {props.viewHeader?.headerDetail.details?.map((r, index) => {
                             return (
                                 <col key={index} width={'200px'}></col>
                             );
                         })}
 
-                    </colgroup>
+                    </colgroup> */}
                     <thead>
                         <tr>
                             {props.viewHeader?.headerDetail.details?.map((r, index) => {
                                 return (
-                                    <th key={index} className="fixed-header" scope="col">{r.customCellName}</th>
+                                    <ResizableTh
+                                        key={index}
+                                        className="fixed-header"
+                                        scope="col"
+                                        width={200}
+                                    >
+                                        {r.customCellName}
+                                    </ResizableTh>
                                 )
                             })}
                         </tr>
