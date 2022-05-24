@@ -1,8 +1,9 @@
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MoveDownIcon from '@mui/icons-material/MoveDown';
+import { v4 as uuidv4 } from 'uuid';
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { CreateFormFieldWrapper } from './CreateUploadHeaderDetailModal.styled';
 
@@ -16,39 +17,62 @@ export default function UploadHeaderDetailFormFieldView(props) {
                         <button type='submit'><AddTaskIcon /></button>
                     </div>
                 </div>
-                <div className="header-detail-box">
-                    <div className="detail-list">
-                        {props.createUploadHeaderDetailState?.uploadHeaderDetail?.details.map((uploadHeader, idx) => {
-                            return (
-                                <div key={'create_header_detail_idx' + idx} className="mb-3 list-group">
-                                    <div className="data-text">
-                                        <div>
-                                            <div onClick={(e) => props.onActionMoveHeaderFormUp(e, uploadHeader.id)}>
-                                                <ExpandLessIcon />
-                                            </div>
-                                            <div onClick={(e) => props.onActionMoveHeaderFormDown(e, uploadHeader.id)}>
-                                                <ExpandMoreIcon />
-                                            </div>
+                <div>
+                    <div className="data-wrapper">
+                        <DragDropContext onDragEnd={(result) => props.onChangeDetailsOrder(result)}>
+                            <Droppable droppableId={uuidv4()}>
+                                {provided => (
+                                    <div
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                    >
+                                        <div className="detail-list">
+                                            {props.createUploadHeaderDetailState?.uploadHeaderDetail?.details.map((uploadHeader, idx) => {
+                                                return (
+                                                    <Draggable
+                                                        key={uploadHeader.id}
+                                                        draggableId={uploadHeader.id}
+                                                        index={idx}
+                                                    >
+                                                        {(provided => (
+                                                            <div
+                                                                ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                                {...provided.dragHandleProps}
+                                                            >
+                                                                <div key={'create_header_detail_idx' + idx} className="mb-3 list-group">
+                                                                    <div className="data-text">
+                                                                        <div>
+                                                                            <MoveDownIcon />
+                                                                        </div>
+                                                                        <span>{idx + 1}.</span>
+                                                                        <input type="text" name='headerName' placeholder='업로드 엑셀 항목명' onChange={(e) => props.onChangeUploadHeaderDetail(e, uploadHeader.id)} value={uploadHeader.headerName || uploadHeader.colData || ''} required />
+                                                                    </div>
+                                                                    <div className="delete-box">
+                                                                        <CancelIcon type="button" sx={{ fontSize: 33 }}
+                                                                            onClick={(e) => props.onActionDeleteFormCell(e, uploadHeader.id)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </Draggable>
+                                                )
+                                            })}
                                         </div>
-                                        <span>{idx + 1}.</span>
-                                        <input type="text" name='headerName' placeholder='업로드 엑셀 항목명' onChange={(e) => props.onChangeUploadHeaderDetail(e, uploadHeader.id)} value={uploadHeader.headerName || uploadHeader.colData || ''} required />
+                                        {provided.placeholder}
                                     </div>
-                                    <div className="delete-box">
-                                        <CancelIcon type="button" sx={{ fontSize: 33 }}
-                                            onClick={(e) => props.onActionDeleteFormCell(e, uploadHeader.id)}
-                                        />
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </div>
-                    <div className="add-btn-box">
-                        <AddCircleOutlineIcon type="button" sx={{ fontSize: 30 }}
-                            onClick={(e) => props.onActionAddFormCell(e)}
-                        />
+                                )}
+                            </Droppable>
+                        </DragDropContext>
                     </div>
                 </div>
-            </form>
-        </CreateFormFieldWrapper>
+                <div className="add-btn-box">
+                    <AddCircleOutlineIcon type="button" sx={{ fontSize: 30 }} className="add-btn"
+                        onClick={(e) => props.onActionAddFormCell(e)}
+                    />
+                </div>
+            </form >
+        </CreateFormFieldWrapper >
     )
 }

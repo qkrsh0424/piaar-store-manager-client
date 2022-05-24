@@ -48,18 +48,9 @@ const CreateFormFieldWrapper = styled.div`
         }
     }
 
-    .header-detail-box {
-        padding: 5px;
-        max-height: 400px;
-        overflow: auto;
-        overflow-x: hidden;
-    }
-
     .detail-list {
         background: linear-gradient(to bottom right,#dce3f6,#f0fcff);
         border: 1px solid #dce3f6;
-        height: 40vh;
-        overflow: auto;
         padding: 10px;
         border-radius: 5px;
     }
@@ -71,6 +62,11 @@ const CreateFormFieldWrapper = styled.div`
         padding: 3px 10px;
         text-align: center;
         align-items: center;
+    }
+
+    .data-wrapper {
+        height: 50vh;
+        overflow: auto;
     }
 
     .list-group .data-text {
@@ -139,7 +135,9 @@ const CreateFormFieldWrapper = styled.div`
         text-align: center;
         width: 100%;
         padding: 10px;
-        
+    }
+
+    .add-btn {
         &:hover{
             transform: scale(1.1);
         }

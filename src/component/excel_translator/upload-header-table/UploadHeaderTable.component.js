@@ -8,6 +8,7 @@ import DataControlFieldView from "./DataControlField.view";
 import TableFieldView from "./TableField.view";
 import CommonModalComponent from "../../module/modal/CommonModalComponent";
 import CreateUploadHeaderDetailModalComponent from "../create-upload-header-detail-modal/CreateUploadHeaderDetailModal.component";
+import valueUtils from "../../../utils/valueUtils";
 
 class UploadHeaderDetail {
     constructor() {
@@ -35,9 +36,6 @@ const UploadHeaderTableComponent = (props) => {
     const [selectedHeaderTitleState, dispatchSelectedHeaderTitleState] = useReducer(selectedHeaderTitleStateReducer, initialSelectedHeaderTitleState);
     const [createUploadHeaderDetailState, dispatchCreateUploadHeaderDetailState] = useReducer(createUploadHeaderDetailStateReducer, initialCreateUploadHeaderDetailState);
     const [uploadHeaderExcelDataState, dispatchUploadHeaderExcelDataState] = useReducer(uploadHeaderExcelDataStateReducer, initialUploadHeaderExcelDataState);
-
-    // const [updateDownloadHeaderForm, dispatchUpdateDownloadHeaderForm] = useReducer(updateDownloadHeaderFormReducer, initialUpdateDownloadHeaderForm);
-    // const [downloadHeaderExcelDataState, dispatchDownloadHeaderExcelDataState] = useReducer(downloadHeaderExcelDataStateReducer, initialDownloadHeaderExcelDataState);
 
     useEffect(() => {
         function initHeaderTitleState() {
@@ -252,52 +250,6 @@ const UploadHeaderTableComponent = (props) => {
         });
     }
 
-    const onActionMoveHeaderFormUp = (e, detailId) => {
-        e.preventDefault();
-
-        let targetIdx = -1;
-
-        createUploadHeaderDetailState.uploadHeaderDetail.details.forEach((detail, idx) => {
-            if (detail.id === detailId) {
-                targetIdx = idx;
-                return;
-            }
-        });
-
-        onChangeArrayContorl(targetIdx, parseInt(targetIdx) - 1);
-    }
-
-    const onActionMoveHeaderFormDown = (e, detailId) => {
-        e.preventDefault();
-
-        let targetIdx = -1;
-
-        createUploadHeaderDetailState.uploadHeaderDetail.details.forEach((detail, idx) => {
-            if (detail.id === detailId) {
-                targetIdx = idx;
-                return;
-            }
-        });
-
-        onChangeArrayContorl(targetIdx, parseInt(targetIdx) + 1);
-    }
-
-    const onChangeArrayContorl = (targetIdx, moveValue) => {
-        if (!(createUploadHeaderDetailState.uploadHeaderDetail.details.length > 1)) return;
-
-        let newPosition = parseInt(moveValue);
-        if (newPosition < 0 || newPosition >= createUploadHeaderDetailState.uploadHeaderDetail.details.length) return;
-
-        let headerDetailList = createUploadHeaderDetailState.uploadHeaderDetail.details;
-        let target = headerDetailList.splice(targetIdx, 1)[0];
-        headerDetailList.splice(newPosition, 0, target);
-
-        dispatchCreateUploadHeaderDetailState({
-            type: 'SET_UPLOAD_HEADER_DETAIL_DATA',
-            payload: headerDetailList
-        })
-    }
-
     const onChangeUploadHeaderDetail = (e, detailId) => {
         e.preventDefault();
 
@@ -334,6 +286,24 @@ const UploadHeaderTableComponent = (props) => {
         await props._onAction_downloadUploadHeaderDetails(selectedHeaderTitleState.uploadHeaderTitle, downloadDetail);
     }
     
+    const onChangeDetailsOrder = (result) => {
+        if(!result.destination) return;
+
+        let targetUpdateHeader = { ...createUploadHeaderDetailState };
+        let targetDetails = targetUpdateHeader.uploadHeaderDetail.details;
+        
+        const newDetails = valueUtils.reorder(
+            targetDetails,
+            result.source.index,
+            result.destination.index
+        );
+
+        dispatchCreateUploadHeaderDetailState({
+            type: 'SET_UPLOAD_HEADER_DETAIL_DATA',
+            payload: newDetails
+        });
+    }
+
     return (
         <Container>
             <DataControlFieldView
@@ -361,8 +331,7 @@ const UploadHeaderTableComponent = (props) => {
 
                     onActionAddFormCell={(e) => onActionAddFormCell(e)}
                     onActionDeleteFormCell={(e, uploadHeaderId) => onActionDeleteFormCell(e, uploadHeaderId)}
-                    onActionMoveHeaderFormDown={(e, detailId) => onActionMoveHeaderFormDown(e, detailId)}
-                    onActionMoveHeaderFormUp={(e, detailId) => onActionMoveHeaderFormUp(e, detailId)}
+                    onChangeDetailsOrder={(result) => onChangeDetailsOrder(result)}
                     onActionStoreUploadHeaderForm={(e) => onActionStoreUploadHeaderForm(e)}
                     onChangeUploadHeaderDetail={(e, detailId) => onChangeUploadHeaderDetail(e, detailId)}
                 ></CreateUploadHeaderDetailModalComponent>

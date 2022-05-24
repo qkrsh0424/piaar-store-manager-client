@@ -15,8 +15,8 @@ export default function TitleSelectorFieldView(props) {
         <TitleSelectorWrapper>
             <div className="selector">
                 <Box sx={{ display: 'flex' }}>
-                    <FormControl fullWidth>
-                        <InputLabel id="storage-title-select-id">엑셀 형식 선택</InputLabel>
+                    <FormControl sx={{ width: '100%', height: '43px' }}>
+                        <InputLabel id="storage-title-select-id" sx={{ top: '-5px'}}>엑셀 형식 선택</InputLabel>
                         <Select
                             labelId="storage-title-select-id"
                             id="storage-title-select"
@@ -24,7 +24,7 @@ export default function TitleSelectorFieldView(props) {
                             label="storage-title-selector"
                             onChange={(e) => props.onChangeSelectedHeaderTitle(e)}
                             defaultValue=''
-                            sx={{ height: '45px'}}
+                            sx={{ height: '43px' }}
                         >
                             {props.excelTranslatorHeaderList?.map((data, idx) => {
                                 return (

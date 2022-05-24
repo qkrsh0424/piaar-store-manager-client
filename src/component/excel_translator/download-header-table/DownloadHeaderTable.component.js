@@ -8,6 +8,7 @@ import DataControlFieldView from "./DataControlField.view";
 import TableFieldView from "./TableField.view";
 import CommonModalComponent from "../../module/modal/CommonModalComponent";
 import CreateDownloadHeaderDetailModalComponent from '../create-download-header-detail-modal/CreateDownloadHeaderDetailModal.component'
+import valueUtils from "../../../utils/valueUtils";
 
 class DownloadHeaderDetail {
     constructor() {
@@ -334,52 +335,6 @@ const DownloadHeaderTableComponent = (props) => {
 
         await props._onSubmit_uploadDownloadHeaderFormExcelFile(uploadedFormData);
     }
-
-    const onActionMoveHeaderFormUp = (e, detailId) => {
-        e.preventDefault();
-
-        let targetIdx = -1;
-
-        updateDownloadHeaderForm.downloadHeaderDetail.details.forEach((detail, idx) => {
-            if (detail.id === detailId) {
-                targetIdx = idx;
-                return;
-            }
-        });
-
-        onChangeArrayContorl(targetIdx, parseInt(targetIdx) - 1);
-    }
-
-    const onActionMoveHeaderFormDown = (e, detailId) => {
-        e.preventDefault();
-
-        let targetIdx = -1;
-
-        updateDownloadHeaderForm.downloadHeaderDetail.details.forEach((detail, idx) => {
-            if (detail.id === detailId) {
-                targetIdx = idx;
-                return;
-            }
-        });
-
-        onChangeArrayContorl(targetIdx, parseInt(targetIdx) + 1);
-    }
-
-    const onChangeArrayContorl = (targetIdx, moveValue) => {
-        if (!(updateDownloadHeaderForm.downloadHeaderDetail.details.length > 1)) return;
-
-        let newPosition = parseInt(moveValue);
-        if (newPosition < 0 || newPosition >= updateDownloadHeaderForm.downloadHeaderDetail.details.length) return;
-
-        let headerDetailList = updateDownloadHeaderForm.downloadHeaderDetail.details;
-        let target = headerDetailList.splice(targetIdx, 1)[0];
-        headerDetailList.splice(newPosition, 0, target);
-
-        dispatchUpdateDownloadHeaderForm({
-            type: 'SET_DOWNLOAD_HEADER_DETAIL_DATA',
-            payload: headerDetailList
-        });
-    }
     
     const onActionDownloadExcelForm = async (e) => {
         e.preventDefault();
@@ -392,6 +347,24 @@ const DownloadHeaderTableComponent = (props) => {
         });
 
         await props._onAction_downloadUploadHeaderDetails(selectedHeaderTitleState.downloadHeaderTitle, downloadDetail);
+    }
+
+    const onChangeDetailsOrder = (result) => {
+        if(!result.destination) return;
+
+        let targetUpdateHeader = { ...updateDownloadHeaderForm };
+        let targetDetails = targetUpdateHeader.downloadHeaderDetail.details;
+        
+        const newDetails = valueUtils.reorder(
+            targetDetails,
+            result.source.index,
+            result.destination.index
+        );
+
+        dispatchUpdateDownloadHeaderForm({
+            type: 'SET_DOWNLOAD_HEADER_DETAIL_DATA',
+            payload: newDetails
+        });
     }
 
     return (
@@ -419,8 +392,7 @@ const DownloadHeaderTableComponent = (props) => {
                 <CreateDownloadHeaderDetailModalComponent
                     updateDownloadHeaderForm={updateDownloadHeaderForm}
 
-                    onActionMoveHeaderFormUp={(e, detailId) => onActionMoveHeaderFormUp(e, detailId)}
-                    onActionMoveHeaderFormDown={(e, detailId) => onActionMoveHeaderFormDown(e, detailId)}
+                    onChangeDetailsOrder={(result) => onChangeDetailsOrder(result)}
                     onActionAddFormCell={(e) => onActionAddFormCell(e)}
                     onActionDeleteCell={(e, headerId) => onActionDeleteCell(e, headerId)}
                     onActionSelectUploadHeader={(e, headerId) => onActionSelectUploadHeader(e, headerId)}
@@ -485,16 +457,5 @@ const downloadHeaderExcelDataStateReducer = (state, action) => {
         case 'CLEAR':
             return initialDownloadHeaderExcelDataState;
         default: return initialDownloadHeaderExcelDataState
-    }
-}
-
-
-const uploadedDownloadHeaderStateReducer = (state, action) => {
-    switch (action.type) {
-        case 'INIT_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialUploadedDownloadHeaderState;
-        default: return initialUploadedDownloadHeaderState
     }
 }

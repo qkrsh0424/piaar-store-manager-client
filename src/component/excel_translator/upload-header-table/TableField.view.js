@@ -3,7 +3,7 @@ import { TableFieldWrapper } from "./UploadHeaderTable.styled"
 export default function TableFieldView(props) {
     return (
         <TableFieldWrapper className="download-header-table">
-            <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%' }}>
+            <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%', marginBottom: '0', minHeight: '30px' }}>
                 <thead>
                     <tr>
                         {props.uploadHeaderExcelDataState?.map((data, idx) => {

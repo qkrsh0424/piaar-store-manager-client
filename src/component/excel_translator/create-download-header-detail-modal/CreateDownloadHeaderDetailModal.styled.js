@@ -4,7 +4,7 @@ const Container = styled.div`
 `;
 
 const CreateFormFieldWrapper = styled.div`
-    
+
     .header-field {
         border-bottom: 1px solid;
         padding:10px;
@@ -48,30 +48,39 @@ const CreateFormFieldWrapper = styled.div`
         }
     }
 
+    .fixed-header {
+        position: sticky;
+        top: -1px;
+        z-index:10;
+    }
+
     .header-detail-box {
-        height: 50vh;
-        overflow: auto;
         background-color: white;
-        padding: 20px;
         border-radius: 10px;
     }
 
+    .grid-box {
+        display: grid;
+        grid-template-columns: 5% 5% 25% 25% 10% 25% 5%;
+        font-weight: 500;
+        border-bottom: 1px solid #cfcfcf;
+        text-align: center;
+        align-items: center;
+        justify-items: center;
+        padding: 5px 0;
+        background-color: #fff;
+        border-radius: 5px;
+    }
+
+    .header-title {
+        width: 100%;
+        text-align: center;
+        padding: 3px;
+    }
+
     .data-wrapper {
-        margin-bottom: 10px;
-        border-radius: 10px;
-        padding: 10px 16px;
-        height: auto;
-        background-color: #e8ecf7;
-
-        & .arrow-img {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            @media only screen and (max-width:992px){
-                transform: rotate(90deg);
-            }
-        }
+        height: 50vh;
+        overflow: auto;
     }
 
     .detail-list {
@@ -107,10 +116,7 @@ const CreateFormFieldWrapper = styled.div`
     }
 
     .form-selector {
-        display: grid;
-        grid-template-columns: 1fr 7fr;
-        text-align: center;
-        align-items: center;
+        width: 100%;
 
         & .add-cell-btn {
             grid-column: span 3;
@@ -154,13 +160,12 @@ const CreateFormFieldWrapper = styled.div`
     }
 
     .delete-box {
-        text-align: right;
         width: 100%;
     }
 
     .delete-box button {
         color: #ff7979;
-        margin-bottom: 5px;
+        /* margin-bottom: 5px; */
         border: none;
         background-color: inherit;
 
@@ -200,7 +205,7 @@ const CreateFormFieldWrapper = styled.div`
     }
 
     .form-move-btn-box{
-        padding: 10px 0;
+        /* padding: 10px 0; */
         text-align: center;
     }
 

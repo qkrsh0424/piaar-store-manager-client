@@ -11,8 +11,7 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
 
                 onActionAddFormCell={(e) => props.onActionAddFormCell(e)}
                 onActionDeleteFormCell={(e, uploadHeaderId) => props.onActionDeleteFormCell(e, uploadHeaderId)}
-                onActionMoveHeaderFormDown={(e, detailId) => props.onActionMoveHeaderFormDown(e, detailId)}
-                onActionMoveHeaderFormUp={(e, detailId) => props.onActionMoveHeaderFormUp(e, detailId)}
+                onChangeDetailsOrder={(result) => props.onChangeDetailsOrder(result)}
                 onActionStoreUploadHeaderForm={(e) => props.onActionStoreUploadHeaderForm(e)}
                 onChangeUploadHeaderDetail={(e, detailId) => props.onChangeUploadHeaderDetail(e, detailId)}
             ></UploadHeaderDetailFormFieldView>
