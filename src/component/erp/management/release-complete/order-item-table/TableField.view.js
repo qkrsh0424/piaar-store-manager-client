@@ -1,6 +1,7 @@
 import { dateToYYYYMMDDhhmmss } from '../../../../../utils/dateFormatUtils';
 import SortButton from '../../../../module/button/SortButton';
 import InfiniteScrollObserver from '../../../../module/observer/InfiniteScrollObserver';
+import ResizableTh from '../../../../module/table/ResizableTh';
 import { TableFieldWrapper } from './OrderItemTable.styled';
 
 function CorrectIcon() {
@@ -25,6 +26,65 @@ function FailedIcon() {
     );
 }
 
+function TableHead({
+    viewHeader
+}) {
+    return (
+        <thead>
+            <tr>
+                <ResizableTh
+                    className="fixed-header fixed-col-left"
+                    style={{ zIndex: '12' }}
+                    width={80}
+                >
+                    재고 반영
+                </ResizableTh>
+                <ResizableTh
+                    className="fixed-header"
+                    width={50}
+                >
+                    선택
+                </ResizableTh>
+                {viewHeader?.headerDetail.details?.map((r, index) => {
+                    return (
+                        <ResizableTh
+                            key={index}
+                            className="fixed-header"
+                            scope="col"
+                            width={200}
+                        >
+                            <div
+                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
+                            >
+                                <div>
+                                    {r.customCellName}
+                                </div>
+                                <div style={{ position: 'absolute', right: '0', top: '50%', transform: 'translate(0, -50%)' }}>
+                                    <SortButton
+                                        buttonSize={25}
+                                        iconSize={16}
+                                        markPoint={r.matchedColumnName}
+                                    ></SortButton>
+                                </div>
+                            </div>
+                            {HIGHLIGHT_FIELDS.includes(r.matchedColumnName) &&
+                                <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '10%', background: '#e1d7b9' }}></div>
+                            }
+                        </ResizableTh>
+                    )
+                })}
+                <ResizableTh
+                    className="fixed-header fixed-col-right"
+                    style={{ zIndex: 12 }}
+                    width={50}
+                >
+                    수정
+                </ResizableTh>
+            </tr>
+        </thead>
+    );
+}
+
 const HIGHLIGHT_FIELDS = [
     'releaseOptionCode',
     'categoryName',
@@ -43,65 +103,9 @@ export default function TableFieldView(props) {
                 ref={props.tableScrollRef}
             >
                 <table cellSpacing="0">
-                    <colgroup>
-                        <col className='col-5-3'></col>
-                        <col className='col-5-3'></col>
-                        {props.viewHeader?.headerDetail.details?.map((r, index) => {
-                            return (
-                                <col
-                                    key={index}
-                                    className='col-15-13'
-                                ></col>
-                            );
-                        })}
-                        <col className='col-5-3'></col>
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th
-                                className="fixed-header fixed-col-left"
-                                style={{ cursor: 'pointer', zIndex:'12' }}
-                            >
-                                재고 반영
-                            </th>
-                            <th
-                                className="fixed-header"
-                                style={{ cursor: 'pointer' }}
-                            >
-                                선택
-                            </th>
-                            {props.viewHeader?.headerDetail.details?.map((r, index) => {
-                                return (
-                                    <th key={index} className="fixed-header" scope="col">
-                                        <div
-                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
-                                        >
-                                            <div>
-                                                {r.customCellName}
-                                            </div>
-                                            <div style={{ position: 'absolute', right: '0', top: '50%', transform: 'translate(0, -50%)' }}>
-                                                <SortButton
-                                                    buttonSize={25}
-                                                    iconSize={16}
-                                                    markPoint={r.matchedColumnName}
-                                                ></SortButton>
-                                            </div>
-                                        </div>
-                                        {HIGHLIGHT_FIELDS.includes(r.matchedColumnName) &&
-                                            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '10%', background: '#e1d7b9' }}></div>
-                                        }
-                                    </th>
-                                )
-                            })}
-                            <th
-                                className="fixed-header fixed-col-right"
-                                style={{ zIndex: 12 }}
-                            >
-                                수정
-                            </th>
-                        </tr>
-                    </thead>
-
+                    <TableHead
+                        viewHeader={props.viewHeader}
+                    />
                     <tbody>
                         {props.orderItemList &&
                             <>

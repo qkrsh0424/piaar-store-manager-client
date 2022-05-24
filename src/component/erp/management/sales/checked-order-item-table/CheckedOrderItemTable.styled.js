@@ -70,6 +70,10 @@ const TableFieldWrapper = styled.div`
         font-weight: 500;
         line-height: 1.5;
         word-break: keep-all;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        height: 43px;
 
         @media all and (max-width: 992px){
             font-size: 10px;

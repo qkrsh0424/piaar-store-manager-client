@@ -106,6 +106,7 @@ const SalesComponent = (props) => {
         let searchColumnName = query.searchColumnName || null;
         let searchQuery = query.searchQuery || null;
         let periodType = query.periodType || null;
+        let releaseYn = query.releaseYn || null;
         let page = query.page || null;
         let size = query.size || null;
         let sortBy = query.sortBy || null;
@@ -114,6 +115,7 @@ const SalesComponent = (props) => {
 
         let params = {
             salesYn: 'y',
+            releaseYn: releaseYn,
             startDate: startDate,
             endDate: endDate,
             periodType: periodType,

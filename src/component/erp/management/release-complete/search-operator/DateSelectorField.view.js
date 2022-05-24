@@ -4,7 +4,22 @@ import CustomDatePicker from '../../../../module/date-picker/CustomDatePicker';
 export default function DateSelectorFieldView(props) {
     return (
         <DateSelectorFieldWrapper>
-            <div className='label-item'>조회기간 (주문등록일)</div>
+            <div className='label-item'>조회기간</div>
+            <div
+                className="quick-select-box"
+            >
+                <button
+                    className="quick-select-button-el"
+                    onClick={props.onActionSetDateToday}
+                >오늘</button>
+                <button
+                    className="quick-select-button-el"
+                    style={{
+                        marginLeft: '-1px'
+                    }}
+                    onClick={props.onActionSetDate7Days}
+                >최근 7일</button>
+            </div>
             <div className='flex-box'>
                 <select
                     className='select-item'
