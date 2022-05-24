@@ -4,14 +4,14 @@ const Container = styled.div`
 `;
 
 const CreateFormFieldWrapper = styled.div`
-
     .header-field {
         border-bottom: 1px solid;
-        padding:10px;
+        padding: 1% 2%;
         align-items: center;
         overflow: auto;
-        display: grid;
-        grid-template-columns: 6fr 1fr;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
         div {
             font-size: 1.3rem;
@@ -25,7 +25,6 @@ const CreateFormFieldWrapper = styled.div`
         button {
             background: #aab3cdee;
             border:none;
-            margin: 0 auto;
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -52,6 +51,7 @@ const CreateFormFieldWrapper = styled.div`
         position: sticky;
         top: -1px;
         z-index:10;
+        font-weight: 600;
     }
 
     .header-detail-box {
@@ -62,20 +62,24 @@ const CreateFormFieldWrapper = styled.div`
     .grid-box {
         display: grid;
         grid-template-columns: 5% 5% 25% 25% 10% 25% 5%;
-        font-weight: 500;
-        border-bottom: 1px solid #cfcfcf;
         text-align: center;
         align-items: center;
         justify-items: center;
         padding: 5px 0;
+        font-size: 14px;
         background-color: #fff;
-        border-radius: 5px;
+
+        @media screen and (max-width: 992px) {
+            grid-template-columns: 50px 50px 250px 250px 100px 250px 50px;
+        }
     }
 
     .header-title {
         width: 100%;
         text-align: center;
         padding: 3px;
+        height: 100%;
+        border-bottom: 1px solid #cfcfcf;
     }
 
     .data-wrapper {

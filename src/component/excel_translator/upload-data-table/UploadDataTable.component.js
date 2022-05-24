@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from 'react-redux';
 
 import TableFieldView from "./TableField.view";
-import ExcelDataControlFieldView from "../control-bar/ExcelDataControlField.view";
+import ExcelDataControlFieldView from "./ExcelDataControlField.view";
 
 const UploadDataTableComponent = (props) => {
     const userRdx = useSelector(state => state.user);

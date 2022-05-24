@@ -18,7 +18,7 @@ export default function DownloadHeaderDetailFormFieldView(props) {
             <form onSubmit={(e) => props.onActionStoreDownloadHeaderForm(e)}>
                 <div>
                     <div className="header-field">
-                        <div>다운로드 엑셀 유형 등록</div>
+                        <div>다운로드 엑셀 양식 설정</div>
                         <button type='submit'><AddTaskIcon /></button>
                     </div>
                 </div>

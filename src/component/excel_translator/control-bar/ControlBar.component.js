@@ -7,7 +7,6 @@ import TitleSelectorFieldView from './TitleSelectorField.view';
 import CommonModalComponent from '../../module/modal/CommonModalComponent';
 import CreateTranslatorHeaderTitleModalComponent from '../create-translator-header-title-modal/CreateTranslatorHeaderTitleModal.component';
 import ModifyTranslatorHeaderTitleComponent from '../modify-translator-header-title-modal/ModifyTranslatorHeaderTitleModal.component';
-import ExcelDataControlFieldView from './ExcelDataControlField.view';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 class ExcelTranslatorHeader {

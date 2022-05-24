@@ -134,8 +134,96 @@ const TableFieldWrapper = styled.div`
     }
 `;
 
+const DataControlFieldWrapper = styled.div`
+    padding-top: 4%;
+    display: flex; 
+    text-align: center;
+    align-items: center;
+
+    form {
+        margin: 10px;
+
+        @media only screen and (max-width: 992px){
+            margin: 0 auto;
+            width: 100%;
+        }
+    }
+
+    form label {
+        font-size: 1rem;
+        display: inline-block;
+        margin: 4px;
+        width: 300px;
+        padding: 3% 0%;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+        background-color: #a9b3d5;
+        border-radius: 3px;
+        transition: 0.15s linear;
+        font-weight: 600;
+
+        &:hover {
+            opacity: 0.8;
+            cursor: pointer;
+        }
+
+        @media only screen and (max-width:992px){
+            padding: 1.5% 0%;
+            width: 90%;
+        }
+
+        @media only screen and (max-width:768px){
+            font-size: 14px;
+        }
+
+        @media only screen and (max-width:576px){
+            font-size: 12px;
+        }
+    }
+
+    form input {
+        font-size: 20px;
+        width: 100%;
+        display: none;
+    }
+
+    form button {
+        font-size: 1rem;
+        width: 300px;
+        padding: 3% 0%;
+        margin: 4px;
+        color: white;
+        vertical-align: middle;
+        background-color: #a9b3d5;
+        border-radius: 3px;
+        border: none;
+        transition: 0.15s linear;
+        font-weight: 600;
+
+        &:hover {
+            opacity: 0.8;
+            cursor: pointer;
+        }
+
+        @media only screen and (max-width:992px){
+            padding: 1.5% 0%;
+            width: 90%;
+        }
+
+        @media only screen and (max-width:768px){
+            font-size: 14px;
+        }
+
+        @media only screen and (max-width:576px){
+            font-size: 12px;
+        }
+    }
+`;
+
 export {
     Container,
     ControlFieldWrapper,
-    TableFieldWrapper
+    TableFieldWrapper,
+    DataControlFieldWrapper
 }
