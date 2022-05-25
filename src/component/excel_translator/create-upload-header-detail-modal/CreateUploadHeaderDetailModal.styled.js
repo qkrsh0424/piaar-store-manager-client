@@ -48,9 +48,12 @@ const CreateFormFieldWrapper = styled.div`
         }
     }
 
-    .detail-list {
+    .detail-body {
         background: linear-gradient(to bottom right,#dce3f6,#f0fcff);
-        border: 1px solid #dce3f6;
+        height: 50vh;
+    }
+
+    .detail-list {
         padding: 10px;
         border-radius: 5px;
     }

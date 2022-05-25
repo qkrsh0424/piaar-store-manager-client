@@ -17,7 +17,7 @@ export default function UploadHeaderDetailFormFieldView(props) {
                         <button type='submit'><AddTaskIcon /></button>
                     </div>
                 </div>
-                <div>
+                <div className="detail-body">
                     <div className="data-wrapper">
                         <DragDropContext onDragEnd={(result) => props.onChangeDetailsOrder(result)}>
                             <Droppable droppableId={uuidv4()}>

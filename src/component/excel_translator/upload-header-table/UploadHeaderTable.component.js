@@ -255,7 +255,6 @@ const UploadHeaderTableComponent = (props) => {
 
         let newDetails = createUploadHeaderDetailState?.uploadHeaderDetail.details.map(r => {
             if (r.id === detailId) {
-                console.log(e.target.value)
                 return {
                     ...r,
                     [e.target.name]: e.target.value

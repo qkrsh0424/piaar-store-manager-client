@@ -119,20 +119,27 @@ const DownloadHeaderTableComponent = (props) => {
             return;
         }
 
-        if(!uploadedDownloadHeaderFile) {
+        if(selectedHeaderTitleState.downloadHeaderDetail.details.length > 0) {
             dispatchUpdateDownloadHeaderForm({
                 type: 'INIT_DATA',
                 payload: { ...selectedHeaderTitleState }
             });
     
-            setFixedValueCheckList(selectedHeaderTitleState.downloadHeaderDetail.details.map(r => {
+            setFixedValueCheckList(selectedHeaderTitleState.downloadHeaderDetail?.details.map(r => {
                 if (r.targetCellNumber === -1) {
                     return r.id;
                 }
             }));
-
-            setCreateTranslatorDownloadHeaderDetailModalOpen(true);
-            return;
+        }else {
+            dispatchUpdateDownloadHeaderForm({
+                type: 'INIT_DATA',
+                payload: {
+                    ...selectedHeaderTitleState,
+                    downloadHeaderDetail: {
+                        details: [new DownloadHeaderDetail().toJSON()]
+                    }
+                }
+            });
         }
 
         // 다운로드헤더 엑셀파일이 업로드 되었다면 이 데이터로 헤더 설정
@@ -156,17 +163,8 @@ const DownloadHeaderTableComponent = (props) => {
                     }
                 }
             });
-        } else {
-            dispatchUpdateDownloadHeaderForm({
-                type: 'INIT_DATA',
-                payload: {
-                    ...selectedHeaderTitleState,
-                    downloadHeaderDetail: {
-                        details: [new DownloadHeaderDetail().toJSON()]
-                    }
-                }
-            });
         }
+
         setCreateTranslatorDownloadHeaderDetailModalOpen(true);
     }
 
