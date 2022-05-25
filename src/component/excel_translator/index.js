@@ -2,15 +2,15 @@ import { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import queryString from 'query-string';
 import { v4 as uuidv4 } from 'uuid';
-// import { withRouter } from 'react-router';
 
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
 import { excelTranslatorDataConnect } from '../../data_connect/excelTranslatorDataConnect';
 import ControlBarComponent from './control-bar/ControlBar.component';
 import UploadDataTableComponent from './upload-data-table/UploadDataTable.component';
 import { dateToYYMMDDhhmmss } from './../../utils/dateFormatUtils'
-import DownloadDataTableComponent from './download-header-table/DownloadDataTable.component';
+import DownloadHeaderTableComponent from './download-header-table/DownloadHeaderTable.component';
 import { useLocation } from 'react-router-dom';
+import UploadHeaderTableComponent from './upload-header-table/UploadHeaderTable.component';
 
 const Container = styled.div`
     background: linear-gradient(to bottom right,#f0fffa,#839edfad);
@@ -39,6 +39,7 @@ const ExcelTranslatorComponent = () => {
 
     const [excelTranslatorHeaderList, setExcelTranslatorHeaderList] = useState(null);
     const [uploadedExcelData, setUploadedExcelData] = useState(null);
+    const [uploadedUploadHeaderExcelData, setUploadedUploadHeaderExcelData] = useState(null);
     const [uploadedDownloadHeaderExcelData, setUploadedDownloadHeaderExcelData] = useState(null);
 
     const [dataChangedTrigger, setDataChangedTrigger] = useState(false);
@@ -77,6 +78,8 @@ const ExcelTranslatorComponent = () => {
         }
 
         setUploadedExcelData(null);
+        setUploadedUploadHeaderExcelData(null);
+        setUploadedDownloadHeaderExcelData(null);
     }, [params.headerId])
 
     const __reqSearchExcelTranslatorHeader = async () => {
@@ -88,7 +91,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             })
     }
 
@@ -102,7 +109,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             });
     }
 
@@ -116,7 +127,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             });
     }
 
@@ -130,7 +145,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             });
     }
 
@@ -143,7 +162,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             })
     }
 
@@ -161,7 +184,12 @@ const ExcelTranslatorComponent = () => {
                 link.click();
             })
             .catch(err => {
-                console.log(err);
+                let res = err.response;
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             });
     }
 
@@ -180,7 +208,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             })
     }
 
@@ -195,7 +227,11 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             })
     }
 
@@ -209,20 +245,47 @@ const ExcelTranslatorComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             })
     }
 
     const __reqUploadDownloadHeaderFormExcelFile = async (formData) => {
-        await excelTranslatorDataConnect().postDownloadHeaderFile(formData)
+        await excelTranslatorDataConnect().postHeaderFile(formData, 1)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
                     setUploadedDownloadHeaderExcelData(res.data.data);
+                    alert("양식이 성공적으로 업로드되었습니다. 양식 설정을 완료해주세요.");
                 }
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.message);
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
+            })
+    }
+
+    const __reqUploadUploadHeaderFormExcelFile = async (formData, rowStartNumber) => {
+        await excelTranslatorDataConnect().postHeaderFile(formData, rowStartNumber)
+            .then(res => {
+                if (res.status === 200 && res.data && res.data.message === 'success') {
+                    setUploadedUploadHeaderExcelData(res.data.data);
+                    alert("양식이 성공적으로 업로드되었습니다. 양식 설정을 완료해주세요.");
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
             })
     }
 
@@ -259,9 +322,7 @@ const ExcelTranslatorComponent = () => {
                 ...isObjectSubmitted,
                 createdUploadHeader: true
             });
-
             await __reqUploadExcelFile(formData);
-
             onActionCloseBackdrop();
             setIsObjectSubmitted({
                 ...isObjectSubmitted,
@@ -335,6 +396,7 @@ const ExcelTranslatorComponent = () => {
     const _onSubmit_storeDownloadHeaderDetail = async (downloadHeaderDetails) => {
         onActionOpenBackdrop();
         await __reqCreateDownloadHeaderDetails(downloadHeaderDetails);
+        setUploadedDownloadHeaderExcelData(null);
         onActionCloseBackdrop();
     }
 
@@ -351,7 +413,22 @@ const ExcelTranslatorComponent = () => {
                 ...isObjectSubmitted,
                 createdDownloadHeader: false
             });
-            alert("양식이 성공적으로 업로드되었습니다. 양식 설정을 완료해주세요.");
+        }
+    }
+
+    const _onSubmit_uploadUploadHeaderFormExcelFile = async (formData, rowStartNumber) => {
+        if (!isObjectSubmitted.createdUploadHeader) {
+            onActionOpenBackdrop();
+            setIsObjectSubmitted({
+                ...isObjectSubmitted,
+                createdUploadHeader: true
+            });
+            await __reqUploadUploadHeaderFormExcelFile(formData, rowStartNumber);
+            onActionCloseBackdrop();
+            setIsObjectSubmitted({
+                ...isObjectSubmitted,
+                createdUploadHeader: false
+            });
         }
     }
 
@@ -364,25 +441,33 @@ const ExcelTranslatorComponent = () => {
                 _onSubmit_createTranslatorHeaderTitle={(headerTitle) => _onSubmit_createTranslatorHeaderTitle(headerTitle)}
                 _onSubmit_modifyTranslatorHeaderTitle={(headerTitle) => _onSubmit_modifyTranslatorHeaderTitle(headerTitle)}
                 _onAction_deleteTranslatorHeaderTitle={(headerId) => _onAction_deleteTranslatorHeaderTitle(headerId)}
-                _onSubmit_uploadExcelFile={(formData) => _onSubmit_uploadExcelFile(formData)}
-                _onSubmit_downloadExcelFile={(title, details) => _onSubmit_downloadExcelFile(title, details)}
             ></ControlBarComponent>
 
-            <UploadDataTableComponent
+            <UploadHeaderTableComponent
                 excelTranslatorHeaderList={excelTranslatorHeaderList}
-                uploadedExcelData={uploadedExcelData}
-
-                _onAction_downloadUploadHeaderDetails={(headerTitle, uploadHeaderDetails) => _onAction_downloadUploadHeaderDetails(headerTitle, uploadHeaderDetails)}
+                uploadedUploadHeaderExcelData={uploadedUploadHeaderExcelData}
+                
+                _onSubmit_uploadUploadHeaderFormExcelFile={(formData, rowStartNumber) => _onSubmit_uploadUploadHeaderFormExcelFile(formData, rowStartNumber)}
                 _onSubmit_createUploadHeaderDetails={(uploadHeaderDetails) => _onSubmit_createUploadHeaderDetails(uploadHeaderDetails)}
-            ></UploadDataTableComponent>
+                _onAction_downloadUploadHeaderDetails={(headerTitle, uploadHeaderDetails) => _onAction_downloadUploadHeaderDetails(headerTitle, uploadHeaderDetails)}
+            ></UploadHeaderTableComponent>
 
-            <DownloadDataTableComponent
+            <DownloadHeaderTableComponent
                 excelTranslatorHeaderList={excelTranslatorHeaderList}
                 uploadedDownloadHeaderExcelData={uploadedDownloadHeaderExcelData}
                 
                 _onSubmit_uploadDownloadHeaderFormExcelFile={(formData) => _onSubmit_uploadDownloadHeaderFormExcelFile(formData)}
                 _onSubmit_storeDownloadHeaderDetail={(downloadHeaderDetails) => _onSubmit_storeDownloadHeaderDetail(downloadHeaderDetails)}
-            ></DownloadDataTableComponent>
+                _onAction_downloadUploadHeaderDetails={(headerTitle, uploadHeaderDetails) => _onAction_downloadUploadHeaderDetails(headerTitle, uploadHeaderDetails)}
+            ></DownloadHeaderTableComponent>
+
+            <UploadDataTableComponent
+                excelTranslatorHeaderList={excelTranslatorHeaderList}
+                uploadedExcelData={uploadedExcelData}
+
+                _onSubmit_uploadExcelFile={(formData) => _onSubmit_uploadExcelFile(formData)}
+                _onSubmit_downloadExcelFile={(title, details) => _onSubmit_downloadExcelFile(title, details)}
+            ></UploadDataTableComponent>
 
             {/* Backdrop Loading */}
             <BackdropHookComponent

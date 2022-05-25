@@ -120,12 +120,12 @@ const BodyTr = styled.tr`
 
     ${(props) => props.checked ?
         css`
-            background-color: #9bb6d150;
+            background-color: #9bb6d150 !important;
         `
         :
         css`
             &:hover{
-                background: #9bb6d125;
+                background: #9bb6d125 !important;
             }
         `
     }

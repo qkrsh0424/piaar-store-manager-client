@@ -6,6 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { TitleSelectorWrapper } from "./ControlBar.styled"
 
@@ -14,8 +15,8 @@ export default function TitleSelectorFieldView(props) {
         <TitleSelectorWrapper>
             <div className="selector">
                 <Box sx={{ display: 'flex' }}>
-                    <FormControl fullWidth>
-                        <InputLabel id="storage-title-select-id">엑셀 형식 선택</InputLabel>
+                    <FormControl sx={{ width: '100%', height: '43px' }}>
+                        <InputLabel id="storage-title-select-id" sx={{ top: '-5px'}}>엑셀 형식 선택</InputLabel>
                         <Select
                             labelId="storage-title-select-id"
                             id="storage-title-select"
@@ -23,11 +24,15 @@ export default function TitleSelectorFieldView(props) {
                             label="storage-title-selector"
                             onChange={(e) => props.onChangeSelectedHeaderTitle(e)}
                             defaultValue=''
+                            sx={{ height: '43px' }}
                         >
                             {props.excelTranslatorHeaderList?.map((data, idx) => {
                                 return (
-                                    <MenuItem key={'excel_translator_title' + idx} value={data.id}>
-                                        {data.uploadHeaderTitle + ' > ' + data.downloadHeaderTitle + ' (' + data.rowStartNumber + ')'}
+                                    <MenuItem key={'excel_translator_title' + idx} value={data.id} sx={{ display: 'flex', padding: '5px 10px', justifyContent: 'space-around'}}>
+                                        <span>{data.uploadHeaderTitle}</span>
+                                        <span><ChevronRightIcon /></span>
+                                        <span>{data.downloadHeaderTitle}</span>
+                                        <span>{'(헤더:' + data.rowStartNumber + ')'}</span>
                                     </MenuItem>
                                 )
                             })}

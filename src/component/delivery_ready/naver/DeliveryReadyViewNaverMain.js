@@ -11,12 +11,12 @@ import { deliveryReadyNaverDataConnect } from '../../../data_connect/deliveryRea
 import DrawerNavbarMain from '../../nav/DrawerNavbarMain';
 import DeliveryReadyDateRangePickerModal from '../modal/DeliveryReadyDateRangePickerModal';
 import DeliveryReadyOptionInfoModal from '../modal/DeliveryReadyOptionInfoModal';
-import BackdropLoading from '../../loading/BackdropLoading';
 import DeliveryReadyViewNaverBar from './DeliveryReadyViewNaverBar';
 import DeliveryReadyUnreleasedViewNaverBody from './DeliveryReadyUnreleasedViewNaverBody';
 import DeliveryReadyReleasedViewNaverBody from './DeliveryReadyReleasedViewNaverBody';
 import DeliveryReadyReleaseMemoModal from '../modal/DeliveryReadyReleaseMemoModal';
 import DeliveryReadyReceiveMemoModal from '../modal/DeliveryReadyReceiveMemoModal';
+import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
 
 // 한페이지에 보여지는 데이터
 const POSTS_PER_PAGE = 50;
@@ -70,7 +70,6 @@ const DeliveryReadyViewNaverMain = () => {
     const [releasedData, setReleasedData] = useState(null);
     const [unreleaseCheckedOrderList, setUnreleaseCheckedOrderList] = useState([]);
     const [releaseCheckedOrderList, setReleaseCheckedOrderList] = useState([]);
-    const [backdropLoading, setBackdropLoading] = useState(false);
     const [originUnreleasedData, setOriginUnreleasedData] = useState(null);
     const [originReleasedData, setOriginReleasedData] = useState(null);
     
@@ -88,6 +87,13 @@ const DeliveryReadyViewNaverMain = () => {
             endDate: new Date(),
         }
     );
+
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
+
     const [deliveryReadyDateRangePickerModalOpen, setDeliveryReadyDateRangePickerModalOpen] = useState(false);
     const [deliveryReadyOptionInfoModalOpen, setDeliveryReadyOptionInfoModalOpen] = useState(false);
     const [selectedDateText, setSelectedDateText] = useState("날짜 선택");
@@ -154,8 +160,10 @@ const DeliveryReadyViewNaverMain = () => {
 
     useEffect(() => {
         async function fetchInit() {
-            __handleDataConnect().getDeliveryReadyUnreleasedData();
-            __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+            onActionOpenBackdrop();
+            await __handleDataConnect().getDeliveryReadyUnreleasedData();
+            await __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
+            onActionCloseBackdrop();
         }
         fetchInit();
     }, []);
@@ -202,8 +210,8 @@ const DeliveryReadyViewNaverMain = () => {
                     })
             },
             getDeliveryReadyReleasedData: async function (start, end) {
-                var date1 = start ? new Date(getStartDate(start)).toUTCString() : null;
-                var date2 = end ? new Date(getEndDate(end)).toUTCString() : null;
+                let date1 = start ? getStartDate(start) : null;
+                let date2 = end ? getEndDate(end) : null;
 
                 setReleaseCheckedOrderList([]);
                 dispatchReleasedDataReflectedState({
@@ -584,10 +592,10 @@ const DeliveryReadyViewNaverMain = () => {
                         e.stopPropagation();
 
                         if(window.confirm('정말 삭제하시겠습니까?')) {
-                            setBackdropLoading(true);
+                            onActionOpenBackdrop();
                             await __handleDataConnect().deleteOrderData(itemCid);
                             setUnreleaseCheckedOrderList([]);
-                            setBackdropLoading(false);
+                            onActionCloseBackdrop();
                         }
                     },
                     deleteList: async function (e) {
@@ -597,10 +605,10 @@ const DeliveryReadyViewNaverMain = () => {
 
                         if (checkedUnreleaseData.length > 0) {
                             if(window.confirm('선택 항목(' + checkedUnreleaseData.length +'개)을 모두 삭제하시겠습니까?')) {
-                                setBackdropLoading(true);
+                                onActionOpenBackdrop();
                                 await __handleDataConnect().deleteOrderListData(checkedUnreleaseData);
                                 setUnreleaseCheckedOrderList([]);
-                                setBackdropLoading(false);
+                                onActionCloseBackdrop();
                             }
                         }
                         else {
@@ -620,10 +628,10 @@ const DeliveryReadyViewNaverMain = () => {
                         
                         if (checkedUnreleaseData.length > 0) {
                             if(window.confirm('선택 항목(' + checkedUnreleaseData.length +'개)을 모두 출고 처리 하시겠습니까?')) {
-                                setBackdropLoading(true);
+                                onActionOpenBackdrop();
                                 await __handleDataConnect().changeListToReleaseData(checkedUnreleaseData);
                                 setUnreleaseCheckedOrderList([]);
-                                setBackdropLoading(false);
+                                onActionCloseBackdrop();
                             }
                         }
                         else {
@@ -688,9 +696,9 @@ const DeliveryReadyViewNaverMain = () => {
                         }
                 
                         if(window.confirm('출고를 취소하시겠습니까?')) {
-                            setBackdropLoading(true);
+                            onActionOpenBackdrop();
                             await __handleDataConnect().changeToUnreleaseData(deliveryReadyItem);
-                            setBackdropLoading(false);
+                            onActionCloseBackdrop();
                         }
                     },
                     changeListToUnreleaseData: async function (e) {
@@ -708,9 +716,9 @@ const DeliveryReadyViewNaverMain = () => {
                             }
 
                             if(window.confirm('선택 항목(' + checkedReleaseData.length +'개)을 모두 출고 취소하시겠습니까?')) {
-                                setBackdropLoading(true);
+                                onActionOpenBackdrop();
                                 await __handleDataConnect().changeListToUnreleaseData(checkedReleaseData);
-                                setBackdropLoading(false);
+                                onActionCloseBackdrop();
                             }
                         }
                         else {
@@ -731,13 +739,13 @@ const DeliveryReadyViewNaverMain = () => {
             
                         if(window.confirm('선택 항목(' + nonReflectedData.length +'개)의 수량을 재고에 반영하시겠습니까?')) {
                             if(!isObjectSubmitted.reflectedUnit){
-                                setBackdropLoading(true);
+                                onActionOpenBackdrop();
                                 setIsObjectSubmitted({
                                     ...isObjectSubmitted,
                                     reflectedUnit: true
                                 });
                                 await __handleDataConnect().reflectStockUnit(nonReflectedData, releaseCompletedMemo.releaseMemo);
-                                setBackdropLoading(false);
+                                onActionCloseBackdrop();
                             }
                         }
                         __handleEventControl().deliveryReadyReleaseMemo().close();
@@ -750,13 +758,13 @@ const DeliveryReadyViewNaverMain = () => {
 
                         if(window.confirm('선택 항목(' + reflectedData.length +'개)에 반영된 재고수량을 취소하시겠습니까?')) {
                             if(!isObjectSubmitted.cancelReflectedUnit){
-                                setBackdropLoading(true);
+                                onActionOpenBackdrop();
                                 setIsObjectSubmitted({
                                     ...isObjectSubmitted,
                                     cancelReflectedUnit: true
                                 });
                                 await __handleDataConnect().cancelReflectedStockUnit(reflectedData, releaseCompletedCancelMemo.receiveMemo);
-                                setBackdropLoading(false);
+                                onActionCloseBackdrop();
                             }
                         }
                         __handleEventControl().deliveryReadyReceiveMemo().close();
@@ -890,24 +898,24 @@ const DeliveryReadyViewNaverMain = () => {
                     changeItemOption: async function () {
                         if(selectedOptionColumn === 'optionManagementCode') {
                             if(window.confirm('옵션코드를 변경하시면 출고옵션코드도 함께 변경됩니다.\n변경하시겠습니까?')) {
-                                setBackdropLoading(true);
+                                onActionOpenBackdrop();
                                 await __handleDataConnect().changeItemOptionManagementCode(changedOptionManagementCode);
-                                setBackdropLoading(false);
+                                onActionCloseBackdrop();
                             }
                         }else if(selectedOptionColumn === 'releaseOptionCode') {
                             if(window.confirm('출고옵션코드를 변경하시겠습니까?')) {
-                                setBackdropLoading(true);
+                                onActionOpenBackdrop();
                                 await __handleDataConnect().changeItemReleaseOptionCode(changedOptionManagementCode);
-                                setBackdropLoading(false);
+                                onActionCloseBackdrop();
                             }
                         }
                     },
                     changeItemsOption: async function () {
                         if(selectedOptionColumn === 'optionManagementCode') {
                             if(window.confirm('옵션코드를 변경하시면 출고옵션코드도 함께 변경됩니다.\n일괄 변경하시겠습니까?')) {
-                                setBackdropLoading(true);
+                                onActionOpenBackdrop();
                                 await __handleDataConnect().changeItemsOptionManagementCode(changedOptionManagementCode);
-                                setBackdropLoading(false);
+                                onActionCloseBackdrop();
                                 
                             }
                         }else if(selectedOptionColumn === 'releaseOptionCode') {
@@ -936,9 +944,9 @@ const DeliveryReadyViewNaverMain = () => {
                         };
 
                         if (downloadData.length > 0) {
-                            setBackdropLoading(true);
+                            onActionOpenBackdrop();
                             await __handleDataConnect().downloadHansanOrderForm(downloadData, storeInfoData.storeName, storeInfoData.storeContact);
-                            setBackdropLoading(false);
+                            onActionCloseBackdrop();
 
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
@@ -964,9 +972,9 @@ const DeliveryReadyViewNaverMain = () => {
                         };
 
                         if (downloadData.length > 0) {
-                            setBackdropLoading(true);
+                            onActionOpenBackdrop();
                             await __handleDataConnect().downloadTailoOrderForm(downloadData, storeInfoData.storeName, storeInfoData.storeContact);
-                            setBackdropLoading(false);
+                            onActionCloseBackdrop();
 
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
@@ -999,9 +1007,9 @@ const DeliveryReadyViewNaverMain = () => {
                         }
 
                         if (downloadData.length > 0) {
-                            setBackdropLoading(true);
+                            onActionOpenBackdrop();
                             await __handleDataConnect().downloadLotteOrderForm(downloadData, storeInfoData.storeName, storeInfoData.storeContact);
-                            setBackdropLoading(false);
+                            onActionCloseBackdrop();
 
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
@@ -1022,9 +1030,9 @@ const DeliveryReadyViewNaverMain = () => {
                         ]
 
                         if (downloadData.length > 0) {
-                            setBackdropLoading(true);
+                            onActionOpenBackdrop();
                             await __handleDataConnect().downloadNaverExcelOrderForm(downloadData);
-                            setBackdropLoading(false);
+                            onActionCloseBackdrop();
 
                             __handleDataConnect().getDeliveryReadyUnreleasedData();
                             __handleDataConnect().getDeliveryReadyReleasedData(selectionRange.startDate, selectionRange.endDate);
@@ -1316,7 +1324,6 @@ const DeliveryReadyViewNaverMain = () => {
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReceiveMemoModal>
 
-           <BackdropLoading open={backdropLoading} />
            <DrawerNavbarMain></DrawerNavbarMain>
 
             <DeliveryReadyViewNaverBar
@@ -1346,6 +1353,11 @@ const DeliveryReadyViewNaverMain = () => {
 
                 __handleEventControl={__handleEventControl}
             ></DeliveryReadyReleasedViewNaverBody>
+
+            {/* Backdrop */}
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
         </>
     )
 }

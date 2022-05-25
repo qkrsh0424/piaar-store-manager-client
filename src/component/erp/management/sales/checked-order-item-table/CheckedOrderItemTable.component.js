@@ -1,8 +1,9 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { Container } from "./CheckedOrderItemTable.styled";
 import TableFieldView from "./TableField.view";
 
 const CheckedOrderItemTableComponent = (props) => {
+    const [checkedOrderItemList, dispatchCheckedOrderItemList] = useReducer(checkedOrderItemListReducer, initialCheckedOrderItemList);
     const [viewSize, dispatchViewSize] = useReducer(viewSizeReducer, initialViewSize);
 
     const onActionfetchMoreOrderItems = async () => {
@@ -13,13 +14,54 @@ const CheckedOrderItemTableComponent = (props) => {
         })
     }
 
+    useEffect(() => {
+        if(!props.checkedOrderItemList || props.checkedOrderItemList?.length <= 0) {
+            dispatchCheckedOrderItemList({
+                type: 'CLEAR'
+            });
+            return;
+        }
+
+        let data = [...props.checkedOrderItemList];
+        let sortedData = data.sort((a, b) => a.receiver.localeCompare(b.receiver));
+
+        // 수령인+수취인전화번호 동일하다면 수령인 duplicationUser값 true로 변경
+        for (var i = 0; i < sortedData.length-1; i++) {
+            if ((sortedData[i].receiver === sortedData[i + 1].receiver)
+                && sortedData[i].receiverContact1 === sortedData[i + 1].receiverContact1) {
+                sortedData[i] = {
+                    ...sortedData[i],
+                    duplicationUser: true
+                };
+
+                sortedData[i + 1] = {
+                    ...sortedData[i + 1],
+                    duplicationUser: true
+                };
+            }
+        }
+
+        let checkedOrderItemViewList = props.checkedOrderItemList.map(r1 => {
+            let data = sortedData.filter(r2 => r1.id === r2.id)[0];
+            return {
+                ...r1,
+                duplicationUser: data.duplicationUser
+            }
+        });
+
+        dispatchCheckedOrderItemList({
+            type: 'SET_DATA',
+            payload: checkedOrderItemViewList
+        })
+    }, [props.checkedOrderItemList])
+
     return (
         <>
             <Container>
-                {(props.viewHeader && props.checkedOrderItemList) &&
+                {(props.viewHeader && checkedOrderItemList) &&
                     <TableFieldView
                         viewHeader={props.viewHeader}
-                        checkedOrderItemList={props.checkedOrderItemList}
+                        checkedOrderItemList={checkedOrderItemList}
                         viewSize={viewSize}
 
                         onActionfetchMoreOrderItems={onActionfetchMoreOrderItems}
@@ -35,11 +77,22 @@ const CheckedOrderItemTableComponent = (props) => {
 export default CheckedOrderItemTableComponent;
 
 const initialViewSize = 50;
+const initialCheckedOrderItemList = null;
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
             return action.payload;
         default: return 50;
+    }
+}
+
+const checkedOrderItemListReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialCheckedOrderItemList;
+        default: return initialCheckedOrderItemList;
     }
 }
