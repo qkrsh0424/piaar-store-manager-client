@@ -1,6 +1,6 @@
 import moment from "moment";
 
-function diffTimeToHHmmss(startDate, endDate){
+function diffTimeToHHmmss(startDate, endDate) {
     let diffTime = new Date(endDate) - new Date(startDate);
     let tempTime = moment.duration(diffTime);
     return moment.utc(tempTime.asMilliseconds()).format('HH : mm : ss');
@@ -38,12 +38,36 @@ function getEndDate(date) {
 //     return [year, month, day].join('-');
 // }
 
+const isValidDateObject = (date) => {
+    if (Object.prototype.toString.call(date) === "[object Date]") {
+        // it is a date
+        if (isNaN(date)) { // d.getTime() or d.valueOf() will also work
+            // date object is not valid
+            return false
+        } else {
+            // date object is valid
+            return true;
+        }
+    } else {
+        // not a date object
+        return false;
+    }
+}
+
 function dateToYYYYMMDDhhmmss(idate) {
     var date = new Date(idate);
     return moment(date).format("YYYY-MM-DD HH:mm:ss");
 }
 
-function dateToYYYYMMDDhhmmssFile(idate){
+function dateToYYYYMMDDhhmmssWithInvalid(idate, invalidReturn) {
+    var date = new Date(idate || '');
+    if (!isValidDateObject(date)) {
+        return invalidReturn;
+    }
+    return moment(date).format("YYYY-MM-DD HH:mm:ss");
+}
+
+function dateToYYYYMMDDhhmmssFile(idate) {
     var date = new Date(idate);
     return moment(date).format("YYYYMMDDHHmmss");
 }
@@ -53,13 +77,13 @@ function dateToYYMMDDhhmmss(idate) {
     return moment(date).format("YY/MM/DD HH:mm:ss");
 }
 
-function dateToYYMMDD(idate){
+function dateToYYMMDD(idate) {
     var date = new Date(idate);
     return moment(date).format("YY.MM.DD");
 }
 
 // 기간 설정 시 start값을 직접 설정
-function setStartDateOfPeriod(idate, prevYear, prevMonth, prevDay){
+function setStartDateOfPeriod(idate, prevYear, prevMonth, prevDay) {
     var date = new Date(idate);
     date.setFullYear(date.getFullYear() + prevYear)
     date.setMonth(date.getMonth() + prevMonth);
@@ -106,6 +130,7 @@ export {
     getEndDate,
     dateToYYYYMMDD,
     dateToYYYYMMDDhhmmss,
+    dateToYYYYMMDDhhmmssWithInvalid,
     dateToYYYYMMDDhhmmssFile,
     dateToYYMMDDhhmmss,
     dateToYYMMDD,

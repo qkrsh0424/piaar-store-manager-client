@@ -156,7 +156,6 @@ const OrderComponent = (props) => {
                 alert(res?.data.memo);
             })
     }
-
     const __reqRefreshOrderItemList = async (ids) => {
         let params = {
             ids: ids,
@@ -338,7 +337,7 @@ const OrderComponent = (props) => {
                     {
                         subscribeUrl: '/topic/erp.erp-order-item',
                         callback: async (e) => {
-                            console.log(e);
+                            // console.log(e);
                             let body = JSON.parse(e.body);
                             if (body?.statusCode === 200) {
                                 await __reqSearchOrderItemList();

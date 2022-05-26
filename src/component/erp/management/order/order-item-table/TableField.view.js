@@ -72,7 +72,7 @@ export default function TableFieldView(props) {
                                     let isOutOfStock = r1.optionStockUnit !== null && r1.optionStockUnit < 0;
                                     return (
                                         <tr
-                                            key={rowIndex}
+                                            key={`row-${rowIndex}`}
                                             className={`${checked && 'tr-active'} ${isOutOfStock && 'tr-highlight'}`}
                                             onClick={(e) => props.onActionCheckOrderItem(e, r1)}
                                         >
@@ -81,14 +81,14 @@ export default function TableFieldView(props) {
                                             </td>
                                             {props.viewHeader?.headerDetail.details?.map(r2 => {
                                                 let matchedColumnName = r2.matchedColumnName;
-                                                if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt') {
+                                                if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt' || matchedColumnName === 'channelOrderDate') {
                                                     return (
-                                                        <td key={r2.cellNumber}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
+                                                        <td key={`col-${matchedColumnName}`}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
                                                     )
                                                 }
                                                 return (
-                                                    <td key={r2.cellNumber}
-                                                        className={`${r2.matchedColumnName === 'receiver' && r1[`duplicationUser`] && 'user-duplication'}`}
+                                                    <td key={`col-${matchedColumnName}`}
+                                                        className={`${matchedColumnName === 'receiver' && r1[`duplicationUser`] && 'user-duplication'}`}
                                                     >
                                                         {r1[matchedColumnName]}
                                                     </td>

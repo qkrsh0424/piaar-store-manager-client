@@ -77,7 +77,7 @@ const CheckedOrderItemTableComponent = (props) => {
 export default CheckedOrderItemTableComponent;
 
 const initialViewSize = 50;
-const initialCheckedOrderItemList = null;
+const initialCheckedOrderItemList = [];
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {

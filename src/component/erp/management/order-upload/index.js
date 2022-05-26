@@ -67,9 +67,9 @@ const ErpOrderUploadComponent = (props) => {
         await erpOrderItemSocket().createList(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
-                    dispatchExcelDataList({
-                        type: 'CLEAR'
-                    })
+                    // dispatchExcelDataList({
+                    //     type: 'CLEAR'
+                    // })
                 }
             })
             .catch(err => {

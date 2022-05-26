@@ -128,6 +128,22 @@ const staticDefaultHeaderDetails2 = [
         ]
     },
     {
+        "originCellName": "주소 상세",
+        "customCellName": "주소 상세",
+        "matchedColumnName": "destinationDetail",
+        "allowedSearch": true,
+        "requiredFlag": false,
+        "variableType": 'string',
+        "fixedValue": '',
+        "mergeYn": "n",
+        "splitter": '-',
+        "viewDetails": [
+            {
+                "matchedColumnName": "destinationDetail"
+            }
+        ]
+    },
+    {
         "originCellName": "판매채널",
         "customCellName": "판매채널",
         "matchedColumnName": "salesChannel",
@@ -380,6 +396,22 @@ const staticDefaultHeaderDetails2 = [
         "viewDetails": [
             {
                 "matchedColumnName": "releaseOptionCode"
+            }
+        ]
+    },
+    {
+        "originCellName": "주문일시",
+        "customCellName": "주문일시",
+        "matchedColumnName": "channelOrderDate",
+        "allowedSearch": false,
+        "requiredFlag": false,
+        "variableType": 'date',
+        "fixedValue": '',
+        "mergeYn": "n",
+        "splitter": '-',
+        "viewDetails": [
+            {
+                "matchedColumnName": "channelOrderDate"
             }
         ]
     },

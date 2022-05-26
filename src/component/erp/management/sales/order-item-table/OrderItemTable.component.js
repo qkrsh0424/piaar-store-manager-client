@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { dateToYYYYMMDDhhmmssWithInvalid } from "../../../../../utils/dateFormatUtils";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
 import { Container, TipFieldWrapper } from "./OrderItemTable.styled";
@@ -24,6 +25,9 @@ const OrderItemTableComponent = (props) => {
 
     useEffect(() => {
         if (!props.orderItemList || props.orderItemList?.length <= 0) {
+            dispatchOrderItemList({
+                type:'CLEAR'
+            })
             return;
         }
 
@@ -97,9 +101,14 @@ const OrderItemTableComponent = (props) => {
 
     const onActionOpenFixItemModal = (e, orderItem) => {
         e.stopPropagation();
+
+        let targetData = {...orderItem};
+
+        targetData.channelOrderDate = dateToYYYYMMDDhhmmssWithInvalid(orderItem.channelOrderDate, '');
+        
         dispatchFixTargetItem({
             type: 'SET_DATA',
-            payload: orderItem
+            payload: targetData
         })
         setFixItemModalOpen(true);
     }
@@ -218,7 +227,7 @@ export default OrderItemTableComponent;
 
 const initialViewSize = 50;
 const initialFixTargetItem = null;
-const initialOrderItemList = null;
+const initialOrderItemList = [];
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
