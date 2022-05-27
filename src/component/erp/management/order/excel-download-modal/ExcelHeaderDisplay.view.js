@@ -34,7 +34,7 @@ const TableBody = ({ defaultHeaderDetails, header }) => {
                 {header.headerDetail.details.map((detail, index) => {
                     if (detail.fieldType === '고정값') {
                         return (
-                            <td>
+                            <td key={detail.id}>
                                 <div>
                                     [고정값]
                                 </div>
@@ -46,7 +46,7 @@ const TableBody = ({ defaultHeaderDetails, header }) => {
                     }
                     if (detail.fieldType === '운송코드') {
                         return (
-                            <td>
+                            <td key={detail.id}>
                                 <div>
                                     [운송코드]
                                 </div>

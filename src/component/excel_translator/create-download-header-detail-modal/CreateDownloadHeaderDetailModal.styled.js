@@ -8,7 +8,7 @@ const CreateFormFieldWrapper = styled.div`
         border-bottom: 1px solid;
         padding: 1% 2%;
         align-items: center;
-        overflow: auto;
+        /* overflow: auto; */
         display: flex;
         justify-content: space-between;
         align-items: center;

@@ -27,7 +27,7 @@ const CheckedOperatorComponent = (props) => {
         setSalesConfirmModalOpen(false);
     }
 
-    const onActionConfirmSales = () => {
+    const onActionConfirmCancelSales = () => {
         let releasedCodes = [];
         props.checkedOrderItemList.forEach(r => {
             if (r.releaseYn === 'y') {
@@ -180,7 +180,7 @@ const CheckedOperatorComponent = (props) => {
                 title={'판매 취소 확인 메세지'}
                 message={`[ ${props.checkedOrderItemList?.length || 0} ] 건의 데이터를 판매 취소 하시겠습니까?`}
 
-                onConfirm={onActionConfirmSales}
+                onConfirm={onActionConfirmCancelSales}
                 onClose={onActionCloseSalesConfirmModal}
             ></ConfirmModalComponent>
             <ConfirmModalComponent
