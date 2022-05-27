@@ -24,6 +24,7 @@ class DownloadHeaderDetail {
             id: this.id,
             headerName: this.headerName,
             targetCellNumber: this.targetCellNumber,
+            fixedValueFlag: this.fixedValueFlag,
             fixedValue: this.fixedValue,
             uploadHeaderId: this.uploadheaderId
         }
@@ -48,7 +49,7 @@ const DownloadHeaderTableComponent = (props) => {
                 return;
             }
 
-            if(!params.headerId) {
+            if (!params.headerId) {
                 dispatchSelectedHeaderTitleState({
                     type: 'CLEAR'
                 });
@@ -80,11 +81,11 @@ const DownloadHeaderTableComponent = (props) => {
 
         if (selectedHeaderTitleState?.downloadHeaderDetail?.details.length) {
             let data = selectedHeaderTitleState.downloadHeaderDetail.details.map(r => {
-                    return {
-                        ...r,
-                        colData: r.headerName
-                    }
-                });
+                return {
+                    ...r,
+                    colData: r.headerName
+                }
+            });
 
             dispatchDownloadHeaderExcelDataState({
                 type: 'INIT_DATA',
@@ -95,7 +96,7 @@ const DownloadHeaderTableComponent = (props) => {
     }, [selectedHeaderTitleState]);
 
     useEffect(() => {
-        if(!props.uploadedDownloadHeaderExcelData) {
+        if (!props.uploadedDownloadHeaderExcelData) {
             setUploadedDownloadHeaderFile(false);
             return;
         }
@@ -119,18 +120,18 @@ const DownloadHeaderTableComponent = (props) => {
             return;
         }
 
-        if(selectedHeaderTitleState.downloadHeaderDetail.details.length > 0) {
+        if (selectedHeaderTitleState.downloadHeaderDetail.details.length > 0) {
             dispatchUpdateDownloadHeaderForm({
                 type: 'INIT_DATA',
                 payload: { ...selectedHeaderTitleState }
             });
-    
+
             setFixedValueCheckList(selectedHeaderTitleState.downloadHeaderDetail?.details.map(r => {
                 if (r.targetCellNumber === -1) {
                     return r.id;
                 }
             }));
-        }else {
+        } else {
             dispatchUpdateDownloadHeaderForm({
                 type: 'INIT_DATA',
                 payload: {
@@ -250,13 +251,13 @@ const DownloadHeaderTableComponent = (props) => {
             setFixedValueCheckList(fixedValueCheckList.concat(headerId));
 
             // 체크하면 targetCellNumber을 -1으로 변경
-            let newDetails = updateDownloadHeaderForm.downloadHeaderDetail.details.map(r=>{
-                if(r.id === headerId){
+            let newDetails = updateDownloadHeaderForm.downloadHeaderDetail.details.map(r => {
+                if (r.id === headerId) {
                     return {
                         ...r,
                         targetCellNumber: parseInt(-1)
                     }
-                }else{
+                } else {
                     return {
                         ...r
                     }
@@ -271,13 +272,13 @@ const DownloadHeaderTableComponent = (props) => {
             setFixedValueCheckList(fixedValueCheckList.filter(r => r !== headerId));
 
             // 체크 해제하면 fixedValue를 빈 값으로 변경
-            let newDetails = updateDownloadHeaderForm.downloadHeaderDetail.details.map(r=>{
-                if(r.id === headerId){
+            let newDetails = updateDownloadHeaderForm.downloadHeaderDetail.details.map(r => {
+                if (r.id === headerId) {
                     return {
                         ...r,
                         fixedValue: ""
                     }
-                }else{
+                } else {
                     return {
                         ...r
                     }
@@ -297,15 +298,15 @@ const DownloadHeaderTableComponent = (props) => {
         return result?.cellNumber ?? -1;
     }
 
-    const onActionStoreDownloadHeaderForm = async (e) => {
-        e.preventDefault();
-
-        await props._onSubmit_storeDownloadHeaderDetail(updateDownloadHeaderForm);
-
-        dispatchSelectedHeaderTitleState({
-            type: 'INIT_DATA',
-            payload: updateDownloadHeaderForm
-        });
+    const onActionStoreDownloadHeaderForm = async (downloadHeaderDetails) => {
+        let targetForm = {
+            ...updateDownloadHeaderForm,
+            downloadHeaderDetail: {
+                ...updateDownloadHeaderForm.downloadHeaderDetail,
+                details: downloadHeaderDetails
+            }
+        };
+        await props._onSubmit_storeDownloadHeaderDetail(targetForm);
 
         onCreateTranslatorDownloadHeaderDetailModalClose();
     }
@@ -333,7 +334,7 @@ const DownloadHeaderTableComponent = (props) => {
 
         await props._onSubmit_uploadDownloadHeaderFormExcelFile(uploadedFormData);
     }
-    
+
     const onActionDownloadExcelForm = async (e) => {
         e.preventDefault();
 
@@ -348,11 +349,11 @@ const DownloadHeaderTableComponent = (props) => {
     }
 
     const onChangeDetailsOrder = (result) => {
-        if(!result.destination) return;
+        if (!result.destination) return;
 
         let targetUpdateHeader = { ...updateDownloadHeaderForm };
         let targetDetails = targetUpdateHeader.downloadHeaderDetail.details;
-        
+
         const newDetails = valueUtils.reorder(
             targetDetails,
             result.source.index,
@@ -415,7 +416,7 @@ const initialUploadedDownloadHeaderState = null;
 const selectedHeaderTitleStateReducer = (state, action) => {
     switch (action.type) {
         case 'INIT_DATA':
-            return {...action.payload};
+            return { ...action.payload };
         case 'CLEAR':
             return initialSelectedHeaderTitleState;
         default: return initialSelectedHeaderTitleState

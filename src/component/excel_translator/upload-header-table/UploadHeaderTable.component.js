@@ -30,8 +30,8 @@ class UploadHeaderDetail {
 
 const UploadHeaderTableComponent = (props) => {
     const location = useLocation();
-    let params = queryString.parse(location.search);
-    
+    let query = queryString.parse(location.search);
+
     const [createTranslatorUploadHeaderDetailModalOpen, setCreateTranslatorUploadHeaderDetailModalOpen] = useState(false);
     const [selectedHeaderTitleState, dispatchSelectedHeaderTitleState] = useReducer(selectedHeaderTitleStateReducer, initialSelectedHeaderTitleState);
     const [createUploadHeaderDetailState, dispatchCreateUploadHeaderDetailState] = useReducer(createUploadHeaderDetailStateReducer, initialCreateUploadHeaderDetailState);
@@ -43,7 +43,7 @@ const UploadHeaderTableComponent = (props) => {
                 return;
             }
 
-            if(!params.headerId) {
+            if (!query.headerId) {
                 dispatchSelectedHeaderTitleState({
                     type: 'CLEAR'
                 });
@@ -56,8 +56,8 @@ const UploadHeaderTableComponent = (props) => {
             dispatchUploadHeaderExcelDataState({
                 type: 'CLEAR'
             });
-            
-            let headerId = params.headerId;
+
+            let headerId = query.headerId;
             let headerTitleState = props.excelTranslatorHeaderList?.filter(r => r.id === headerId)[0];
 
             dispatchSelectedHeaderTitleState({
@@ -66,7 +66,7 @@ const UploadHeaderTableComponent = (props) => {
             });
         }
         initHeaderTitleState();
-    }, [params.headerId, props.excelTranslatorHeaderList]);
+    }, [query.headerId, props.excelTranslatorHeaderList]);
 
     useEffect(() => {
         if (!selectedHeaderTitleState) {
@@ -75,11 +75,11 @@ const UploadHeaderTableComponent = (props) => {
 
         if (selectedHeaderTitleState?.uploadHeaderDetail?.details.length) {
             let data = selectedHeaderTitleState.uploadHeaderDetail.details.map(r => {
-                    return {
-                        ...r,
-                        colData: r.headerName
-                    }
-                });
+                return {
+                    ...r,
+                    colData: r.headerName
+                }
+            });
 
             dispatchUploadHeaderExcelDataState({
                 type: 'INIT_DATA',
@@ -90,7 +90,7 @@ const UploadHeaderTableComponent = (props) => {
     }, [selectedHeaderTitleState]);
 
     useEffect(() => {
-        if(!props.uploadedUploadHeaderExcelData) {
+        if (!props.uploadedUploadHeaderExcelData) {
             dispatchUploadHeaderExcelDataState({
                 type: 'CLEAR'
             });
@@ -140,7 +140,7 @@ const UploadHeaderTableComponent = (props) => {
             type: 'INIT_DATA',
             payload: { ...selectedHeaderTitleState }
         });
-        
+
         // 다운로드헤더 엑셀파일이 업로드 되었다면 이 데이터로 헤더 설정
         if (uploadHeaderExcelDataState) {
             let dataArr = [];
@@ -183,19 +183,17 @@ const UploadHeaderTableComponent = (props) => {
         setCreateTranslatorUploadHeaderDetailModalOpen(false);
     }
 
-    const onActionStoreUploadHeaderForm = async (e) => {
+    const onActionStoreUploadHeaderForm = async (e, uploadHeaderDetails) => {
         e.preventDefault();
 
-        if(selectedHeaderTitleState.downloadHeaderDetail.details.length > 0) {
+        if (uploadHeaderDetails.length > 0) {
             // 다운로드헤더 형식이 설정되어있다면 형식초기화
-            if(!window.confirm('업로드 엑셀헤더 양식을 변경하면 다운로드 엑셀헤더 양식은 초기화됩니다.')) {
+            if (!window.confirm('업로드 엑셀헤더 양식을 변경하면 다운로드 엑셀헤더 양식은 초기화됩니다.')) {
                 return;
             }
         }
 
-        let uploadedHeader = createUploadHeaderDetailState.uploadHeaderDetail;
-
-        let uploadDetails = uploadedHeader.details.map((r, idx) => {
+        let uploadDetails = uploadHeaderDetails.map((r, idx) => {
             let data = new UploadHeaderDetail().toJSON();
             data = {
                 ...data,
@@ -224,54 +222,6 @@ const UploadHeaderTableComponent = (props) => {
         onCreateTranslatorUploadHeaderDetailModalClose();
     }
 
-    const onActionAddFormCell = (e) => {
-        e.preventDefault();
-
-        let newDetail = {
-            id: uuidv4(),
-            colData: '',
-            cellType: 'String'
-        }
-
-        dispatchCreateUploadHeaderDetailState({
-            type: 'SET_UPLOAD_HEADER_DETAIL_DATA',
-            payload: createUploadHeaderDetailState.uploadHeaderDetail.details.concat(newDetail)
-        });
-    }
-
-    const onActionDeleteFormCell = (e, uploadHeaderId) => {
-        e.preventDefault();
-
-        let newDetails = createUploadHeaderDetailState.uploadHeaderDetail.details.filter(r => r.id !== uploadHeaderId);
-
-        dispatchCreateUploadHeaderDetailState({
-            type: 'SET_UPLOAD_HEADER_DETAIL_DATA',
-            payload: newDetails
-        });
-    }
-
-    const onChangeUploadHeaderDetail = (e, detailId) => {
-        e.preventDefault();
-
-        let newDetails = createUploadHeaderDetailState?.uploadHeaderDetail.details.map(r => {
-            if (r.id === detailId) {
-                return {
-                    ...r,
-                    [e.target.name]: e.target.value
-                }
-            } else {
-                return {
-                    ...r
-                }
-            }
-        });
-
-        dispatchCreateUploadHeaderDetailState({
-            type: 'SET_UPLOAD_HEADER_DETAIL_DATA',
-            payload: newDetails
-        });
-    }
-
     const onActionDownloadExcelForm = async (e) => {
         e.preventDefault();
 
@@ -283,24 +233,6 @@ const UploadHeaderTableComponent = (props) => {
         });
 
         await props._onAction_downloadUploadHeaderDetails(selectedHeaderTitleState.uploadHeaderTitle, downloadDetail);
-    }
-    
-    const onChangeDetailsOrder = (result) => {
-        if(!result.destination) return;
-
-        let targetUpdateHeader = { ...createUploadHeaderDetailState };
-        let targetDetails = targetUpdateHeader.uploadHeaderDetail.details;
-        
-        const newDetails = valueUtils.reorder(
-            targetDetails,
-            result.source.index,
-            result.destination.index
-        );
-
-        dispatchCreateUploadHeaderDetailState({
-            type: 'SET_UPLOAD_HEADER_DETAIL_DATA',
-            payload: newDetails
-        });
     }
 
     return (
@@ -319,22 +251,20 @@ const UploadHeaderTableComponent = (props) => {
             ></TableFieldView>
 
             {/* ExcelTranslator Donwload Header Create Modal */}
-            <CommonModalComponent
-                open={createTranslatorUploadHeaderDetailModalOpen}
-                onClose={() => onCreateTranslatorUploadHeaderDetailModalClose()}
-                maxWidth={'xs'}
-                fullWidth={true}
-            >
-                <CreateUploadHeaderDetailModalComponent
-                    createUploadHeaderDetailState={createUploadHeaderDetailState}
+            {createTranslatorUploadHeaderDetailModalOpen &&
+                <CommonModalComponent
+                    open={createTranslatorUploadHeaderDetailModalOpen}
+                    onClose={() => onCreateTranslatorUploadHeaderDetailModalClose()}
+                    maxWidth={'xs'}
+                    fullWidth={true}
+                >
+                    <CreateUploadHeaderDetailModalComponent
+                        createUploadHeaderDetailState={createUploadHeaderDetailState}
 
-                    onActionAddFormCell={(e) => onActionAddFormCell(e)}
-                    onActionDeleteFormCell={(e, uploadHeaderId) => onActionDeleteFormCell(e, uploadHeaderId)}
-                    onChangeDetailsOrder={(result) => onChangeDetailsOrder(result)}
-                    onActionStoreUploadHeaderForm={(e) => onActionStoreUploadHeaderForm(e)}
-                    onChangeUploadHeaderDetail={(e, detailId) => onChangeUploadHeaderDetail(e, detailId)}
-                ></CreateUploadHeaderDetailModalComponent>
-            </CommonModalComponent>
+                        onActionStoreUploadHeaderForm={onActionStoreUploadHeaderForm}
+                    ></CreateUploadHeaderDetailModalComponent>
+                </CommonModalComponent>
+            }
         </Container>
     )
 }
@@ -348,7 +278,7 @@ const initialUploadHeaderExcelDataState = null;
 const selectedHeaderTitleStateReducer = (state, action) => {
     switch (action.type) {
         case 'INIT_DATA':
-            return {...action.payload};
+            return { ...action.payload };
         case 'CLEAR':
             return null;
         default: return { ...state }

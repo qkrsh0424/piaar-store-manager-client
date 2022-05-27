@@ -50,7 +50,7 @@ const CreateFormFieldWrapper = styled.div`
 
     .detail-body {
         background: linear-gradient(to bottom right,#dce3f6,#f0fcff);
-        height: 50vh;
+        height: 100%;
     }
 
     .detail-list {
@@ -68,8 +68,6 @@ const CreateFormFieldWrapper = styled.div`
     }
 
     .data-wrapper {
-        height: 50vh;
-        overflow: auto;
     }
 
     .list-group .data-text {
