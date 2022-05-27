@@ -8,7 +8,6 @@ import DataControlFieldView from "./DataControlField.view";
 import TableFieldView from "./TableField.view";
 import CommonModalComponent from "../../module/modal/CommonModalComponent";
 import CreateDownloadHeaderDetailModalComponent from '../create-download-header-detail-modal/CreateDownloadHeaderDetailModal.component'
-import valueUtils from "../../../utils/valueUtils";
 
 class DownloadHeaderDetail {
     constructor() {
@@ -36,7 +35,6 @@ const DownloadHeaderTableComponent = (props) => {
     let params = queryString.parse(location.search);
 
     const [createTranslatorDownloadHeaderDetailModalOpen, setCreateTranslatorDownloadHeaderDetailModalOpen] = useState(false);
-    const [fixedValueCheckList, setFixedValueCheckList] = useState([]);
 
     const [selectedHeaderTitleState, dispatchSelectedHeaderTitleState] = useReducer(selectedHeaderTitleStateReducer, initialSelectedHeaderTitleState);
     const [updateDownloadHeaderForm, dispatchUpdateDownloadHeaderForm] = useReducer(updateDownloadHeaderFormReducer, initialUpdateDownloadHeaderForm);
@@ -126,11 +124,6 @@ const DownloadHeaderTableComponent = (props) => {
                 payload: { ...selectedHeaderTitleState }
             });
 
-            setFixedValueCheckList(selectedHeaderTitleState.downloadHeaderDetail?.details.map(r => {
-                if (r.targetCellNumber === -1) {
-                    return r.id;
-                }
-            }));
         } else {
             dispatchUpdateDownloadHeaderForm({
                 type: 'INIT_DATA',
@@ -174,128 +167,6 @@ const DownloadHeaderTableComponent = (props) => {
             type: 'CLEAR'
         });
         setCreateTranslatorDownloadHeaderDetailModalOpen(false);
-    }
-
-    const onActionAddFormCell = (e) => {
-        e.preventDefault();
-
-        dispatchUpdateDownloadHeaderForm({
-            type: 'ADD_DATA'
-        });
-    }
-
-    const onActionDeleteCell = (e, headerId) => {
-        e.preventDefault();
-
-        let newDetails = updateDownloadHeaderForm.downloadHeaderDetail.details.filter(r => r.id !== headerId);
-
-        dispatchUpdateDownloadHeaderForm({
-            type: 'SET_DOWNLOAD_HEADER_DETAIL_DATA',
-            payload: newDetails
-        });
-    }
-
-    const onActionSelectUploadHeader = (e, headerId) => {
-        e.preventDefault();
-
-        let newDetails = updateDownloadHeaderForm.downloadHeaderDetail.details.map(r => {
-            if (r.id === headerId) {
-                let uploadHeaderId = updateDownloadHeaderForm.uploadHeaderDetail.details.filter(uploadHeader => uploadHeader.cellNumber === e.target.value)[0].id;
-
-                return {
-                    ...r,
-                    targetCellNumber: parseInt(e.target.value),
-                    uploadHeaderId: uploadHeaderId
-                }
-            } else {
-                return {
-                    ...r
-                }
-            }
-        });
-
-        dispatchUpdateDownloadHeaderForm({
-            type: 'SET_DOWNLOAD_HEADER_DETAIL_DATA',
-            payload: newDetails
-        });
-    }
-
-    const onChangeInputValue = (e, headerId) => {
-        e.preventDefault();
-
-        let newDetails = updateDownloadHeaderForm?.downloadHeaderDetail.details.map(r => {
-            if (r.id === headerId) {
-                return {
-                    ...r,
-                    [e.target.name]: e.target.value
-                }
-            } else {
-                return {
-                    ...r
-                }
-            }
-        });
-
-        dispatchUpdateDownloadHeaderForm({
-            type: 'SET_DOWNLOAD_HEADER_DETAIL_DATA',
-            payload: newDetails
-        })
-    }
-
-    const isChecked = (headerId) => {
-        return fixedValueCheckList.includes(headerId);
-    }
-
-    const checkOne = (e, headerId) => {
-        if (e.target.checked) {
-            setFixedValueCheckList(fixedValueCheckList.concat(headerId));
-
-            // 체크하면 targetCellNumber을 -1으로 변경
-            let newDetails = updateDownloadHeaderForm.downloadHeaderDetail.details.map(r => {
-                if (r.id === headerId) {
-                    return {
-                        ...r,
-                        targetCellNumber: parseInt(-1)
-                    }
-                } else {
-                    return {
-                        ...r
-                    }
-                }
-            });
-
-            dispatchUpdateDownloadHeaderForm({
-                type: 'SET_DOWNLOAD_HEADER_DETAIL_DATA',
-                payload: newDetails
-            })
-        } else {
-            setFixedValueCheckList(fixedValueCheckList.filter(r => r !== headerId));
-
-            // 체크 해제하면 fixedValue를 빈 값으로 변경
-            let newDetails = updateDownloadHeaderForm.downloadHeaderDetail.details.map(r => {
-                if (r.id === headerId) {
-                    return {
-                        ...r,
-                        fixedValue: ""
-                    }
-                } else {
-                    return {
-                        ...r
-                    }
-                }
-            });
-
-            dispatchUpdateDownloadHeaderForm({
-                type: 'SET_DOWNLOAD_HEADER_DETAIL_DATA',
-                payload: newDetails
-            })
-        }
-    }
-
-    // 다운로드 엑셀 헤더의 targetCellNumber에 대응하는 업로드 엑셀의 헤더명을 찾는다.
-    const getUploadHeaderName = (targetCellNumber) => {
-        let result = updateDownloadHeaderForm?.uploadHeaderDetail?.details.filter(r => r.cellNumber === targetCellNumber)[0];
-        return result?.cellNumber ?? -1;
     }
 
     const onActionStoreDownloadHeaderForm = async (downloadHeaderDetails) => {
@@ -348,24 +219,6 @@ const DownloadHeaderTableComponent = (props) => {
         await props._onAction_downloadUploadHeaderDetails(selectedHeaderTitleState.downloadHeaderTitle, downloadDetail);
     }
 
-    const onChangeDetailsOrder = (result) => {
-        if (!result.destination) return;
-
-        let targetUpdateHeader = { ...updateDownloadHeaderForm };
-        let targetDetails = targetUpdateHeader.downloadHeaderDetail.details;
-
-        const newDetails = valueUtils.reorder(
-            targetDetails,
-            result.source.index,
-            result.destination.index
-        );
-
-        dispatchUpdateDownloadHeaderForm({
-            type: 'SET_DOWNLOAD_HEADER_DETAIL_DATA',
-            payload: newDetails
-        });
-    }
-
     return (
         <Container>
             <DataControlFieldView
@@ -391,14 +244,6 @@ const DownloadHeaderTableComponent = (props) => {
                 <CreateDownloadHeaderDetailModalComponent
                     updateDownloadHeaderForm={updateDownloadHeaderForm}
 
-                    onChangeDetailsOrder={(result) => onChangeDetailsOrder(result)}
-                    onActionAddFormCell={(e) => onActionAddFormCell(e)}
-                    onActionDeleteCell={(e, headerId) => onActionDeleteCell(e, headerId)}
-                    onActionSelectUploadHeader={(e, headerId) => onActionSelectUploadHeader(e, headerId)}
-                    onChangeInputValue={(e, headerId) => onChangeInputValue(e, headerId)}
-                    isChecked={(headerId) => isChecked(headerId)}
-                    checkOne={(e, headerId) => checkOne(e, headerId)}
-                    getUploadHeaderName={(targetCellNum) => getUploadHeaderName(targetCellNum)}
                     onActionStoreDownloadHeaderForm={(e) => onActionStoreDownloadHeaderForm(e)}
                 ></CreateDownloadHeaderDetailModalComponent>
             </CommonModalComponent>
@@ -411,7 +256,6 @@ export default DownloadHeaderTableComponent;
 const initialSelectedHeaderTitleState = null;
 const initialUpdateDownloadHeaderForm = null;
 const initialDownloadHeaderExcelDataState = null;
-const initialUploadedDownloadHeaderState = null;
 
 const selectedHeaderTitleStateReducer = (state, action) => {
     switch (action.type) {

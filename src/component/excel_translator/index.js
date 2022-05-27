@@ -11,6 +11,7 @@ import { dateToYYMMDDhhmmss } from './../../utils/dateFormatUtils'
 import DownloadHeaderTableComponent from './download-header-table/DownloadHeaderTable.component';
 import { useLocation } from 'react-router-dom';
 import UploadHeaderTableComponent from './upload-header-table/UploadHeaderTable.component';
+import CustomSelect from '../module/select/CustomSelect';
 
 const Container = styled.div`
     background: linear-gradient(to bottom right,#f0fffa,#839edfad);
@@ -434,6 +435,14 @@ const ExcelTranslatorComponent = () => {
 
     return (
         <Container>
+            <CustomSelect
+                value='1'
+                width='200px'
+            >
+                <option value=''>전체</option>
+                <option value='1'>1 djkalsjd klasj kldajs kldjkl jdklajs kladj kladjkl djaklsdj akls jklajkl</option>
+                <option value='2'>2</option>
+            </CustomSelect>
             <ControlBarComponent
                 excelTranslatorHeaderList={excelTranslatorHeaderList}
                 uploadedExcelData={uploadedExcelData}
