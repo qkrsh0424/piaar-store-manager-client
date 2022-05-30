@@ -4,7 +4,7 @@ import CustomDatePicker from '../../../../module/date-picker/CustomDatePicker';
 export default function DateSelectorFieldView(props) {
     return (
         <DateSelectorFieldWrapper>
-            <div className='label-item'>조회기간 (주문등록일)</div>
+            <div className='label-item'>조회기간</div>
             <div
                 className="quick-select-box"
             >
@@ -23,10 +23,12 @@ export default function DateSelectorFieldView(props) {
             <div className='flex-box'>
                 <select
                     className='select-item'
-                    value={'registration'}
-                    onChange={() => { }}
+                    value={props.periodType || ''}
+                    onChange={props.onChangePeriodType}
                 >
+                    <option value="">전체</option>
                     <option value='registration'>주문등록일</option>
+                    <option value='channelOrderDate'>주문일시</option>
                 </select>
                 <div className='date-selector-box'>
                     <CustomDatePicker

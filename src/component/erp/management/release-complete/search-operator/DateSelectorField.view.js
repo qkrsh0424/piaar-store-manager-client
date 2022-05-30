@@ -30,6 +30,7 @@ export default function DateSelectorFieldView(props) {
                     <option value='registration'>주문등록일</option>
                     <option value='sales'>판매등록일</option>
                     <option value='release'>출고등록일</option>
+                    <option value='channelOrderDate'>주문일시</option>
                 </select>
                 {props.periodType &&
                     <>

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const ContainerDiv = styled.div`
-
 `;
 
 const ContainerTr = styled.tr`

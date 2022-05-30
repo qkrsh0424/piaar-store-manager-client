@@ -420,7 +420,7 @@ const ReleaseCompleteComponent = (props) => {
         const __effect = {
             mount: async () => {
                 onActionOpenSocketConnectLoading();
-                if (!connected) {
+                if (!connected || !orderItemPage || !viewHeader) {
                     return;
                 }
 
@@ -459,7 +459,7 @@ const ReleaseCompleteComponent = (props) => {
         return () => {
             __effect.unmount();
         };
-    }, [connected]);
+    }, [connected, orderItemPage, viewHeader]);
 
     useEffect(() => {
         async function fetchCheckedOrderItems() {

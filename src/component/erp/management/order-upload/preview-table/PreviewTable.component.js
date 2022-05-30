@@ -10,7 +10,7 @@ function Layout({ children }) {
     );
 }
 
-const defaultHeaderDetails = getDefaultHeaderDetails().slice(0, 34);
+const defaultHeaderDetails = getDefaultHeaderDetails().slice(0, 36);
 
 const PreviewTableComponent = (props) => {
 

@@ -725,13 +725,16 @@ function DownloadFormView({
                                                                 {r.fieldType === '일반' ?
                                                                     <>
                                                                         <div>
-                                                                            {r.viewDetails.map(viewDetail => {
+                                                                            {r.viewDetails.map((viewDetail, index) => {
                                                                                 return (
-                                                                                    <div style={{
-                                                                                        color: '#2c73d2',
-                                                                                        borderLeft: '3px solid #2c73d260',
-                                                                                        marginBottom: '8px'
-                                                                                    }}>
+                                                                                    <div
+                                                                                        key={`${viewDetail.matchedColumnName}-${index}`}
+                                                                                        style={{
+                                                                                            color: '#2c73d2',
+                                                                                            borderLeft: '3px solid #2c73d260',
+                                                                                            marginBottom: '8px'
+                                                                                        }}
+                                                                                    >
                                                                                         {defaultHeaderDetails.filter(r => r.matchedColumnName === viewDetail.matchedColumnName)[0].originCellName}
                                                                                     </div>
                                                                                 );

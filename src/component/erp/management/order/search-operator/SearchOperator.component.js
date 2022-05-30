@@ -16,15 +16,22 @@ const SearchOperatorComponent = (props) => {
     const navigate = useNavigate();
     const query = qs.parse(location.search);
 
+    const [periodType, dispatchPeriodType] = useReducer(periodTypeReducer, initialPeriodType);
     const [startDate, dispatchStartDate] = useReducer(startDateReducer, initialStartDate);
     const [endDate, dispatchEndDate] = useReducer(endDateReducer, initialEndDate);
     const [searchColumnName, dispatchSearchColumnName] = useReducer(searchColumnNameReducer, initialSearchColumnName);
     const [searchQuery, dispatchSearchQuery] = useReducer(searchQueryReducer, initialSearchQuery);
 
     useEffect(() => {
+        let periodType = query.periodType;
         let startDate = query.startDate;
         let endDate = query.endDate;
 
+        dispatchPeriodType({
+            type: 'SET_DATA',
+            payload: periodType
+        })
+        
         if (startDate) {
             dispatchStartDate({
                 type: 'SET_DATA',
@@ -38,7 +45,7 @@ const SearchOperatorComponent = (props) => {
                 payload: new Date(endDate)
             })
         }
-    }, [query.startDate, query.endDate])
+    }, [query.startDate, query.endDate, query.periodType])
 
     useEffect(() => {
         let searchColumnName = query.searchColumnName;
@@ -107,10 +114,14 @@ const SearchOperatorComponent = (props) => {
             return;
         }
 
-        if (startDate && endDate) {
+        if (periodType && startDate && endDate) {
             query.startDate = dateToYYYYMMDD(startDate);
             query.endDate = dateToYYYYMMDD(endDate);
-            query.periodType = 'registration'
+            query.periodType = periodType;
+        }else{
+            delete query.startDate;
+            delete query.endDate;
+            delete query.periodType;
         }
 
         if (searchColumnName) {
@@ -155,7 +166,7 @@ const SearchOperatorComponent = (props) => {
     }
 
     const onActionSetDateToday = () => {
-        let pType = 'registration';
+        let pType = periodType || 'registration';
         let sDate = dateToYYYYMMDD(new Date());
         let eDate = dateToYYYYMMDD(new Date());
 
@@ -176,7 +187,7 @@ const SearchOperatorComponent = (props) => {
     }
 
     const onActionSetDate7Days = () => {
-        let pType = 'registration';
+        let pType = periodType || 'registration';
         let today = new Date();
 
         let eDate = dateToYYYYMMDD(today);
@@ -200,10 +211,28 @@ const SearchOperatorComponent = (props) => {
         )
     }
 
+    const onChangePeriodType = (e) => {
+        let value = e.target.value;
+
+        if (!value) {
+            dispatchStartDate({
+                type: 'CLEAR'
+            })
+            dispatchEndDate({
+                type: 'CLEAR'
+            })
+        }
+        dispatchPeriodType({
+            type: 'SET_DATA',
+            payload: value
+        })
+    }
+
     return (
         <>
             <Container>
                 <DateSelectorFieldView
+                    periodType={periodType}
                     startDate={startDate}
                     endDate={endDate}
 
@@ -211,6 +240,7 @@ const SearchOperatorComponent = (props) => {
                     onChangeEndDateValue={onChangeEndDateValue}
                     onActionSetDateToday={onActionSetDateToday}
                     onActionSetDate7Days={onActionSetDate7Days}
+                    onChangePeriodType={onChangePeriodType}
                 ></DateSelectorFieldView>
                 <form onSubmit={(e) => onActionRouteToSearch(e)}>
                     <DetailSearchFieldView
@@ -233,10 +263,21 @@ const SearchOperatorComponent = (props) => {
 }
 export default SearchOperatorComponent;
 
+const initialPeriodType = '';
 const initialStartDate = null;
 const initialEndDate = null;
 const initialSearchColumnName = null;
 const initialSearchQuery = '';
+
+const periodTypeReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialPeriodType;
+        default: return initialPeriodType;
+    }
+}
 
 const startDateReducer = (state, action) => {
     switch (action.type) {

@@ -372,7 +372,7 @@ const SalesComponent = (props) => {
         return () => {
             __effect.unmount();
         };
-    }, [connected]);
+    }, [connected, orderItemPage, viewHeader]);
 
     useEffect(() => {
         async function fetchCheckedOrderItems() {
@@ -612,9 +612,11 @@ const SalesComponent = (props) => {
                 ></BasicSnackbarHookComponent>
             }
 
-            <SocketConnectLoadingHookComponent
-                open={socketConnectLoadingOpen}
-            ></SocketConnectLoadingHookComponent>
+            {socketConnectLoadingOpen &&
+                <SocketConnectLoadingHookComponent
+                    open={socketConnectLoadingOpen}
+                ></SocketConnectLoadingHookComponent>
+            }
         </>
     );
 }

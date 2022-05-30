@@ -52,7 +52,7 @@ const TableBody = ({ viewHeader, downloadOrderItemList, isCheckedItem, _onAction
                             let checked = isCheckedItem(r2);
                             return (
                                 <tr
-                                    key={r2Index}
+                                    key={r2.id}
                                 >
                                     <td
                                         style={{ background: '#d1d1d1' }}
@@ -66,13 +66,13 @@ const TableBody = ({ viewHeader, downloadOrderItemList, isCheckedItem, _onAction
                                     </td>
                                     {viewHeader?.headerDetail.details.map(r3 => {
                                         let matchedColumnName = r3.matchedColumnName;
-                                        if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt') {
+                                        if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt' || matchedColumnName === 'channelOrderDate') {
                                             return (
-                                                <td key={r2.cellNumber}>{r2[matchedColumnName] ? dateToYYYYMMDDhhmmss(r2[matchedColumnName]) : ""}</td>
+                                                <td key={matchedColumnName}>{r2[matchedColumnName] ? dateToYYYYMMDDhhmmss(r2[matchedColumnName]) : ""}</td>
                                             )
                                         }
                                         return (
-                                            <td key={r3.cellNumber}>{r2[matchedColumnName]}</td>
+                                            <td key={matchedColumnName}>{r2[matchedColumnName]}</td>
                                         )
                                     })}
                                 </tr>

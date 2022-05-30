@@ -156,7 +156,6 @@ const OrderComponent = (props) => {
                 alert(res?.data.memo);
             })
     }
-
     const __reqRefreshOrderItemList = async (ids) => {
         let params = {
             ids: ids,
@@ -330,7 +329,7 @@ const OrderComponent = (props) => {
         const __effect = {
             mount: async () => {
                 onActionOpenSocketConnectLoading();
-                if (!connected) {
+                if (!connected || !orderItemPage) {
                     return;
                 }
 
@@ -338,7 +337,6 @@ const OrderComponent = (props) => {
                     {
                         subscribeUrl: '/topic/erp.erp-order-item',
                         callback: async (e) => {
-                            console.log(e);
                             let body = JSON.parse(e.body);
                             if (body?.statusCode === 200) {
                                 await __reqSearchOrderItemList();
@@ -370,7 +368,7 @@ const OrderComponent = (props) => {
         return () => {
             __effect.unmount();
         };
-    }, [connected]);
+    }, [connected, orderItemPage, viewHeader]);
 
     useEffect(() => {
         async function fetchCheckedOrderItems() {

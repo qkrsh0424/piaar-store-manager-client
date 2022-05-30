@@ -44,11 +44,14 @@ const FixOrderItemModalComponent = (props) => {
                         <span style={{ color: 'red' }}>[*]</span> 은 필수 입력 값 입니다.
                     </TipFieldWrapper>
                     <ContentFieldWrapper>
-                        {defaultHeaderDetails.slice(0, 34).map(r => {
+                        {defaultHeaderDetails.slice(0, 36).map(r => {
+                            let matchedColumnName = r.matchedColumnName;
+                            
                             if (EXCLUDED_COLUMN_NAME.includes(r.matchedColumnName)) {
+
                                 return (
                                     <div
-                                        key={r.matchedColumnName}
+                                        key={matchedColumnName}
                                         className='input-box'
                                     >
                                         <div className='input-label'>
@@ -60,7 +63,7 @@ const FixOrderItemModalComponent = (props) => {
                                         <input
                                             type='text'
                                             className='input-el readonly'
-                                            defaultValue={props.fixTargetItem[r.matchedColumnName]}
+                                            defaultValue={props.fixTargetItem[matchedColumnName]}
                                             readOnly
                                             required={r.requiredFlag && true}
                                         >
@@ -71,7 +74,7 @@ const FixOrderItemModalComponent = (props) => {
                             if (r.variableType === 'number') {
                                 return (
                                     <div
-                                        key={r.matchedColumnName}
+                                        key={matchedColumnName}
                                         className='input-box'
                                     >
                                         <div className='input-label'>
@@ -83,17 +86,43 @@ const FixOrderItemModalComponent = (props) => {
                                         <input
                                             type='number'
                                             className='input-el'
-                                            name={r.matchedColumnName}
-                                            value={props.fixTargetItem[r.matchedColumnName] || ''}
+                                            name={matchedColumnName}
+                                            value={props.fixTargetItem[matchedColumnName] || ''}
                                             onChange={props.onChangeFixTargetItem}
                                             required={r.requiredFlag && true}
                                         ></input>
                                     </div>
                                 );
                             }
+
+                            if (matchedColumnName === 'channelOrderDate') {
+                                return (
+                                    <div
+                                        key={matchedColumnName}
+                                        className='input-box'
+                                    >
+                                        <div className='input-label'>
+                                            {r.originCellName}
+                                            {r.requiredFlag &&
+                                                <span style={{ color: 'red' }}> *</span>
+                                            }
+                                        </div>
+                                        <input
+                                            type='text'
+                                            className='input-el'
+                                            name={matchedColumnName}
+                                            value={props.fixTargetItem[matchedColumnName] || ''}
+                                            placeholder='ex) 2022-01-01 09:00:00'
+                                            onChange={props.onChangeFixTargetItem}
+                                            required={r.requiredFlag && true}
+                                        ></input>
+                                    </div>
+                                );
+                            }
+
                             return (
                                 <div
-                                    key={r.matchedColumnName}
+                                    key={matchedColumnName}
                                     className='input-box'
                                 >
                                     <div className='input-label'>
@@ -105,8 +134,8 @@ const FixOrderItemModalComponent = (props) => {
                                     <input
                                         type='text'
                                         className='input-el'
-                                        name={r.matchedColumnName}
-                                        value={props.fixTargetItem[r.matchedColumnName] || ''}
+                                        name={matchedColumnName}
+                                        value={props.fixTargetItem[matchedColumnName] || ''}
                                         onChange={props.onChangeFixTargetItem}
                                         required={r.requiredFlag && true}
                                     ></input>

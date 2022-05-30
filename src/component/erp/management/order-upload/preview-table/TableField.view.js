@@ -56,6 +56,7 @@ export default function TableFieldView(props) {
                                     <td>{rowData.receiverContact1}</td>
                                     <td>{rowData.receiverContact2}</td>
                                     <td>{rowData.destination}</td>
+                                    <td>{rowData.destinationDetail}</td>
                                     <td>{rowData.salesChannel}</td>
                                     <td>{rowData.orderNumber1}</td>
                                     <td>{rowData.orderNumber2}</td>
@@ -72,6 +73,7 @@ export default function TableFieldView(props) {
                                     <td>{rowData.prodCode}</td>
                                     <td>{rowData.optionCode}</td>
                                     <td>{rowData.releaseOptionCode}</td>
+                                    <td>{rowData.channelOrderDate}</td>
                                     <td>{rowData.managementMemo1}</td>
                                     <td>{rowData.managementMemo2}</td>
                                     <td>{rowData.managementMemo3}</td>

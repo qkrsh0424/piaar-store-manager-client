@@ -8,7 +8,6 @@ const CreateFormFieldWrapper = styled.div`
         border-bottom: 1px solid;
         padding: 1% 2%;
         align-items: center;
-        overflow: auto;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -80,11 +79,6 @@ const CreateFormFieldWrapper = styled.div`
         padding: 3px;
         height: 100%;
         border-bottom: 1px solid #cfcfcf;
-    }
-
-    .data-wrapper {
-        height: 50vh;
-        overflow: auto;
     }
 
     .detail-list {
