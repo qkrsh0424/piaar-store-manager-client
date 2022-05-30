@@ -180,6 +180,9 @@ const UploadHeaderTableComponent = (props) => {
     }
 
     const onCreateTranslatorUploadHeaderDetailModalClose = () => {
+        dispatchCreateUploadHeaderDetailState({
+            type: 'CLEAR'
+        })
         setCreateTranslatorUploadHeaderDetailModalOpen(false);
     }
 
@@ -251,20 +254,18 @@ const UploadHeaderTableComponent = (props) => {
             ></TableFieldView>
 
             {/* ExcelTranslator Donwload Header Create Modal */}
-            {createTranslatorUploadHeaderDetailModalOpen &&
-                <CommonModalComponent
-                    open={createTranslatorUploadHeaderDetailModalOpen}
-                    onClose={() => onCreateTranslatorUploadHeaderDetailModalClose()}
-                    maxWidth={'xs'}
-                    fullWidth={true}
-                >
-                    <CreateUploadHeaderDetailModalComponent
-                        createUploadHeaderDetailState={createUploadHeaderDetailState}
+            <CommonModalComponent
+                open={createTranslatorUploadHeaderDetailModalOpen}
+                onClose={onCreateTranslatorUploadHeaderDetailModalClose}
+                maxWidth={'xs'}
+                fullWidth={true}
+            >
+                <CreateUploadHeaderDetailModalComponent
+                    createUploadHeaderDetailState={createUploadHeaderDetailState}
 
-                        onActionStoreUploadHeaderForm={onActionStoreUploadHeaderForm}
-                    ></CreateUploadHeaderDetailModalComponent>
-                </CommonModalComponent>
-            }
+                    onActionStoreUploadHeaderForm={onActionStoreUploadHeaderForm}
+                ></CreateUploadHeaderDetailModalComponent>
+            </CommonModalComponent>
         </Container>
     )
 }

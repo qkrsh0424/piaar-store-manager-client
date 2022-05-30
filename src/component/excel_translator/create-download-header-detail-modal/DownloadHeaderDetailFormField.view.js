@@ -12,6 +12,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { CreateFormFieldWrapper } from './CreateDownloadHeaderDetailModal.styled';
 import CustomCheckbox from '../../module/checkbox/CustomCheckbox';
+import CustomSelect from '../../module/select/CustomSelect';
 
 export default function DownloadHeaderDetailFormFieldView(props) {
     return (
@@ -65,15 +66,11 @@ export default function DownloadHeaderDetailFormFieldView(props) {
                                                                     <input type="text" name='headerName' placeholder='다운로드 엑셀 항목명' onChange={(e) => props.onChangeValueOfNameWithDetailId(e, downloadHeader.id)} value={downloadHeader.headerName} required></input>
                                                                 </div>
                                                                 <div className="form-selector">
-                                                                    <select
+                                                                    <CustomSelect
                                                                         value={downloadHeader.targetCellNumber}
                                                                         name='targetCellNumber'
                                                                         onChange={(e) => props.onChangeValueOfNameWithDetailId(e, downloadHeader.id)}
                                                                         disabled={parseInt(downloadHeader.targetCellNumber) === -1}
-
-                                                                        style={{
-                                                                            width: '100%'
-                                                                        }}
                                                                     >
                                                                         {parseInt(downloadHeader.targetCellNumber) !== -1 &&
                                                                             <>
@@ -90,7 +87,7 @@ export default function DownloadHeaderDetailFormFieldView(props) {
                                                                             </>
                                                                         }
                                                                         <option value={-1}>고정값</option>
-                                                                    </select>
+                                                                    </CustomSelect>
                                                                 </div>
                                                                 <div>
                                                                     <div>

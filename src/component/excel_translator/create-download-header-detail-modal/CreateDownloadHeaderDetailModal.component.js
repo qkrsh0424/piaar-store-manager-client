@@ -11,6 +11,9 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
 
     useEffect(() => {
         if (!props.updateDownloadHeaderForm || !props.updateDownloadHeaderForm?.downloadHeaderDetail?.details) {
+            dispatchDownloadHeaderDetails({
+                type:'CLEAR'
+            })
             return;
         }
 

@@ -435,14 +435,6 @@ const ExcelTranslatorComponent = () => {
 
     return (
         <Container>
-            <CustomSelect
-                value='1'
-                width='200px'
-            >
-                <option value=''>전체</option>
-                <option value='1'>1 djkalsjd klasj kldajs kldjkl jdklajs kladj kladjkl djaklsdj akls jklajkl</option>
-                <option value='2'>2</option>
-            </CustomSelect>
             <ControlBarComponent
                 excelTranslatorHeaderList={excelTranslatorHeaderList}
                 uploadedExcelData={uploadedExcelData}
