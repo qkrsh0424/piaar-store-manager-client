@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import ExcelTranslatorComponent from '../../component/excel_translator';
+import ExcelTranslatorComponent from '../../component/excel-translator-v2';
 import DrawerNavbarMain from '../../component/nav/DrawerNavbarMain';
 
 const Container = styled.div`
