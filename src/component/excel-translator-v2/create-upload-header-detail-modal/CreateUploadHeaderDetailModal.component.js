@@ -50,10 +50,10 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             let returnedDetails = [...res.data.data.uploadedData.details];
 
-                            let newDetails = returnedDetails.map(r => {
+                            let newDetails = returnedDetails.map((r, idx) => {
                                 return {
                                     id: r.id,
-                                    cellNumber: -1,
+                                    cellNumber: idx,
                                     headerName: r.colData,
                                     cellType: r.cellType
                                 }
@@ -80,7 +80,7 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
         submit: {
             confirm: (e) => {
                 e.preventDefault();
-                
+
                 setDisabledBtn(true);
 
                 props.onActionStoreUploadHeaderForm(uploadHeaderDetails);

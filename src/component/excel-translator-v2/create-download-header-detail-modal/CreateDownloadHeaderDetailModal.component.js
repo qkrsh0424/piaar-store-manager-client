@@ -88,6 +88,7 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
 
                         if (res.status === 500) {
                             alert('undefined error');
+                            return;
                         }
                         alert(res.data.memo);
                     })
@@ -179,6 +180,7 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
                 let name = e.target.name;
                 let value = e.target.value;
 
+                console.log(name, value);
                 let targetDownloadHeaderDetails = downloadHeaderDetails.map(r => {
                     if (r.id === detailId) {
                         return {
