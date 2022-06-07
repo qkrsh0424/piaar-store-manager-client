@@ -71,6 +71,11 @@ const DownloadHeaderTableComponent = (props) => {
                 __handler.action.closeSettingFormModal();
             },
             downloadHeaderSampleExcel: async () => {
+                if(selectedTranslatorHeader.downloadHeaderDetail.details.length <= 0 ) {
+                    alert('다운로드 엑셀 헤더를 먼저 등록해 주세요.');
+                    return;
+                }
+
                 let downloadDetail = selectedTranslatorHeader.downloadHeaderDetail.details.map(r => {
                     return {
                         ...r,

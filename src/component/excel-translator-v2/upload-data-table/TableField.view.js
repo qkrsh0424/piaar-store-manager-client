@@ -43,12 +43,28 @@ export default function TableFieldView(props) {
                 (
                     <div
                         style={{
-                            textAlign:'center',
-                            fontSize:'16px',
-                            fontWeight:'500',
-                            marginTop:'50px'
+                            textAlign: 'center',
+                            fontSize: '16px',
+                            fontWeight: '500',
+                            marginTop: '50px'
                         }}
-                    >엑셀 형식을 먼저 선택해 주세요.</div>
+                    >
+                        엑셀 형식을 먼저 선택해 주세요.
+                    </div>
+                )
+            }
+            {props.selectedTranslatorHeader?.uploadHeaderDetail.details.length <= 0 &&
+                (
+                    <div
+                        style={{
+                            textAlign: 'center',
+                            fontSize: '16px',
+                            fontWeight: '500',
+                            marginTop: '50px'
+                        }}
+                    >
+                        업로드 엑셀 양식을 먼저 선택해 주세요.
+                    </div>
                 )
             }
         </TableFieldWrapper>

@@ -75,6 +75,11 @@ const UploadHeaderTableComponent = (props) => {
                 __handler.action.closeSettingFormModal();
             },
             downloadHeaderSampleExcel: async () => {
+                if(selectedTranslatorHeader.uploadHeaderDetail.details.length <= 0 ) {
+                    alert('업로드 엑셀 헤더를 먼저 등록해 주세요.');
+                    return;
+                }
+
                 let downloadDetail = selectedTranslatorHeader.uploadHeaderDetail.details.map(r => {
                     return {
                         ...r,
