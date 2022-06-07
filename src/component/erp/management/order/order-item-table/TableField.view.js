@@ -69,7 +69,7 @@ export default function TableFieldView(props) {
                             <>
                                 {props.orderItemList?.slice(0, props.viewSize).map((r1, rowIndex) => {
                                     let checked = props.isCheckedOne(r1.id)
-                                    let isOutOfStock = r1.optionStockUnit !== null && r1.optionStockUnit < 0;
+                                    let isOutOfStock = r1.optionStockUnit !== null && r1.optionStockUnit <= 0;
                                     return (
                                         <tr
                                             key={`row-${rowIndex}`}
