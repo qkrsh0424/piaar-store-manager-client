@@ -119,7 +119,8 @@ const InputBox = styled.div`
 
 const ListFieldWrapper = styled.div`
     margin-top: 10px;
-    min-height: 100px;
+    min-height: 600px;
+    max-height: 600px;
     white-space: pre-line;
 
     .flex-box { 

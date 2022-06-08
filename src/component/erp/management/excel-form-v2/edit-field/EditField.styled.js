@@ -421,7 +421,7 @@ const DownloadFormWrapper = styled.div`
     }
 
     .add-field-button{
-        padding:5px 8px;
+        padding: 10px 20px;
         line-height: 1;
         border: 1px solid #e0e0e0;
         background: white;
@@ -608,6 +608,15 @@ const DownloadFormWrapper = styled.div`
     .delete-button-icon{
         width:20px;
         height: 20px;
+    }
+
+    .foot-wrapper {
+        float: right;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0px;
+        margin-top: 10px;
+
     }
 `;
 

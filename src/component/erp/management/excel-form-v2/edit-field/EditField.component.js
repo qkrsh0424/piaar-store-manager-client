@@ -333,6 +333,9 @@ export default function EditFieldComponent(props) {
                     <HeaderFieldView
                         onActionDeleteHeaderConfirmModalOpen={__updateHeader.action.openDeleteHeaderConfirmModal}
                     />
+                    <UpdateButtonFieldView
+                        onSubmitUpdateHeader={__updateHeader.submit.updateHeader}
+                    />
                     {/* Body */}
                     <DownloadFormView
                         updateHeader={updateHeader}
@@ -344,9 +347,6 @@ export default function EditFieldComponent(props) {
                         onActionOpenMergeSplitterModal={__updateHeader.action.openMergeSplitterModal}
                         onActionOpenChangeFieldTypeModal={__updateHeader.action.openChangeFieldTypeModal}
                         onActionOpenValueSplitterModal={__updateHeader.action.openValueSplitterModal}
-                    />
-                    <UpdateButtonFieldView
-                        onSubmitUpdateHeader={__updateHeader.submit.updateHeader}
                     />
                 </Layout>
             }
@@ -648,18 +648,6 @@ function DownloadFormView({
 }) {
     return (
         <DownloadFormWrapper>
-            <div className='head-wrapper'>
-                <div className='title'>다운로드 양식</div>
-                <div>
-                    <button
-                        type='button'
-                        className='add-field-button'
-                        onClick={onActionAddField}
-                    >
-                        헤더 추가
-                    </button>
-                </div>
-            </div>
             <div className='body-wrapper'>
                 <div className='list-wrapper'>
                     {valueUtils.isEmptyValues(updateHeader?.headerDetail?.details) &&
@@ -846,6 +834,15 @@ function DownloadFormView({
                             </Droppable>
                         </DragDropContext>
                     }
+                </div>
+                <div className='foot-wrapper'>
+                    <button
+                        type='button'
+                        className='add-field-button'
+                        onClick={onActionAddField}
+                    >
+                        헤더 추가
+                    </button>
                 </div>
             </div>
         </DownloadFormWrapper >
