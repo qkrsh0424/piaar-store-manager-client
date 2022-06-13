@@ -48,24 +48,15 @@ const TableFieldWrapper = styled.div`
         background: #c8cef7;
     }
 
-    .status-box .release-box {
-        background: #d8def5;
+    .release-box {
+        background: #d8def5 !important;
     }
 
-    li {
-        list-style: none;
-        text-align: center;
+    table {
+        border: 1px solid #c8c8c8;
     }
 
-    .data-container {
-        min-height: 50vh;
-        max-height: 50vh;
-        overflow: auto;
-    }
-
-    .data-container li {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
+    tbody tr {
         border: 1px solid #e9e9e9;
         background: #c8cef7;
 
@@ -79,17 +70,13 @@ const TableFieldWrapper = styled.div`
         }
     }
 
-    .data-container .release-list {
+    tbody .release-list {
         background: #d8def5;
     }
 
-    .data-container li div {
-        overflow: hidden;
-        height: auto;
-        font-size: 1rem;
-        padding: 2px;
+    .table-container {
         text-align: center;
-        border-right: 1px solid #e9e9e9;
+        overflow: auto;
     }
 `;
 

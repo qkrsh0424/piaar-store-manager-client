@@ -5,7 +5,7 @@ const TableFieldView = (props) => {
         <TableFieldWrapper>
             <div className='table-container'>
                 <table className='table table-sm' style={{ tableLayout: 'fixed' }}>
-                    <thead className='body-container'>
+                    <thead>
                         <tr className='fixed-header'>
                             <th scope='col' width='150'>대체코드</th>
                             <th scope='col' width='250'>메모</th>
@@ -55,6 +55,11 @@ const TableFieldView = (props) => {
                                 </tr>
                             )
                         })}
+                        {props.subOptionCode.length === 0 && 
+                            <tr>
+                                <td colSpan={4}>대체코드가 존재하지 않습니다.</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
