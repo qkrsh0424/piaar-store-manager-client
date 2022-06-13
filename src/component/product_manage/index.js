@@ -6,6 +6,7 @@ import { productDataConnect } from '../../data_connect/productDataConnect';
 import { productOptionDataConnect } from '../../data_connect/productOptionDataConnect';
 import { productReceiveDataConnect } from '../../data_connect/productReceiveDataConnect';
 import { productReleaseDataConnect } from '../../data_connect/productReleaseDataConnect';
+import { subOptionCodeDataConnect } from '../../data_connect/subOptionCodeDataConnect';
 
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
 import { dateToYYYYMMDD, getEndDate, getStartDate } from '../../utils/dateFormatUtils';
@@ -35,6 +36,8 @@ const ProductManageComponent = () => {
 
     const [optionReceiveStatusData, setOptionReceiveStatusData] = useState(null);
     const [optionReleaseStatusData, setOptionReleaseStatusData] = useState(null);
+
+    const [subOptionCodeData, setSubOptionCodeData] = useState(null);
 
     const {
         open: backdropOpen,
@@ -255,6 +258,19 @@ const ProductManageComponent = () => {
             })
     }
 
+    // const __reqSearchSubOptionCode = async (optionId) => {
+    //     await subOptionCodeDataConnect().searchListByProductOptionId(optionId)
+    //         .then(res => {
+    //             if (res.status == 200 && res.data && res.data.message == 'success') {
+    //                 setSubOptionCodeData(res.data.data);
+    //             }
+    //         })
+    //         .catch(err => {
+    //             let res = err.response;
+    //             alert(res?.data?.memo);
+    //         })
+    // }
+
     const __reqCreateProductReleaseList = async (data) => {
         await productReleaseDataConnect().postList(data)
             .then(res => {
@@ -292,6 +308,20 @@ const ProductManageComponent = () => {
                 if (res.status === 200 && res.data.message === 'success') {
                     setOptionReceiveStatusData(res.data.data.productReceive);
                     setOptionReleaseStatusData(res.data.data.productRelease);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                alert(res?.data?.memo);
+            })
+    }
+
+    const __reqDeleteSubOptionCode = async (subOptionId) => {
+        await subOptionCodeDataConnect().deleteOne(subOptionId)
+            .then(res => {
+                if (res.status == 200 && res.data && res.data.message == 'success') {
+                    alert('정상적으로 삭제되었습니다.');
+                    setDataChangedTrigger(true);
                 }
             })
             .catch(err => {
@@ -362,6 +392,10 @@ const ProductManageComponent = () => {
         await __reqSearchStockStatus(optionCid);
     }
 
+    // const _onAction_searchSubOptionCode = async (optionId) => {
+    //     await __reqSearchSubOptionCode(optionId);
+    // }
+
     const _onAction_modifyReceiveMemo = async (data) => {
         await __reqModifyReceiveMemo(data);
     }
@@ -373,7 +407,6 @@ const ProductManageComponent = () => {
     const _onAction_checkOneTr = (optionId) => {
         if(checkedOptionList.includes(optionId)){
             setCheckedOptionList(checkedOptionList.filter(r => r !== optionId));
-            
         }else{
             setCheckedOptionList(checkedOptionList.concat(optionId));
         }
@@ -431,6 +464,13 @@ const ProductManageComponent = () => {
         await __reqSearchReceiveAndRelease(date.startDate, date.endDate);
         onActionCloseBackdrop();
     }
+
+    const _onAction_deleteSubOptionCode = async (subOptionId) => {
+        onActionOpenBackdrop();
+        await __reqDeleteSubOptionCode(subOptionId);
+        onActionCloseBackdrop();
+    }
+
     return (
         <Container>
             <CategorySelectorComponent
@@ -446,6 +486,7 @@ const ProductManageComponent = () => {
                 submitCheck={submitCheck}
                 optionPackage={optionPackage}
                 stockStatusList={stockStatusList}
+                subOptionCodeData={subOptionCodeData}
 
                 onActionOpenBackdrop={onActionOpenBackdrop}
                 onActionCloseBackdrop={onActionCloseBackdrop}
@@ -462,6 +503,7 @@ const ProductManageComponent = () => {
                 _onAction_checkAll={() => _onAction_checkAll()}
                 _onAction_isCheckedAll={() => _onAction_isCheckedAll()}
                 _onAction_isChecked={(optionId) => _onAction_isChecked(optionId)}
+                _onAction_deleteSubOptionCode={(subOptionId) => _onAction_deleteSubOptionCode(subOptionId)}
             ></ProductManageTableComponent>
 
             <ProductManageNavComponent

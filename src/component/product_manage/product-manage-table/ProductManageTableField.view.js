@@ -34,6 +34,7 @@ export default function ProductManageTableFieldView(props) {
                         <th className='fixedHeader' scope="col" width='150'>현재상태</th>
                         <th className='fixedHeader' scope="col" width='150'>가격</th>
                         <th className='fixedHeader' scope="col" width='300'>비고</th>
+                        <th className='fixedHeader' scope="col" width='150'>대체코드</th>
                         <th className='fixedHeader' scope="col" width='400'>옵션컨트롤</th>
                     </tr>
                 </thead>
@@ -95,7 +96,7 @@ export default function ProductManageTableFieldView(props) {
                                         </div>
                                     </th>
 
-                                    <th colSpan={11} style={{ background: '#7a7bda20', color: '#888' }}>
+                                    <th colSpan={12} style={{ background: '#7a7bda20', color: '#888' }}>
                                         <div>{product.product.managementName}-{product.product.code}-{product.product.manufacturingCode}</div>
                                     </th>
 
@@ -123,6 +124,13 @@ export default function ProductManageTableFieldView(props) {
                                             <td style={{ fontWeight: '800' }}>{option.status}</td>
                                             <td style={{ fontWeight: '800' }}>{option.salesPrice}</td>
                                             <td style={{ fontWeight: '800' }}>{option.memo}</td>
+                                            <td style={{ fontWeight: '800' }}>
+                                                <button
+                                                    type='button'
+                                                    className='sub-option-code-btn'
+                                                    onClick={(e) => props.onActionOpenSubOptionCodeModal(e, product.product.id, option.id)}
+                                                >대체코드</button>
+                                            </td>
                                             <td style={{ fontWeight: '800' }} className="option-control">
                                                 <button
                                                     type='button'

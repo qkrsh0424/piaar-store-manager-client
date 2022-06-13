@@ -8,6 +8,7 @@ import CommonModalComponent from '../../module/modal/CommonModalComponent';
 import ModifyProductOptionModalComponent from '../modify-product-option-modal/ModifyProductOptionModal.component';
 import StockStatusModalComponent from '../stock-status-modal/StockStatusModal.component';
 import CreateProductOptionModalComponent from '../create-product-option-modal/CreateProductOptionModal.component';
+import SubOptionCodeModalComponent from '../sub-option-code-modal/SubOptionCodeModal.component';
 
 class ProductOption {
     constructor(productId, optionDefaultName = '', optionManagementName = '') {
@@ -67,6 +68,9 @@ const ProductManageTableComponent = (props) => {
 
     const [stockStatusModalOpen, setStockStatusModalOpen] = useState(false);
     const [stockStatusListData, setStockStatusListData] = useState(null);
+
+    const [subOptionCodeModalOpen, setSubOptionCodeModalOpen] = useState(false);
+    const [selectedProductOptionData, setSelectedProductOptionData] = useState(null);
 
     useEffect(() => {
         if(!props.stockStatusList) {
@@ -195,9 +199,24 @@ const ProductManageTableComponent = (props) => {
         setStockStatusModalOpen(true);
     }
 
+    const onActionOpenSubOptionCodeModal = async (e, productId, optionId) => {
+        e.stopPropagation();
+
+        let product = props.productViewList.filter(r => r.product.id === productId)[0];
+        let option = product.options.filter(r => r.id === optionId)[0];
+
+        // await props._onAction_searchSubOptionCode(option.id);
+        setSubOptionCodeModalOpen(true);
+        setSelectedProductOptionData(option);
+    }
+
     const onActionCloseStockStatusModal = () => {
         setStockStatusListData(null);
         setStockStatusModalOpen(false);
+    }
+
+    const onActionCloseSubOptionCodeModal = () => {
+        setSubOptionCodeModalOpen(false);
     }
 
     const onActionModifyReceiveStockStatusMemo = async (data) => {
@@ -206,6 +225,10 @@ const ProductManageTableComponent = (props) => {
 
     const onActionModifyReleaseStockStatusMemo = async (data) => {
         await props._onAction_modifyReleaseMemo(data);
+    }
+
+    const onActionDeleteSubOptionCode = async (subOptionId) => {
+        await props._onAction_deleteSubOptionCode(subOptionId);
     }
 
     return (
@@ -219,6 +242,7 @@ const ProductManageTableComponent = (props) => {
                 onActionOpenModifyProductOptionModal={(e, productId, optionId) => onActionOpenModifyProductOptionModal(e, productId, optionId)}
                 onActionDeleteProductOption={(e, productId, optionId) => onActionDeleteProductOption(e, productId, optionId)}
                 onActionOpenStockStatusModal={(e, productId, optionId) => onActionOpenStockStatusModal(e, productId, optionId)}
+                onActionOpenSubOptionCodeModal={(e, productId, optionId) => onActionOpenSubOptionCodeModal(e, productId, optionId)}
                 checkOneTr={(optionId) => props._onAction_checkOneTr(optionId)}
                 checkAll={() => props._onAction_checkAll()}
                 isCheckedAll={() => props._onAction_isCheckedAll()}
@@ -301,6 +325,23 @@ const ProductManageTableComponent = (props) => {
                     onActionModifyReceiveStockStatusMemo={(data) => onActionModifyReceiveStockStatusMemo(data)}
                     onActionModifyReleaseStockStatusMemo={(data) => onActionModifyReleaseStockStatusMemo(data)}
                 ></StockStatusModalComponent>
+            </CommonModalComponent>
+
+            {/* SubOptionCode Control Modal */}
+            <CommonModalComponent
+                open={subOptionCodeModalOpen}
+                maxWidth={'sm'}
+                fullWidth={true}
+
+                onClose={onActionCloseSubOptionCodeModal}
+            >
+                <SubOptionCodeModalComponent
+                    selectedProductOptionData={selectedProductOptionData}
+                    subOptionCodeData={props.subOptionCodeData}
+
+                    onActionCloseSubOptionCodeModal={() => onActionCloseSubOptionCodeModal()}
+                    onActionDeleteSubOptionCode={(subOptionId) => onActionDeleteSubOptionCode(subOptionId)}
+                ></SubOptionCodeModalComponent>
             </CommonModalComponent>
         </Container>
     )
