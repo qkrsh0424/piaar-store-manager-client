@@ -20,7 +20,7 @@ const TableFieldView = (props) => {
                                     key={'subOptionCodeIdx' + data.id}
                                     className='grid-box'
                                 >
-                                    <td>
+                                    <td className='sub-option-code'>
                                         {data.subOptionCode}
                                     </td>
                                     <td>

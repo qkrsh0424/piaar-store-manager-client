@@ -88,11 +88,15 @@ const TableFieldWrapper = styled.div`
         vertical-align: middle !important;
     }
 
+    .sub-option-code {
+        font-weight: 600;
+    }
+
     .button-el{
         overflow: hidden;
         position: relative;
-        width:40px;
-        height:40px;
+        width:30px;
+        height:30px;
 
         /* background: #ff3060;
         border: 1px solid #ff306000; */

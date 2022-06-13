@@ -38,7 +38,8 @@ const HeaderFieldWrapper = styled.div`
 `;
 
 const InputFormFieldWrapper = styled.div`
-    padding: 5% 2%;
+    padding: 2%;
+    overflow: auto;
 
     input {
         font-size: 1rem;
@@ -51,7 +52,7 @@ const InputFormFieldWrapper = styled.div`
     }
 
     .submit-box {
-        padding: 15px;
+        padding: 10px;
         border-top: 1px solid #efefef;
 
         @media only screen and (max-width:992px){
