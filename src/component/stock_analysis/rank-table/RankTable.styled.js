@@ -4,7 +4,14 @@ const Container = styled.div`
 `;
 
 const TableFieldWrapper = styled.div`
-    padding: 10px 0;
+
+    .total-stock-property {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #ff0000;
+        padding: 10px;
+        text-align: right;
+    }
 
     .table-box {
         height: 85vh;
@@ -58,6 +65,10 @@ const TableFieldWrapper = styled.div`
         position: sticky;
         top: 0;
         z-index:10;
+    }
+
+    table tbody .bad-stock {
+        color: #ff0000;
     }
 `;
 

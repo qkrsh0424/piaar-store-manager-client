@@ -20,6 +20,16 @@ const valueUtils = {
         result.splice(endIndex, 0, removed);
 
         return result;
+    },
+    isRecentlyReleased: (value) => {
+        let date = new Date();
+        date.setMonth(date.getMonth()-1);
+
+        if(value <= date) {
+            return true;
+        }else {
+            return false;
+        }
     }
 }
 
