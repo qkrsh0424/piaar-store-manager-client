@@ -19,6 +19,7 @@ export default function InputFormFieldView(props) {
                             name='subOptionCode'
                             value={props.createData.subOptionCode}
                             onChange={(e) => props.onChangeInputValue(e)}
+                            required
                         />
                     </div>
                 </div>

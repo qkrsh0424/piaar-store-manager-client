@@ -7,7 +7,9 @@ export default function TableFieldView(props) {
     return (
         <TableFieldWrapper>
             <div className='total-stock-property'>
-                총 재고자산 : {(props.totalStockProperty).toLocaleString()}원
+                <span className='total-stock-info'>총 재고수량: {props.totalStockInfo?.totalStockSumUnit}개</span>
+                <span className='total-stock-info'>총 재고자산: {(props.totalStockInfo?.totalStockProperty)?.toLocaleString()}원</span>
+                <span className='total-stock-info'>총 예상판매매출액: {(props.totalStockInfo?.totalEstimatedSalesPrice)?.toLocaleString()}원</span>
             </div>
             <div className='table-box'>
                 <table cellSpacing="0" width="100%">
@@ -15,7 +17,7 @@ export default function TableFieldView(props) {
                         <col width="50" />
                         <col width="150" />
                         <col width="150" />
-                        <col width="100" />
+                        <col width="150" />
                         <col width="100" />
                         <col width="100" />
                         <col width="120" />
@@ -32,7 +34,7 @@ export default function TableFieldView(props) {
                                     <SortButton
                                         buttonSize={25}
                                         iconSize={16}
-                                        markPoint='productDefaultName'
+                                        markPoint='product.defaultName'
                                     ></SortButton>
                                 </div>
                             </th>
@@ -42,7 +44,7 @@ export default function TableFieldView(props) {
                                     <SortButton
                                         buttonSize={25}
                                         iconSize={16}
-                                        markPoint='optionDefaultName'
+                                        markPoint='option.defaultName'
                                     ></SortButton>
                                 </div>
                             </th>
@@ -52,7 +54,7 @@ export default function TableFieldView(props) {
                                     <SortButton
                                         buttonSize={25}
                                         iconSize={16}
-                                        markPoint='optionCode'
+                                        markPoint='option.code'
                                     ></SortButton>
                                 </div>
                             </th>
@@ -62,7 +64,7 @@ export default function TableFieldView(props) {
                                     <SortButton
                                         buttonSize={25}
                                         iconSize={16}
-                                        markPoint='optionTotalPurchasePrice'
+                                        markPoint='option.totalPurchasePrice'
                                     ></SortButton>
                                 </div>    
                             </th>

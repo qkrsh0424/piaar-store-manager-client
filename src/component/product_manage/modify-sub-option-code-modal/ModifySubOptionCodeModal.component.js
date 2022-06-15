@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { Container } from "./ModifySubOptionCodeModal.styled";
 import HeaderFieldView from "./HeaderField.view";
 import InputFormFieldView from "./InputFormField.view";
-import { isIncludeBlank } from "../../../utils/regexUtils";
 
 const ModifySubOptionCodeModalComponent = (props) => {
     const [subOptionCode, dispatchSubOptionCode] = useReducer(subOptionCodeReducer, initialsubOptionCodeReducer);
@@ -31,11 +30,6 @@ const ModifySubOptionCodeModalComponent = (props) => {
 
     const onSubmitModifySubOptionCode = async (e) => {
         e.preventDefault();
-
-        if(isIncludeBlank(subOptionCode.subOptionCode)) {
-            alert('대체옵션코드에 공백을 포함할 수 없습니다.');
-            return;
-        }
 
         await props.onSubmitModifySubOptionCode(subOptionCode);
     }

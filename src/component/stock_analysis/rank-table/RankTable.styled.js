@@ -6,11 +6,15 @@ const Container = styled.div`
 const TableFieldWrapper = styled.div`
 
     .total-stock-property {
-        font-size: 1rem;
+        font-size: 14px;
         font-weight: 600;
         color: #ff0000;
-        padding: 10px;
+        padding: 5px;
         text-align: right;
+    }
+
+    .total-stock-info {
+        padding: 0 10px;
     }
 
     .table-box {

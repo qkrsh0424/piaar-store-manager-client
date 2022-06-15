@@ -14,15 +14,16 @@ const OperatorComponent = (props) => {
     const [searchInputValueState, dispatchSearchInputValueState] = useReducer(searchInputValueReducer, initialSearchInputValueState);
 
     useEffect(() => {
-        dispatchSearchInputValueState({
-            type: 'INIT_DATA'
-        });
-    }, []);
-
-    useEffect(() => {
         if (!searchInputValueState) {
             return;
         }
+
+        if(searchInputValueState.searchColumn === 'total') {
+            dispatchSearchInputValueState({
+                type: 'CLEAR'
+            })
+        }
+
         props._onAction_changeSearchInput(searchInputValueState);
     }, [searchInputValueState]);
 
@@ -66,7 +67,7 @@ const OperatorComponent = (props) => {
 
     const onActionClearRoute = () => {
         dispatchSearchInputValueState({
-            type: 'INIT_DATA'
+            type: 'CLEAR'
         });
     }
 
@@ -79,28 +80,30 @@ const OperatorComponent = (props) => {
                 onChangeCategorySelector={(e) => onChangeCategorySelector(e)}
             ></ConditionSelectorFieldView>
 
-            <ConditionSearchFieldView
-                searchInputValueState={searchInputValueState}
+            {searchInputValueState &&
+                <ConditionSearchFieldView
+                    searchInputValueState={searchInputValueState}
 
-                onChangeSearchColumn={(e) => onChangeSearchColumn(e)}
-                onChangeSearchInputValue={(e) => onChangeSearchInputValue(e)}
-                onActionClearRoute={() => onActionClearRoute()}
-            ></ConditionSearchFieldView>
+                    onChangeSearchColumn={(e) => onChangeSearchColumn(e)}
+                    onChangeSearchInputValue={(e) => onChangeSearchInputValue(e)}
+                    onActionClearRoute={() => onActionClearRoute()}
+                ></ConditionSearchFieldView>
+            }
         </Container>
     )
 }
 
 export default OperatorComponent;
 
-const initialSearchInputValueState = null;
+const initialSearchInputValueState = {
+    searchColumn: 'total',
+    searchValue: ''
+};
 
 const searchInputValueReducer = (state, action) => {
     switch(action.type) {
         case 'INIT_DATA':
-            return {
-                searchColumn: 'total',
-                searchValue: ''
-            }
+            return action.payload;
         case 'CHANGE_DATA':
             return{
                 ...state,

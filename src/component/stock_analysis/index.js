@@ -27,7 +27,7 @@ const StockAnalysisComponent = (props) => {
     const query = qs.parse(location.search);
     const [searchInputState, dispatchSearchInputState] = useReducer(searchInputReducer, initialSearchInputState);
 
-    const [totalStockProperty, setTotalStockProperty] = useState(null);
+    const [totalStockInfo, dispatchTotalStockInfo] = useReducer(totalStockInfoReducer, initialTotalStockInfo);
     const [stockAnalysisList, setStockAnalysisList] = useState(null);
     const [stockAnalysisViewList, setStockAnalysisViewList] = useState(null);
     const [productCategoryList, setProductCategoryList] = useState(null);
@@ -45,10 +45,6 @@ const StockAnalysisComponent = (props) => {
             _onAction_CalculateStockAnalysis(result);
             await __reqSearchProductCategory();
             onActionCloseBackdrop();
-
-            dispatchSearchInputState({
-                type: 'INIT_DATA'
-            })
         }
         fetchInit();
     }, []);
@@ -99,29 +95,28 @@ const StockAnalysisComponent = (props) => {
             return;
         }
 
+        // 재정렬
         _onAction_sortStockAnalysisViewData(viewData);
     }, [stockAnalysisList, query.categoryCid, query.sortBy, query.sortDirection, searchInputState])
 
     const _onAction_sortStockAnalysisViewData = (viewData) => {
         let data = [ ...viewData ];
-        let mul = query.sortDirection === 'asc' ? 1 : -1;
+        let mul = query.sortDirection === DEFAULT_SORT_DIRECTION ? -1 : 1;
+
+        let sortData = query.sortBy.split('.');
+        const SORT_DATA_START_IDX = 0;
 
         // 정렬
-        switch (query.sortBy) {
-            case 'productDefaultName':
-                data.sort((a, b) => (b.product.defaultName.localeCompare(a.product.defaultName)) * mul);
-                break;
-            case 'optionDefaultName':
-                data.sort((a, b) => (b.option.defaultName.localeCompare(a.option.defaultName)) * mul);
-                break;
-            case 'optionCode':
-                data.sort((a, b) => (b.option.code.localeCompare(a.option.code)) * mul);
-                break;
-            case 'optionTotalPurchasePrice':
-                data.sort((a, b) => (a.option.totalPurchasePrice - b.option.totalPurchasePrice) * mul);
-                break;
-            default:
-                data.sort((a, b) => (a[query.sortBy] - b[query.sortBy]) * mul);
+        if(sortData[SORT_DATA_START_IDX] === 'product') {
+            data.sort((a, b) => (a[sortData[SORT_DATA_START_IDX]][sortData[SORT_DATA_START_IDX+1]].localeCompare(b[sortData[SORT_DATA_START_IDX]][sortData[SORT_DATA_START_IDX+1]])) * mul);
+        } else if(sortData[SORT_DATA_START_IDX] === 'option') {
+            if(sortData[SORT_DATA_START_IDX+1] === 'totalPurchasePrice') {
+                data.sort((a, b) => (a[sortData[SORT_DATA_START_IDX]][sortData[SORT_DATA_START_IDX+1]] - b[sortData[SORT_DATA_START_IDX]][sortData[SORT_DATA_START_IDX+1]]) * mul);
+            }else {
+                data.sort((a, b) => (a[sortData[SORT_DATA_START_IDX]][sortData[SORT_DATA_START_IDX+1]].localeCompare(b[sortData[SORT_DATA_START_IDX]][sortData[SORT_DATA_START_IDX+1]])) * mul);
+            }
+        } else {
+            data.sort((a, b) => (a[sortData[SORT_DATA_START_IDX]] - b[sortData[SORT_DATA_START_IDX]]) * mul);
         }
 
         // 검색
@@ -130,7 +125,6 @@ const StockAnalysisComponent = (props) => {
                 switch (searchInputState.searchColumn) {
                     case 'productDefaultName':
                         data = data.filter(r => (r.product.defaultName).includes(searchInputState?.searchValue));
-                        console.log(data);
                         break;
                     case 'optionDefaultName':
                         data = data.filter(r => (r.option.defaultName).includes(searchInputState?.searchValue));
@@ -175,11 +169,11 @@ const StockAnalysisComponent = (props) => {
         let stockAnalysis = data.map(r => {
             let stockProperty = 0;
             let estimatedSalesPrice = 0;
+
             if(r.stockSumUnit > 0) {
                 stockProperty = r.option.totalPurchasePrice * r.stockSumUnit;   // 재고자산
                 estimatedSalesPrice = r.option.salesPrice * r.stockSumUnit;      // 예상판매매출액
             }
-
             return {
                 ...r,
                 stockProperty,
@@ -189,12 +183,26 @@ const StockAnalysisComponent = (props) => {
 
         // 총 재고자산을 구한다.
         let totalStockProperty = 0;
+        let totalStockSumUnit = 0;
+        let totalEstimatedSalesPrice = 0;
+
         stockAnalysis.forEach(r => {
             totalStockProperty += r.stockProperty;
+            totalStockSumUnit += r.stockSumUnit;
+            totalEstimatedSalesPrice = r.estimatedSalesPrice;
         });
+
+        let totalStockInfo = {
+            totalStockProperty,
+            totalStockSumUnit,
+            totalEstimatedSalesPrice
+        }
         
+        dispatchTotalStockInfo({
+            type: 'SET_DATA',
+            payload: totalStockInfo
+        });
         setStockAnalysisList(stockAnalysis);
-        setTotalStockProperty(totalStockProperty);
     }
 
     const _onAction_changeSearchInput = (searchInput) => {
@@ -216,7 +224,7 @@ const StockAnalysisComponent = (props) => {
 
             <RankBoardComponent
                 stockAnalysisViewList={stockAnalysisViewList}
-                totalStockProperty={totalStockProperty}
+                totalStockInfo={totalStockInfo}
             >
             </RankBoardComponent>
             
@@ -230,19 +238,28 @@ const StockAnalysisComponent = (props) => {
 
 export default StockAnalysisComponent;
 
-const initialSearchInputState = null;
+const initialSearchInputState = {
+    searchColumn: 'total',
+    searchValue: ''
+};
+const initialTotalStockInfo = null;
 
 const searchInputReducer = (state, action) => {
     switch(action.type) {
-        case 'INIT_DATA':
-            return { ...state,
-                searchColumn: 'total',
-                searchValue: ''
-            }
         case 'SET_DATA':
             return action.payload;
         case 'CLEAR':
             return initialSearchInputState;
+        default: return { ...state }
+    }
+}
+
+const totalStockInfoReducer = (state, action) => {
+    switch(action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialTotalStockInfo;
         default: return { ...state }
     }
 }

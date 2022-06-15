@@ -21,7 +21,7 @@ const RankBoardComponent = (props) => {
         <Container>
             <TableFieldView
                 stockAnalysisViewList={props.stockAnalysisViewList}
-                totalStockProperty={props.totalStockProperty}
+                totalStockInfo={props.totalStockInfo}
 
                 onActionOpenProductStockAnalysisModal={(productId) => onActionOpenProductStockAnalysisModal(productId)}
             >
@@ -37,7 +37,6 @@ const RankBoardComponent = (props) => {
             >
                 <ProductStockAnalysisModalComponent
                     selectedProductId={selectedProductId}
-                    // searchInfoState={props.searchInfoState}
                     stockAnalysisViewList={props.stockAnalysisViewList}
 
                     onActionCloseProductStockAnalysisModal={() => onActionCloseProductStockAnalysisModal()}
