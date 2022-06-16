@@ -122,6 +122,16 @@ const SearchOperatorComponent = (props) => {
             delete query.startDate;
             delete query.endDate;
             delete query.periodType;
+
+            dispatchStartDate({
+                type: 'CLEAR'
+            })
+            dispatchEndDate({
+                type: 'CLEAR'
+            })
+            dispatchPeriodType({
+                type: 'CLEAR'
+            })
         }
 
         if (searchColumnName) {
@@ -248,6 +258,7 @@ const SearchOperatorComponent = (props) => {
                         defaultHeaderDetails={defaultHeaderDetails}
                         searchColumnName={searchColumnName}
                         searchQuery={searchQuery}
+                        periodType={periodType}
 
                         onChangeSearchColumnNameValue={onChangeSearchColumnNameValue}
                         onChangeSearchQueryValue={onChangeSearchQueryValue}

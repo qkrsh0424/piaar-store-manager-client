@@ -150,8 +150,8 @@ const OrderItemTableComponent = (props) => {
             return;
         }
 
-        if (!fixTargetItem.unit) {
-            alert('[수량] 은 필수 입력 값 입니다.');
+        if (!fixTargetItem.unit || fixTargetItem.unit <= 0 || isNaN(fixTargetItem.unit)) {
+            alert('[수량]  은 필수 항목이며, 1 이상의 숫자값만 허용됩니다.');
             return;
         }
 

@@ -38,9 +38,10 @@ const HeaderFieldWrapper = styled.div`
         font-size: 16px;
         font-weight: 600;
         padding: 10px 20px;
-        color: #444;
+        color: #fff;
+        background-color: #2C73D2;
+        border:1px solid #2C73D2;
         vertical-align: middle;
-        border:1px solid #e0e0e0;
         border-radius: 3px;
         transition: opacity 0.1s linear;
 
@@ -48,7 +49,9 @@ const HeaderFieldWrapper = styled.div`
             cursor: pointer;
             background-color: #2C73D2;
             border:1px solid #2C73D2;
-            color:#fff;
+            color: #444;
+            background-color: #fff;
+            border:1px solid #e0e0e0;
             transition: 0.2s;
         }
 
