@@ -293,6 +293,28 @@ const DownloadButtonFieldWrapper = styled.div`
     }
 `;
 
+const InputFieldWrapper = styled.div`
+    margin-top: 10px;
+    padding: 0 30px;
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    align-items: center;
+
+    .input-el {
+        border: 1px solid #fff;
+        border-bottom: 1px solid #ced4da;
+        width : 500px;
+        color: #444;
+        padding: 5px;
+
+        :focus{
+            outline: none;
+            border: 1px solid #4662B4;
+        }
+    }
+`;
+
 export {
     Container,
     TitleContainer,
@@ -301,5 +323,6 @@ export {
     TableBox,
     ExcelHeaderSelectorWrapper,
     ExcelHeaderDisplayWrapper,
-    DownloadButtonFieldWrapper
+    DownloadButtonFieldWrapper,
+    InputFieldWrapper
 }

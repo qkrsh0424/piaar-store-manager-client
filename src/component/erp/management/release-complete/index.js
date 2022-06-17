@@ -106,6 +106,7 @@ const ReleaseCompleteComponent = (props) => {
         let searchColumnName = query.searchColumnName || null;
         let searchQuery = query.searchQuery || null;
         let periodType = query.periodType || null;
+        let stockReflectYn = query.stockReflectYn || null;
         let page = query.page || null;
         let size = query.size || null;
         let sortBy = query.sortBy || null;
@@ -118,6 +119,7 @@ const ReleaseCompleteComponent = (props) => {
             startDate: startDate,
             endDate: endDate,
             periodType: periodType,
+            stockReflectYn: stockReflectYn,
             searchColumnName: searchColumnName,
             searchQuery: searchQuery,
             page: page,
@@ -303,17 +305,15 @@ const ReleaseCompleteComponent = (props) => {
     }
 
     // Action
-    const __reqActionDownloadForDownloadOrderItems = async (id, downloadOrderItemsBody) => {
+    const __reqActionDownloadForDownloadOrderItems = async (fileName, id, downloadOrderItemsBody) => {
         await erpDownloadExcelHeaderDataConnect().actionDownloadForDownloadOrderItems(id, downloadOrderItemsBody)
             .then(res => {
                 // if (res.status === 200 && res.data.message === 'success') {
                 const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
                 const link = document.createElement('a');
                 link.href = url;
-
-                let date = dateToYYYYMMDDhhmmssFile(new Date());
-
-                link.setAttribute('download', date + '_출고상태_데이터_엑셀.xlsx');
+                
+                link.setAttribute('download', fileName + '.xlsx');
                 document.body.appendChild(link);
                 link.click();
                 // }
@@ -420,7 +420,7 @@ const ReleaseCompleteComponent = (props) => {
         const __effect = {
             mount: async () => {
                 onActionOpenSocketConnectLoading();
-                if (!connected || !orderItemPage || !viewHeader) {
+                if (!connected || !orderItemPage) {
                     return;
                 }
 
@@ -593,9 +593,9 @@ const ReleaseCompleteComponent = (props) => {
     }
 
     // 엑셀 다운로드
-    const _onSubmit_downloadOrderItemsExcel = async (downloadExcelHeader, downloadOrderItemList) => {
+    const _onSubmit_downloadOrderItemsExcel = async (downloadExcelFileName, downloadExcelHeader, downloadOrderItemList) => {
         onActionOpenBackdrop();
-        await __reqActionDownloadForDownloadOrderItems(downloadExcelHeader.id, downloadOrderItemList);
+        await __reqActionDownloadForDownloadOrderItems(downloadExcelFileName, downloadExcelHeader.id, downloadOrderItemList);
         onActionCloseBackdrop();
     }
 

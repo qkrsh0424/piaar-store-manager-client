@@ -43,7 +43,7 @@ export default function TableFieldView(props) {
                                         <span>{r[props.searchInfoState?.storeSalesUnit]}</span>
                                     </td>
                                     <td>
-                                        <span>{(r.salesOptionPrice * r[props.searchInfoState?.storeSalesUnit]).toLocaleString()}원</span>
+                                        <span>{(r.salesOptionPrice * r[props.searchInfoState?.storeSalesUnit])?.toLocaleString()}원</span>
                                     </td>
                                 </tr>
                             )

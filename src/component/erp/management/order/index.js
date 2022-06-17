@@ -281,8 +281,7 @@ const OrderComponent = (props) => {
             })
     }
 
-    // Action
-    const __reqActionDownloadForDownloadOrderItems = async (id, downloadOrderItemsBody) => {
+    const __reqActionDownloadForDownloadOrderItems = async (fileName, id, downloadOrderItemsBody) => {
         await erpDownloadExcelHeaderDataConnect().actionDownloadForDownloadOrderItems(id, downloadOrderItemsBody)
             .then(res => {
                 // if (res.status === 200 && res.data.message === 'success') {
@@ -290,9 +289,7 @@ const OrderComponent = (props) => {
                 const link = document.createElement('a');
                 link.href = url;
 
-                let date = dateToYYYYMMDDhhmmssFile(new Date());
-
-                link.setAttribute('download', date + '_주문수집_데이터_엑셀.xlsx');
+                link.setAttribute('download', fileName + '.xlsx');
                 document.body.appendChild(link);
                 link.click();
                 // }
@@ -502,9 +499,9 @@ const OrderComponent = (props) => {
     }
 
     // 엑셀 다운로드
-    const _onSubmit_downloadOrderItemsExcel = async (downloadExcelHeader, downloadOrderItemList) => {
+    const _onSubmit_downloadOrderItemsExcel = async (downloadExcelFileName, downloadExcelHeader, downloadOrderItemList) => {
         onActionOpenBackdrop();
-        await __reqActionDownloadForDownloadOrderItems(downloadExcelHeader.id, downloadOrderItemList);
+        await __reqActionDownloadForDownloadOrderItems(downloadExcelFileName, downloadExcelHeader.id, downloadOrderItemList);
         onActionCloseBackdrop();
     }
 

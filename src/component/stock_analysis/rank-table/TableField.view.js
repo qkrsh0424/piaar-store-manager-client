@@ -121,16 +121,16 @@ export default function TableFieldView(props) {
                                         <span>{r.option.code}</span>
                                     </td>
                                     <td>
-                                        <span>{(r.option.totalPurchasePrice).toLocaleString()}원</span>
+                                        <span>{(r.option.totalPurchasePrice)?.toLocaleString()}원</span>
                                     </td>
                                     <td>
                                         <span>{r.stockSumUnit}</span>
                                     </td>
                                     <td>
-                                        <span>{(r.stockProperty).toLocaleString()}원</span>
+                                        <span>{(r.stockProperty)?.toLocaleString()}원</span>
                                     </td>
                                     <td>
-                                        <span>{(r.estimatedSalesPrice).toLocaleString()}원</span>
+                                        <span>{(r.estimatedSalesPrice)?.toLocaleString()}원</span>
                                     </td>
                                 </tr>
                             )

@@ -57,7 +57,7 @@ const ProductSalesAnalysisModalComponent = (props) => {
 
             setProdTotalSales({
                 totalUnit : totalUnit,
-                totalRevenue : totalRevenue.toLocaleString()
+                totalRevenue : totalRevenue?.toLocaleString()
             });
         }
 

@@ -7,6 +7,7 @@ import DetailSearchFieldView from "./DetailSearchField.view";
 import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
 import ButtonFieldView from "./ButtonField.view";
 import { dateToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
+import StockReflectSelectorFieldView from "./StockReflectSelectorField.view";
 
 const defaultHeaderDetails = getDefaultHeaderDetails();
 
@@ -20,6 +21,7 @@ const SearchOperatorComponent = (props) => {
     const [endDate, dispatchEndDate] = useReducer(endDateReducer, initialEndDate);
     const [searchColumnName, dispatchSearchColumnName] = useReducer(searchColumnNameReducer, initialSearchColumnName);
     const [searchQuery, dispatchSearchQuery] = useReducer(searchQueryReducer, initialSearchQuery);
+    const [stockReflectYn, dispatchStockReflectYn] = useReducer(stockReflectYnReducer, initialStockReflectYn);
 
     useEffect(() => {
         let periodType = query.periodType;
@@ -64,6 +66,17 @@ const SearchOperatorComponent = (props) => {
             })
         }
     }, [query.searchColumnName, query.searchQuery])
+
+    useEffect(() => {
+        let stockReflectYn = query.stockReflectYn;
+
+        if(stockReflectYn) {
+            dispatchStockReflectYn({
+                type: 'SET_DATA',
+                payload: stockReflectYn
+            });
+        }
+    }, [query.stockReflectYn])
 
     const onChangePeriodType = (e) => {
         let value = e.target.value;
@@ -138,7 +151,6 @@ const SearchOperatorComponent = (props) => {
             delete query.startDate;
             delete query.endDate;
             delete query.periodType;
-
         }
 
         if (searchColumnName) {
@@ -150,6 +162,12 @@ const SearchOperatorComponent = (props) => {
 
         if (searchColumnName && searchQuery) {
             query.searchQuery = searchQuery;
+        }
+
+        if (stockReflectYn) {
+            query.stockReflectYn = stockReflectYn;
+        } else {
+            delete query.stockReflectYn;
         }
 
         delete query.page;
@@ -177,6 +195,10 @@ const SearchOperatorComponent = (props) => {
         dispatchSearchQuery({
             type: 'CLEAR'
         })
+        dispatchStockReflectYn({
+            type: 'CLEAR'
+        })
+
         navigate(location.pathname, {
             replace: true
         })
@@ -228,6 +250,14 @@ const SearchOperatorComponent = (props) => {
         )
     }
 
+    const onChangeStockReflectYn = (e) => {
+        let value = e.target.value;
+        dispatchStockReflectYn({
+            type: 'SET_DATA',
+            payload: value
+        })
+    }
+
     return (
         <>
             <Container>
@@ -252,6 +282,10 @@ const SearchOperatorComponent = (props) => {
                         onChangeSearchColumnNameValue={onChangeSearchColumnNameValue}
                         onChangeSearchQueryValue={onChangeSearchQueryValue}
                     ></DetailSearchFieldView>
+                    <StockReflectSelectorFieldView
+                        stockReflectYn={stockReflectYn}
+                        onChangeStockReflectYn={onChangeStockReflectYn}
+                    />
                     <ButtonFieldView
                         onActionRouteToSearch={onActionRouteToSearch}
                         onActionClearRoute={onActionClearRoute}
@@ -268,6 +302,7 @@ const initialStartDate = null;
 const initialEndDate = null;
 const initialSearchColumnName = null;
 const initialSearchQuery = '';
+const initialStockReflectYn = null;
 
 const periodTypeReducer = (state, action) => {
     switch (action.type) {
@@ -316,5 +351,15 @@ const searchQueryReducer = (state, action) => {
         case 'CLEAR':
             return '';
         default: return '';
+    }
+}
+
+const stockReflectYnReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return null;
+        default: return null;
     }
 }
