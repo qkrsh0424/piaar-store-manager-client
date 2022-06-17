@@ -675,6 +675,7 @@ const ReleaseCompleteComponent = (props) => {
                     checkedOrderItemList={checkedOrderItemList}
 
                     _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
+                    _onAction_checkOrderItem={_onAction_checkOrderItem}
                 ></CheckedOrderItemTableComponent>
                 <CheckedOperatorComponent
                     viewHeader={viewHeader}

@@ -65,6 +65,7 @@ export default function TableFieldView(props) {
                                         <tr
                                             key={rowIndex}
                                             className={`${isOutOfStock && 'tr-highlight'}`}
+                                            onClick={(e) => props.onActionCheckedOrderItem(e, r1)}
                                         >
                                             <td className={`fixed-col-left`}>
                                                 {r1.stockReflectYn === 'y' &&
@@ -93,11 +94,28 @@ export default function TableFieldView(props) {
                                     )
 
                                 })}
+                                <InfiniteScrollObserver
+                                    elementTagType={'tr'}
+                                    totalSize={props.checkedOrderItemList.length}
+                                    startOffset={0}
+                                    endOffset={props.viewSize}
+                                    fetchData={props.onActionfetchMoreOrderItems}
+                                    loadingElementTag={
+                                        <td style={{ textAlign: 'left', fontSize: '14px', fontWeight: '600', color: '#444', paddingLeft: '600px' }} colSpan={props.viewSize}>
+                                            로딩중...
+                                        </td>
+                                    }
+                                    endElementTag={
+                                        <td style={{ textAlign: 'left', fontSize: '14px', fontWeight: '600', color: '#444', paddingLeft: '600px' }} colSpan={props.viewSize}>
+                                            마지막 데이터 입니다.
+                                        </td>
+                                    }
+                                />
                             </>
                         }
                     </tbody>
                 </table>
-                <InfiniteScrollObserver
+                {/* <InfiniteScrollObserver
                     elementTagType={'div'}
                     totalSize={props.checkedOrderItemList.length}
                     startOffset={0}
@@ -113,7 +131,7 @@ export default function TableFieldView(props) {
                             마지막 데이터 입니다.
                         </p>
                     }
-                />
+                /> */}
             </div>
         </TableFieldWrapper>
     );

@@ -74,7 +74,7 @@ const StockAnalysisComponent = (props) => {
     useEffect(() => {
         if(!stockAnalysisList) {
             return;
-        } 
+        }
 
         if(query.categoryCid !== 0 && !query.categoryCid) {
             return;
@@ -136,6 +136,28 @@ const StockAnalysisComponent = (props) => {
             }
         }
 
+        // 총 재고자산을 구한다.
+        let totalStockProperty = 0;
+        let totalStockSumUnit = 0;
+        let totalEstimatedSalesPrice = 0;
+
+        data.forEach(r => {
+            totalStockProperty += r.stockProperty;
+            totalStockSumUnit += r.stockSumUnit;
+            totalEstimatedSalesPrice = r.estimatedSalesPrice;
+        });
+
+        let totalStockInfo = {
+            totalStockProperty,
+            totalStockSumUnit,
+            totalEstimatedSalesPrice
+        }
+
+        dispatchTotalStockInfo({
+            type: 'SET_DATA',
+            payload: totalStockInfo
+        });
+
         setStockAnalysisViewList(data);
     }
 
@@ -180,28 +202,7 @@ const StockAnalysisComponent = (props) => {
                 estimatedSalesPrice
             }
         });
-
-        // 총 재고자산을 구한다.
-        let totalStockProperty = 0;
-        let totalStockSumUnit = 0;
-        let totalEstimatedSalesPrice = 0;
-
-        stockAnalysis.forEach(r => {
-            totalStockProperty += r.stockProperty;
-            totalStockSumUnit += r.stockSumUnit;
-            totalEstimatedSalesPrice = r.estimatedSalesPrice;
-        });
-
-        let totalStockInfo = {
-            totalStockProperty,
-            totalStockSumUnit,
-            totalEstimatedSalesPrice
-        }
         
-        dispatchTotalStockInfo({
-            type: 'SET_DATA',
-            payload: totalStockInfo
-        });
         setStockAnalysisList(stockAnalysis);
     }
 

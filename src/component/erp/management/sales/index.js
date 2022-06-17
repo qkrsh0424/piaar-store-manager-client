@@ -560,6 +560,7 @@ const SalesComponent = (props) => {
                     <CheckedOrderItemTableComponent
                         viewHeader={viewHeader}
                         checkedOrderItemList={checkedOrderItemList}
+                        _onAction_checkOrderItem={_onAction_checkOrderItem}
                     ></CheckedOrderItemTableComponent>
                     <CheckedOperatorComponent
                         viewHeader={viewHeader}

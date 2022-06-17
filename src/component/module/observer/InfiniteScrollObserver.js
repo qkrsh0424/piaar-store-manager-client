@@ -5,7 +5,15 @@ const ContainerDiv = styled.div`
 `;
 
 const ContainerTr = styled.tr`
+    :hover {
+        background: none !important;
+    }
 
+    td {
+        :hover {
+            background: none !important;
+        }
+    }
 `;
 
 const InfiniteScrollObserver = ({ elementTagType, totalSize, startOffset, endOffset, fetchData, loadingElementTag, endElementTag }) => {

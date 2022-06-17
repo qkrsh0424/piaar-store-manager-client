@@ -109,13 +109,29 @@ export default function TableFieldView(props) {
                                             </td>
                                         </tr>
                                     )
-
                                 })}
+                                <InfiniteScrollObserver
+                                    elementTagType={'tr'}
+                                    totalSize={props.orderItemList.length}
+                                    startOffset={0}
+                                    endOffset={props.viewSize}
+                                    fetchData={props.onActionfetchMoreOrderItems}
+                                    loadingElementTag={
+                                        <td style={{ textAlign: 'center', fontSize: '14px', fontWeight: '600', color: '#444', paddingLeft: '600px' }} colSpan={props.viewSize}>
+                                            로딩중...
+                                        </td>
+                                    }
+                                    endElementTag={
+                                        <td style={{ textAlign: 'left', fontSize: '14px', fontWeight: '600', color: '#444', paddingLeft: '600px' }} colSpan={props.viewSize}>
+                                            마지막 데이터 입니다.
+                                        </td>
+                                    }
+                                />
                             </>
                         }
                     </tbody>
                 </table>
-                <InfiniteScrollObserver
+                {/* <InfiniteScrollObserver
                     elementTagType={'div'}
                     totalSize={props.orderItemList.length}
                     startOffset={0}
@@ -131,7 +147,7 @@ export default function TableFieldView(props) {
                             마지막 데이터 입니다.
                         </p>
                     }
-                />
+                /> */}
             </div>
         </TableFieldWrapper>
     );
