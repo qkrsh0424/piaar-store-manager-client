@@ -71,12 +71,12 @@ export default function TableFieldView(props) {
                                     endOffset={props.viewSize}
                                     fetchData={props.onActionfetchMoreOrderItems}
                                     loadingElementTag={
-                                        <td style={{ textAlign: 'left', fontSize: '14px', fontWeight: '600', color: '#444', paddingLeft: '600px' }} colSpan={props.viewSize}>
+                                        <td style={{ textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#444', paddingLeft: '50px' }} colSpan={100}>
                                             로딩중...
                                         </td>
                                     }
                                     endElementTag={
-                                        <td style={{ textAlign: 'left', fontSize: '14px', fontWeight: '600', color: '#444', paddingLeft: '600px' }} colSpan={props.viewSize}>
+                                        <td style={{ textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#444', paddingLeft: '50px' }} colSpan={100}>
                                             마지막 데이터 입니다.
                                         </td>
                                     }
