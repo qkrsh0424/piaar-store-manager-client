@@ -26,6 +26,7 @@ class ProductOption {
         this.stockUnit = 0;
         this.status = '준비중';
         this.memo = '';
+        this.releaseLocation = '';
         this.imageUrl = '';
         this.imageFileName = '';
         this.color = '';
@@ -47,6 +48,7 @@ class ProductOption {
             salesPrice: this.salesPrice,
             stockUnit: this.stockUnit,
             status: this.status,
+            releaseLocation: this.releaseLocation,
             memo: this.memo,
             imageUrl: this.imageUrl,
             imageFileName: this.imageFileName,

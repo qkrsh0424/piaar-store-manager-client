@@ -87,7 +87,10 @@ function App(props) {
                         dispatch(setUserInfo(res.data.data))
                     }
                 })
-                .catch(err => { 
+                .catch(err => {
+                    if(!err.response){
+                        alert('페이지에 연결할 수 없습니다. 서버 연결이 끊겼습니다.');
+                    }
                     console.log(err.response);
                 })
             dispatch(setUserLoadingFalse());

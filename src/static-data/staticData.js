@@ -720,6 +720,22 @@ const staticDefaultHeaderDetails2 = [
         ]
     },
     {
+        "originCellName": "$피아르 옵션출고지",
+        "customCellName": "$피아르 옵션출고지",
+        "matchedColumnName": "optionReleaseLocation",
+        "allowedSearch": true,
+        "requiredFlag": false,
+        "variableType": 'string',
+        "fixedValue": '',
+        "mergeYn": "n",
+        "splitter": '-',
+        "viewDetails": [
+            {
+                "matchedColumnName": "optionReleaseLocation"
+            }
+        ]
+    },
+    {
         "originCellName": "$재고수량",
         "customCellName": "$재고수량",
         "matchedColumnName": "optionStockUnit",
