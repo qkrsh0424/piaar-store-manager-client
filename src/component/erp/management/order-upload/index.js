@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { erpDownloadExcelHeaderDataConnect } from "../../../../data_connect/erpDownloadExcelHeaderDataConnect";
 import { erpOrderItemDataConnect } from "../../../../data_connect/erpOrderItemDataConnect";
+import { excelTranslatorDataConnect } from "../../../../data_connect/excelTranslatorDataConnect";
 import { erpOrderItemSocket } from "../../../../data_connect/socket/erpOrderItemSocket";
 import { useBackdropHook, BackdropHookComponent } from "../../../../hooks/backdrop/useBackdropHook";
 import { useSocketConnectLoadingHook, SocketConnectLoadingHookComponent } from "../../../../hooks/loading/useSocketConnectLoadingHook";
@@ -30,9 +31,72 @@ const ErpOrderUploadComponent = (props) => {
     } = useSocketConnectLoadingHook();
 
     const [excelDataList, dispatchExcelDataList] = useReducer(excelDataListReducer, initialExcelDataList);
+    const [excelTranslatorData, dispatchExcelTranslatorData] = useReducer(excelTranslatorDataReducer, initialExcelTranslatorData);
+
+    useEffect(() => {
+        if(excelTranslatorData) {
+            return;
+        }
+
+        __reqSearchExcelTranslator();
+    }, []);
+
+    const __reqSearchExcelTranslator = async () => {
+        await excelTranslatorDataConnect().searchList()
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    dispatchExcelTranslatorData({
+                        type: 'SET_DATA',
+                        payload: res.data.data
+                    });
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (res?.status === 500) {
+                    alert('undefined error.')
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
 
     const __reqUploadExcelFile = async (formData) => {
         await erpOrderItemDataConnect().uploadExcelFile(formData)
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    if (excelDataList) {
+                        dispatchExcelDataList({
+                            type: 'SET_DATA',
+                            payload: [
+                                ...excelDataList,
+                                ...res.data.data
+                            ]
+                        });
+                        return;
+                    }
+                    dispatchExcelDataList({
+                        type: 'SET_DATA',
+                        payload: res.data.data
+                    })
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (res?.status === 500) {
+                    alert('undefined error.')
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqUploadExcelFileByOtherForm = async (headerId, formData) => {
+        await erpOrderItemDataConnect().uploadExcelFileByOtherForm(headerId, formData)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     if (excelDataList) {
@@ -151,6 +215,12 @@ const ErpOrderUploadComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    const _onSubmit_uploadExcelFileByOtherForm = async (headerId, formData) => {
+        onActionOpenBackdrop();
+        await __reqUploadExcelFileByOtherForm(headerId, formData);
+        onActionCloseBackdrop();
+    }
+
     const _onSubmit_createOrderItems = async () => {
         if (!excelDataList || excelDataList.length <= 0) {
             return;
@@ -196,10 +266,13 @@ const ErpOrderUploadComponent = (props) => {
 
     return (
         <>
-            {connected &&
+            {connected && excelTranslatorData &&
                 <>
                     <OperatorComponent
+                        excelTranslatorData={excelTranslatorData}
+
                         _onSubmit_uploadExcelFile={(formData) => _onSubmit_uploadExcelFile(formData)}
+                        _onSubmit_uploadExcelFileByOtherForm={(headerId, formData) => _onSubmit_uploadExcelFileByOtherForm(headerId, formData)}
                         _onSubmit_createOrderItems={() => _onSubmit_createOrderItems()}
                         _onSubmit_downloadUploadExcelSample={_onSubmit_downloadUploadExcelSample}
                         _onSubmit_addSingleExcelData={_onSubmit_addSingleExcelData}
@@ -227,6 +300,7 @@ const ErpOrderUploadComponent = (props) => {
 export default ErpOrderUploadComponent;
 
 const initialExcelDataList = null;
+const initialExcelTranslatorData = null;
 
 const excelDataListReducer = (state, action) => {
     switch (action.type) {
@@ -235,5 +309,15 @@ const excelDataListReducer = (state, action) => {
         case 'CLEAR':
             return null;
         default: return null;
+    }
+}
+
+const excelTranslatorDataReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialExcelTranslatorData;
+        default: return initialExcelTranslatorData;
     }
 }

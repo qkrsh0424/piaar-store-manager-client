@@ -17,10 +17,42 @@ const ControlButtonFieldWrapper = styled.div`
     .flex-box{
         display: flex;
         flex-wrap: wrap;
+        color: #000;
+        align-items: center;
+        height: 50px !important;
     }
 
     @media only screen and (max-width:992px){
         padding: 0 5px;
+    }
+
+    .selector-box {
+        margin: 0 10px;
+        font-size: 14px;
+        padding: 5px;
+    }
+
+    .select-item{
+        width: 300px;
+        height: 100%;
+        padding: 5px;
+        margin: 0 10px;
+        border: 1px solid #e1e1e1;
+        border-radius: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+
+        &:focus{
+            outline: none;
+        }
+
+        @media all and (max-width:992px) {
+            margin: 10px 0 0 0;
+            width: 100%;
+        }
     }
 
     .button-box{
