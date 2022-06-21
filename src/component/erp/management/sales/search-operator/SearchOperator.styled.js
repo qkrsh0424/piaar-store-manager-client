@@ -49,13 +49,12 @@ const DateSelectorFieldWrapper = styled.div`
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        height: 50px !important;
         /* gap: 10px; */
     }
 
     .select-item{
         width: 300px;
-        height: 100%;
+        height: 50px;
         padding: 5px;
         margin: 0 10px;
         border: 1px solid #e1e1e1;
@@ -110,13 +109,12 @@ const DetailSearchFieldWrapper = styled.div`
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        height: 50px !important;
     }
 
     .select-item{
         margin: 0 10px;
         width: 300px;
-        height: 100%;
+        height: 50px;
         padding: 5px;
         border: 1px solid #e1e1e1;
         border-radius: 0;
@@ -139,7 +137,7 @@ const DetailSearchFieldWrapper = styled.div`
     .input-item{
         margin: 0 10px;
         width: 300px;
-        height: 100%;
+        height: 50px;
         border: 1px solid #e1e1e1;
         padding: 0 5px;
         font-size: 14px;
@@ -179,13 +177,12 @@ const ReleaseSelectorFieldWrapper = styled.div`
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        height: 50px !important;
     }
 
     .select-item{
         margin: 0 10px;
         width: 300px;
-        height: 100%;
+        height: 50px;
         padding: 5px;
         border: 1px solid #e1e1e1;
         border-radius: 0;

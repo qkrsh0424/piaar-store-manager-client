@@ -16,10 +16,13 @@ const ControlButtonFieldWrapper = styled.div`
 
     .flex-box{
         display: flex;
-        flex-wrap: wrap;
         color: #000;
         align-items: center;
-        height: 50px !important;
+        align-content: center
+    }
+
+    .flex-wrap {
+        flex-wrap: wrap;
     }
 
     @media only screen and (max-width:992px){
@@ -27,16 +30,18 @@ const ControlButtonFieldWrapper = styled.div`
     }
 
     .selector-box {
-        margin: 0 10px;
         font-size: 14px;
         padding: 5px;
+
+        @media all and (max-width:992px) {
+            padding: 5px 0;
+        }
     }
 
     .select-item{
-        width: 300px;
-        height: 100%;
         padding: 5px;
-        margin: 0 10px;
+        width: 300px;
+        height: 40px;
         border: 1px solid #e1e1e1;
         border-radius: 0;
         font-size: 14px;
@@ -50,7 +55,6 @@ const ControlButtonFieldWrapper = styled.div`
         }
 
         @media all and (max-width:992px) {
-            margin: 10px 0 0 0;
             width: 100%;
         }
     }
@@ -79,7 +83,8 @@ const ControlButtonFieldWrapper = styled.div`
 
         &:hover{
             cursor: pointer;
-            background: #2C73D2;
+            /* background: #2C73D2; */
+            background: var(--erp-main-color);
             border: 1px solid #2C73D2;
             color: #fff;
             transition: 0.2s;
