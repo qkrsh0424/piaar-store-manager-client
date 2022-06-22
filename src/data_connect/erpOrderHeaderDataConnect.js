@@ -4,8 +4,13 @@ const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 
 const erpOrderHeaderDataConnect = () => {
     return {
-        searchOne: async function () {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/erp-order-headers`, {
+        searchOne: async function (headerId) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/erp-order-headers/${headerId}`, {
+                withCredentials: true
+            })
+        },
+        searchTitle: async function () {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/erp-order-headers/title`, {
                 withCredentials: true
             })
         },
@@ -26,6 +31,11 @@ const erpOrderHeaderDataConnect = () => {
         },
         updateOneSocket: async function (params) {
             return await axios.put(`${API_SERVER_ADDRESS}/ws/v1/erp-order-headers`, params, {
+                withCredentials: true
+            })
+        },
+        deleteOne: async function (headerId) {
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/erp-order-headers/${headerId}`, {
                 withCredentials: true
             })
         }

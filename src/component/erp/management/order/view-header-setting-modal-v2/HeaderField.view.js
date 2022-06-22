@@ -1,5 +1,6 @@
-import Ripple from "../../../../module/button/Ripple";
 import { HeaderFieldWrapper } from "./ViewHeaderSettingModal.styled";
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 function Title({ element }) {
     return (
@@ -9,31 +10,15 @@ function Title({ element }) {
     );
 }
 
-function Button({ onSubmitSaveAndModify }) {
-    return (
-        <div className='button-box'>
-            <button
-                type='button'
-                className='button-el'
-                onClick={() => onSubmitSaveAndModify()}
-            >
-                <div className='icon-box'>
-                    <img className='icon-el' src='/assets/icon/add_icon.png' alt=''></img>
-                </div>
-                <Ripple color={'#d1d1d1'} duration={1000}></Ripple>
-            </button>
-        </div>
-    );
-}
 export default function HeaderFieldView(props) {
     return (
         <HeaderFieldWrapper>
             <Title
                 element={'뷰 헤더 설정'}
             ></Title>
-            <Button
-                onSubmitSaveAndModify={props.onSubmitSaveAndModify}
-            ></Button>
+            <IconButton className="modal-close-btn" aria-label="close" onClick={props.onActionCloseModal}>
+                <CloseIcon />
+            </IconButton>
         </HeaderFieldWrapper>
     );
 }

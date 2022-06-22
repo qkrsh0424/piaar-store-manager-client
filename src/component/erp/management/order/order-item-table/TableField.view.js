@@ -131,23 +131,6 @@ export default function TableFieldView(props) {
                         }
                     </tbody>
                 </table>
-                {/* <InfiniteScrollObserver
-                    elementTagType={'div'}
-                    totalSize={props.orderItemList.length}
-                    startOffset={0}
-                    endOffset={props.viewSize}
-                    fetchData={props.onActionfetchMoreOrderItems}
-                    loadingElementTag={
-                        <p style={{ textAlign: 'center', fontSize: '14px', fontWeight: '600', color: '#444' }}>
-                            로딩중...
-                        </p>
-                    }
-                    endElementTag={
-                        <p style={{ textAlign: 'center', fontSize: '14px', fontWeight: '600', color: '#444' }}>
-                            마지막 데이터 입니다.
-                        </p>
-                    }
-                /> */}
             </div>
         </TableFieldWrapper>
     );
