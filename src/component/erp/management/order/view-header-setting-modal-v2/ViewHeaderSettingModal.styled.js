@@ -89,11 +89,11 @@ const HeaderFieldWrapper = styled.div`
 `;
 
 const SelectorFieldWrapper = styled.div`
-    padding: 10px;
+    padding: 20px 10px;
 
     .selector-box {
         width: 350px;
-        padding: 20px 10px;
+        padding: 10px;
     }
 
     .flex-box {
@@ -124,17 +124,6 @@ const SelectorFieldWrapper = styled.div`
         top:50%;
         left:50%;
         transform: translate(-50%, -50%);
-    }
-
-    .input-item {
-        margin: 0 10px;
-        width: 330px;
-        height: 30px;
-        border: 1px solid #d9d9d9;
-        border-radius: 3px;
-        padding: 0 10px;
-        font-size: 14px;
-        box-sizing: border-box;
     }
 
     .button-el{
@@ -172,11 +161,30 @@ const SelectorFieldWrapper = styled.div`
 `
 
 const InfoTextFieldWrapper = styled.div`
-    margin-top: 20px;
     padding: 0 20px;
 
     @media all and (max-width: 992px){
         padding: 0 10px;
+    }
+
+    .input-item {
+        margin: 0 10px;
+        width: 330px;
+        height: 30px;
+        border: none;
+        border-bottom: 1px solid #d9d9d9;
+        border-radius: 3px;
+        padding: 0 15px;
+        font-size: 16px;
+        font-weight: 600;
+        box-sizing: border-box;
+    }
+
+    .view-header-title {
+        color: #000;
+        padding: 20px 10px;
+        display: flex;
+        align-items: center;
     }
 
     .info-box{

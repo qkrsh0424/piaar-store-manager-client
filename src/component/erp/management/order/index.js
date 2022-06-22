@@ -358,6 +358,20 @@ const OrderComponent = (props) => {
     }, [location]);
 
     useEffect(() => {
+        async function setViewHeader() {
+            onActionOpenBackdrop();
+            await __reqSearchSelectedViewHeader(query.headerId);
+            onActionCloseBackdrop();
+        }
+
+        if(!query.headerId) {
+            return;
+        }
+
+        setViewHeader();
+    }, [query.headerId])
+
+    useEffect(() => {
         let subscribes = [];
 
         const __effect = {
@@ -485,8 +499,8 @@ const OrderComponent = (props) => {
     // 뷰 헤더 생성 서밋
     const _onSubmit_createViewHeader = async (body) => {
         onActionOpenBackdrop();
-
         await __reqCreateOrderHeaderOneSocket(body);
+        await __reqSearchViewHeaderTitle();
         navigate({
             pathname: pathname,
             search: `?${qs.stringify({
@@ -496,8 +510,6 @@ const OrderComponent = (props) => {
         }, {
             replace: true
         })
-        await __reqSearchSelectedViewHeader(body.id);
-
         onActionCloseBackdrop();
     }
 
@@ -546,9 +558,15 @@ const OrderComponent = (props) => {
 
     // 뷰 헤더 선택
     const _onAction_searchSelectedViewHeader = async (headerId) => {
-        onActionOpenBackdrop();
-        await __reqSearchSelectedViewHeader(headerId);
-        onActionCloseBackdrop();
+        navigate({
+            pathname: pathname,
+            search: `?${qs.stringify({
+                ...query,
+                headerId: headerId
+            })}`
+        }, {
+            replace: true
+        })
     }
 
     // 선택된 뷰 헤더 제거
@@ -559,6 +577,16 @@ const OrderComponent = (props) => {
 
         dispatchViewHeader({
             type: 'CLEAR'
+        })
+
+        delete query.headerId;
+        navigate({
+            pathname: pathname,
+            search: `?${qs.stringify({
+                ...query
+            })}`
+        }, {
+            replace: true
         })
         onActionCloseBackdrop();
     }

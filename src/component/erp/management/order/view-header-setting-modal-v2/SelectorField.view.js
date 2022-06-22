@@ -5,19 +5,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-function Button({ element, onClick, style }) {
-    return (
-        <div className="button-box">
-            <button
-                className='button-el'
-                type='button'
-                onClick={() => onClick()}
-                style={style}
-            >{element}</button>
-        </div>
-    );
-}
-
 export default function SelectorFieldView(props) {
     return (
         <SelectorFieldWrapper>
@@ -25,7 +12,7 @@ export default function SelectorFieldView(props) {
                 <div className="selector-box">
                     <Box sx={{ display: 'flex' }}>
                         <FormControl sx={{ width: '100%', height: '35px' }}>
-                            <InputLabel id="title-select-id" sx={{ top: '-10px' }}>뷰 헤더 선택</InputLabel>
+                            <InputLabel id="title-select-id" sx={{ top: '-10px' }} name='headerTitle' onChange={props.onChangeSelectViewHeaderTitle}>뷰 헤더 선택</InputLabel>
                             <Select
                                 labelId="title-select-id"
                                 id="title-select"
@@ -61,17 +48,6 @@ export default function SelectorFieldView(props) {
                     <button
                         type='button'
                         className='image-button-el'
-                    // onClick={(e) => props.onActionDeleteDataOne(e, rowIndex)}
-                    >
-                        <img
-                            className='image-button-icon'
-                            src='/assets/icon/edit_black_icon.png'
-                            alt=""
-                        ></img>
-                    </button>
-                    <button
-                        type='button'
-                        className='image-button-el'
                         onClick={props.onActionDeleteSelectedViewHeader}
                     >
                         <img
@@ -82,24 +58,6 @@ export default function SelectorFieldView(props) {
                     </button>
                 </div>
             </div>
-            {props.createViewHeader &&
-                <div className='flex-box'>
-                    <input type='text'
-                        name='headerTitle'
-                        className='input-item'
-                        value={props.createViewHeader.headerTitle}
-                        onChange={props.onChangeViewHeaderTitle}
-                        placeholder='뷰 헤더 이름'
-                        required
-                        />
-                    <div className='flex-box'>
-                        <Button 
-                            element={'취소'}
-                            onClick={props.onActionCancelCreateViewHeader}
-                        />
-                    </div>
-                </div>
-            }
         </SelectorFieldWrapper>
     );
 }

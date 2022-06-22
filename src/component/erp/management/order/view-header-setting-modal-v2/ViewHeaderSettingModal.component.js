@@ -3,7 +3,6 @@ import HeaderFieldView from "./HeaderField.view";
 import InfoTextFieldView from "./InfoTextField.view";
 import TableOperatorFieldView from "./TableOperatorField.view";
 import DefaultTableFieldView from './DefaultTableField.view'
-import queryString from 'query-string';
 import { Container } from "./ViewHeaderSettingModal.styled";
 import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
 import { useEffect, useReducer } from "react";
@@ -12,7 +11,6 @@ import _ from "lodash";
 import valueUtils from "../../../../../utils/valueUtils";
 import SelectorFieldView from "./SelectorField.view";
 import { v4 as uuidv4 } from 'uuid';
-import { useLocation, useNavigate } from "react-router-dom";
 
 const defaultHeaderDetails = getDefaultHeaderDetails();
 
@@ -30,23 +28,16 @@ function Button({ element, onClick, style }) {
 }
 
 const ViewHeaderSettingModalComponent = (props) => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    let pathname = location.pathname;
-    let params = queryString.parse(location.search);
-
     const [createHeaderDetails, dispatchCreateHeaderDetails] = useReducer(createHeaderDetailsReducer, initialCreateHeaderDetails);
     const [viewHeader, dispatchViewHeader] = useReducer(viewHeaderReducer, initialViewHeader);
     const [createViewHeader, dispatchCreateViewHeader] = useReducer(createViewHeaderReducer, initialCreateViewHeader);
+    const [createViewHeaderTitle, dispatchCreateViewHeaderTitle] = useReducer(createViewHeaderTitleReducer, initialCreateViewHeaderTitle);
 
     useEffect(() => {
         if (!props.viewHeader) {
             dispatchViewHeader({
                 type: 'CLEAR'
             })
-            // dispatchCreateHeaderDetails({
-            //     type: 'CLEAR'
-            // })
             dispatchCreateViewHeader({
                 type: 'CLEAR'
             })
@@ -57,13 +48,19 @@ const ViewHeaderSettingModalComponent = (props) => {
             type: 'INIT_DATA',
             payload: _.cloneDeep(props.viewHeader)
         })
-        
-        onActionCancelCreateViewHeader();
+
+        dispatchCreateViewHeader({
+            type: 'CLEAR'
+        })
     }, [props.viewHeader]);
 
+    // 이미 존재하는 뷰 헤더 컨트롤 시
     useEffect(() => {
         if(!viewHeader) {
             dispatchCreateHeaderDetails({
+                type: 'CLEAR'
+            })
+            dispatchCreateViewHeaderTitle({
                 type: 'CLEAR'
             })
             return;
@@ -73,7 +70,37 @@ const ViewHeaderSettingModalComponent = (props) => {
             type: 'SET_DATA',
             payload: viewHeader.headerDetail.details
         })
+        dispatchCreateViewHeaderTitle({
+            type: 'SET_DATA',
+            payload: viewHeader.headerTitle
+        })
     }, [viewHeader])
+
+    // 새로 생성하는 뷰 헤더 컨트롤 시
+    useEffect(() => {
+        if(viewHeader) {
+            return;
+        }
+
+        if(!createViewHeader) {
+            dispatchCreateHeaderDetails({
+                type: 'CLEAR'
+            })
+            dispatchCreateViewHeaderTitle({
+                type: 'CLEAR'
+            })
+            return;
+        }
+
+        dispatchCreateHeaderDetails({
+            type: 'SET_DATA',
+            payload: createViewHeader.headerDetail.details
+        })
+        dispatchCreateViewHeaderTitle({
+            type: 'SET_DATA',
+            payload: createViewHeader.headerTitle
+        })
+    }, [createViewHeader])
 
     const __createHeaderDetails = {
         submit: {
@@ -97,20 +124,21 @@ const ViewHeaderSettingModalComponent = (props) => {
                 if(!createViewHeader){
                     body = {
                         ...viewHeader,
+                        headerTitle: createViewHeaderTitle,
                         headerDetail: {
                             details: createHeaderDetails
                         }
                     }
                     props._onSubmit_modifyViewHeader(body);
                 }else {
-                    if(!createViewHeader.headerTitle) {
+                    if(!createViewHeaderTitle) {
                         alert('뷰 헤더 이름을 먼저 설정해주세요.');
                         return;
                     }
                     body = {
                         ...viewHeader,
                         id: uuidv4(),
-                        headerTitle: createViewHeader.headerTitle,
+                        headerTitle: createViewHeaderTitle,
                         headerDetail: {
                             details: createHeaderDetails
                         }
@@ -225,33 +253,17 @@ const ViewHeaderSettingModalComponent = (props) => {
     }
 
     const onChangeSelectedViewHeaderTitle = (e) => {
+        e.preventDefault();
         let headerId = e.target.value;
-        
-        // header선택안한 경우
-        if(!headerId) {
-            dispatchViewHeader({
-                type: 'CLEAR'
-            })
-            dispatchCreateHeaderDetails({
-                type: 'CLEAR'
-            })
-            return;
-        }
-
-        navigate({
-            pathname: pathname,
-            search: `?${queryString.stringify({
-                ...params,
-                headerId: headerId
-            })}`
-        }, {
-            replace: true
-        })
         props._onAction_searchSelectedViewHeader(headerId);
     }
 
     const onActionCreateViewHeader = (e) => {
         e.preventDefault();
+
+        dispatchViewHeader({
+            type: 'CLEAR'
+        })
 
         let data = {
             id: uuidv4(),
@@ -264,15 +276,6 @@ const ViewHeaderSettingModalComponent = (props) => {
         dispatchCreateViewHeader({
             type: 'INIT_DATA',
             payload: data
-        })
-
-        dispatchCreateHeaderDetails({
-            type: 'SET_DATA',
-            payload: data.headerDetail.details
-        })
-
-        dispatchViewHeader({
-            type: 'CLEAR'
         })
     }
 
@@ -287,17 +290,6 @@ const ViewHeaderSettingModalComponent = (props) => {
         if(window.confirm('선택된 뷰 헤더를 제거하시겠습니까?')) {
             props._onAction_deleteSelectedViewHeader(viewHeader.id);
 
-            delete params.headerId;
-
-            navigate({
-                pathname: pathname,
-                search: `?${queryString.stringify({
-                    ...params
-                })}`
-            }, {
-                replace: true
-            })
-
             dispatchViewHeader({
                 type: 'CLEAR'
             });
@@ -305,23 +297,22 @@ const ViewHeaderSettingModalComponent = (props) => {
         }
     }
 
-    const onChangeViewHeaderTitle = (e) => {
-        dispatchCreateViewHeader({
+    const onChangeCreateViewHeaderTitle = (e) => {
+        e.preventDefault();
+
+        dispatchCreateViewHeaderTitle({
+            type: 'SET_DATA',
+            payload: e.target.value
+        })
+    }
+
+    const onChangeSelectViewHeaderTitle = (e) => {
+        dispatchViewHeader({
             type: 'CHANGE_DATA',
             payload: {
                 name: e.target.name,
                 value: e.target.value
             }
-        });
-    }
-
-    const onActionCancelCreateViewHeader = () => {
-        dispatchCreateViewHeader({
-            type: 'CLEAR'
-        });
-
-        dispatchCreateHeaderDetails({
-            type: 'CLEAR'
         })
     }
 
@@ -340,14 +331,27 @@ const ViewHeaderSettingModalComponent = (props) => {
                     onChangeSelectedViewHeaderTitle={onChangeSelectedViewHeaderTitle}
                     onActionCreateViewHeader={onActionCreateViewHeader}
                     onActionDeleteSelectedViewHeader={onActionDeleteSelectedViewHeader}
-                    onChangeViewHeaderTitle={onChangeViewHeaderTitle}
-                    onActionCancelCreateViewHeader={onActionCancelCreateViewHeader}
+                    onChangeSelectViewHeaderTitle={onChangeSelectViewHeaderTitle}
+                    onSubmitSaveAndModifyViewHeader={__createHeaderDetails.submit.saveAndModify}
                 ></SelectorFieldView>
                 {createHeaderDetails &&
                     <>
                         <InfoTextFieldView
                             element={
-                                <div>* 주문 현황에서 확인할 데이터 항목을 선택해주세요.</div>
+                                <>
+                                    <div className='view-header-title'>
+                                        <div>뷰 헤더명 : </div>
+                                        <input type='text'
+                                            name='headerTitle'
+                                            className='input-item'
+                                            value={createViewHeaderTitle || ''}
+                                            onChange={onChangeCreateViewHeaderTitle}
+                                            placeholder='뷰 헤더 이름'
+                                            required
+                                        />
+                                    </div>
+                                    <div>* 주문 현황에서 확인할 데이터 항목을 선택해주세요.</div>
+                                </>
                             }
                         ></InfoTextFieldView>
                         <TableOperatorFieldView
@@ -416,6 +420,8 @@ export default ViewHeaderSettingModalComponent;
 const initialCreateHeaderDetails = null;
 const initialViewHeader = null;
 const initialCreateViewHeader = null;
+const initialCreateViewHeaderTitle = null;
+const initialViewHeaderTitleList = null;
 
 const createHeaderDetailsReducer = (state, action) => {
     switch (action.type) {
@@ -431,9 +437,24 @@ const viewHeaderReducer = (state, action) => {
     switch (action.type) {
         case 'INIT_DATA':
             return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
         case 'CLEAR':
             return initialViewHeader;
         default: return initialViewHeader;
+    }
+}
+
+const createViewHeaderTitleReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialCreateViewHeaderTitle;
+        default: return initialCreateViewHeaderTitle;
     }
 }
 
