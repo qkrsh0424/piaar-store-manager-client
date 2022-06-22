@@ -23,6 +23,8 @@ const ControlButtonFieldWrapper = styled.div`
 
     .flex-wrap {
         flex-wrap: wrap;
+        color: #000;
+        align-items: center;
     }
 
     @media only screen and (max-width:992px){

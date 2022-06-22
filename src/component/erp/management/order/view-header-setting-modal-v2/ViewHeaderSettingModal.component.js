@@ -44,9 +44,9 @@ const ViewHeaderSettingModalComponent = (props) => {
             dispatchViewHeader({
                 type: 'CLEAR'
             })
-            dispatchCreateHeaderDetails({
-                type: 'CLEAR'
-            })
+            // dispatchCreateHeaderDetails({
+            //     type: 'CLEAR'
+            // })
             dispatchCreateViewHeader({
                 type: 'CLEAR'
             })
@@ -63,6 +63,9 @@ const ViewHeaderSettingModalComponent = (props) => {
 
     useEffect(() => {
         if(!viewHeader) {
+            dispatchCreateHeaderDetails({
+                type: 'CLEAR'
+            })
             return;
         }
 
