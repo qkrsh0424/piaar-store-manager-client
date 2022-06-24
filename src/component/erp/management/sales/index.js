@@ -1,13 +1,13 @@
 import { useEffect, useReducer, useState } from 'react';
 import qs from 'query-string';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonModalComponent from '../../../module/modal/CommonModalComponent';
-import ViewHeaderSettingModalComponent from './view-header-setting-modal-v2/ViewHeaderSettingModal.component';
+import ViewHeaderSettingModalComponent from './view-header-setting-modal-v3/ViewHeaderSettingModal.component';
 import HeaderComponent from './header/Header.component';
 import { erpSalesHeaderDataConnect } from '../../../../data_connect/erpSalesHeaderDataConnect';
 import SearchOperatorComponent from './search-operator/SearchOperator.component';
-import { dateToYYYYMMDDhhmmssFile, getEndDate, getStartDate } from '../../../../utils/dateFormatUtils';
+import { getEndDate, getStartDate } from '../../../../utils/dateFormatUtils';
 import { erpOrderItemDataConnect } from '../../../../data_connect/erpOrderItemDataConnect';
 import { productOptionDataConnect } from '../../../../data_connect/productOptionDataConnect';
 import OrderItemTableComponent from './order-item-table/OrderItemTable.component';
@@ -33,6 +33,8 @@ const DEFAULT_HEADER_FIELDS = getDefaultHeaderFields();
 
 const SalesComponent = (props) => {
     const location = useLocation();
+    const navigate = useNavigate();
+    let pathname = location.pathname;
     const query = qs.parse(location.search);
 
     const {
@@ -66,22 +68,49 @@ const SalesComponent = (props) => {
     const [orderItemPage, dispatchOrderItemPage] = useReducer(orderItemPageReducer, initialOrderItemPage);
     const [checkedOrderItemList, dispatchCheckedOrderItemList] = useReducer(checkedOrderItemListReducer, initialCheckedOrderItemList);
     const [downloadExcelList, dispatchDownloadExcelList] = useReducer(downloadExcelListReducer, initialDownloadExcelList);
+    const [viewHeaderList, dispatchViewHeaderList] = useReducer(viewHeaderListReducer, initialViewHeaderList);
 
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
 
     // Search
-    const __reqSearchViewHeaderOne = async () => {
-        await erpSalesHeaderDataConnect().searchOne()
+    const __reqSearchViewHeaderList = async () => {
+        await erpSalesHeaderDataConnect().searchList()
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
-                    dispatchViewHeader({
+                    dispatchViewHeaderList({
                         type: 'INIT_DATA',
                         payload: res.data.data
                     })
                 }
             })
             .catch(err => {
-                console.log(err);
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqDeleteSelectedViewHeader = async (headerId) => {
+        await erpSalesHeaderDataConnect().deleteOne(headerId)
+            .then(res => {
+                if(res.status === 200 && res.data.message == 'success') {
+                    dispatchViewHeader({
+                        type: 'CLEAR'
+                    })
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -137,7 +166,12 @@ const SalesComponent = (props) => {
             })
             .catch(err => {
                 let res = err.response;
-                console.log(res);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -158,7 +192,12 @@ const SalesComponent = (props) => {
             })
             .catch(err => {
                 let res = err.response;
-                console.log(res);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -174,7 +213,12 @@ const SalesComponent = (props) => {
             })
             .catch(err => {
                 let res = err.response;
-                console.log(res);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -311,7 +355,7 @@ const SalesComponent = (props) => {
     }
 
     useEffect(() => {
-        __reqSearchViewHeaderOne();
+        __reqSearchViewHeaderList();
         __reqSearchProductOptionList();
         __reqSearchDownloadExcelHeaders();
     }, []);
@@ -324,6 +368,26 @@ const SalesComponent = (props) => {
         }
         fetchInit();
     }, [location]);
+
+    useEffect(() => {
+        if(!viewHeaderList) {
+            return;
+        }
+        
+        if(!query.headerId) {
+            dispatchViewHeader({
+                type: 'CLEAR'
+            })
+            return;
+        }
+
+        let selectedData = viewHeaderList.filter(r => r.id === query.headerId)[0];
+
+        dispatchViewHeader({
+            type: 'INIT_DATA',
+            payload: selectedData
+        });
+    }, [query.headerId, viewHeaderList])
 
     useEffect(() => {
         let subscribes = [];
@@ -353,7 +417,7 @@ const SalesComponent = (props) => {
                         callback: async (e) => {
                             let body = JSON.parse(e.body);
                             if (body?.statusCode === 200) {
-                                await __reqSearchViewHeaderOne();
+                                await __reqSearchViewHeaderList();
                             }
                         }
                     }
@@ -450,29 +514,26 @@ const SalesComponent = (props) => {
         })
     }
 
-    // 헤더 설정 서밋
-    const _onSubmit_saveAndModifyViewHeader = async (headerDetails) => {
+    // 뷰 헤더 생성 서밋
+    const _onSubmit_createViewHeader = async (body) => {
         onActionOpenBackdrop();
-        let params = null;
-        if (!viewHeader) {
-            params = {
-                headerDetail: {
-                    details: headerDetails
-                }
-            }
-            await __reqCreateViewHeaderOneSocket(params);
-        } else {
-            params = {
-                ...viewHeader,
-                headerDetail: {
-                    details: headerDetails
-                }
-            }
-            await __reqUpdateViewHeaderOneSocket(params);
-        }
+        await __reqCreateViewHeaderOneSocket(body);
+        navigate({
+            pathname: pathname,
+            search: `?${qs.stringify({
+                ...query,
+                headerId: body.id
+            })}`
+        }, {
+            replace: true
+        })
+        onActionCloseBackdrop();
+    }
 
-        _onAction_closeHeaderSettingModal();
-        await __reqSearchViewHeaderOne();
+    // 뷰 헤더 수정 서밋
+    const _onSubmit_modifyViewHeader = async (body) => {
+        onActionOpenBackdrop();
+        await __reqUpdateViewHeaderOneSocket(body);
         onActionCloseBackdrop();
     }
 
@@ -525,10 +586,27 @@ const SalesComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    // 선택된 뷰 헤더 제거
+    const _onAction_deleteSelectedViewHeader = async (headerId) => {
+        onActionOpenBackdrop();
+        await __reqDeleteSelectedViewHeader(headerId);
+        await __reqSearchViewHeaderList();
+        
+        delete query.headerId;
+        navigate({
+            pathname,
+            search: `?${qs.stringify({
+                ...query
+            })}`
+        }, {
+            replace: true
+        });
+        onActionCloseBackdrop();
+    }
+
     return (
         <>
             {connected &&
-
                 <Container>
                     <HeaderComponent
                         _onAction_openHeaderSettingModal={_onAction_openHeaderSettingModal}
@@ -588,8 +666,12 @@ const SalesComponent = (props) => {
             >
                 <ViewHeaderSettingModalComponent
                     viewHeader={viewHeader}
+                    viewHeaderList={viewHeaderList}
 
-                    _onSubmit_saveAndModifyViewHeader={_onSubmit_saveAndModifyViewHeader}
+                    _onSubmit_createViewHeader={_onSubmit_createViewHeader}
+                    _onSubmit_modifyViewHeader={_onSubmit_modifyViewHeader}
+                    _onAction_closeHeaderSettingModal={_onAction_closeHeaderSettingModal}
+                    _onAction_deleteSelectedViewHeader={_onAction_deleteSelectedViewHeader}
                 ></ViewHeaderSettingModalComponent>
             </CommonModalComponent>
 
@@ -627,8 +709,19 @@ const initialProductOptionList = null;
 const initialOrderItemPage = null;
 const initialCheckedOrderItemList = [];
 const initialDownloadExcelList = null;
+const initialViewHeaderList = null;
 
 const viewHeaderReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialViewHeader;
+        default: return initialViewHeader;
+    }
+}
+
+const viewHeaderListReducer = (state, action) => {
     switch (action.type) {
         case 'INIT_DATA':
             return action.payload;

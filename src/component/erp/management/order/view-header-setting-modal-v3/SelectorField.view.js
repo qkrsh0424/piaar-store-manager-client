@@ -22,7 +22,7 @@ export default function SelectorFieldView(props) {
                                 defaultValue=''
                                 sx={{ height: '35px' }}
                             >
-                                {props.viewHeaderTitleList?.map((data, idx) => {
+                                {props.viewHeaderList?.map((data, idx) => {
                                     return (
                                         <MenuItem key={'header_title' + idx} value={data.id} sx={{ display: 'flex', padding: '5px 10px', justifyContent: 'space-around' }}>
                                             <span>{data.headerTitle}</span>
