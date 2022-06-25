@@ -167,6 +167,44 @@ const InfoTextFieldWrapper = styled.div`
         padding: 0 10px;
     }
 
+    .info-box{
+        font-size: 14px;
+        color: #2C73D2;
+        word-break: keep-all;
+
+        @media all and (max-width: 992px){
+            font-size: 12px;
+        }
+    }
+
+    .image-button-el{
+        position: relative;
+        overflow: hidden;
+        width:30px;
+        height: 30px;
+        background: white;
+        border: 1px solid #212529;
+        border-radius: 2px;
+
+        cursor: pointer;
+
+        &:hover{
+            transform: scale(1.02);
+        }
+    }
+
+    .image-button-icon{
+        width:80%;
+        position: absolute;
+        top:50%;
+        left:50%;
+        transform: translate(-50%, -50%);
+    }
+`;
+
+const ViewHeaderInputFieldWrapper  = styled.div`
+    padding: 0 20px;
+
     .input-item {
         margin: 0 10px;
         width: 330px;
@@ -187,16 +225,23 @@ const InfoTextFieldWrapper = styled.div`
         align-items: center;
     }
 
-    .info-box{
-        font-size: 14px;
-        color: #2C73D2;
-        word-break: keep-all;
+    .image-button-el{
+        position: relative;
+        overflow: hidden;
+        width: 40px;
+        height: 40px;
+        background: white;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        transition: 0.2s;
 
-        @media all and (max-width: 992px){
-            font-size: 12px;
+        cursor: pointer;
+
+        :hover {
+            transform: scale(1.05);
+            background-color: #e0e0e0;
         }
     }
-
 `;
 
 const TableOperatorFieldWrapper = styled.div`
@@ -355,6 +400,7 @@ const CreateTableFieldWrapper = styled.div`
 export {
     Container,
     HeaderFieldWrapper,
+    ViewHeaderInputFieldWrapper,
     InfoTextFieldWrapper,
     TableOperatorFieldWrapper,
     DefaultTableFieldWrapper,

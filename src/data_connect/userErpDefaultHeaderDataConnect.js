@@ -8,6 +8,16 @@ const userErpDefaultHeaderDataConnect = () => {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/user-erp-default-headers`, {
                 withCredentials: true
             })
+        },
+        createOne: async function (data) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/user-erp-default-headers`, data, {
+                withCredentials: true
+            })
+        },
+        patchOne: async function (params) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/api/v1/user-erp-default-headers`, params, {
+                withCredentials: true
+            })
         }
     }
 }

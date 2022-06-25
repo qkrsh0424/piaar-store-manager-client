@@ -4,6 +4,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { ListItemIcon } from "@mui/material";
 
 export default function SelectorFieldView(props) {
     return (
@@ -24,8 +25,17 @@ export default function SelectorFieldView(props) {
                             >
                                 {props.viewHeaderList?.map((data, idx) => {
                                     return (
-                                        <MenuItem key={'header_title' + idx} value={data.id} sx={{ display: 'flex', padding: '5px 10px', justifyContent: 'space-around' }}>
+                                        <MenuItem key={'header_title' + idx} value={data.id} sx={{ display: 'flex', padding: '5px 10px', justifyContent: 'space-around', alignItems: 'center' }}>
                                             <span>{data.headerTitle}</span>
+                                            <span> 
+                                                {props.erpDefaultHeader?.orderHeaderId === data.id ?
+                                                    <img
+                                                        src='/assets/icon/bookmark_black_icon.png'
+                                                        alt=""
+                                                    ></img>
+                                                    :
+                                                    ''}
+                                            </span>
                                         </MenuItem>
                                     )
                                 })}

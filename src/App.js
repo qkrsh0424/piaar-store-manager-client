@@ -62,6 +62,7 @@ import ErpManagementReleaseCompletePage from './pages/erp/management/release-com
 import ErpManagementExcelFormPage from './pages/erp/management/excel/ErpManagementExcelFormPage';
 import ProductManagePage from './pages/product_manage/ProductManagePage';
 import StockAnalysisPage from './pages/stock_analysis/SalesAnalysisPage';
+import { userErpDefaultHeaderDataConnect } from './data_connect/userErpDefaultHeaderDataConnect';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -98,6 +99,7 @@ function App(props) {
         }
         userCheckInit();
     }, [location])
+
     return (
         <>
             <ThemeProvider theme={theme}>

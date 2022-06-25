@@ -71,29 +71,30 @@ const OrderComponent = (props) => {
     const [checkedOrderItemList, dispatchCheckedOrderItemList] = useReducer(checkedOrderItemListReducer, initialCheckedOrderItemList);
     const [downloadExcelList, dispatchDownloadExcelList] = useReducer(downloadExcelListReducer, initialDownloadExcelList);
     const [viewHeaderList, dispatchViewHeaderList] = useReducer(viewHeaderListReducer, initialViewHeaderList);
+    const [erpDefaultHeader, dispatchErpDefaultHeader] = useReducer(erpDefaultHeaderReducer, initialErpDefaultHeader);
 
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
 
-    // const __reqSearchUserErpDefaultHeader = async () => {
-    //     await userErpDefaultHeaderDataConnect().searchOne()
-    //         .then(res => {
-    //             if (res.status === 200 && res.data.message === 'success') {
-    //                 dispatchViewHeaderList({
-    //                     type: 'INIT_DATA',
-    //                     payload: res.data.data
-    //                 })
-    //             }
-    //         })
-    //         .catch(err => {
-    //             let res = err.response;
-    //             if (res?.status === 500) {
-    //                 alert('undefined error.');
-    //                 return;
-    //             }
+    const __reqSearchUserErpDefaultHeader = async () => {
+        await userErpDefaultHeaderDataConnect().searchOne()
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    dispatchErpDefaultHeader({
+                        type: 'INIT_DATA',
+                        payload: res.data.data
+                    })
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
 
-    //             alert(res?.data.memo);
-    //         })
-    // }
+                alert(res?.data.memo);
+            })
+    }
 
     // Search
     const __reqSearchViewHeaderList = async () => {
@@ -356,8 +357,34 @@ const OrderComponent = (props) => {
             })
     }
 
+    const __reqChangeDefaultHeader = async (params) => {
+        await userErpDefaultHeaderDataConnect().patchOne(params)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqCreateDefaultHeader = async (params) => {
+        await userErpDefaultHeaderDataConnect().createOne(params)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
     useEffect(() => {
-        // __reqSearchUserErpDefaultHeader();
+        __reqSearchUserErpDefaultHeader();
         __reqSearchViewHeaderList();
         __reqSearchProductOptionList();
         __reqSearchDownloadExcelHeaders();
@@ -391,6 +418,22 @@ const OrderComponent = (props) => {
             payload: selectedData
         });
     }, [query.headerId, viewHeaderList])
+
+    useEffect(() => {
+        if(!erpDefaultHeader) {
+            return;
+        }
+        
+        navigate({
+            pathname,
+            search: `?${qs.stringify({
+                ...query,
+                headerId: erpDefaultHeader.orderHeaderId
+            })}`
+        }, {
+            replace: true
+        });
+    }, [erpDefaultHeader])
 
     useEffect(() => {
         let subscribes = [];
@@ -593,6 +636,20 @@ const OrderComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    const _onAction_changeDefaultHeader = async (params) => {
+        onActionOpenBackdrop();
+        await __reqChangeDefaultHeader(params);
+        await __reqSearchUserErpDefaultHeader();
+        onActionCloseBackdrop();
+    }
+
+    const _onAction_createDefaultHeader = async (params) => {
+        onActionOpenBackdrop();
+        await __reqCreateDefaultHeader(params);
+        await __reqSearchUserErpDefaultHeader();
+        onActionCloseBackdrop();
+    }
+
     return (
         <>
             {connected &&
@@ -652,12 +709,14 @@ const OrderComponent = (props) => {
                 <ViewHeaderSettingModalComponent
                     viewHeader={viewHeader}
                     viewHeaderList={viewHeaderList}
+                    erpDefaultHeader={erpDefaultHeader}
 
                     _onSubmit_createViewHeader={_onSubmit_createViewHeader}
                     _onSubmit_modifyViewHeader={_onSubmit_modifyViewHeader}
-                    // _onAction_searchSelectedViewHeader={_onAction_searchSelectedViewHeader}
                     _onAction_closeHeaderSettingModal={_onAction_closeHeaderSettingModal}
                     _onAction_deleteSelectedViewHeader={_onAction_deleteSelectedViewHeader}
+                    _onAction_createDefaultHeader={_onAction_createDefaultHeader}
+                    _onAction_changeDefaultHeader={_onAction_changeDefaultHeader}
                 ></ViewHeaderSettingModalComponent>
             </CommonModalComponent>
 
@@ -696,11 +755,17 @@ const initialOrderItemPage = null;
 const initialCheckedOrderItemList = [];
 const initialDownloadExcelList = null;
 const initialViewHeaderList = null;
+const initialErpDefaultHeader = null;
 
 const viewHeaderReducer = (state, action) => {
     switch (action.type) {
         case 'INIT_DATA':
             return action.payload;
+        case 'SET_DATA':
+            return {
+                ...state,
+                'orderHeaderId': action.payload
+            }
         case 'CLEAR':
             return initialViewHeader;
         default: return initialViewHeader;
@@ -712,6 +777,16 @@ const viewHeaderListReducer = (state, action) => {
         case 'INIT_DATA':
             return action.payload;
         default: return null;
+    }
+}
+
+const erpDefaultHeaderReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialErpDefaultHeader;
+        default: return initialErpDefaultHeader;
     }
 }
 

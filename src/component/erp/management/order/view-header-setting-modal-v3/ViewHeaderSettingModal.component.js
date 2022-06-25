@@ -13,6 +13,7 @@ import valueUtils from "../../../../../utils/valueUtils";
 import SelectorFieldView from "./SelectorField.view";
 import { v4 as uuidv4 } from 'uuid';
 import { useLocation, useNavigate } from "react-router-dom";
+import ViewHeaderInputFieldView from "./ViewHeaderInputField.view";
 
 const defaultHeaderDetails = getDefaultHeaderDetails();
 
@@ -296,7 +297,23 @@ const ViewHeaderSettingModalComponent = (props) => {
                         type: 'CLEAR'
                     });
                 }
-            }
+            },
+            updateDefaultHeader: () => {
+                let selectedHeaderId = query.headerId;
+                let headerId = props.viewHeaderList.filter(r => r.id === selectedHeaderId)[0].id;
+
+                if (window.confirm('[주문 수집 관리]의 기본 헤더로 설정하시겠습니까?')) {
+                    let params = {
+                        orderHeaderId: headerId
+                    }
+
+                    if (props.erpDefaultHeader) {
+                        props._onAction_changeDefaultHeader(params);
+                    } else {
+                        props._onAction_createDefaultHeader(params);
+                    }
+                }
+            },
         },
         change: {
             selectedHeader: (e) => {
@@ -324,14 +341,15 @@ const ViewHeaderSettingModalComponent = (props) => {
         }
     }
 
-    return (
+    return(
         <>
-            <Container>
-                <HeaderFieldView
+        <Container>
+            <HeaderFieldView
                     onSubmitSaveAndModify={__createHeaderDetails.submit.saveAndModify}
                     onActionCloseModal={props._onAction_closeHeaderSettingModal}
                 ></HeaderFieldView>
                 <SelectorFieldView
+                    erpDefaultHeader={props.erpDefaultHeader}
                     viewHeaderList={props.viewHeaderList}
                     viewHeader={viewHeader}
                     createViewHeader={createViewHeader}
@@ -343,22 +361,17 @@ const ViewHeaderSettingModalComponent = (props) => {
                 ></SelectorFieldView>
                 {createHeaderDetails &&
                     <>
+                        <ViewHeaderInputFieldView
+                            erpDefaultHeader={props.erpDefaultHeader}
+                            viewHeader={viewHeader}
+                            createViewHeaderTitle={createViewHeaderTitle}
+
+                            onChangeInputValue={__viewHeader.change.createHeaderValue}
+                            onActionChangeDefaultHeader={__viewHeader.action.updateDefaultHeader}
+                        ></ViewHeaderInputFieldView>
                         <InfoTextFieldView
                             element={
-                                <>
-                                    <div className='view-header-title'>
-                                        <div>뷰 헤더명 : </div>
-                                        <input type='text'
-                                            name='headerTitle'
-                                            className='input-item'
-                                            value={createViewHeaderTitle || ''}
-                                            onChange={__viewHeader.change.createHeaderValue}
-                                            placeholder='뷰 헤더 이름'
-                                            required
-                                        />
-                                    </div>
-                                    <div>* 주문 현황에서 확인할 데이터 항목을 선택해주세요.</div>
-                                </>
+                                <div>* 주문 현황에서 확인할 데이터 항목을 선택해주세요.</div>
                             }
                         ></InfoTextFieldView>
                         <TableOperatorFieldView
@@ -421,6 +434,7 @@ const ViewHeaderSettingModalComponent = (props) => {
         </>
     );
 }
+
 export default ViewHeaderSettingModalComponent;
 
 // const initialCreateHeaderDetails = [];
