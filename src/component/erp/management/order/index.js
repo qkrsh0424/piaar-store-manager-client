@@ -391,16 +391,33 @@ const OrderComponent = (props) => {
     }, []);
 
     useEffect(() => {
+        // 선택된 뷰 헤더가 있는 상태에서 현재 탭을 클릭한 경우
+        if(!query.headerId) {
+            if(viewHeader) {
+                navigate({
+                    pathname,
+                    search: `?${qs.stringify({
+                        ...query,
+                        headerId: viewHeader.id
+                    })}`
+                }, {
+                    replace: true
+                });
+            }
+            return;
+        }
+
         async function fetchInit() {
             onActionOpenBackdrop();
             await __reqSearchOrderItemList();
             onActionCloseBackdrop();
         }
+
         fetchInit();
     }, [location]);
 
     useEffect(() => {
-        if(!viewHeaderList) {
+        if (!viewHeaderList) {
             return;
         }
         

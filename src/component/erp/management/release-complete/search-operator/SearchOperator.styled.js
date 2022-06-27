@@ -49,7 +49,6 @@ const DateSelectorFieldWrapper = styled.div`
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        height: 50px !important;
         /* gap: 10px; */
     }
 
@@ -110,7 +109,6 @@ const DetailSearchFieldWrapper = styled.div`
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        height: 50px !important;
     }
 
     .select-item{
