@@ -1,4 +1,5 @@
 import { ControlButtonFieldWrapper } from "./Operator.styled";
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 function Button({ element, onClick, style }) {
     return (
@@ -16,7 +17,32 @@ function Button({ element, onClick, style }) {
 export default function ControlButtonFieldView(props) {
     return (
         <ControlButtonFieldWrapper>
-            <div className='flex-box' style={{ justifyContent: 'space-between' }}>
+            <div className='flex-box flex-wrap'>
+                <div>엑셀 헤더 양식 : </div>
+                <div className='flex-box selector-box'>
+                    <select
+                        className='select-item'
+                        value={props.selectedExcelTranslator?.id || ''}
+                        onChange={props.onChangeExcelTranslator}
+                    >
+                        <option value=''>피아르</option>
+                        {props.excelTranslatorData?.map(r => {
+                            return (
+                                <option key={r.id} value={r.id}>
+                                    {`${r.uploadHeaderTitle} > ${r.downloadHeaderTitle} (헤더: ${r.rowStartNumber})`}
+                                </option>
+                            );
+                        })}
+                    </select>
+                    <div>
+                        <Button
+                            element={'양식 확인'}
+                            onClick={props.onActionOpenExcelTranslatorSearchModal}
+                        ></Button>
+                    </div>
+                </div>
+            </div>
+            <div className='flex-box flex-wrap' style={{ justifyContent: 'space-between' }}>
                 <div className='flex-box'>
                     <Button
                         element={'단건 등록'}

@@ -16,7 +16,7 @@ export default function ReleaseSelectorFieldView({
                 >
                     <option value=''>전체</option>
                     <option value={'n'}>미출고</option>
-                    <option value={'y'}>출고됨</option>
+                    <option value={'y'}>출고</option>
                 </select>
             </div>
         </ReleaseSelectorFieldWrapper>

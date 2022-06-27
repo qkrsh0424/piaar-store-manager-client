@@ -47,16 +47,16 @@ export default function TableFieldView(props) {
                                         <span>{r.option.code}</span>
                                     </td>
                                     <td>
-                                        <span>{(r.option.totalPurchasePrice).toLocaleString()}원</span>
+                                        <span>{(r.option.totalPurchasePrice)?.toLocaleString()}원</span>
                                     </td>
                                     <td>
                                         <span>{r.stockSumUnit}</span>
                                     </td>
                                     <td>
-                                        <span>{(r.stockProperty).toLocaleString()}원</span>
+                                        <span>{(r.stockProperty)?.toLocaleString()}원</span>
                                     </td>
                                     <td>
-                                        <span>{(r.estimatedSalesPrice).toLocaleString()}원</span>
+                                        <span>{(r.estimatedSalesPrice)?.toLocaleString()}원</span>
                                     </td>
                                 </tr>
                             )
@@ -66,8 +66,8 @@ export default function TableFieldView(props) {
             </div>
             <div className="total-info">
                 <div>재고 수량 합계: {props.prodTotalStock.totalStockSumUnit} 개</div>
-                <div>재고 자산 합계: {(props.prodTotalStock.totalStockProperty).toLocaleString()} 원</div>
-                <div>예상 판매 매출액 합계: {(props.prodTotalStock.totalEstimatedSalesPrice).toLocaleString()} 원</div>
+                <div>재고 자산 합계: {(props.prodTotalStock.totalStockProperty)?.toLocaleString()} 원</div>
+                <div>예상 판매 매출액 합계: {(props.prodTotalStock.totalEstimatedSalesPrice)?.toLocaleString()} 원</div>
             </div>
         </TableFieldWrapper>
     )

@@ -55,6 +55,11 @@ const CheckedOrderItemTableComponent = (props) => {
         })
     }, [props.checkedOrderItemList])
 
+    const onActionCheckedOrderItem = (e, orderItem) => {
+        e.stopPropagation();
+        props._onAction_checkOrderItem(e, orderItem);
+    }
+
     return (
         <>
             <Container>
@@ -65,6 +70,7 @@ const CheckedOrderItemTableComponent = (props) => {
                         viewSize={viewSize}
 
                         onActionfetchMoreOrderItems={onActionfetchMoreOrderItems}
+                        onActionCheckedOrderItem={onActionCheckedOrderItem}
                     ></TableFieldView>
                 }
                 {!props.viewHeader &&

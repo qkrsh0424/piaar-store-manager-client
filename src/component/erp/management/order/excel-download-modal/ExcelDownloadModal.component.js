@@ -1,10 +1,13 @@
 import { useEffect, useReducer, useState } from "react";
 import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
+import { dateToYYYYMMDDhhmmFile } from "../../../../../utils/dateFormatUtils";
+import { checkFileNameFormat } from "../../../../../utils/regexUtils";
 import CombineOperators from "./CombineOperators.view";
 import DownloadButtonFieldView from "./DownloadButtonField.view";
 import { Container } from "./ExcelDownloadModal.styled";
 import ExcelHeaderDisplayView from "./ExcelHeaderDisplay.view";
 import ExcelHeaderSelectorView from "./ExcelHeaderSelector.view";
+import InputFieldView from "./InputField.view";
 import PreviewTableView from "./PreviewTable.view";
 import TitleView from "./Title.view";
 
@@ -25,6 +28,7 @@ const ExcelDownloadModalComponent = (props) => {
     const [downloadOrderItemList, dispatchDownloadOrderItemList] = useReducer(downloadOrderItemListReducer, initialDownloadOrderItemList);
     const [checkedItemList, dispatchCheckedItemList] = useReducer(checkedItemListReducer, initialCheckedItemList);
     const [selectedExcelHeader, dispatchSelectedExcelHeader] = useReducer(selectedExcelHeaderReducer, initialSelectedExcelHeader);
+    const [downloadExcelFileName, dispatchDownloadExcelFileName] = useReducer(downloadExcelFileNameReducer, initialDownloadExcelFileName);
 
     useEffect(() => {
         if (!props.checkedOrderItemList || props.checkedOrderItemList?.length <= 0) {
@@ -47,6 +51,19 @@ const ExcelDownloadModalComponent = (props) => {
         _onSet_downloadOrderItemList(dataList);
 
     }, [props.checkedOrderItemList]);
+
+    useEffect(() => {
+        if(!selectedExcelHeader) {
+            return;
+        }
+
+        let fileName = '[' + dateToYYYYMMDDhhmmFile(new Date()) + ']' + selectedExcelHeader.title + '_피아르_주문수집';
+
+        dispatchDownloadExcelFileName({
+            type: 'SET_DATA',
+            payload: fileName
+        })
+    }, [selectedExcelHeader]);
 
     const _onSet_downloadOrderItemList = (data) => {
         dispatchDownloadOrderItemList({
@@ -186,7 +203,19 @@ const ExcelDownloadModalComponent = (props) => {
     }
 
     const onActionDownloadExcel = () => {
-        props.onActionDownloadExcel(selectedExcelHeader, downloadOrderItemList)
+        if(!checkFileNameFormat(downloadExcelFileName)) {
+            alert('파일명에 허용되지 않은 특수문자가 포함되어 있습니다. \n제거해야 할 특수문자 : \/:*?%."<>|');
+            return;
+        }
+
+        props.onActionDownloadExcel(downloadExcelFileName, selectedExcelHeader, downloadOrderItemList)
+    }
+
+    const onChangeDownloadExcelFileName = (e) => {
+        dispatchDownloadExcelFileName({
+            type: 'SET_DATA',
+            payload: e.target.value
+        })
     }
 
     return (
@@ -224,6 +253,10 @@ const ExcelDownloadModalComponent = (props) => {
                             defaultHeaderDetails={defaultHeaderDetails}
                             selectedExcelHeader={selectedExcelHeader}
                         ></ExcelHeaderDisplayView>
+                        <InputFieldView
+                            downloadExcelFileName={downloadExcelFileName}
+                            onChangeDownloadExcelFileName={onChangeDownloadExcelFileName}
+                        ></InputFieldView>
                         <DownloadButtonFieldView
                             onActionDownloadExcel={onActionDownloadExcel}
                         ></DownloadButtonFieldView>
@@ -238,6 +271,7 @@ export default ExcelDownloadModalComponent;
 const initialDownloadOrderItemList = null;
 const initialCheckedItemList = [];
 const initialSelectedExcelHeader = null;
+const initialDownloadExcelFileName = null;
 
 const downloadOrderItemListReducer = (state, action) => {
     switch (action.type) {
@@ -264,5 +298,15 @@ const selectedExcelHeaderReducer = (state, action) => {
         case 'CLEAR':
             return initialSelectedExcelHeader;
         default: return initialSelectedExcelHeader;
+    }
+}
+
+const downloadExcelFileNameReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialDownloadExcelFileName;
+        default: return initialDownloadExcelFileName;
     }
 }

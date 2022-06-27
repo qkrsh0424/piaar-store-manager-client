@@ -20,6 +20,7 @@ class ProductOption {
         this.salesPrice = 0;
         this.stockUnit = 0;
         this.status = '준비중';
+        this.releaseLocation = '';
         this.memo = '';
         this.imageUrl = '';
         this.imageFileName = '';
@@ -42,6 +43,7 @@ class ProductOption {
             salesPrice: this.salesPrice,
             stockUnit: this.stockUnit,
             status: this.status,
+            releaseLocation: this.releaseLocation,
             memo: this.memo,
             imageUrl: this.imageUrl,
             imageFileName: this.imageFileName,

@@ -198,7 +198,7 @@ const ProductDetailSalesAnalysisComponent = (props) => {
 
             setProdTotalSales({
                 totalUnit : totalUnit,
-                totalRevenue : totalRevenue.toLocaleString()
+                totalRevenue : totalRevenue?.toLocaleString()
             });
         }
 
@@ -271,7 +271,7 @@ const ProductDetailSalesAnalysisComponent = (props) => {
                                         <span>{r[props.selectedStoreInfoState?.storeSalesUnit]}</span>
                                     </ItemData>
                                     <ItemData>
-                                        <span>{(r.salesOptionPrice * r[props.selectedStoreInfoState?.storeSalesUnit]).toLocaleString()}원</span>
+                                        <span>{(r.salesOptionPrice * r[props.selectedStoreInfoState?.storeSalesUnit])?.toLocaleString()}원</span>
                                     </ItemData>
                                 </ProdRankDetailInfo>
                             )

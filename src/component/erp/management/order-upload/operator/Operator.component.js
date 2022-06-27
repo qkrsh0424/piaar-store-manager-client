@@ -1,8 +1,11 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useReducer, useEffect } from "react";
+import queryString from 'query-string';
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
+import ExcelTranslatorSearchModalComponent from "../excel-translator-search-modal/ExcelTranslatorSearchModal.component"
 import SingleAddModalComponent from "../single-add-modal/SingleAddModal.component";
 import ControlButtonFieldView from "./ControlButtonField.view";
 import { Container, TipFieldWrapper, Wrapper } from "./Operator.styled";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function Layout({ children }) {
     return (
@@ -40,9 +43,34 @@ function Tip() {
 }
 
 const OperatorComponent = (props) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    let pathname = location.pathname;
+    let params = queryString.parse(location.search);
+
     const fileUploaderRef = useRef();
 
     const [singleAddModalOpen, setSingleAddModalOpen] = useState(false);
+    const [selectedExcelTranslator, dispatchSelectedExcelTranslator] = useReducer(selectedExcelTranslatorReducer, initialSelectedExcelTranslator);
+    const [excelTranslatorSearchModalOpen, setExcelTranslatorSearchodalOpen] = useState(false);
+
+    useEffect(() => {
+        let headerId = params.headerId;
+        
+        if(!headerId) {
+            dispatchSelectedExcelTranslator({
+                type: 'CLEAR'
+            });
+            return;
+        }
+        
+        let excelTranslatorHeader = props.excelTranslatorData.filter(r => r.id === headerId)[0];
+        dispatchSelectedExcelTranslator({
+            type: 'SET_DATA',
+            payload: excelTranslatorHeader
+        });
+
+    }, [location]);
 
     const onActionOpenFileUploader = () => {
         fileUploaderRef.current.click();
@@ -65,7 +93,11 @@ const OperatorComponent = (props) => {
         var formData = new FormData();
         formData.append('file', files[0]);
 
-        props._onSubmit_uploadExcelFile(formData);
+        if(!selectedExcelTranslator) {
+            props._onSubmit_uploadExcelFile(formData);
+        }else {
+            props._onSubmit_uploadExcelFileByOtherForm(selectedExcelTranslator.id, formData);
+        }
     }
 
     const onActionSaveExcelData = () => {
@@ -89,6 +121,44 @@ const OperatorComponent = (props) => {
         onActionCloseSingleAddModal();
     }
 
+    const onActionOpenExcelTranslatorSearchModal = () => {
+        setExcelTranslatorSearchodalOpen(true);
+    }
+
+    const onActionCloseExcelTranslatorSearchModal = () => {
+        setExcelTranslatorSearchodalOpen(false);
+    }
+
+    const onChangeExcelTranslator = (e) => {
+        let headerId = e.target.value;
+
+        let selectedHeader = props.excelTranslatorData.filter(r => r.id === headerId)[0];
+
+        // 피아르(default) 선택 시
+        if(!selectedHeader) {
+            delete params.headerId;
+
+            navigate({
+                pathname: pathname,
+                search: `?${queryString.stringify({
+                    ...params
+                })}`
+            }, {
+                replace: true
+            })
+        } else {
+            navigate({
+                pathname: pathname,
+                search: `?${queryString.stringify({
+                    ...params,
+                    headerId: selectedHeader.id
+                })}`
+            }, {
+                replace: true
+            })
+        }
+    }
+
     return (
         <>
             <Layout>
@@ -101,10 +171,15 @@ const OperatorComponent = (props) => {
                     hidden
                 />
                 <ControlButtonFieldView
+                    excelTranslatorData={props.excelTranslatorData}
+                    selectedExcelTranslator={selectedExcelTranslator}
+
                     onActionOpenFileUploader={onActionOpenFileUploader}
                     onActionSaveExcelData={onActionSaveExcelData}
                     onActionDownloadSampleForm={onActionDownloadSampleForm}
                     onActionOpenSingleAddModal={onActionOpenSingleAddModal}
+                    onChangeExcelTranslator={onChangeExcelTranslator}
+                    onActionOpenExcelTranslatorSearchModal={onActionOpenExcelTranslatorSearchModal}
                 ></ControlButtonFieldView>
                 <Tip></Tip>
             </Layout>
@@ -120,8 +195,34 @@ const OperatorComponent = (props) => {
                     onActionAddSingleData={onActionAddSingleData}
                 ></SingleAddModalComponent>
             </CommonModalComponent>
+
+            {/* Modal */}
+            <CommonModalComponent
+                open={excelTranslatorSearchModalOpen}
+                maxWidth={'md'}
+
+                onClose={onActionCloseExcelTranslatorSearchModal}
+            >
+                <ExcelTranslatorSearchModalComponent
+                    selectedExcelTranslator={selectedExcelTranslator}
+
+                    onActionCloseExcelTranslatorSearchModal={onActionCloseExcelTranslatorSearchModal}
+                ></ExcelTranslatorSearchModalComponent>
+            </CommonModalComponent>
         </>
     );
 }
 
 export default OperatorComponent;
+
+const initialSelectedExcelTranslator = '';
+
+const selectedExcelTranslatorReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialSelectedExcelTranslator;
+        default: return initialSelectedExcelTranslator;
+    }
+}

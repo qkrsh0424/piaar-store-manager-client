@@ -127,6 +127,20 @@ export default function OptionInfoFormFieldView(props) {
                 <div className="input-group mb-3">
                     <div className="input-group-prepend">
                         <span className="input-group-text">
+                            출고지
+                        </span>
+                    </div>
+                    <input
+                        type="text"
+                        className='form-control'
+                        name='releaseLocation'
+                        value={props.createOption.releaseLocation}
+                        onChange={(e) => props.onChangeInputValue(e)}
+                    />
+                </div>
+                <div className="input-group mb-3">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">
                             비고
                         </span>
                     </div>

@@ -56,6 +56,7 @@ export default function OptionInfoFieldView(props) {
                                         <th scope="col" width='200'>판매가</th>
                                         <th scope="col" width='200'>매입총합계</th>
                                         <th scope="col" width='200'>상태</th>
+                                        <th scope="col" width='200'>출고지</th>
                                         <th scope="col" width='200'>비고</th>
                                         <th scope="col" width='200'>색상</th>
                                         <th scope="col" width='200'>CNY</th>
@@ -88,6 +89,9 @@ export default function OptionInfoFieldView(props) {
                                         </td>
                                         <td>
                                             <input type='text' value={optionData.status} disabled></input>
+                                        </td>
+                                        <td>
+                                            <input type='text' value={optionData.releaseLocation} name='releaseLocation' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>
                                         </td>
                                         <td>
                                             <input type='text' value={optionData.memo} name='memo' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>

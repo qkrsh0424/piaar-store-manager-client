@@ -55,7 +55,11 @@ const DateSelectorFieldWrapper = styled.div`
 
     .select-item{
         width: 300px;
+<<<<<<< HEAD
         height: 100%;
+=======
+        height: 50px;
+>>>>>>> grace
         padding: 5px;
         margin: 0 10px;
         border: 1px solid #e1e1e1;
@@ -116,7 +120,11 @@ const DetailSearchFieldWrapper = styled.div`
     .select-item{
         margin: 0 10px;
         width: 300px;
+<<<<<<< HEAD
         height: 100%;
+=======
+        height: 50px;
+>>>>>>> grace
         padding: 5px;
         border: 1px solid #e1e1e1;
         border-radius: 0;
@@ -139,11 +147,64 @@ const DetailSearchFieldWrapper = styled.div`
     .input-item{
         margin: 0 10px;
         width: 300px;
+<<<<<<< HEAD
         height: 100%;
+=======
+        height: 50px;
+>>>>>>> grace
         border: 1px solid #e1e1e1;
         padding: 0 5px;
         font-size: 14px;
         box-sizing: border-box;
+
+        &:focus{
+            outline: none;
+        }
+
+        @media all and (max-width:992px) {
+            width: 100%;
+            margin: 10px 0 0 0;
+        }
+    }
+`;
+
+const StockReflectSelectorFieldWrapper = styled.div`
+    padding: 0 20px;
+    margin-top: 20px;
+    
+    @media all and (max-width:992px) {
+        padding: 0 10px;
+    }
+    
+    .label-item{
+        margin: 0 10px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #444;
+        @media all and (max-width:992px) {
+            margin: 0 0;
+        }
+    }
+
+    .flex-box{
+        margin-top: 5px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .select-item{
+        margin: 0 10px;
+        width: 300px;
+        height: 50px;
+        padding: 5px;
+        border: 1px solid #e1e1e1;
+        border-radius: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
 
         &:focus{
             outline: none;
@@ -205,5 +266,6 @@ export {
     Container,
     DateSelectorFieldWrapper,
     DetailSearchFieldWrapper,
+    StockReflectSelectorFieldWrapper,
     ButtonFieldWrapper
 }
