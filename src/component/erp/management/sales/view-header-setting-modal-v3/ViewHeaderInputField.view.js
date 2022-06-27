@@ -18,7 +18,7 @@ export default function ViewHeaderInputFieldView(props) {
                     </div>
                     {props.viewHeader &&
                         <div>
-                            {props.erpDefaultHeader?.orderHeaderId === props.viewHeader.id ?
+                            {props.erpDefaultHeader?.salesHeaderId === props.viewHeader.id ?
                                 <button
                                     type='button'
                                     className='image-button-el'

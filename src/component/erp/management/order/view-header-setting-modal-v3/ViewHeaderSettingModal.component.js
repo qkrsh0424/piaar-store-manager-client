@@ -298,7 +298,7 @@ const ViewHeaderSettingModalComponent = (props) => {
                     });
                 }
             },
-            updateDefaultHeader: () => {
+            saveAndModifyDefaultHeader: () => {
                 let selectedHeaderId = query.headerId;
                 let headerId = props.viewHeaderList.filter(r => r.id === selectedHeaderId)[0].id;
 
@@ -307,13 +307,14 @@ const ViewHeaderSettingModalComponent = (props) => {
                         orderHeaderId: headerId
                     }
 
+                    // user의 기본 헤더 설정 내역이 있다면 change, 없다면 create
                     if (props.erpDefaultHeader) {
                         props._onAction_changeDefaultHeader(params);
                     } else {
                         props._onAction_createDefaultHeader(params);
                     }
                 }
-            },
+            }
         },
         change: {
             selectedHeader: (e) => {
@@ -367,7 +368,7 @@ const ViewHeaderSettingModalComponent = (props) => {
                             createViewHeaderTitle={createViewHeaderTitle}
 
                             onChangeInputValue={__viewHeader.change.createHeaderValue}
-                            onActionChangeDefaultHeader={__viewHeader.action.updateDefaultHeader}
+                            onActionChangeDefaultHeader={__viewHeader.action.saveAndModifyDefaultHeader}
                         ></ViewHeaderInputFieldView>
                         <InfoTextFieldView
                             element={
@@ -437,12 +438,10 @@ const ViewHeaderSettingModalComponent = (props) => {
 
 export default ViewHeaderSettingModalComponent;
 
-// const initialCreateHeaderDetails = [];
 const initialCreateHeaderDetails = null;
 const initialViewHeader = null;
 const initialCreateViewHeader = null;
 const initialCreateViewHeaderTitle = null;
-const initialViewHeaderTitleList = null;
 
 const createHeaderDetailsReducer = (state, action) => {
     switch (action.type) {

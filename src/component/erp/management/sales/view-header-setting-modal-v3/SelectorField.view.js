@@ -24,8 +24,17 @@ export default function SelectorFieldView(props) {
                             >
                                 {props.viewHeaderList?.map((data, idx) => {
                                     return (
-                                        <MenuItem key={'header_title' + idx} value={data.id} sx={{ display: 'flex', padding: '5px 10px', justifyContent: 'space-around' }}>
+                                        <MenuItem key={'sales_header_title' + idx} value={data.id} sx={{ display: 'flex', padding: '5px 10px', justifyContent: 'space-around', alignItems: 'center' }}>
                                             <span>{data.headerTitle}</span>
+                                            <span> 
+                                                {props.erpDefaultHeader?.salesHeaderId === data.id ?
+                                                    <img
+                                                        src='/assets/icon/bookmark_black_icon.png'
+                                                        alt=""
+                                                    ></img>
+                                                    :
+                                                    ''}
+                                            </span>
                                         </MenuItem>
                                     )
                                 })}
@@ -33,7 +42,7 @@ export default function SelectorFieldView(props) {
                         </FormControl>
                     </Box>
                 </div>
-                <div className='flex-box'>
+                <div className='flex-box selector-control-box'>
                     <button
                         type='button'
                         className='image-button-el'

@@ -24,6 +24,7 @@ import { erpSalesHeaderSocket } from '../../../../data_connect/socket/erpSalesHe
 import { useSocketConnectLoadingHook, SocketConnectLoadingHookComponent } from '../../../../hooks/loading/useSocketConnectLoadingHook';
 import { useBasicSnackbarHook, BasicSnackbarHookComponent } from '../../../../hooks/snackbar/useBasicSnackbarHook';
 import CheckedHeadComponent from './checked-head/CheckedHead.component';
+import { userErpDefaultHeaderDataConnect } from '../../../../data_connect/userErpDefaultHeaderDataConnect';
 
 const Container = styled.div`
     margin-bottom: 100px;
@@ -69,8 +70,30 @@ const SalesComponent = (props) => {
     const [checkedOrderItemList, dispatchCheckedOrderItemList] = useReducer(checkedOrderItemListReducer, initialCheckedOrderItemList);
     const [downloadExcelList, dispatchDownloadExcelList] = useReducer(downloadExcelListReducer, initialDownloadExcelList);
     const [viewHeaderList, dispatchViewHeaderList] = useReducer(viewHeaderListReducer, initialViewHeaderList);
+    const [erpDefaultHeader, dispatchErpDefaultHeader] = useReducer(erpDefaultHeaderReducer, initialErpDefaultHeader);
 
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
+
+    const __reqSearchUserErpDefaultHeader = async () => {
+        await userErpDefaultHeaderDataConnect().searchOne()
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    dispatchErpDefaultHeader({
+                        type: 'INIT_DATA',
+                        payload: res.data.data
+                    })
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
 
     // Search
     const __reqSearchViewHeaderList = async () => {
@@ -354,7 +377,34 @@ const SalesComponent = (props) => {
             })
     }
 
+    const __reqChangeDefaultHeader = async (params) => {
+        await userErpDefaultHeaderDataConnect().patchOne(params)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqCreateDefaultHeader = async (params) => {
+        await userErpDefaultHeaderDataConnect().createOne(params)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
     useEffect(() => {
+        __reqSearchUserErpDefaultHeader();
         __reqSearchViewHeaderList();
         __reqSearchProductOptionList();
         __reqSearchDownloadExcelHeaders();
@@ -388,6 +438,31 @@ const SalesComponent = (props) => {
             payload: selectedData
         });
     }, [query.headerId, viewHeaderList])
+
+    useEffect(() => {
+        // 선택된 뷰 헤더가 존재한다면 default setting x.
+        if(query.headerId) {
+            return;
+        }
+
+        if(!erpDefaultHeader) {
+            return;
+        }
+
+        if(!erpDefaultHeader.salesHeaderId) {
+            return;
+        }
+        
+        navigate({
+            pathname,
+            search: `?${qs.stringify({
+                ...query,
+                headerId: erpDefaultHeader.salesHeaderId
+            })}`
+        }, {
+            replace: true
+        });
+    }, [erpDefaultHeader])
 
     useEffect(() => {
         let subscribes = [];
@@ -604,6 +679,20 @@ const SalesComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    const _onAction_changeDefaultHeader = async (params) => {
+        onActionOpenBackdrop();
+        await __reqChangeDefaultHeader(params);
+        await __reqSearchUserErpDefaultHeader();
+        onActionCloseBackdrop();
+    }
+
+    const _onAction_createDefaultHeader = async (params) => {
+        onActionOpenBackdrop();
+        await __reqCreateDefaultHeader(params);
+        await __reqSearchUserErpDefaultHeader();
+        onActionCloseBackdrop();
+    }
+
     return (
         <>
             {connected &&
@@ -667,11 +756,14 @@ const SalesComponent = (props) => {
                 <ViewHeaderSettingModalComponent
                     viewHeader={viewHeader}
                     viewHeaderList={viewHeaderList}
+                    erpDefaultHeader={erpDefaultHeader}
 
                     _onSubmit_createViewHeader={_onSubmit_createViewHeader}
                     _onSubmit_modifyViewHeader={_onSubmit_modifyViewHeader}
                     _onAction_closeHeaderSettingModal={_onAction_closeHeaderSettingModal}
                     _onAction_deleteSelectedViewHeader={_onAction_deleteSelectedViewHeader}
+                    _onAction_createDefaultHeader={_onAction_createDefaultHeader}
+                    _onAction_changeDefaultHeader={_onAction_changeDefaultHeader}
                 ></ViewHeaderSettingModalComponent>
             </CommonModalComponent>
 
@@ -710,6 +802,7 @@ const initialOrderItemPage = null;
 const initialCheckedOrderItemList = [];
 const initialDownloadExcelList = null;
 const initialViewHeaderList = null;
+const initialErpDefaultHeader = null;
 
 const viewHeaderReducer = (state, action) => {
     switch (action.type) {
@@ -726,6 +819,16 @@ const viewHeaderListReducer = (state, action) => {
         case 'INIT_DATA':
             return action.payload;
         default: return null;
+    }
+}
+
+const erpDefaultHeaderReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialErpDefaultHeader;
+        default: return initialErpDefaultHeader;
     }
 }
 

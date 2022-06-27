@@ -100,6 +100,11 @@ const SelectorFieldWrapper = styled.div`
         display: flex;
         align-items: center;
         gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .selector-control-box {
+        padding: 0 10px;
     }
 
     .image-button-el{
@@ -197,6 +202,59 @@ const InfoTextFieldWrapper = styled.div`
         }
     }
 
+`;
+
+const ViewHeaderInputFieldWrapper  = styled.div`
+    padding: 0 20px;
+
+    .input-item {
+        /* margin: 0 10px; */
+        width: 330px;
+        height: 30px;
+        border: none;
+        border-bottom: 1px solid #d9d9d9;
+        border-radius: 3px;
+        padding: 0 15px;
+        font-size: 16px;
+        font-weight: 600;
+        box-sizing: border-box;
+
+        @media screen and (max-width: 992px){
+            width: 100%;
+        }
+    }
+
+    .view-header-title {
+        color: #000;
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+    }
+
+    .info-box {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+    }
+
+    .image-button-el{
+        position: relative;
+        overflow: hidden;
+        width: 40px;
+        height: 40px;
+        background: white;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        transition: 0.2s;
+        margin: 5px;
+
+        cursor: pointer;
+
+        :hover {
+            transform: scale(1.05);
+            background-color: #e0e0e0;
+        }
+    }
 `;
 
 const TableOperatorFieldWrapper = styled.div`
@@ -355,6 +413,7 @@ const CreateTableFieldWrapper = styled.div`
 export {
     Container,
     HeaderFieldWrapper,
+    ViewHeaderInputFieldWrapper,
     InfoTextFieldWrapper,
     TableOperatorFieldWrapper,
     DefaultTableFieldWrapper,

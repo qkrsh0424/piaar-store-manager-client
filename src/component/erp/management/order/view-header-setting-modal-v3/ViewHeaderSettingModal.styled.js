@@ -100,6 +100,11 @@ const SelectorFieldWrapper = styled.div`
         display: flex;
         align-items: center;
         gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .selector-control-box {
+        padding: 0 10px;
     }
 
     .image-button-el{
@@ -206,7 +211,7 @@ const ViewHeaderInputFieldWrapper  = styled.div`
     padding: 0 20px;
 
     .input-item {
-        margin: 0 10px;
+        /* margin: 0 10px; */
         width: 330px;
         height: 30px;
         border: none;
@@ -216,13 +221,23 @@ const ViewHeaderInputFieldWrapper  = styled.div`
         font-size: 16px;
         font-weight: 600;
         box-sizing: border-box;
+
+        @media screen and (max-width: 992px){
+            width: 100%;
+        }
     }
 
     .view-header-title {
         color: #000;
-        padding: 20px 10px;
         display: flex;
-        align-items: center;
+        align-items: baseline;
+        flex-wrap: wrap;
+    }
+
+    .info-box {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
     }
 
     .image-button-el{
@@ -234,6 +249,7 @@ const ViewHeaderInputFieldWrapper  = styled.div`
         border: 1px solid #fff;
         border-radius: 50%;
         transition: 0.2s;
+        margin: 5px;
 
         cursor: pointer;
 

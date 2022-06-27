@@ -420,7 +420,16 @@ const OrderComponent = (props) => {
     }, [query.headerId, viewHeaderList])
 
     useEffect(() => {
+        // 선택된 뷰 헤더가 존재한다면 default setting x.
+        if(query.headerId) {
+            return;
+        }
+
         if(!erpDefaultHeader) {
+            return;
+        }
+        
+        if(!erpDefaultHeader.orderHeaderId) {
             return;
         }
         
