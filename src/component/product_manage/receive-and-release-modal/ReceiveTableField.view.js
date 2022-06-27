@@ -28,7 +28,6 @@ export default function ReceiveTableFieldView(props) {
                         </th>
                     </tr>
                 </thead>
-
                 <tbody style={{ border: 'none' }}>
                     {props.optionReceiveStatusData?.map((data, idx) => {
                         return (

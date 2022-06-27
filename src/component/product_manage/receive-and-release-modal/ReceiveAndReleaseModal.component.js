@@ -10,7 +10,7 @@ import ReleaseTableFieldView from './ReleaseTableField.view';
 
 const ReceiveAndReleaseModalComponent = (props) => {
     const [selectedDateRangeState, dispatchSelectedDateRangeState] = useReducer(selectedDateRangeReducer, initialDateRangeState);
-    const [dateRangeInfo, setDateRangeInfo] = useState(null);
+    const [dateRangeInfo, dispatchDateRangeInfo] = useReducer(dateRangeInfoReducer, initialDateRangeInfoState);
     const [dateRangePickerModalOpen, setDateRangePickerModalOpen] = useState(false);
 
     useEffect(() => {
@@ -18,14 +18,23 @@ const ReceiveAndReleaseModalComponent = (props) => {
             return;
         }
 
+        let date = {
+            startDate: new Date(),
+            endDate: new Date()
+        }
         dispatchSelectedDateRangeState({
             type: 'INIT_DATA'
         });
-        setDateRangeInfo({
-            startDate: new Date(),
-            endDate: new Date()
+        dispatchDateRangeInfo({
+            type: 'SET_DATA',
+            payload: date
         });
+        props.onActionSearchReceiveAndRelease(date);
     }, []);
+
+    useEffect(() => {
+
+    })
 
     const onActionOpenDatePickerModal = () => {
         setDateRangePickerModalOpen(true);
@@ -49,10 +58,12 @@ const ReceiveAndReleaseModalComponent = (props) => {
     }
 
     const onActionSearchReceiveAndRelease = async () => {
-        let dateInfo = {...selectedDateRangeState};
-        setDateRangeInfo(dateInfo);
+        dispatchDateRangeInfo({
+            type: 'SET_DATA',
+            payload: selectedDateRangeState
+        })
 
-        await props.onActionSearchReceiveAndRelease(dateInfo);
+        await props.onActionSearchReceiveAndRelease(dateRangeInfo);
         onActionCloseDatePickerModal();
     }
     
@@ -99,6 +110,7 @@ const ReceiveAndReleaseModalComponent = (props) => {
 export default ReceiveAndReleaseModalComponent;
 
 const initialDateRangeState = null;
+const initialDateRangeInfoState = null;
 
 const selectedDateRangeReducer = (state, action) => {
     switch(action.type) {
@@ -115,6 +127,16 @@ const selectedDateRangeReducer = (state, action) => {
                 startDate: action.payload.startDate,
                 endDate: action.payload.endDate
             }
+        case 'CLEAR':
+            return null;
+        default: return { ...state }
+    }
+}
+
+const dateRangeInfoReducer = (state, action) => {
+    switch(action.type) {
+        case 'SET_DATA':
+            return action.payload;
         case 'CLEAR':
             return null;
         default: return { ...state }
