@@ -17,24 +17,12 @@ const ReceiveAndReleaseModalComponent = (props) => {
         if (selectedDateRangeState) {
             return;
         }
-
-        let date = {
-            startDate: new Date(),
-            endDate: new Date()
-        }
+        
         dispatchSelectedDateRangeState({
             type: 'INIT_DATA'
         });
-        dispatchDateRangeInfo({
-            type: 'SET_DATA',
-            payload: date
-        });
-        props.onActionSearchReceiveAndRelease(date);
+        props.onActionSearchReceiveAndRelease(dateRangeInfo);
     }, []);
-
-    useEffect(() => {
-
-    })
 
     const onActionOpenDatePickerModal = () => {
         setDateRangePickerModalOpen(true);
@@ -58,12 +46,16 @@ const ReceiveAndReleaseModalComponent = (props) => {
     }
 
     const onActionSearchReceiveAndRelease = async () => {
+        let date = {
+           startDate: selectedDateRangeState.startDate,
+           endDate: selectedDateRangeState.endDate
+        }
         dispatchDateRangeInfo({
             type: 'SET_DATA',
-            payload: selectedDateRangeState
+            payload: date
         })
 
-        await props.onActionSearchReceiveAndRelease(dateRangeInfo);
+        await props.onActionSearchReceiveAndRelease(date);
         onActionCloseDatePickerModal();
     }
     
@@ -110,7 +102,10 @@ const ReceiveAndReleaseModalComponent = (props) => {
 export default ReceiveAndReleaseModalComponent;
 
 const initialDateRangeState = null;
-const initialDateRangeInfoState = null;
+const initialDateRangeInfoState = {
+    startDate: new Date(),
+    endDate: new Date()
+};
 
 const selectedDateRangeReducer = (state, action) => {
     switch(action.type) {
@@ -138,7 +133,7 @@ const dateRangeInfoReducer = (state, action) => {
         case 'SET_DATA':
             return action.payload;
         case 'CLEAR':
-            return null;
+            return initialDateRangeInfoState;
         default: return { ...state }
     }
 }
