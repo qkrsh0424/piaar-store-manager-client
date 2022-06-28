@@ -5,9 +5,8 @@ const Container = styled.div`
 `;
 
 const HeaderFieldWrapper = styled.div`
-    padding: 1% 2%;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #000;
+    padding: 10px 20px;
+    border-bottom: 1px solid #e1e1e1;
 
     .header-top {
         display: flex;
@@ -16,7 +15,7 @@ const HeaderFieldWrapper = styled.div`
     }
 
     .modal-title {
-        font-size: 1.2rem;
+        font-size: 18px;
         font-weight: 600;
 
         @media only screen and (max-width:576px){
@@ -37,48 +36,38 @@ const TableFieldWrapper = styled.div`
     padding: 2%;
 
     .form-header-title {
-        font-size: 1.1rem;
+        font-size: 14px;
         padding: 10px 0;
         font-weight: 600;
     }
 
     .title-name {
-        color: #2C73D2;
+        color: #444;
         font-weight: 700;
     }
 
     .form-header-box { 
-        padding: 50px 0;
+        padding: 30px 0;
     }
 
     .table-box {
         overflow: auto;
-    }
-
-    .large-cell {
-        width: 200px;
+        border: 1px solid #77777740;
     }
 
     table thead tr th {
         vertical-align: middle !important;
         text-align: center;
-        width: 100px;
-        height: 40px;
-        border-right: 1px solid #efefef;
+        width: 200px;
         background-color: #777777;
-        font-size: 14px;
-        font-weight: 500;
+        font-size: 12px;
         color: white;
     }
 
     table tbody tr td {
         vertical-align: middle !important;
         text-align: center;
-        width: 100px;
-        height: 40px;
-        border-right: 1px solid #efefef;
-        font-size: 14px;
-        font-weight: 400;
+        font-size: 12px;
         color: #000;
     }
 

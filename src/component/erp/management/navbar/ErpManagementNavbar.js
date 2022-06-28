@@ -56,7 +56,7 @@ const ButtonBox = styled.div`
     }
 
     .button-active{
-        background: #2C73D2 !important;
+        background: var(--piaar-main-color) !important;
         color:white !important;
         font-weight: 600 !important;
     }
@@ -71,7 +71,7 @@ const ModalButtonBox = styled.div`
         font-size: 14px;
     }
     .button-active{
-        background: #2C73D2 !important;
+        background: var(--piaar-main-color) !important;
         color:white !important;
         font-weight: 600 !important;
     }
