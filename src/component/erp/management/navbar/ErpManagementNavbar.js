@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
 import CommonModalComponent from '../../../module/modal/CommonModalComponent';
 
 const Container = styled.div`
@@ -103,6 +105,9 @@ const ErpManagementNavbar = (props) => {
 
     const [mobileRouterSelectorOpen, setMobileRouterSelectorOpen] = useState(false);
 
+    const [defaultHeader, setDefaultHeader] = useLocalStorageHook("defaultHeader", null);
+    const userRdx = useSelector(state => state.user);
+
     const _onMobileRouterSelectorOpen = () => {
         setMobileRouterSelectorOpen(true);
     }
@@ -110,6 +115,25 @@ const ErpManagementNavbar = (props) => {
     const _onMobileRouterSelectorClose = () => {
         setMobileRouterSelectorOpen(false);
     }
+
+    useEffect(() => {
+        if(userRdx.isLoading) {
+            return;
+        }
+
+        if (userRdx.userInfo.id === defaultHeader?.userId) {
+            return;
+        }
+
+        let data = {
+            userId: userRdx.userInfo.id,
+            orderHeaderId: '',
+            salesHeaderId: '',
+            releaseCompleteHeaderId: ''
+        }
+        setDefaultHeader(data);
+
+    }, [userRdx]);
 
     return (
         <>

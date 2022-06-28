@@ -3,7 +3,7 @@ import qs from 'query-string';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonModalComponent from '../../../module/modal/CommonModalComponent';
-import ViewHeaderSettingModalComponent from './view-header-setting-modal-v3/ViewHeaderSettingModal.component.js';
+import ViewHeaderSettingModalComponent from './view-header-setting-modal-v4/ViewHeaderSettingModal.component.js';
 import HeaderComponent from './header/Header.component';
 import { erpOrderHeaderDataConnect } from '../../../../data_connect/erpOrderHeaderDataConnect';
 import SearchOperatorComponent from './search-operator/SearchOperator.component';
@@ -25,7 +25,8 @@ import { useBasicSnackbarHook, BasicSnackbarHookComponent } from '../../../../ho
 import { erpDownloadExcelHeaderDataConnect } from '../../../../data_connect/erpDownloadExcelHeaderDataConnect';
 import CheckedHeadComponent from './checked-head/CheckedHead.component';
 import _ from 'lodash';
-import { userErpDefaultHeaderDataConnect } from '../../../../data_connect/userErpDefaultHeaderDataConnect';
+import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
+import { useSelector } from 'react-redux';
 
 const Container = styled.div`
     margin-bottom: 100px;
@@ -71,30 +72,11 @@ const OrderComponent = (props) => {
     const [checkedOrderItemList, dispatchCheckedOrderItemList] = useReducer(checkedOrderItemListReducer, initialCheckedOrderItemList);
     const [downloadExcelList, dispatchDownloadExcelList] = useReducer(downloadExcelListReducer, initialDownloadExcelList);
     const [viewHeaderList, dispatchViewHeaderList] = useReducer(viewHeaderListReducer, initialViewHeaderList);
-    const [erpDefaultHeader, dispatchErpDefaultHeader] = useReducer(erpDefaultHeaderReducer, initialErpDefaultHeader);
 
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
 
-    const __reqSearchUserErpDefaultHeader = async () => {
-        await userErpDefaultHeaderDataConnect().searchOne()
-            .then(res => {
-                if (res.status === 200 && res.data.message === 'success') {
-                    dispatchErpDefaultHeader({
-                        type: 'INIT_DATA',
-                        payload: res.data.data
-                    })
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data.memo);
-            })
-    }
+    const [defaultHeader, setDefaultHeader] = useLocalStorageHook("defaultHeader", null);
+    const userRdx = useSelector(state => state.user);
 
     // Search
     const __reqSearchViewHeaderList = async () => {
@@ -357,60 +339,32 @@ const OrderComponent = (props) => {
             })
     }
 
-    const __reqChangeDefaultHeader = async (params) => {
-        await userErpDefaultHeaderDataConnect().patchOne(params)
-            .catch(err => {
-                let res = err.response;
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data.memo);
-            })
-    }
-
-    const __reqCreateDefaultHeader = async (params) => {
-        await userErpDefaultHeaderDataConnect().createOne(params)
-            .catch(err => {
-                let res = err.response;
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data.memo);
-            })
-    }
-
     useEffect(() => {
-        __reqSearchUserErpDefaultHeader();
         __reqSearchViewHeaderList();
         __reqSearchProductOptionList();
         __reqSearchDownloadExcelHeaders();
     }, []);
 
     useEffect(() => {
-        // 선택된 뷰 헤더가 있는 상태에서 현재 탭을 클릭한 경우
-        if(!query.headerId) {
-            if(viewHeader) {
+        async function fetchInit() {
+            onActionOpenBackdrop();
+            await __reqSearchOrderItemList();
+            onActionCloseBackdrop();
+        }
+
+        if(!query.headerId && viewHeader) {
+            if (defaultHeader.orderHeaderId) {
                 navigate({
                     pathname,
                     search: `?${qs.stringify({
                         ...query,
-                        headerId: viewHeader.id
+                        headerId: defaultHeader.orderHeaderId
                     })}`
                 }, {
                     replace: true
                 });
             }
             return;
-        }
-
-        async function fetchInit() {
-            onActionOpenBackdrop();
-            await __reqSearchOrderItemList();
-            onActionCloseBackdrop();
         }
 
         fetchInit();
@@ -437,33 +391,35 @@ const OrderComponent = (props) => {
     }, [query.headerId, viewHeaderList])
 
     useEffect(() => {
-        // 선택된 뷰 헤더가 존재한다면 default setting x.
-        if(query.headerId) {
+        if(!defaultHeader || !defaultHeader.orderHeaderId) {
             return;
         }
 
-        if(!erpDefaultHeader) {
+        if(viewHeader) {
             return;
         }
-        
-        if(!erpDefaultHeader.orderHeaderId) {
-            return;
+
+        if(!query.headerId) {
+            navigate({
+                pathname,
+                search: `?${qs.stringify({
+                    ...query,
+                    headerId: defaultHeader.orderHeaderId
+                })}`
+            }, {
+                replace: true
+            });
         }
-        
-        navigate({
-            pathname,
-            search: `?${qs.stringify({
-                ...query,
-                headerId: erpDefaultHeader.orderHeaderId
-            })}`
-        }, {
-            replace: true
-        });
-    }, [erpDefaultHeader])
+    }, [defaultHeader])
 
     useEffect(() => {
         let subscribes = [];
 
+        // 헤더를 선택하기 전에는 소켓통신 하지 않는다.
+        if(!viewHeader) {
+            return;
+        }
+        
         const __effect = {
             mount: async () => {
                 onActionOpenSocketConnectLoading();
@@ -586,29 +542,6 @@ const OrderComponent = (props) => {
         })
     }
 
-    // 뷰 헤더 생성 서밋
-    const _onSubmit_createViewHeader = async (body) => {
-        onActionOpenBackdrop();
-        await __reqCreateViewHeaderOneSocket(body);
-        navigate({
-            pathname: pathname,
-            search: `?${qs.stringify({
-                ...query,
-                headerId: body.id
-            })}`
-        }, {
-            replace: true
-        })
-        onActionCloseBackdrop();
-    }
-
-    // 뷰 헤더 수정 서밋
-    const _onSubmit_modifyViewHeader = async (body) => {
-        onActionOpenBackdrop();
-        await __reqUpdateViewHeaderOneSocket(body);
-        onActionCloseBackdrop();
-    }
-
     // 판매 전환 서밋
     const _onSubmit_changeSalesYnForOrderItemList = async (body) => {
         onActionOpenBackdrop()
@@ -644,7 +577,31 @@ const OrderComponent = (props) => {
         onActionCloseBackdrop();
     }
 
-    // 선택된 뷰 헤더 제거
+    // 뷰 헤더 생성 서밋
+    const _onSubmit_createViewHeader = async (body) => {
+        onActionOpenBackdrop();
+        await __reqCreateViewHeaderOneSocket(body);
+        await __reqSearchViewHeaderList();
+        navigate({
+            pathname: pathname,
+            search: `?${qs.stringify({
+                ...query,
+                headerId: body.id
+            })}`
+        }, {
+            replace: true
+        })
+        onActionCloseBackdrop();
+    }
+
+    // 뷰 헤더 수정 서밋
+    const _onSubmit_modifyViewHeader = async (body) => {
+        onActionOpenBackdrop();
+        await __reqUpdateViewHeaderOneSocket(body);
+        onActionCloseBackdrop();
+    }
+
+    // 뷰 헤더 제거 서밋
     const _onAction_deleteSelectedViewHeader = async (headerId) => {
         onActionOpenBackdrop();
         await __reqDeleteSelectedViewHeader(headerId);
@@ -662,18 +619,22 @@ const OrderComponent = (props) => {
         onActionCloseBackdrop();
     }
 
-    const _onAction_changeDefaultHeader = async (params) => {
-        onActionOpenBackdrop();
-        await __reqChangeDefaultHeader(params);
-        await __reqSearchUserErpDefaultHeader();
-        onActionCloseBackdrop();
+    // 기본 헤더 수정. localStorage - defaultHeader값 수정
+    const _onAction_updateDefaultHeader = (headerId) => {
+        if(userRdx.userInfo.id === defaultHeader.userId) {
+            let data = { 
+                ...defaultHeader,
+                orderHeaderId: headerId
+            }
+            setDefaultHeader(data);
+        }
     }
 
-    const _onAction_createDefaultHeader = async (params) => {
-        onActionOpenBackdrop();
-        await __reqCreateDefaultHeader(params);
-        await __reqSearchUserErpDefaultHeader();
-        onActionCloseBackdrop();
+    // 뷰 헤더 선택 해제
+    const _onAction_resetSelectedViewHeader = () => {
+        dispatchViewHeader({
+            type: 'INIT_DATA'
+        })
     }
 
     return (
@@ -735,14 +696,15 @@ const OrderComponent = (props) => {
                 <ViewHeaderSettingModalComponent
                     viewHeader={viewHeader}
                     viewHeaderList={viewHeaderList}
-                    erpDefaultHeader={erpDefaultHeader}
+                    defaultHeader={defaultHeader}
 
                     _onSubmit_createViewHeader={_onSubmit_createViewHeader}
                     _onSubmit_modifyViewHeader={_onSubmit_modifyViewHeader}
                     _onAction_closeHeaderSettingModal={_onAction_closeHeaderSettingModal}
                     _onAction_deleteSelectedViewHeader={_onAction_deleteSelectedViewHeader}
-                    _onAction_createDefaultHeader={_onAction_createDefaultHeader}
-                    _onAction_changeDefaultHeader={_onAction_changeDefaultHeader}
+
+                    _onAction_updateDefaultHeader={_onAction_updateDefaultHeader}
+                    _onAction_resetSelectedViewHeader={_onAction_resetSelectedViewHeader}
                 ></ViewHeaderSettingModalComponent>
             </CommonModalComponent>
 
@@ -781,17 +743,11 @@ const initialOrderItemPage = null;
 const initialCheckedOrderItemList = [];
 const initialDownloadExcelList = null;
 const initialViewHeaderList = null;
-const initialErpDefaultHeader = null;
 
 const viewHeaderReducer = (state, action) => {
     switch (action.type) {
         case 'INIT_DATA':
             return action.payload;
-        case 'SET_DATA':
-            return {
-                ...state,
-                'orderHeaderId': action.payload
-            }
         case 'CLEAR':
             return initialViewHeader;
         default: return initialViewHeader;
@@ -803,16 +759,6 @@ const viewHeaderListReducer = (state, action) => {
         case 'INIT_DATA':
             return action.payload;
         default: return null;
-    }
-}
-
-const erpDefaultHeaderReducer = (state, action) => {
-    switch (action.type) {
-        case 'INIT_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialErpDefaultHeader;
-        default: return initialErpDefaultHeader;
     }
 }
 
