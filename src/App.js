@@ -26,8 +26,8 @@ import IncomeMain from './component/account_book/IncomeMain';
 import ExpenditureMain from './component/account_book/ExpenditureMain';
 
 // component : product
-import ProductManageMain from './component/product_manage/ProductManageMain';
-import CreateMain from './component/product_manage/CreateMain';
+// import ProductManageMain from './component/product_manage/ProductManageMain';
+// import CreateMain from './component/product_manage/CreateMain';
 
 // component : delivery-ready
 import DeliveryReadyUploadNaverMain from './component/delivery_ready/naver/DeliveryReadyUploadNaverMain';
@@ -39,16 +39,16 @@ import DeliveryReadyViewCoupangMain from './component/delivery_ready/coupang/Del
 import OrderRegistrationNaverMain from './component/order_registration/naver/OrderRegistrationNaverMain';
 
 // product-information
-import ProductDetailMain from './component/product_detail/ProductDetailMain';
+// import ProductDetailMain from './component/product_detail/ProductDetailMain';
 
 
 // data connect
 import { userDataConnect } from './data_connect/userDataConnect';
 import CommuteRecordMain from './component/commute_record/CommuteRecordMain';
-import ExcelTranslatorMain from './component/excel_translator/ExcelTranslatorMain';
+// import ExcelTranslatorMain from './component/excel_translator/ExcelTranslatorMain';
 import DeliveryReadyUploadPiaarMain from './component/delivery_ready/piaar/DeliveryReadyUploadPiaarMain';
 import DeliveryReadyViewPiaarMain from './component/delivery_ready/piaar/DeliveryReadyViewPiaarMain';
-import SalesAnalysisMain from './component/sales_analysis/SalesAnalysisMain';
+// import SalesAnalysisMain from './component/sales_analysis/SalesAnalysisMain';
 
 // refactor
 import SalesAnalysisPage from './pages/sales_analysis/SalesAnalysisPage';
@@ -61,6 +61,7 @@ import ErpManagementSalesPage from './pages/erp/management/sales/ErpManagementSa
 import ErpManagementReleaseCompletePage from './pages/erp/management/release-complete/ErpManagementReleaseCompletePage';
 import ErpManagementExcelFormPage from './pages/erp/management/excel/ErpManagementExcelFormPage';
 import ProductManagePage from './pages/product_manage/ProductManagePage';
+import StockAnalysisPage from './pages/stock_analysis/SalesAnalysisPage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -86,7 +87,10 @@ function App(props) {
                         dispatch(setUserInfo(res.data.data))
                     }
                 })
-                .catch(err => { 
+                .catch(err => {
+                    if(!err.response){
+                        alert('페이지에 연결할 수 없습니다. 서버 연결이 끊겼습니다.');
+                    }
                     console.log(err.response);
                 })
             dispatch(setUserLoadingFalse());
@@ -94,6 +98,7 @@ function App(props) {
         }
         userCheckInit();
     }, [location])
+
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -131,11 +136,11 @@ function App(props) {
 
                                 {/* refactor page 5 - /products -> /ex/products */}
                                 {/* Product Manage */}
-                                <Route path='/ex/products' element={<ProductManageMain />} />
+                                {/* <Route path='/ex/products' element={<ProductManageMain />} /> */}
                                 <Route path='/products' element={<ProductManagePage />} />
 
                                  {/* refactor page 3 - /product/create -> /ex/product/create */}
-                                <Route path='/ex/products/create' element={<CreateMain />} />
+                                {/* <Route path='/ex/products/create' element={<CreateMain />} /> */}
                                 <Route path='/products/create' element={<ProductCreatePage />} />
                                 
                                 {/* Shipment */}
@@ -163,18 +168,20 @@ function App(props) {
                                 <Route path='/order-registration/naver' element={<OrderRegistrationNaverMain />} />
 
                                 {/* refactor page 2 - /product-detail -> /ex/product-detail */}
-                                <Route path='/ex/product-detail' element={<ProductDetailMain />} />
+                                {/* <Route path='/ex/product-detail' element={<ProductDetailMain />} /> */}
                                 <Route path='/product-detail' element={<ProductDetailPage />} />
 
                                 <Route path='/commute-record' element={<CommuteRecordMain />} />
 
                                 {/* refactor page 4 - /excel-translator -> /ex/excel-translator */}
-                                <Route path='/ex/excel-translator' element={<ExcelTranslatorMain />} />
+                                {/* <Route path='/ex/excel-translator' element={<ExcelTranslatorMain />} /> */}
                                 <Route path='/excel-translator' element={<ExcelTranslatorPage />} />
                                 
                                 {/* refactor page 1 - /sales-analysis -> /ex/sales-analysis */}
-                                <Route path='/ex/sales-analysis' element={<SalesAnalysisMain />} />
+                                {/* <Route path='/ex/sales-analysis' element={<SalesAnalysisMain />} /> */}
                                 <Route path='/sales-analysis' element={<SalesAnalysisPage />} />
+
+                                <Route path='/stock-analysis' element={<StockAnalysisPage />} />
 
                                 {/* PiaarErpManagement */}
                                 <Route path='/erp/management/order-upload' element={<ErpManagementOrderUploadPage />} />

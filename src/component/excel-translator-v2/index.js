@@ -262,7 +262,7 @@ const ExcelTranslatorComponent = () => {
                         alert(res.data.memo);
                     })
             },
-            downloadExcelFile: async (title, details) => {
+            downloadExcelFile: async (uploadTitle, downloadTitle, details) => {
                 await excelTranslatorDataConnect().downloadTranslatedExcelFile(details)
                     .then(res => {
                         const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
@@ -271,7 +271,7 @@ const ExcelTranslatorComponent = () => {
 
                         let date = dateToYYMMDDhhmmss(new Date());
 
-                        link.setAttribute('download', '[' + date + ']' + title + ' 다운로드.xlsx');
+                        link.setAttribute('download', '[' + date + ']' + uploadTitle + '-' + downloadTitle + ' 다운로드.xlsx');
                         document.body.appendChild(link);
                         link.click();
                     })
@@ -291,8 +291,12 @@ const ExcelTranslatorComponent = () => {
                 await __uploadedExcelData.req.uploadExcelFile(formData);
                 onActionCloseBackdrop();
             },
-            downloadExcelFile: async (title, details) => {
+            downloadExcelFile: async (selectedHeader) => {
                 onActionOpenBackdrop();
+                let uploadTitle = selectedHeader.uploadHeaderTitle;
+                let downloadTitle = selectedHeader.downloadHeaderTitle;
+                let details = selectedHeader.downloadHeaderDetail.details;
+
                 // 다운로드 양식으로 변경
                 let excelData = details.map(r => {
                     return uploadedExcelData.map((data, idx) => {
@@ -325,7 +329,7 @@ const ExcelTranslatorComponent = () => {
                     return data;
                 })
 
-                await __uploadedExcelData.req.downloadExcelFile(title, translatedDetails);
+                await __uploadedExcelData.req.downloadExcelFile(uploadTitle, downloadTitle, translatedDetails);
                 onActionCloseBackdrop();
             }
         }
@@ -360,7 +364,7 @@ const ExcelTranslatorComponent = () => {
                 uploadedExcelData={uploadedExcelData}
 
                 onActionUploadExcelFile={(formData) => __uploadedExcelData.action.uploadExcelFile(formData)}
-                onActionDownloadExcelFile={(title, details) => __uploadedExcelData.action.downloadExcelFile(title, details)}
+                onActionDownloadExcelFile={(selectedHeader) => __uploadedExcelData.action.downloadExcelFile(selectedHeader)}
             />
 
             {/* Backdrop Loading */}

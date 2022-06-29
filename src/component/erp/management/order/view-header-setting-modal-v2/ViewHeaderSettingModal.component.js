@@ -3,28 +3,112 @@ import HeaderFieldView from "./HeaderField.view";
 import InfoTextFieldView from "./InfoTextField.view";
 import TableOperatorFieldView from "./TableOperatorField.view";
 import DefaultTableFieldView from './DefaultTableField.view'
+import qs from 'query-string';
 import { Container } from "./ViewHeaderSettingModal.styled";
 import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
 import { useEffect, useReducer } from "react";
 import CreateTableFieldView from "./CreateTableField.view";
 import _ from "lodash";
 import valueUtils from "../../../../../utils/valueUtils";
+import SelectorFieldView from "./SelectorField.view";
+import { v4 as uuidv4 } from 'uuid';
+import { useLocation, useNavigate } from "react-router-dom";
 
 const defaultHeaderDetails = getDefaultHeaderDetails();
 
+function Button({ element, onClick, style }) {
+    return (
+        <div className="button-box">
+            <button
+                className='button-el'
+                type='button'
+                onClick={() => onClick()}
+                style={style}
+            >{element}</button>
+        </div>
+    );
+}
+
 const ViewHeaderSettingModalComponent = (props) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    let pathname = location.pathname;
+    const query = qs.parse(location.search);
+
     const [createHeaderDetails, dispatchCreateHeaderDetails] = useReducer(createHeaderDetailsReducer, initialCreateHeaderDetails);
+    const [viewHeader, dispatchViewHeader] = useReducer(viewHeaderReducer, initialViewHeader);
+    const [createViewHeader, dispatchCreateViewHeader] = useReducer(createViewHeaderReducer, initialCreateViewHeader);
+    const [createViewHeaderTitle, dispatchCreateViewHeaderTitle] = useReducer(createViewHeaderTitleReducer, initialCreateViewHeaderTitle);
+    
 
     useEffect(() => {
         if (!props.viewHeader) {
+            dispatchViewHeader({
+                type: 'CLEAR'
+            })
+            dispatchCreateViewHeader({
+                type: 'CLEAR'
+            })
+            return;
+        }
+
+        dispatchViewHeader({
+            type: 'INIT_DATA',
+            payload: _.cloneDeep(props.viewHeader)
+        })
+
+        dispatchCreateViewHeader({
+            type: 'CLEAR'
+        })
+    }, [props.viewHeader]);
+
+    // 이미 존재하는 뷰 헤더 컨트롤 시
+    useEffect(() => {
+        if(!viewHeader) {
+            dispatchCreateHeaderDetails({
+                type: 'CLEAR'
+            })
+            dispatchCreateViewHeaderTitle({
+                type: 'CLEAR'
+            })
             return;
         }
 
         dispatchCreateHeaderDetails({
             type: 'SET_DATA',
-            payload: _.cloneDeep(props.viewHeader.headerDetail.details)
+            payload: viewHeader.headerDetail.details
         })
-    }, [props.viewHeader]);
+        dispatchCreateViewHeaderTitle({
+            type: 'SET_DATA',
+            payload: viewHeader.headerTitle
+        })
+    }, [viewHeader])
+
+    // 새로 생성하는 뷰 헤더 컨트롤 시
+    useEffect(() => {
+        if(viewHeader) {
+            return;
+        }
+
+        if(!createViewHeader) {
+            dispatchCreateHeaderDetails({
+                type: 'CLEAR'
+            })
+            dispatchCreateViewHeaderTitle({
+                type: 'CLEAR'
+            })
+            return;
+        }
+
+        dispatchCreateHeaderDetails({
+            type: 'SET_DATA',
+            payload: createViewHeader.headerDetail.details
+        })
+        dispatchCreateViewHeaderTitle({
+            type: 'SET_DATA',
+            payload: createViewHeader.headerTitle
+        })
+    }, [createViewHeader])
 
     const __createHeaderDetails = {
         submit: {
@@ -44,7 +128,31 @@ const ViewHeaderSettingModalComponent = (props) => {
                     return;
                 }
 
-                props._onSubmit_saveAndModifyViewHeader(createHeaderDetails);
+                let body = null;
+                if(!createViewHeader){
+                    body = {
+                        ...viewHeader,
+                        headerTitle: createViewHeaderTitle,
+                        headerDetail: {
+                            details: createHeaderDetails
+                        }
+                    }
+                    props._onSubmit_modifyViewHeader(body);
+                }else {
+                    if(!createViewHeaderTitle) {
+                        alert('뷰 헤더 이름을 먼저 설정해주세요.');
+                        return;
+                    }
+                    body = {
+                        ...viewHeader,
+                        id: uuidv4(),
+                        headerTitle: createViewHeaderTitle,
+                        headerDetail: {
+                            details: createHeaderDetails
+                        }
+                    }
+                    props._onSubmit_createViewHeader(body);
+                }
             }
         },
         action: {
@@ -72,7 +180,8 @@ const ViewHeaderSettingModalComponent = (props) => {
             checkAll: () => {
                 if (__createHeaderDetails.return.isCheckedAll()) {
                     dispatchCreateHeaderDetails({
-                        type: 'CLEAR'
+                        type: 'SET_DATA',
+                        payload: []
                     })
                 } else {
                     let data = [...defaultHeaderDetails];
@@ -150,57 +259,145 @@ const ViewHeaderSettingModalComponent = (props) => {
             }
         }
     }
+
+    const onChangeSelectedViewHeaderTitle = (e) => {
+        e.preventDefault();
+        let headerId = e.target.value;
+        props._onAction_searchSelectedViewHeader(headerId);
+    }
+
+    const onActionCreateViewHeader = (e) => {
+        e.preventDefault();
+
+        dispatchViewHeader({
+            type: 'CLEAR'
+        })
+
+        let data = {
+            id: uuidv4(),
+            headerTitle: '',
+            headerDetail: {
+                details: []
+            }
+        }
+
+        dispatchCreateViewHeader({
+            type: 'INIT_DATA',
+            payload: data
+        })
+    }
+
+    const onActionDeleteSelectedViewHeader = (e) => {
+        e.preventDefault();
+
+        if(!viewHeader?.id) {
+            alert('선택된 뷰 헤더가 없습니다.');
+            return;
+        }
+
+        if(window.confirm('선택된 뷰 헤더를 제거하시겠습니까?')) {
+            props._onAction_deleteSelectedViewHeader(viewHeader.id);
+
+            dispatchViewHeader({
+                type: 'CLEAR'
+            });
+        }
+    }
+
+    const onChangeCreateViewHeaderTitle = (e) => {
+        e.preventDefault();
+
+        dispatchCreateViewHeaderTitle({
+            type: 'SET_DATA',
+            payload: e.target.value
+        })
+    }
+
     return (
         <>
             <Container>
                 <HeaderFieldView
                     onSubmitSaveAndModify={__createHeaderDetails.submit.saveAndModify}
+                    onActionCloseModal={props._onAction_closeHeaderSettingModal}
                 ></HeaderFieldView>
-                <InfoTextFieldView
-                    element={
-                        <div>* 주문 현황에서 확인할 데이터 항목을 선택해주세요.</div>
-                    }
-                ></InfoTextFieldView>
-                <TableOperatorFieldView
-                    element={
-                        <CustomCheckbox
-                            checked={__createHeaderDetails.return.isCheckedAll()}
-                            size={'20px'}
-                            label={'전체 선택'}
-                            labelSize={'16px'}
+                <SelectorFieldView
+                    viewHeaderTitleList={props.viewHeaderTitleList}
+                    viewHeader={viewHeader}
+                    createViewHeader={createViewHeader}
 
-                            onChange={() => __createHeaderDetails.action.checkAll()}
-                        ></CustomCheckbox>
-                    }
-                ></TableOperatorFieldView>
-                <DefaultTableFieldView
-                    defaultHeaderDetails={defaultHeaderDetails}
-                    isCheckedOne={__createHeaderDetails.return.isCheckedOne}
+                    onChangeSelectedViewHeaderTitle={onChangeSelectedViewHeaderTitle}
+                    onActionCreateViewHeader={onActionCreateViewHeader}
+                    onActionDeleteSelectedViewHeader={onActionDeleteSelectedViewHeader}
+                    onSubmitSaveAndModifyViewHeader={__createHeaderDetails.submit.saveAndModify}
+                ></SelectorFieldView>
+                {createHeaderDetails &&
+                    <>
+                        <InfoTextFieldView
+                            element={
+                                <>
+                                    <div className='view-header-title'>
+                                        <div>뷰 헤더명 : </div>
+                                        <input type='text'
+                                            name='headerTitle'
+                                            className='input-item'
+                                            value={createViewHeaderTitle || ''}
+                                            onChange={onChangeCreateViewHeaderTitle}
+                                            placeholder='뷰 헤더 이름'
+                                            required
+                                        />
+                                    </div>
+                                    <div>* 주문 현황에서 확인할 데이터 항목을 선택해주세요.</div>
+                                </>
+                            }
+                        ></InfoTextFieldView>
+                        <TableOperatorFieldView
+                            element={
+                                <>
+                                    <CustomCheckbox
+                                        checked={__createHeaderDetails.return.isCheckedAll()}
+                                        size={'20px'}
+                                        label={'전체 선택'}
+                                        labelSize={'16px'}
 
-                    onActionCheckHeaderDetail={__createHeaderDetails.action.checkOne}
-                ></DefaultTableFieldView>
-                <div style={{ textAlign: 'center', marginTop: '20px', padding: '20px 0' }}>
-                    <img src='/assets/icon/down_arrow_icon.png' width={32}></img>
-                </div>
-                <InfoTextFieldView
-                    element={
-                        <>
-                            <div>* 선택한 양식의 헤더명과 순서를 변경할 수 있습니다.</div>
-                            <div>* 새롭게 체크 된 항목은 뒤에서 부터 추가 됩니다.</div>
-                        </>
-                    }
-                ></InfoTextFieldView>
-                <TableOperatorFieldView
-                    element={
-                        <button
-                            type='button'
-                            style={{ padding: '5px 10px', background: '#2c73d2', border: '1px solid #2c73d2', color: 'white', fontWeight: '600', cursor: 'pointer', fontSize: 14 }}
-                            onClick={__createHeaderDetails.action.sortByDefault}
-                        >기준 양식으로 순서 정렬</button>
-                    }
-                >
-                </TableOperatorFieldView>
-                {(createHeaderDetails && createHeaderDetails.length > 0) &&
+                                        onChange={() => __createHeaderDetails.action.checkAll()}
+                                    ></CustomCheckbox>
+                                    <Button
+                                        element={'저장'}
+                                        onClick={__createHeaderDetails.submit.saveAndModify}
+                                    ></Button>
+                                </>
+                            }
+                        ></TableOperatorFieldView>
+                        <DefaultTableFieldView
+                            defaultHeaderDetails={defaultHeaderDetails}
+                            isCheckedOne={__createHeaderDetails.return.isCheckedOne}
+
+                            onActionCheckHeaderDetail={__createHeaderDetails.action.checkOne}
+                        ></DefaultTableFieldView>
+                        <div style={{ textAlign: 'center', marginTop: '20px', padding: '20px 0' }}>
+                            <img src='/assets/icon/down_arrow_icon.png' width={32}></img>
+                        </div>
+                        <InfoTextFieldView
+                            element={
+                                <>
+                                    <div>* 선택한 양식의 헤더명과 순서를 변경할 수 있습니다.</div>
+                                    <div>* 새롭게 체크 된 항목은 뒤에서 부터 추가 됩니다.</div>
+                                </>
+                            }
+                        ></InfoTextFieldView>
+                        <TableOperatorFieldView
+                            element={
+                                <button
+                                    type='button'
+                                    style={{ padding: '5px 10px', background: '#2c73d2', border: '1px solid #2c73d2', color: 'white', fontWeight: '600', cursor: 'pointer', fontSize: 14 }}
+                                    onClick={__createHeaderDetails.action.sortByDefault}
+                                >기준 양식으로 순서 정렬</button>
+                            }
+                        >
+                        </TableOperatorFieldView>
+                    </>
+                }
+                {createHeaderDetails &&
                     <CreateTableFieldView
                         createHeaderDetails={createHeaderDetails}
 
@@ -209,21 +406,65 @@ const ViewHeaderSettingModalComponent = (props) => {
                         onActionRemoveOne={__createHeaderDetails.action.removeOne}
                     ></CreateTableFieldView>
                 }
-
             </Container>
         </>
     );
 }
 export default ViewHeaderSettingModalComponent;
 
-const initialCreateHeaderDetails = [];
+// const initialCreateHeaderDetails = [];
+const initialCreateHeaderDetails = null;
+const initialViewHeader = null;
+const initialCreateViewHeader = null;
+const initialCreateViewHeaderTitle = null;
+const initialViewHeaderTitleList = null;
 
 const createHeaderDetailsReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
             return action.payload;
         case 'CLEAR':
-            return [];
-        default: return [];
+            return initialCreateHeaderDetails;
+        default: return initialCreateHeaderDetails;
+    }
+}
+
+const viewHeaderReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
+        case 'CLEAR':
+            return initialViewHeader;
+        default: return initialViewHeader;
+    }
+}
+
+const createViewHeaderTitleReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialCreateViewHeaderTitle;
+        default: return initialCreateViewHeaderTitle;
+    }
+}
+
+const createViewHeaderReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
+        case 'CLEAR':
+            return initialCreateViewHeader;
+        default: return initialCreateViewHeader;
     }
 }

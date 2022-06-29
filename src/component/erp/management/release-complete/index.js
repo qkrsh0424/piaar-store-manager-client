@@ -1,9 +1,9 @@
 import { useEffect, useReducer, useState } from 'react';
 import qs from 'query-string';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonModalComponent from '../../../module/modal/CommonModalComponent';
-import ViewHeaderSettingModalComponent from './view-header-setting-modal-v2/ViewHeaderSettingModal.component';
+import ViewHeaderSettingModalComponent from './view-header-setting-modal-v3/ViewHeaderSettingModal.component';
 import HeaderComponent from './header/Header.component';
 import { erpReleaseCompleteHeaderDataConnect } from '../../../../data_connect/erpReleaseCompleteHeaderDataConnect';
 import SearchOperatorComponent from './search-operator/SearchOperator.component';
@@ -24,6 +24,7 @@ import { useSocketConnectLoadingHook, SocketConnectLoadingHookComponent } from '
 import { erpOrderItemSocket } from '../../../../data_connect/socket/erpOrderItemSocket';
 import { erpReleaseCompleteHeaderSocket } from '../../../../data_connect/socket/erpReleaseCompleteHeaderSocket';
 import CheckedHeadComponent from './checked-head/CheckedHead.component';
+import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
 
 const Container = styled.div`
     margin-bottom: 100px;
@@ -66,22 +67,44 @@ const ReleaseCompleteComponent = (props) => {
     const [orderItemPage, dispatchOrderItemPage] = useReducer(orderItemPageReducer, initialOrderItemPage);
     const [checkedOrderItemList, dispatchCheckedOrderItemList] = useReducer(checkedOrderItemListReducer, initialCheckedOrderItemList);
     const [downloadExcelList, dispatchDownloadExcelList] = useReducer(downloadExcelListReducer, initialDownloadExcelList);
+    const [viewHeaderList, dispatchViewHeaderList] = useReducer(viewHeaderListReducer, initialViewHeaderList);
 
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
 
+    const [defaultHeader, setDefaultHeader] = useLocalStorageHook("defaultHeader", null);
+
     // Search
-    const __reqSearchViewHeaderOne = async () => {
-        await erpReleaseCompleteHeaderDataConnect().searchOne()
+    const __reqSearchViewHeaderList = async () => {
+        await erpReleaseCompleteHeaderDataConnect().searchList()
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
-                    dispatchViewHeader({
+                    dispatchViewHeaderList({
                         type: 'INIT_DATA',
                         payload: res.data.data
                     })
                 }
             })
             .catch(err => {
-                console.log(err);
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqDeleteSelectedViewHeader = async (headerId) => {
+        await erpReleaseCompleteHeaderDataConnect().deleteOne(headerId)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -96,7 +119,13 @@ const ReleaseCompleteComponent = (props) => {
                 }
             })
             .catch(err => {
-                console.log(err.response)
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -106,6 +135,7 @@ const ReleaseCompleteComponent = (props) => {
         let searchColumnName = query.searchColumnName || null;
         let searchQuery = query.searchQuery || null;
         let periodType = query.periodType || null;
+        let stockReflectYn = query.stockReflectYn || null;
         let page = query.page || null;
         let size = query.size || null;
         let sortBy = query.sortBy || null;
@@ -118,6 +148,7 @@ const ReleaseCompleteComponent = (props) => {
             startDate: startDate,
             endDate: endDate,
             periodType: periodType,
+            stockReflectYn: stockReflectYn,
             searchColumnName: searchColumnName,
             searchQuery: searchQuery,
             page: page,
@@ -136,7 +167,12 @@ const ReleaseCompleteComponent = (props) => {
             })
             .catch(err => {
                 let res = err.response;
-                console.log(res);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -157,7 +193,12 @@ const ReleaseCompleteComponent = (props) => {
             })
             .catch(err => {
                 let res = err.response;
-                console.log(res);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -173,7 +214,12 @@ const ReleaseCompleteComponent = (props) => {
             })
             .catch(err => {
                 let res = err.response;
-                console.log(res);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -303,17 +349,15 @@ const ReleaseCompleteComponent = (props) => {
     }
 
     // Action
-    const __reqActionDownloadForDownloadOrderItems = async (id, downloadOrderItemsBody) => {
+    const __reqActionDownloadForDownloadOrderItems = async (fileName, id, downloadOrderItemsBody) => {
         await erpDownloadExcelHeaderDataConnect().actionDownloadForDownloadOrderItems(id, downloadOrderItemsBody)
             .then(res => {
                 // if (res.status === 200 && res.data.message === 'success') {
                 const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
                 const link = document.createElement('a');
                 link.href = url;
-
-                let date = dateToYYYYMMDDhhmmssFile(new Date());
-
-                link.setAttribute('download', date + '_출고상태_데이터_엑셀.xlsx');
+                
+                link.setAttribute('download', fileName + '.xlsx');
                 document.body.appendChild(link);
                 link.click();
                 // }
@@ -400,7 +444,7 @@ const ReleaseCompleteComponent = (props) => {
     }
 
     useEffect(() => {
-        __reqSearchViewHeaderOne();
+        __reqSearchViewHeaderList();
         __reqSearchProductOptionList();
         __reqSearchDownloadExcelHeaders();
     }, []);
@@ -411,16 +455,41 @@ const ReleaseCompleteComponent = (props) => {
             await __reqSearchOrderItemList();
             onActionCloseBackdrop();
         }
+
         fetchInit();
-    }, [location]);
+    }, []);
+
+    useEffect(() => {
+        if(!viewHeaderList) {
+            return;
+        }
+
+        if(!defaultHeader || !defaultHeader.releaseCompleteHeaderId) {
+            dispatchViewHeader({
+                type: 'CLEAR'
+            })
+            return;
+        }
+
+        let data = viewHeaderList.filter(r => r.id === defaultHeader.releaseCompleteHeaderId)[0];
+        dispatchViewHeader({
+            type: 'INIT_DATA',
+            payload: data
+        });
+    }, [defaultHeader, viewHeaderList])
 
     useEffect(() => {
         let subscribes = [];
 
+        // 헤더를 선택하기 전에는 소켓통신 하지 않는다.
+        if(!viewHeader) {
+            return;
+        }
+        
         const __effect = {
             mount: async () => {
                 onActionOpenSocketConnectLoading();
-                if (!connected || !orderItemPage || !viewHeader) {
+                if (!connected || !orderItemPage) {
                     return;
                 }
 
@@ -442,7 +511,7 @@ const ReleaseCompleteComponent = (props) => {
                         callback: async (e) => {
                             let body = JSON.parse(e.body);
                             if (body?.statusCode === 200) {
-                                await __reqSearchViewHeaderOne();
+                                await __reqSearchViewHeaderList();
                             }
                         }
                     }
@@ -539,31 +608,6 @@ const ReleaseCompleteComponent = (props) => {
         })
     }
 
-    // 헤더 설정 서밋
-    const _onSubmit_saveAndModifyViewHeader = async (headerDetails) => {
-        onActionOpenBackdrop()
-        let params = null;
-        if (!viewHeader) {
-            params = {
-                headerDetail: {
-                    details: headerDetails
-                }
-            }
-            await __reqCreateViewHeaderOneSocket(params);
-        } else {
-            params = {
-                ...viewHeader,
-                headerDetail: {
-                    details: headerDetails
-                }
-            }
-            await __reqUpdateViewHeaderOneSocket(params);
-        }
-
-        _onAction_closeHeaderSettingModal();
-        onActionCloseBackdrop()
-    }
-
     // 판매 전환 서밋
     const _onSubmit_changeSalesYnForOrderItemList = async (body) => {
         onActionOpenBackdrop();
@@ -593,9 +637,9 @@ const ReleaseCompleteComponent = (props) => {
     }
 
     // 엑셀 다운로드
-    const _onSubmit_downloadOrderItemsExcel = async (downloadExcelHeader, downloadOrderItemList) => {
+    const _onSubmit_downloadOrderItemsExcel = async (downloadExcelFileName, downloadExcelHeader, downloadOrderItemList) => {
         onActionOpenBackdrop();
-        await __reqActionDownloadForDownloadOrderItems(downloadExcelHeader.id, downloadOrderItemList);
+        await __reqActionDownloadForDownloadOrderItems(downloadExcelFileName, downloadExcelHeader.id, downloadOrderItemList);
         onActionCloseBackdrop();
     }
 
@@ -640,6 +684,49 @@ const ReleaseCompleteComponent = (props) => {
         await __reqActionCancelStock(checkedOrderItemList);
         onActionCloseBackdrop();
     }
+
+    // 뷰 헤더 생성 서밋
+    const _onSubmit_createViewHeader = async (body) => {
+        onActionOpenBackdrop();
+        await __reqCreateViewHeaderOneSocket(body);
+        await __reqSearchViewHeaderList();
+        _onAction_updateDefaultHeader(body.id);
+        onActionCloseBackdrop();
+    }
+
+    // 뷰 헤더 수정 서밋
+    const _onSubmit_modifyViewHeader = async (body) => {
+        onActionOpenBackdrop();
+        await __reqUpdateViewHeaderOneSocket(body);
+        onActionCloseBackdrop();
+    }
+
+    // 뷰 헤더 제거 서밋
+    const _onAction_deleteSelectedViewHeader = async (headerId) => {
+        onActionOpenBackdrop();
+        await __reqDeleteSelectedViewHeader(headerId);
+        await __reqSearchViewHeaderList();
+        _onAction_updateDefaultHeader();
+        onActionCloseBackdrop();
+    }
+
+    // localStorage 기본 헤더 수정
+    const _onAction_updateDefaultHeader = (headerId) => {
+        if(!headerId) {
+            setDefaultHeader({
+                ...defaultHeader,
+                releaseCompleteHeaderId: ''
+            })
+            return;
+        }
+
+        let data = {
+            ...defaultHeader,
+            releaseCompleteHeaderId: headerId
+        }
+        setDefaultHeader(data);
+    }
+
     return (
         <>
             <Container>
@@ -675,6 +762,7 @@ const ReleaseCompleteComponent = (props) => {
                     checkedOrderItemList={checkedOrderItemList}
 
                     _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
+                    _onAction_checkOrderItem={_onAction_checkOrderItem}
                 ></CheckedOrderItemTableComponent>
                 <CheckedOperatorComponent
                     viewHeader={viewHeader}
@@ -703,8 +791,14 @@ const ReleaseCompleteComponent = (props) => {
             >
                 <ViewHeaderSettingModalComponent
                     viewHeader={viewHeader}
+                    viewHeaderList={viewHeaderList}
 
-                    _onSubmit_saveAndModifyViewHeader={_onSubmit_saveAndModifyViewHeader}
+                    _onSubmit_createViewHeader={_onSubmit_createViewHeader}
+                    _onSubmit_modifyViewHeader={_onSubmit_modifyViewHeader}
+                    _onAction_closeHeaderSettingModal={_onAction_closeHeaderSettingModal}
+                    _onAction_deleteSelectedViewHeader={_onAction_deleteSelectedViewHeader}
+                    
+                    _onAction_updateDefaultHeader={_onAction_updateDefaultHeader}
                 ></ViewHeaderSettingModalComponent>
             </CommonModalComponent>
 
@@ -740,8 +834,19 @@ const initialProductOptionList = null;
 const initialOrderItemPage = null;
 const initialCheckedOrderItemList = [];
 const initialDownloadExcelList = null;
+const initialViewHeaderList = null;
 
 const viewHeaderReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialViewHeader;
+        default: return initialViewHeader;
+    }
+}
+
+const viewHeaderListReducer = (state, action) => {
     switch (action.type) {
         case 'INIT_DATA':
             return action.payload;

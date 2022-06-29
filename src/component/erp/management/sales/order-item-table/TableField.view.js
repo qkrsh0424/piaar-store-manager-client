@@ -103,7 +103,7 @@ export default function TableFieldView(props) {
                             <>
                                 {props.orderItemList?.slice(0, props.viewSize).map((r1, rowIndex) => {
                                     let checked = props.isCheckedOne(r1.id);
-                                    let isOutOfStock = r1.optionStockUnit !== null && r1.optionStockUnit < 0;
+                                    let isOutOfStock = r1.optionStockUnit !== null && r1.optionStockUnit <= 0;
                                     return (
                                         <tr
                                             key={rowIndex}
@@ -153,13 +153,29 @@ export default function TableFieldView(props) {
                                             </td>
                                         </tr>
                                     )
-
                                 })}
+                                <InfiniteScrollObserver
+                                    elementTagType={'tr'}
+                                    totalSize={props.orderItemList.length}
+                                    startOffset={0}
+                                    endOffset={props.viewSize}
+                                    fetchData={props.onActionfetchMoreOrderItems}
+                                    loadingElementTag={
+                                        <td style={{ textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#444', paddingLeft: '50px' }} colSpan={100}>
+                                            로딩중...
+                                        </td>
+                                    }
+                                    endElementTag={
+                                        <td style={{ textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#444', paddingLeft: '50px' }} colSpan={100}>
+                                            마지막 데이터 입니다.
+                                        </td>
+                                    }
+                                />
                             </>
                         }
                     </tbody>
                 </table>
-                <InfiniteScrollObserver
+                {/* <InfiniteScrollObserver
                     elementTagType={'div'}
                     totalSize={props.orderItemList.length}
                     startOffset={0}
@@ -175,7 +191,7 @@ export default function TableFieldView(props) {
                             마지막 데이터 입니다.
                         </p>
                     }
-                />
+                /> */}
             </div>
         </TableFieldWrapper>
     );

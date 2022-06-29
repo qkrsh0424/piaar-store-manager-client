@@ -114,8 +114,15 @@ const HomeBody = () => {
                         <LinkBox>
                             <CustomLink to='/products'>상품 재고관리</CustomLink>
                             <CustomLink to='/product-detail'>상품 상세정보</CustomLink>
+                        </LinkBox>
+                    </GroupBox>
+
+                    <GroupBox>
+                        <GroupTitle>분석기</GroupTitle>
+                        <LinkBox>
                             <CustomLink2 href='https://analytics.piaar.co.kr'>분석기</CustomLink2>
                             <CustomLink to='/sales-analysis'>판매 랭킹</CustomLink>
+                            <CustomLink to='/stock-analysis'>재고 자산</CustomLink>
                         </LinkBox>
                     </GroupBox>
 
@@ -123,6 +130,7 @@ const HomeBody = () => {
                         <GroupTitle>피아르</GroupTitle>
                         <LinkBox>
                             <CustomLink to='/erp/management/order-upload'>피아르 주문 & 출고 관리</CustomLink>
+                            <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
                         </LinkBox>
                     </GroupBox>
 
@@ -154,7 +162,6 @@ const HomeBody = () => {
                                     <></>
                             }
                             <CustomLink to='/commute-record'>출/퇴근 기록</CustomLink>
-                            <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
                         </LinkBox>
                     </GroupBox>
                 </LinkGroup>

@@ -16,11 +16,49 @@ const ControlButtonFieldWrapper = styled.div`
 
     .flex-box{
         display: flex;
+        color: #000;
+        align-items: center;
+        align-content: center
+    }
+
+    .flex-wrap {
         flex-wrap: wrap;
+        color: #000;
+        align-items: center;
     }
 
     @media only screen and (max-width:992px){
         padding: 0 5px;
+    }
+
+    .selector-box {
+        font-size: 14px;
+        padding: 5px;
+
+        @media all and (max-width:992px) {
+            padding: 5px 0;
+        }
+    }
+
+    .select-item{
+        padding: 5px;
+        width: 300px;
+        height: 40px;
+        border: 1px solid #e1e1e1;
+        border-radius: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+
+        &:focus{
+            outline: none;
+        }
+
+        @media all and (max-width:992px) {
+            width: 100%;
+        }
     }
 
     .button-box{
@@ -47,7 +85,8 @@ const ControlButtonFieldWrapper = styled.div`
 
         &:hover{
             cursor: pointer;
-            background: #2C73D2;
+            /* background: #2C73D2; */
+            background: var(--erp-main-color);
             border: 1px solid #2C73D2;
             color: #fff;
             transition: 0.2s;

@@ -93,6 +93,16 @@ const ProductManageTableWrapper = styled.div`
         background: #9fa0f1;
         border:1px solid #9fa0f1;
     }
+
+    .sub-option-code-btn {
+        padding:3px 8px;
+        background: #babaff;
+        color:white;
+        border:1px solid #babaff;
+        border-radius: 3px;
+        font-weight: 600;
+        margin: 0 3px;
+    }
 `;
 
 const OptionTr = styled.tr`

@@ -12,6 +12,7 @@ const TableFieldWrapper = styled.div`
         border: 1px solid #e0e0e0;
         background-color: white;
         box-shadow: 2px 2px 15px #b0b2b799;
+        font-size: 14px;
 
         @media only screen and (max-width:768px){
             font-size: 10px;

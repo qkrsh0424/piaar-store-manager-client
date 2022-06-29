@@ -26,6 +26,9 @@ export default function ReleaseTableFieldView(props) {
                         <th scope="col" className="large-cell">
                             <span>출고메모</span>
                         </th>
+                        <th scope="col">
+                            <span>출고지</span>
+                        </th>
                     </tr>
                 </thead>
 
@@ -57,12 +60,17 @@ export default function ReleaseTableFieldView(props) {
                                 </td>
                                 <td className="col">
                                     <span>
-                                        +{data.release.releaseUnit}
+                                        -{data.release.releaseUnit}
                                     </span>
                                 </td>
                                 <td className="col">
                                     <span>
                                         {data.release.memo}
+                                    </span>
+                                </td>
+                                <td className="col">
+                                    <span>
+                                        {data.option.releaseLocation}
                                     </span>
                                 </td>
                             </tr>

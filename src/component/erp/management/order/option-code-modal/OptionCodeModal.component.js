@@ -4,7 +4,7 @@ import ConfirmMessageField from "./ConfirmMessageField.view";
 import HeaderFieldView from "./HeaderField.view";
 import InputFieldView from "./InputFieldView";
 import ListFieldView from "./ListField.view";
-import { Container, ListFieldWrapper } from "./OptionCodeModal.styled";
+import { Container } from "./OptionCodeModal.styled";
 
 const OptionCodeModalComponent = (props) => {
     const [selectedProductOption, dispatchSelectedProductOption] = useReducer(selectedProductOptionStateReducer, initialSelectedProductOptionState);

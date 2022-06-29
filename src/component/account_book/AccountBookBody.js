@@ -216,7 +216,7 @@ const AccountBookBody = (props) => {
                                             <ItemFooterWrapper>
                                                 <ItemBodyEl style={{ fontWeight: 800, color: '#444', fontSize: '13px' }}>{r.accountBook.desc}</ItemBodyEl>
                                                 {r.accountBook.accountBookType == 'expenditure' ?
-                                                    <ItemBodyEl type='button' className='text-center' onClick={() => props.__handleEventControl().expenditureType().settingModalOpen(r.accountBook.id)} style={{ fontWeight: 800, color: '#1199dc', fontSize: '13px', textAlign: 'right' }}>{r.accountBook.expenditureType ? r.accountBook.expenditureType : '미설정'}</ItemBodyEl>
+                                                    <ItemBodyEl type='button' className='text-center' onClick={() => props.__handleEventControl().expenditureType().settingModalOpen(r.accountBook.id)} style={{ fontWeight: 800, color: '#1199dc', fontSize: '13px', textAlign: 'right' }}>{r.accountBook.expenditureTypeId ? r.expenditureType.expenditureType : '미설정'}</ItemBodyEl>
                                                     :
                                                     <></>
                                                 }

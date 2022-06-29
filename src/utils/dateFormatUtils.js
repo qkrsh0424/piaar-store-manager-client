@@ -72,6 +72,11 @@ function dateToYYYYMMDDhhmmssFile(idate) {
     return moment(date).format("YYYYMMDDHHmmss");
 }
 
+function dateToYYYYMMDDhhmmFile(idate) {
+    var date = new Date(idate);
+    return moment(date).format("YYYYMMDD_HHmm");
+}
+
 function dateToYYMMDDhhmmss(idate) {
     var date = new Date(idate);
     return moment(date).format("YY/MM/DD HH:mm:ss");
@@ -135,5 +140,6 @@ export {
     dateToYYMMDDhhmmss,
     dateToYYMMDD,
     setStartDateOfPeriod,
-    getRemainingDateCount
+    getRemainingDateCount,
+    dateToYYYYMMDDhhmmFile
 }

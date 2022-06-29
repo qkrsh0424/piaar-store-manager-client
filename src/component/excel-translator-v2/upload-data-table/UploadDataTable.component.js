@@ -45,6 +45,11 @@ const UploadDataTableComponent = (props) => {
             alert('헤더 형식을 먼저 선택해주세요.');
             return;
         }
+        
+        if(selectedTranslatorHeader.uploadHeaderDetail.details.length <= 0) {
+            alert('업로드 헤더 양식을 먼저 설정해주세요.');
+            return;
+        }
 
         // 파일을 선택하지 않은 경우
         if (e.target.files.length === 0) return;
@@ -75,7 +80,7 @@ const UploadDataTableComponent = (props) => {
             return;
         }
 
-        await props.onActionDownloadExcelFile(selectedTranslatorHeader.downloadHeaderTitle, selectedTranslatorHeader.downloadHeaderDetail.details);
+        await props.onActionDownloadExcelFile(selectedTranslatorHeader);
     }
 
     return (

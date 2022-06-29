@@ -58,8 +58,8 @@ const CheckedHeadComponent = (props) => {
         setDownloadExcelModalOpen(false);
     }
 
-    const onActionDownloadExcel = (selectedExcelHeader, downloadOrderItemList) => {
-        props._onSubmit_downloadOrderItemsExcel(selectedExcelHeader, downloadOrderItemList);
+    const onActionDownloadExcel = (downloadExcelFileName, selectedExcelHeader, downloadOrderItemList) => {
+        props._onSubmit_downloadOrderItemsExcel(downloadExcelFileName, selectedExcelHeader, downloadOrderItemList);
     }
     
     return (
