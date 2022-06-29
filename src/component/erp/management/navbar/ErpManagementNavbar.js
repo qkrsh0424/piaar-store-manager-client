@@ -110,7 +110,6 @@ const ErpManagementNavbar = (props) => {
     const [mobileRouterSelectorOpen, setMobileRouterSelectorOpen] = useState(false);
 
     const [defaultHeader, setDefaultHeader] = useLocalStorageHook("defaultHeader", null);
-    const userRdx = useSelector(state => state.user);
 
     const _onMobileRouterSelectorOpen = () => {
         setMobileRouterSelectorOpen(true);
@@ -121,16 +120,11 @@ const ErpManagementNavbar = (props) => {
     }
 
     useEffect(() => {
-        if(userRdx.isLoading) {
-            return;
-        }
-
-        if (userRdx.userInfo.id === defaultHeader?.userId) {
+        if(defaultHeader) {
             return;
         }
 
         let data = {
-            userId: userRdx.userInfo.id,
             orderHeaderId: '',
             salesHeaderId: '',
             releaseCompleteHeaderId: ''

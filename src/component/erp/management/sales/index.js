@@ -25,7 +25,6 @@ import { useSocketConnectLoadingHook, SocketConnectLoadingHookComponent } from '
 import { useBasicSnackbarHook, BasicSnackbarHookComponent } from '../../../../hooks/snackbar/useBasicSnackbarHook';
 import CheckedHeadComponent from './checked-head/CheckedHead.component';
 import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
-import { useSelector } from 'react-redux';
 
 const Container = styled.div`
     margin-bottom: 100px;
@@ -74,8 +73,7 @@ const SalesComponent = (props) => {
 
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
 
-    const [defaultHeader, setDefaultHeader] = useLocalStorageHook("defaultHeader", {});
-    const userRdx = useSelector(state => state.user);
+    const [defaultHeader, setDefaultHeader] = useLocalStorageHook("defaultHeader", null);
 
     // Search
     const __reqSearchViewHeaderList = async () => {
@@ -655,13 +653,11 @@ const SalesComponent = (props) => {
 
     // 기본 헤더 수정. localStorage - defaultHeader값 수정
     const _onAction_updateDefaultHeader = (headerId) => {
-        if(userRdx.userInfo.id === defaultHeader.userId) {
-            let data = { 
-                ...defaultHeader,
-                salesHeaderId: headerId
-            }
-            setDefaultHeader(data);
+        let data = {
+            ...defaultHeader,
+            salesHeaderId: headerId
         }
+        setDefaultHeader(data);
     }
 
     // 뷰 헤더 선택 해제

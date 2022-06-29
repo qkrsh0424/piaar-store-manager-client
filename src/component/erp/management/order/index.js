@@ -26,7 +26,6 @@ import { erpDownloadExcelHeaderDataConnect } from '../../../../data_connect/erpD
 import CheckedHeadComponent from './checked-head/CheckedHead.component';
 import _ from 'lodash';
 import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
-import { useSelector } from 'react-redux';
 
 const Container = styled.div`
     margin-bottom: 100px;
@@ -76,7 +75,6 @@ const OrderComponent = (props) => {
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
 
     const [defaultHeader, setDefaultHeader] = useLocalStorageHook("defaultHeader", null);
-    const userRdx = useSelector(state => state.user);
 
     // Search
     const __reqSearchViewHeaderList = async () => {
@@ -623,13 +621,11 @@ const OrderComponent = (props) => {
 
     // 기본 헤더 수정. localStorage - defaultHeader값 수정
     const _onAction_updateDefaultHeader = (headerId) => {
-        if(userRdx.userInfo.id === defaultHeader.userId) {
-            let data = { 
-                ...defaultHeader,
-                orderHeaderId: headerId
-            }
-            setDefaultHeader(data);
+        let data = {
+            ...defaultHeader,
+            orderHeaderId: headerId
         }
+        setDefaultHeader(data);
     }
 
     // 뷰 헤더 선택 해제
