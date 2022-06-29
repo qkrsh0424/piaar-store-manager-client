@@ -3,7 +3,6 @@ import HeaderFieldView from "./HeaderField.view";
 import InfoTextFieldView from "./InfoTextField.view";
 import TableOperatorFieldView from "./TableOperatorField.view";
 import DefaultTableFieldView from './DefaultTableField.view'
-import qs from 'query-string';
 import { Container } from "./ViewHeaderSettingModal.styled";
 import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
 import { useEffect, useReducer } from "react";
@@ -12,16 +11,11 @@ import _ from "lodash";
 import valueUtils from "../../../../../utils/valueUtils";
 import SelectorFieldView from "./SelectorField.view";
 import { v4 as uuidv4 } from 'uuid';
-import { useLocation, useNavigate } from "react-router-dom";
 import ViewHeaderInputFieldView from "./ViewHeaderInputField.view";
 
 const defaultHeaderDetails = getDefaultHeaderDetails();
 
 const ViewHeaderSettingModalComponent = (props) => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    let pathname = location.pathname;
-    const query = qs.parse(location.search);
 
     const [viewHeader, dispatchViewHeader] = useReducer(viewHeaderReducer, initialViewHeader);      // 선택된 헤더
     const [createViewHeader, dispatchCreateViewHeader] = useReducer(createViewHeaderReducer, initialCreateViewHeader);      // 새로 생성하는 헤더
@@ -42,41 +36,47 @@ const ViewHeaderSettingModalComponent = (props) => {
         })
     }, [props.viewHeader]);
 
-    // 이미 존재하는 뷰 헤더 컨트롤 시
+    // 선택된 뷰 헤더 컨트롤 시
     useEffect(() => {
         if(!viewHeader) {
-            dispatchViewHeaderDetails({
+            dispatchViewHeaderTitle({
                 type: 'CLEAR'
             })
-            dispatchViewHeaderTitle({
+            dispatchViewHeaderDetails({
                 type: 'CLEAR'
             })
             return;
         }
 
-        dispatchViewHeaderDetails({
-            type: 'SET_DATA',
-            payload: viewHeader.headerDetail.details
-        })
         dispatchViewHeaderTitle({
             type: 'SET_DATA',
             payload: viewHeader.headerTitle
+        })
+        dispatchViewHeaderDetails({
+            type: 'SET_DATA',
+            payload: viewHeader.headerDetail.details
         })
     }, [viewHeader])
 
     // 새로 생성하는 뷰 헤더 컨트롤 시
     useEffect(() => {
         if(!createViewHeader) {
+            dispatchViewHeaderTitle({
+                type: 'CLEAR'
+            })
+            dispatchViewHeaderDetails({
+                type: 'CLEAR'
+            })
             return;
         }
 
-        dispatchViewHeaderDetails({
-            type: 'SET_DATA',
-            payload: createViewHeader.headerDetail.details
-        })
         dispatchViewHeaderTitle({
             type: 'SET_DATA',
             payload: createViewHeader.headerTitle
+        })
+        dispatchViewHeaderDetails({
+            type: 'SET_DATA',
+            payload: createViewHeader.headerDetail.details
         })
     }, [createViewHeader])
 
@@ -122,6 +122,10 @@ const ViewHeaderSettingModalComponent = (props) => {
                         }
                     }
                     props._onSubmit_createViewHeader(body);
+                    
+                    dispatchCreateViewHeader({
+                        type: 'CLEAR'
+                    })
                 }
             }
         },
@@ -239,17 +243,6 @@ const ViewHeaderSettingModalComponent = (props) => {
                     type: 'CLEAR'
                 })
 
-                // 선택된 헤더 리셋
-                delete query.headerId;
-                navigate({
-                    pathname,
-                    search: `?${qs.stringify({
-                        ...query
-                    })}`
-                }, {
-                    replace: true
-                });
-
                 let data = {
                     id: uuidv4(),
                     headerTitle: '',
@@ -263,7 +256,7 @@ const ViewHeaderSettingModalComponent = (props) => {
                     payload: data
                 })
 
-                props._onAction_resetSelectedViewHeader();
+                props._onAction_changeSelectedViewHeader();
             },
             deleteOne: (e) => {
                 e.preventDefault();
@@ -275,15 +268,11 @@ const ViewHeaderSettingModalComponent = (props) => {
 
                 if (window.confirm('선택된 뷰 헤더를 제거하시겠습니까?')) {
                     props._onAction_deleteSelectedViewHeader(viewHeader.id);
-
-                    dispatchViewHeader({
-                        type: 'CLEAR'
-                    });
+                    props._onAction_changeSelectedViewHeader();
                 }
             },
             updateDefaultHeader: () => {
-                let selectedHeaderId = query.headerId;
-                let headerId = props.viewHeaderList.filter(r => r.id === selectedHeaderId)[0].id;
+                let headerId = props.viewHeaderList.filter(r => r.id === viewHeader.id)[0].id;
 
                 if (window.confirm('[주문 수집 관리]의 기본 헤더로 설정하시겠습니까?')) {
                     props._onAction_updateDefaultHeader(headerId);
@@ -294,16 +283,7 @@ const ViewHeaderSettingModalComponent = (props) => {
             selectedHeader: (e) => {
                 e.preventDefault();
                 let headerId = e.target.value;
-
-                navigate({
-                    pathname: pathname,
-                    search: `?${qs.stringify({
-                        ...query,
-                        headerId: headerId
-                    })}`
-                }, {
-                    replace: true
-                })
+                props._onAction_changeSelectedViewHeader(headerId);
             },
             createHeaderValue: (e) => {
                 e.preventDefault();

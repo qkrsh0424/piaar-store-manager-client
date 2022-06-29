@@ -100,13 +100,6 @@ const OrderComponent = (props) => {
 
     const __reqDeleteSelectedViewHeader = async (headerId) => {
         await erpOrderHeaderDataConnect().deleteOne(headerId)
-            .then(res => {
-                if(res.status === 200 && res.data.message == 'success') {
-                    dispatchViewHeader({
-                        type: 'CLEAR'
-                    })
-                }
-            })
             .catch(err => {
                 let res = err.response;
                 if (res?.status === 500) {
@@ -350,67 +343,25 @@ const OrderComponent = (props) => {
             onActionCloseBackdrop();
         }
 
-        // 현재 선택된 헤더가 없다면 기본헤더로 세팅
-        if(!query.headerId && viewHeader) {
-            if (defaultHeader.orderHeaderId) {
-                navigate({
-                    pathname,
-                    search: `?${qs.stringify({
-                        ...query,
-                        headerId: defaultHeader.orderHeaderId
-                    })}`
-                }, {
-                    replace: true
-                });
-            }
-            return;
-        }
-
         fetchInit();
-    }, [location]);
-
-    useEffect(() => {
-        if (!viewHeaderList) {
-            return;
-        }
-        
-        if(!query.headerId) {
-            dispatchViewHeader({
-                type: 'CLEAR'
-            })
-            return;
-        }
-
-        let selectedData = viewHeaderList.filter(r => r.id === query.headerId)[0];
-
-        dispatchViewHeader({
-            type: 'INIT_DATA',
-            payload: selectedData
-        });
-    }, [query.headerId, viewHeaderList])
+    }, []);
 
     useEffect(() => {
         if(!defaultHeader || !defaultHeader.orderHeaderId) {
             return;
         }
 
-        if(viewHeader) {
+        if(!viewHeaderList || viewHeader) {
             return;
         }
 
-        // 주문수집 기본 헤더가 존재하는 경우, 현재 선택된 헤더가 없다면 기본 뷰 헤더 세팅
-        if(!query.headerId) {
-            navigate({
-                pathname,
-                search: `?${qs.stringify({
-                    ...query,
-                    headerId: defaultHeader.orderHeaderId
-                })}`
-            }, {
-                replace: true
-            });
-        }
-    }, [defaultHeader])
+        let data = viewHeaderList.filter(r => r.id === defaultHeader.orderHeaderId)[0];
+
+        dispatchViewHeader({
+            type: 'INIT_DATA',
+            payload: data
+        });
+    }, [defaultHeader, viewHeaderList])
 
     useEffect(() => {
         let subscribes = [];
@@ -582,15 +533,6 @@ const OrderComponent = (props) => {
         onActionOpenBackdrop();
         await __reqCreateViewHeaderOneSocket(body);
         await __reqSearchViewHeaderList();
-        navigate({
-            pathname: pathname,
-            search: `?${qs.stringify({
-                ...query,
-                headerId: body.id
-            })}`
-        }, {
-            replace: true
-        })
         onActionCloseBackdrop();
     }
 
@@ -606,16 +548,6 @@ const OrderComponent = (props) => {
         onActionOpenBackdrop();
         await __reqDeleteSelectedViewHeader(headerId);
         await __reqSearchViewHeaderList();
-        
-        delete query.headerId;
-        navigate({
-            pathname,
-            search: `?${qs.stringify({
-                ...query
-            })}`
-        }, {
-            replace: true
-        });
         onActionCloseBackdrop();
     }
 
@@ -628,17 +560,26 @@ const OrderComponent = (props) => {
         setDefaultHeader(data);
     }
 
-    // 뷰 헤더 선택 해제
-    const _onAction_resetSelectedViewHeader = () => {
-        dispatchViewHeader({
-            type: 'INIT_DATA'
-        })
+    const _onAction_changeSelectedViewHeader = (headerId) => {
+        let data = viewHeaderList.filter(r => r.id === headerId)[0];
+
+        if(data) {
+            dispatchViewHeader({
+                type: 'INIT_DATA',
+                payload: data
+            })
+        } else {
+            dispatchViewHeader({
+                type: 'CLEAR'
+            })
+        }
     }
 
     return (
         <>
             {connected &&
                 <Container>
+                    {console.log(viewHeader)}
                     <HeaderComponent
                         _onAction_openHeaderSettingModal={_onAction_openHeaderSettingModal}
                     ></HeaderComponent>
@@ -702,7 +643,7 @@ const OrderComponent = (props) => {
                     _onAction_deleteSelectedViewHeader={_onAction_deleteSelectedViewHeader}
 
                     _onAction_updateDefaultHeader={_onAction_updateDefaultHeader}
-                    _onAction_resetSelectedViewHeader={_onAction_resetSelectedViewHeader}
+                    _onAction_changeSelectedViewHeader={_onAction_changeSelectedViewHeader}
                 ></ViewHeaderSettingModalComponent>
             </CommonModalComponent>
 
