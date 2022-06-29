@@ -359,32 +359,6 @@ const SalesComponent = (props) => {
             })
     }
 
-    const __reqChangeDefaultHeader = async (params) => {
-        await userErpDefaultHeaderDataConnect().patchOne(params)
-            .catch(err => {
-                let res = err.response;
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data.memo);
-            })
-    }
-
-    const __reqCreateDefaultHeader = async (params) => {
-        await userErpDefaultHeaderDataConnect().createOne(params)
-            .catch(err => {
-                let res = err.response;
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data.memo);
-            })
-    }
-
     useEffect(() => {
         __reqSearchViewHeaderList();
         __reqSearchProductOptionList();
@@ -807,7 +781,6 @@ const initialOrderItemPage = null;
 const initialCheckedOrderItemList = [];
 const initialDownloadExcelList = null;
 const initialViewHeaderList = null;
-const initialErpDefaultHeader = null;
 
 const viewHeaderReducer = (state, action) => {
     switch (action.type) {
@@ -824,16 +797,6 @@ const viewHeaderListReducer = (state, action) => {
         case 'INIT_DATA':
             return action.payload;
         default: return null;
-    }
-}
-
-const erpDefaultHeaderReducer = (state, action) => {
-    switch (action.type) {
-        case 'INIT_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialErpDefaultHeader;
-        default: return initialErpDefaultHeader;
     }
 }
 
