@@ -3,7 +3,7 @@ import qs from 'query-string';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonModalComponent from '../../../module/modal/CommonModalComponent';
-import ViewHeaderSettingModalComponent from './view-header-setting-modal-v4/ViewHeaderSettingModal.component';
+import ViewHeaderSettingModalComponent from './view-header-setting-modal-v3/ViewHeaderSettingModal.component';
 import HeaderComponent from './header/Header.component';
 import { erpReleaseCompleteHeaderDataConnect } from '../../../../data_connect/erpReleaseCompleteHeaderDataConnect';
 import SearchOperatorComponent from './search-operator/SearchOperator.component';

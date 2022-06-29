@@ -24,10 +24,10 @@ export default function SelectorFieldView(props) {
                             >
                                 {props.viewHeaderList?.map((data, idx) => {
                                     return (
-                                        <MenuItem key={'sales_header_title' + idx} value={data.id} sx={{ display: 'flex', padding: '5px 10px', justifyContent: 'space-around', alignItems: 'center' }}>
+                                        <MenuItem key={'order_header_title' + idx} value={data.id} sx={{ display: 'flex', padding: '5px 10px', justifyContent: 'space-around', alignItems: 'center' }}>
                                             <span>{data.headerTitle}</span>
-                                            <span> 
-                                                {props.erpDefaultHeader?.salesHeaderId === data.id ?
+                                            <span>
+                                                {props.defaultHeader?.salesHeaderId === data.id ?
                                                     <img
                                                         src='/assets/icon/bookmark_black_icon.png'
                                                         alt=""

@@ -52,7 +52,7 @@ export default function CreateTableFieldView(props) {
                                         }}
                                     >선택해제</div>
                                 </div>
-                                {props.createHeaderDetails.map((r, index) => {
+                                {props.viewHeaderDetails.map((r, index) => {
                                     return (
                                         <Draggable
                                             key={r.matchedColumnName}

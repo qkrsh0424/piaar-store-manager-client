@@ -78,6 +78,10 @@ const ModalButtonBox = styled.div`
 `;
 
 const thisRouters = [
+    // {
+    //     name: '대시보드',
+    //     pathname: '/erp/management/dashboard'
+    // },
     {
         name: '주문 파일 업로드',
         pathname: '/erp/management/order-upload'
@@ -133,7 +137,7 @@ const ErpManagementNavbar = (props) => {
         }
         setDefaultHeader(data);
 
-    }, [userRdx]);
+    }, []);
 
     return (
         <>

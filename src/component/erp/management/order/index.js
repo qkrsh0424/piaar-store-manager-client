@@ -3,7 +3,7 @@ import qs from 'query-string';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonModalComponent from '../../../module/modal/CommonModalComponent';
-import ViewHeaderSettingModalComponent from './view-header-setting-modal-v4/ViewHeaderSettingModal.component.js';
+import ViewHeaderSettingModalComponent from './view-header-setting-modal-v3/ViewHeaderSettingModal.component.js';
 import HeaderComponent from './header/Header.component';
 import { erpOrderHeaderDataConnect } from '../../../../data_connect/erpOrderHeaderDataConnect';
 import SearchOperatorComponent from './search-operator/SearchOperator.component';
@@ -352,6 +352,7 @@ const OrderComponent = (props) => {
             onActionCloseBackdrop();
         }
 
+        // 현재 선택된 헤더가 없다면 기본헤더로 세팅
         if(!query.headerId && viewHeader) {
             if (defaultHeader.orderHeaderId) {
                 navigate({
@@ -399,6 +400,7 @@ const OrderComponent = (props) => {
             return;
         }
 
+        // 주문수집 기본 헤더가 존재하는 경우, 현재 선택된 헤더가 없다면 기본 뷰 헤더 세팅
         if(!query.headerId) {
             navigate({
                 pathname,
