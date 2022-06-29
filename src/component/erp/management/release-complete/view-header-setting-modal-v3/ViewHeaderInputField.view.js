@@ -1,5 +1,18 @@
 import { ViewHeaderInputFieldWrapper } from "./ViewHeaderSettingModal.styled";
 
+function Button({ element, onClick, style }) {
+    return (
+        <div className="button-box">
+            <button
+                className='button-el'
+                type='button'
+                onClick={() => onClick()}
+                style={style}
+            >{element}</button>
+        </div>
+    );
+}
+
 export default function ViewHeaderInputFieldView(props) {
     return (
         <ViewHeaderInputFieldWrapper>
@@ -10,7 +23,7 @@ export default function ViewHeaderInputFieldView(props) {
                         <input type='text'
                             name='headerTitle'
                             className='input-item'
-                            value={props.createViewHeaderTitle || ''}
+                            value={props.viewHeaderTitle || ''}
                             onChange={props.onChangeInputValue}
                             placeholder='뷰 헤더 이름'
                             required
@@ -18,7 +31,7 @@ export default function ViewHeaderInputFieldView(props) {
                     </div>
                     {props.viewHeader &&
                         <div>
-                            {props.erpDefaultHeader?.releaseCompleteHeaderId === props.viewHeader.id ?
+                            {props.defaultHeader?.releaseCompleteHeaderId === props.viewHeader.id ?
                                 <button
                                     type='button'
                                     className='image-button-el'
@@ -45,6 +58,12 @@ export default function ViewHeaderInputFieldView(props) {
                         </div>
                     }
                 </div>
+            </div>
+            <div>
+                <Button
+                    element={'저장'}
+                    onClick={props.onSubmitViewHeader}
+                ></Button>
             </div>
         </ViewHeaderInputFieldWrapper >
     );

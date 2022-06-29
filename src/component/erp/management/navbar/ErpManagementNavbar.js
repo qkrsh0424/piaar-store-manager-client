@@ -1,7 +1,8 @@
-import { List, ListItem, ListItemText } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
 import CommonModalComponent from '../../../module/modal/CommonModalComponent';
 
 const Container = styled.div`
@@ -55,7 +56,7 @@ const ButtonBox = styled.div`
     }
 
     .button-active{
-        background: #2C73D2 !important;
+        background: var(--piaar-main-color) !important;
         color:white !important;
         font-weight: 600 !important;
     }
@@ -70,13 +71,17 @@ const ModalButtonBox = styled.div`
         font-size: 14px;
     }
     .button-active{
-        background: #2C73D2 !important;
+        background: var(--piaar-main-color) !important;
         color:white !important;
         font-weight: 600 !important;
     }
 `;
 
 const thisRouters = [
+    // {
+    //     name: '대시보드',
+    //     pathname: '/erp/management/dashboard'
+    // },
     {
         name: '주문 파일 업로드',
         pathname: '/erp/management/order-upload'
@@ -98,10 +103,14 @@ const thisRouters = [
         pathname: '/erp/management/excel'
     }
 ]
+
 const ErpManagementNavbar = (props) => {
     const location = useLocation();
 
     const [mobileRouterSelectorOpen, setMobileRouterSelectorOpen] = useState(false);
+
+    const [defaultHeader, setDefaultHeader] = useLocalStorageHook("defaultHeader", null);
+    const userRdx = useSelector(state => state.user);
 
     const _onMobileRouterSelectorOpen = () => {
         setMobileRouterSelectorOpen(true);
@@ -110,6 +119,25 @@ const ErpManagementNavbar = (props) => {
     const _onMobileRouterSelectorClose = () => {
         setMobileRouterSelectorOpen(false);
     }
+
+    useEffect(() => {
+        if(userRdx.isLoading) {
+            return;
+        }
+
+        if (userRdx.userInfo.id === defaultHeader?.userId) {
+            return;
+        }
+
+        let data = {
+            userId: userRdx.userInfo.id,
+            orderHeaderId: '',
+            salesHeaderId: '',
+            releaseCompleteHeaderId: ''
+        }
+        setDefaultHeader(data);
+
+    }, []);
 
     return (
         <>

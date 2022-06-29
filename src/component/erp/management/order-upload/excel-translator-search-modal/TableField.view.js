@@ -25,13 +25,13 @@ export default function TableFieldView(props) {
             <div className='form-header-box'>
                 <div className='form-header-title'>다운로드 엑셀 양식 : <span className='title-name'>{props.selectedExcelTranslator.downloadHeaderTitle || '피아르'}</span></div>
                 <div className="table-box">
-                    <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%', marginBottom: '0', minHeight: '30px' }}>
+                    <table className="table table-sm" style={{ tableLayout: 'fixed', width: '100%', marginBottom: '0', minHeight: '20px' }}>
                         <thead>
                             <tr>
                                 <th><span>헤더명</span></th>
                                 {props.selectedExcelTranslator.downloadHeaderDetail?.details?.map((data, idx) => {
                                     return (
-                                        <th key={'download_header_idx' + idx} className="fixed-header large-cell" scope="col">
+                                        <th key={'download_header_idx' + idx} className="fixed-header" scope="col">
                                             <span>{idx + 1}. </span><span>{data.headerName}</span>
                                         </th>
                                     )
@@ -39,7 +39,7 @@ export default function TableFieldView(props) {
                                 {!props.selectedExcelTranslator &&
                                     props.allowedFields?.map((defaultDetail, idx) => {
                                         return (
-                                            <th key={'default_header_idx' + idx} className="fixed-header large-cell" scope="col">
+                                            <th key={'default_header_idx' + idx} className="fixed-header" scope="col">
                                                 <span>{defaultDetail.originCellName}</span>
                                             </th>
                                         )
@@ -54,7 +54,7 @@ export default function TableFieldView(props) {
                                     return (
                                         <>
                                             {parseInt(downloadHeader.targetCellNumber) !== -1 &&
-                                                <td key={'download_header_detail_idx' + idx} className="large-cell" scope="col">
+                                                <td key={'download_header_detail_idx' + idx} scope="col">
                                                     {props.selectedExcelTranslator.uploadHeaderDetail.details.map((uploadHeader) => {
                                                         if (uploadHeader.cellNumber === downloadHeader.targetCellNumber) {
                                                             return (
@@ -67,7 +67,7 @@ export default function TableFieldView(props) {
                                                 </td>
                                             }
                                             {parseInt(downloadHeader.targetCellNumber) === -1 &&
-                                                <td key={'download_header_detail_idx' + idx} className="large-cell" scope="col">
+                                                <td key={'download_header_detail_idx' + idx} scope="col">
                                                     <span style={{color: '#f00'}}>고정값 : </span> <span>{downloadHeader.fixedValue}</span>
                                                 </td>
                                             }

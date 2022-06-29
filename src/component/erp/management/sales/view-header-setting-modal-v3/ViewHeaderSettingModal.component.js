@@ -17,30 +17,17 @@ import ViewHeaderInputFieldView from "./ViewHeaderInputField.view";
 
 const defaultHeaderDetails = getDefaultHeaderDetails();
 
-function Button({ element, onClick, style }) {
-    return (
-        <div className="button-box">
-            <button
-                className='button-el'
-                type='button'
-                onClick={() => onClick()}
-                style={style}
-            >{element}</button>
-        </div>
-    );
-}
-
 const ViewHeaderSettingModalComponent = (props) => {
     const location = useLocation();
     const navigate = useNavigate();
     let pathname = location.pathname;
     const query = qs.parse(location.search);
 
-    const [createHeaderDetails, dispatchCreateHeaderDetails] = useReducer(createHeaderDetailsReducer, initialCreateHeaderDetails);
     const [viewHeader, dispatchViewHeader] = useReducer(viewHeaderReducer, initialViewHeader);      // 선택된 헤더
     const [createViewHeader, dispatchCreateViewHeader] = useReducer(createViewHeaderReducer, initialCreateViewHeader);      // 새로 생성하는 헤더
-    const [createViewHeaderTitle, dispatchCreateViewHeaderTitle] = useReducer(createViewHeaderTitleReducer, initialCreateViewHeaderTitle);      // 새로 생성하는 헤더의 타이틀
-    
+    const [viewHeaderTitle, dispatchViewHeaderTitle] = useReducer(viewHeaderTitleReducer, initialViewHeaderTitle);      // 생성 or 수정하려는 header title
+    const [viewHeaderDetails, dispatchViewHeaderDetails] = useReducer(viewHeaderDetailsReducer, initialViewHeaderDetails);      // 생성 or 수정하려는 header detail
+
     useEffect(() => {
         if (!props.viewHeader) {
             dispatchViewHeader({
@@ -58,20 +45,20 @@ const ViewHeaderSettingModalComponent = (props) => {
     // 이미 존재하는 뷰 헤더 컨트롤 시
     useEffect(() => {
         if(!viewHeader) {
-            dispatchCreateHeaderDetails({
+            dispatchViewHeaderDetails({
                 type: 'CLEAR'
             })
-            dispatchCreateViewHeaderTitle({
+            dispatchViewHeaderTitle({
                 type: 'CLEAR'
             })
             return;
         }
 
-        dispatchCreateHeaderDetails({
+        dispatchViewHeaderDetails({
             type: 'SET_DATA',
             payload: viewHeader.headerDetail.details
         })
-        dispatchCreateViewHeaderTitle({
+        dispatchViewHeaderTitle({
             type: 'SET_DATA',
             payload: viewHeader.headerTitle
         })
@@ -80,20 +67,14 @@ const ViewHeaderSettingModalComponent = (props) => {
     // 새로 생성하는 뷰 헤더 컨트롤 시
     useEffect(() => {
         if(!createViewHeader) {
-            // dispatchCreateHeaderDetails({
-            //     type: 'CLEAR'
-            // })
-            // dispatchCreateViewHeaderTitle({
-            //     type: 'CLEAR'
-            // })
             return;
         }
 
-        dispatchCreateHeaderDetails({
+        dispatchViewHeaderDetails({
             type: 'SET_DATA',
             payload: createViewHeader.headerDetail.details
         })
-        dispatchCreateViewHeaderTitle({
+        dispatchViewHeaderTitle({
             type: 'SET_DATA',
             payload: createViewHeader.headerTitle
         })
@@ -107,7 +88,7 @@ const ViewHeaderSettingModalComponent = (props) => {
              */
             saveAndModify: () => {
                 try {
-                    createHeaderDetails.forEach((r, index) => {
+                    viewHeaderDetails.forEach((r, index) => {
                         if(valueUtils.isEmptyValues(r.customCellName)){
                             throw new Error(`순서 [${index+1}] 의 헤더명을 지정해 주세요.`);
                         }
@@ -121,23 +102,23 @@ const ViewHeaderSettingModalComponent = (props) => {
                 if(!createViewHeader){
                     body = {
                         ...viewHeader,
-                        headerTitle: createViewHeaderTitle,
+                        headerTitle: viewHeaderTitle,
                         headerDetail: {
-                            details: createHeaderDetails
+                            details: viewHeaderDetails
                         }
                     }
                     props._onSubmit_modifyViewHeader(body);
                 }else {
-                    if(!createViewHeaderTitle) {
+                    if(!viewHeaderTitle) {
                         alert('뷰 헤더 이름을 먼저 설정해주세요.');
                         return;
                     }
                     body = {
                         ...viewHeader,
                         id: uuidv4(),
-                        headerTitle: createViewHeaderTitle,
+                        headerTitle: viewHeaderTitle,
                         headerDetail: {
-                            details: createHeaderDetails
+                            details: viewHeaderDetails
                         }
                     }
                     props._onSubmit_createViewHeader(body);
@@ -146,42 +127,42 @@ const ViewHeaderSettingModalComponent = (props) => {
         },
         action: {
             sortByDefault: () => {
-                let data = [...createHeaderDetails];
+                let data = [...viewHeaderDetails];
                 data.sort(function (a, b) {
                     return a.cellNumber - b.cellNumber;
                 });
 
-                dispatchCreateHeaderDetails({
+                dispatchViewHeaderDetails({
                     type: 'SET_DATA',
                     payload: data
                 })
             },
             removeOne: (index) => {
-                let data = [...createHeaderDetails];
+                let data = [...viewHeaderDetails];
 
                 data = data.filter((r, rIndex) => rIndex !== index);
 
-                dispatchCreateHeaderDetails({
+                dispatchViewHeaderDetails({
                     type: 'SET_DATA',
                     payload: data
                 });
             },
             checkAll: () => {
                 if (__createHeaderDetails.return.isCheckedAll()) {
-                    dispatchCreateHeaderDetails({
+                    dispatchViewHeaderDetails({
                         type: 'SET_DATA',
                         payload: []
                     })
                 } else {
                     let data = [...defaultHeaderDetails];
-                    dispatchCreateHeaderDetails({
+                    dispatchViewHeaderDetails({
                         type: 'SET_DATA',
                         payload: data
                     })
                 }
             },
             checkOne: (selectedData) => {
-                let data = [...createHeaderDetails];
+                let data = [...viewHeaderDetails];
                 let selectedMatchedColumnName = selectedData.matchedColumnName;
 
                 if (__createHeaderDetails.return.isCheckedOne(selectedMatchedColumnName)) {
@@ -190,7 +171,7 @@ const ViewHeaderSettingModalComponent = (props) => {
                     data.push(selectedData);
                 }
 
-                dispatchCreateHeaderDetails({
+                dispatchViewHeaderDetails({
                     type: 'SET_DATA',
                     payload: data
                 })
@@ -203,12 +184,12 @@ const ViewHeaderSettingModalComponent = (props) => {
                 }
 
                 const newHeaderDetails = valueUtils.reorder(
-                    createHeaderDetails,
+                    viewHeaderDetails,
                     result.source.index,
                     result.destination.index
                 )
 
-                dispatchCreateHeaderDetails({
+                dispatchViewHeaderDetails({
                     type: 'SET_DATA',
                     payload: newHeaderDetails
                 })
@@ -217,7 +198,7 @@ const ViewHeaderSettingModalComponent = (props) => {
                 let name = e.target.name;
                 let value = e.target.value;
 
-                let data = [...createHeaderDetails];
+                let data = [...viewHeaderDetails];
 
                 data = data.map(r => {
                     if (data.indexOf(r) === index) {
@@ -230,7 +211,7 @@ const ViewHeaderSettingModalComponent = (props) => {
                     }
                 })
 
-                dispatchCreateHeaderDetails({
+                dispatchViewHeaderDetails({
                     type: 'SET_DATA',
                     payload: data
                 })
@@ -238,13 +219,13 @@ const ViewHeaderSettingModalComponent = (props) => {
         },
         return: {
             isCheckedAll: () => {
-                if (createHeaderDetails.length <= 0) {
+                if (viewHeaderDetails.length <= 0) {
                     return false;
                 }
-                return defaultHeaderDetails.length === createHeaderDetails.length
+                return defaultHeaderDetails.length === viewHeaderDetails.length
             },
             isCheckedOne: (matchedColumnName) => {
-                return createHeaderDetails.some(r => r.matchedColumnName === matchedColumnName);
+                return viewHeaderDetails.some(r => r.matchedColumnName === matchedColumnName);
             }
         }
     }
@@ -281,6 +262,8 @@ const ViewHeaderSettingModalComponent = (props) => {
                     type: 'INIT_DATA',
                     payload: data
                 })
+
+                props._onAction_resetSelectedViewHeader();
             },
             deleteOne: (e) => {
                 e.preventDefault();
@@ -298,21 +281,12 @@ const ViewHeaderSettingModalComponent = (props) => {
                     });
                 }
             },
-            saveAndModifyDefaultHeader: () => {
+            updateDefaultHeader: () => {
                 let selectedHeaderId = query.headerId;
                 let headerId = props.viewHeaderList.filter(r => r.id === selectedHeaderId)[0].id;
 
                 if (window.confirm('[판매 상태 관리]의 기본 헤더로 설정하시겠습니까?')) {
-                    let params = {
-                        salesHeaderId: headerId
-                    }
-
-                    // user의 기본 헤더 설정 내역이 있다면 change, 없다면 create
-                    if (props.erpDefaultHeader) {
-                        props._onAction_changeDefaultHeader(params);
-                    } else {
-                        props._onAction_createDefaultHeader(params);
-                    }
+                    props._onAction_updateDefaultHeader(headerId);
                 }
             }
         },
@@ -334,7 +308,7 @@ const ViewHeaderSettingModalComponent = (props) => {
             createHeaderValue: (e) => {
                 e.preventDefault();
 
-                dispatchCreateViewHeaderTitle({
+                dispatchViewHeaderTitle({
                     type: 'SET_DATA',
                     payload: e.target.value
                 })
@@ -342,15 +316,15 @@ const ViewHeaderSettingModalComponent = (props) => {
         }
     }
 
-    return (
+    return(
         <>
-            <Container>
-                <HeaderFieldView
+        <Container>
+            <HeaderFieldView
                     onSubmitSaveAndModify={__createHeaderDetails.submit.saveAndModify}
                     onActionCloseModal={props._onAction_closeHeaderSettingModal}
                 ></HeaderFieldView>
                 <SelectorFieldView
-                    erpDefaultHeader={props.erpDefaultHeader}
+                    defaultHeader={props.defaultHeader}
                     viewHeaderList={props.viewHeaderList}
                     viewHeader={viewHeader}
                     createViewHeader={createViewHeader}
@@ -360,15 +334,16 @@ const ViewHeaderSettingModalComponent = (props) => {
                     onActionDeleteSelectedViewHeader={__viewHeader.action.deleteOne}
                     onSubmitSaveAndModifyViewHeader={__createHeaderDetails.submit.saveAndModify}
                 ></SelectorFieldView>
-                {createHeaderDetails &&
+                {viewHeaderDetails &&
                     <>
                         <ViewHeaderInputFieldView
-                            erpDefaultHeader={props.erpDefaultHeader}
+                            defaultHeader={props.defaultHeader}
                             viewHeader={viewHeader}
-                            createViewHeaderTitle={createViewHeaderTitle}
+                            viewHeaderTitle={viewHeaderTitle}
 
                             onChangeInputValue={__viewHeader.change.createHeaderValue}
-                            onActionChangeDefaultHeader={__viewHeader.action.saveAndModifyDefaultHeader}
+                            onActionChangeDefaultHeader={__viewHeader.action.updateDefaultHeader}
+                            onSubmitViewHeader={__createHeaderDetails.submit.saveAndModify}
                         ></ViewHeaderInputFieldView>
                         <InfoTextFieldView
                             element={
@@ -386,10 +361,6 @@ const ViewHeaderSettingModalComponent = (props) => {
 
                                         onChange={() => __createHeaderDetails.action.checkAll()}
                                     ></CustomCheckbox>
-                                    <Button
-                                        element={'저장'}
-                                        onClick={__createHeaderDetails.submit.saveAndModify}
-                                    ></Button>
                                 </>
                             }
                         ></TableOperatorFieldView>
@@ -422,9 +393,9 @@ const ViewHeaderSettingModalComponent = (props) => {
                         </TableOperatorFieldView>
                     </>
                 }
-                {createHeaderDetails &&
+                {viewHeaderDetails &&
                     <CreateTableFieldView
-                        createHeaderDetails={createHeaderDetails}
+                        viewHeaderDetails={viewHeaderDetails}
 
                         onChangeValueOfName={__createHeaderDetails.change.valueOfName}
                         onChangeOrderWithDragAndDrop={__createHeaderDetails.change.orderWithDragAndDrop}
@@ -435,20 +406,21 @@ const ViewHeaderSettingModalComponent = (props) => {
         </>
     );
 }
+
 export default ViewHeaderSettingModalComponent;
 
-const initialCreateHeaderDetails = null;
+const initialViewHeaderDetails = null;
 const initialViewHeader = null;
 const initialCreateViewHeader = null;
-const initialCreateViewHeaderTitle = null;
+const initialViewHeaderTitle = null;
 
-const createHeaderDetailsReducer = (state, action) => {
+const viewHeaderDetailsReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
             return action.payload;
         case 'CLEAR':
-            return initialCreateHeaderDetails;
-        default: return initialCreateHeaderDetails;
+            return initialViewHeaderDetails;
+        default: return initialViewHeaderDetails;
     }
 }
 
@@ -467,13 +439,13 @@ const viewHeaderReducer = (state, action) => {
     }
 }
 
-const createViewHeaderTitleReducer = (state, action) => {
+const viewHeaderTitleReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
             return action.payload;
         case 'CLEAR':
-            return initialCreateViewHeaderTitle;
-        default: return initialCreateViewHeaderTitle;
+            return initialViewHeaderTitle;
+        default: return initialViewHeaderTitle;
     }
 }
 
