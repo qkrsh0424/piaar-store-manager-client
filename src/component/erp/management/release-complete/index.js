@@ -34,8 +34,6 @@ const DEFAULT_HEADER_FIELDS = getDefaultHeaderFields();
 
 const ReleaseCompleteComponent = (props) => {
     const location = useLocation();
-    const navigate = useNavigate();
-    let pathname = location.pathname;
     const query = qs.parse(location.search);
 
     const {
@@ -99,13 +97,6 @@ const ReleaseCompleteComponent = (props) => {
 
     const __reqDeleteSelectedViewHeader = async (headerId) => {
         await erpReleaseCompleteHeaderDataConnect().deleteOne(headerId)
-            .then(res => {
-                if(res.status === 200 && res.data.message == 'success') {
-                    dispatchViewHeader({
-                        type: 'CLEAR'
-                    })
-                }
-            })
             .catch(err => {
                 let res = err.response;
                 if (res?.status === 500) {
@@ -465,65 +456,27 @@ const ReleaseCompleteComponent = (props) => {
             onActionCloseBackdrop();
         }
 
-        if(!query.headerId && viewHeader) {
-            if (defaultHeader.releaseCompleteHeaderId) {
-                navigate({
-                    pathname,
-                    search: `?${qs.stringify({
-                        ...query,
-                        headerId: defaultHeader.releaseCompleteHeaderId
-                    })}`
-                }, {
-                    replace: true
-                });
-            }
-            return;
-        }
-
         fetchInit();
-    }, [location]);
+    }, []);
 
     useEffect(() => {
         if(!viewHeaderList) {
             return;
         }
-        
-        if(!query.headerId) {
+
+        if(!defaultHeader || !defaultHeader.releaseCompleteHeaderId) {
             dispatchViewHeader({
                 type: 'CLEAR'
             })
             return;
         }
 
-        let selectedData = viewHeaderList.filter(r => r.id === query.headerId)[0];
-
+        let data = viewHeaderList.filter(r => r.id === defaultHeader.releaseCompleteHeaderId)[0];
         dispatchViewHeader({
             type: 'INIT_DATA',
-            payload: selectedData
+            payload: data
         });
-    }, [query.headerId, viewHeaderList])
-
-    useEffect(() => {
-        if(!defaultHeader || !defaultHeader.releaseCompleteHeaderId) {
-            return;
-        }
-
-        if(viewHeader) {
-            return;
-        }
-
-        if(!query.headerId) {
-            navigate({
-                pathname,
-                search: `?${qs.stringify({
-                    ...query,
-                    headerId: defaultHeader.releaseCompleteHeaderId
-                })}`
-            }, {
-                replace: true
-            });
-        }
-    }, [defaultHeader])
+    }, [defaultHeader, viewHeaderList])
 
     useEffect(() => {
         let subscribes = [];
@@ -737,15 +690,7 @@ const ReleaseCompleteComponent = (props) => {
         onActionOpenBackdrop();
         await __reqCreateViewHeaderOneSocket(body);
         await __reqSearchViewHeaderList();
-        navigate({
-            pathname: pathname,
-            search: `?${qs.stringify({
-                ...query,
-                headerId: body.id
-            })}`
-        }, {
-            replace: true
-        })
+        _onAction_updateDefaultHeader(body.id);
         onActionCloseBackdrop();
     }
 
@@ -761,33 +706,25 @@ const ReleaseCompleteComponent = (props) => {
         onActionOpenBackdrop();
         await __reqDeleteSelectedViewHeader(headerId);
         await __reqSearchViewHeaderList();
-       
-        delete query.headerId;
-        navigate({
-            pathname,
-            search: `?${qs.stringify({
-                ...query
-            })}`
-        }, {
-            replace: true
-        });
+        _onAction_updateDefaultHeader();
         onActionCloseBackdrop();
     }
 
-    // 기본 헤더 수정. localStorage - defaultHeader값 수정
+    // localStorage 기본 헤더 수정
     const _onAction_updateDefaultHeader = (headerId) => {
+        if(!headerId) {
+            setDefaultHeader({
+                ...defaultHeader,
+                releaseCompleteHeaderId: ''
+            })
+            return;
+        }
+
         let data = {
             ...defaultHeader,
             releaseCompleteHeaderId: headerId
         }
         setDefaultHeader(data);
-    }
-
-    // 뷰 헤더 선택 해제
-    const _onAction_resetSelectedViewHeader = () => {
-        dispatchViewHeader({
-            type: 'INIT_DATA'
-        })
     }
 
     return (
@@ -855,7 +792,6 @@ const ReleaseCompleteComponent = (props) => {
                 <ViewHeaderSettingModalComponent
                     viewHeader={viewHeader}
                     viewHeaderList={viewHeaderList}
-                    defaultHeader={defaultHeader}
 
                     _onSubmit_createViewHeader={_onSubmit_createViewHeader}
                     _onSubmit_modifyViewHeader={_onSubmit_modifyViewHeader}
@@ -863,7 +799,6 @@ const ReleaseCompleteComponent = (props) => {
                     _onAction_deleteSelectedViewHeader={_onAction_deleteSelectedViewHeader}
                     
                     _onAction_updateDefaultHeader={_onAction_updateDefaultHeader}
-                    _onAction_resetSelectedViewHeader={_onAction_resetSelectedViewHeader}
                 ></ViewHeaderSettingModalComponent>
             </CommonModalComponent>
 

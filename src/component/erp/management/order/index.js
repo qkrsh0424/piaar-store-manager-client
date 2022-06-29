@@ -35,9 +35,7 @@ const DEFAULT_HEADER_FIELDS = getDefaultHeaderFields();
 
 const OrderComponent = (props) => {
     const location = useLocation();
-    const navigate = useNavigate();
-    let pathname = location.pathname;
-    const query = qs.parse(location.search);
+    const query = qs.parse(location.search)
 
     const {
         connected,
@@ -347,16 +345,18 @@ const OrderComponent = (props) => {
     }, []);
 
     useEffect(() => {
-        if(!defaultHeader || !defaultHeader.orderHeaderId) {
+        if(!viewHeaderList) {
             return;
         }
 
-        if(!viewHeaderList || viewHeader) {
+        if(!defaultHeader || !defaultHeader.orderHeaderId) {
+            dispatchViewHeader({
+                type: 'CLEAR'
+            })
             return;
         }
 
         let data = viewHeaderList.filter(r => r.id === defaultHeader.orderHeaderId)[0];
-
         dispatchViewHeader({
             type: 'INIT_DATA',
             payload: data
@@ -533,6 +533,7 @@ const OrderComponent = (props) => {
         onActionOpenBackdrop();
         await __reqCreateViewHeaderOneSocket(body);
         await __reqSearchViewHeaderList();
+        _onAction_updateDefaultHeader(body.id);
         onActionCloseBackdrop();
     }
 
@@ -548,11 +549,20 @@ const OrderComponent = (props) => {
         onActionOpenBackdrop();
         await __reqDeleteSelectedViewHeader(headerId);
         await __reqSearchViewHeaderList();
+        _onAction_updateDefaultHeader();
         onActionCloseBackdrop();
     }
 
-    // 기본 헤더 수정. localStorage - defaultHeader값 수정
+    // localStorage 기본 헤더 수정
     const _onAction_updateDefaultHeader = (headerId) => {
+        if(!headerId) {
+            setDefaultHeader({
+                ...defaultHeader,
+                orderHeaderId: ''
+            })
+            return;
+        }
+
         let data = {
             ...defaultHeader,
             orderHeaderId: headerId
@@ -560,26 +570,10 @@ const OrderComponent = (props) => {
         setDefaultHeader(data);
     }
 
-    const _onAction_changeSelectedViewHeader = (headerId) => {
-        let data = viewHeaderList.filter(r => r.id === headerId)[0];
-
-        if(data) {
-            dispatchViewHeader({
-                type: 'INIT_DATA',
-                payload: data
-            })
-        } else {
-            dispatchViewHeader({
-                type: 'CLEAR'
-            })
-        }
-    }
-
     return (
         <>
             {connected &&
                 <Container>
-                    {console.log(viewHeader)}
                     <HeaderComponent
                         _onAction_openHeaderSettingModal={_onAction_openHeaderSettingModal}
                     ></HeaderComponent>
@@ -635,7 +629,6 @@ const OrderComponent = (props) => {
                 <ViewHeaderSettingModalComponent
                     viewHeader={viewHeader}
                     viewHeaderList={viewHeaderList}
-                    defaultHeader={defaultHeader}
 
                     _onSubmit_createViewHeader={_onSubmit_createViewHeader}
                     _onSubmit_modifyViewHeader={_onSubmit_modifyViewHeader}
@@ -643,7 +636,6 @@ const OrderComponent = (props) => {
                     _onAction_deleteSelectedViewHeader={_onAction_deleteSelectedViewHeader}
 
                     _onAction_updateDefaultHeader={_onAction_updateDefaultHeader}
-                    _onAction_changeSelectedViewHeader={_onAction_changeSelectedViewHeader}
                 ></ViewHeaderSettingModalComponent>
             </CommonModalComponent>
 

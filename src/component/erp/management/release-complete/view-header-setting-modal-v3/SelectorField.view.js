@@ -26,15 +26,6 @@ export default function SelectorFieldView(props) {
                                     return (
                                         <MenuItem key={'order_header_title' + idx} value={data.id} sx={{ display: 'flex', padding: '5px 10px', justifyContent: 'space-around', alignItems: 'center' }}>
                                             <span>{data.headerTitle}</span>
-                                            <span>
-                                                {props.defaultHeader?.releaseCompleteHeaderId === data.id ?
-                                                    <img
-                                                        src='/assets/icon/bookmark_black_icon.png'
-                                                        alt=""
-                                                    ></img>
-                                                    :
-                                                    ''}
-                                            </span>
                                         </MenuItem>
                                     )
                                 })}

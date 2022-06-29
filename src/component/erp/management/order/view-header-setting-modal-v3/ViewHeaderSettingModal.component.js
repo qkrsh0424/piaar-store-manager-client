@@ -122,10 +122,6 @@ const ViewHeaderSettingModalComponent = (props) => {
                         }
                     }
                     props._onSubmit_createViewHeader(body);
-                    
-                    dispatchCreateViewHeader({
-                        type: 'CLEAR'
-                    })
                 }
             }
         },
@@ -256,7 +252,7 @@ const ViewHeaderSettingModalComponent = (props) => {
                     payload: data
                 })
 
-                props._onAction_changeSelectedViewHeader();
+                props._onAction_updateDefaultHeader();
             },
             deleteOne: (e) => {
                 e.preventDefault();
@@ -268,14 +264,10 @@ const ViewHeaderSettingModalComponent = (props) => {
 
                 if (window.confirm('선택된 뷰 헤더를 제거하시겠습니까?')) {
                     props._onAction_deleteSelectedViewHeader(viewHeader.id);
-                    props._onAction_changeSelectedViewHeader();
-                }
-            },
-            updateDefaultHeader: () => {
-                let headerId = props.viewHeaderList.filter(r => r.id === viewHeader.id)[0].id;
-
-                if (window.confirm('[주문 수집 관리]의 기본 헤더로 설정하시겠습니까?')) {
-                    props._onAction_updateDefaultHeader(headerId);
+                    
+                    dispatchViewHeader({
+                        type: 'CLEAR'
+                    })
                 }
             }
         },
@@ -283,7 +275,7 @@ const ViewHeaderSettingModalComponent = (props) => {
             selectedHeader: (e) => {
                 e.preventDefault();
                 let headerId = e.target.value;
-                props._onAction_changeSelectedViewHeader(headerId);
+                props._onAction_updateDefaultHeader(headerId);
             },
             createHeaderValue: (e) => {
                 e.preventDefault();
@@ -304,7 +296,6 @@ const ViewHeaderSettingModalComponent = (props) => {
                     onActionCloseModal={props._onAction_closeHeaderSettingModal}
                 ></HeaderFieldView>
                 <SelectorFieldView
-                    defaultHeader={props.defaultHeader}
                     viewHeaderList={props.viewHeaderList}
                     viewHeader={viewHeader}
                     createViewHeader={createViewHeader}
@@ -317,12 +308,10 @@ const ViewHeaderSettingModalComponent = (props) => {
                 {viewHeaderDetails &&
                     <>
                         <ViewHeaderInputFieldView
-                            defaultHeader={props.defaultHeader}
                             viewHeader={viewHeader}
                             viewHeaderTitle={viewHeaderTitle}
 
                             onChangeInputValue={__viewHeader.change.createHeaderValue}
-                            onActionChangeDefaultHeader={__viewHeader.action.updateDefaultHeader}
                             onSubmitViewHeader={__createHeaderDetails.submit.saveAndModify}
                         ></ViewHeaderInputFieldView>
                         <InfoTextFieldView

@@ -18,10 +18,6 @@ import ViewHeaderInputFieldView from "./ViewHeaderInputField.view";
 const defaultHeaderDetails = getDefaultHeaderDetails();
 
 const ViewHeaderSettingModalComponent = (props) => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    let pathname = location.pathname;
-    const query = qs.parse(location.search);
 
     const [viewHeader, dispatchViewHeader] = useReducer(viewHeaderReducer, initialViewHeader);      // 선택된 헤더
     const [createViewHeader, dispatchCreateViewHeader] = useReducer(createViewHeaderReducer, initialCreateViewHeader);      // 새로 생성하는 헤더
@@ -67,6 +63,12 @@ const ViewHeaderSettingModalComponent = (props) => {
     // 새로 생성하는 뷰 헤더 컨트롤 시
     useEffect(() => {
         if(!createViewHeader) {
+            dispatchViewHeaderTitle({
+                type: 'CLEAR'
+            })
+            dispatchViewHeaderDetails({
+                type: 'CLEAR'
+            })
             return;
         }
 
@@ -239,17 +241,6 @@ const ViewHeaderSettingModalComponent = (props) => {
                     type: 'CLEAR'
                 })
 
-                // 선택된 헤더 리셋
-                delete query.headerId;
-                navigate({
-                    pathname,
-                    search: `?${qs.stringify({
-                        ...query
-                    })}`
-                }, {
-                    replace: true
-                });
-
                 let data = {
                     id: uuidv4(),
                     headerTitle: '',
@@ -263,7 +254,7 @@ const ViewHeaderSettingModalComponent = (props) => {
                     payload: data
                 })
 
-                props._onAction_resetSelectedViewHeader();
+                props._onAction_updateDefaultHeader();
             },
             deleteOne: (e) => {
                 e.preventDefault();
@@ -280,30 +271,13 @@ const ViewHeaderSettingModalComponent = (props) => {
                         type: 'CLEAR'
                     });
                 }
-            },
-            updateDefaultHeader: () => {
-                let selectedHeaderId = query.headerId;
-                let headerId = props.viewHeaderList.filter(r => r.id === selectedHeaderId)[0].id;
-
-                if (window.confirm('[판매 상태 관리]의 기본 헤더로 설정하시겠습니까?')) {
-                    props._onAction_updateDefaultHeader(headerId);
-                }
             }
         },
         change: {
             selectedHeader: (e) => {
                 e.preventDefault();
                 let headerId = e.target.value;
-
-                navigate({
-                    pathname: pathname,
-                    search: `?${qs.stringify({
-                        ...query,
-                        headerId: headerId
-                    })}`
-                }, {
-                    replace: true
-                })
+                props._onAction_updateDefaultHeader(headerId);
             },
             createHeaderValue: (e) => {
                 e.preventDefault();
@@ -324,7 +298,6 @@ const ViewHeaderSettingModalComponent = (props) => {
                     onActionCloseModal={props._onAction_closeHeaderSettingModal}
                 ></HeaderFieldView>
                 <SelectorFieldView
-                    defaultHeader={props.defaultHeader}
                     viewHeaderList={props.viewHeaderList}
                     viewHeader={viewHeader}
                     createViewHeader={createViewHeader}
@@ -337,17 +310,15 @@ const ViewHeaderSettingModalComponent = (props) => {
                 {viewHeaderDetails &&
                     <>
                         <ViewHeaderInputFieldView
-                            defaultHeader={props.defaultHeader}
                             viewHeader={viewHeader}
                             viewHeaderTitle={viewHeaderTitle}
 
                             onChangeInputValue={__viewHeader.change.createHeaderValue}
-                            onActionChangeDefaultHeader={__viewHeader.action.updateDefaultHeader}
                             onSubmitViewHeader={__createHeaderDetails.submit.saveAndModify}
                         ></ViewHeaderInputFieldView>
                         <InfoTextFieldView
                             element={
-                                <div>* 주문 현황에서 확인할 데이터 항목을 선택해주세요.</div>
+                                <div>* 판매 현황에서 확인할 데이터 항목을 선택해주세요.</div>
                             }
                         ></InfoTextFieldView>
                         <TableOperatorFieldView

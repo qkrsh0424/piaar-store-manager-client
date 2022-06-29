@@ -29,34 +29,6 @@ export default function ViewHeaderInputFieldView(props) {
                             required
                         />
                     </div>
-                    {props.viewHeader &&
-                        <div>
-                            {props.defaultHeader?.salesHeaderId === props.viewHeader.id ?
-                                <button
-                                    type='button'
-                                    className='image-button-el'
-                                >
-                                    <img
-                                        className='image-button-icon'
-                                        src='/assets/icon/bookmark_black_icon.png'
-                                        alt=""
-                                    ></img>
-                                </button>
-                                :
-                                <button
-                                    type='button'
-                                    className='image-button-el'
-                                    onClick={props.onActionChangeDefaultHeader}
-                                >
-                                    <img
-                                        className='image-button-icon'
-                                        src='/assets/icon/bookmark_icon.png'
-                                        alt=""
-                                    ></img>
-                                </button>
-                            }
-                        </div>
-                    }
                 </div>
             </div>
             <div>
