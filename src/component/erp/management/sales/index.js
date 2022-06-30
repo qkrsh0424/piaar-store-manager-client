@@ -362,7 +362,7 @@ const SalesComponent = (props) => {
         }
         
         fetchInit();
-    }, []);
+    }, [location]);
 
     useEffect(() => {
         if(!viewHeaderList) {

@@ -457,7 +457,7 @@ const ReleaseCompleteComponent = (props) => {
         }
 
         fetchInit();
-    }, []);
+    }, [location]);
 
     useEffect(() => {
         if(!viewHeaderList) {

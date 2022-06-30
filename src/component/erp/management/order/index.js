@@ -342,7 +342,7 @@ const OrderComponent = (props) => {
         }
 
         fetchInit();
-    }, []);
+    }, [location]);
 
     useEffect(() => {
         if(!viewHeaderList) {
