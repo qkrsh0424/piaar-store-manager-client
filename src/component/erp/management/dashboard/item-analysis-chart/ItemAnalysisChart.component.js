@@ -3,12 +3,13 @@ import { useEffect, useReducer } from "react";
 import { Container } from "./ItemAnalysisChart.styled";
 import ChartFieldView from "./ChartField.view";
 import DefaultChartFieldView from "./DefaultChartField.view";
+import _ from "lodash";
 
 const defaultAnalysisColumn = ['totalRevenue', 'totalUnit', 'totalOrder'];
 
 const chartAnalysisColumn = ['salesChannel', 'categoryName', 'prodDefaultName'];
 const chartAnalysisItem = ['orderItemData', 'salesItemData', 'releaseCompleteItemData'];
-const chartBgColor = [ '#b9b4eb', '#b5bcff', '#908cb8']
+const chartBgColor = ['#908CB8', '#B9B4EB', '#F1EDFF']
 
 const ItemAnalysisChartComponent = (props) => {
     const [orderItemData, dispatchOrderItemData] = useReducer(orderItemDataReducer, initialOrderItemData);
@@ -39,7 +40,7 @@ const ItemAnalysisChartComponent = (props) => {
 
         // 도넛 그래프
         chartAnalysisItem.forEach(item => {
-            chartAnalysisColumn.forEach(r => _onAction_createDoughnutGraph(item, r));
+            chartAnalysisColumn.forEach(r => _onAction_createDoughnutGraph2(item, r));
         });
     }, [orderItemData, salesItemData, releaseCompleteItemData])
 
@@ -71,6 +72,8 @@ const ItemAnalysisChartComponent = (props) => {
         let salesAnalysis = 0;
         let releaseCompleteAnalysis = 0;
         let label = '데이터';
+
+        // 매출기준
         if(column === 'totalRevenue') {
             label = '총 매출액';
             orderItemData.forEach(r => {
@@ -82,7 +85,7 @@ const ItemAnalysisChartComponent = (props) => {
                     releaseCompleteAnalysis += parseInt(r.price) + parseInt(r.deliveryCharge);
                 }
             });
-        }else if(column === 'totalUnit') {
+        }else if(column === 'totalUnit') {  // 수량 기준
             label = '총 주문수량';
             orderItemData.forEach(r => {
                 orderAnalysis += parseInt(r.unit);
@@ -93,7 +96,7 @@ const ItemAnalysisChartComponent = (props) => {
                     releaseCompleteAnalysis += parseInt(r.unit);
                 }
             });
-        }else {
+        }else {     // 주문건 기준
             label = '총 주문건';
             orderAnalysis = orderItemData.length;
             salesAnalysis = salesItemData.length;
@@ -149,6 +152,8 @@ const ItemAnalysisChartComponent = (props) => {
             }
         });
 
+        console.log(analysis);
+
         let dataset = [];
         labels.forEach(r => dataset.push(analysis[r] || 0));
 
@@ -167,6 +172,79 @@ const ItemAnalysisChartComponent = (props) => {
                                 data: dataset,
                                 backgroundColor: bgColor,
                                 borderColor: bgColor,
+                                borderWidth: 1
+                            }
+                        ]
+                }
+            }
+        })
+    }
+
+    const _onAction_createDoughnutGraph2 = (itemStatus, column) => {
+        let labels = new Set([]);
+        let analysis = [];
+        let data = [];
+
+        if(itemStatus === 'orderItemData') {
+            data = [...orderItemData];
+        }else if(itemStatus === 'salesItemData') {
+            data = [...salesItemData];
+        }else {
+            data = [...releaseCompleteItemData];
+        }
+
+        data.forEach(r => {
+            let matchName = '';
+            if (!r[column]) {
+                matchName = '기타';
+            } else {
+                matchName = r[column];
+            }
+            labels.add(matchName)
+
+            let data = analysis.filter(r2 => r2.key === matchName)[0];
+
+            if(data) {
+                let result = analysis.map(r2 => {
+                    if (r2.key === matchName) {
+                        return r2 = {
+                            ...r2,
+                            value: parseInt(r2.value) + parseInt(r.price) + parseInt(r.deliveryCharge)
+                        }
+                    }else {
+                        return r2;
+                    }
+                })
+
+                analysis = [...result];
+            } else {
+                let data2 = {
+                    key: matchName,
+                    value: parseInt(r.price) + parseInt(r.deliveryCharge)
+                }
+                analysis.push(data2);
+            }
+        });
+
+        let bestItem = _.sortBy(analysis, 'value').reverse();
+        bestItem = bestItem.slice(0, 3);
+
+        let resultLabels = bestItem.map(r => r.key);
+        let dataset = bestItem.map(r => r.value);
+
+        dispatchDoughnutGraphData({
+            type: 'CHANGE_DATA',
+            payload: {
+                item: itemStatus,
+                name: column,
+                value: {
+                    labels: resultLabels,
+                    datasets:
+                        [
+                            {
+                                data: dataset,
+                                backgroundColor: chartBgColor,
+                                borderColor: chartBgColor,
                                 borderWidth: 1
                             }
                         ]

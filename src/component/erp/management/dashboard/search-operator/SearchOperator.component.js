@@ -15,22 +15,6 @@ const SearchOperatorComponent = (props) => {
     const [endDate, dispatchEndDate] = useReducer(endDateReducer, initialEndDate);
 
     useEffect(() => {
-        if (!(startDate && endDate)) {
-            query.startDate = dateToYYYYMMDD(new Date());
-            query.endDate = dateToYYYYMMDD(new Date());
-        }
-
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
-            query: { ...query }
-        }),
-            {
-                replace: true
-            }
-        )
-    }, [])
-
-    useEffect(() => {
         let startDate = query.startDate;
         let endDate = query.endDate;
         
@@ -103,32 +87,6 @@ const SearchOperatorComponent = (props) => {
                 replace: true
             }
         )
-
-        props._onAction_searchErpOrderItem();
-    }
-
-    const onActionClearRoute = () => {
-        let sDate = dateToYYYYMMDD(new Date());
-        let eDate = dateToYYYYMMDD(new Date());
-
-        query.startDate = sDate;
-        query.endDate = eDate;
-
-        dispatchStartDate({
-            type: 'CLEAR'
-        })
-        dispatchEndDate({
-            type: 'CLEAR'
-        })
-
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
-            query: { ...query }
-        }),
-            {
-                replace: true
-            }
-        )
     }
 
     const onActionSetDateToday = () => {
@@ -184,7 +142,6 @@ const SearchOperatorComponent = (props) => {
                 <form onSubmit={(e) => onActionRouteToSearch(e)}>
                     <ButtonFieldView
                         onActionRouteToSearch={onActionRouteToSearch}
-                        onActionClearRoute={onActionClearRoute}
                     ></ButtonFieldView>
                 </form>
             </Container>
@@ -201,7 +158,7 @@ const startDateReducer = (state, action) => {
         case 'SET_DATA':
             return action.payload;
         case 'CLEAR':
-            return new Date();
+            return initialStartDate;
         default: return new Date();
     }
 }
@@ -211,7 +168,7 @@ const endDateReducer = (state, action) => {
         case 'SET_DATA':
             return action.payload;
         case 'CLEAR':
-            return new Date();
+            return initialEndDate;
         default: return new Date();
     }
 }

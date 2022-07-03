@@ -6,12 +6,10 @@ import { erpOrderItemDataConnect } from "../../../../data_connect/erpOrderItemDa
 import { getDefaultHeaderFields } from "../../../../static-data/staticData";
 import ItemAnalysisChartComponent from "./item-analysis-chart/ItemAnalysisChart.component";
 import SearchOperatorComponent from "./search-operator/SearchOperator.component";
-import { getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 
 const Container = styled.div`
 `;
-
-const DEFAULT_HEADER_FIELDS = getDefaultHeaderFields();
 
 const DashboardComponent = (props) => {
     const location = useLocation();
@@ -19,6 +17,14 @@ const DashboardComponent = (props) => {
     const query = qs.parse(location.search);
 
     const [erpItemAnalysisData, dispatchErpItemAnalysisData] = useReducer(erpItemAnalysisDataReducer, initialErpItemAnalysisData);
+
+    useEffect(() => {
+        async function fetchInit() {
+            await __reqSearchErpOrderItem();
+        }
+
+        fetchInit();
+    }, [location])
 
     const __reqSearchErpOrderItem = async () => {
         let startDate = query.startDate ? getStartDate(query.startDate) : null;
@@ -50,15 +56,10 @@ const DashboardComponent = (props) => {
             })
     }
 
-    const _onAction_searchErpOrderItem = async () => {
-        await __reqSearchErpOrderItem();
-    }
-
     return (
         <>
             <Container>
                 <SearchOperatorComponent
-                    _onAction_searchErpOrderItem={_onAction_searchErpOrderItem}
                 ></SearchOperatorComponent>
 
                 <ItemAnalysisChartComponent
