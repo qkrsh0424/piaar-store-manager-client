@@ -867,22 +867,6 @@ const staticDefaultHeaderDetails2 = [
 
 const staticReleaseListHeaderDetails = [
     {
-        "originCellName": "상품명",
-        "matchedColumnName": "prodName"
-    },
-    {
-        "originCellName": "옵션정보",
-        "matchedColumnName": "optionName"
-    },
-    {
-        "originCellName": "피아르 옵션코드",
-        "matchedColumnName": "optionCode",
-    },
-    {
-        "originCellName": "출고 옵션코드",
-        "matchedColumnName": "releaseOptionCode",
-    },
-    {
         "originCellName": "$피아르 상품명",
         "matchedColumnName": "prodDefaultName"
     },

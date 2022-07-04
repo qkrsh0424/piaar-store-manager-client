@@ -8,19 +8,14 @@ import TitleView from "./Title.view";
 
 const ReleaseListModalComponent = (props) => {
     const [releaseItemList, dispatchReleaseItemList] = useReducer(releaseItemListReducer, initialReleaseItemList);
-    const [releaseUnitMergeYn, setReleaseUnitMergeYn] = useState(false);
+    const [releaseUnitMergeYn, setReleaseUnitMergeYn] = useState(true);
 
     useEffect(() => {
         if(!props.checkedOrderItemList) {
             return;
         }
 
-        let releaseItem = _onSet_releaseItemList(props.checkedOrderItemList)
-        
-        dispatchReleaseItemList({
-            type: 'INIT_DATA',
-            payload: releaseItem
-        })
+        _onAction_combineReleaseItemList();
     }, [props.checkedOrderItemList])
 
     const _onSet_releaseItemList = (data) => {
@@ -33,9 +28,6 @@ const ReleaseListModalComponent = (props) => {
         // 출고 리스트에서 확인할 데이터만 추출
         let releaseInfo = sortedData.map(r => {
             let data = {
-                prodName: r.prodName,
-                optionName: r.optionName,
-                optionCode: r.optionCode,
                 releaseOptionCode: r.releaseOptionCode,
                 prodDefaultName: r.prodDefaultName,
                 optionDefaultName: r.optionDefaultName,
@@ -51,7 +43,9 @@ const ReleaseListModalComponent = (props) => {
     const _onAction_combineReleaseItemList = () => {
         let orderItemList = [];
 
-        props.checkedOrderItemList.forEach(r => {
+        let data = _onSet_releaseItemList(props.checkedOrderItemList);
+
+        data.forEach(r => {
             orderItemList.push({...r})
         });
 
