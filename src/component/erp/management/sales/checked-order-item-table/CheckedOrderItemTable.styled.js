@@ -100,6 +100,15 @@ const TableFieldWrapper = styled.div`
         color: #ff0000;
     }
 
+    .table-box .fixed-col-left {
+        position: sticky;
+        background: white;
+        left: 0;
+        z-index:10;
+        border-right: 1px solid #e0e0e060;
+        box-shadow: 6px 0 10px -7px #e0e0e0;
+    }
+
     .table-box::-webkit-scrollbar{
         background: #e1e1e130;
         height:7px;

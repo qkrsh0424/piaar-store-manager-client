@@ -757,13 +757,6 @@ const ReleaseCompleteComponent = (props) => {
                     _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
                     _onSubmit_downloadOrderItemsExcel={_onSubmit_downloadOrderItemsExcel}
                 />
-                <CheckedOrderItemTableComponent
-                    viewHeader={viewHeader}
-                    checkedOrderItemList={checkedOrderItemList}
-
-                    _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
-                    _onAction_checkOrderItem={_onAction_checkOrderItem}
-                ></CheckedOrderItemTableComponent>
                 <CheckedOperatorComponent
                     viewHeader={viewHeader}
                     checkedOrderItemList={checkedOrderItemList}
@@ -780,6 +773,13 @@ const ReleaseCompleteComponent = (props) => {
                     _onAction_reflectStock={_onAction_reflectStock}
                     _onAction_cancelStock={_onAction_cancelStock}
                 ></CheckedOperatorComponent>
+                <CheckedOrderItemTableComponent
+                    viewHeader={viewHeader}
+                    checkedOrderItemList={checkedOrderItemList}
+
+                    _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
+                    _onAction_checkOrderItem={_onAction_checkOrderItem}
+                ></CheckedOrderItemTableComponent>
             </Container>
 
             {/* Modal */}

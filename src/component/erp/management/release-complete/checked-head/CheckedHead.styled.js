@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Container = styled.div`
-    margin-top: 30px;
+    margin: 30px 0;
 `;
 
 const TitleFieldWrapper = styled.div`

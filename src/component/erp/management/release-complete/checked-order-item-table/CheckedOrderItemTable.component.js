@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, useCallback } from "react";
 import { Container } from "./CheckedOrderItemTable.styled";
 import TableFieldView from "./TableField.view";
 
@@ -55,7 +55,11 @@ const CheckedOrderItemTableComponent = (props) => {
         })
     }, [props.checkedOrderItemList])
 
-    const onActionCheckedOrderItem = (e, orderItem) => {
+    const isCheckedOne = useCallback((id) => {
+        return props.checkedOrderItemList.some(r => r.id === id);
+    }, [props.checkedOrderItemList])
+
+    const onActionCheckOrderItem = (e, orderItem) => {
         e.stopPropagation();
         props._onAction_checkOrderItem(e, orderItem);
     }
@@ -69,8 +73,10 @@ const CheckedOrderItemTableComponent = (props) => {
                         checkedOrderItemList={checkedOrderItemList}
                         viewSize={viewSize}
 
+                        isCheckedOne={isCheckedOne}
+
                         onActionfetchMoreOrderItems={onActionfetchMoreOrderItems}
-                        onActionCheckedOrderItem={onActionCheckedOrderItem}
+                        onActionCheckOrderItem={onActionCheckOrderItem}
                     ></TableFieldView>
                 }
                 {!props.viewHeader &&
