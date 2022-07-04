@@ -5,11 +5,12 @@ import ChartFieldView from "./ChartField.view";
 import DefaultChartFieldView from "./DefaultChartField.view";
 import _ from "lodash";
 
-const defaultAnalysisColumn = ['totalRevenue', 'totalUnit', 'totalOrder'];
+const DEFAULT_CHART_COLUMN = ['totalRevenue', 'totalUnit', 'totalOrder'];
 
-const chartAnalysisColumn = ['salesChannel', 'categoryName', 'prodDefaultName'];
-const chartAnalysisItem = ['orderItemData', 'salesItemData', 'releaseCompleteItemData'];
-const chartBgColor = ['#908CB8', '#B9B4EB', '#F1EDFF']
+const DETAIL_CHART_COLUMN = ['salesChannel', 'categoryName', 'prodDefaultName'];
+const ANALYSIS_ITEM = ['orderItemData', 'salesItemData', 'releaseCompleteItemData'];
+
+const CHART_BG_COLOR = ['#908CB8', '#B9B4EB', '#F1EDFF']
 
 const ItemAnalysisChartComponent = (props) => {
     const [orderItemData, dispatchOrderItemData] = useReducer(orderItemDataReducer, initialOrderItemData);
@@ -34,13 +35,13 @@ const ItemAnalysisChartComponent = (props) => {
         }
         
         // 바 그래프
-        defaultAnalysisColumn.forEach(r => {
+        DEFAULT_CHART_COLUMN.forEach(r => {
             _onAction_createBarGraph(r);
         })
 
         // 도넛 그래프
-        chartAnalysisItem.forEach(item => {
-            chartAnalysisColumn.forEach(r => _onAction_createDoughnutGraph2(item, r));
+        ANALYSIS_ITEM.forEach(item => {
+            DETAIL_CHART_COLUMN.forEach(r => _onAction_createDoughnutGraph2(item, r));
         });
     }, [orderItemData, salesItemData, releaseCompleteItemData])
 
@@ -115,7 +116,7 @@ const ItemAnalysisChartComponent = (props) => {
                         label: label,
                         axis: 'y',
                         data: datasets,
-                        backgroundColor: chartBgColor,
+                        backgroundColor: CHART_BG_COLOR,
                         borderWidth: 1,
                         fill: true
                     }
@@ -125,60 +126,60 @@ const ItemAnalysisChartComponent = (props) => {
         })
     }
 
-    const _onAction_createDoughnutGraph = (itemStatus, column) => {
-        let labels = new Set([]);
-        let analysis = {};
-        let data = [];
+    // const _onAction_createDoughnutGraph = (itemStatus, column) => {
+    //     let labels = new Set([]);
+    //     let analysis = {};
+    //     let data = [];
 
-        if(itemStatus === 'orderItemData') {
-            data = [...orderItemData];
-        }else if(itemStatus === 'salesItemData') {
-            data = [...salesItemData];
-        }else {
-            data = [...releaseCompleteItemData];
-        }
+    //     if(itemStatus === 'orderItemData') {
+    //         data = [...orderItemData];
+    //     }else if(itemStatus === 'salesItemData') {
+    //         data = [...salesItemData];
+    //     }else {
+    //         data = [...releaseCompleteItemData];
+    //     }
 
-        data.forEach(r => {
-            if (!r[column]) {
-                labels.add('기타');
-            } else {
-                labels.add(r[column])
-            }
+    //     data.forEach(r => {
+    //         if (!r[column]) {
+    //             labels.add('기타');
+    //         } else {
+    //             labels.add(r[column])
+    //         }
 
-            let prevRevenue = analysis[r[column]] || 0;
-            analysis = {
-                ...analysis,
-                [r[column]]: prevRevenue + parseInt(r.price) + parseInt(r.deliveryCharge)
-            }
-        });
+    //         let prevRevenue = analysis[r[column]] || 0;
+    //         analysis = {
+    //             ...analysis,
+    //             [r[column]]: prevRevenue + parseInt(r.price) + parseInt(r.deliveryCharge)
+    //         }
+    //     });
 
-        console.log(analysis);
+    //     console.log(analysis);
 
-        let dataset = [];
-        labels.forEach(r => dataset.push(analysis[r] || 0));
+    //     let dataset = [];
+    //     labels.forEach(r => dataset.push(analysis[r] || 0));
 
-        let bgColor = dataset.map(data => `rgba(122, 123, 218, ${Math.random().toFixed(1) ?? 1})`);
+    //     let bgColor = dataset.map(data => `rgba(122, 123, 218, ${Math.random().toFixed(1) ?? 1})`);
 
-        dispatchDoughnutGraphData({
-            type: 'CHANGE_DATA',
-            payload: {
-                item: itemStatus,
-                name: column,
-                value: {
-                    labels: [...labels],
-                    datasets:
-                        [
-                            {
-                                data: dataset,
-                                backgroundColor: bgColor,
-                                borderColor: bgColor,
-                                borderWidth: 1
-                            }
-                        ]
-                }
-            }
-        })
-    }
+    //     dispatchDoughnutGraphData({
+    //         type: 'CHANGE_DATA',
+    //         payload: {
+    //             item: itemStatus,
+    //             name: column,
+    //             value: {
+    //                 labels: [...labels],
+    //                 datasets:
+    //                     [
+    //                         {
+    //                             data: dataset,
+    //                             backgroundColor: bgColor,
+    //                             borderColor: bgColor,
+    //                             borderWidth: 1
+    //                         }
+    //                     ]
+    //             }
+    //         }
+    //     })
+    // }
 
     const _onAction_createDoughnutGraph2 = (itemStatus, column) => {
         let labels = new Set([]);
@@ -243,8 +244,8 @@ const ItemAnalysisChartComponent = (props) => {
                         [
                             {
                                 data: dataset,
-                                backgroundColor: chartBgColor,
-                                borderColor: chartBgColor,
+                                backgroundColor: CHART_BG_COLOR,
+                                borderColor: CHART_BG_COLOR,
                                 borderWidth: 1
                             }
                         ]

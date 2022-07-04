@@ -5,6 +5,34 @@ const Container = styled.div`
     padding-bottom: 100px;
 `;
 
+const DefaultChartFieldWrapper  = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    min-height: 300px;
+    
+    @media screen and (max-width: 992px) {
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    .chart-title {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px;
+    }
+
+    .chart-box {
+        width: 30%;
+        height: 200px;
+
+        @media screen and (max-width: 992px) {
+            width: 85%;
+            height: 150px;
+        }
+    }
+`;
+
 const ChartFieldWrapper = styled.div`
 
     .chart-title {
@@ -20,49 +48,22 @@ const ChartFieldWrapper = styled.div`
     .chart-group {
         display: flex;
         align-items: center;
-        justify-content: space-evenly;
+        justify-content: space-around;
         box-shadow: 1px 1px 10px 3px #e1e2f577;
         border-radius: 10px;
         min-height: 350px;
+        padding: 20px;
+        overflow: auto;
 
         @media screen and (max-width: 992px) {
-            flex-direction: column;
-            overflow: auto;
+            justify-content: flex-start;
         }
-    }
-
-    .chart-box {
-        width: 25%;
-
-        @media screen and (max-width: 992px) {
-            width: 200px;
-        }
-    }
-`;
-
-const DefaultChartFieldWrapper  = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    min-height: 300px;
-
-    @media screen and (max-width: 992px) {
-        flex-direction: column;
-    }
-
-    .chart-title {
-        font-size: 14px;
-        font-weight: 600;
-        padding: 10px;
     }
 
     .chart-box {
         width: 400px;
-        height: 200px;
-
-        @media screen and (max-width: 992px) {
-            width: 250px;
-        }
+        height: 150px;
+        margin-right: 30px;
     }
 `;
 

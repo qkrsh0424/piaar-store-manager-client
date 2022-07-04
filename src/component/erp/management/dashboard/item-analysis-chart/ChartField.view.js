@@ -1,17 +1,28 @@
 import { ChartFieldWrapper } from "./ItemAnalysisChart.styled";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import { createDoughnutGraphOption, createGraphData } from "../../../../../utils/chartUtils";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const analysisItem = ['orderItemData', 'salesItemData', 'releaseCompleteItemData'];
 const analysisColumn = ['salesChannel', 'categoryName', 'prodDefaultName'];
 
+const graphOption = {
+    responsive: true,
+    plugins: {
+        legend: {
+            position: 'right'
+        }
+    },
+    maintainAspectRatio: false
+}
+
 export default function ChartFieldView(props) {
     return (
         <ChartFieldWrapper>
             {props.doughnutGraphData && analysisItem?.map((item, index) => {
-                if (props.doughnutGraphData?.[item])
+                if (props.doughnutGraphData?.[item]) {
                     return (
                         <div key={`erp-chart-group-idx` + index} className='chart-group-wrapper'>
                             <div className='chart-title'>
@@ -22,29 +33,18 @@ export default function ChartFieldView(props) {
                             <div className='chart-group'>
                                 {analysisColumn?.map((column, idx) => {
                                     return (
-                                        <div key={`erp-doughnut-chart-idx` + idx} className="chart-box">
+                                        <div key={`erp-doughnut-chart-idx` + idx} className='chart-box'>
                                             <Doughnut
-                                                data={
-                                                    {
-                                                        labels: props.doughnutGraphData?.[item]?.[column]?.labels,
-                                                        datasets: props.doughnutGraphData?.[item]?.[column]?.datasets
-                                                    }
-                                                }
-                                                options={{
-                                                    responsive: true,
-                                                    plugins: {
-                                                        legend: {
-                                                           position: 'right'
-                                                        }
-                                                     }
-                                                }}
+                                                data={createGraphData(props.doughnutGraphData?.[item]?.[column])}
+                                                options={createDoughnutGraphOption(graphOption)}
                                             />
                                         </div>
-                                    )
+                                )
                                 })}
                             </div>
                         </div>
                     )
+                }
             }
             )}
         </ChartFieldWrapper>

@@ -7,6 +7,7 @@ import { getDefaultHeaderFields } from "../../../../static-data/staticData";
 import ItemAnalysisChartComponent from "./item-analysis-chart/ItemAnalysisChart.component";
 import SearchOperatorComponent from "./search-operator/SearchOperator.component";
 import { dateToYYYYMMDD, getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
+import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 
 const Container = styled.div`
 `;
@@ -18,13 +19,42 @@ const DashboardComponent = (props) => {
 
     const [erpItemAnalysisData, dispatchErpItemAnalysisData] = useReducer(erpItemAnalysisDataReducer, initialErpItemAnalysisData);
 
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop,
+    } = useBackdropHook();
+
+    useEffect(() => {
+        let sDate = dateToYYYYMMDD(new Date());
+        let eDate = dateToYYYYMMDD(new Date());
+
+        query.startDate = sDate;
+        query.endDate = eDate;
+
+        navigate(qs.stringifyUrl({
+            url: location.pathname,
+            query: { ...query }
+        }),
+            {
+                replace: true
+            }
+        )
+    }, [])
+
     useEffect(() => {
         async function fetchInit() {
+            onActionOpenBackdrop();
             await __reqSearchErpOrderItem();
+            onActionCloseBackdrop();
+        }
+
+        if(!location.search) {
+            return;
         }
 
         fetchInit();
-    }, [location])
+    }, [location.search])
 
     const __reqSearchErpOrderItem = async () => {
         let startDate = query.startDate ? getStartDate(query.startDate) : null;
@@ -66,6 +96,11 @@ const DashboardComponent = (props) => {
                     erpItemAnalysisData={erpItemAnalysisData?.content}
                 ></ItemAnalysisChartComponent>
             </Container>
+
+            {/* Backdrop */}
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
         </>
     )
 }
