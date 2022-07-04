@@ -181,7 +181,7 @@ const OrderComponent = (props) => {
             releaseYn: 'n',
         }
 
-        await erpOrderItemDataConnect().refreshList(params)
+        await erpOrderItemDataConnect().refreshOrderList(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchCheckedOrderItemList({
@@ -601,11 +601,6 @@ const OrderComponent = (props) => {
                         _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
                         _onSubmit_downloadOrderItemsExcel={_onSubmit_downloadOrderItemsExcel}
                     />
-                    <CheckedOrderItemTableComponent
-                        viewHeader={viewHeader}
-                        checkedOrderItemList={checkedOrderItemList}
-                        _onAction_checkOrderItem={_onAction_checkOrderItem}
-                    ></CheckedOrderItemTableComponent>
                     <CheckedOperatorComponent
                         viewHeader={viewHeader}
                         checkedOrderItemList={checkedOrderItemList}
@@ -616,6 +611,11 @@ const OrderComponent = (props) => {
                         _onSubmit_deleteOrderItemList={_onSubmit_deleteOrderItemList}
                         _onSubmit_changeOptionCodeForOrderItemListInBatch={_onSubmit_changeOptionCodeForOrderItemListInBatch}
                     ></CheckedOperatorComponent>
+                    <CheckedOrderItemTableComponent
+                        viewHeader={viewHeader}
+                        checkedOrderItemList={checkedOrderItemList}
+                        _onAction_checkOrderItem={_onAction_checkOrderItem}
+                    ></CheckedOrderItemTableComponent>
                 </Container>
             }
 

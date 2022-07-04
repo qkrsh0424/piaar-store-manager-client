@@ -865,6 +865,21 @@ const staticDefaultHeaderDetails2 = [
     }
 ];
 
+const staticReleaseListHeaderDetails = [
+    {
+        "originCellName": "$피아르 상품명",
+        "matchedColumnName": "prodDefaultName"
+    },
+    {
+        "originCellName": "$피아르 옵션명",
+        "matchedColumnName": "optionDefaultName",
+    },
+    {
+        "originCellName": "수량",
+        "matchedColumnName": "unit",
+    }
+];
+
 const staticOrderItemDetaultPageSizeElements = [200, 500, 1000];
 
 function getDefaultHeaderDetails() {
@@ -888,6 +903,7 @@ function getDefaultHeaderFields() {
 
 export {
     staticOrderItemDetaultPageSizeElements,
+    staticReleaseListHeaderDetails,
     getDefaultHeaderDetails,
     getDefaultHeaderFields
 }

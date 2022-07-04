@@ -14,14 +14,30 @@ const erpOrderItemDataConnect = () => {
                 withCredentials: true
             })
         },
+        searchAll: async function (params) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/erp-order-items`, {
+                params: params,
+                withCredentials: true
+            })
+        },
         searchList: async function (params) {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/search`, {
                 params: params,
                 withCredentials: true
             })
         },
-        refreshList: async function (params) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/action-refresh`, params, {
+        refreshOrderList: async function (params) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/target:order/action-refresh`, params, {
+                withCredentials: true
+            })
+        },
+        refreshSalesList: async function (params) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/target:sales/action-refresh`, params, {
+                withCredentials: true
+            })
+        },
+        refreshReleaseList: async function (params) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/target:release/action-refresh`, params, {
                 withCredentials: true
             })
         },
@@ -57,7 +73,7 @@ const erpOrderItemDataConnect = () => {
             })
         },
         changeReleaseOptionCodeForListInBatch: async function (body) {
-            return await axios.patch(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/batch/release-option-code`, body, {
+            return await axios.patch(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/batch/release-option-code/all`, body, {
                 withCredentials: true
             })
         },
@@ -68,6 +84,12 @@ const erpOrderItemDataConnect = () => {
         },
         changeWaybillForList: async function (formData) {
             return await axios.patch(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/batch/waybill`, formData, {
+                withCredentials: true
+            })
+        },
+        actionDownloadForDownloadReleaseItems: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/download-release-items/action-download`, body, {
+                responseType: 'blob',
                 withCredentials: true
             })
         }

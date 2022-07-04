@@ -20,7 +20,7 @@ const erpOrderItemSocket = () => {
             })
         },
         changeReleaseOptionCodeForListInBatch: async function (body) {
-            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-order-items/batch/release-option-code`, body, {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-order-items/batch/release-option-code/all`, body, {
                 withCredentials: true
             })
         },

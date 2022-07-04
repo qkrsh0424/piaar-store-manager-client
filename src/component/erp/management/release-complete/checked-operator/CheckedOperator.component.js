@@ -3,6 +3,7 @@ import Ripple from "../../../../module/button/Ripple";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
+import ReleaseListModalComponent from "../release-list-modal/ReleaseListModal.component";
 import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
 import WaybillModalComponent from "../waybill-modal/WaybillModal.component";
 import { Container } from "./CheckedOperator.styled";
@@ -17,6 +18,7 @@ const CheckedOperatorComponent = (props) => {
     const [waybillModalOpen, setWaybillModalOpen] = useState(false);
     const [reflectStockConfirmModalOpen, setReflectStockConfirmModalOpen] = useState(false);
     const [cancelStockConfirmModalOpen, setCancelStockConfirmModalOpen] = useState(false);
+    const [releaseListModalOpen, setReleaseListModalOpen] = useState(false);
 
     const onActionOpenSalesConfirmModal = () => {
         if (props.checkedOrderItemList?.length <= 0) {
@@ -232,6 +234,22 @@ const CheckedOperatorComponent = (props) => {
         onActionCloseCancelStockConfirmModal();
     }
 
+    const onActionOpenReleaseListModal = () => {
+        if(props.checkedOrderItemList?.length <= 0) {
+            alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+        setReleaseListModalOpen(true);
+    }
+
+    const onActionCloseReleaseListModal = () => {
+        setReleaseListModalOpen(false);
+    }
+
+    const onActionDownloadReleaseItemList = (data) => {
+        props._onAction_downloadReleaseItemList(data);
+    }
+
     return (
         <>
             <Container>
@@ -244,6 +262,8 @@ const CheckedOperatorComponent = (props) => {
                     onActionOpenWaybillModal={onActionOpenWaybillModal}
                     onActionOpenReflectStockConfirmModal={onActionOpenReflectStockConfirmModal}
                     onActionOpenCancelStockConfirmModal={onActionOpenCancelStockConfirmModal}
+                    onActionOpenReleaseListModal={onActionOpenReleaseListModal}
+                    onActionCloseReleaseListModal={onActionCloseReleaseListModal}
                 />
             </Container>
 
@@ -332,6 +352,21 @@ const CheckedOperatorComponent = (props) => {
                 onConfirm={onSubmitCancelStock}
                 onClose={onActionCloseCancelStockConfirmModal}
             />
+
+            {/* 출고 리스트 모달 */}
+            <CommonModalComponent
+                open={releaseListModalOpen}
+                maxWidth='lg'
+
+                onClose={onActionCloseReleaseListModal}
+            >
+                <ReleaseListModalComponent
+                    checkedOrderItemList={props.checkedOrderItemList}
+
+                    // onConfirm={(optionCode) => onActionChangeReleaseOptionCode(optionCode)}
+                    onActionDownloadReleaseItemList={onActionDownloadReleaseItemList}
+                ></ReleaseListModalComponent>
+            </CommonModalComponent>
         </>
     );
 }

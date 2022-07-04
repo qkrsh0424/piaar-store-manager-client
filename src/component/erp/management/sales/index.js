@@ -175,7 +175,7 @@ const SalesComponent = (props) => {
             salesYn: 'y',
         }
 
-        await erpOrderItemDataConnect().refreshList(params)
+        await erpOrderItemDataConnect().refreshSalesList(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchCheckedOrderItemList({
@@ -635,11 +635,6 @@ const SalesComponent = (props) => {
                         _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
                         _onSubmit_downloadOrderItemsExcel={_onSubmit_downloadOrderItemsExcel}
                     />
-                    <CheckedOrderItemTableComponent
-                        viewHeader={viewHeader}
-                        checkedOrderItemList={checkedOrderItemList}
-                        _onAction_checkOrderItem={_onAction_checkOrderItem}
-                    ></CheckedOrderItemTableComponent>
                     <CheckedOperatorComponent
                         viewHeader={viewHeader}
                         checkedOrderItemList={checkedOrderItemList}
@@ -654,6 +649,11 @@ const SalesComponent = (props) => {
                         _onSubmit_downloadOrderItemsExcel={_onSubmit_downloadOrderItemsExcel}
                         _onSubmit_changeReleaseYnForOrderItemList={_onSubmit_changeReleaseYnForOrderItemList}
                     ></CheckedOperatorComponent>
+                    <CheckedOrderItemTableComponent
+                        viewHeader={viewHeader}
+                        checkedOrderItemList={checkedOrderItemList}
+                        _onAction_checkOrderItem={_onAction_checkOrderItem}
+                    ></CheckedOrderItemTableComponent>
                 </Container>
             }
 

@@ -12,6 +12,12 @@ export default function TableFieldView(props) {
                 <table cellSpacing="0">
                     <thead>
                         <tr>
+                            <ResizableTh
+                                className="fixed-header"
+                                width={50}
+                            >
+                                선택
+                            </ResizableTh>
                             {props.viewHeader?.headerDetail.details?.map((r, index) => {
                                 return (
                                     <ResizableTh
@@ -30,13 +36,17 @@ export default function TableFieldView(props) {
                         {props.checkedOrderItemList &&
                             <>
                                 {props.checkedOrderItemList?.slice(0, props.viewSize).map((r1, rowIndex) => {
+                                    let checked = props.isCheckedOne(r1.id)
                                     let isOutOfStock = r1.optionStockUnit !== null && r1.optionStockUnit <= 0;
                                     return (
                                         <tr
                                             key={rowIndex}
                                             className={`${isOutOfStock && 'tr-highlight'}`}
-                                            onClick={(e) => props.onActionCheckedOrderItem(e, r1)}
+                                            onClick={(e) => props.onActionCheckOrderItem(e, r1)}
                                         >
+                                            <td style={{ cursor: 'pointer' }}>
+                                                <input type='checkbox' checked={checked} onChange={(e) => props.onActionCheckOrderItem(e, r1)}></input>
+                                            </td>
                                             {props.viewHeader?.headerDetail.details?.map(r2 => {
                                                 let matchedColumnName = r2.matchedColumnName;
                                                 if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt' || matchedColumnName === 'channelOrderDate') {

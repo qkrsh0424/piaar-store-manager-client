@@ -5,6 +5,7 @@ import HeaderFieldView from "./HeaderField.view";
 import InputFieldView from "./InputFieldView";
 import ListFieldView from "./ListField.view";
 import { Container, ListFieldWrapper } from "./ReleaseOptionCodeModal.styled";
+import TableFieldView from "./TableFieldView.view";
 
 const ReleaseOptionCodeModalComponent = (props) => {
     const [selectedProductOption, dispatchSelectedProductOption] = useReducer(selectedProductOptionStateReducer, initialSelectedProductOptionState);
@@ -45,6 +46,9 @@ const ReleaseOptionCodeModalComponent = (props) => {
                 ></HeaderFieldView>
                 {(!confirmModeOpen && props.productOptionList && props.productOptionList?.length > 0) &&
                     <>
+                        <TableFieldView
+                            checkedOrderItemList={props.checkedOrderItemList}
+                        ></TableFieldView>
                         <InputFieldView
                             inputValue={inputValue}
 

@@ -162,6 +162,7 @@ const CheckedOperatorComponent = (props) => {
         props._onSubmit_changeReleaseOptionCodeForOrderItemListInBatch(data);
         onActionCloseReleaseOptionCodeModal();
     }
+
     return (
         <>
             <Container>

@@ -7,7 +7,7 @@ import ViewHeaderSettingModalComponent from './view-header-setting-modal-v3/View
 import HeaderComponent from './header/Header.component';
 import { erpReleaseCompleteHeaderDataConnect } from '../../../../data_connect/erpReleaseCompleteHeaderDataConnect';
 import SearchOperatorComponent from './search-operator/SearchOperator.component';
-import { dateToYYYYMMDDhhmmssFile, getEndDate, getStartDate } from '../../../../utils/dateFormatUtils';
+import { dateToYYYYMMDDhhmmFile, dateToYYYYMMDDhhmmssFile, getEndDate, getStartDate } from '../../../../utils/dateFormatUtils';
 import { erpOrderItemDataConnect } from '../../../../data_connect/erpOrderItemDataConnect';
 import { productOptionDataConnect } from '../../../../data_connect/productOptionDataConnect';
 import OrderItemTableComponent from './order-item-table/OrderItemTable.component';
@@ -182,13 +182,14 @@ const ReleaseCompleteComponent = (props) => {
             releaseYn: 'y',
         }
 
-        await erpOrderItemDataConnect().refreshList(params)
+        await erpOrderItemDataConnect().refreshReleaseList(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchCheckedOrderItemList({
                         type: 'SET_DATA',
                         payload: res.data.data
                     });
+                    console.log(params)
                 }
             })
             .catch(err => {
@@ -441,6 +442,32 @@ const ReleaseCompleteComponent = (props) => {
                 alert(res?.data?.memo);
             })
             ;
+    }
+
+    const __reqActionDownloadReleaseItemList = async (item) => {
+        await erpOrderItemDataConnect().actionDownloadForDownloadReleaseItems(item)
+            .then(res => {
+                // if (res.status === 200 && res.data.message === 'success') {
+                const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
+                const link = document.createElement('a');
+                link.href = url;
+                
+                let date = dateToYYYYMMDDhhmmFile(new Date());
+
+                link.setAttribute('download', date + '출고리스트.xlsx');
+                document.body.appendChild(link);
+                link.click();
+                // }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
     }
 
     useEffect(() => {
@@ -727,6 +754,12 @@ const ReleaseCompleteComponent = (props) => {
         setDefaultHeader(data);
     }
 
+    const _onAction_downloadReleaseItemList = async (data) => {
+        onActionOpenBackdrop();
+        await __reqActionDownloadReleaseItemList(data);
+        onActionCloseBackdrop();
+    }
+
     return (
         <>
             <Container>
@@ -757,13 +790,6 @@ const ReleaseCompleteComponent = (props) => {
                     _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
                     _onSubmit_downloadOrderItemsExcel={_onSubmit_downloadOrderItemsExcel}
                 />
-                <CheckedOrderItemTableComponent
-                    viewHeader={viewHeader}
-                    checkedOrderItemList={checkedOrderItemList}
-
-                    _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
-                    _onAction_checkOrderItem={_onAction_checkOrderItem}
-                ></CheckedOrderItemTableComponent>
                 <CheckedOperatorComponent
                     viewHeader={viewHeader}
                     checkedOrderItemList={checkedOrderItemList}
@@ -779,7 +805,15 @@ const ReleaseCompleteComponent = (props) => {
                     _onSubmit_changeWaybillForOrderItemList={_onSubmit_changeWaybillForOrderItemList}
                     _onAction_reflectStock={_onAction_reflectStock}
                     _onAction_cancelStock={_onAction_cancelStock}
+                    _onAction_downloadReleaseItemList={_onAction_downloadReleaseItemList}
                 ></CheckedOperatorComponent>
+                <CheckedOrderItemTableComponent
+                    viewHeader={viewHeader}
+                    checkedOrderItemList={checkedOrderItemList}
+
+                    _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
+                    _onAction_checkOrderItem={_onAction_checkOrderItem}
+                ></CheckedOrderItemTableComponent>
             </Container>
 
             {/* Modal */}

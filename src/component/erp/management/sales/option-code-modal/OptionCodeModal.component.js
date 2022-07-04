@@ -5,6 +5,7 @@ import HeaderFieldView from "./HeaderField.view";
 import InputFieldView from "./InputFieldView";
 import ListFieldView from "./ListField.view";
 import { Container, ListFieldWrapper } from "./OptionCodeModal.styled";
+import TableFieldView from "./TableFieldView.view";
 
 const OptionCodeModalComponent = (props) => {
     const [selectedProductOption, dispatchSelectedProductOption] = useReducer(selectedProductOptionStateReducer, initialSelectedProductOptionState);
@@ -44,7 +45,10 @@ const OptionCodeModalComponent = (props) => {
                     element={'옵션 코드 변경'}
                 ></HeaderFieldView>
                 {(!confirmModeOpen && props.productOptionList && props.productOptionList?.length > 0) &&
-                    <>
+                    <>  
+                        <TableFieldView
+                            checkedOrderItemList={props.checkedOrderItemList}
+                        ></TableFieldView>
                         <InputFieldView
                             inputValue={inputValue}
 
