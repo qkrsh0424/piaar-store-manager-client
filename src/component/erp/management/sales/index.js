@@ -175,7 +175,7 @@ const SalesComponent = (props) => {
             salesYn: 'y',
         }
 
-        await erpOrderItemDataConnect().refreshList(params)
+        await erpOrderItemDataConnect().refreshSalesList(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchCheckedOrderItemList({

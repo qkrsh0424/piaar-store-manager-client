@@ -181,7 +181,7 @@ const OrderComponent = (props) => {
             releaseYn: 'n',
         }
 
-        await erpOrderItemDataConnect().refreshList(params)
+        await erpOrderItemDataConnect().refreshOrderList(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchCheckedOrderItemList({

@@ -97,7 +97,7 @@ export default function TableFieldView(props) {
                                         </tr>
                                     )
                                 })}
-                                <InfiniteScrollObserver
+                                {/* <InfiniteScrollObserver
                                     elementTagType={'tr'}
                                     totalSize={props.checkedOrderItemList.length}
                                     startOffset={0}
@@ -113,7 +113,7 @@ export default function TableFieldView(props) {
                                             마지막 데이터 입니다.
                                         </td>
                                     }
-                                />
+                                /> */}
                             </>
                         }
                     </tbody>

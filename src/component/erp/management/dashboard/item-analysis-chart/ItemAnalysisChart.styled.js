@@ -24,7 +24,7 @@ const DefaultChartFieldWrapper  = styled.div`
 
     .chart-box {
         width: 30%;
-        height: 200px;
+        height: 180px;
 
         @media screen and (max-width: 992px) {
             width: 85%;
@@ -54,6 +54,7 @@ const ChartFieldWrapper = styled.div`
         min-height: 350px;
         padding: 20px;
         overflow: auto;
+        justify-content: flex-start;
 
         @media screen and (max-width: 992px) {
             justify-content: flex-start;
@@ -61,9 +62,13 @@ const ChartFieldWrapper = styled.div`
     }
 
     .chart-box {
-        width: 400px;
+        width: 30%;
         height: 150px;
         margin-right: 30px;
+
+        @media screen and (max-width: 992px) {
+            width: 500px;
+        }
     }
 `;
 

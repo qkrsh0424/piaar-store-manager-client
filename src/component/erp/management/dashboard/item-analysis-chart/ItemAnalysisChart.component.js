@@ -10,7 +10,7 @@ const DEFAULT_CHART_COLUMN = ['totalRevenue', 'totalUnit', 'totalOrder'];
 const DETAIL_CHART_COLUMN = ['salesChannel', 'categoryName', 'prodDefaultName'];
 const ANALYSIS_ITEM = ['orderItemData', 'salesItemData', 'releaseCompleteItemData'];
 
-const CHART_BG_COLOR = ['#908CB8', '#B9B4EB', '#F1EDFF']
+const CHART_BG_COLOR = ['#908CB8BB', '#B9B4EBBB', '#F1EDFFBB']
 
 const ItemAnalysisChartComponent = (props) => {
     const [orderItemData, dispatchOrderItemData] = useReducer(orderItemDataReducer, initialOrderItemData);
