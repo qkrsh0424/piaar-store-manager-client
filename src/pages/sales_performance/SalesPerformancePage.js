@@ -6,7 +6,7 @@ const Container = styled.div`
 
 `;
 
-const SalesAnalysisPage = (props) => {
+const SalesPerformancePage = (props) => {
     return(
         <>
             <Container>
@@ -17,4 +17,4 @@ const SalesAnalysisPage = (props) => {
     )
 }
 
-export default SalesAnalysisPage;
+export default SalesPerformancePage;

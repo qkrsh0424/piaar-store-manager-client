@@ -1,5 +1,7 @@
 import moment from "moment";
 
+const weekDay = ['일', '월', '화', '수', '목', '금', '토'];
+
 function diffTimeToHHmmss(startDate, endDate) {
     let diffTime = new Date(endDate) - new Date(startDate);
     let tempTime = moment.duration(diffTime);
@@ -129,6 +131,19 @@ function dateToYYYYMMDD(date) {
     return moment(d).format("YYYY-MM-DD");
 }
 
+function dateToYYYYMMDD2(idate) {
+    var date = new Date(idate);
+    return moment(date).format("YYYYMMDD")
+}
+
+function getDayName(idate) {
+    var year = idate.substring(0, 4);
+    var month = idate.substring(4, 6);
+    var date = idate.substring(6, 8);
+    var d = new Date(year, month, date);
+    return weekDay[d.getDay()];
+}
+
 export {
     diffTimeToHHmmss,
     getStartDate,
@@ -141,5 +156,7 @@ export {
     dateToYYMMDD,
     setStartDateOfPeriod,
     getRemainingDateCount,
-    dateToYYYYMMDDhhmmFile
+    dateToYYYYMMDDhhmmFile,
+    dateToYYYYMMDD2,
+    getDayName
 }

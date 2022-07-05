@@ -131,6 +131,7 @@ const HomeBody = () => {
                         <LinkBox>
                             <CustomLink to='/erp/management/order-upload'>피아르 주문 & 출고 관리</CustomLink>
                             <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
+                            <CustomLink to='/sales-performance'>판매 성과</CustomLink>
                         </LinkBox>
                     </GroupBox>
 

@@ -63,6 +63,7 @@ import ErpManagementExcelFormPage from './pages/erp/management/excel/ErpManageme
 import ProductManagePage from './pages/product_manage/ProductManagePage';
 import StockAnalysisPage from './pages/stock_analysis/SalesAnalysisPage';
 import ErpManagementDashboardPage from './pages/erp/management/dashboard/ErpManagementDashboardPage';
+import SalesPerformancePage from './pages/sales_performance/SalesPerformancePage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -183,6 +184,8 @@ function App(props) {
                                 <Route path='/sales-analysis' element={<SalesAnalysisPage />} />
 
                                 <Route path='/stock-analysis' element={<StockAnalysisPage />} />
+
+                                <Route path='/sales-performance' element={<SalesPerformancePage />} />
 
                                 {/* PiaarErpManagement */}
                                 <Route path='/erp/management/dashboard' element={<ErpManagementDashboardPage />} />

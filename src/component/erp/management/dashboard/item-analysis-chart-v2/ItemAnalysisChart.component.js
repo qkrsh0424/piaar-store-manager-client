@@ -26,7 +26,7 @@ const ItemAnalysisChartComponent = (props) => {
             return;
         }
 
-        _onAction_convertAnalysisItem();
+        onActionConvertAnalysisItem();
     }, [props.erpItemAnalysisData]);
 
     useEffect(() => {
@@ -36,16 +36,16 @@ const ItemAnalysisChartComponent = (props) => {
         
         // 바 그래프
         DEFAULT_CHART_COLUMN.forEach(r => {
-            _onAction_createBarGraph(r);
+            onActionCreateBarGraph(r);
         })
 
         // 도넛 그래프
         ANALYSIS_ITEM.forEach(item => {
-            DETAIL_CHART_COLUMN.forEach(r => _onAction_createDoughnutGraph(item, r));
+            DETAIL_CHART_COLUMN.forEach(r => onActionCreateDoughnutGraph(item, r));
         });
     }, [orderItemData, salesItemData, releaseCompleteItemData])
 
-    const _onAction_convertAnalysisItem = () => {
+    const onActionConvertAnalysisItem = () => {
         let data = [ ...props.erpItemAnalysisData ];
         let salesItem = data.filter(r => r.salesYn === 'y');
         let releaseCompleteItem = data.filter(r => r.releaseYn === 'y');
@@ -67,7 +67,7 @@ const ItemAnalysisChartComponent = (props) => {
     }
 
     // 총 매출액, 주문수량, 주문건 바 그래프 데이터 생성
-    const _onAction_createBarGraph = (column) => {
+    const onActionCreateBarGraph = (column) => {
         let orderAnalysis = 0;
         let salesAnalysis = 0;
         let releaseCompleteAnalysis = 0;
@@ -126,7 +126,8 @@ const ItemAnalysisChartComponent = (props) => {
     }
 
     // 주문, 판매, 출고 도넛그래프 데이터 생성
-    const _onAction_createDoughnutGraph = (itemStatus, column) => {
+    const onActionCreateDoughnutGraph = (itemStatus, column) => {
+        // TODO :: labels를 사용안함?. 불필요한 코드 정리하기
         let labels = new Set([]);
         let analysis = [];
         let data = [];
@@ -148,6 +149,7 @@ const ItemAnalysisChartComponent = (props) => {
             }
             labels.add(matchName)
 
+            // TODO :: set has-add로 변경하기
             let matchData = analysis.filter(r2 => r2.key === matchName)[0];
             if(matchData) {
                 let result = analysis.map(r2 => {
