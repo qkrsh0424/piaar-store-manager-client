@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import qs from 'query-string'
 import { erpOrderItemDataConnect } from "../../../../data_connect/erpOrderItemDataConnect";
-import { getDefaultHeaderFields } from "../../../../static-data/staticData";
-import ItemAnalysisChartComponent from "./item-analysis-chart/ItemAnalysisChart.component";
+import ItemAnalysisChartComponent from "./item-analysis-chart-v2/ItemAnalysisChart.component";
 import SearchOperatorComponent from "./search-operator/SearchOperator.component";
 import { dateToYYYYMMDD, getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";

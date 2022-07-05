@@ -356,8 +356,9 @@ const CheckedOperatorComponent = (props) => {
             {/* 출고 리스트 모달 */}
             <CommonModalComponent
                 open={releaseListModalOpen}
-                maxWidth='lg'
-
+                maxWidth={'md'}
+                fullWidth={false}
+                
                 onClose={onActionCloseReleaseListModal}
             >
                 <ReleaseListModalComponent

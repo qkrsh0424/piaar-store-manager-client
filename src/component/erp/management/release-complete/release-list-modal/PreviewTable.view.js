@@ -8,7 +8,7 @@ const Colgroup = ({  }) => {
             <col width={'50px'}></col>
             {staticReleaseListHeaderDetails.map((r, index) => {
                 return (
-                    <col key={index} width={'200px'}></col>
+                    <col key={index} width={'250px'}></col>
                 );
             })}
 

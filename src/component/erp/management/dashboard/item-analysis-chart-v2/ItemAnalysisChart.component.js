@@ -47,9 +47,7 @@ const ItemAnalysisChartComponent = (props) => {
 
     const _onAction_convertAnalysisItem = () => {
         let data = [ ...props.erpItemAnalysisData ];
-
         let salesItem = data.filter(r => r.salesYn === 'y');
-
         let releaseCompleteItem = data.filter(r => r.releaseYn === 'y');
 
         dispatchOrderItemData({
@@ -68,11 +66,12 @@ const ItemAnalysisChartComponent = (props) => {
         })
     }
 
+    // 총 매출액, 주문수량, 주문건 바 그래프 데이터 생성
     const _onAction_createBarGraph = (column) => {
         let orderAnalysis = 0;
         let salesAnalysis = 0;
         let releaseCompleteAnalysis = 0;
-        let label = '데이터';
+        let label = '';
 
         // 매출기준
         if(column === 'totalRevenue') {
@@ -126,6 +125,7 @@ const ItemAnalysisChartComponent = (props) => {
         })
     }
 
+    // 주문, 판매, 출고 도넛그래프 데이터 생성
     const _onAction_createDoughnutGraph = (itemStatus, column) => {
         let labels = new Set([]);
         let analysis = [];
@@ -148,8 +148,8 @@ const ItemAnalysisChartComponent = (props) => {
             }
             labels.add(matchName)
 
-            let data = analysis.filter(r2 => r2.key === matchName)[0];
-            if(data) {
+            let matchData = analysis.filter(r2 => r2.key === matchName)[0];
+            if(matchData) {
                 let result = analysis.map(r2 => {
                     if (r2.key === matchName) {
                         return r2 = {
@@ -163,14 +163,15 @@ const ItemAnalysisChartComponent = (props) => {
 
                 analysis = [...result];
             } else {
-                let data2 = {
+                let newData = {
                     key: matchName,
                     value: parseInt(r.price) + parseInt(r.deliveryCharge)
                 }
-                analysis.push(data2);
+                analysis.push(newData);
             }
         });
 
+        // best3 추출
         let bestItem = _.sortBy(analysis, 'value').reverse();
         bestItem = bestItem.slice(0, 3);
 
@@ -200,16 +201,12 @@ const ItemAnalysisChartComponent = (props) => {
     
     return (
         <Container>
-            {barGraphData &&
-                <DefaultChartFieldView
-                    barGraphData={barGraphData}
-                ></DefaultChartFieldView>
-            }
-            {doughnutGraphData &&
-                <ChartFieldView
-                    doughnutGraphData={doughnutGraphData}
-                ></ChartFieldView>
-            }
+            <DefaultChartFieldView
+                barGraphData={barGraphData}
+            ></DefaultChartFieldView>
+            <ChartFieldView
+                doughnutGraphData={doughnutGraphData}
+            ></ChartFieldView>
         </Container>
     )
 }
