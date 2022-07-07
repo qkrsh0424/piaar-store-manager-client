@@ -95,7 +95,7 @@ function setStartDateOfPeriod(idate, prevYear, prevMonth, prevDay) {
     date.setFullYear(date.getFullYear() + prevYear)
     date.setMonth(date.getMonth() + prevMonth);
     date.setDate(date.getDate() + prevDay);
-    return moment(date);
+    return new Date(moment(date));
 }
 
 function getRemainingDateCount(closingDate) {
@@ -133,15 +133,25 @@ function dateToYYYYMMDD(date) {
 
 function dateToYYYYMMDD2(idate) {
     var date = new Date(idate);
-    return moment(date).format("YYYYMMDD")
+    return moment(date).format("YYYYMMDD");
 }
 
 function getDayName(idate) {
-    var year = idate.substring(0, 4);
-    var month = idate.substring(4, 6);
-    var date = idate.substring(6, 8);
-    var d = new Date(year, month, date);
+    var d = new Date(idate);
     return weekDay[d.getDay()];
+}
+
+function dateToMMDD(idate) {
+    var d = new Date(idate);
+    return moment(d).format("MM.DD")
+}
+
+function getBetweenDay(startDate, endDate) {
+    var sDate = new Date(startDate);
+    var eDate = new Date(endDate);
+
+    var betweenTime = Math.abs(eDate.getTime() - sDate.getTime());
+    return Math.floor(betweenTime / (1000 * 60 * 60 * 24));
 }
 
 export {
@@ -158,5 +168,7 @@ export {
     getRemainingDateCount,
     dateToYYYYMMDDhhmmFile,
     dateToYYYYMMDD2,
-    getDayName
+    getDayName,
+    dateToMMDD,
+    getBetweenDay
 }

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import DrawerNavbarMain from '../../component/nav/DrawerNavbarMain';
-import SalesPerformanceComponent from '../../component/sales_performance';
+import SalesAnalysisComponent from '../../component/sales_analysis';
 
 const Container = styled.div`
 
@@ -11,7 +11,7 @@ const SalesAnalysisPage = (props) => {
         <>
             <Container>
                 <DrawerNavbarMain></DrawerNavbarMain>
-                <SalesPerformanceComponent></SalesPerformanceComponent>
+                <SalesAnalysisComponent></SalesAnalysisComponent>
             </Container>
         </>
     )

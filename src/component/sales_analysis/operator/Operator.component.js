@@ -58,7 +58,7 @@ const OperatorComponent = (props) => {
     }, [searchInputValueState]);
 
     const onActionSelectDataRange = async (year, month, day) => {
-        let startDate = new Date(setStartDateOfPeriod(new Date(), year, month, day));
+        let startDate = setStartDateOfPeriod(new Date(), year, month, day);
         let endDate = new Date();
         let dateInfo = { startDate, endDate };
 

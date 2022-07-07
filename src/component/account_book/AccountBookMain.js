@@ -24,7 +24,7 @@ const AccountBookMain = (props) => {
     const navigate = useNavigate();
 
     let pathname =location.pathname;
-    let query = queryString.parse(window.location.search);
+    let query = queryString.parse(location.search);
 
     const [itemDataList, setItemDataList] = useState(null);
     const [bankTypeList, setBankTypeList] = useState(null);

@@ -27,7 +27,7 @@ export default function ChartFieldView(props) {
         <ChartFieldWrapper>
             <div className='chart-group-wrapper'>
                 <div className='chart-title'>
-                    <span>1. 주문데이터 TOP3</span>
+                    <span>1. 주문데이터 매출 TOP3</span>
                 </div>
                 <div className='chart-group'>
                     {props.doughnutGraphData?.orderItemData &&
@@ -47,7 +47,7 @@ export default function ChartFieldView(props) {
             </div>
             <div>
                 <div className='chart-title'>
-                    <span>2. 판매데이터 TOP3</span>
+                    <span>2. 판매데이터 매출 TOP3</span>
                 </div>
                 <div className='chart-group'>
                     {props.doughnutGraphData?.salesItemData &&
@@ -67,7 +67,7 @@ export default function ChartFieldView(props) {
             </div>
             <div>
                 <div className='chart-title'>
-                    <span>3. 출고데이터 TOP3</span>
+                    <span>3. 출고데이터 매출 TOP3</span>
                 </div>
                 <div className='chart-group'>
                     {props.doughnutGraphData?.releaseCompleteItemData &&

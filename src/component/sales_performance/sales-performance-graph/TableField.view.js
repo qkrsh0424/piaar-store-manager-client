@@ -1,16 +1,16 @@
 import React from "react";
-import { getDayName } from "../../../utils/dateFormatUtils";
+import { dateToMMDD, dateToYYYYMMDD, getDayName } from "../../../utils/dateFormatUtils";
 import { TableFieldWrapper } from "./SalesPerformanceGraph.styled";
 
 const Colgroup = ({  }) => {
     return (
         <colgroup>
-            <col width={'100x'}></col>
-            <col width={'200x'}></col>
-            <col width={'200px'}></col>
-            <col width={'250px'}></col>
-            <col width={'250px'}></col>
-            <col width={'300px'}></col>
+            <col width={'5%'}></col>
+            <col width={'15%'}></col>
+            <col width={'5%'}></col>
+            <col width={'20%'}></col>
+            <col width={'20%'}></col>
+            <col width={'30%'}></col>
         </colgroup>
     );
 }
@@ -34,26 +34,42 @@ const TableBody = ({ tableData }) => {
     return (
         <tbody>
             {tableData.map((r1, r1Index) => {
-                return (
-                    <React.Fragment key={r1Index}>
-                        <tr>
-                            <td>{r1Index + 1}</td>
-                            <td>{r1.key}</td>
-                            <td>{getDayName(r1.key)}</td>
-                            <td>{r1.order}</td>
-                            <td>{r1.unit}</td>
-                            <td>{r1.revenue}</td>
-                        </tr>
-                    </React.Fragment>
-                )
+                if (r1Index === 0) {
+                    return (
+                        <React.Fragment key={r1Index}>
+                            <tr className='first-tr'>
+                                <td>전체</td>
+                                <td>{r1.key}</td>
+                                <td>{r1.key}</td>
+                                <td>{r1.order}건</td>
+                                <td>{r1.unit}개</td>
+                                <td>{r1.revenue?.toLocaleString()}원</td>
+                            </tr>
+                        </React.Fragment>
+                    )
+                } else {
+                    return (
+                        <React.Fragment key={r1Index}>
+                            <tr>
+                                <td>{r1Index}</td>
+                                <td>{dateToYYYYMMDD(r1.key)}</td>
+                                <td>{getDayName(r1.key)}</td>
+                                <td>{r1.order}건</td>
+                                <td>{r1.unit}개</td>
+                                <td>{r1.revenue?.toLocaleString()}원</td>
+                            </tr>
+                        </React.Fragment>
+                    )
+                }
             })}
         </tbody>
     );
 }
 const TableFieldView = (props) => {
     return (
+        props.tableData && 
         <TableFieldWrapper>
-            <table cellSpacing="0">
+            <table cellSpacing="0" width='100%'>
                 <Colgroup></Colgroup>
                 <TableHead></TableHead>
                 <TableBody

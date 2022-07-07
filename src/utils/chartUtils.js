@@ -22,8 +22,19 @@ function createBarGraphOption(option) {
     }
 }
 
+function createStackedBarGraphOption(option) {
+    return {
+        responsive: option.responsive,
+        maintainAspectRatio: option.maintainAspectRatio,
+        indexAxis: option.indexAxis,
+        plugins: option.plugins,
+        scales: option.scales
+    }
+}
+
 export {
     createGraphData,
     createDoughnutGraphOption,
-    createBarGraphOption
+    createBarGraphOption,
+    createStackedBarGraphOption
 }
