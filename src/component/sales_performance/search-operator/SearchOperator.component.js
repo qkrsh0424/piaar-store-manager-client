@@ -6,7 +6,6 @@ import CommonModalComponent from "../../module/modal/CommonModalComponent";
 import DateRangePickerModalComponent from "../date-range-picker-modal/DateRangePickerModal.component";
 import DateSelectorFieldView from "./DateSelectorField.view";
 import { Container } from "./SearchOperator.styled"
-import DropDownFieldView from "./DropDownField.view";
 
 const SearchOperatorComponent = (props) => {
     const location = useLocation();
@@ -15,23 +14,15 @@ const SearchOperatorComponent = (props) => {
 
     const [dateRange, dispatchDateRange] = useReducer(dateRangeReducer, initialDateRange);
     const [dateRangePickerModalOpen, setDateRangePickerModalOpen] = useState(false);
-    const [searchItem, setSearchItem] = useState('total');
 
     useEffect(() => {
         if(dateRange) {
             return;
         }
 
+        // 기본 최근 2주 조회. 이미 조회된 값이 있다면 그 날짜값으로 조회
         let endDate = query.endDate ?? new Date();
         let startDate = query.startDate ?? setStartDateOfPeriod(endDate, 0, 0, -13);
-
-        dispatchDateRange({
-            type: 'SET_DATA',
-            payload: {
-                startDate: startDate,
-                endDate: endDate
-            }
-        });
 
         query.startDate = dateToYYYYMMDD(startDate);
         query.endDate = dateToYYYYMMDD(endDate);
@@ -39,6 +30,14 @@ const SearchOperatorComponent = (props) => {
         navigate({
             pathname: query.pathname,
             search: `?${qs.stringify(query)}`
+        });
+
+        dispatchDateRange({
+            type: 'SET_DATA',
+            payload: {
+                startDate: startDate,
+                endDate: endDate
+            }
         });
     }, []);
 
@@ -51,18 +50,24 @@ const SearchOperatorComponent = (props) => {
     }
 
     const onActionConfirmSelectedDateRange = (date) => {
-        dispatchDateRange({
-            type: 'INIT_DATA',
-            payload: date
-        })
+        let start = date.startDate;
+        let end = date.endDate;
 
-        query.startDate = dateToYYYYMMDD(date.startDate);
-        query.endDate = dateToYYYYMMDD(date.endDate);
+        query.startDate = dateToYYYYMMDD(start);
+        query.endDate = dateToYYYYMMDD(end);
 
         navigate({
             pathname: query.pathname,
             search: `?${qs.stringify(query)}`
         });
+
+        dispatchDateRange({
+            type: 'SET_DATA',
+            payload: {
+                startDate: start,
+                endDate: end
+            }
+        })
 
         onActionCloseDatePickerModal();
     }
@@ -75,27 +80,21 @@ const SearchOperatorComponent = (props) => {
         onActionConfirmSelectedDateRange(dateInfo);
     }
 
-    const onChangeDropDownItem = (e) => {
-        let target = e.target.value;
-        setSearchItem(target);
-        props._onAction_changeSearchItem(target);
+    const onActionChangeAnalysisDateRange = (searchRange) => {
+        props._onAction_changeDateRangeOfAnalysis(searchRange);
     }
 
     return (
         <>
             <Container>
-                <DropDownFieldView
-                    searchItem={searchItem}
-                    onChangeDropDownItem={onChangeDropDownItem}
-                ></DropDownFieldView>
-
                 <DateSelectorFieldView
                     dateRange={dateRange}
+                    analysisDateRange={props.analysisDateRange}
 
                     onActionOpenDatePickerModal={onActionOpenDatePickerModal}
                     onActionSelectDataRange={onActionSelectDataRange}
+                    onActionChangeAnalysisDateRange={onActionChangeAnalysisDateRange}
                 ></DateSelectorFieldView>
-
             </Container>
 
             {/* Modal */}

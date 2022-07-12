@@ -1,8 +1,24 @@
 
 function createGraphData(graph) {
+    // return {
+    //     labels: graph.labels,
+    //     datasets: graph.datasets
+    // }
+    let datasets = graph.datasets?.map(r => {
+        return {
+            type: r.type || 'bar',
+            label: r.label || '',
+            data: r.data || [],
+            fill: r.fill || false,
+            borderColor: r.borderColor || '#eee',
+            backgroundColor: r.backgroundColor || '#eee',
+            tension: r.tension || '0'
+        }
+    });
+
     return {
-        labels: graph.labels,
-        datasets: graph.datasets
+        labels: graph.labels || [],
+        datasets
     }
 }
 
@@ -18,23 +34,23 @@ function createBarGraphOption(option) {
     return {
         responsive: option.responsive,
         indexAxis: option.indexAxis,
-        maintainAspectRatio: option.maintainAspectRatio
-    }
-}
-
-function createStackedBarGraphOption(option) {
-    return {
-        responsive: option.responsive,
         maintainAspectRatio: option.maintainAspectRatio,
-        indexAxis: option.indexAxis,
-        plugins: option.plugins,
-        scales: option.scales
+        interaction: option.interaction,
+        maxBarThickness: option.maxBarThickness || 30,
+        lineTension: option.lineTension || 0.3,
+        borderWidth: option.borderWidth || 2,
+        plugins: {
+            legend: {
+                labels: {
+                    boxWidth: 12,
+                }
+            }
+        }
     }
 }
 
 export {
     createGraphData,
     createDoughnutGraphOption,
-    createBarGraphOption,
-    createStackedBarGraphOption
+    createBarGraphOption
 }

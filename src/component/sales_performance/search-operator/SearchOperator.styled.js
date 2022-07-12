@@ -1,19 +1,15 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-    padding: 2%;
+    padding: 20px;
     border-bottom: 1px solid #ccc;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
 `;
 
 const DateSelectorFieldWrapper = styled.div`
-    padding: 0 20px;
+    padding: 2%;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    align-items: flex-end;
 
     .date-selector-box {
         font-size: 15px;
@@ -38,6 +34,12 @@ const DateSelectorFieldWrapper = styled.div`
     }
 
     .date-control-box {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .flex-box {
         display: flex;
         gap: 5px;
     }
@@ -54,35 +56,26 @@ const DateSelectorFieldWrapper = styled.div`
             border: 1px solid #B9B4EB;
         }
     }
-`;
 
-const DropDownFieldViewWrapper = styled.div`
-    .select-item{
-        width: 300px;
-        height: 35px;
-        padding: 0 10px;
-        margin: 0 10px;
-        border: 1px solid #ccc;
-        border-radius: 0;
-        font-size: 14px;
-        -webkit-appearance: none;
-        -moz-appearance: none; 
-        appearance: none;
-        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+    .analysis-range-btn {
+        padding: 3px 20px;
+        background-color: #aaa;
+        color: white;
+        border: 1px solid #aaa;
+        transition: 0.2s;
 
-        &:focus{
-            outline: none;
+        :hover {
+            background-color: #999;
+            border: 1px solid #999;
         }
+    }
 
-        @media all and (max-width:992px) {
-            margin: 10px 0 0 0;
-            width: 100%;
-        }
+    .selected {
+        background-color: #444 !important;
     }
 `;
 
 export {
     Container,
-    DateSelectorFieldWrapper,
-    DropDownFieldViewWrapper
+    DateSelectorFieldWrapper
 }

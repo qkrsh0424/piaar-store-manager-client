@@ -1,5 +1,5 @@
 import React from "react";
-import { dateToMMDD, dateToYYYYMMDD, getDayName } from "../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getDayName } from "../../../utils/dateFormatUtils";
 import { TableFieldWrapper } from "./SalesPerformanceGraph.styled";
 
 const Colgroup = ({  }) => {
@@ -7,10 +7,11 @@ const Colgroup = ({  }) => {
         <colgroup>
             <col width={'5%'}></col>
             <col width={'15%'}></col>
-            <col width={'5%'}></col>
-            <col width={'20%'}></col>
-            <col width={'20%'}></col>
-            <col width={'30%'}></col>
+            <col width={'7%'}></col>
+            <col width={'15%'}></col>
+            <col width={'15%'}></col>
+            <col width={'15%'}></col>
+            <col width={'25%'}></col>
         </colgroup>
     );
 }
@@ -24,6 +25,7 @@ const TableHead = ({ }) => {
                 <th className="fixed-header" scope="col">요일</th>
                 <th className="fixed-header" scope="col">총 주문건수</th>
                 <th className="fixed-header" scope="col">총 주문수량</th>
+                <th className="fixed-header" scope="col">주문건수 당 주문수량</th>
                 <th className="fixed-header" scope="col">총 매출액</th>
             </tr>
         </thead>
@@ -43,6 +45,7 @@ const TableBody = ({ tableData }) => {
                                 <td>{r1.key}</td>
                                 <td>{r1.order}건</td>
                                 <td>{r1.unit}개</td>
+                                <td>{r1.order ? (r1.unit / r1.order).toFixed(2) : 0}</td>
                                 <td>{r1.revenue?.toLocaleString()}원</td>
                             </tr>
                         </React.Fragment>
@@ -56,6 +59,7 @@ const TableBody = ({ tableData }) => {
                                 <td>{getDayName(r1.key)}</td>
                                 <td>{r1.order}건</td>
                                 <td>{r1.unit}개</td>
+                                <td>{r1.order ? (r1.unit / r1.order).toFixed(2) : 0}</td>
                                 <td>{r1.revenue?.toLocaleString()}원</td>
                             </tr>
                         </React.Fragment>
@@ -67,7 +71,6 @@ const TableBody = ({ tableData }) => {
 }
 const TableFieldView = (props) => {
     return (
-        props.tableData && 
         <TableFieldWrapper>
             <table cellSpacing="0" width='100%'>
                 <Colgroup></Colgroup>

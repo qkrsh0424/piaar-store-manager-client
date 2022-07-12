@@ -1,6 +1,6 @@
 import moment from "moment";
 
-const weekDay = ['일', '월', '화', '수', '목', '금', '토'];
+const weekName = ['일', '월', '화', '수', '목', '금', '토'];
 
 function diffTimeToHHmmss(startDate, endDate) {
     let diffTime = new Date(endDate) - new Date(startDate);
@@ -138,7 +138,7 @@ function dateToYYYYMMDD2(idate) {
 
 function getDayName(idate) {
     var d = new Date(idate);
-    return weekDay[d.getDay()];
+    return weekName[d.getDay()];
 }
 
 function dateToMMDD(idate) {
@@ -146,13 +146,32 @@ function dateToMMDD(idate) {
     return moment(d).format("MM.DD")
 }
 
-function getBetweenDay(startDate, endDate) {
+function getDifferenceBetweenStartDateAndEndDate(startDate, endDate) {
     var sDate = new Date(startDate);
     var eDate = new Date(endDate);
 
     var betweenTime = Math.abs(eDate.getTime() - sDate.getTime());
-    return Math.floor(betweenTime / (1000 * 60 * 60 * 24));
+    return Math.floor(betweenTime / (1000 * 60 * 60 * 24)) + 1;
 }
+
+function dateToYYYYMM(date) {
+    var d = new Date(date);
+    return moment(d).format("YYYY-MM");
+}
+
+function getWeekNumber(date) {
+    let d = new Date(date);
+    var currentDate = d.getDate();
+    var startOfMonth = new Date(d.setDate(1));
+    var weekDay = startOfMonth.getDay();
+    var weekNum = parseInt(((weekDay - 1) + currentDate) / 7) + 1;
+    return weekNum;
+}
+
+function getWeekName() {
+    return weekName;
+}
+
 
 export {
     diffTimeToHHmmss,
@@ -170,5 +189,8 @@ export {
     dateToYYYYMMDD2,
     getDayName,
     dateToMMDD,
-    getBetweenDay
+    getDifferenceBetweenStartDateAndEndDate,
+    dateToYYYYMM,
+    getWeekNumber,
+    getWeekName
 }

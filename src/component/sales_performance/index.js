@@ -8,6 +8,9 @@ import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/use
 import { getEndDate, getStartDate } from '../../utils/dateFormatUtils';
 import SalesPerformanceGraphComponent from './sales-performance-graph/SalesPerformanceGraph.component';
 import SearchOperatorComponent from './search-operator/SearchOperator.component';
+import _ from 'lodash';
+import { productCategoryDataConnect } from '../../data_connect/productCategoryDataConnect';
+import { productDataConnect } from '../../data_connect/productDataConnect';
 
 const Container = styled.div`
 `;
@@ -17,7 +20,9 @@ const SalesPerformanceComponent = (props) => {
     const query = qs.parse(location.search);
 
     const [erpItemData, dispatchErpItemData] = useReducer(erpItemDataReducer, initialErpItemData);
-    const [searchItem, dispatchSearchItem] = useReducer(searchItemReducer, initialSearchItem);
+    const [analysisDateRange, dispatchAnalysisDateRange] = useReducer(analysisDateRangeReducer, initialAnalysisDateRange);
+    const [categoryList, dispatchCategoryList] = useReducer(categoryListReducer, initialCategoryList);
+    const [productList, dispatchProductList] = useReducer(productListReducer, initialProductList);
 
     const {
         open: backdropOpen,
@@ -36,7 +41,18 @@ const SalesPerformanceComponent = (props) => {
             onActionCloseBackdrop();
         }
 
+        async function fetchProduct() {
+            onActionOpenBackdrop();
+            await __reqSearchProductCategory();
+            await __reqSearchProduct();
+            onActionCloseBackdrop();
+        }
+
         fetchInit();
+
+        if(query.searchItem === 'product') {
+            fetchProduct();
+        }
     }, [location.search])
 
     const __reqSearchErpOrderItem = async () => {
@@ -70,22 +86,67 @@ const SalesPerformanceComponent = (props) => {
             })
     }
 
-    const _onAction_changeSearchItem = (item) => {
-        dispatchSearchItem({
+    const __reqSearchProductCategory = async () => {
+        await productCategoryDataConnect().searchList()
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    dispatchCategoryList({
+                        type: 'INIT_DATA',
+                        payload: res.data.data
+                    })
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqSearchProduct = async () => {
+        await productDataConnect().getList()
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    dispatchProductList({
+                        type: 'INIT_DATA',
+                        payload: res.data.data
+                    })
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const _onAction_changeDateRangeOfAnalysis = (range) => {
+        dispatchAnalysisDateRange({
             type: 'INIT_DATA',
-            payload: item
+            payload: range
         })
     }
 
     return (
         <Container>
             <SearchOperatorComponent
-                _onAction_changeSearchItem={_onAction_changeSearchItem}
+                analysisDateRange={analysisDateRange}
+                _onAction_changeDateRangeOfAnalysis={_onAction_changeDateRangeOfAnalysis}
             ></SearchOperatorComponent>
 
             <SalesPerformanceGraphComponent
-                searchItem={searchItem}
                 erpItemData={erpItemData}
+                analysisDateRange={analysisDateRange}
+                categoryList={categoryList}
+                productList={productList}
             ></SalesPerformanceGraphComponent>
 
             {/* Backdrop Loading */}
@@ -99,7 +160,9 @@ const SalesPerformanceComponent = (props) => {
 export default SalesPerformanceComponent;
 
 const initialErpItemData = null;
-const initialSearchItem = 'total';
+const initialAnalysisDateRange = 'date';
+const initialCategoryList = null;
+const initialProductList = null;
 
 const erpItemDataReducer = (state, action) => {
     switch(action.type) {
@@ -112,12 +175,34 @@ const erpItemDataReducer = (state, action) => {
     }
 }
 
-const searchItemReducer = (state, action) => {
+const analysisDateRangeReducer = (state, action) => {
     switch(action.type) {
         case 'INIT_DATA':
             return action.payload;
         case 'CLEAR':
-            return initialSearchItem;
+            return initialAnalysisDateRange;
+        default:
+            return state;
+    }
+}
+
+const categoryListReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialCategoryList;
+        default:
+            return state;
+    }
+}
+
+const productListReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialProductList;
         default:
             return state;
     }

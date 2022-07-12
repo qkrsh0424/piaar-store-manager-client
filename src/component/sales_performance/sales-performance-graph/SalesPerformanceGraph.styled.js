@@ -5,20 +5,75 @@ const Container = styled.div`
     margin-bottom: 100px;
 
     .graph-group {
-        padding-bottom: 5%;
+        padding-bottom: 30px;
     }
 `;
 
 const GraphTitleFieldWrapper = styled.div`
-    padding: 10px 20px;
     font-size: 1.1rem;
     font-weight: 700;
+    padding: 20px 0;
+
+    .title {
+        width: 100%;
+        background-color: #e1e1e1bb;
+        color: #000;
+        text-align: center;
+        padding: 5px 0;
+    }
 `;
 
 const RevenueGraphFieldWrapper = styled.div`
     padding: 20px;
     margin-bottom: 20px;
-    height: 400px;
+    min-height: 300px;
+    
+    .graph-wrapper {
+        height: 400px;
+    }
+
+    .option-graph-wrapper {
+        display: flex;
+        width: 50%;
+        height: 300px;
+    }
+
+    .product-graph-wrapper {
+        display: flex;
+        width: 50%;
+        height: 400px;
+    }
+
+    .info-text {
+        font-size: 14px;
+        color: #444;
+        padding: 10px 5px;
+        font-weight: 700;
+    }
+`;
+
+const DayRevenueGraphFieldWrapper = styled.div`
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    
+    .graph-wrapper {
+        width: 45%;
+        height: 400px;
+    }
+
+    .checkbox-group {
+        display: flex;
+        gap: 15px;
+        padding: 1% 2%;
+        font-weight: 600;
+    }
+
+    .checkbox-input {
+        margin: 5px;
+    }
 `;
 
 const OrderAnalysisGraphFieldWrapper = styled.div`
@@ -84,10 +139,57 @@ const TableFieldWrapper = styled.div`
     }
 `;
 
+const RevenueOperatorFieldViewWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .flex-box {
+        display: flex;
+        align-items: center;
+    }
+
+    .select-item{
+        width: 300px;
+        height: 35px;
+        padding: 0 10px;
+        margin: 0 10px;
+        border: 1px solid #ccc;
+        border-radius: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+
+        &:focus{
+            outline: none;
+        }
+
+        @media all and (max-width:992px) {
+            margin: 10px 0 0 0;
+            width: 100%;
+        }
+    }
+
+    .checkbox-group {
+        display: flex;
+        gap: 15px;
+        padding: 1% 2%;
+        font-weight: 600;
+    }
+
+    .checkbox-input {
+        margin: 5px;
+    }
+`;
+
 export {
     Container,
     RevenueGraphFieldWrapper,
     GraphTitleFieldWrapper,
+    DayRevenueGraphFieldWrapper,
     OrderAnalysisGraphFieldWrapper,
-    TableFieldWrapper
+    TableFieldWrapper,
+    RevenueOperatorFieldViewWrapper
 }

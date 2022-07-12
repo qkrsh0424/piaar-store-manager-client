@@ -1,4 +1,3 @@
-import { SatelliteTwoTone } from "@material-ui/icons";
 import { useEffect, useReducer } from "react";
 import { Container } from "./ItemAnalysisChart.styled";
 import ChartFieldView from "./ChartField.view";
