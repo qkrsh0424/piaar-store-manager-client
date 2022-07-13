@@ -1,4 +1,12 @@
 
+
+function createDashboardGraphData(graph) {
+    return {
+        labels: graph.labels,
+        datasets: graph.datasets
+    }
+}
+
 function createGraphData(graph) {
     // return {
     //     labels: graph.labels,
@@ -12,7 +20,7 @@ function createGraphData(graph) {
             fill: r.fill || false,
             borderColor: r.borderColor || '#eee',
             backgroundColor: r.backgroundColor || '#eee',
-            tension: r.tension || '0'
+            tension: r.tension || 0
         }
     });
 
@@ -50,6 +58,7 @@ function createBarGraphOption(option) {
 }
 
 export {
+    createDashboardGraphData,
     createGraphData,
     createDoughnutGraphOption,
     createBarGraphOption

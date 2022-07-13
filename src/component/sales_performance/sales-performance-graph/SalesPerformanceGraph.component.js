@@ -48,7 +48,6 @@ function GraphTitleField({ element }) {
 const ORDER_GRAPH_BG_COLOR = ['#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
 // 그래프 기본 2가지 색상
 const PIAAR_DEFAUTL_GRAPH_BG_COLOR = ['#B9B4EB', '#908CB8'];
-// const PIAAR_DEFAUTL_GRAPH_BG_COLOR = ['#B9B4EB', '#80A9E1'];
 
 const SalesPerformanceGraphComponent = (props) => {
     const location = useLocation();
@@ -349,7 +348,9 @@ const SalesPerformanceGraphComponent = (props) => {
         
         let idx = 0;
         channel.forEach(r => {
-            let data = {
+            let channelGraphDataset = new GraphDataset().toJSON();
+            channelGraphDataset = {
+                ...channelGraphDataset,
                 type: 'bar',
                 label: r,
                 data: channelRevenue[idx],
@@ -359,7 +360,7 @@ const SalesPerformanceGraphComponent = (props) => {
                 order: 0,
                 tension: 0.1
             }
-            datasets.push(data);
+            datasets.push(channelGraphDataset);
             idx++;
         })
 
@@ -395,7 +396,8 @@ const SalesPerformanceGraphComponent = (props) => {
 
             let idx = 0;
             channel.forEach(r => {
-                let data = {
+                let channelGraphDataset = new GraphDataset().toJSON();
+                channelGraphDataset = {
                     type: 'line',
                     label: '(판매) ' + r,
                     data: channelRevenue[idx],
@@ -404,7 +406,7 @@ const SalesPerformanceGraphComponent = (props) => {
                     backgroundColor: graphColor[idx],
                     order: -1
                 }
-                datasets.push(data);
+                datasets.push(channelGraphDataset);
                 idx++;
             })
         }
@@ -511,7 +513,8 @@ const SalesPerformanceGraphComponent = (props) => {
 
         let idx = 0;
         category.forEach(r => {
-            let data = {
+            let categoryGraphDataset = new GraphDataset().toJSON();
+            categoryGraphDataset = {
                 label: r,
                 data: categoryRevenue[idx],
                 fill: false,
@@ -521,7 +524,7 @@ const SalesPerformanceGraphComponent = (props) => {
                 order: 0,
                 tension: 0.1
             }
-            datasets.push(data);
+            datasets.push(categoryGraphDataset);
             idx++;
         })
 
@@ -557,7 +560,8 @@ const SalesPerformanceGraphComponent = (props) => {
 
             let idx = 0;
             category.forEach(r => {
-                let data = {
+                let categoryGraphDataset = new GraphDataset().toJSON();
+                categoryGraphDataset = {
                     label: '(판매) ' + r,
                     data: categoryRevenue[idx],
                     fill: false,
@@ -566,7 +570,7 @@ const SalesPerformanceGraphComponent = (props) => {
                     type: 'line',
                     order: -1
                 }
-                datasets.push(data);
+                datasets.push(categoryGraphDataset);
                 idx++;
             })
         }

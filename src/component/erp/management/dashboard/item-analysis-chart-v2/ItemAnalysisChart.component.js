@@ -4,6 +4,30 @@ import ChartFieldView from "./ChartField.view";
 import DefaultChartFieldView from "./DefaultChartField.view";
 import _ from "lodash";
 
+class GraphDataset {
+    constructor() {
+        this.type = 'bar';
+        this.label = '';
+        this.data = [];
+        this.fill = false;
+        this.borderColor = '#80A9E1';
+        this.backgroundColor = '#80A9E1';
+        this.tension = '0';
+    }
+
+    toJSON() {
+        return {
+            type: this.type,
+            label: this.label,
+            data: this.data,
+            fill: this.fill,
+            borderColor: this.borderColor,
+            backgroundColor: this.backgroundColor,
+            tension: this.tension
+        }
+    }
+}
+
 const DEFAULT_CHART_COLUMN = ['totalRevenue', 'totalUnit', 'totalOrder'];
 
 const DETAIL_CHART_COLUMN = ['salesChannel', 'categoryName', 'prodDefaultName'];
@@ -65,12 +89,12 @@ const ItemAnalysisChartComponent = (props) => {
         })
     }
 
-    // 총 매출액, 주문수량, 주문건 바 그래프 데이터 생성
     const onActionCreateBarGraph = (column) => {
         let orderAnalysis = 0;
         let salesAnalysis = 0;
         let releaseCompleteAnalysis = 0;
         let label = '';
+        let datasets = [];
 
         // 매출기준
         if(column === 'totalRevenue') {
@@ -102,35 +126,42 @@ const ItemAnalysisChartComponent = (props) => {
             releaseCompleteAnalysis = releaseCompleteItemData.length;
         }
 
-        let datasets = [orderAnalysis, salesAnalysis, releaseCompleteAnalysis];
-        
+        let data = [orderAnalysis, salesAnalysis, releaseCompleteAnalysis];
+
+        let datshboardDataset = new GraphDataset().toJSON();
+        datshboardDataset = {
+            type: 'bar',
+            label: label,
+            data: data,
+            fill: true,
+            backgroundColor: CHART_BG_COLOR,
+            borderColor: CHART_BG_COLOR,
+            order: 0,
+            tension: 0.1,
+            axis: 'y',
+        };
+        datasets.push(datshboardDataset);
+
         dispatchBarGraphData({
             type: 'CHANGE_DATA',
             payload: {
                 name: column,
                 value: {
                     labels: ['주문', '판매', '출고'],
-                    datasets: [{
-                        label: label,
-                        axis: 'y',
-                        data: datasets,
-                        backgroundColor: CHART_BG_COLOR,
-                        borderWidth: 1,
-                        fill: true
-                    }
-                    ]
+                    datasets
                 }
             }
         })
     }
-
+    
     // 주문, 판매, 출고 도넛그래프 데이터 생성
     const onActionCreateDoughnutGraph = (itemStatus, column) => {
-        // TODO :: labels를 사용안함?. 불필요한 코드 정리하기
-        let labels = new Set([]);
         let analysis = [];
         let data = [];
+        let matchColumn = new Set([]);
+        let datasets = [];
 
+        // itemStatus에 대응되는 데이터 사용 (주문/판매/출고)
         if(itemStatus === 'orderItemData') {
             data = [...orderItemData];
         }else if(itemStatus === 'salesItemData') {
@@ -140,44 +171,50 @@ const ItemAnalysisChartComponent = (props) => {
         }
 
         data.forEach(r => {
-            let matchName = '';
-            if (!r[column]) {
-                matchName = '기타';
-            } else {
-                matchName = r[column];
-            }
-            labels.add(matchName)
+            matchColumn.add(r[column] || '미지정');
+        })
 
-            // TODO :: set has-add로 변경하기
-            let matchData = analysis.filter(r2 => r2.key === matchName)[0];
-            if(matchData) {
-                let result = analysis.map(r2 => {
-                    if (r2.key === matchName) {
-                        return r2 = {
-                            ...r2,
-                            value: parseInt(r2.value) + parseInt(r.price) + parseInt(r.deliveryCharge)
-                        }
-                    }else {
-                        return r2;
-                    }
-                })
-
-                analysis = [...result];
-            } else {
-                let newData = {
-                    key: matchName,
-                    value: parseInt(r.price) + parseInt(r.deliveryCharge)
-                }
-                analysis.push(newData);
+        analysis = [...matchColumn].map(r => { 
+            return {
+                key: r,
+                value: 0
             }
         });
+
+        data.forEach(r => {
+            let matchData = r[column] || '미지정';
+            analysis = analysis.map(r2 => {
+                if(r2.key === matchData) {
+                    return {
+                        ...r2,
+                        value: parseInt(r2.value) + parseInt(r.price) + parseInt(r.deliveryCharge)
+                    }
+                }else {
+                    return r2;
+                }
+            })
+        })
 
         // best3 추출
         let bestItem = _.sortBy(analysis, 'value').reverse();
         bestItem = bestItem.slice(0, 3);
 
-        let resultLabels = bestItem.map(r => r.key);
         let dataset = bestItem.map(r => r.value);
+
+        let bestGraphDataset = new GraphDataset().toJSON();
+        bestGraphDataset = {
+            ...bestGraphDataset,
+            type: 'doughnut',
+            label: '주문 매출액',
+            data: dataset,
+            fill: true,
+            borderColor: CHART_BG_COLOR,
+            backgroundColor: CHART_BG_COLOR,
+            tension: 0
+        }
+        datasets.push(bestGraphDataset);
+
+        let labels = bestItem.map(r => r.key);
 
         dispatchDoughnutGraphData({
             type: 'CHANGE_DATA',
@@ -185,21 +222,13 @@ const ItemAnalysisChartComponent = (props) => {
                 item: itemStatus,
                 name: column,
                 value: {
-                    labels: resultLabels,
-                    datasets:
-                        [
-                            {
-                                data: dataset,
-                                backgroundColor: CHART_BG_COLOR,
-                                borderColor: CHART_BG_COLOR,
-                                borderWidth: 1
-                            }
-                        ]
+                    labels,
+                    datasets
                 }
             }
         })
     }
-    
+
     return (
         <Container>
             <DefaultChartFieldView

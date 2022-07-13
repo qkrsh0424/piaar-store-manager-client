@@ -1,8 +1,7 @@
 import { ChartFieldWrapper } from "./ItemAnalysisChart.styled";
-// import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { createDoughnutGraphOption, createGraphData } from "../../../../../utils/chartUtils";
+import { createDashboardGraphData, createDoughnutGraphOption, createGraphData } from "../../../../../utils/chartUtils";
 
 
 const DETAIL_CHART_COLUMN = ['salesChannel', 'categoryName', 'prodDefaultName'];
@@ -16,8 +15,6 @@ const graphOption = {
     },
     maintainAspectRatio: false
 }
-
-// ChartJS.register(ArcElement, Tooltip, Legend);
 
 ChartJS.register(...registerables);
 

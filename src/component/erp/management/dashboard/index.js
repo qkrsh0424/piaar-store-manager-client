@@ -65,7 +65,7 @@ const DashboardComponent = (props) => {
             endDate: endDate,
             periodType: periodType
         }
-        await erpOrderItemDataConnect().searchList(params)
+        await erpOrderItemDataConnect().searchBatch(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchErpItemAnalysisData({
@@ -92,7 +92,7 @@ const DashboardComponent = (props) => {
                 ></SearchOperatorComponent>
 
                 <ItemAnalysisChartComponent
-                    erpItemAnalysisData={erpItemAnalysisData?.content}
+                    erpItemAnalysisData={erpItemAnalysisData}
                 ></ItemAnalysisChartComponent>
             </Container>
 
