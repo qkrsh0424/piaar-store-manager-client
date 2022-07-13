@@ -73,7 +73,7 @@ const SalesPerformanceGraphComponent = (props) => {
             return;
         }
 
-        let item = props.erpItemData.map(r => r.erpOrderItem);
+        let item = props.erpItemData?.map(r => r.erpOrderItem);
         dispatchAnalysisItem({
             type: 'INIT_DATA',
             payload: item
