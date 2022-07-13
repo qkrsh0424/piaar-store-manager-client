@@ -26,6 +26,16 @@ function getEndDate(date) {
     return d;
 }
 
+function getStartDateOfMonth(date) {
+    var d = new Date(date);
+    return new Date(d.getFullYear(), d.getMonth(), 1);
+}
+
+function getEndDateOfMonth(date) {
+    var d = new Date(date);
+    return new Date(d.getFullYear(), d.getMonth() + 1, 0);
+}
+
 // function dateToYYYYMMDD(date) {
 //     var d = new Date(date),
 //         month = '' + (d.getMonth() + 1),
@@ -161,7 +171,7 @@ function dateToYYYYMM(date) {
 
 function getWeekNumber(date) {
     let d = new Date(date);
-    var currentDate = d.getDate();
+    var currentDate = d.getDate()-1;
     var startOfMonth = new Date(d.setDate(1));
     var weekDay = startOfMonth.getDay();
     var weekNum = parseInt(((weekDay - 1) + currentDate) / 7) + 1;
@@ -192,5 +202,7 @@ export {
     getDifferenceBetweenStartDateAndEndDate,
     dateToYYYYMM,
     getWeekNumber,
-    getWeekName
+    getWeekName,
+    getStartDateOfMonth,
+    getEndDateOfMonth
 }

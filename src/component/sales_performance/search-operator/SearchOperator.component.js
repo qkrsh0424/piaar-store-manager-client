@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from 'query-string';
-import { dateToYYYYMMDD, setStartDateOfPeriod } from "../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getEndDateOfMonth, getStartDateOfMonth, setStartDateOfPeriod } from "../../../utils/dateFormatUtils";
 import CommonModalComponent from "../../module/modal/CommonModalComponent";
 import DateRangePickerModalComponent from "../date-range-picker-modal/DateRangePickerModal.component";
 import DateSelectorFieldView from "./DateSelectorField.view";
@@ -79,6 +79,16 @@ const SearchOperatorComponent = (props) => {
 
         onActionConfirmSelectedDateRange(dateInfo);
     }
+    
+    const onActionSearchQuickMonth = (month) => {
+        let date = new Date();
+        let searchMonth = new Date(date.setMonth(date.getMonth() + month));
+        let startDate = getStartDateOfMonth(searchMonth);
+        let endDate = getEndDateOfMonth(searchMonth);
+        let dateInfo = {startDate, endDate};
+        
+        onActionConfirmSelectedDateRange(dateInfo);
+    }
 
     const onActionChangeAnalysisDateRange = (searchRange) => {
         props._onAction_changeDateRangeOfAnalysis(searchRange);
@@ -94,6 +104,7 @@ const SearchOperatorComponent = (props) => {
                     onActionOpenDatePickerModal={onActionOpenDatePickerModal}
                     onActionSelectDataRange={onActionSelectDataRange}
                     onActionChangeAnalysisDateRange={onActionChangeAnalysisDateRange}
+                    onActionSearchQuickMonth={onActionSearchQuickMonth}
                 ></DateSelectorFieldView>
             </Container>
 

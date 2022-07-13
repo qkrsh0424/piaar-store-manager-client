@@ -24,15 +24,19 @@ const OptionRevenueGraphFieldView = (props) => {
                     <div>
                         <span className='info-text'>* 주문 데이터 기준 TOP10</span>
                     </div>
-                    <div className='option-graph-wrapper'>
-                        <Bar
-                            data={createGraphData(props.optionRevenueGraphData?.revenue)}
-                            options={createBarGraphOption(verticalGraphOption)}
-                        />
-                        <Bar
-                            data={createGraphData(props.optionRevenueGraphData?.unit)}
-                            options={createBarGraphOption(verticalGraphOption)}
-                        />
+                    <div className='flex-box'>
+                        <div className='option-graph-wrapper'>
+                            <Bar
+                                data={createGraphData(props.optionRevenueGraphData?.revenue)}
+                                options={createBarGraphOption(verticalGraphOption)}
+                            />
+                        </div>
+                        <div className='option-graph-wrapper'>
+                            <Bar
+                                data={createGraphData(props.optionRevenueGraphData?.unit)}
+                                options={createBarGraphOption(verticalGraphOption)}
+                            />
+                        </div>
                     </div>
                 </>
             }

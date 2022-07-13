@@ -22,7 +22,7 @@ export default function RevenueOperatorFieldView(props) {
                         className='checkbox-input'
                         checked={props.hideSalesGraph}
                         name='sales'
-                        onChange={props.onActionCheckOrderItem}
+                        onChange={props.onActionHideSalesGraph}
                     />
                     <span>판매 데이터 숨기기</span>
                 </div>

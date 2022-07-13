@@ -1,17 +1,5 @@
 
-
-function createDashboardGraphData(graph) {
-    return {
-        labels: graph.labels,
-        datasets: graph.datasets
-    }
-}
-
 function createGraphData(graph) {
-    // return {
-    //     labels: graph.labels,
-    //     datasets: graph.datasets
-    // }
     let datasets = graph.datasets?.map(r => {
         return {
             type: r.type || 'bar',
@@ -20,7 +8,7 @@ function createGraphData(graph) {
             fill: r.fill || false,
             borderColor: r.borderColor || '#eee',
             backgroundColor: r.backgroundColor || '#eee',
-            tension: r.tension || 0
+            order: r.order || 0
         }
     });
 
@@ -58,7 +46,6 @@ function createBarGraphOption(option) {
 }
 
 export {
-    createDashboardGraphData,
     createGraphData,
     createDoughnutGraphOption,
     createBarGraphOption

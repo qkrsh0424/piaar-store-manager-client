@@ -6,7 +6,8 @@ const Container = styled.div`
 `;
 
 const DateSelectorFieldWrapper = styled.div`
-    padding: 2%;
+    padding: 10px;
+    padding-top: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -34,20 +35,25 @@ const DateSelectorFieldWrapper = styled.div`
     }
 
     .date-control-box {
-        width: 100%;
         display: flex;
         justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
     }
 
     .flex-box {
         display: flex;
         gap: 5px;
+        padding: 3px 0;
     }
     
     .date-range-btn {
-        padding: 3px 20px;
+        padding: 4px;
         background-color: var(--piaar-main-color);
         color: white;
+        width: 110px;
+        font-size: 14px;
+        font-weight: 600;
         border: 1px solid var(--piaar-main-color);
         transition: 0.3s;
 
@@ -55,6 +61,16 @@ const DateSelectorFieldWrapper = styled.div`
             background-color: #B9B4EB;
             border: 1px solid #B9B4EB;
         }
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+            font-size: 12px;
+        }
+    }
+
+    .month-select-btn {
+        background-color: #999ad5;
+        border: 1px solid #999ad5;
     }
 
     .analysis-range-btn {

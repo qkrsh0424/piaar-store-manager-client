@@ -66,15 +66,19 @@ const RevenueGraphFieldView = (props) => {
                     <div>
                         <span className='info-text'>* 주문 데이터 기준 TOP15</span>
                     </div>
-                    <div className='product-graph-wrapper'>
-                        <Bar
-                            data={createGraphData(props.revenueGraphData?.revenue)}
-                            options={createBarGraphOption(verticalGraphOption)}
-                        />
-                        <Bar
-                            data={createGraphData(props.revenueGraphData?.unit)}
-                            options={createBarGraphOption(verticalGraphOption)}
-                        />
+                    <div className='flex-box'>
+                        <div className='product-graph-wrapper'>
+                            <Bar
+                                data={createGraphData(props.revenueGraphData?.revenue)}
+                                options={createBarGraphOption(verticalGraphOption)}
+                            />
+                        </div>
+                        <div className='product-graph-wrapper'>
+                            <Bar
+                                data={createGraphData(props.revenueGraphData?.unit)}
+                                options={createBarGraphOption(verticalGraphOption)}
+                            />
+                        </div>
                     </div>
                 </>
             }

@@ -36,12 +36,21 @@ const RevenueGraphFieldWrapper = styled.div`
         display: flex;
         width: 50%;
         height: 300px;
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+            flex-direction: column;
+        }
     }
 
     .product-graph-wrapper {
-        display: flex;
         width: 50%;
         height: 400px;
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+            flex-direction: column;
+        }
     }
 
     .info-text {
@@ -50,18 +59,30 @@ const RevenueGraphFieldWrapper = styled.div`
         padding: 10px 5px;
         font-weight: 700;
     }
+
+    .flex-box {
+        display: flex;
+        flex-wrap: wrap;
+    }
 `;
 
 const DayRevenueGraphFieldWrapper = styled.div`
     padding: 20px;
     margin-bottom: 20px;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-around;
     
     .graph-wrapper {
         width: 45%;
         height: 400px;
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+            flex-direction: column;
+            height: 300px;
+        }
     }
 
     .checkbox-group {
@@ -149,7 +170,7 @@ const RevenueOperatorFieldViewWrapper = styled.div`
         align-items: center;
     }
 
-    .select-item{
+    .select-item {
         width: 300px;
         height: 35px;
         padding: 0 10px;
