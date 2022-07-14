@@ -102,9 +102,7 @@ const SearchOperatorComponent = (props) => {
                     analysisDateRange={props.analysisDateRange}
 
                     onActionOpenDatePickerModal={onActionOpenDatePickerModal}
-                    onActionSelectDataRange={onActionSelectDataRange}
                     onActionChangeAnalysisDateRange={onActionChangeAnalysisDateRange}
-                    onActionSearchQuickMonth={onActionSearchQuickMonth}
                 ></DateSelectorFieldView>
             </Container>
 
@@ -120,6 +118,8 @@ const SearchOperatorComponent = (props) => {
                     dateRange={dateRange}
 
                     onActionConfirmSelectedDateRange={onActionConfirmSelectedDateRange}
+                    onActionSelectDataRange={onActionSelectDataRange}
+                    onActionSearchQuickMonth={onActionSearchQuickMonth}
                 ></DateRangePickerModalComponent>
             </CommonModalComponent>
         </>

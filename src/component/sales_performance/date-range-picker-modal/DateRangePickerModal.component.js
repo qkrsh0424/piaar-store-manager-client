@@ -42,6 +42,14 @@ const DateRangePickerModalComponent = (props) => {
         props.onActionConfirmSelectedDateRange(dateRange);
     }
 
+    const onActionSelectDataRange = (year, month, day) => {
+        props.onActionSelectDataRange(year, month, day);
+    }
+
+    const onActionSearchQuickMonth = (month) => {
+        props.onActionSearchQuickMonth(month);
+    }
+
     return (
         <Container>
             {dateRange &&
@@ -50,6 +58,8 @@ const DateRangePickerModalComponent = (props) => {
 
                     onChangeSelectedDate={onChangeSelectedDate}
                     onActionConfirmSelectedDate={onActionConfirmSelectedDate}
+                    onActionSelectDataRange={onActionSelectDataRange}
+                    onActionSearchQuickMonth={onActionSearchQuickMonth}
                 ></DateRangePickerFieldView>
             }
         </Container>

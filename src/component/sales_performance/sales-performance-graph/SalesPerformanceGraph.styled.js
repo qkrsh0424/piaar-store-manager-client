@@ -7,6 +7,26 @@ const Container = styled.div`
     .graph-group {
         padding-bottom: 30px;
     }
+
+    .flex-box {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        @media screen and (max-width: 992px) {
+            flex-wrap: wrap;
+        }
+    }
+
+    .icon-dot {
+        position: relative;
+        margin-right: 5px;
+        width: 8px;
+        height: 8px;
+        display: inline-block;
+        border-radius: 50%;
+        vertical-align: middle;
+    }
 `;
 
 const GraphTitleFieldWrapper = styled.div`
@@ -21,15 +41,28 @@ const GraphTitleFieldWrapper = styled.div`
         text-align: center;
         padding: 5px 0;
     }
+
+    .info-text {
+        font-size: 14px;
+        color: var(--erp-main-color);
+        padding: 10px;
+        width: 100%;
+        text-align: right;
+    }
 `;
 
 const RevenueGraphFieldWrapper = styled.div`
     padding: 20px;
     margin-bottom: 20px;
     min-height: 300px;
-    
+    width: 100%;
+
     .graph-wrapper {
         height: 400px;
+    }
+
+    .product-graph-box {
+        width: 100%;
     }
 
     .option-graph-wrapper {
@@ -66,6 +99,58 @@ const RevenueGraphFieldWrapper = styled.div`
     }
 `;
 
+const GraphAnalysisResultFieldWrapper = styled.div`
+    width: 400px;
+    height: 340px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 7px 3px #eee;
+    padding: 10px;
+
+    @media screen and (max-width: 992px) {
+        height: 200px;
+    }
+
+    .analysis-group {
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 80%;
+    }
+
+    .title-text {
+        font-weight: 700;
+        padding: 10px;
+        text-align: center;
+        height: 50px;
+    }
+
+    .value-info {
+        font-weight: 500;
+        font-size: 1rem;
+        color: #444;
+
+        @media screen and (max-width: 992px) {
+            font-size: 12px;
+        }
+    }
+
+    .analysis-value {
+        border-bottom: 1px solid #dedede;
+        font-size: 1.1rem;
+        display : flex;
+        justify-content: space-between;
+        align-items : center;
+        font-weight: 700;
+        padding: 8px 10px;
+        color: #3a3b88;
+
+        @media screen and (max-width: 992px) {
+            font-size: 12px;
+        }
+    }
+`;
+
 const DayRevenueGraphFieldWrapper = styled.div`
     padding: 20px;
     margin-bottom: 20px;
@@ -99,6 +184,9 @@ const DayRevenueGraphFieldWrapper = styled.div`
 
 const OrderAnalysisGraphFieldWrapper = styled.div`
     padding: 20px;
+    margin-bottom: 20px;
+    min-height: 300px;
+    width: 100%;
 
     .graph-wrapper {
         height: 400px;
@@ -212,5 +300,6 @@ export {
     DayRevenueGraphFieldWrapper,
     OrderAnalysisGraphFieldWrapper,
     TableFieldWrapper,
-    RevenueOperatorFieldViewWrapper
+    RevenueOperatorFieldViewWrapper,
+    GraphAnalysisResultFieldWrapper
 }

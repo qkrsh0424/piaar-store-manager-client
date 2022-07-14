@@ -62,7 +62,7 @@ const RevenueGraphFieldView = (props) => {
                 </div>
             }
             {props.searchItem === 'product' &&
-                <>
+                <div className='product-graph-box'>
                     <div>
                         <span className='info-text'>* 주문 데이터 기준 TOP15</span>
                     </div>
@@ -80,7 +80,7 @@ const RevenueGraphFieldView = (props) => {
                             />
                         </div>
                     </div>
-                </>
+                </div>
             }
         </RevenueGraphFieldWrapper>
     )
