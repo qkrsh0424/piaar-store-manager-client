@@ -26,7 +26,7 @@ const DateRangePickerWrapper = styled.div`
         padding: 7px;
         background-color: rgb(206 214 230);
         color: #444;
-        width: 25%;
+        width: 50%;
         font-size: 14px;
         font-weight: 600;
         border: 1px solid #fff;
