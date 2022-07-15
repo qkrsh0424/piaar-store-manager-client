@@ -35,12 +35,6 @@ const SalesPerformanceComponent = (props) => {
             return;
         }
 
-        async function fetchInit() {
-            onActionOpenBackdrop();
-            await __reqSearchErpOrderItem();
-            onActionCloseBackdrop();
-        }
-
         async function fetchProduct() {
             onActionOpenBackdrop();
             await __reqSearchProductCategory();
@@ -48,12 +42,28 @@ const SalesPerformanceComponent = (props) => {
             onActionCloseBackdrop();
         }
 
-        fetchInit();
-
         if(query.searchItem === 'product') {
             fetchProduct();
         }
     }, [location.search])
+
+    useEffect(() => {
+        if(!location.search) {
+            return;
+        }
+
+        if(!(query.startDate && query.endDate)) {
+            return;
+        }
+
+        async function fetchInit() {
+            onActionOpenBackdrop();
+            await __reqSearchErpOrderItem();
+            onActionCloseBackdrop();
+        }
+
+        fetchInit();
+    }, [query.startDate, query.endDate])
 
     const __reqSearchErpOrderItem = async () => {
         let startDate = query.startDate ? getStartDate(query.startDate) : null;

@@ -64,7 +64,7 @@ const RevenueGraphFieldView = (props) => {
             {props.searchItem === 'product' &&
                 <div>
                     <div>
-                        <span className='info-text'>* 주문 데이터 기준 TOP15</span>
+                        <span className='info-text'>* 판매 데이터 기준 TOP15</span>
                     </div>
                     <div className='flex-box'>
                         <div className='half-type-graph graph-wrapper'>

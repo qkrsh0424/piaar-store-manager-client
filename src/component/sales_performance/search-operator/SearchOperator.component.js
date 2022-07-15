@@ -5,7 +5,15 @@ import { dateToYYYYMMDD, getEndDateOfMonth, getStartDateOfMonth, setStartDateOfP
 import CommonModalComponent from "../../module/modal/CommonModalComponent";
 import DateRangePickerModalComponent from "../date-range-picker-modal/DateRangePickerModal.component";
 import DateSelectorFieldView from "./DateSelectorField.view";
-import { Container } from "./SearchOperator.styled"
+import { Container, InfoTextFieldWrapper } from "./SearchOperator.styled"
+
+function InfoTextField({ element }) {
+    return (
+        <InfoTextFieldWrapper>
+            {element}
+        </InfoTextFieldWrapper>
+    )
+}
 
 const SearchOperatorComponent = (props) => {
     const location = useLocation();
@@ -104,6 +112,11 @@ const SearchOperatorComponent = (props) => {
                     onActionOpenDatePickerModal={onActionOpenDatePickerModal}
                     onActionChangeAnalysisDateRange={onActionChangeAnalysisDateRange}
                 ></DateSelectorFieldView>
+                <InfoTextField
+                    element={
+                        ( <div>* 분석결과는 판매 데이터 기준입니다.</div> )
+                    }
+                ></InfoTextField>
             </Container>
 
             {/* Modal */}

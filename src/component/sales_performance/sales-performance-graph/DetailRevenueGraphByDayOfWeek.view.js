@@ -15,18 +15,17 @@ const graphOption = {
 ChartJS.register(...registerables);
 
 const DetailRevenueGraphByDayOfWeekFieldView = (props) => {
-
     return (
         <DayRevenueGraphFieldWrapper>
             {props.optionRevenueGraphByDayOfWeekData &&
                 <>
-                    <div className='half-type-graph md-height-graph'>
+                    <div className='half-type-graph'>
                         <Bar
                             data={createGraphData(props.optionRevenueGraphByDayOfWeekData?.total)}
                             options={createBarGraphOption(graphOption)}
                         />
                     </div>
-                    <div className='half-type-graph md-height-graph'>
+                    <div className='half-type-graph'>
                         <Bar
                             data={createGraphData(props.optionRevenueGraphByDayOfWeekData?.week)}
                             options={createBarGraphOption(graphOption)}

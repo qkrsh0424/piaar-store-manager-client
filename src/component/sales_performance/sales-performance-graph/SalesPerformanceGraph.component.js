@@ -125,14 +125,14 @@ const SalesPerformanceGraphComponent = (props) => {
     }, [analysisItem, searchItem, hideOrderGraph, props.analysisDateRange])
 
     useEffect(() => {
-        if (!(analysisItem && props.analysisDateRange)) {
+        if (!analysisItem) {
             return;
         }
 
         onActionCreateDayRevenueGraphData();
         onActionCreateOrderAnalysisGraphData();
         onActionCreateTableData();
-    }, [analysisItem, props.analysisDateRange])
+    }, [analysisItem, hideOrderGraph])
 
     useEffect(() => {
         if (!(props.categoryList && props.productList)) {
@@ -218,9 +218,9 @@ const SalesPerformanceGraphComponent = (props) => {
 
         let dataset = salesAnalysis.map(r => r.value);
 
-        let lineGraphDataset = new GraphDataset().toJSON();
-        lineGraphDataset = {
-            ...lineGraphDataset,
+        let barGraphDataset = new GraphDataset().toJSON();
+        barGraphDataset = {
+            ...barGraphDataset,
             type: 'bar',
             label: '판매 매출액',
             data: dataset,
@@ -228,7 +228,7 @@ const SalesPerformanceGraphComponent = (props) => {
             borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1],
             backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1],
         }
-        datasets.push(lineGraphDataset);
+        datasets.push(barGraphDataset);
 
         let labels = analysis.map(r => getAnalysisDateFormatToViewFormat(props.analysisDateRange, r.key));
 
@@ -276,8 +276,8 @@ const SalesPerformanceGraphComponent = (props) => {
                 label: '주문 매출액',
                 data: dataset,
                 fill: false,
-                borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0],
-                backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0],
+                borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0] + '88',
+                backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0] + '88',
                 order: -1
             }
             datasets.push(lineGraphDataset);
@@ -394,7 +394,7 @@ const SalesPerformanceGraphComponent = (props) => {
                 channelGraphDataset = {
                     ...channelGraphDataset,
                     type: 'line',
-                    label: '(주문)' + r,
+                    label: '(주문) ' + r,
                     data: channelRevenue[idx],
                     backgroundColor: graphColor[idx] + '88',
                     borderColor: graphColor[idx] + '88',
@@ -527,7 +527,7 @@ const SalesPerformanceGraphComponent = (props) => {
                 categoryGraphDataset = {
                     ...categoryGraphDataset,
                     type: 'line',
-                    label: '(주문)' + r,
+                    label: '(주문) ' + r,
                     data: categoryRevenue[idx],
                     borderColor: graphColor[idx] + '88',
                     backgroundColor: graphColor[idx] + '88',
@@ -878,7 +878,7 @@ const SalesPerformanceGraphComponent = (props) => {
             }
         });
 
-        // 옵션 - 판매 그래프
+        // 기본 - 판매 그래프
         let salesAnalysis = [...analysis];
         let erpSalesItem = erpOrderItem.filter(r => r.salesYn === 'y');
 
@@ -999,9 +999,11 @@ const SalesPerformanceGraphComponent = (props) => {
         })
     }
 
-    // 1-4. 상품 - 요일별 매출액
+    // 1-4. 상품(카테고리별) 요일별 매출액
     const onActionCreateCategoryRevenueGraphByDayOfWeekData = () => {
         let erpOrderItem = [...optionAnalysisItem];
+        erpOrderItem = erpOrderItem.filter(r => r.productCategory?.cid === parseInt(productSearchItem.category));
+        erpOrderItem = erpOrderItem.map(r => r.erpOrderItem);
 
         let dayName = getWeekName();    // 일 ~ 토
         let date = new Set([]);
@@ -1047,12 +1049,13 @@ const SalesPerformanceGraphComponent = (props) => {
         });
         analysisByWeek.reverse();
 
-        erpOrderItem = erpOrderItem.filter(r => r.productCategory?.cid === parseInt(productSearchItem.category));
-        erpOrderItem = erpOrderItem.map(r => r.erpOrderItem);
+        let salesAnalysis = [...analysis];
+        let salesAnalysisByWeek = [...analysisByWeek];
+        let salesErpOrderItem = erpOrderItem.filter(r => r.salesYn === 'y');
 
-        erpOrderItem.forEach(r => {
+        salesErpOrderItem.forEach(r => {
             let compareDate = getDateToAnalysisRangeDateFormat('date', r.channelOrderDate);
-            analysis = analysis.map(r2 => {
+            salesAnalysis = salesAnalysis.map(r2 => {
                 if (r2.key === compareDate) {
                     return r2 = {
                         ...r2,
@@ -1073,7 +1076,7 @@ const SalesPerformanceGraphComponent = (props) => {
             }
         })
 
-        analysis.forEach(r => {
+        salesAnalysis.forEach(r => {
             total = total.map(r2 => {
                 if (r2.key === getDayName(r.key)) {
                     return {
@@ -1104,7 +1107,7 @@ const SalesPerformanceGraphComponent = (props) => {
         totalRevenueGraphDataset = {
             ...totalRevenueGraphDataset,
             type: 'bar',
-            label: '[ ' + categoryName + ' ] 평균 매출액',
+            label: '[' + categoryName + '] 평균 매출액',
             data: totalRevenue,
             fill: true,
             borderColor: ORDER_GRAPH_BG_COLOR[3] + 'BB',
@@ -1112,10 +1115,10 @@ const SalesPerformanceGraphComponent = (props) => {
         }
         datasets.push(totalRevenueGraphDataset);
 
-        analysis.forEach(r => {
+        salesAnalysis.forEach(r => {
             let compareWeek = getDateToAnalysisRangeDateFormat('week', r.key);
             let compareDay = getDayName(r.key);
-            analysisByWeek = analysisByWeek.map(r2 => {
+            salesAnalysisByWeek = salesAnalysisByWeek.map(r2 => {
                 if (r2.key === compareWeek) {
                     return r2 = {
                         ...r2,
@@ -1132,15 +1135,15 @@ const SalesPerformanceGraphComponent = (props) => {
 
         // 검색 주차가 팔레트색상 사이즈보다 크다면 랜덤한 컬러 생성
         let graphColor = ORDER_GRAPH_BG_COLOR;
-        for (let i = ORDER_GRAPH_BG_COLOR.length; i < analysisByWeek.length; i++) {
+        for (let i = ORDER_GRAPH_BG_COLOR.length; i < salesAnalysisByWeek.length; i++) {
             let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
             graphColor.push(randomColor);
         }
 
-        let revenueByWeek = analysisByWeek.map(r => Object.values(r.value));
-        datasetsByWeek = analysisByWeek.map((r, idx) => {
+        let revenueByWeek = salesAnalysisByWeek.map(r => Object.values(r.value));
+        salesAnalysisByWeek.forEach((r, idx) => {
             let datasets = new GraphDataset().toJSON();
-            return {
+            datasets = {
                 ...datasets,
                 type: 'bar',
                 label: r.key + '주차',
@@ -1149,7 +1152,106 @@ const SalesPerformanceGraphComponent = (props) => {
                 borderColor: graphColor[idx] + 'BB',
                 backgroundColor: graphColor[idx] + 'BB'
             }
+            datasetsByWeek.push(datasets);
         })
+
+        if (!hideOrderGraph) {
+            let orderAnalysis = [...analysis];
+            let orderAnalysisByWeek = [...analysisByWeek];
+
+            erpOrderItem.forEach(r => {
+                let compareDate = getDateToAnalysisRangeDateFormat('date', r.channelOrderDate);
+                orderAnalysis = orderAnalysis.map(r2 => {
+                    if (r2.key === compareDate) {
+                        return r2 = {
+                            ...r2,
+                            value: parseInt(r2.value) + parseInt(r.price) + parseInt(r.deliveryCharge)
+                        }
+                    } else {
+                        return r2;
+                    }
+                })
+            })
+
+            // 요일별 평균 매출액을 구하기 위해 count를 추가
+            let total = dayName.map(r => {
+                return {
+                    key: r,
+                    revenue: 0,
+                    count: 0
+                }
+            })
+
+            orderAnalysis.forEach(r => {
+                total = total.map(r2 => {
+                    if (r2.key === getDayName(r.key)) {
+                        return {
+                            ...r2,
+                            revenue: r2.revenue + r.value,
+                            count: r2.count + 1
+                        }
+                    } else {
+                        return r2;
+                    }
+                })
+            });
+
+            // 요일별 평균 매출액 계산
+            let totalAverage = [];
+            total.forEach(r => {
+                totalAverage = {
+                    ...totalAverage,
+                    [r.key]: r.revenue / r.count
+                }
+            })
+
+            let categoryName = props.categoryList.filter(r => r.cid === parseInt(productSearchItem.category))[0]?.name;
+
+            // [일, 월, 화, 수, 목, 금, 토] 로 정렬
+            let totalRevenue = dayName.map(r => totalAverage[r]);
+            let totalRevenueGraphDataset = new GraphDataset().toJSON();
+            totalRevenueGraphDataset = {
+                ...totalRevenueGraphDataset,
+                type: 'line',
+                label: '(주문) [' + categoryName + '] 평균 매출액',
+                data: totalRevenue,
+                borderColor: ORDER_GRAPH_BG_COLOR[3] + '88',
+                backgroundColor: ORDER_GRAPH_BG_COLOR[3] + '88'
+            }
+            datasets.push(totalRevenueGraphDataset);
+        
+            orderAnalysis.forEach(r => {
+                let compareWeek = getDateToAnalysisRangeDateFormat('week', r.key);
+                let compareDay = getDayName(r.key);
+                orderAnalysisByWeek = orderAnalysisByWeek.map(r2 => {
+                    if (r2.key === compareWeek) {
+                        return r2 = {
+                            ...r2,
+                            value: {
+                                ...r2.value,
+                                [compareDay]: parseInt(r2.value[compareDay]) + parseInt(r.value)
+                            }
+                        }
+                    } else {
+                        return r2;
+                    }
+                })
+            })
+
+            let revenueByWeek = orderAnalysisByWeek.map(r => Object.values(r.value));
+            orderAnalysisByWeek.forEach((r, idx) => {
+                let datasets = new GraphDataset().toJSON();
+                datasets = {
+                    ...datasets,
+                    type: 'line',
+                    label: '(주문) ' + r.key + '주차',
+                    data: revenueByWeek[idx],
+                    borderColor: graphColor[idx] + '88',
+                    backgroundColor: graphColor[idx] + '88'
+                }
+                datasetsByWeek.push(datasets);
+            })
+        }
 
         // 요일별 그래프 2개 생성
         let dayRevenueGraphData = {
@@ -1169,9 +1271,11 @@ const SalesPerformanceGraphComponent = (props) => {
         })
     }
 
-    // 1-4. 상품 - 요일별 매출액
+    // 1-4. 상품(상품별) - 요일별 매출액
     const onActionCreateProductRevenueGraphByDayOfWeekData = () => {
         let erpOrderItem = [...optionAnalysisItem];
+        erpOrderItem = erpOrderItem.filter(r => r.product?.cid === parseInt(productSearchItem.product));
+        erpOrderItem = erpOrderItem.map(r => r.erpOrderItem);
 
         let dayName = getWeekName();    // 일 ~ 토
         let date = new Set([]);
@@ -1217,12 +1321,13 @@ const SalesPerformanceGraphComponent = (props) => {
         });
         analysisByWeek.reverse();
 
-        erpOrderItem = erpOrderItem.filter(r => r.product?.cid === parseInt(productSearchItem.product));
-        erpOrderItem = erpOrderItem.map(r => r.erpOrderItem);
+        let salesAnalysis = [...analysis];
+        let salesAnalysisByWeek = [...analysisByWeek];
+        let salesErpOrderItem = erpOrderItem.filter(r => r.salesYn === 'y');
 
-        erpOrderItem.forEach(r => {
+        salesErpOrderItem.forEach(r => {
             let compareDate = getDateToAnalysisRangeDateFormat('date', r.channelOrderDate);
-            analysis = analysis.map(r2 => {
+            salesAnalysis = salesAnalysis.map(r2 => {
                 if (r2.key === compareDate) {
                     return r2 = {
                         ...r2,
@@ -1243,7 +1348,7 @@ const SalesPerformanceGraphComponent = (props) => {
             }
         })
 
-        analysis.forEach(r => {
+        salesAnalysis.forEach(r => {
             total = total.map(r2 => {
                 if (r2.key === getDayName(r.key)) {
                     return {
@@ -1274,7 +1379,7 @@ const SalesPerformanceGraphComponent = (props) => {
         totalRevenueGraphDataset = {
             ...totalRevenueGraphDataset,
             type: 'bar',
-            label: '[ ' + productDefaultName + ' ] 평균 매출액',
+            label: '[' + productDefaultName + '] 평균 매출액',
             data: totalRevenue,
             fill: true,
             borderColor: ORDER_GRAPH_BG_COLOR[3] + 'BB',
@@ -1282,10 +1387,10 @@ const SalesPerformanceGraphComponent = (props) => {
         }
         datasets.push(totalRevenueGraphDataset);
 
-        analysis.forEach(r => {
+        salesAnalysis.forEach(r => {
             let compareWeek = getDateToAnalysisRangeDateFormat('week', r.key);
             let compareDay = getDayName(r.key);
-            analysisByWeek = analysisByWeek.map(r2 => {
+            salesAnalysisByWeek = salesAnalysisByWeek.map(r2 => {
                 if (r2.key === compareWeek) {
                     return r2 = {
                         ...r2,
@@ -1302,15 +1407,15 @@ const SalesPerformanceGraphComponent = (props) => {
 
         // 검색 주차가 팔레트색상 사이즈보다 크다면 랜덤한 컬러 생성
         let graphColor = ORDER_GRAPH_BG_COLOR;
-        for (let i = ORDER_GRAPH_BG_COLOR.length; i < analysisByWeek.length; i++) {
+        for (let i = ORDER_GRAPH_BG_COLOR.length; i < salesAnalysisByWeek.length; i++) {
             let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
             graphColor.push(randomColor);
         }
 
-        let revenueByWeek = analysisByWeek.map(r => Object.values(r.value));
-        datasetsByWeek = analysisByWeek.map((r, idx) => {
+        let revenueByWeek = salesAnalysisByWeek.map(r => Object.values(r.value));
+        salesAnalysisByWeek.map((r, idx) => {
             let datasets = new GraphDataset().toJSON();
-            return {
+            datasets = {
                 ...datasets,
                 type: 'bar',
                 label: r.key + '주차',
@@ -1319,7 +1424,106 @@ const SalesPerformanceGraphComponent = (props) => {
                 borderColor: graphColor[idx] + 'BB',
                 backgroundColor: graphColor[idx] + 'BB'
             }
+            datasetsByWeek.push(datasets);
         })
+
+        if (!hideOrderGraph) {
+            let orderAnalysis = [...analysis];
+            let orderAnalysisByWeek = [...analysisByWeek];
+            
+            erpOrderItem.forEach(r => {
+                let compareDate = getDateToAnalysisRangeDateFormat('date', r.channelOrderDate);
+                orderAnalysis = orderAnalysis.map(r2 => {
+                    if (r2.key === compareDate) {
+                        return r2 = {
+                            ...r2,
+                            value: parseInt(r2.value) + parseInt(r.price) + parseInt(r.deliveryCharge)
+                        }
+                    } else {
+                        return r2;
+                    }
+                })
+            })
+    
+            // 요일별 평균 매출액을 구하기 위해 count를 추가
+            let total = dayName.map(r => {
+                return {
+                    key: r,
+                    revenue: 0,
+                    count: 0
+                }
+            })
+    
+            orderAnalysis.forEach(r => {
+                total = total.map(r2 => {
+                    if (r2.key === getDayName(r.key)) {
+                        return {
+                            ...r2,
+                            revenue: r2.revenue + r.value,
+                            count: r2.count + 1
+                        }
+                    } else {
+                        return r2;
+                    }
+                })
+            });
+    
+            // 요일별 평균 매출액 계산
+            let totalAverage = [];
+            total.forEach(r => {
+                totalAverage = {
+                    ...totalAverage,
+                    [r.key]: r.revenue / r.count
+                }
+            })
+    
+            let productDefaultName = productViewList.filter(r => r.cid === parseInt(productSearchItem.product))[0]?.defaultName;
+    
+            // [일, 월, 화, 수, 목, 금, 토] 로 정렬
+            let totalRevenue = dayName.map(r => totalAverage[r]);
+            let totalRevenueGraphDataset = new GraphDataset().toJSON();
+            totalRevenueGraphDataset = {
+                ...totalRevenueGraphDataset,
+                type: 'line',
+                label: '(주문) [' + productDefaultName + '] 평균 매출액',
+                data: totalRevenue,
+                borderColor: ORDER_GRAPH_BG_COLOR[3] + '88',
+                backgroundColor: ORDER_GRAPH_BG_COLOR[3] + '88'
+            }
+            datasets.push(totalRevenueGraphDataset);
+
+            orderAnalysis.forEach(r => {
+                let compareWeek = getDateToAnalysisRangeDateFormat('week', r.key);
+                let compareDay = getDayName(r.key);
+                orderAnalysisByWeek = orderAnalysisByWeek.map(r2 => {
+                    if (r2.key === compareWeek) {
+                        return r2 = {
+                            ...r2,
+                            value: {
+                                ...r2.value,
+                                [compareDay]: parseInt(r2.value[compareDay]) + parseInt(r.value)
+                            }
+                        }
+                    } else {
+                        return r2;
+                    }
+                })
+            })
+
+            let revenueByWeek = orderAnalysisByWeek.map(r => Object.values(r.value));
+            orderAnalysisByWeek.map((r, idx) => {
+                let datasets = new GraphDataset().toJSON();
+                datasets = {
+                    ...datasets,
+                    type: 'line',
+                    label: '(주문) ' + r.key + '주차',
+                    data: revenueByWeek[idx],
+                    borderColor: graphColor[idx] + '88',
+                    backgroundColor: graphColor[idx] + '88'
+                }
+                datasetsByWeek.push(datasets);
+            })
+        }
 
         // 요일별 그래프 2개 생성
         let dayRevenueGraphData = {
@@ -1339,7 +1543,7 @@ const SalesPerformanceGraphComponent = (props) => {
         })
     }
 
-    // 2. 총 주문건 & 수량
+    // 2. 총 판매건 & 판매수량
     const onActionCreateOrderAnalysisGraphData = () => {
         let date = new Set([]);
         let analysis = [];
@@ -1366,9 +1570,12 @@ const SalesPerformanceGraphComponent = (props) => {
         });
         analysis.reverse();
 
-        analysisItem.forEach(r => {
+        let salesAnalysis = [...analysis];
+        let salesAnalysisItem = [...analysisItem].filter(r => r.salesYn ==='y');
+
+        salesAnalysisItem.forEach(r => {
             let compareDate = getDateToAnalysisRangeDateFormat(props.analysisDateRange, r.channelOrderDate);
-            analysis = analysis.map(r2 => {
+            salesAnalysis = salesAnalysis.map(r2 => {
                 if (r2.key === compareDate) {
                     return r2 = {
                         ...r2,
@@ -1381,14 +1588,14 @@ const SalesPerformanceGraphComponent = (props) => {
             })
         })
 
-        let labels = analysis.map(r => getAnalysisDateFormatToViewFormat(props.analysisDateRange, r.key));
+        let labels = salesAnalysis.map(r => getAnalysisDateFormatToViewFormat(props.analysisDateRange, r.key));
 
-        let orderData = analysis.map(r => r.order);
+        let orderData = salesAnalysis.map(r => r.order);
         let orderBarGraphDataset = new GraphDataset().toJSON();
         orderBarGraphDataset = {
             ...orderBarGraphDataset,
             type: 'bar',
-            label: '주문건',
+            label: '판매건',
             data: orderData,
             fill: true,
             borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0],
@@ -1396,12 +1603,12 @@ const SalesPerformanceGraphComponent = (props) => {
         }
         datasets.push(orderBarGraphDataset);
 
-        let unitData = analysis.map(r => r.unit);
+        let unitData = salesAnalysis.map(r => r.unit);
         let unitBarGraphDataset = new GraphDataset().toJSON();
         unitBarGraphDataset = {
             ...unitBarGraphDataset,
             type: 'bar',
-            label: '주문 수량',
+            label: '판매 수량',
             data: unitData,
             fill: true,
             borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1],
@@ -1409,20 +1616,65 @@ const SalesPerformanceGraphComponent = (props) => {
         }
         datasets.push(unitBarGraphDataset);
 
-        dispatchOrderAnalysisGraphData({
-            type: 'INIT_DATA',
-            payload: {
-                labels: labels,
-                datasets
-            }
-        })
-
         // 전체 판매 매출액 분석 결과 텍스트 설정
         let orderAnalysis = setAnalysisResultText(datasets);
 
         dispatchOrderAnalysisResult({
             type: 'INIT_DATA',
             payload: orderAnalysis
+        })
+
+        // 주문그래프 숨기기 체크박스가 해제되어 있다면
+        if (!hideOrderGraph) {
+            // 옵션 - 주문 그래프 값 세팅
+            let orderAnalysis = [...analysis];
+            
+            analysisItem.forEach(r => {
+                let compareDate = getDateToAnalysisRangeDateFormat(props.analysisDateRange, r.channelOrderDate);
+                orderAnalysis = orderAnalysis.map(r2 => {
+                    if (r2.key === compareDate) {
+                        return r2 = {
+                            ...r2,
+                            order: parseInt(r2.order) + 1,
+                            unit: parseInt(r2.unit) + parseInt(r.unit)
+                        }
+                    } else {
+                        return r2;
+                    }
+                })
+            })
+    
+            let orderData = orderAnalysis.map(r => r.order);
+            let orderBarGraphDataset = new GraphDataset().toJSON();
+            orderBarGraphDataset = {
+                ...orderBarGraphDataset,
+                type: 'line',
+                label: '주문건',
+                data: orderData,
+                borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0] + '88',
+                backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0 + '88']
+            }
+            datasets.push(orderBarGraphDataset);
+    
+            let unitData = salesAnalysis.map(r => r.unit);
+            let unitBarGraphDataset = new GraphDataset().toJSON();
+            unitBarGraphDataset = {
+                ...unitBarGraphDataset,
+                type: 'line',
+                label: '주문 수량',
+                data: unitData,
+                borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1] + '88',
+                backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1] + '88'
+            }
+            datasets.push(unitBarGraphDataset);
+        }
+
+        dispatchOrderAnalysisGraphData({
+            type: 'INIT_DATA',
+            payload: {
+                labels: labels,
+                datasets
+            }
         })
     }
 
@@ -1472,9 +1724,13 @@ const SalesPerformanceGraphComponent = (props) => {
         });
         analysisByWeek.reverse();
 
-        analysisItem.forEach(r => {
+        let salesAnalysis = [...analysis];
+        let salesAnalysisByWeek = [...analysisByWeek];
+        let salesAnalysisItem = [...analysisItem].filter(r => r.salesYn ==='y');
+
+        salesAnalysisItem.forEach(r => {
             let compareDate = getDateToAnalysisRangeDateFormat('date', r.channelOrderDate);
-            analysis = analysis.map(r2 => {
+            salesAnalysis = salesAnalysis.map(r2 => {
                 if (r2.key === compareDate) {
                     return r2 = {
                         ...r2,
@@ -1495,7 +1751,7 @@ const SalesPerformanceGraphComponent = (props) => {
             }
         })
 
-        analysis.forEach(r => {
+        salesAnalysis.forEach(r => {
             total = total.map(r2 => {
                 if (r2.key === getDayName(r.key)) {
                     return {
@@ -1532,10 +1788,11 @@ const SalesPerformanceGraphComponent = (props) => {
         }
         datasets.push(totalRevenueGraphDataset);
 
-        analysis.forEach(r => {
+        // 주차별 요일 매출액 그래프
+        salesAnalysis.forEach(r => {
             let compareWeek = getDateToAnalysisRangeDateFormat('week', r.key);
             let compareDay = getDayName(r.key);
-            analysisByWeek = analysisByWeek.map(r2 => {
+            salesAnalysisByWeek = salesAnalysisByWeek.map(r2 => {
                 if (r2.key === compareWeek) {
                     return r2 = {
                         ...r2,
@@ -1552,15 +1809,15 @@ const SalesPerformanceGraphComponent = (props) => {
 
         // 검색 주차가 팔레트색상 사이즈보다 크다면 랜덤한 컬러 생성
         let graphColor = ORDER_GRAPH_BG_COLOR;
-        for (let i = ORDER_GRAPH_BG_COLOR.length; i < analysisByWeek.length; i++) {
+        for (let i = ORDER_GRAPH_BG_COLOR.length; i < salesAnalysisByWeek.length; i++) {
             let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
             graphColor.push(randomColor);
         }
 
-        let revenueByWeek = analysisByWeek.map(r => Object.values(r.value));
-        datasetsByWeek = analysisByWeek.map((r, idx) => {
+        let revenueByWeek = salesAnalysisByWeek.map(r => Object.values(r.value));
+        salesAnalysisByWeek.forEach((r, idx) => {
             let datasets = new GraphDataset().toJSON();
-            return {
+            datasets = {
                 ...datasets,
                 type: 'bar',
                 label: r.key + '주차',
@@ -1569,7 +1826,107 @@ const SalesPerformanceGraphComponent = (props) => {
                 borderColor: graphColor[idx] + 'BB',
                 backgroundColor: graphColor[idx] + 'BB'
             }
+            datasetsByWeek.push(datasets);
         })
+
+        if (!hideOrderGraph) {
+            // 옵션 - 주문 그래프
+            let orderAnalysis = [...analysis];
+            let orderAnalysisByWeek = [...analysisByWeek];
+            analysisItem.forEach(r => {
+                let compareDate = getDateToAnalysisRangeDateFormat('date', r.channelOrderDate);
+                orderAnalysis = orderAnalysis.map(r2 => {
+                    if (r2.key === compareDate) {
+                        return r2 = {
+                            ...r2,
+                            value: parseInt(r2.value) + parseInt(r.price) + parseInt(r.deliveryCharge)
+                        }
+                    } else {
+                        return r2;
+                    }
+                })
+            })
+    
+            // 요일별 평균 매출액을 구하기 위해 count를 추가
+            let total = dayName.map(r => {
+                return {
+                    key: r,
+                    revenue: 0,
+                    count: 0
+                }
+            })
+    
+            orderAnalysis.forEach(r => {
+                total = total.map(r2 => {
+                    if (r2.key === getDayName(r.key)) {
+                        return {
+                            ...r2,
+                            revenue: r2.revenue + r.value,
+                            count: r2.count + 1
+                        }
+                    } else {
+                        return r2;
+                    }
+                })
+            });
+    
+            // 요일별 평균 매출액 계산
+            let totalAverage = [];
+            total.forEach(r => {
+                totalAverage = {
+                    ...totalAverage,
+                    [r.key]: r.revenue / r.count
+                }
+            })
+    
+            // [일, 월, 화, 수, 목, 금, 토] 로 정렬
+            let totalRevenue = dayName.map(r => totalAverage[r]);
+            let totalRevenueGraphDataset = new GraphDataset().toJSON();
+            totalRevenueGraphDataset = {
+                ...totalRevenueGraphDataset,
+                type: 'line',
+                label: '(주문) 평균 매출액',
+                data: totalRevenue,
+                borderColor: ORDER_GRAPH_BG_COLOR[2] + '88',
+                backgroundColor: ORDER_GRAPH_BG_COLOR[2] + '88'
+            }
+            datasets.push(totalRevenueGraphDataset);
+
+            // 주차별 요일 매출액 그래프
+            orderAnalysis.forEach(r => {
+                let compareWeek = getDateToAnalysisRangeDateFormat('week', r.key);
+                let compareDay = getDayName(r.key);
+                orderAnalysisByWeek = orderAnalysisByWeek.map(r2 => {
+                    if (r2.key === compareWeek) {
+                        return r2 = {
+                            ...r2,
+                            value: {
+                                ...r2.value,
+                                [compareDay]: parseInt(r2.value[compareDay]) + parseInt(r.value)
+                            }
+                        }
+                    } else {
+                        return r2;
+                    }
+                })
+            })
+
+            let revenueByWeek = orderAnalysisByWeek.map(r => Object.values(r.value));
+            orderAnalysisByWeek.forEach((r, idx) => {
+                let datasets = new GraphDataset().toJSON();
+                datasets = {
+                    ...datasets,
+                    type: 'line',
+                    label: '(주문) ' + r.key + '주차',
+                    data: revenueByWeek[idx],
+                    borderColor: graphColor[idx] + '88',
+                    backgroundColor: graphColor[idx] + '88'
+                }
+                datasetsByWeek.push(datasets);
+            })
+        }
+
+
 
         // 요일별 그래프 2개 생성
         let dayRevenueGraphData = {
@@ -1610,7 +1967,10 @@ const SalesPerformanceGraphComponent = (props) => {
                 key: r,
                 revenue: 0,
                 order: 0,
-                unit: 0
+                unit: 0,
+                salesRevenue: 0,
+                sales: 0,
+                salesUnit: 0
             }
         });
 
@@ -1618,11 +1978,23 @@ const SalesPerformanceGraphComponent = (props) => {
             let compareDate = getDateToAnalysisRangeDateFormat('date', r.channelOrderDate);
             analysis = analysis.map(r2 => {
                 if (r2.key === compareDate) {
-                    return {
-                        ...r2,
-                        revenue: parseInt(r2.revenue) + parseInt(r.price) + parseInt(r.deliveryCharge),
-                        order: parseInt(r2.order) + 1,
-                        unit: parseInt(r2.unit) + parseInt(r.unit)
+                    if(r.salesYn === 'y'){
+                        return {
+                            ...r2,
+                            revenue: parseInt(r2.revenue) + parseInt(r.price) + parseInt(r.deliveryCharge),
+                            order: parseInt(r2.order) + 1,
+                            unit: parseInt(r2.unit) + parseInt(r.unit),
+                            salesRevenue: parseInt(r2.salesRevenue) + parseInt(r.price) + parseInt(r.deliveryCharge),
+                            sales: parseInt(r2.sales) + 1,
+                            salesUnit: parseInt(r2.salesUnit) + parseInt(r.unit)
+                        }
+                    }else {
+                        return {
+                            ...r2,
+                            revenue: parseInt(r2.revenue) + parseInt(r.price) + parseInt(r.deliveryCharge),
+                            order: parseInt(r2.order) + 1,
+                            unit: parseInt(r2.unit) + parseInt(r.unit)
+                        }
                     }
                 } else {
                     return r2;
@@ -1630,14 +2002,17 @@ const SalesPerformanceGraphComponent = (props) => {
             })
         })
         // 매출 내림차순 정렬
-        analysis.sort((a, b) => b.revenue - a.revenue);
+        analysis.sort((a, b) => b.salesRevenue - a.salesRevenue);
 
         // 전체 합계를 나타내는 컬럼 추가
         let total = {
             key: '전체',
             order: 0,
             unit: 0,
-            revenue: 0
+            revenue: 0,
+            sales: 0,
+            salesUnit: 0,
+            salesRevenue: 0
         }
 
         analysis.forEach(r => {
@@ -1645,7 +2020,10 @@ const SalesPerformanceGraphComponent = (props) => {
                 ...total,
                 order: total.order + r.order,
                 unit: total.unit + r.unit,
-                revenue: total.revenue + r.revenue
+                revenue: total.revenue + r.revenue,
+                sales: total.sales + r.sales,
+                salesUnit: total.salesUnit + r.salesUnit,
+                salesRevenue: total.salesRevenue + r.salesRevenue
             }
         })
 
@@ -1761,13 +2139,9 @@ const SalesPerformanceGraphComponent = (props) => {
                         <GraphTitleField
                             element={
                                 searchItem === 'product' ?
-                                    (
-                                        <div className='title'>[ 총 매출액 & 주문 수량]</div>
-                                    )
+                                    (<div className='title'>[ 총 매출액 & 주문 수량]</div>)
                                     :
-                                    (
-                                        <div className='title'>[ 총 매출액 ]</div>
-                                    )
+                                    (<div className='title'>[ 총 매출액 ]</div>)
                             }
                         ></GraphTitleField>
                         <RevenueOperatorFieldView
@@ -1822,12 +2196,7 @@ const SalesPerformanceGraphComponent = (props) => {
                 <div className='graph-group'>
                     <GraphTitleField
                         element={
-                            (
-                                <>
-                                    <div className='title'>[ 총 주문건 & 수량 ]</div>
-                                    <div className='info-text'>* 주문데이터 기준</div>
-                                </>
-                            )
+                            (<div className='title'>[ 총 판매건 & 수량 ]</div>)
                         }
                     ></GraphTitleField>
                     <div className='flex-box'>
@@ -1846,12 +2215,7 @@ const SalesPerformanceGraphComponent = (props) => {
                 <div className='graph-group'>
                     <GraphTitleField
                         element={
-                            (
-                                <>
-                                    <div className='title'>[ 요일별 매출액 ]</div>
-                                    <div className='info-text'>* 주문데이터 기준</div>
-                                </>
-                            )
+                            (<div className='title'>[ 요일별 매출액 ]</div>)
                         }
                     ></GraphTitleField>
                     <DayRevenueGraphFieldView
@@ -1868,7 +2232,9 @@ const SalesPerformanceGraphComponent = (props) => {
                             (
                                 <>
                                     <div className='title'>[ 매출 BEST ]</div>
-                                    <div className='info-text'>* 주문데이터 기준</div>
+                                    <div className='info-text'>
+                                        * 판매 매출액 기준으로 정렬됩니다.
+                                    </div>
                                 </>
                             )
                         }

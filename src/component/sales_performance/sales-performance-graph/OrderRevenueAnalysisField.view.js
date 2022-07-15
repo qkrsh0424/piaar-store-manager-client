@@ -4,7 +4,7 @@ const OrderAnalysisFieldView = (props) => {
     return (
         <GraphAnalysisResultFieldWrapper>
             <div className='analysis-group'>
-                <div className='title-text'>[ 기간별 총 주문건 & 수량 ]</div>
+                <div className='title-text'>[ 기간별 총 판매건 & 수량 ]</div>
                 <div className='analysis-group'>
                     {props.orderAnalysisResult?.map((r, idx) => {
                         return (

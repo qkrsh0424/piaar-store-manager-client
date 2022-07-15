@@ -9,7 +9,8 @@ const DateSelectorFieldWrapper = styled.div`
     padding: 10px;
     padding-top: 20px;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    flex-wrap: wrap;
     gap: 10px;
 
     .date-selector-box {
@@ -65,7 +66,15 @@ const DateSelectorFieldWrapper = styled.div`
     }
 `;
 
+const InfoTextFieldWrapper = styled.div`
+    padding: 0 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--erp-main-color);
+`;
+
 export {
     Container,
-    DateSelectorFieldWrapper
+    DateSelectorFieldWrapper,
+    InfoTextFieldWrapper
 }
