@@ -62,18 +62,18 @@ const RevenueGraphFieldView = (props) => {
                 </div>
             }
             {props.searchItem === 'product' &&
-                <div className='product-graph-box'>
+                <div>
                     <div>
                         <span className='info-text'>* 주문 데이터 기준 TOP15</span>
                     </div>
                     <div className='flex-box'>
-                        <div className='product-graph-wrapper'>
+                        <div className='half-type-graph graph-wrapper'>
                             <Bar
                                 data={createGraphData(props.revenueGraphData?.revenue)}
                                 options={createBarGraphOption(verticalGraphOption)}
                             />
                         </div>
-                        <div className='product-graph-wrapper'>
+                        <div className='half-type-graph graph-wrapper'>
                             <Bar
                                 data={createGraphData(props.revenueGraphData?.unit)}
                                 options={createBarGraphOption(verticalGraphOption)}

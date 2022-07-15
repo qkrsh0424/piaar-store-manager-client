@@ -3,7 +3,7 @@ import { RevenueOperatorFieldViewWrapper } from "./SalesPerformanceGraph.styled"
 export default function RevenueOperatorFieldView(props) {
     return (
         <RevenueOperatorFieldViewWrapper>
-            <div>
+            <div className='select-group'>
                 <select
                     className='select-item'
                     value={props.searchItem ?? 'total'}

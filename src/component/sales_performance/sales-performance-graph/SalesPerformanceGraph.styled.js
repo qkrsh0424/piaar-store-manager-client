@@ -60,15 +60,10 @@ const RevenueGraphFieldWrapper = styled.div`
     .graph-wrapper {
         height: 400px;
     }
-
-    .product-graph-box {
-        width: 100%;
-    }
-
-    .option-graph-wrapper {
+    
+    .half-type-graph {
         display: flex;
         width: 50%;
-        height: 300px;
 
         @media screen and (max-width: 992px) {
             width: 100%;
@@ -76,14 +71,8 @@ const RevenueGraphFieldWrapper = styled.div`
         }
     }
 
-    .product-graph-wrapper {
-        width: 50%;
-        height: 400px;
-
-        @media screen and (max-width: 992px) {
-            width: 100%;
-            flex-direction: column;
-        }
+    .md-height-graph {
+        height: 300px;
     }
 
     .info-text {
@@ -170,6 +159,10 @@ const DayRevenueGraphFieldWrapper = styled.div`
         }
     }
 
+    .md-height-graph {
+        height: 300px;
+    }
+
     .checkbox-group {
         display: flex;
         gap: 15px;
@@ -253,16 +246,25 @@ const RevenueOperatorFieldViewWrapper = styled.div`
     align-items: center;
     justify-content: space-between;
 
-    .flex-box {
+    @media screen and (max-width: 992px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .select-group {
+        width: 80%;
         display: flex;
-        align-items: center;
+        gap: 10px;
+
+        @media screen and (max-width: 992px){
+            flex-direction: column;
+        }
     }
 
     .select-item {
         width: 300px;
         height: 35px;
         padding: 0 10px;
-        margin: 0 10px;
         border: 1px solid #ccc;
         border-radius: 0;
         font-size: 14px;
@@ -275,9 +277,8 @@ const RevenueOperatorFieldViewWrapper = styled.div`
             outline: none;
         }
 
-        @media all and (max-width:992px) {
-            margin: 10px 0 0 0;
-            width: 100%;
+        @media screen and (max-width: 992px){
+            width: 70%;
         }
     }
 

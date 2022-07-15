@@ -20,13 +20,13 @@ const DetailRevenueGraphByDayOfWeekFieldView = (props) => {
         <DayRevenueGraphFieldWrapper>
             {props.optionRevenueGraphByDayOfWeekData &&
                 <>
-                    <div className='half-type-graph'>
+                    <div className='half-type-graph md-height-graph'>
                         <Bar
                             data={createGraphData(props.optionRevenueGraphByDayOfWeekData?.total)}
                             options={createBarGraphOption(graphOption)}
                         />
                     </div>
-                    <div className='half-type-graph'>
+                    <div className='half-type-graph md-height-graph'>
                         <Bar
                             data={createGraphData(props.optionRevenueGraphByDayOfWeekData?.week)}
                             options={createBarGraphOption(graphOption)}

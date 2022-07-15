@@ -3,7 +3,7 @@ import { RevenueOperatorFieldViewWrapper } from "./SalesPerformanceGraph.styled"
 export default function OptionRevenueOperatorFieldView(props) {
     return (
         <RevenueOperatorFieldViewWrapper>
-            <div className='flex-box'>
+            <div className='select-group'>
                 <div>
                     <select
                         className='select-item'
