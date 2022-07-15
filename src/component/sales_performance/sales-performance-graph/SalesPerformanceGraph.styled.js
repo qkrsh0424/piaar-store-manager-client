@@ -159,7 +159,7 @@ const DayRevenueGraphFieldWrapper = styled.div`
     align-items: center;
     justify-content: space-around;
     
-    .graph-wrapper {
+    .half-type-graph {
         width: 45%;
         height: 400px;
 

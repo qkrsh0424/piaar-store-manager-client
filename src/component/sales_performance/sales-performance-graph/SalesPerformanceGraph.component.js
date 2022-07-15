@@ -13,6 +13,7 @@ import OptionRevenueGraphFieldView from "./OptionRevenueGraphField.view";
 import OptionRevenueOperatorFieldView from "./OptionRevenueOperatorField.view";
 import OrderAnalysisFieldView from "./OrderRevenueAnalysisField.view";
 import RevenueAnalysisFieldView from "./RevenueAnalysisField.view";
+import DetailRevenueGraphByDayOfWeekFieldView from "./DetailRevenueGraphByDayOfWeek.view";
 
 class GraphDataset {
     constructor() {
@@ -73,6 +74,9 @@ const SalesPerformanceGraphComponent = (props) => {
     // 기간별 총 매출액 및 총 주문건 & 주문 수량 데이터
     const [revenueAnalysisResult, dispatchRevenueAnalysisResult] = useReducer(revenueAnalysisResultReducer, initialRevenueAnalysisResult);
     const [orderAnalysisResult, dispatchOrderAnalysisResult] = useReducer(orderAnalysisResultReducer, initialOrderAnalysisResult);
+
+    // 요일별 상품 매출 그래프
+    const [optionRevenueGraphByDayOfWeekData, dispatchOptionRevenueGraphByDayOfWeekData] = useReducer(optionRevenueGraphByDayOfWeekDataReducer, initialOptionRevenueGraphByDayOfWeekData)
 
     useEffect(() => {
         if (!props.erpItemData) {
@@ -154,11 +158,17 @@ const SalesPerformanceGraphComponent = (props) => {
                 })
                 return;
             }
+            dispatchOptionRevenueGraphByDayOfWeekData({
+                type: 'CLEAR'
+            })
+
             onActionCreateProductCategoryRevenueGraphData();
+            onActionCreateCategoryRevenueGraphByDayOfWeekData();
             return;
         }
-
+        
         onActionCreateOptionRevenueGraphData();
+        onActionCreateProductRevenueGraphByDayOfWeekData();
     }, [productSearchItem, hideOrderGraph, optionAnalysisItem])
 
     // 1-1. 전체 - 총 매출액
@@ -989,6 +999,346 @@ const SalesPerformanceGraphComponent = (props) => {
         })
     }
 
+    // 1-4. 상품 - 요일별 매출액
+    const onActionCreateCategoryRevenueGraphByDayOfWeekData = () => {
+        let erpOrderItem = [...optionAnalysisItem];
+
+        let dayName = getWeekName();    // 일 ~ 토
+        let date = new Set([]);
+        let week = new Set([]);
+        let analysis = [];
+        let analysisByWeek = [];
+        let datasets = [];
+        let datasetsByWeek = [];
+
+        let startDate = query.startDate;
+        let endDate = query.endDate;
+
+        let betweenDay = getDifferenceBetweenStartDateAndEndDate(startDate, endDate);
+        for (let i = 0; i < betweenDay; i++) {
+            let lastDate = new Date(endDate);
+            lastDate.setDate(lastDate.getDate() - i);
+            let addDate = getDateToAnalysisRangeDateFormat('date', lastDate);
+            let addWeek = getDateToAnalysisRangeDateFormat('week', lastDate);
+            date.add(addDate);
+            week.add(addWeek);
+        }
+
+        analysis = [...date].map(r => {
+            return {
+                key: r,
+                value: 0
+            }
+        });
+
+        // 주차 별 요일 데이터
+        let weekValue = {};
+        dayName.forEach(r => {
+            weekValue = {
+                ...weekValue,
+                [r]: 0
+            }
+        })
+        analysisByWeek = [...week].map(r => {
+            return {
+                key: r,
+                value: weekValue
+            }
+        });
+        analysisByWeek.reverse();
+
+        erpOrderItem = erpOrderItem.filter(r => r.productCategory?.cid === parseInt(productSearchItem.category));
+        erpOrderItem = erpOrderItem.map(r => r.erpOrderItem);
+
+        erpOrderItem.forEach(r => {
+            let compareDate = getDateToAnalysisRangeDateFormat('date', r.channelOrderDate);
+            analysis = analysis.map(r2 => {
+                if (r2.key === compareDate) {
+                    return r2 = {
+                        ...r2,
+                        value: parseInt(r2.value) + parseInt(r.price) + parseInt(r.deliveryCharge)
+                    }
+                } else {
+                    return r2;
+                }
+            })
+        })
+
+        // 요일별 평균 매출액을 구하기 위해 count를 추가
+        let total = dayName.map(r => {
+            return {
+                key: r,
+                revenue: 0,
+                count: 0
+            }
+        })
+
+        analysis.forEach(r => {
+            total = total.map(r2 => {
+                if (r2.key === getDayName(r.key)) {
+                    return {
+                        ...r2,
+                        revenue: r2.revenue + r.value,
+                        count: r2.count + 1
+                    }
+                } else {
+                    return r2;
+                }
+            })
+        });
+
+        // 요일별 평균 매출액 계산
+        let totalAverage = [];
+        total.forEach(r => {
+            totalAverage = {
+                ...totalAverage,
+                [r.key]: r.revenue / r.count
+            }
+        })
+
+        let categoryName = props.categoryList.filter(r => r.cid === parseInt(productSearchItem.category))[0]?.name;
+
+        // [일, 월, 화, 수, 목, 금, 토] 로 정렬
+        let totalRevenue = dayName.map(r => totalAverage[r]);
+        let totalRevenueGraphDataset = new GraphDataset().toJSON();
+        totalRevenueGraphDataset = {
+            ...totalRevenueGraphDataset,
+            type: 'bar',
+            label: '[ ' + categoryName + ' ] 평균 매출액',
+            data: totalRevenue,
+            fill: true,
+            borderColor: ORDER_GRAPH_BG_COLOR[3] + 'BB',
+            backgroundColor: ORDER_GRAPH_BG_COLOR[3] + 'BB'
+        }
+        datasets.push(totalRevenueGraphDataset);
+
+        analysis.forEach(r => {
+            let compareWeek = getDateToAnalysisRangeDateFormat('week', r.key);
+            let compareDay = getDayName(r.key);
+            analysisByWeek = analysisByWeek.map(r2 => {
+                if (r2.key === compareWeek) {
+                    return r2 = {
+                        ...r2,
+                        value: {
+                            ...r2.value,
+                            [compareDay]: parseInt(r2.value[compareDay]) + parseInt(r.value)
+                        }
+                    }
+                } else {
+                    return r2;
+                }
+            })
+        })
+
+        // 검색 주차가 팔레트색상 사이즈보다 크다면 랜덤한 컬러 생성
+        let graphColor = ORDER_GRAPH_BG_COLOR;
+        for (let i = ORDER_GRAPH_BG_COLOR.length; i < analysisByWeek.length; i++) {
+            let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
+            graphColor.push(randomColor);
+        }
+
+        let revenueByWeek = analysisByWeek.map(r => Object.values(r.value));
+        datasetsByWeek = analysisByWeek.map((r, idx) => {
+            let datasets = new GraphDataset().toJSON();
+            return {
+                ...datasets,
+                type: 'bar',
+                label: r.key + '주차',
+                data: revenueByWeek[idx],
+                fill: true,
+                borderColor: graphColor[idx] + 'BB',
+                backgroundColor: graphColor[idx] + 'BB'
+            }
+        })
+
+        // 요일별 그래프 2개 생성
+        let dayRevenueGraphData = {
+            total: {
+                labels: dayName,
+                datasets: datasets
+            },
+            week: {
+                labels: dayName,
+                datasets: datasetsByWeek
+            }
+        }
+
+        dispatchOptionRevenueGraphByDayOfWeekData({
+            type: 'INIT_DATA',
+            payload: dayRevenueGraphData
+        })
+    }
+
+    // 1-4. 상품 - 요일별 매출액
+    const onActionCreateProductRevenueGraphByDayOfWeekData = () => {
+        let erpOrderItem = [...optionAnalysisItem];
+
+        let dayName = getWeekName();    // 일 ~ 토
+        let date = new Set([]);
+        let week = new Set([]);
+        let analysis = [];
+        let analysisByWeek = [];
+        let datasets = [];
+        let datasetsByWeek = [];
+
+        let startDate = query.startDate;
+        let endDate = query.endDate;
+
+        let betweenDay = getDifferenceBetweenStartDateAndEndDate(startDate, endDate);
+        for (let i = 0; i < betweenDay; i++) {
+            let lastDate = new Date(endDate);
+            lastDate.setDate(lastDate.getDate() - i);
+            let addDate = getDateToAnalysisRangeDateFormat('date', lastDate);
+            let addWeek = getDateToAnalysisRangeDateFormat('week', lastDate);
+            date.add(addDate);
+            week.add(addWeek);
+        }
+
+        analysis = [...date].map(r => {
+            return {
+                key: r,
+                value: 0
+            }
+        });
+
+        // 주차 별 요일 데이터
+        let weekValue = {};
+        dayName.forEach(r => {
+            weekValue = {
+                ...weekValue,
+                [r]: 0
+            }
+        })
+        analysisByWeek = [...week].map(r => {
+            return {
+                key: r,
+                value: weekValue
+            }
+        });
+        analysisByWeek.reverse();
+
+        erpOrderItem = erpOrderItem.filter(r => r.product?.cid === parseInt(productSearchItem.product));
+        erpOrderItem = erpOrderItem.map(r => r.erpOrderItem);
+
+        erpOrderItem.forEach(r => {
+            let compareDate = getDateToAnalysisRangeDateFormat('date', r.channelOrderDate);
+            analysis = analysis.map(r2 => {
+                if (r2.key === compareDate) {
+                    return r2 = {
+                        ...r2,
+                        value: parseInt(r2.value) + parseInt(r.price) + parseInt(r.deliveryCharge)
+                    }
+                } else {
+                    return r2;
+                }
+            })
+        })
+
+        // 요일별 평균 매출액을 구하기 위해 count를 추가
+        let total = dayName.map(r => {
+            return {
+                key: r,
+                revenue: 0,
+                count: 0
+            }
+        })
+
+        analysis.forEach(r => {
+            total = total.map(r2 => {
+                if (r2.key === getDayName(r.key)) {
+                    return {
+                        ...r2,
+                        revenue: r2.revenue + r.value,
+                        count: r2.count + 1
+                    }
+                } else {
+                    return r2;
+                }
+            })
+        });
+
+        // 요일별 평균 매출액 계산
+        let totalAverage = [];
+        total.forEach(r => {
+            totalAverage = {
+                ...totalAverage,
+                [r.key]: r.revenue / r.count
+            }
+        })
+
+        let productDefaultName = productViewList.filter(r => r.cid === parseInt(productSearchItem.product))[0]?.defaultName;
+
+        // [일, 월, 화, 수, 목, 금, 토] 로 정렬
+        let totalRevenue = dayName.map(r => totalAverage[r]);
+        let totalRevenueGraphDataset = new GraphDataset().toJSON();
+        totalRevenueGraphDataset = {
+            ...totalRevenueGraphDataset,
+            type: 'bar',
+            label: '[ ' + productDefaultName + ' ] 평균 매출액',
+            data: totalRevenue,
+            fill: true,
+            borderColor: ORDER_GRAPH_BG_COLOR[3] + 'BB',
+            backgroundColor: ORDER_GRAPH_BG_COLOR[3] + 'BB'
+        }
+        datasets.push(totalRevenueGraphDataset);
+
+        analysis.forEach(r => {
+            let compareWeek = getDateToAnalysisRangeDateFormat('week', r.key);
+            let compareDay = getDayName(r.key);
+            analysisByWeek = analysisByWeek.map(r2 => {
+                if (r2.key === compareWeek) {
+                    return r2 = {
+                        ...r2,
+                        value: {
+                            ...r2.value,
+                            [compareDay]: parseInt(r2.value[compareDay]) + parseInt(r.value)
+                        }
+                    }
+                } else {
+                    return r2;
+                }
+            })
+        })
+
+        // 검색 주차가 팔레트색상 사이즈보다 크다면 랜덤한 컬러 생성
+        let graphColor = ORDER_GRAPH_BG_COLOR;
+        for (let i = ORDER_GRAPH_BG_COLOR.length; i < analysisByWeek.length; i++) {
+            let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
+            graphColor.push(randomColor);
+        }
+
+        let revenueByWeek = analysisByWeek.map(r => Object.values(r.value));
+        datasetsByWeek = analysisByWeek.map((r, idx) => {
+            let datasets = new GraphDataset().toJSON();
+            return {
+                ...datasets,
+                type: 'bar',
+                label: r.key + '주차',
+                data: revenueByWeek[idx],
+                fill: true,
+                borderColor: graphColor[idx] + 'BB',
+                backgroundColor: graphColor[idx] + 'BB'
+            }
+        })
+
+        // 요일별 그래프 2개 생성
+        let dayRevenueGraphData = {
+            total: {
+                labels: dayName,
+                datasets: datasets
+            },
+            week: {
+                labels: dayName,
+                datasets: datasetsByWeek
+            }
+        }
+
+        dispatchOptionRevenueGraphByDayOfWeekData({
+            type: 'INIT_DATA',
+            payload: dayRevenueGraphData
+        })
+    }
+
     // 2. 총 주문건 & 수량
     const onActionCreateOrderAnalysisGraphData = () => {
         let date = new Set([]);
@@ -1404,6 +1754,7 @@ const SalesPerformanceGraphComponent = (props) => {
 
     return (
         <Container>
+            {/* 매출액 그래프 */}
             {revenueGraphData &&
                 <>
                     <div className='graph-group'>
@@ -1438,24 +1789,35 @@ const SalesPerformanceGraphComponent = (props) => {
                             }
                         </div>
                     </div>
+                    {/* 상품별 & 옵션별 매출액 그래프 */}
                     {searchItem === 'product' &&
-                        <div className='graph-group'>
-                            <OptionRevenueOperatorFieldView
-                                productSearchItem={productSearchItem}
-                                hideOrderGraph={hideOrderGraph}
-                                categoryList={props.categoryList}
-                                productViewList={productViewList}
+                        <>
+                            <div className='graph-group'>
+                                <OptionRevenueOperatorFieldView
+                                    productSearchItem={productSearchItem}
+                                    hideOrderGraph={hideOrderGraph}
+                                    categoryList={props.categoryList}
+                                    productViewList={productViewList}
 
-                                onChangeOptionRevenueDropDownItem={onChangeOptionRevenueDropDownItem}
-                            ></OptionRevenueOperatorFieldView>
-                            <OptionRevenueGraphFieldView
-                                productSearchItem={productSearchItem}
-                                optionRevenueGraphData={optionRevenueGraphData}
-                            ></OptionRevenueGraphFieldView>
-                        </div>
+                                    onChangeOptionRevenueDropDownItem={onChangeOptionRevenueDropDownItem}
+                                ></OptionRevenueOperatorFieldView>
+                                <OptionRevenueGraphFieldView
+                                    productSearchItem={productSearchItem}
+                                    optionRevenueGraphData={optionRevenueGraphData}
+                                ></OptionRevenueGraphFieldView>
+                            </div>
+                            {/* 요일별 상품 매출 그래프 */}
+                            <div className='graph-group'>
+                                <DetailRevenueGraphByDayOfWeekFieldView
+                                    productSearchItem={productSearchItem}
+                                    optionRevenueGraphByDayOfWeekData={optionRevenueGraphByDayOfWeekData}
+                                ></DetailRevenueGraphByDayOfWeekFieldView>
+                            </div>
+                        </>
                     }
                 </>
             }
+            {/* 총 주문건 & 수량 그래프 */}
             {orderAnalysisGraphData &&
                 <div className='graph-group'>
                     <GraphTitleField
@@ -1479,6 +1841,7 @@ const SalesPerformanceGraphComponent = (props) => {
                     </div>
                 </div>
             }
+            {/* 요일별 매출액 그래프 */}
             {dayRevenueGraphData &&
                 <div className='graph-group'>
                     <GraphTitleField
@@ -1497,6 +1860,7 @@ const SalesPerformanceGraphComponent = (props) => {
                     ></DayRevenueGraphFieldView>
                 </div>
             }
+            {/* 매출 BEST 테이블 */}
             {tableData &&
                 <div className='graph-group'>
                     <GraphTitleField
@@ -1535,6 +1899,7 @@ const initialOptionAnalysisItem = null;
 const initialOptionRevenueGraphData = null;
 const initialRevenueAnalysisResult = null;
 const initialOrderAnalysisResult = null;
+const initialOptionRevenueGraphByDayOfWeekData = null;
 
 const revenueGraphDataReducer = (state, action) => {
     switch (action.type) {
@@ -1668,6 +2033,17 @@ const orderAnalysisResultReducer = (state, action) => {
             return action.payload;
         case 'CLEAR':
             return initialOrderAnalysisResult;
+        default:
+            return state;
+    }
+}
+
+const optionRevenueGraphByDayOfWeekDataReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialOptionRevenueGraphByDayOfWeekData;
         default:
             return state;
     }
