@@ -18,7 +18,10 @@ export default function ProductManageTableFieldView(props) {
                         }
                         <th className='fixedHeader' scope="col" width='250'>상품식별코드</th>
                         <th className='fixedHeader' scope="col" width='140'>상품이미지</th>
-                        <th className='fixedHeader' scope="col" width='200'>상품관리</th>
+                        
+                        {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&
+                            <th className='fixedHeader' scope="col" width='200'>상품관리</th>
+                        }
                         <th className='fixedHeader' scope="col" width='50'>
                             <input type='checkbox' 
                                 onChange={() => props.checkAll()} 
@@ -27,15 +30,19 @@ export default function ProductManageTableFieldView(props) {
                         </th>
                         <th className='fixedHeader' scope="col" width='200'>옵션관리코드</th>
                         <th className='fixedHeader' scope="col" width='100'>세트상품 여부</th>
-                        <th className='fixedHeader' scope="col" width='150'>노스노스 고유코드</th>
+                        {/* <th className='fixedHeader' scope="col" width='150'>노스노스 고유코드</th> */}
                         <th className='fixedHeader' scope="col" width='200'>옵션명</th>
                         <th className='fixedHeader' scope="col" width='200'>옵션관리명</th>
                         <th className='fixedHeader' scope="col" width='100'>재고수량</th>
                         <th className='fixedHeader' scope="col" width='150'>현재상태</th>
-                        <th className='fixedHeader' scope="col" width='150'>가격</th>
+                        {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&
+                            <th className='fixedHeader' scope="col" width='150'>가격</th>
+                        }
                         <th className='fixedHeader' scope="col" width='200'>출고지</th>
                         <th className='fixedHeader' scope="col" width='200'>비고</th>
-                        <th className='fixedHeader' scope="col" width='100'>대체코드</th>
+                        {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&
+                            <th className='fixedHeader' scope="col" width='100'>대체코드</th>
+                        }
                         <th className='fixedHeader' scope="col" width='400'>옵션컨트롤</th>
                     </tr>
                 </thead>
@@ -80,24 +87,25 @@ export default function ProductManageTableFieldView(props) {
                                             </div>
                                         </div>
                                     </th>
-                                    <th rowSpan={product.options.length + 1}>
-                                        <div>
-                                            {product.product.purchaseUrl ?
-                                                <a href={product.product.purchaseUrl} target='_blank'>
-                                                    <LinkIcon type='button'>구매링크</LinkIcon>
-                                                </a>
-                                                :
-                                                <LinkOffIcon type='button' onClick={() => alert('구매링크를 먼저 등록해주세요.')}>구매링크</LinkOffIcon>
-                                            }
-                                        </div>
-                                        <div style={{ color: 'green' }}>[{product.category.name}]</div>
-                                        <div>{product.product.imageFileUri}</div>
-                                        <div>
-                                            <button type='button' className="add-btn" onClick={() => props.onActionOpenCreateProductOptionModal(product.product.id)}>옵션추가</button>
-                                        </div>
-                                    </th>
-
-                                    <th colSpan={13} style={{ background: '#7a7bda20', color: '#888' }}>
+                                    {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&
+                                        <th rowSpan={product.options.length + 1}>
+                                            <div>
+                                                {product.product.purchaseUrl ?
+                                                    <a href={product.product.purchaseUrl} target='_blank'>
+                                                        <LinkIcon type='button'>구매링크</LinkIcon>
+                                                    </a>
+                                                    :
+                                                    <LinkOffIcon type='button' onClick={() => alert('구매링크를 먼저 등록해주세요.')}>구매링크</LinkOffIcon>
+                                                }
+                                            </div>
+                                            <div style={{ color: 'green' }}>[{product.category.name}]</div>
+                                            <div>{product.product.imageFileUri}</div>
+                                            <div>
+                                                <button type='button' className="add-btn" onClick={() => props.onActionOpenCreateProductOptionModal(product.product.id)}>옵션추가</button>
+                                            </div>
+                                        </th>
+                                    }
+                                    <th colSpan={12} style={{ background: '#7a7bda20', color: '#888' }}>
                                         <div>{product.product.managementName}-{product.product.code}-{product.product.manufacturingCode}</div>
                                     </th>
 
@@ -118,32 +126,41 @@ export default function ProductManageTableFieldView(props) {
                                             </td>
                                             <td>{option.code}</td>
                                             <td style={{ fontWeight: '800' }}>{option.packageYn === 'y' ? 'O' : '-'}</td>
-                                            <td>{option.nosUniqueCode}</td>
+                                            {/* <td>{option.nosUniqueCode}</td> */}
                                             <td>{option.defaultName}</td>
                                             <td>{option.managementName}</td>
                                             <td style={{ fontWeight: '800' }}>{option.stockSumUnit}</td>
                                             <td style={{ fontWeight: '800' }}>{option.status}</td>
-                                            <td style={{ fontWeight: '800' }}>{option.salesPrice}</td>
+                                            {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&
+                                                <td style={{ fontWeight: '800' }}>{option.salesPrice}</td>
+                                            }
                                             <td style={{ fontWeight: '800' }}>{option.releaseLocation}</td>
                                             <td style={{ fontWeight: '800' }}>{option.memo}</td>
-                                            <td style={{ fontWeight: '800' }}>
-                                                <button
-                                                    type='button'
-                                                    className='sub-option-code-btn'
-                                                    onClick={(e) => props.onActionOpenSubOptionCodeModal(e, product.product.id, option.id)}
-                                                >대체코드</button>
-                                            </td>
+                                            {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&
+
+                                                <td style={{ fontWeight: '800' }}>
+                                                    <button
+                                                        type='button'
+                                                        className='sub-option-code-btn'
+                                                        onClick={(e) => props.onActionOpenSubOptionCodeModal(e, product.product.id, option.id)}
+                                                    >대체코드</button>
+                                                </td>
+                                            }
                                             <td style={{ fontWeight: '800' }} className="option-control">
-                                                <button
-                                                    type='button'
-                                                    className="modify-btn"
-                                                    onClick={(e) => props.onActionOpenModifyProductOptionModal(e, product.product.id, option.id)}
-                                                >옵션수정</button>
-                                                <button
-                                                    type='button'
-                                                    className="delete-btn"
-                                                    onClick={(e) => props.onActionDeleteProductOption(e, product.product.id, option.id)}
-                                                >옵션삭제</button>
+                                                {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&
+                                                    <>
+                                                        <button
+                                                            type='button'
+                                                            className="modify-btn"
+                                                            onClick={(e) => props.onActionOpenModifyProductOptionModal(e, product.product.id, option.id)}
+                                                        >옵션수정</button>
+                                                        <button
+                                                            type='button'
+                                                            className="delete-btn"
+                                                            onClick={(e) => props.onActionDeleteProductOption(e, product.product.id, option.id)}
+                                                        >옵션삭제</button>
+                                                    </>
+                                                }
                                                 <button
                                                     type='button'
                                                     className="status-btn"

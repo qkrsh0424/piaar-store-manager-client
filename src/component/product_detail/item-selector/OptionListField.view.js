@@ -3,27 +3,32 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { DataListWrapper } from "./ItemSelector.styled";
+import { useSelector } from 'react-redux';
 
 export default function OptionListFieldView(props) {
+    const userRdx = useSelector(state => state.user);
+
     return (
         <DataListWrapper>
-            <div className="control-box">
-                <button className="add-btn"
-                    onClick={() => props.onActionOpenCreateProductOptionModal()}
-                >
-                    <AddIcon />
-                </button>
-                <button className="modify-btn"
-                    onClick={() => props.onActionOpenModifyProductOptionModal()}
-                >
-                    <EditIcon />
-                </button>
-                <button className="delete-btn"
-                    onClick={() => props.onActionDeleteProductOption()}
-                >
-                    <DeleteIcon />
-                </button>
-            </div>
+            {userRdx.userInfo && !(userRdx.userInfo?.roles.includes("ROLE_LOGISTICS")) &&
+                <div className="control-box">
+                    <button className="add-btn"
+                        onClick={() => props.onActionOpenCreateProductOptionModal()}
+                    >
+                        <AddIcon />
+                    </button>
+                    <button className="modify-btn"
+                        onClick={() => props.onActionOpenModifyProductOptionModal()}
+                    >
+                        <EditIcon />
+                    </button>
+                    <button className="delete-btn"
+                        onClick={() => props.onActionDeleteProductOption()}
+                    >
+                        <DeleteIcon />
+                    </button>
+                </div>
+            }
             <div className="item-list">
                 <div className="fixed-header">
                     <div>옵션</div>

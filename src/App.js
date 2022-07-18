@@ -108,99 +108,111 @@ function App(props) {
                     <AppContainer>
                         {(userRdx.isLoading == false ? (
                             userRdx.userInfo ? (
-                            <Routes>
-                                {/* {console.log(userRdx.userInfo.roles.includes("ROLE_MANAGER"))} */}
-                                {/* 올바르지 않은 url 입력 or 접근 제한되었을 때 */}
-                                <Route path="*" element={<HomeMain />} />
+                                userRdx.userInfo.roles.includes("ROLE_LOGISTICS") ? (
+                                    <Routes>
+                                        <Route path="*" element={<HomeMain />} />
+                                        <Route path="/" element={<HomeMain />} />
+                                        <Route path='/login' element={<LoginMain />} />
+                                        <Route path='/products' element={<ProductManagePage />} />
+                                        <Route path='/product-detail' element={<ProductDetailPage />} />
+                                    </Routes>
+                                )
+                                    : (
+                                        <Routes>
+                                            {/* {console.log(userRdx.userInfo.roles.includes("ROLE_MANAGER"))} */}
+                                            {/* 올바르지 않은 url 입력 or 접근 제한되었을 때 */}
+                                            <Route path="*" element={<HomeMain />} />
 
-                                {/* Home */}
-                                <Route path="/" element={<HomeMain />} />
+                                            {/* Home */}
+                                            <Route path="/" element={<HomeMain />} />
 
-                                {/* OrderManage */}
-                                <Route path="/order-confirm" element={<OrderConfirmMain />} />
+                                            {/* Login Signup etc.. */}
+                                            <Route path='/login' element={<LoginMain />} />
 
-                                <Route path="/waybill" element={<WaybillMain />} />
+                                            {/* refactor page 5 - /products -> /ex/products */}
+                                            {/* Product Manage */}
+                                            {/* <Route path='/ex/products' element={<ProductManageMain />} /> */}
+                                            <Route path='/products' element={<ProductManagePage />} />
 
-                                {/* Login Signup etc.. */}
-                                <Route path='/login' element={<LoginMain />} />
+                                            {/* refactor page 2 - /product-detail -> /ex/product-detail */}
+                                            {/* <Route path='/ex/product-detail' element={<ProductDetailMain />} /> */}
+                                            <Route path='/product-detail' element={<ProductDetailPage />} />
 
-                                {/* Account book */}
-                                {(userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) &&
-                                    <>
-                                        <Route path='/account-book' element={<AccountBookMain />} />
-                                        <Route path='/account-book/income' element={<IncomeMain />} />
-                                        <Route path='/account-book/expenditure' element={<ExpenditureMain />} />
-                                    </>
-                                }
+                                            {/* OrderManage */}
+                                            <Route path="/order-confirm" element={<OrderConfirmMain />} />
 
-                                {/* Sales Rate */}
-                                <Route path='/sales-rate/naver' element={<SalesRateNaverMain />} />
+                                            <Route path="/waybill" element={<WaybillMain />} />
 
-                                {/* refactor page 5 - /products -> /ex/products */}
-                                {/* Product Manage */}
-                                {/* <Route path='/ex/products' element={<ProductManageMain />} /> */}
-                                <Route path='/products' element={<ProductManagePage />} />
+                                            {/* Account book */}
+                                            {(userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) &&
+                                                <>
+                                                    <Route path='/account-book' element={<AccountBookMain />} />
+                                                    <Route path='/account-book/income' element={<IncomeMain />} />
+                                                    <Route path='/account-book/expenditure' element={<ExpenditureMain />} />
+                                                </>
+                                            }
 
-                                 {/* refactor page 3 - /product/create -> /ex/product/create */}
-                                {/* <Route path='/ex/products/create' element={<CreateMain />} /> */}
-                                <Route path='/products/create' element={<ProductCreatePage />} />
-                                
-                                {/* Shipment */}
-                                <Route path='/shipment/packing-list/naver' element={<SPackingListNaverMain />} />
-                                
-                                <Route path='/shipment/packing-list/coupang' element={<SPackingListCoupangMain />} />
+                                            {/* Sales Rate */}
+                                            <Route path='/sales-rate/naver' element={<SalesRateNaverMain />} />
 
-                                {/* DeliveryReady - NAVER */}
-                                <Route path='/delivery-ready/naver' element={<DeliveryReadyUploadNaverMain />} />
-                                
-                                {/* DeliveryReady - COUPANG */}
-                                <Route path='/delivery-ready/coupang' element={<DeliveryReadyUploadCoupangMain />} />
+                                            {/* refactor page 3 - /product/create -> /ex/product/create */}
+                                            {/* <Route path='/ex/products/create' element={<CreateMain />} /> */}
+                                            <Route path='/products/create' element={<ProductCreatePage />} />
 
-                                {/* DeliveryReady - PIAAR */}
-                                <Route path='/delivery-ready/piaar' element={<DeliveryReadyUploadPiaarMain />} />
+                                            {/* Shipment */}
+                                            <Route path='/shipment/packing-list/naver' element={<SPackingListNaverMain />} />
 
-                                {(userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) &&
-                                    <>
-                                        <Route path='/delivery-ready/naver/view' element={<DeliveryReadyViewNaverMain />} />
-                                        <Route path='/delivery-ready/coupang/view' element={<DeliveryReadyViewCoupangMain />} />
-                                        <Route path='/delivery-ready/piaar/view' element={<DeliveryReadyViewPiaarMain />} />
-                                    </>
-                                }
+                                            <Route path='/shipment/packing-list/coupang' element={<SPackingListCoupangMain />} />
 
-                                <Route path='/order-registration/naver' element={<OrderRegistrationNaverMain />} />
+                                            {/* DeliveryReady - NAVER */}
+                                            <Route path='/delivery-ready/naver' element={<DeliveryReadyUploadNaverMain />} />
 
-                                {/* refactor page 2 - /product-detail -> /ex/product-detail */}
-                                {/* <Route path='/ex/product-detail' element={<ProductDetailMain />} /> */}
-                                <Route path='/product-detail' element={<ProductDetailPage />} />
+                                            {/* DeliveryReady - COUPANG */}
+                                            <Route path='/delivery-ready/coupang' element={<DeliveryReadyUploadCoupangMain />} />
 
-                                <Route path='/commute-record' element={<CommuteRecordMain />} />
+                                            {/* DeliveryReady - PIAAR */}
+                                            <Route path='/delivery-ready/piaar' element={<DeliveryReadyUploadPiaarMain />} />
 
-                                {/* refactor page 4 - /excel-translator -> /ex/excel-translator */}
-                                {/* <Route path='/ex/excel-translator' element={<ExcelTranslatorMain />} /> */}
-                                <Route path='/excel-translator' element={<ExcelTranslatorPage />} />
-                                
-                                {/* refactor page 1 - /sales-analysis -> /ex/sales-analysis */}
-                                {/* <Route path='/ex/sales-analysis' element={<SalesAnalysisMain />} /> */}
-                                <Route path='/sales-analysis' element={<SalesAnalysisPage />} />
+                                            {(userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) &&
+                                                <>
+                                                    <Route path='/delivery-ready/naver/view' element={<DeliveryReadyViewNaverMain />} />
+                                                    <Route path='/delivery-ready/coupang/view' element={<DeliveryReadyViewCoupangMain />} />
+                                                    <Route path='/delivery-ready/piaar/view' element={<DeliveryReadyViewPiaarMain />} />
+                                                </>
+                                            }
 
-                                <Route path='/stock-analysis' element={<StockAnalysisPage />} />
+                                            <Route path='/order-registration/naver' element={<OrderRegistrationNaverMain />} />
 
-                                <Route path='/sales-performance' element={<SalesPerformancePage />} />
+                                            <Route path='/commute-record' element={<CommuteRecordMain />} />
 
-                                {/* PiaarErpManagement */}
-                                <Route path='/erp/management/dashboard' element={<ErpManagementDashboardPage />} />
-                                <Route path='/erp/management/order-upload' element={<ErpManagementOrderUploadPage />} />
-                                <Route path='/erp/management/order' element={<ErpManagementOrderPage />} />
-                                <Route path='/erp/management/sales' element={<ErpManagementSalesPage />} />
-                                <Route path='/erp/management/release-complete' element={<ErpManagementReleaseCompletePage />} />
-                                <Route path='/erp/management/excel' element={<ErpManagementExcelFormPage />} />
-                            </Routes>
-                        ):
-                        <>
-                        <Routes>
-                            <Route path="*" element={<LoginMain />} />
-                        </Routes>
-                        </>
+                                            {/* refactor page 4 - /excel-translator -> /ex/excel-translator */}
+                                            {/* <Route path='/ex/excel-translator' element={<ExcelTranslatorMain />} /> */}
+                                            <Route path='/excel-translator' element={<ExcelTranslatorPage />} />
+
+                                            {/* refactor page 1 - /sales-analysis -> /ex/sales-analysis */}
+                                            {/* <Route path='/ex/sales-analysis' element={<SalesAnalysisMain />} /> */}
+                                            <Route path='/sales-analysis' element={<SalesAnalysisPage />} />
+
+                                            <Route path='/stock-analysis' element={<StockAnalysisPage />} />
+
+                                            <Route path='/sales-performance' element={<SalesPerformancePage />} />
+
+                                            {/* PiaarErpManagement */}
+                                            <Route path='/erp/management/dashboard' element={<ErpManagementDashboardPage />} />
+                                            <Route path='/erp/management/order-upload' element={<ErpManagementOrderUploadPage />} />
+                                            <Route path='/erp/management/order' element={<ErpManagementOrderPage />} />
+                                            <Route path='/erp/management/sales' element={<ErpManagementSalesPage />} />
+                                            <Route path='/erp/management/release-complete' element={<ErpManagementReleaseCompletePage />} />
+                                            <Route path='/erp/management/excel' element={<ErpManagementExcelFormPage />} />
+                                        </Routes>
+                                    )
+                            )
+                                :
+                                <>
+                                    <Routes>
+                                        <Route path="*" element={<LoginMain />} />
+                                    </Routes>
+                                </>
                         )
                             :
                             (

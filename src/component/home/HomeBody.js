@@ -117,54 +117,58 @@ const HomeBody = () => {
                         </LinkBox>
                     </GroupBox>
 
-                    <GroupBox>
-                        <GroupTitle>분석기</GroupTitle>
-                        <LinkBox>
-                            <CustomLink2 href='https://analytics.piaar.co.kr'>분석기</CustomLink2>
-                            <CustomLink to='/sales-analysis'>판매 랭킹</CustomLink>
-                            <CustomLink to='/stock-analysis'>재고 자산</CustomLink>
-                        </LinkBox>
-                    </GroupBox>
+                    {userRdx.userInfo && !(userRdx.userInfo?.roles.includes("ROLE_LOGISTICS")) &&
+                        <>
+                            <GroupBox>
+                                <GroupTitle>분석기</GroupTitle>
+                                <LinkBox>
+                                    <CustomLink2 href='https://analytics.piaar.co.kr'>분석기</CustomLink2>
+                                    <CustomLink to='/sales-analysis'>판매 랭킹</CustomLink>
+                                    <CustomLink to='/stock-analysis'>재고 자산</CustomLink>
+                                </LinkBox>
+                            </GroupBox>
 
-                    <GroupBox>
-                        <GroupTitle>피아르</GroupTitle>
-                        <LinkBox>
-                            <CustomLink to='/erp/management/order-upload'>피아르 주문 & 출고 관리</CustomLink>
-                            <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
-                            <CustomLink to='/sales-performance'>판매 성과</CustomLink>
-                        </LinkBox>
-                    </GroupBox>
+                            <GroupBox>
+                                <GroupTitle>피아르</GroupTitle>
+                                <LinkBox>
+                                    <CustomLink to='/erp/management/order-upload'>피아르 주문 & 출고 관리</CustomLink>
+                                    <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
+                                    <CustomLink to='/sales-performance'>판매 성과</CustomLink>
+                                </LinkBox>
+                            </GroupBox>
 
-                    <GroupBox>
-                        <GroupTitle>네이버</GroupTitle>
-                        <LinkBox>
-                            <CustomLink to='/delivery-ready/naver'>배송준비</CustomLink>
-                            <CustomLink to='/order-registration/naver'>대량등록</CustomLink>
-                            <CustomLink to='/shipment/packing-list/naver'>데이터 추출기</CustomLink>
-                            <CustomLink to='/sales-rate/naver'>주문통합검색 판매량 추출기</CustomLink>
-                        </LinkBox>
-                    </GroupBox>
+                            <GroupBox>
+                                <GroupTitle>네이버</GroupTitle>
+                                <LinkBox>
+                                    <CustomLink to='/delivery-ready/naver'>배송준비</CustomLink>
+                                    <CustomLink to='/order-registration/naver'>대량등록</CustomLink>
+                                    <CustomLink to='/shipment/packing-list/naver'>데이터 추출기</CustomLink>
+                                    <CustomLink to='/sales-rate/naver'>주문통합검색 판매량 추출기</CustomLink>
+                                </LinkBox>
+                            </GroupBox>
 
-                    <GroupBox>
-                        <GroupTitle>쿠팡</GroupTitle>
-                        <LinkBox>
-                            <CustomLink to='/delivery-ready/coupang'>배송준비</CustomLink>
-                            <CustomLink to='/shipment/packing-list/coupang'>배송준비 데이터 추출기</CustomLink>
-                        </LinkBox>
-                    </GroupBox>
+                            <GroupBox>
+                                <GroupTitle>쿠팡</GroupTitle>
+                                <LinkBox>
+                                    <CustomLink to='/delivery-ready/coupang'>배송준비</CustomLink>
+                                    <CustomLink to='/shipment/packing-list/coupang'>배송준비 데이터 추출기</CustomLink>
+                                </LinkBox>
+                            </GroupBox>
 
-                    <GroupBox>
-                        <GroupTitle>기타</GroupTitle>
-                        <LinkBox>
-                            {
-                                userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
-                                    <CustomLink to='/account-book'>부기관리</CustomLink>
-                                    :
-                                    <></>
-                            }
-                            <CustomLink to='/commute-record'>출/퇴근 기록</CustomLink>
-                        </LinkBox>
-                    </GroupBox>
+                            <GroupBox>
+                                <GroupTitle>기타</GroupTitle>
+                                <LinkBox>
+                                    {
+                                        userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
+                                            <CustomLink to='/account-book'>부기관리</CustomLink>
+                                            :
+                                            <></>
+                                    }
+                                    <CustomLink to='/commute-record'>출/퇴근 기록</CustomLink>
+                                </LinkBox>
+                            </GroupBox>
+                        </>
+                    }
                 </LinkGroup>
 
             </Container>

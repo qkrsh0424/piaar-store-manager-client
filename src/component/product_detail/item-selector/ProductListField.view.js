@@ -4,8 +4,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DataListWrapper } from "./ItemSelector.styled";
+import { useSelector } from 'react-redux';
 
 export default function ProductListFieldView(props) {
+    const userRdx = useSelector(state => state.user);
+
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -15,26 +18,28 @@ export default function ProductListFieldView(props) {
 
     return (
         <DataListWrapper>
-            <div className="control-box">
-                <button className="add-btn"
-                    type='button'
-                    onClick={() => navigate('/products/create', {
-                        state:routerState
-                    })}
-                >
-                    <AddIcon />
-                </button>
-                <button className="modify-btn"
-                    onClick={() => props.onActionOpenModifyProductModal()}
-                >
-                    <EditIcon />
-                </button>
-                <button className="delete-btn"
-                    onClick={() => props.onActionDeleteProduct()}
-                >
-                    <DeleteIcon />
-                </button>
-            </div>
+            {userRdx.userInfo && !(userRdx.userInfo?.roles.includes("ROLE_LOGISTICS")) &&
+                <div className="control-box">
+                    <button className="add-btn"
+                        type='button'
+                        onClick={() => navigate('/products/create', {
+                            state: routerState
+                        })}
+                    >
+                        <AddIcon />
+                    </button>
+                    <button className="modify-btn"
+                        onClick={() => props.onActionOpenModifyProductModal()}
+                    >
+                        <EditIcon />
+                    </button>
+                    <button className="delete-btn"
+                        onClick={() => props.onActionDeleteProduct()}
+                    >
+                        <DeleteIcon />
+                    </button>
+                </div>
+            }
             <div className="item-list">
                 <div className="fixed-header">
                     <div>상품</div>

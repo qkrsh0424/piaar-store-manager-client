@@ -11,6 +11,7 @@ import CreateProductDetailModalComponent from '../create-product-detail-modal/Cr
 import { PanoramaSharp } from '@material-ui/icons';
 import ModifyProductDetailModalComponent from '../modify-product-detail-modal/ModifyProductDetailModal.component';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 class ProductDetail {
     constructor(productOptionId) {
@@ -41,6 +42,8 @@ class ProductDetail {
 }
 
 const DetailTableComponent = (props) => {
+    const userRdx = useSelector(state => state.user);
+
     const location = useLocation();
     const navigate = useNavigate();
     const query = qs.parse(location.search);
@@ -156,26 +159,30 @@ const DetailTableComponent = (props) => {
         onActionCloseModifyProductDetailModal();
     }
 
-    return(
+    return (
         <Container>
             <DataBox>
                 <ProductInfoTableFieldView
                     selectedProduct={props.selectedProduct}
                 ></ProductInfoTableFieldView>
 
-                <OptionInfoTableFieldView
-                    selectedOption={props.selectedOption}
-                ></OptionInfoTableFieldView>
+                {userRdx.userInfo && !(userRdx.userInfo?.roles.includes("ROLE_LOGISTICS")) &&
+                    <>
+                        <OptionInfoTableFieldView
+                            selectedOption={props.selectedOption}
+                        ></OptionInfoTableFieldView>
 
-                <DetailInfoTableFieldView
-                    detailViewList={props.detailViewList}
-                    detailCid={detailCid}
+                        <DetailInfoTableFieldView
+                            detailViewList={props.detailViewList}
+                            detailCid={detailCid}
 
-                    onChangeDetailCidValue={(value) => onChangeDetailCidValue(value)}
-                    onActionDeleteProductDetail={() => onActionDeleteProductDetail()}
-                    onActionOpenCreateProductDetailModal={() => onActionOpenCreateProductDetailModal()}
-                    onActionOpenModifyProductDetailModal={() => onActionOpenModifyProductDetailModal()}
-                ></DetailInfoTableFieldView>
+                            onChangeDetailCidValue={(value) => onChangeDetailCidValue(value)}
+                            onActionDeleteProductDetail={() => onActionDeleteProductDetail()}
+                            onActionOpenCreateProductDetailModal={() => onActionOpenCreateProductDetailModal()}
+                            onActionOpenModifyProductDetailModal={() => onActionOpenModifyProductDetailModal()}
+                        ></DetailInfoTableFieldView>
+                    </>
+                }
             </DataBox>
 
             {createProductDetailData &&
