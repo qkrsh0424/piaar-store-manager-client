@@ -124,13 +124,14 @@ const SalesPerformanceGraphComponent = (props) => {
         });
     }, [analysisItem, searchItem, hideOrderGraph, props.analysisDateRange])
 
+    // 공통 그래프(총 판매건 & 수량 / 요일별 매출액 / 매출BEST) 생성
     useEffect(() => {
         if (!analysisItem) {
             return;
         }
 
-        onActionCreateDayRevenueGraphData();
         onActionCreateOrderAnalysisGraphData();
+        onActionCreateDayRevenueGraphData();
         onActionCreateTableData();
     }, [analysisItem, hideOrderGraph])
 
@@ -152,15 +153,18 @@ const SalesPerformanceGraphComponent = (props) => {
 
         // 카테고리만 선택된 경우
         if (!productSearchItem.product || productSearchItem.product === 'total') {
+            // 하단 요일별 그래프 초기화
+            dispatchOptionRevenueGraphByDayOfWeekData({
+                type: 'CLEAR'
+            })
+
             if (!productSearchItem.category || productSearchItem.category == 'total') {
                 dispatchOptionRevenueGraphData({
                     type: 'CLEAR'
                 })
+
                 return;
             }
-            dispatchOptionRevenueGraphByDayOfWeekData({
-                type: 'CLEAR'
-            })
 
             onActionCreateProductCategoryRevenueGraphData();
             onActionCreateCategoryRevenueGraphByDayOfWeekData();
