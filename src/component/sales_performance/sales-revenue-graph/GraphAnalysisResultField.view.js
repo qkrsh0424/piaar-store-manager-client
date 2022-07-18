@@ -1,6 +1,6 @@
-import { GraphAnalysisResultFieldWrapper } from "./SalesPerformanceGraph.styled";
+import { GraphAnalysisResultFieldWrapper } from "./SalesRevenueGraph.styled";
 
-const RevenueAnalysisFieldView = (props) => {
+const GraphAnalysisResultFieldView = (props) => {
     return (
         <GraphAnalysisResultFieldWrapper>
             {props.searchItem === 'total' &&
@@ -18,7 +18,7 @@ const RevenueAnalysisFieldView = (props) => {
                         <div key={'revenue-analysis-idx' + idx} className='analysis-value'>
                             <span className='value-info'>
                                 <i className='icon-dot' style={{ backgroundColor: `${r.color}` }}></i>
-                                {r.label}
+                                <span>{idx+1}. {r.label}</span>
                             </span>
                             <span>{r.value?.toLocaleString()} 원</span>
                         </div>
@@ -29,4 +29,4 @@ const RevenueAnalysisFieldView = (props) => {
     )
 }
 
-export default RevenueAnalysisFieldView;
+export default GraphAnalysisResultFieldView;

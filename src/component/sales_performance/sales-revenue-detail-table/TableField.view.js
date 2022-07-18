@@ -1,6 +1,6 @@
 import React from "react";
 import { dateToYYYYMMDD, getDayName } from "../../../utils/dateFormatUtils";
-import { TableFieldWrapper } from "./SalesPerformanceGraph.styled";
+import { TableFieldWrapper } from "./SalesRevenueDetailTable.styled";
 
 const Colgroup = ({  }) => {
     return (

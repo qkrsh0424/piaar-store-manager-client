@@ -5,13 +5,30 @@ import { dateToYYYYMMDD, getEndDateOfMonth, getStartDateOfMonth, setStartDateOfP
 import CommonModalComponent from "../../module/modal/CommonModalComponent";
 import DateRangePickerModalComponent from "../date-range-picker-modal/DateRangePickerModal.component";
 import DateSelectorFieldView from "./DateSelectorField.view";
-import { Container, InfoTextFieldWrapper } from "./SearchOperator.styled"
+import { CheckBoxFieldWrapper, Container, InfoTextFieldWrapper } from "./SearchOperator.styled"
 
 function InfoTextField({ element }) {
     return (
         <InfoTextFieldWrapper>
             {element}
         </InfoTextFieldWrapper>
+    )
+}
+
+function CheckBoxField({ element, onChange, checked }) {
+    return (
+        <CheckBoxFieldWrapper>
+            <div className='checkbox-group'>
+                <input
+                    type='checkbox'
+                    className='checkbox-input'
+                    checked={checked}
+                    name='sales'
+                    onChange={onChange}
+                />
+                <span>{element}</span>
+            </div>
+        </CheckBoxFieldWrapper>
     )
 }
 
@@ -102,6 +119,12 @@ const SearchOperatorComponent = (props) => {
         props._onAction_changeDateRangeOfAnalysis(searchRange);
     }
 
+    const onActionHideSalesGraph = (e) => {
+        e.stopPropagation();
+
+        props._onAction_hideSalesGraph();
+    }
+
     return (
         <>
             <Container>
@@ -117,6 +140,11 @@ const SearchOperatorComponent = (props) => {
                         ( <div>* 분석결과는 판매 데이터 기준입니다.</div> )
                     }
                 ></InfoTextField>
+                <CheckBoxField
+                    element={'주문 데이터 숨기기'}
+                    checked={props.hideOrderGraph}
+                    onChange={onActionHideSalesGraph}
+                ></CheckBoxField>
             </Container>
 
             {/* Modal */}

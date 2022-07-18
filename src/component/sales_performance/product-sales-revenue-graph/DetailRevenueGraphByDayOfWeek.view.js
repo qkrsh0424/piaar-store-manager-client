@@ -1,7 +1,7 @@
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { createBarGraphOption, createGraphData } from "../../../utils/chartUtils";
-import { DayRevenueGraphFieldWrapper } from "./SalesPerformanceGraph.styled";
+import { RevenueByWeekGraphFieldWrapper } from "./ProductSalesRevenueGraph.styled";
 
 const graphOption = {
     responsive: true,
@@ -14,27 +14,27 @@ const graphOption = {
 
 ChartJS.register(...registerables);
 
-const DayRevenueGraphFieldView = (props) => {
+const DetailRevenueGraphByDayOfWeekFieldView = (props) => {
     return (
-        <DayRevenueGraphFieldWrapper>
-            {props.dayRevenueGraphData &&
+        <RevenueByWeekGraphFieldWrapper>
+            {props.optionRevenueGraphByDayOfWeekData &&
                 <>
                     <div className='half-type-graph'>
                         <Bar
-                            data={createGraphData(props.dayRevenueGraphData?.total)}
+                            data={createGraphData(props.optionRevenueGraphByDayOfWeekData?.total)}
                             options={createBarGraphOption(graphOption)}
                         />
                     </div>
                     <div className='half-type-graph'>
                         <Bar
-                            data={createGraphData(props.dayRevenueGraphData?.week)}
+                            data={createGraphData(props.optionRevenueGraphByDayOfWeekData?.week)}
                             options={createBarGraphOption(graphOption)}
                         />
                     </div>
                 </>
             }
-        </DayRevenueGraphFieldWrapper>
+        </RevenueByWeekGraphFieldWrapper>
     )
 }
 
-export default DayRevenueGraphFieldView;
+export default DetailRevenueGraphByDayOfWeekFieldView;

@@ -1,6 +1,6 @@
-import { RevenueOperatorFieldViewWrapper } from "./SalesPerformanceGraph.styled";
+import { RevenueOperatorFieldViewWrapper } from "./ProductSalesRevenueGraph.styled";
 
-export default function OptionRevenueOperatorFieldView(props) {
+export default function RevenueOperatorFieldView(props) {
     return (
         <RevenueOperatorFieldViewWrapper>
             <div className='select-group'>

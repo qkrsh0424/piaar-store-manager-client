@@ -1,7 +1,7 @@
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Bar } from "react-chartjs-2";
 import { createBarGraphOption, createGraphData } from "../../../utils/chartUtils";
-import { OrderAnalysisGraphFieldWrapper } from "./SalesPerformanceGraph.styled";
+import { GraphFieldWrapper } from './SalesRegistrationAndUnitGraph.styled';
 
 const graphOption = {
     responsive: true,
@@ -14,9 +14,9 @@ const graphOption = {
 
 ChartJS.register(...registerables);
 
-const OrderAnalysisGraphFieldView = (props) => {
+const GraphFieldView = (props) => {
     return (
-        <OrderAnalysisGraphFieldWrapper>
+        <GraphFieldWrapper>
             {props.orderAnalysisGraphData &&
                 <div className='graph-wrapper'>
                     <Bar
@@ -25,8 +25,8 @@ const OrderAnalysisGraphFieldView = (props) => {
                     />
                 </div>
             }
-        </OrderAnalysisGraphFieldWrapper>
+        </GraphFieldWrapper>
     )
 }
 
-export default OrderAnalysisGraphFieldView;
+export default GraphFieldView;

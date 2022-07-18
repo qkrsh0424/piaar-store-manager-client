@@ -73,8 +73,25 @@ const InfoTextFieldWrapper = styled.div`
     color: var(--erp-main-color);
 `;
 
+const CheckBoxFieldWrapper = styled.div`
+    display: flex;
+    padding: 0 2%;
+    font-weight: 600;
+    flex-direction: row-reverse;
+
+    .checkbox-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .checkbox-input {
+        margin: 5px;
+    }
+`;
+
 export {
     Container,
     DateSelectorFieldWrapper,
-    InfoTextFieldWrapper
+    InfoTextFieldWrapper,
+    CheckBoxFieldWrapper
 }

@@ -1,7 +1,7 @@
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { createBarGraphOption, createGraphData } from "../../../utils/chartUtils";
-import { RevenueGraphFieldWrapper } from "./SalesPerformanceGraph.styled";
+import { GraphFieldWrapper } from "./ProductSalesRevenueGraph.styled";
 
 const verticalGraphOption = {
     responsive: true,
@@ -15,10 +15,9 @@ const verticalGraphOption = {
 
 ChartJS.register(...registerables);
 
-const OptionRevenueGraphFieldView = (props) => {
-
+const GraphFieldView = (props) => {
     return (
-        <RevenueGraphFieldWrapper>
+        <GraphFieldWrapper>
             {props.optionRevenueGraphData &&
                 <>
                     <div>
@@ -40,8 +39,8 @@ const OptionRevenueGraphFieldView = (props) => {
                     </div>
                 </>
             }
-        </RevenueGraphFieldWrapper>
+        </GraphFieldWrapper>
     )
 }
 
-export default OptionRevenueGraphFieldView;
+export default GraphFieldView;

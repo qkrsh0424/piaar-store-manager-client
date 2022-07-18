@@ -1,4 +1,4 @@
-import { RevenueOperatorFieldViewWrapper } from "./SalesPerformanceGraph.styled";
+import { RevenueOperatorFieldViewWrapper } from "./SalesRevenueGraph.styled";
 
 export default function RevenueOperatorFieldView(props) {
     return (
@@ -14,18 +14,6 @@ export default function RevenueOperatorFieldView(props) {
                     <option value='category'>카테고리 별</option>
                     <option value='product'>상품 별</option>
                 </select>
-            </div>
-            <div className='checkbox-group'>
-                <div>
-                    <input
-                        type='checkbox'
-                        className='checkbox-input'
-                        checked={props.hideOrderGraph}
-                        name='sales'
-                        onChange={props.onActionHideSalesGraph}
-                    />
-                    <span>주문 데이터 숨기기</span>
-                </div>
             </div>
         </RevenueOperatorFieldViewWrapper>
     )

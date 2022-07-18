@@ -1,6 +1,7 @@
-import { GraphAnalysisResultFieldWrapper } from "./SalesPerformanceGraph.styled";
+import { GraphAnalysisResultFieldWrapper } from "./SalesRegistrationAndUnitGraph.styled";
 
-const OrderAnalysisFieldView = (props) => {
+
+const GraphAnalysisResultFieldView = (props) => {
     return (
         <GraphAnalysisResultFieldWrapper>
             <div className='analysis-group'>
@@ -23,4 +24,4 @@ const OrderAnalysisFieldView = (props) => {
     )
 }
 
-export default OrderAnalysisFieldView;
+export default GraphAnalysisResultFieldView;
