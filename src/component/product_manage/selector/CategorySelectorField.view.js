@@ -1,8 +1,8 @@
-import { CategorySelectorWrapper } from "./CategorySelector.styled";
+import { SelectorWrapper } from "./Selector.styled";
 
 export default function CategorySelectorFieldView(props) {
     return (
-        <CategorySelectorWrapper>
+        <SelectorWrapper>
             <select onChange={(e) => props.onChangeCategoryValue(e)}>
                 <option value='total'>카테고리 전체</option>
                 {props.categoryList?.map((r, idx) => {
@@ -11,6 +11,6 @@ export default function CategorySelectorFieldView(props) {
                     )
                 })}
             </select>
-        </CategorySelectorWrapper>
+        </SelectorWrapper>
     )
 }

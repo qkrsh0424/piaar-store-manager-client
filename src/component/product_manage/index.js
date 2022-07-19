@@ -10,9 +10,9 @@ import { subOptionCodeDataConnect } from '../../data_connect/subOptionCodeDataCo
 
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
 import { dateToYYYYMMDD, getEndDate, getStartDate } from '../../utils/dateFormatUtils';
-import CategorySelectorComponent from './category-selector/CategorySelector.component';
 import ProductManageNavComponent from './product-manage-nav/ProductManageNav.component';
 import ProductManageTableComponent from './product-manage-table/ProductManageTable.component';
+import SelectorComponent from './selector/Selector.component';
 
 const Container = styled.div`
     overflow:hidden;
@@ -24,7 +24,9 @@ const ProductManageComponent = () => {
     const [productList, setProductList] = useState(null);
     const [optionList, setOptionList] = useState(null);
 
-    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+    const [selectedCategoryId, setSelectedCategoryId] = useState('total');
+    const [selectedProductId, setSelectedProductId] = useState('total');
+
     const [productViewList, setProductViewList] = useState(null);
     const [stockStatusList, setStockStatusList] = useState(null);
     const [optionPackage, setOptionPackage] = useState(null);
@@ -79,7 +81,7 @@ const ProductManageComponent = () => {
     }, [dataChangedTrigger]);
 
     useEffect(() => {
-        if(!selectedCategoryId) {
+        if(!(selectedCategoryId && selectedProductId)) {
             return;
         }
 
@@ -88,13 +90,23 @@ const ProductManageComponent = () => {
         }
 
         let viewData = productList;
-
         if (selectedCategoryId !== 'total') {
             viewData = productList.filter(r => r.category.id === selectedCategoryId);
         }
+        if(selectedProductId !== 'total') {
+            viewData = viewData.filter(r => r.product.id === selectedProductId);
+        }
 
         setProductViewList(viewData);
-    }, [productList, selectedCategoryId])
+    }, [productList, selectedCategoryId, selectedProductId])
+
+    useEffect(() => {
+        if(!selectedCategoryId) {
+            return;
+        }
+
+        setSelectedProductId('total');
+    }, [selectedCategoryId]);
 
     const __reqSearchProductListFj = async () => {
         await productDataConnect().getStockListFj()
@@ -334,6 +346,10 @@ const ProductManageComponent = () => {
         setSelectedCategoryId(categoryId);
     }
 
+    const _onAction_changeProduct = (productId) => {
+        setSelectedProductId(productId);
+    }
+
     const _onSubmit_modifyProduct = async (modifyProductData) => {
         onActionOpenBackdrop();
         dispatchSubmitCheck({ 
@@ -473,11 +489,15 @@ const ProductManageComponent = () => {
 
     return (
         <Container>
-            <CategorySelectorComponent
+            <SelectorComponent
+                selectedCategoryId={selectedCategoryId}
                 categoryList={categoryList}
+                productList={productList}
+                selectedProductId={selectedProductId}
 
                 _onAction_changeCategory={(categoryId) => _onAction_changeCategory(categoryId)}
-            ></CategorySelectorComponent>
+                _onAction_changeProduct={(productId) => _onAction_changeProduct(productId)}
+            ></SelectorComponent>
 
             <ProductManageTableComponent
                 productViewList={productViewList}

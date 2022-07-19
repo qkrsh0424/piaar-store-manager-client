@@ -1,10 +1,11 @@
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
-    padding: 2%;
+    padding: 0 10px;;
+    display: flex;
 `;
 
-const CategorySelectorWrapper = styled.div`
+const SelectorWrapper = styled.div`
     select {
         padding: 3px;
         margin: 10px;
@@ -14,7 +15,8 @@ const CategorySelectorWrapper = styled.div`
         text-align: center;
         display: inline-block;
         transition: 0.25s;
-        width: 20%;
+        /* width: 20%; */
+        width: 200px;
         
         &:focus{
             outline: none;
@@ -33,5 +35,5 @@ const CategorySelectorWrapper = styled.div`
 
 export {
     Container,
-    CategorySelectorWrapper
+    SelectorWrapper
 }
