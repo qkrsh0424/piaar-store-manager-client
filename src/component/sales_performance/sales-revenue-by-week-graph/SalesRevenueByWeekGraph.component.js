@@ -4,30 +4,7 @@ import qs from "query-string";
 import { dateToYYYYMM, dateToYYYYMMDD, getDayName, getDifferenceBetweenStartDateAndEndDate, getWeekName, getWeekNumber } from "../../../utils/dateFormatUtils";
 import GraphFieldView from "./GraphField.view";
 import { Container, GraphTitleFieldWrapper } from "./SalesRevenueByWeekGraph.styled";
-
-class GraphDataset {
-    constructor() {
-        this.type = 'bar';
-        this.label = '';
-        this.data = [];
-        this.fill = false;
-        this.borderColor = '#80A9E1';
-        this.backgroundColor = '#80A9E1';
-        this.order = 0;
-    }
-
-    toJSON() {
-        return {
-            type: this.type,
-            label: this.label,
-            data: this.data,
-            fill: this.fill,
-            borderColor: this.borderColor,
-            backgroundColor: this.backgroundColor,
-            order: this.order
-        }
-    }
-}
+import { getDateToAnalysisRangeDateFormat, GraphDataset } from "../../../utils/graphUtils";
 
 function GraphTitleField({ element }) {
     return (
@@ -333,17 +310,6 @@ const SalesRevenueByWeekGraphComponent = (props) => {
             type: 'INIT_DATA',
             payload: revenueByWeekGraphData
         })
-    }
-
-    // dateRange(일, 주, 월)값에 따라 date값을 변환한다
-    const getDateToAnalysisRangeDateFormat = (dateRange, date) => {
-        let addDate = dateToYYYYMMDD(date);
-        if (dateRange === 'week') {
-            addDate = dateToYYYYMM(date) + '-' + getWeekNumber(date);
-        } else if (dateRange === 'month') {
-            addDate = dateToYYYYMM(date);
-        }
-        return addDate;
     }
 
     return (

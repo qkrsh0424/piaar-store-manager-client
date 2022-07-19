@@ -5,30 +5,7 @@ import { dateToMMDD, dateToYYYYMM, dateToYYYYMMDD, getDayName, getDifferenceBetw
 import GraphAnalysisResultFieldView from "./GraphAnalysisResultField.view";
 import GraphFieldView from "./GraphField.view";
 import { Container, GraphTitleFieldWrapper } from "./SalesRegistrationAndUnitGraph.styled";
-
-class GraphDataset {
-    constructor() {
-        this.type = 'bar';
-        this.label = '';
-        this.data = [];
-        this.fill = false;
-        this.borderColor = '#80A9E1';
-        this.backgroundColor = '#80A9E1';
-        this.order = 0;
-    }
-
-    toJSON() {
-        return {
-            type: this.type,
-            label: this.label,
-            data: this.data,
-            fill: this.fill,
-            borderColor: this.borderColor,
-            backgroundColor: this.backgroundColor,
-            order: this.order
-        }
-    }
-}
+import { getAnalysisDateFormatToViewFormat, getDateToAnalysisRangeDateFormat, GraphDataset, setAnalysisResultText } from "../../../utils/graphUtils";
 
 function GraphTitleField({ element }) {
     return (
@@ -202,41 +179,6 @@ const SalesRegistrationAndUnitGraphComponent = (props) => {
             payload: {
                 labels: labels,
                 datasets
-            }
-        })
-    }
-
-    // dateRange(일, 주, 월)값에 따라 date값을 변환한다
-    const getDateToAnalysisRangeDateFormat = (dateRange, date) => {
-        let addDate = dateToYYYYMMDD(date);
-        if (dateRange === 'week') {
-            addDate = dateToYYYYMM(date) + '-' + getWeekNumber(date);
-        } else if (dateRange === 'month') {
-            addDate = dateToYYYYMM(date);
-        }
-        return addDate;
-    }
-
-    // dateRange(일, 주, 월)값에 따라 date값을 view 형식으로 변환한다
-    const getAnalysisDateFormatToViewFormat = (dateRange, date) => {
-        let viewDateFormat = dateToMMDD(date) + ' (' + getDayName(date) + ')';
-        if (dateRange === 'week') {
-            viewDateFormat = date + '주차';
-        } else if (dateRange === 'month') {
-            viewDateFormat = date;
-        }
-        return viewDateFormat;
-    }
-
-    const setAnalysisResultText = (datasets) => {
-        return datasets?.map(r => {
-            let sum = 0;
-            r.data.forEach(r2 => sum += r2);
-
-            return {
-                label: r.label,
-                value: sum,
-                color: r.backgroundColor
             }
         })
     }

@@ -1,10 +1,11 @@
 import { useEffect, useReducer } from "react";
 import { useLocation } from "react-router-dom";
 import qs from "query-string";
-import { dateToYYYYMM, dateToYYYYMMDD, getDifferenceBetweenStartDateAndEndDate, getWeekNumber } from "../../../utils/dateFormatUtils";
+import { getDifferenceBetweenStartDateAndEndDate } from "../../../utils/dateFormatUtils";
 import { Container, GraphTitleFieldWrapper } from "./SalesRevenueDetailTable.styled";
 import _ from "lodash";
 import TableFieldView from "./TableField.view";
+import { getDateToAnalysisRangeDateFormat } from "../../../utils/graphUtils";
 
 function GraphTitleField({ element }) {
     return (
@@ -128,17 +129,6 @@ const SalesRevenueDetailTableComponent = (props) => {
             type: 'INIT_DATA',
             payload: analysis
         })
-    }
-
-    // dateRange(일, 주, 월)값에 따라 date값을 변환한다
-    const getDateToAnalysisRangeDateFormat = (dateRange, date) => {
-        let addDate = dateToYYYYMMDD(date);
-        if (dateRange === 'week') {
-            addDate = dateToYYYYMM(date) + '-' + getWeekNumber(date);
-        } else if (dateRange === 'month') {
-            addDate = dateToYYYYMM(date);
-        }
-        return addDate;
     }
 
     return(

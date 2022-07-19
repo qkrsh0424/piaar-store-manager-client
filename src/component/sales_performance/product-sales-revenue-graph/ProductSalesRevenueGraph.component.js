@@ -7,30 +7,7 @@ import { Container, GraphTitleFieldWrapper } from "./ProductSalesRevenueGraph.st
 import GraphFieldView from "./GraphField.view";
 import RevenueOperatorFieldView from "./RevenueOperatorField.view";
 import DetailRevenueGraphByDayOfWeekFieldView from "./DetailRevenueGraphByDayOfWeek.view";
-
-class GraphDataset {
-    constructor() {
-        this.type = 'bar';
-        this.label = '';
-        this.data = [];
-        this.fill = false;
-        this.borderColor = '#80A9E1';
-        this.backgroundColor = '#80A9E1';
-        this.order = 0;
-    }
-
-    toJSON() {
-        return {
-            type: this.type,
-            label: this.label,
-            data: this.data,
-            fill: this.fill,
-            borderColor: this.borderColor,
-            backgroundColor: this.backgroundColor,
-            order: this.order
-        }
-    }
-}
+import { getDateToAnalysisRangeDateFormat, GraphDataset } from "../../../utils/graphUtils";
 
 function GraphTitleField({ element }) {
     return (
@@ -984,17 +961,6 @@ const ProductSalesRevenueGraphComponent = (props) => {
             type: 'INIT_DATA',
             payload: dayRevenueGraphData
         })
-    }
-
-    // dateRange(일, 주, 월)값에 따라 date값을 변환한다
-    const getDateToAnalysisRangeDateFormat = (dateRange, date) => {
-        let addDate = dateToYYYYMMDD(date);
-        if (dateRange === 'week') {
-            addDate = dateToYYYYMM(date) + '-' + getWeekNumber(date);
-        } else if (dateRange === 'month') {
-            addDate = dateToYYYYMM(date);
-        }
-        return addDate;
     }
 
     return (

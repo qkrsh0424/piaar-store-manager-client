@@ -12,8 +12,8 @@ const Container = styled.div`
         justify-content: space-around;
         align-items: center;
 
-        @media screen and (max-width: 992px) {
-            flex-wrap: wrap;
+        @media screen and (max-width: 1200px) {
+            flex-direction: column;
         }
     }
 `;
@@ -46,19 +46,24 @@ const GraphFieldWrapper = styled.div`
     min-height: 300px;
     width: 100%;
 
+    @media screen and (max-width: 1200px) {
+        width: 100%;
+    }
+
     .graph-wrapper {
         height: 400px;
     }
 `;
 
 const GraphAnalysisResultFieldWrapper = styled.div`
-    width: 400px;
+    min-width: 350px;
     height: 340px;
     border-radius: 5px;
     box-shadow: 0px 0px 7px 3px #eee;
     padding: 10px;
 
-    @media screen and (max-width: 992px) {
+    @media screen and (max-width: 1200px) {
+        width: 90%;
         height: 200px;
     }
 

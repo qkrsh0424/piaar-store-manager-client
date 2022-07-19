@@ -53,12 +53,12 @@ const TableBody = ({ tableData }) => {
                                 <td>{r1.key}</td>
                                 <td>{r1.sales + '건 / ' + r1.order}건</td>
                                 <td>{r1.salesUnit + '개 / ' + r1.unit}개</td>
-                                <td>{r1.unit - r1.salesUnit}개</td>
+                                <td className='highlight-text'>{r1.unit - r1.salesUnit}개</td>
                                 <td>{r1.order ? (r1.unit / r1.order).toFixed(2) : 0}</td>
                                 <td>{r1.sales ? (r1.salesUnit / r1.sales).toFixed(2) : 0}</td>
                                 <td>{r1.revenue?.toLocaleString()}원</td>
                                 <td>{r1.salesRevenue?.toLocaleString()}원</td>
-                                <td>{(r1.revenue - r1.salesRevenue)?.toLocaleString()}원</td>
+                                <td className='highlight-text'>{(r1.revenue - r1.salesRevenue)?.toLocaleString()}원</td>
                             </tr>
                         </React.Fragment>
                     )
@@ -71,12 +71,12 @@ const TableBody = ({ tableData }) => {
                                 <td>{getDayName(r1.key)}</td>
                                 <td>{r1.sales + '건 / ' + r1.order}건</td>
                                 <td>{r1.salesUnit + '개 / ' + r1.unit}개</td>
-                                <td>{r1.unit - r1.salesUnit}개</td>
+                                <td className='highlight-text'>{r1.unit - r1.salesUnit}개</td>
                                 <td>{r1.order ? (r1.unit / r1.order).toFixed(2) : 0}</td>
                                 <td>{r1.sales ? (r1.salesUnit / r1.sales).toFixed(2) : 0}</td>
                                 <td>{r1.revenue?.toLocaleString()}원</td>
                                 <td>{r1.salesRevenue?.toLocaleString()}원</td>
-                                <td>{(r1.revenue - r1.salesRevenue)?.toLocaleString()}원</td>
+                                <td className='highlight-text'>{(r1.revenue - r1.salesRevenue)?.toLocaleString()}원</td>
                             </tr>
                         </React.Fragment>
                     )

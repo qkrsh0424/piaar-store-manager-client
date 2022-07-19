@@ -93,6 +93,10 @@ const TableFieldWrapper = styled.div`
     table tbody td {
         border: 1px solid #eee;
     }
+
+    .highlight-text {
+        color: #4356cf;
+    }
 `;
 
 export{

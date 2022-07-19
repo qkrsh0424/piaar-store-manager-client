@@ -63,17 +63,16 @@ const GraphFieldView = (props) => {
             {props.searchItem === 'product' &&
                 <div>
                     <div>
-                        {console.log(props.revenueGraphData)}
                         <span className='info-text'>* 판매 데이터 기준 TOP15</span>
                     </div>
                     <div className='flex-box'>
-                        <div className='half-type-graph graph-wrapper'>
+                        <div className='graph-wrapper half-type-graph'>
                             <Bar
                                 data={createGraphData(props.revenueGraphData?.revenue)}
                                 options={createBarGraphOption(verticalGraphOption)}
                             />
                         </div>
-                        <div className='half-type-graph graph-wrapper'>
+                        <div className='graph-wrapper half-type-graph'>
                             <Bar
                                 data={createGraphData(props.revenueGraphData?.unit)}
                                 options={createBarGraphOption(verticalGraphOption)}
