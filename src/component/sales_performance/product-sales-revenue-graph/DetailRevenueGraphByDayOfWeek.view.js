@@ -1,16 +1,7 @@
 import { Chart as ChartJS, registerables } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { createBarGraphOption, createGraphData } from "../../../utils/chartUtils";
+import { createGraphOption, createGraphData } from "../../../utils/chartUtils";
 import { RevenueByWeekGraphFieldWrapper } from "./ProductSalesRevenueGraph.styled";
-
-const graphOption = {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: {
-        mode: 'index',
-        intersect: false
-    }
-}
 
 ChartJS.register(...registerables);
 
@@ -22,13 +13,13 @@ const DetailRevenueGraphByDayOfWeekFieldView = (props) => {
                     <div className='half-type-graph'>
                         <Bar
                             data={createGraphData(props.optionRevenueGraphByDayOfWeekData?.total)}
-                            options={createBarGraphOption(graphOption)}
+                            options={createGraphOption(props.dayOfWeekGraphOption)}
                         />
                     </div>
                     <div className='half-type-graph'>
                         <Bar
                             data={createGraphData(props.optionRevenueGraphByDayOfWeekData?.week)}
-                            options={createBarGraphOption(graphOption)}
+                            options={createGraphOption(props.dayOfWeekGraphOption)}
                         />
                     </div>
                 </>

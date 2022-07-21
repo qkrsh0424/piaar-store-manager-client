@@ -1,13 +1,13 @@
 import { useEffect, useReducer } from "react";
 import { useLocation } from "react-router-dom";
 import qs from "query-string";
-import { getDifferenceBetweenStartDateAndEndDate } from "../../../utils/dateFormatUtils";
+import { getDifferenceBetweenStartDateAndEndDate, getEndDate, getEndDateByWeekNumber, getEndDateOfMonth, getStartDate, getStartDateByWeekNumber, getStartDateOfMonth } from "../../../utils/dateFormatUtils";
 import RevenueOperatorFieldView from "./RevnueOperatorField.view";
 import { Container, GraphTitleFieldWrapper } from "./SalesRevenueGraph.styled";
 import _ from "lodash";
 import GraphAnalysisResultFieldView from "./GraphAnalysisResultField.view";
 import GraphFieldView from "./GraphField.view";
-import { getAnalysisDateFormatToViewFormat, getDateToAnalysisRangeDateFormat, GraphDataset, setAnalysisResultText } from "../../../utils/graphUtils";
+import { getAnalysisDateFormatToViewFormat, getDateToAnalysisRangeDateFormat, GraphDataset, setAnalysisResultText } from "../../../utils/graphDataUtils";
 
 function GraphTitleField({ element }) {
     return (
@@ -26,14 +26,16 @@ const SalesRevenueGraphComponent = (props) => {
     const location = useLocation();
     const query = qs.parse(location.search);
 
-    const [revenueGraphData, dispatchRevenueGraphData] = useReducer(revenueGraphDataReducer, initialRevenueGraphData);
-
-    const [revenueAnalysisResult, dispatchRevenueAnalysisResult] = useReducer(revenueAnalysisResultReducer, initialRevenueAnalysisResult);
     const [analysisItem, dispatchAnalysisItem] = useReducer(analysisItemReducer, initialAnalysisItem);
-
+    
+    const [graphOption, dispatchGraphOption] = useReducer(graphOptionReducer, initialGraphOption);
     const [graphLabels, dispatchGraphLabels] = useReducer(graphLabelsReducer, initialGraphLabels);
     const [graphDatasets, dispatchGraphDatasets] = useReducer(graphDatasetsReducer, initialGraphDatasets);
     
+    const [revenueGraphData, dispatchRevenueGraphData] = useReducer(revenueGraphDataReducer, initialRevenueGraphData);
+    const [revenueAnalysisResult, dispatchRevenueAnalysisResult] = useReducer(revenueAnalysisResultReducer, initialRevenueAnalysisResult);
+
+
     useEffect(() => {
         if (!props.erpItemData) {
             return;
@@ -78,8 +80,50 @@ const SalesRevenueGraphComponent = (props) => {
             return;
         }
 
+        // 주문 데이터 표시 여부 바뀔 때마다 호출
         onActionSetGraphDataset();
     }, [graphLabels, graphDatasets, props.hideOrderGraph])
+
+    useEffect(() => {
+        if(!(graphLabels && graphDatasets)) {
+            return;
+        }
+        
+        let gOption = {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            onClick: function (e, item) {
+                onActionSetGraphOption(e, item)
+            },
+            onHover: (e, item) => {
+                const target = e.native ? e.native.target : e.target;
+                target.style.cursor = item[0] ? 'pointer' : 'default';
+            }
+        }
+
+        if(props.searchItem === 'product') {
+            gOption = {
+                ...gOption,
+                indexAxis: 'y',
+                interaction: {
+                    mode: 'index',
+                    intersect: true
+                },
+                onClick: function (e, item) {
+                    onActionSetProductGraphOption(e, item)
+                }
+            }
+        }
+
+        dispatchGraphOption({
+            type: 'INIT_DATA',
+            payload: gOption
+        })
+    }, [graphLabels, graphDatasets])
     
     // 1-1. 전체 - 총 매출액
     const onActionCreateRevenueGraphData = () => {
@@ -221,17 +265,14 @@ const SalesRevenueGraphComponent = (props) => {
 
         // key: 날짜, store1: 0, store2: 0, store3: 0, ...
         date.forEach(r => {
-            let data = {};
+            let data = {
+                key: r
+            };
             channel.forEach(r2 => {
-                data = {
-                    ...data,
-                    key: r,
-                    [r2]: 0
-                }
+                data = { ...data, [r2]: 0}
             })
             analysis.push(data);
         })
-        analysis.reverse();
 
         // 기본 - 판매 그래프
         let salesAnalysis = [...analysis];
@@ -261,22 +302,36 @@ const SalesRevenueGraphComponent = (props) => {
             graphColor.push(randomColor);
         }
 
-        [...channel].forEach((r, idx) => {
+        let channelSalesRevenue = [];
+        if(channel.size === 0) {
             let channelGraphDataset = new GraphDataset().toJSON();
             channelGraphDataset = {
                 ...channelGraphDataset,
-                type: 'bar',
-                label: r,
-                data: salesChannelRevenue[idx],
-                borderColor: graphColor[idx],
-                backgroundColor: graphColor[idx]
+                label: '판매 매출액',
+                data: [],
+                borderColor: graphColor[0],
+                backgroundColor: graphColor[0]
             }
             salesDatasets.push(channelGraphDataset);
-        })
+            channelSalesRevenue = setAnalysisResultText(salesDatasets);
+        }else {
+            [...channel].forEach((r, idx) => {
+                let channelGraphDataset = new GraphDataset().toJSON();
+                channelGraphDataset = {
+                    ...channelGraphDataset,
+                    type: 'bar',
+                    label: r,
+                    data: salesChannelRevenue[idx],
+                    borderColor: graphColor[idx],
+                    backgroundColor: graphColor[idx]
+                }
+                salesDatasets.push(channelGraphDataset);
+            })
 
-        // 채널 스토어 별 분석 결과 텍스트 설정
-        let channelSalesRevenue = setAnalysisResultText(salesDatasets);
-        channelSalesRevenue.sort((a, b) => b.value - a.value);
+            // 채널 스토어 별 분석 결과 텍스트 설정
+            channelSalesRevenue = setAnalysisResultText(salesDatasets);
+            channelSalesRevenue.sort((a, b) => b.value - a.value);
+        }
 
         dispatchRevenueAnalysisResult({
             type: 'INIT_DATA',
@@ -357,11 +412,12 @@ const SalesRevenueGraphComponent = (props) => {
         })
 
         date.forEach(r => {
-            let data = {};
+            let data = {
+                key: r
+            };
             category.forEach(r2 => {
                 data = {
                     ...data,
-                    key: r,
                     [r2]: 0
                 }
             })
@@ -397,22 +453,36 @@ const SalesRevenueGraphComponent = (props) => {
             graphColor.push(randomColor);
         }
 
-        [...category].forEach((r, idx) => {
+        let categorySalesRevenue = [];
+        if(category.size === 0) {
             let categoryGraphDataset = new GraphDataset().toJSON();
             categoryGraphDataset = {
                 ...categoryGraphDataset,
-                type: 'bar',
-                label: r,
-                data: salesCategoryRevenue[idx],
-                borderColor: graphColor[idx],
-                backgroundColor: graphColor[idx]
+                label: '판매 매출액',
+                data: [],
+                borderColor: graphColor[0],
+                backgroundColor: graphColor[0]
             }
             salesDatasets.push(categoryGraphDataset);
-        })
-
-        // 카테고리 별 분석 결과 텍스트 설정
-        let categorySalesRevenue = setAnalysisResultText(salesDatasets);
-        categorySalesRevenue.sort((a, b) => b.value - a.value);
+            categorySalesRevenue = setAnalysisResultText(salesDatasets);
+        }else {
+            [...category].forEach((r, idx) => {
+                let categoryGraphDataset = new GraphDataset().toJSON();
+                categoryGraphDataset = {
+                    ...categoryGraphDataset,
+                    type: 'bar',
+                    label: r,
+                    data: salesCategoryRevenue[idx],
+                    borderColor: graphColor[idx],
+                    backgroundColor: graphColor[idx]
+                }
+                salesDatasets.push(categoryGraphDataset);
+            })
+    
+            // 카테고리 별 분석 결과 텍스트 설정
+            categorySalesRevenue = setAnalysisResultText(salesDatasets);
+            categorySalesRevenue.sort((a, b) => b.value - a.value);
+        }
 
         dispatchRevenueAnalysisResult({
             type: 'INIT_DATA',
@@ -421,7 +491,6 @@ const SalesRevenueGraphComponent = (props) => {
 
         // 옵션 - 주문 그래프
         let orderAnalysis = [...analysis];
-
         analysisItem.forEach(r => {
             let compareDate = getDateToAnalysisRangeDateFormat(props.analysisDateRange, r.channelOrderDate);
             orderAnalysis = orderAnalysis.map(r2 => {
@@ -672,9 +741,88 @@ const SalesRevenueGraphComponent = (props) => {
         })
     }
 
+    const onActionSetGraphOption = async (e, item) => {
+        if(item.length === 0) return;
+
+        var idx = item[0].index;
+        var label = graphLabels[idx];
+
+        let startDate ='';
+        let endDate ='';
+        let periodType = 'channelOrderDate';
+        let salesYn = 'y'   // 주문데이터까지 구하려면 제거.
+
+        if(props.analysisDateRange === 'date') {
+            var date = new Date(label);
+            startDate = getStartDate(date);
+            endDate = getEndDate(date);
+        }else if(props.analysisDateRange === 'week') {
+            startDate = getStartDateByWeekNumber(label);
+            endDate = getEndDateByWeekNumber(label);
+
+            // 조회된 기간의 시작일
+            if(idx === 0) {
+                startDate = getStartDate(query.startDate);
+            }
+            // 조회된 기간의 마지막일
+            if(idx === (graphLabels.length-1)){
+                endDate = getEndDate(query.endDate);
+            }
+        }else if(props.analysisDateRange === 'month') {
+            var date = new Date(label);
+            startDate = getStartDate(getStartDateOfMonth(date));
+            endDate = getEndDate(getEndDateOfMonth(date));
+            
+            // 조회된 기간의 시작일
+            if(idx === 0) {
+                startDate = getStartDate(query.startDate);
+            }
+            // 조회된 기간의 마지막일
+            if(idx === (graphLabels.length-1)){
+                endDate = getEndDate(query.endDate);
+            }
+        }
+
+        let params = {
+            startDate: startDate,
+            endDate: endDate,
+            periodType: periodType,
+            salesYn: salesYn
+        }
+
+        await props._onAction_searchErpOrderGraphItemByParams(params);
+    }
+
+    const onActionSetProductGraphOption = async (e, item) => {
+        if(item.length === 0) return;
+
+        var idx = item[0].index;
+        var legend = e.chart.legend.legendItems[0].text === '(판매) 매출액' ? 'revenue' : 'unit';
+        var label = graphLabels[legend][idx] === '미지정' ? null : graphLabels[legend][idx];
+        
+        let startDate = getStartDate(query.startDate);
+        let endDate = getEndDate(query.endDate);
+        let periodType = 'channelOrderDate';
+        let salesYn = 'y'   // 주문데이터까지 구하려면 제거
+        let searchColumnName = 'prodDefaultName'
+
+        let params = {
+            startDate: startDate,
+            endDate: endDate,
+            periodType: periodType,
+            salesYn: salesYn,
+            searchColumnName: searchColumnName,
+            searchQuery: label,
+            fixedSearchColumnName: searchColumnName,
+            fixedSearchQuery: label
+        }
+
+        await props._onAction_searchErpOrderGraphItemByParams(params);
+    }
+
     return (
         <Container>
-            {revenueGraphData && 
+            {revenueGraphData && graphOption &&
                 <div className='graph-group'>
                     <GraphTitleField
                         element={
@@ -692,6 +840,7 @@ const SalesRevenueGraphComponent = (props) => {
                         <GraphFieldView
                             searchItem={props.searchItem}
                             revenueGraphData={revenueGraphData}
+                            graphOption={graphOption}
                         ></GraphFieldView>
                         {revenueAnalysisResult &&
                             <GraphAnalysisResultFieldView
@@ -713,17 +862,7 @@ const initialAnalysisItem = null;
 const initialRevenueGraphData = null;
 const initialGraphLabels = null;
 const initialGraphDatasets = {};
-
-const revenueAnalysisResultReducer = (state, action) => {
-    switch (action.type) {
-        case 'INIT_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialRevenueAnalysisResult;
-        default:
-            return state;
-    }
-}
+const initialGraphOption = null;
 
 const analysisItemReducer = (state, action) => {
     switch (action.type) {
@@ -769,6 +908,28 @@ const graphDatasetsReducer = (state, action) => {
             }
         case 'CLEAR':
             return initialGraphDatasets;
+        default:
+            return state;
+    }
+}
+
+const revenueAnalysisResultReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialRevenueAnalysisResult;
+        default:
+            return state;
+    }
+}
+
+const graphOptionReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialGraphOption;
         default:
             return state;
     }

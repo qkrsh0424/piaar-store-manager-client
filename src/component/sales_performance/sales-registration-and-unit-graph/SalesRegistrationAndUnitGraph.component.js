@@ -1,11 +1,11 @@
 import { useEffect, useReducer, useState } from "react";
 import { useLocation } from "react-router-dom";
 import qs from "query-string";
-import { dateToMMDD, dateToYYYYMM, dateToYYYYMMDD, getDayName, getDifferenceBetweenStartDateAndEndDate, getWeekNumber } from "../../../utils/dateFormatUtils";
+import { getDifferenceBetweenStartDateAndEndDate, getEndDate, getEndDateByWeekNumber, getEndDateOfMonth, getStartDate, getStartDateByWeekNumber, getStartDateOfMonth } from "../../../utils/dateFormatUtils";
 import GraphAnalysisResultFieldView from "./GraphAnalysisResultField.view";
 import GraphFieldView from "./GraphField.view";
 import { Container, GraphTitleFieldWrapper } from "./SalesRegistrationAndUnitGraph.styled";
-import { getAnalysisDateFormatToViewFormat, getDateToAnalysisRangeDateFormat, GraphDataset, setAnalysisResultText } from "../../../utils/graphUtils";
+import { getAnalysisDateFormatToViewFormat, getDateToAnalysisRangeDateFormat, GraphDataset, setAnalysisResultText } from "../../../utils/graphDataUtils";
 
 function GraphTitleField({ element }) {
     return (
@@ -24,8 +24,13 @@ const SalesRegistrationAndUnitGraphComponent = (props) => {
 
     const [analysisItem, dispatchAnalysisItem] = useReducer(analysisItemReducer, initialAnalysisItem);
 
+    const [graphOption, dispatchGraphOption] = useReducer(graphOptionReducer, initialGraphOption);
+    const [graphLabels, dispatchGraphLabels] = useReducer(graphLabelsReducer, initialGraphLabels);
+    
+    const [graphDatasets, dispatchGraphDatasets] = useReducer(graphDatasetsReducer, initialGraphDatasets);
     const [orderAnalysisGraphData, dispatchOrderAnalysisGraphData] = useReducer(orderAnalysisGraphDataReducer, initialOrderAnalysisGraphData);
     const [orderAnalysisResult, dispatchOrderAnalysisResult] = useReducer(orderAnalysisResultReducer, initialOrderAnalysisResult);
+
 
     useEffect(() => {
         if (!props.erpItemData) {
@@ -45,14 +50,55 @@ const SalesRegistrationAndUnitGraphComponent = (props) => {
             return;
         }
 
+        dispatchGraphLabels({type: 'CLEAR'});
+        dispatchGraphDatasets({type: 'CLEAR'});
+        dispatchOrderAnalysisGraphData({type: 'CLEAR'});
+
         onActionCreateOrderAnalysisGraphData();
-    }, [analysisItem, props.hideOrderGraph])
+    }, [analysisItem, props.analysisDateRange])
+
+    useEffect(() => {
+        if(!(graphDatasets && graphLabels)) {
+            return;
+        }
+
+        // 주문 데이터 표시 여부 바뀔 때마다 호출
+        onActionSetGraphDataset();
+    }, [graphLabels, graphDatasets, props.hideOrderGraph])
+
+    useEffect(() => {
+        if(! (graphLabels && graphDatasets)) {
+            return;
+        }
+        
+        let gOption = {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            onClick: function (e, item) {
+                onActionSetGraphOption(e, item)
+            },
+            onHover: (e, item) => {
+                const target = e.native ? e.native.target : e.target;
+                target.style.cursor = item[0] ? 'pointer' : 'default';
+            }
+        }
+
+        dispatchGraphOption({
+            type: 'INIT_DATA',
+            payload: gOption
+        })
+    }, [graphLabels, graphDatasets])
 
     // 2. 총 판매건 & 판매수량
     const onActionCreateOrderAnalysisGraphData = () => {
         let date = new Set([]);
         let analysis = [];
-        let datasets = [];
+        let salesDatasets = [];
+        let orderDatasets = [];
 
         let startDate = query.startDate;
         let endDate = query.endDate;
@@ -93,100 +139,171 @@ const SalesRegistrationAndUnitGraphComponent = (props) => {
             })
         })
 
-        let labels = salesAnalysis.map(r => getAnalysisDateFormatToViewFormat(props.analysisDateRange, r.key));
-
-        let orderData = salesAnalysis.map(r => r.order);
-        let orderBarGraphDataset = new GraphDataset().toJSON();
-        orderBarGraphDataset = {
-            ...orderBarGraphDataset,
+        let salesData = salesAnalysis.map(r => r.order);
+        let salesBarGraphDataset = new GraphDataset().toJSON();
+        salesBarGraphDataset = {
+            ...salesBarGraphDataset,
             type: 'bar',
             label: '판매건',
-            data: orderData,
+            data: salesData,
             fill: true,
             borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0],
             backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0]
         }
-        datasets.push(orderBarGraphDataset);
+        salesDatasets.push(salesBarGraphDataset);
 
-        let unitData = salesAnalysis.map(r => r.unit);
-        let unitBarGraphDataset = new GraphDataset().toJSON();
-        unitBarGraphDataset = {
-            ...unitBarGraphDataset,
+        let salesUnitData = salesAnalysis.map(r => r.unit);
+        let salesUnitBarGraphDataset = new GraphDataset().toJSON();
+        salesUnitBarGraphDataset = {
+            ...salesUnitBarGraphDataset,
             type: 'bar',
             label: '판매 수량',
-            data: unitData,
+            data: salesUnitData,
             fill: true,
             borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1],
             backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1]
         }
-        datasets.push(unitBarGraphDataset);
+        salesDatasets.push(salesUnitBarGraphDataset);
 
         // 전체 판매 매출액 분석 결과 텍스트 설정
-        let orderAnalysis = setAnalysisResultText(datasets);
+        let salesAnalysisResult = setAnalysisResultText(salesDatasets);
 
         dispatchOrderAnalysisResult({
             type: 'INIT_DATA',
-            payload: orderAnalysis
+            payload: salesAnalysisResult
         })
 
-        // 주문그래프 숨기기 체크박스가 해제되어 있다면
-        if (!props.hideOrderGraph) {
-            // 옵션 - 주문 그래프 값 세팅
-            let orderAnalysis = [...analysis];
-            
-            analysisItem.forEach(r => {
-                let compareDate = getDateToAnalysisRangeDateFormat(props.analysisDateRange, r.channelOrderDate);
-                orderAnalysis = orderAnalysis.map(r2 => {
-                    if (r2.key === compareDate) {
-                        return r2 = {
-                            ...r2,
-                            order: parseInt(r2.order) + 1,
-                            unit: parseInt(r2.unit) + parseInt(r.unit)
-                        }
-                    } else {
-                        return r2;
+        // 옵션 - 주문 그래프 값 세팅
+        let orderAnalysis = [...analysis];
+
+        analysisItem.forEach(r => {
+            let compareDate = getDateToAnalysisRangeDateFormat(props.analysisDateRange, r.channelOrderDate);
+            orderAnalysis = orderAnalysis.map(r2 => {
+                if (r2.key === compareDate) {
+                    return r2 = {
+                        ...r2,
+                        order: parseInt(r2.order) + 1,
+                        unit: parseInt(r2.unit) + parseInt(r.unit)
                     }
-                })
+                } else {
+                    return r2;
+                }
             })
-    
-            let orderData = orderAnalysis.map(r => r.order);
-            let orderBarGraphDataset = new GraphDataset().toJSON();
-            orderBarGraphDataset = {
-                ...orderBarGraphDataset,
-                type: 'line',
-                label: '주문건',
-                data: orderData,
-                borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0] + '88',
-                backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0 + '88']
+        })
+
+        let orderData = orderAnalysis.map(r => r.order);
+        let orderBarGraphDataset = new GraphDataset().toJSON();
+        orderBarGraphDataset = {
+            ...orderBarGraphDataset,
+            type: 'line',
+            label: '주문건',
+            data: orderData,
+            borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0] + '88',
+            backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0 + '88']
+        }
+        orderDatasets.push(orderBarGraphDataset);
+
+        let orderUnitData = salesAnalysis.map(r => r.unit);
+        let orderUnitBarGraphDataset = new GraphDataset().toJSON();
+        orderUnitBarGraphDataset = {
+            ...orderUnitBarGraphDataset,
+            type: 'line',
+            label: '주문 수량',
+            data: orderUnitData,
+            borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1] + '88',
+            backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1] + '88'
+        }
+        orderDatasets.push(orderUnitBarGraphDataset);
+
+        let labels = salesAnalysis.map(r => getAnalysisDateFormatToViewFormat(props.analysisDateRange, r.key));
+
+        dispatchGraphLabels({
+            type: 'INIT_DATA',
+            payload: labels
+        })
+
+        dispatchGraphDatasets({
+            type: 'INIT_DATA',
+            payload: {
+                sales: salesDatasets,
+                order: orderDatasets
             }
-            datasets.push(orderBarGraphDataset);
-    
-            let unitData = salesAnalysis.map(r => r.unit);
-            let unitBarGraphDataset = new GraphDataset().toJSON();
-            unitBarGraphDataset = {
-                ...unitBarGraphDataset,
-                type: 'line',
-                label: '주문 수량',
-                data: unitData,
-                borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1] + '88',
-                backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1] + '88'
-            }
-            datasets.push(unitBarGraphDataset);
+        })
+    }
+
+    // hideOrderGraph 값에 따라 표시되는 데이터 변환
+    const onActionSetGraphDataset = () => {
+        let datasets = [...graphDatasets.sales];
+
+        if(!props.hideOrderGraph) {
+            datasets = datasets.concat([...graphDatasets.order]);
         }
 
         dispatchOrderAnalysisGraphData({
             type: 'INIT_DATA',
             payload: {
-                labels: labels,
+                labels: graphLabels,
                 datasets
             }
         })
     }
 
+    const onActionSetGraphOption = async (e, item) => {
+        if(item.length === 0) return;
+
+        var idx = item[0].index;
+        var label = graphLabels[idx];
+
+        let startDate = '';
+        let endDate = '';
+        let periodType = 'channelOrderDate';
+        let salesYn = 'y'   // 주문데이터까지 구하려면 제거
+
+        if(props.analysisDateRange === 'date') {
+            var date = new Date(label);
+            startDate = getStartDate(date);
+            endDate = getEndDate(date);
+        }else if(props.analysisDateRange === 'week') {
+            startDate = getStartDateByWeekNumber(label);
+            endDate = getEndDateByWeekNumber(label);
+
+            // 조회된 기간의 시작일
+            if(idx === 0) {
+                startDate = getStartDate(query.startDate);
+            }
+            // 조회된 기간의 마지막일
+            if(idx === (graphLabels.length-1)){
+                endDate = getEndDate(query.endDate);
+            }
+        }else if(props.analysisDateRange === 'month') {
+            var date = new Date(label);
+            startDate = getStartDate(getStartDateOfMonth(date));
+            endDate = getEndDate(getEndDateOfMonth(date));
+            
+            // 조회된 기간의 시작일
+            if(idx === 0) {
+                startDate = getStartDate(query.startDate);
+            }
+            // 조회된 기간의 마지막일
+            if(idx === (graphLabels.length-1)){
+                endDate = getEndDate(query.endDate);
+            }
+        }
+
+        let params = {
+            startDate: startDate,
+            endDate: endDate,
+            periodType: periodType,
+            salesYn: salesYn
+        }
+
+        await props._onAction_searchErpOrderGraphItemByParams(params);
+    }
+
     return (
         <Container>
             {/* 총 주문건 & 수량 그래프 */}
-            {orderAnalysisGraphData &&
+            {orderAnalysisGraphData && graphOption &&
                 <div className='graph-group'>
                     <GraphTitleField
                         element={
@@ -196,6 +313,7 @@ const SalesRegistrationAndUnitGraphComponent = (props) => {
                     <div className='flex-box'>
                         <GraphFieldView
                             orderAnalysisGraphData={orderAnalysisGraphData}
+                            graphOption={graphOption}
                         ></GraphFieldView>
                         <GraphAnalysisResultFieldView
                             orderAnalysisResult={orderAnalysisResult}
@@ -212,6 +330,9 @@ export default SalesRegistrationAndUnitGraphComponent;
 const initialOrderAnalysisGraphData = null;
 const initialOrderAnalysisResult = null;
 const initialAnalysisItem = null;
+const initialGraphLabels = null;
+const initialGraphDatasets = {};
+const initialGraphOption = null;
 
 const orderAnalysisGraphDataReducer = (state, action) => {
     switch (action.type) {
@@ -241,6 +362,44 @@ const orderAnalysisResultReducer = (state, action) => {
             return action.payload;
         case 'CLEAR':
             return initialOrderAnalysisResult;
+        default:
+            return state;
+    }
+}
+
+const graphLabelsReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialGraphLabels;
+        default:
+            return state;
+    }
+}
+
+const graphDatasetsReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
+        case 'CLEAR':
+            return initialGraphDatasets;
+        default:
+            return state;
+    }
+}
+
+const graphOptionReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialGraphOption;
         default:
             return state;
     }

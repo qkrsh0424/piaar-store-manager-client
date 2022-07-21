@@ -99,6 +99,11 @@ function dateToYYMMDD(idate) {
     return moment(date).format("YY.MM.DD");
 }
 
+function dateToYYMMDD2(idate) {
+    var date = new Date(idate);
+    return moment(date).format("YY-MM-DD");
+}
+
 // 기간 설정 시 start값을 직접 설정
 function setStartDateOfPeriod(idate, prevYear, prevMonth, prevDay) {
     var date = new Date(idate);
@@ -178,6 +183,32 @@ function getWeekNumber(date) {
     return weekNum;
 }
 
+function getStartDateByWeekNumber(date) {
+    var y = date.slice(0, 4);
+    var m = date.slice(5, 7)-1;
+    var weekNum = date.slice(8, 9);
+
+    var startOfMonth = new Date(y, m, 1);
+    var weekDay = startOfMonth.getDay();
+    let d = parseInt((weekNum-1) * 7) + 2 - weekDay;
+
+    var date = new Date(y, m, d);
+    return getStartDate(date);
+}
+
+function getEndDateByWeekNumber(date) {
+    var y = date.slice(0, 4);
+    var m = date.slice(5, 7)-1;
+    var weekNum = date.slice(8, 9);
+
+    var startOfMonth = new Date(y, m, 1);
+    var weekDay = startOfMonth.getDay();
+    let d = parseInt((weekNum) * 7) + 1 - weekDay;
+
+    var date = new Date(y, m, d);
+    return getEndDate(date);
+}
+
 function getWeekName() {
     return weekName;
 }
@@ -204,5 +235,8 @@ export {
     getWeekNumber,
     getWeekName,
     getStartDateOfMonth,
-    getEndDateOfMonth
+    getEndDateOfMonth,
+    dateToYYMMDD2,
+    getStartDateByWeekNumber,
+    getEndDateByWeekNumber
 }

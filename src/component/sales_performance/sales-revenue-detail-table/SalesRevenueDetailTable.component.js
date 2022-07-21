@@ -5,7 +5,7 @@ import { getDifferenceBetweenStartDateAndEndDate } from "../../../utils/dateForm
 import { Container, GraphTitleFieldWrapper } from "./SalesRevenueDetailTable.styled";
 import _ from "lodash";
 import TableFieldView from "./TableField.view";
-import { getDateToAnalysisRangeDateFormat } from "../../../utils/graphUtils";
+import { getDateToAnalysisRangeDateFormat } from "../../../utils/graphDataUtils";
 
 function GraphTitleField({ element }) {
     return (

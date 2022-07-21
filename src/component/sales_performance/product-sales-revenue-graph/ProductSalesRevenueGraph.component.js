@@ -2,12 +2,13 @@ import _ from "lodash";
 import { useEffect, useReducer } from "react";
 import { useLocation } from "react-router-dom";
 import qs from 'query-string';
-import { dateToYYYYMM, dateToYYYYMMDD, getDayName, getDifferenceBetweenStartDateAndEndDate, getWeekName, getWeekNumber } from "../../../utils/dateFormatUtils";
+import { getDayName, getDifferenceBetweenStartDateAndEndDate, getEndDate, getStartDate, getWeekName } from "../../../utils/dateFormatUtils";
 import { Container, GraphTitleFieldWrapper } from "./ProductSalesRevenueGraph.styled";
 import GraphFieldView from "./GraphField.view";
 import RevenueOperatorFieldView from "./RevenueOperatorField.view";
 import DetailRevenueGraphByDayOfWeekFieldView from "./DetailRevenueGraphByDayOfWeek.view";
-import { getDateToAnalysisRangeDateFormat, GraphDataset } from "../../../utils/graphUtils";
+import { getDateToAnalysisRangeDateFormat, GraphDataset } from "../../../utils/graphDataUtils";
+import { ControlPointSharp } from "@material-ui/icons";
 
 function GraphTitleField({ element }) {
     return (
@@ -25,12 +26,16 @@ const PIAAR_DEFAUTL_GRAPH_BG_COLOR = ['#B9B4EB', '#908CB8'];
 const ProductSalesRevenueGraphComponent = (props) => {
     const location = useLocation();
     const query = qs.parse(location.search);
-
+    
     const [analysisItem, dispatchAnalysisItem] = useReducer(analysisItemReducer, initialAnalysisItem);
     const [productViewList, dispatchProductViewList] = useReducer(productViewListReducer, initialProductViewList);
     const [productSearchItem, dispatchProductSearchItem] = useReducer(productSearchItemReducer, initialProductSearchItem);
-    const [optionRevenueGraphByDayOfWeekData, dispatchOptionRevenueGraphByDayOfWeekData] = useReducer(optionRevenueGraphByDayOfWeekDataReducer, initialOptionRevenueGraphByDayOfWeekData)
+
+    const [graphOption, dispatchGraphOption] = useReducer(graphOptionReducer, initialGraphOption);
     const [optionRevenueGraphData, dispatchOptionRevenueGraphData] = useReducer(optionRevenueGraphDataReducer, initialOptionRevenueGraphData);
+    
+    const [dayOfWeekGraphOption, dispatchDayOfWeekGraphOption] = useReducer(dayOfWeekGraphOptionReducer, initialDayOfWeekGraphOption);
+    const [optionRevenueGraphByDayOfWeekData, dispatchOptionRevenueGraphByDayOfWeekData] = useReducer(optionRevenueGraphByDayOfWeekDataReducer, initialOptionRevenueGraphByDayOfWeekData)
 
     useEffect(() => {
         if (!props.erpItemData) {
@@ -84,6 +89,57 @@ const ProductSalesRevenueGraphComponent = (props) => {
         onActionCreateOptionRevenueGraphData();
         onActionCreateProductRevenueGraphByDayOfWeekData();
     }, [productSearchItem, props.hideOrderGraph, analysisItem])
+
+    useEffect(() => {
+        if(!optionRevenueGraphData) {
+            return;
+        }
+
+        let gOption = {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: true
+            },
+            indexAxis: 'y',
+            onClick: function (e, item) {
+                onActionSetGraphOption(e, item)
+            },
+            onHover: (e, item) => {
+                const target = e.native ? e.native.target : e.target;
+                target.style.cursor = item[0] ? 'pointer' : 'default';
+            }
+        }
+
+        dispatchGraphOption({
+            type: 'INIT_DATA',
+            payload: gOption
+        })
+    }, [optionRevenueGraphData])
+
+    useEffect(() => {
+        if(!optionRevenueGraphByDayOfWeekData) {
+            return;
+        }
+
+        let gOption = {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
+            onClick: function (e, item) {
+                onActionSetDayOfWeekGraphOption(e, item)
+            }
+        }
+
+        dispatchDayOfWeekGraphOption({
+            type: 'INIT_DATA',
+            payload: gOption
+        })
+    }, [optionRevenueGraphByDayOfWeekData])
 
     const onChangeOptionRevenueDropDownItem = (e) => {
         let name = e.target.name;
@@ -963,6 +1019,70 @@ const ProductSalesRevenueGraphComponent = (props) => {
         })
     }
 
+    const onActionSetGraphOption = async (e, item) => {
+        if(item.length === 0) return;
+
+        var idx = item[0].index;
+        var legend = e.chart.legend.legendItems[0].text === '(판매) 매출액' ? 'revenue' : 'unit';
+        var label = optionRevenueGraphData[legend].labels[idx];
+        
+        let startDate = getStartDate(query.startDate);
+        let endDate = getEndDate(query.endDate);
+        let periodType = 'channelOrderDate';
+        let salesYn = 'y'   // 주문데이터까지 구하려면 제거
+        let searchColumnName = 'prodDefaultName'
+
+        if(productSearchItem.product !== 'total') {
+            label = productViewList.filter(r => r.cid === parseInt(productSearchItem.product))[0]?.defaultName || '';
+        }
+
+        let params = {
+            startDate: startDate,
+            endDate: endDate,
+            periodType: periodType,
+            salesYn: salesYn,
+            searchColumnName: searchColumnName,
+            searchQuery: label,
+            fixedSearchColumnName: searchColumnName,
+            fixedSearchQuery: label
+        }
+
+        await props._onAction_searchErpOrderGraphItemByParams(params);
+    }
+
+    const onActionSetDayOfWeekGraphOption = async (e, item) => {
+        if(item.length === 0) return;
+
+        var idx = item[0].index;
+        var searchDay = e.chart.config._config.data.labels[idx];
+        var searchColumnName = 'categoryName';
+        var label = props.categoryList.filter(r => r.cid === parseInt(productSearchItem.category))[0]?.name;
+        
+        let startDate = getStartDate(query.startDate);
+        let endDate = getEndDate(query.endDate);
+        let periodType = 'channelOrderDate';
+        let salesYn = 'y'   // 주문데이터까지 구하려면 제거
+
+        if(productSearchItem.product !== 'total') {
+            searchColumnName = 'prodDefaultName';
+            label = productViewList.filter(r => r.cid === parseInt(productSearchItem.product))[0]?.defaultName;
+        }
+
+        let params = {
+            startDate: startDate,
+            endDate: endDate,
+            periodType: periodType,
+            salesYn: salesYn,
+            searchColumnName: searchColumnName,
+            searchQuery: label,
+            fixedSearchColumnName: searchColumnName,
+            fixedSearchQuery: label,
+            fixedSearchDay: searchDay
+        }
+
+        await props._onAction_searchErpOrderGraphItemByParams(params);
+    }
+
     return (
         <Container>
             <GraphTitleField
@@ -979,17 +1099,24 @@ const ProductSalesRevenueGraphComponent = (props) => {
 
                     onChangeOptionRevenueDropDownItem={onChangeOptionRevenueDropDownItem}
                 ></RevenueOperatorFieldView>
-                <GraphFieldView
-                    productSearchItem={productSearchItem}
-                    optionRevenueGraphData={optionRevenueGraphData}
-                ></GraphFieldView>
+                {optionRevenueGraphData && graphOption && 
+                    <GraphFieldView
+                        productSearchItem={productSearchItem}
+                        optionRevenueGraphData={optionRevenueGraphData}
+                        graphOption={graphOption}
+                    ></GraphFieldView>
+                }
             </div>
+
             {/* 요일별 상품 매출 그래프 */}
             <div className='graph-group'>
-                <DetailRevenueGraphByDayOfWeekFieldView
-                    productSearchItem={productSearchItem}
-                    optionRevenueGraphByDayOfWeekData={optionRevenueGraphByDayOfWeekData}
-                ></DetailRevenueGraphByDayOfWeekFieldView>
+                {optionRevenueGraphByDayOfWeekData && dayOfWeekGraphOption && 
+                    <DetailRevenueGraphByDayOfWeekFieldView
+                        productSearchItem={productSearchItem}
+                        optionRevenueGraphByDayOfWeekData={optionRevenueGraphByDayOfWeekData}
+                        dayOfWeekGraphOption={dayOfWeekGraphOption}
+                    ></DetailRevenueGraphByDayOfWeekFieldView>
+                }
             </div>
         </Container>
     )
@@ -1005,6 +1132,8 @@ const initialProductSearchItem = {
 };
 const initialOptionRevenueGraphData = null;
 const initialOptionRevenueGraphByDayOfWeekData = null;
+const initialGraphOption = null;
+const initialDayOfWeekGraphOption = null;
 
 const analysisItemReducer = (state, action) => {
     switch (action.type) {
@@ -1061,6 +1190,28 @@ const optionRevenueGraphByDayOfWeekDataReducer = (state, action) => {
             return action.payload;
         case 'CLEAR':
             return initialOptionRevenueGraphByDayOfWeekData;
+        default:
+            return state;
+    }
+}
+
+const graphOptionReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialGraphOption;
+        default:
+            return state;
+    }
+}
+
+const dayOfWeekGraphOptionReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialDayOfWeekGraphOption;
         default:
             return state;
     }

@@ -1,35 +1,8 @@
-import { Chart as ChartJS, registerables } from 'chart.js';
-import { Bar, Line } from 'react-chartjs-2';
-import { createBarGraphOption, createGraphData } from "../../../utils/chartUtils";
+import {Chart as ChartJS, registerables } from 'chart.js';
+import _ from 'lodash';
+import { Bar } from 'react-chartjs-2';
+import { createGraphOption, createGraphData } from "../../../utils/chartUtils";
 import { GraphFieldWrapper } from './SalesRevenueGraph.styled';
-
-const lineGraphOption = {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: {
-        mode: 'index',
-        intersect: false
-    }
-}
-
-const graphOption = {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: {
-        mode: 'index',
-        intersect: false
-    }
-}
-
-const verticalGraphOption = {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: {
-        mode: 'index',
-        intersect: true
-    },
-    indexAxis: 'y'
-}
 
 ChartJS.register(...registerables);
 
@@ -38,9 +11,9 @@ const GraphFieldView = (props) => {
         <GraphFieldWrapper>
             {props.searchItem === 'total' &&
                 <div className='graph-wrapper'>
-                    <Line
+                    <Bar
                         data={createGraphData(props.revenueGraphData)}
-                        options={createBarGraphOption(lineGraphOption)}
+                        options={createGraphOption(props.graphOption)}
                     />
                 </div>
             }
@@ -48,7 +21,7 @@ const GraphFieldView = (props) => {
                 <div className='graph-wrapper'>
                     <Bar
                         data={createGraphData(props.revenueGraphData)}
-                        options={createBarGraphOption(graphOption)}
+                        options={createGraphOption(props.graphOption)}
                     />
                 </div>
             }
@@ -56,7 +29,7 @@ const GraphFieldView = (props) => {
                 <div className='graph-wrapper'>
                     <Bar
                         data={createGraphData(props.revenueGraphData)}
-                        options={createBarGraphOption(graphOption)}
+                        options={createGraphOption(props.graphOption)}
                     />
                 </div>
             }
@@ -69,13 +42,13 @@ const GraphFieldView = (props) => {
                         <div className='graph-wrapper half-type-graph'>
                             <Bar
                                 data={createGraphData(props.revenueGraphData?.revenue)}
-                                options={createBarGraphOption(verticalGraphOption)}
+                                options={createGraphOption(props.graphOption)}
                             />
                         </div>
                         <div className='graph-wrapper half-type-graph'>
                             <Bar
                                 data={createGraphData(props.revenueGraphData?.unit)}
-                                options={createBarGraphOption(verticalGraphOption)}
+                                options={createGraphOption(props.graphOption)}
                             />
                         </div>
                     </div>

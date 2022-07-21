@@ -15,6 +15,8 @@ import ProductSalesRevenueGraphComponent from './product-sales-revenue-graph/Pro
 import SalesRegistrationAndUnitGraphComponent from './sales-registration-and-unit-graph/SalesRegistrationAndUnitGraph.component';
 import SalesRevenueByWeekGraphComponent from './sales-revenue-by-week-graph/SalesRevenueByWeekGraph.component';
 import SalesRevenueDetailTableComponent from './sales-revenue-detail-table/SalesRevenueDetailTable.component';
+import CommonModalComponent from '../module/modal/CommonModalComponent';
+import SelectedGraphItemModalComponent from './selected-graph-item-modal/SelectedGraphItemModal.component';
 
 const Container = styled.div`
 `;
@@ -25,12 +27,17 @@ const SalesPerformanceComponent = (props) => {
     const navigate = useNavigate();
 
     const [erpItemData, dispatchErpItemData] = useReducer(erpItemDataReducer, initialErpItemData);
+    const [erpItemGraphData, dispatchErpItemGraphData] = useReducer(erpItemGraphDataReducer, initialErpItemGraphData);
     const [analysisDateRange, dispatchAnalysisDateRange] = useReducer(analysisDateRangeReducer, initialAnalysisDateRange);
     const [categoryList, dispatchCategoryList] = useReducer(categoryListReducer, initialCategoryList);
     const [productList, dispatchProductList] = useReducer(productListReducer, initialProductList);
 
     const [searchItem, dispatchSearchItem] = useReducer(searchItemReducer, initialSearchItem);
     const [hideOrderGraph, setHideOrderGraph] = useState(true);
+
+    const [selectedGraphItemModalOpen, setSelectedGraphItemModalOpen] = useState(false);
+
+    const [graphSearchParam, dispatchGraphSearchParam] = useReducer(graphSearchParamReducer, initialGraphSearchParam);
 
     const {
         open: backdropOpen,
@@ -97,6 +104,27 @@ const SalesPerformanceComponent = (props) => {
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchErpItemData({
+                        type: 'INIT_DATA',
+                        payload: res.data.data
+                    })
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+    
+    const __reqSearchErpOrderItemByParams = async (params) => {
+        await erpOrderItemDataConnect().searchBatch(params)
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    dispatchErpItemGraphData({
                         type: 'INIT_DATA',
                         payload: res.data.data
                     })
@@ -180,6 +208,32 @@ const SalesPerformanceComponent = (props) => {
         setHideOrderGraph(!hideOrderGraph);
     }
 
+    const _onAction_searchErpOrderGraphItemByParams = async (params) => {
+        dispatchGraphSearchParam({
+            type: 'INIT_DATA',
+            payload: params
+        })
+        onActionOpenBackdrop();
+        await __reqSearchErpOrderItemByParams(params);
+        onActionCloseBackdrop();
+        _onAction_openSelectedGraphItemModal();
+
+    }
+
+    const _onAction_searchErpOrderItemByParams = async (params) => {
+        onActionOpenBackdrop();
+        await __reqSearchErpOrderItemByParams(params);
+        onActionCloseBackdrop();
+    }
+
+    const _onAction_openSelectedGraphItemModal = () => {
+        setSelectedGraphItemModalOpen(true);
+    }
+
+    const _onAction_closeSelectedGraphItemModal = () => {
+        setSelectedGraphItemModalOpen(false);
+    }
+
     return (
         <Container>
             <SearchOperatorComponent
@@ -198,6 +252,7 @@ const SalesPerformanceComponent = (props) => {
                 hideOrderGraph={hideOrderGraph}
 
                 _onAction_changeRevenueItem={_onAction_changeRevenueItem}
+                _onAction_searchErpOrderGraphItemByParams={_onAction_searchErpOrderGraphItemByParams}
             ></SalesRevenueGraphComponent>
             {/* 총 매출액 그래프 - 상품별 */}
             {searchItem === 'product' && 
@@ -208,6 +263,8 @@ const SalesPerformanceComponent = (props) => {
                     analysisDateRange={analysisDateRange}
                     categoryList={categoryList}
                     productList={productList}
+
+                    _onAction_searchErpOrderGraphItemByParams={_onAction_searchErpOrderGraphItemByParams}
                 ></ProductSalesRevenueGraphComponent>
             }
 
@@ -216,12 +273,16 @@ const SalesPerformanceComponent = (props) => {
                 erpItemData={erpItemData}
                 analysisDateRange={analysisDateRange}
                 hideOrderGraph={hideOrderGraph}
+
+                _onAction_searchErpOrderGraphItemByParams={_onAction_searchErpOrderGraphItemByParams}
             ></SalesRegistrationAndUnitGraphComponent>
 
             {/* 요일별 매출 그래프 */}
             <SalesRevenueByWeekGraphComponent
                 erpItemData={erpItemData}
                 hideOrderGraph={hideOrderGraph}
+
+                _onAction_searchErpOrderGraphItemByParams={_onAction_searchErpOrderGraphItemByParams}
             ></SalesRevenueByWeekGraphComponent>
             
             {/* 매출액 BEST 테이블 */}
@@ -229,6 +290,20 @@ const SalesPerformanceComponent = (props) => {
                 erpItemData={erpItemData}
                 hideOrderGraph={hideOrderGraph}
             ></SalesRevenueDetailTableComponent>
+
+            <CommonModalComponent
+                open={selectedGraphItemModalOpen}
+                maxWidth={'lg'}
+
+                onClose={_onAction_closeSelectedGraphItemModal}
+            >
+                <SelectedGraphItemModalComponent
+                    erpItemGraphData={erpItemGraphData}
+                    graphSearchParam={graphSearchParam}
+
+                    _onAction_searchErpOrderItemByParams={_onAction_searchErpOrderItemByParams}
+                ></SelectedGraphItemModalComponent>
+            </CommonModalComponent>
 
             {/* Backdrop Loading */}
             <BackdropHookComponent
@@ -241,10 +316,12 @@ const SalesPerformanceComponent = (props) => {
 export default SalesPerformanceComponent;
 
 const initialErpItemData = null;
+const initialErpItemGraphData = null;
 const initialAnalysisDateRange = 'date';
 const initialCategoryList = null;
 const initialProductList = null;
 const initialSearchItem = 'total';
+const initialGraphSearchParam = null;
 
 const erpItemDataReducer = (state, action) => {
     switch(action.type) {
@@ -252,6 +329,17 @@ const erpItemDataReducer = (state, action) => {
             return action.payload;
         case 'CLEAR':
             return initialErpItemData;
+        default:
+            return state;
+    }
+}
+
+const erpItemGraphDataReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialErpItemGraphData;
         default:
             return state;
     }
@@ -296,6 +384,17 @@ const searchItemReducer = (state, action) => {
             return action.payload;
         case 'CLEAR':
             return initialSearchItem;
+        default:
+            return state;
+    }
+}
+
+const graphSearchParamReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialGraphSearchParam;
         default:
             return state;
     }

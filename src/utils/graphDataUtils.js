@@ -1,4 +1,4 @@
-import { dateToMMDD, dateToYYYYMM, dateToYYYYMMDD, getDayName, getWeekNumber } from "./dateFormatUtils";
+import { dateToYYYYMM, dateToYYYYMMDD, getDayName, getWeekNumber } from "./dateFormatUtils";
 
 class GraphDataset {
     constructor() {
@@ -37,7 +37,7 @@ function getDateToAnalysisRangeDateFormat(dateRange, date) {
 
 // dateRange(일, 주, 월)값에 따라 date값을 view 형식으로 변환한다
 function getAnalysisDateFormatToViewFormat(dateRange, date) {
-    let viewDateFormat = dateToMMDD(date) + ' (' + getDayName(date) + ')';
+    let viewDateFormat = dateToYYYYMMDD(date) + ' (' + getDayName(date) + ')';
     if (dateRange === 'week') {
         viewDateFormat = date + '주차';
     } else if (dateRange === 'month') {
@@ -48,14 +48,15 @@ function getAnalysisDateFormatToViewFormat(dateRange, date) {
 
 // 결과 test를 설정. label: 항목명, value: 항목 해당 값, color: 그래프에서 나타내는 색상
 function setAnalysisResultText(datasets) {
+    // 데이터가 존재하지 않는 경우
     return datasets?.map(r => {
         let sum = 0;
         r.data.forEach(r2 => sum += r2);
 
         return {
-            label: r.label,
-            value: sum,
-            color: r.backgroundColor
+            label: r.label || '',
+            value: sum || 0,
+            color: r.backgroundColor || ''
         }
     })
 }

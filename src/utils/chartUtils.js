@@ -26,7 +26,7 @@ function createDoughnutGraphOption(option) {
     }
 }
 
-function createBarGraphOption(option) {
+function createGraphOption(option) {
     return {
         responsive: option.responsive,
         indexAxis: option.indexAxis,
@@ -41,12 +41,14 @@ function createBarGraphOption(option) {
                     boxWidth: 12,
                 }
             }
-        }
+        },
+        onClick: option.onClick,
+        onHover: option.onHover
     }
 }
 
 export {
     createGraphData,
     createDoughnutGraphOption,
-    createBarGraphOption
+    createGraphOption
 }

@@ -307,7 +307,8 @@ const staticDefaultHeaderDetails2 = [
         "originCellName": "판매금액",
         "customCellName": "판매금액",
         "matchedColumnName": "price",
-        "allowedSearch": true,
+        // "allowedSearch": true,
+        "allowedSearch": false,
         "requiredFlag": false,
         "variableType": 'number',
         "fixedValue": '',
@@ -323,7 +324,8 @@ const staticDefaultHeaderDetails2 = [
         "originCellName": "배송비",
         "customCellName": "배송비",
         "matchedColumnName": "deliveryCharge",
-        "allowedSearch": true,
+        // "allowedSearch": true,
+        "allowedSearch": false,
         "requiredFlag": false,
         "variableType": 'number',
         "fixedValue": '',
@@ -901,9 +903,22 @@ function getDefaultHeaderFields() {
     return result;
 }
 
+function getSelectedHeaderFields(selectedHeader) {
+    let result = [];
+    selectedHeader.forEach(r => {
+        staticDefaultHeaderDetails2.forEach(r2 => {
+            if(r2.matchedColumnName === r){
+                result.push(r2);
+            }
+        })
+    })
+    return result;
+}
+
 export {
     staticOrderItemDetaultPageSizeElements,
     staticReleaseListHeaderDetails,
     getDefaultHeaderDetails,
-    getDefaultHeaderFields
+    getDefaultHeaderFields,
+    getSelectedHeaderFields
 }
