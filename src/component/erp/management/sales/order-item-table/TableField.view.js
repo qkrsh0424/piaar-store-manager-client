@@ -122,16 +122,16 @@ export default function TableFieldView(props) {
                                             >
                                                 <input type='checkbox' checked={checked} onChange={(e) => props.onActionCheckOrderItem(e, r1)}></input>
                                             </td>
-                                            {props.viewHeader?.headerDetail.details?.map(r2 => {
+                                            {props.viewHeader?.headerDetail.details?.map((r2, idx) => {
                                                 let matchedColumnName = r2.matchedColumnName;
                                                 if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt' || matchedColumnName === 'channelOrderDate') {
                                                     return (
-                                                        <td key={r2.cellNumber}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
+                                                        <td key={idx}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
                                                     )
                                                 }
                                                 return (
                                                     <td
-                                                        key={r2.cellNumber}
+                                                        key={idx}
                                                         className={`${r2.matchedColumnName === 'receiver' && r1[`duplicationUser`] && 'user-duplication'}`}
                                                     >
                                                         {r1[matchedColumnName]}

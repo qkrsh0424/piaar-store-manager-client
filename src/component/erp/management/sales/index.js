@@ -68,7 +68,8 @@ const SalesComponent = (props) => {
     const [checkedOrderItemList, dispatchCheckedOrderItemList] = useReducer(checkedOrderItemListReducer, initialCheckedOrderItemList);
     const [downloadExcelList, dispatchDownloadExcelList] = useReducer(downloadExcelListReducer, initialDownloadExcelList);
     const [viewHeaderList, dispatchViewHeaderList] = useReducer(viewHeaderListReducer, initialViewHeaderList);
-
+    const [releaseLocation, dispatchReleaseLocation] = useReducer(releaseLocationReducer, initialReleaseLocation);
+    
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
 
     const [defaultHeader, setDefaultHeader] = useLocalStorageHook("defaultHeader", null);
@@ -348,7 +349,29 @@ const SalesComponent = (props) => {
             })
     }
 
+    const __reqSearchReleaseLocationOfProductOption = async () => {
+        await productOptionDataConnect().searchReleaseLocation()
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    dispatchReleaseLocation({
+                        type: 'INIT_DATA',
+                        payload: res.data.data
+                    })
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
     useEffect(() => {
+        __reqSearchReleaseLocationOfProductOption();
         __reqSearchViewHeaderList();
         __reqSearchProductOptionList();
         __reqSearchDownloadExcelHeaders();
@@ -618,6 +641,7 @@ const SalesComponent = (props) => {
                         viewHeader={viewHeader}
                         orderItemList={orderItemPage?.content}
                         checkedOrderItemList={checkedOrderItemList}
+                        releaseLocation={releaseLocation}
 
                         _onAction_checkOrderItem={_onAction_checkOrderItem}
                         _onAction_checkOrderItemAll={_onAction_checkOrderItemAll}
@@ -712,6 +736,17 @@ const initialOrderItemPage = null;
 const initialCheckedOrderItemList = [];
 const initialDownloadExcelList = null;
 const initialViewHeaderList = null;
+const initialReleaseLocation = null;
+
+const releaseLocationReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialReleaseLocation;
+        default: return initialReleaseLocation;
+    }
+}
 
 const viewHeaderReducer = (state, action) => {
     switch (action.type) {

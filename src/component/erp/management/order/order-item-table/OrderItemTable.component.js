@@ -1,12 +1,18 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import qs from 'query-string';
 import { Container } from "./OrderItemTable.styled";
 import SelectorButtonFieldView from "./SelectorButtonField.view";
 import TableFieldView from "./TableField.view";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
-import { dateToYYYYMMDDhhmmss, dateToYYYYMMDDhhmmssWithInvalid } from "../../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDDhhmmssWithInvalid } from "../../../../../utils/dateFormatUtils";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const OrderItemTableComponent = (props) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const query = qs.parse(location.search);
+
     const tableScrollRef = useRef();
 
     const [orderItemList, dispatchOrderItemList] = useReducer(orderItemListReducer, initialOrderItemList);
@@ -14,6 +20,17 @@ const OrderItemTableComponent = (props) => {
     const [fixTargetItem, dispatchFixTargetItem] = useReducer(fixTargetItemReducer, initialFixTargetItem);
 
     const [fixItemModalOpen, setFixItemModalOpen] = useState(false);
+
+    const [searchReleaseLocationValue, dispatchSearchReleaseLocationValue] = useReducer(searchReleaseLocationValueReducer, initialSearchReleaseLocationValue);
+
+    useEffect(() => {
+        if(query.searchColumnName === 'optionReleaseLocation') {
+            dispatchSearchReleaseLocationValue({
+                type: 'SET_DATA',
+                payload: query.searchQuery
+            })
+        }
+    }, [])
 
     useEffect(() => {
         if (!props.orderItemList || props.orderItemList?.length <= 0) {
@@ -171,6 +188,25 @@ const OrderItemTableComponent = (props) => {
         onActionCloseFixItemModal();
     }
 
+    const onChangeReleaseLocationValue = (e) => {
+        let searchQuery = e.target.value;
+        dispatchSearchReleaseLocationValue({
+            type: 'SET_DATA',
+            payload: e.target.value
+        })
+
+        query.searchColumnName = 'optionReleaseLocation';
+        query.searchQuery = searchQuery
+
+        navigate(qs.stringifyUrl({
+            url: location.pathname,
+            query: { ...query }
+        }),
+            {
+                replace: true
+            }
+        )
+    }
 
     return (
         <>
@@ -178,8 +214,12 @@ const OrderItemTableComponent = (props) => {
                 {(props.viewHeader && orderItemList) &&
                     <>
                         <SelectorButtonFieldView
+                            releaseLocation={props.releaseLocation}
+                            searchReleaseLocationValue={searchReleaseLocationValue}
+
                             onActionCheckOrderItemAll={onActionCheckOrderItemAll}
                             onActionReleaseOrderItemAll={onActionReleaseOrderItemAll}
+                            onChangeReleaseLocationValue={onChangeReleaseLocationValue}
                         ></SelectorButtonFieldView>
                         <TableFieldView
                             tableScrollRef={tableScrollRef}
@@ -227,6 +267,7 @@ export default OrderItemTableComponent;
 const initialViewSize = 50;
 const initialFixTargetItem = null;
 const initialOrderItemList = [];
+const initialSearchReleaseLocationValue = null;
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
@@ -258,5 +299,13 @@ const orderItemListReducer = (state, action) => {
         case 'CLEAR':
             return initialOrderItemList;
         default: return initialOrderItemList;
+    }
+}
+
+const searchReleaseLocationValueReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        default: return initialSearchReleaseLocationValue;
     }
 }

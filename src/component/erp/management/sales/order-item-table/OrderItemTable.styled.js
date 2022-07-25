@@ -214,6 +214,28 @@ const SelectorButtonFieldWrapper = styled.div`
         }
     }
 
+    .select-item {
+        width: 200px;
+        height: 30px;
+        padding: 5px;
+        border: 1px solid #e0e0e0;
+        border-bottom: none;
+        border-radius: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+
+        &:focus{
+            outline: none;
+        }
+
+        @media all and (max-width:992px) {
+            width: 100%;
+        }
+    }
+
     .button-el{
         position: relative;
         overflow: hidden;
