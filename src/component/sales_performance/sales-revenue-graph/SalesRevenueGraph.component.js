@@ -80,15 +80,6 @@ const SalesRevenueGraphComponent = (props) => {
             return;
         }
 
-        // 주문 데이터 표시 여부 바뀔 때마다 호출
-        onActionSetGraphDataset();
-    }, [graphLabels, graphDatasets, props.hideOrderGraph])
-
-    useEffect(() => {
-        if(!(graphLabels && graphDatasets)) {
-            return;
-        }
-        
         let gOption = {
             responsive: true,
             maintainAspectRatio: false,
@@ -123,7 +114,10 @@ const SalesRevenueGraphComponent = (props) => {
             type: 'INIT_DATA',
             payload: gOption
         })
-    }, [graphLabels, graphDatasets])
+
+        // 주문 데이터 표시 여부 바뀔 때마다 호출
+        onActionSetGraphDataset();
+    }, [props.hideOrderGraph, graphLabels, graphDatasets])
     
     // 1-1. 전체 - 총 매출액
     const onActionCreateRevenueGraphData = () => {
@@ -273,6 +267,7 @@ const SalesRevenueGraphComponent = (props) => {
             })
             analysis.push(data);
         })
+        analysis.reverse();
 
         // 기본 - 판매 그래프
         let salesAnalysis = [...analysis];
@@ -750,7 +745,12 @@ const SalesRevenueGraphComponent = (props) => {
         let startDate ='';
         let endDate ='';
         let periodType = 'channelOrderDate';
-        let salesYn = 'y'   // 주문데이터까지 구하려면 제거.
+        let salesYn = 'y';
+
+        // 판매매출액 그래프만 표시된 경우
+        if(!props.hideOrderGraph) {
+            salesYn = null;
+        }
 
         if(props.analysisDateRange === 'date') {
             var date = new Date(label);
@@ -803,8 +803,13 @@ const SalesRevenueGraphComponent = (props) => {
         let startDate = getStartDate(query.startDate);
         let endDate = getEndDate(query.endDate);
         let periodType = 'channelOrderDate';
-        let salesYn = 'y'   // 주문데이터까지 구하려면 제거
         let searchColumnName = 'prodDefaultName'
+        let salesYn = 'y';
+
+        // 판매매출액 그래프만 표시된 경우
+        if(!props.hideOrderGraph) {
+            salesYn = null;
+        }
 
         let params = {
             startDate: startDate,

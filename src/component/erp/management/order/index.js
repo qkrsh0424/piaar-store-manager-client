@@ -35,7 +35,7 @@ const DEFAULT_HEADER_FIELDS = getDefaultHeaderFields();
 
 const OrderComponent = (props) => {
     const location = useLocation();
-    const query = qs.parse(location.search)
+    const query = qs.parse(location.search);
 
     const {
         connected,

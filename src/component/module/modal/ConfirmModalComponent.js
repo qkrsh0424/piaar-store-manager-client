@@ -14,10 +14,17 @@ const TitleBox = styled.div`
 `;
 
 const MessageBox = styled.div`
-    padding: 30px 10px;
+    padding: 20px 10px 30px 10px;
     font-size: 14px;
     font-weight: 600;
     text-align: center;
+
+    .info-text {
+        color: var(--erp-main-color);
+        text-align: left;
+        padding: 0 10px;
+        font-size: 12px;
+    }
 `;
 
 const MemoBox = styled.div`

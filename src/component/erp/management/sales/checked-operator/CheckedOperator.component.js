@@ -1,10 +1,51 @@
-import { useRef, useState } from "react";
+import { useReducer, useRef, useState } from "react";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
 import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
-import { Container } from "./CheckedOperator.styled";
+import { Container, TableFieldWrapper } from "./CheckedOperator.styled";
 import OperatorFieldView from "./OperatorField.view";
+
+function TableFieldView({releaseConfirmItem}) {
+    return (
+        <TableFieldWrapper>
+            <div
+                className='table-box'
+            >
+                <table cellSpacing="0">
+                    <thead>
+                        <tr className='fixed-header'>
+                            <th width='200'>출고 옵션코드</th>
+                            <th width='200'>$피아르 상품관리명</th>
+                            <th width='200'>$피아르 옵션관리명</th>
+                            <th width='150'>총 출고전환 수량</th>
+                            <th width='150'>$재고수량</th>
+                            <th width='150' style={{color: '#ff4949'}}>[출고 부족 수량]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {releaseConfirmItem?.map((r, idx) => {
+                            let isOutOfStock = r.optionStockUnit != null && (r.optionStockUnit - r.unit < 0);
+                            return (
+                                <tr
+                                    key={'release-item-idx' + idx}
+                                    className={`${isOutOfStock && 'tr-highlight'}`}
+                                >
+                                    <td>{r.releaseOptionCode}</td>
+                                    <td>{r.prodDefaultName}</td>
+                                    <td>{r.optionDefaultName}</td>
+                                    <td>{r.unit}</td>
+                                    <td>{r.optionStockUnit}</td>
+                                    <td className={`${isOutOfStock && 'td-highlight'}`}>{isOutOfStock && Math.abs(r.optionStockUnit - r.unit)}</td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        </TableFieldWrapper>
+    )
+}
 
 const CheckedOperatorComponent = (props) => {
 
@@ -13,6 +54,7 @@ const CheckedOperatorComponent = (props) => {
     const [optionCodeModalOpen, setOptionCodeModalOpen] = useState(false);
     const [releaseConfirmModalOpen, setReleaseConfirmModalOpen] = useState(false);
     const [releaseOptionCodeModalOpen, setReleaseOptionCodeModalOpen] = useState(false);
+    const [releaseConfirmItem, dispatchReleaseConfirmItem] = useReducer(releaseConfirmItemReducer, initialReleaseConfirmItem);
 
     const onActionOpenSalesConfirmModal = () => {
         if (props.checkedOrderItemList?.length <= 0) {
@@ -120,6 +162,36 @@ const CheckedOperatorComponent = (props) => {
             return;
         }
 
+        // 출고 부족 수량 계산
+        let releaseOptionCode = new Set(props.checkedOrderItemList?.map(r => r.releaseOptionCode));
+        let releaseItem = [...releaseOptionCode].map(r =>{
+            return {
+                releaseOptionCode: r,
+                unit: 0
+            }
+        })
+
+        props.checkedOrderItemList?.forEach(r => {
+            releaseItem = releaseItem.map(r2 => {
+                if(r2.releaseOptionCode === r.releaseOptionCode) {
+                    return {
+                        ...r2,
+                        prodDefaultName: r.prodDefaultName,
+                        optionDefaultName: r.optionDefaultName,
+                        unit: parseInt(r2.unit) + parseInt(r.unit),
+                        optionStockUnit: r.optionStockUnit
+                    }
+                }else {
+                    return r2;
+                }
+            })
+        })
+
+        dispatchReleaseConfirmItem({
+            type: 'INIT_DATA',
+            payload: releaseItem
+        })
+
         setReleaseConfirmModalOpen(true);
     }
 
@@ -201,10 +273,16 @@ const CheckedOperatorComponent = (props) => {
             <ConfirmModalComponent
                 open={releaseConfirmModalOpen}
                 title={'출고 전환 확인 메세지'}
-                message={`[ ${props.checkedOrderItemList?.length || 0} ] 건의 데이터를 출고 전환 하시겠습니까?`}
-
+                message={
+                    <>
+                        <div className='info-text'>* [출고 부족 수량]을 확인해주세요.</div>
+                        <TableFieldView releaseConfirmItem={releaseConfirmItem}></TableFieldView>
+                        <div>[ {props.checkedOrderItemList?.length || 0} ] 건의 데이터를 출고 전환 하시겠습니까?</div>
+                    </>
+                }
                 onConfirm={onActionConfirmRelease}
                 onClose={onActionCloseReleaseConfirmModal}
+                maxWidth='md'
             ></ConfirmModalComponent>
 
             {/* 옵션 코드 모달 */}
@@ -238,3 +316,15 @@ const CheckedOperatorComponent = (props) => {
     );
 }
 export default CheckedOperatorComponent;
+
+const initialReleaseConfirmItem = null;
+
+const releaseConfirmItemReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialReleaseConfirmItem;
+        default: return initialReleaseConfirmItem;
+    }
+}

@@ -59,15 +59,6 @@ const SalesRevenueByWeekGraphComponent = (props) => {
             return;
         }
 
-        // 주문 데이터 표시 여부 바뀔 때마다 호출
-        onActionSetGraphDataset();
-    }, [graphLabels, graphDatasets, props.hideOrderGraph])
-
-    useEffect(() => {
-        if(!(graphLabels && graphDatasets)) {
-            return;
-        }
-        
         let gOption = {
             responsive: true,
             maintainAspectRatio: false,
@@ -88,7 +79,10 @@ const SalesRevenueByWeekGraphComponent = (props) => {
             type: 'INIT_DATA',
             payload: gOption
         })
-    }, [graphLabels, graphDatasets])
+
+        // 주문 데이터 표시 여부 바뀔 때마다 호출
+        onActionSetGraphDataset();
+    }, [props.hideOrderGraph, graphLabels, graphDatasets])
 
     // 3. 요일별 매출액
     const onActionCreateRevenueByWeekGraphData = () => {
@@ -395,7 +389,12 @@ const SalesRevenueByWeekGraphComponent = (props) => {
         let startDate = getStartDate(query.startDate);
         let endDate = getEndDate(query.endDate);
         let periodType = 'channelOrderDate';
-        let salesYn = 'y'   // 주문데이터까지 구하려면 제거
+        let salesYn = 'y';
+
+        // 주문그래프가 보여지는 경우
+        if(!props.hideOrderGraph) {
+            salesYn = null;
+        }
 
         let params = {
             startDate: startDate,

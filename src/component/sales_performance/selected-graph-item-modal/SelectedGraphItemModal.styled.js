@@ -11,9 +11,17 @@ const Container = styled.div`
 
 const InfoTextFieldWrapper = styled.div`
     padding: 10px 35px;
-    font-size: 12px;
-    color: var(--erp-main-color);
-    font-weight: 600;
+    
+    .date-text {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .info-text {
+        font-weight: 600;
+        font-size: 12px;
+        color: var(--erp-main-color);
+    }
 `;
 
 const TableFieldWrapper = styled.div`

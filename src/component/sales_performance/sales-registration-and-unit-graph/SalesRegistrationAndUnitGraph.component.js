@@ -62,15 +62,6 @@ const SalesRegistrationAndUnitGraphComponent = (props) => {
             return;
         }
 
-        // 주문 데이터 표시 여부 바뀔 때마다 호출
-        onActionSetGraphDataset();
-    }, [graphLabels, graphDatasets, props.hideOrderGraph])
-
-    useEffect(() => {
-        if(! (graphLabels && graphDatasets)) {
-            return;
-        }
-        
         let gOption = {
             responsive: true,
             maintainAspectRatio: false,
@@ -91,7 +82,10 @@ const SalesRegistrationAndUnitGraphComponent = (props) => {
             type: 'INIT_DATA',
             payload: gOption
         })
-    }, [graphLabels, graphDatasets])
+
+        // 주문 데이터 표시 여부 바뀔 때마다 호출
+        onActionSetGraphDataset();
+    }, [graphLabels, graphDatasets, props.hideOrderGraph])
 
     // 2. 총 판매건 & 판매수량
     const onActionCreateOrderAnalysisGraphData = () => {
@@ -254,10 +248,15 @@ const SalesRegistrationAndUnitGraphComponent = (props) => {
         var idx = item[0].index;
         var label = graphLabels[idx];
 
-        let startDate = '';
-        let endDate = '';
+        let startDate = null;
+        let endDate = null;
         let periodType = 'channelOrderDate';
-        let salesYn = 'y'   // 주문데이터까지 구하려면 제거
+        let salesYn = 'y';
+
+        // 주문그래프가 보여지는 경우
+        if(!props.hideOrderGraph) {
+            salesYn = null;
+        }
 
         if(props.analysisDateRange === 'date') {
             var date = new Date(label);

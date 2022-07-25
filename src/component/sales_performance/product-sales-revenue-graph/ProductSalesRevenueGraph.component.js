@@ -116,7 +116,7 @@ const ProductSalesRevenueGraphComponent = (props) => {
             type: 'INIT_DATA',
             payload: gOption
         })
-    }, [optionRevenueGraphData])
+    }, [props.hideOrderGraph, optionRevenueGraphData])
 
     useEffect(() => {
         if(!optionRevenueGraphByDayOfWeekData) {
@@ -139,7 +139,7 @@ const ProductSalesRevenueGraphComponent = (props) => {
             type: 'INIT_DATA',
             payload: gOption
         })
-    }, [optionRevenueGraphByDayOfWeekData])
+    }, [props.hideOrderGraph, optionRevenueGraphByDayOfWeekData])
 
     const onChangeOptionRevenueDropDownItem = (e) => {
         let name = e.target.name;
@@ -1029,8 +1029,12 @@ const ProductSalesRevenueGraphComponent = (props) => {
         let startDate = getStartDate(query.startDate);
         let endDate = getEndDate(query.endDate);
         let periodType = 'channelOrderDate';
-        let salesYn = 'y'   // 주문데이터까지 구하려면 제거
         let searchColumnName = 'prodDefaultName'
+        let salesYn = 'y'
+
+        if(!props.hideOrderGraph) {
+            salesYn = null;
+        }
 
         if(productSearchItem.product !== 'total') {
             label = productViewList.filter(r => r.cid === parseInt(productSearchItem.product))[0]?.defaultName || '';
@@ -1061,7 +1065,11 @@ const ProductSalesRevenueGraphComponent = (props) => {
         let startDate = getStartDate(query.startDate);
         let endDate = getEndDate(query.endDate);
         let periodType = 'channelOrderDate';
-        let salesYn = 'y'   // 주문데이터까지 구하려면 제거
+        let salesYn = 'y'
+
+        if(!props.hideOrderGraph) {
+            salesYn = null;
+        }
 
         if(productSearchItem.product !== 'total') {
             searchColumnName = 'prodDefaultName';

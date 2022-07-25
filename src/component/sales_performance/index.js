@@ -300,6 +300,7 @@ const SalesPerformanceComponent = (props) => {
                 <SelectedGraphItemModalComponent
                     erpItemGraphData={erpItemGraphData}
                     graphSearchParam={graphSearchParam}
+                    hideOrderGraph={hideOrderGraph}
 
                     _onAction_searchErpOrderItemByParams={_onAction_searchErpOrderItemByParams}
                 ></SelectedGraphItemModalComponent>

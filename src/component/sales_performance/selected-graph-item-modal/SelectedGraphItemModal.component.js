@@ -147,7 +147,7 @@ const SelectedGraphItemModalComponent = (props) => {
             periodType: 'channelOrderDate',
             salesYn: 'y'
         }
-        
+
         props._onAction_searchErpOrderItemByParams(params);
     }
 
@@ -172,10 +172,20 @@ const SelectedGraphItemModalComponent = (props) => {
 
             <InfoTextField
                 element={(
-                    <div>
-                        <span>검색된 기간 : </span>
-                        <span>{dateToYYMMDD(props.graphSearchParam?.startDate)} ~ {dateToYYMMDD(props.graphSearchParam?.endDate)}</span>
-                    </div>
+                    <>
+                        <div className='date-text'>
+                            <span>검색 기간 : </span>
+                            <span>{dateToYYMMDD(props.graphSearchParam?.startDate)} ~ {dateToYYMMDD(props.graphSearchParam?.endDate)}</span>
+                        </div>
+                        <div>
+                            {!props.hideOrderGraph &&
+                                <span className='info-text'>판매데이터만 확인하려면 '주문데이터 숨기기' 체크박스를 해제해주세요.</span>
+                            }
+                            {props.hideOrderGraph &&
+                                <span className='info-text'>주문데이터도 함께 확인하려면 '주문데이터 숨기기' 체크박스를 체크해주세요.</span>
+                            }
+                        </div>
+                    </>
                 )}
             ></InfoTextField>
             <TableFieldView
