@@ -1,6 +1,7 @@
 import { useReducer, useState } from "react";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
+import ReleaseOptionCodeModalComponent from "../../sales/release-option-code-modal/ReleaseOptionCodeModal.component";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
 import { Container, TableFieldWrapper } from "./CheckedOperator.styled";
 import OperatorFieldView from "./OperatorField.view";
@@ -51,6 +52,7 @@ const CheckedOperatorComponent = (props) => {
     const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState(false);
     const [optionCodeModalOpen, setOptionCodeModalOpen] = useState(false);
     const [salesConfirmItem, dispatchSalesConfirmItem] = useReducer(salesConfirmItemReducer, initialSalesConfirmItem);
+    const [releaseOptionCodeModalOpen, setReleaseOptionCodeModalOpen] = useState(false);
 
     const onActionOpenSalesConfirmModal = () => {
         if (props.checkedOrderItemList?.length <= 0) {
@@ -150,6 +152,30 @@ const CheckedOperatorComponent = (props) => {
         onActionCloseOptionCodeModal();
     }
 
+    const onActionOpenReleaseOptionCodeModal = () => {
+        if (props.checkedOrderItemList?.length <= 0) {
+            alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+        setReleaseOptionCodeModalOpen(true);
+    }
+
+    const onActionCloseReleaseOptionCodeModal = () => {
+        setReleaseOptionCodeModalOpen(false);
+    }
+
+    const onActionChangeReleaseOptionCode = (optionCode) => {
+        let data = [...props.checkedOrderItemList];
+        data = data.map(r => {
+            return {
+                ...r,
+                releaseOptionCode: optionCode
+            }
+        })
+        props._onSubmit_changeReleaseOptionCodeForOrderItemListInBatch(data);
+        onActionCloseReleaseOptionCodeModal();
+    }
+
     return (
         <>
             <Container>
@@ -157,6 +183,7 @@ const CheckedOperatorComponent = (props) => {
                     onActionOpenSalesConfirmModal={onActionOpenSalesConfirmModal}
                     onActionOpenDeleteConfirmModal={onActionOpenDeleteConfirmModal}
                     onActionOpenOptionCodeModal={onActionOpenOptionCodeModal}
+                    onActionOpenReleaseOptionCodeModal={onActionOpenReleaseOptionCodeModal}
                 ></OperatorFieldView>
             </Container>
 
@@ -189,6 +216,8 @@ const CheckedOperatorComponent = (props) => {
                 onConfirm={onActionConfirmDelete}
                 onClose={onActionCloseDeleteConfirmModal}
             ></ConfirmModalComponent>
+
+            {/* 옵션 코드 모달 */}
             <CommonModalComponent
                 open={optionCodeModalOpen}
 
@@ -200,6 +229,20 @@ const CheckedOperatorComponent = (props) => {
 
                     onConfirm={(optionCode) => onActionChangeOptionCode(optionCode)}
                 ></OptionCodeModalComponent>
+            </CommonModalComponent>
+
+            {/* 출고 옵션 코드 모달 */}
+            <CommonModalComponent
+                open={releaseOptionCodeModalOpen}
+
+                onClose={onActionCloseReleaseOptionCodeModal}
+            >
+                <ReleaseOptionCodeModalComponent
+                    checkedOrderItemList={props.checkedOrderItemList}
+                    productOptionList={props.productOptionList}
+
+                    onConfirm={(optionCode) => onActionChangeReleaseOptionCode(optionCode)}
+                ></ReleaseOptionCodeModalComponent>
             </CommonModalComponent>
         </>
     );

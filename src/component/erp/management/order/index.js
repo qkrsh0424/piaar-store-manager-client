@@ -264,6 +264,19 @@ const OrderComponent = (props) => {
             })
     }
 
+    const __reqChangeReleaseOptionCodeForOrderItemListInBatchSocket = async function (body) {
+        await erpOrderItemSocket().changeReleaseOptionCodeForListInBatch(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            });
+    }
+
     const __reqChangeSalesYnForOrderItemListSocket = async function (body) {
         await erpOrderItemSocket().changeSalesYnForListInSales(body)
             .catch(err => {
@@ -537,6 +550,13 @@ const OrderComponent = (props) => {
         onActionCloseBackdrop()
     }
 
+    // 출고 옵션 코드 변경
+    const _onSubmit_changeReleaseOptionCodeForOrderItemListInBatch = async function (body) {
+        onActionOpenBackdrop();
+        await __reqChangeReleaseOptionCodeForOrderItemListInBatchSocket(body);
+        onActionCloseBackdrop();
+    }
+
     // 단일 erpOrderItem 업데이트
     const _onSubmit_updateErpOrderItemOne = async (body) => {
         onActionOpenBackdrop();
@@ -634,6 +654,7 @@ const OrderComponent = (props) => {
                         _onSubmit_changeSalesYnForOrderItemList={_onSubmit_changeSalesYnForOrderItemList}
                         _onSubmit_deleteOrderItemList={_onSubmit_deleteOrderItemList}
                         _onSubmit_changeOptionCodeForOrderItemListInBatch={_onSubmit_changeOptionCodeForOrderItemListInBatch}
+                        _onSubmit_changeReleaseOptionCodeForOrderItemListInBatch={_onSubmit_changeReleaseOptionCodeForOrderItemListInBatch}
                     ></CheckedOperatorComponent>
                     <CheckedOrderItemTableComponent
                         viewHeader={viewHeader}
