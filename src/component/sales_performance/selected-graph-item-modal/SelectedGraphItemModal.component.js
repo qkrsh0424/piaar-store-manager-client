@@ -96,6 +96,7 @@ const SelectedGraphItemModalComponent = (props) => {
             endDate: endDate,
             periodType: 'channelOrderDate',
             salesYn: 'y',
+            matchedCode: 'optionCode',
             searchColumnName: searchColumnName,
             searchQuery: searchQuery
         }

@@ -7,15 +7,18 @@ import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModa
 import { Container, TipFieldWrapper } from "./OrderItemTable.styled";
 import SelectorButtonFieldView from "./SelectorButtonField.view";
 import TableFieldView from "./TableField.view";
+import SelectorRadioFieldView from "./SelectorRadioField.view";
 
-function Tip() {
+function Tip({selectedMatchCode}) {
     return (
         <TipFieldWrapper>
             <div>
-                <span className='highlight'>[출고 옵션코드]</span> 를 기준으로 매칭된 상품 데이터 정보를 불러옵니다.
-            </div>
-            <div>
-                <span className='highlight'>[출고 옵션코드]</span> 에 매칭된 상품의 재고가 반영됩니다.
+                <div>
+                    <span className='highlight'>{selectedMatchCode === 'optionCode' ? '[피아르 옵션코드]' : '[출고 옵션코드]'}</span>를 기준으로 매칭된 상품 데이터 정보를 불러옵니다.
+                </div>
+                <div>
+                    <span className='highlight'>{selectedMatchCode === 'optionCode' ? '[피아르 옵션코드]' : '[출고 옵션코드]'}</span>에 매칭된 상품의 재고가 반영됩니다.
+                </div>
             </div>
         </TipFieldWrapper>
     );
@@ -35,7 +38,7 @@ const OrderItemTableComponent = (props) => {
     const [fixItemModalOpen, setFixItemModalOpen] = useState(false);
 
     const [searchReleaseLocationValue, dispatchSearchReleaseLocationValue] = useReducer(searchReleaseLocationValueReducer, initialSearchReleaseLocationValue);
-
+    
     useEffect(() => {
         if (!props.orderItemList || props.orderItemList?.length <= 0) {
             dispatchOrderItemList({
@@ -97,11 +100,11 @@ const OrderItemTableComponent = (props) => {
     }
 
     const onActionCheckOrderItemAll = () => {
-        props._onAction_checkOrderItemAll();
+        props._onAction_checkOrderItemAll(searchReleaseLocationValue);
     }
 
     const onActionReleaseOrderItemAll = () => {
-        props._onAction_releaseOrderItemAll();
+        props._onAction_releaseOrderItemAll(searchReleaseLocationValue);
     }
 
     const onActionfetchMoreOrderItems = async () => {
@@ -185,23 +188,16 @@ const OrderItemTableComponent = (props) => {
     }
     
     const onChangeReleaseLocationValue = (e) => {
-        let searchQuery = e.target.value;
+        let location = e.target.value;
         dispatchSearchReleaseLocationValue({
             type: 'SET_DATA',
-            payload: e.target.value
+            payload: location
         })
+    }
 
-        query.searchColumnName = 'optionReleaseLocation';
-        query.searchQuery = searchQuery
-
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
-            query: { ...query }
-        }),
-            {
-                replace: true
-            }
-        )
+    const onChangeSelectedMatchCode = (e) => {
+        let matchedCode = e.target.value;
+        props._onAction_changeMatchCode(matchedCode);
     }
 
     return (
@@ -209,23 +205,30 @@ const OrderItemTableComponent = (props) => {
             <Container>
                 {(props.viewHeader && orderItemList) &&
                     <>
-                        <Tip></Tip>
-                        <SelectorButtonFieldView
-                            releaseLocation={props.releaseLocation}
-                            searchReleaseLocationValue={searchReleaseLocationValue}
-                            
-                            onActionCheckOrderItemAll={onActionCheckOrderItemAll}
-                            onActionReleaseOrderItemAll={onActionReleaseOrderItemAll}
-                            onChangeReleaseLocationValue={onChangeReleaseLocationValue}
-                        ></SelectorButtonFieldView>
+                        <Tip selectedMatchCode={props.selectedMatchCode}></Tip>
+                        <div className="selector-box">
+                            <SelectorButtonFieldView
+                                releaseLocation={props.releaseLocation}
+                                searchReleaseLocationValue={searchReleaseLocationValue}
+
+                                onActionCheckOrderItemAll={onActionCheckOrderItemAll}
+                                onActionReleaseOrderItemAll={onActionReleaseOrderItemAll}
+                                onChangeReleaseLocationValue={onChangeReleaseLocationValue}
+                            ></SelectorButtonFieldView>
+                            <SelectorRadioFieldView
+                                selectedMatchCode={props.selectedMatchCode}
+                                onChangeSelectedMatchCode={onChangeSelectedMatchCode}
+                            ></SelectorRadioFieldView>
+                        </div>
                         <TableFieldView
                             tableScrollRef={tableScrollRef}
 
                             viewHeader={props.viewHeader}
                             orderItemList={orderItemList}
                             viewSize={viewSize}
+                            selectedMatchCode={props.selectedMatchCode}
+                            
                             isCheckedOne={isCheckedOne}
-
                             onActionCheckOrderItem={onActionCheckOrderItem}
                             onActionCheckOrderItemAll={onActionCheckOrderItemAll}
                             onActionfetchMoreOrderItems={onActionfetchMoreOrderItems}

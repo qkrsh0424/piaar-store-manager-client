@@ -1,7 +1,16 @@
 import styled from 'styled-components';
 
 const Container = styled.div`
-
+    .selector-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        
+        @media screen and (max-width: 992px){
+            align-items: flex-start;
+            flex-direction: column-reverse;
+        }
+    }
 `;
 
 const TableFieldWrapper = styled.div`
@@ -236,7 +245,7 @@ const SelectorButtonFieldWrapper = styled.div`
         border: 1px solid #e0e0e0;
         border-bottom: none;
         background: white;
-        width: 100px;
+        width: 80px;
         height: 30px;
         font-weight: 700;
         font-size: 12px;
@@ -250,11 +259,43 @@ const SelectorButtonFieldWrapper = styled.div`
     }
 `;
 
+const SelectorRadioFieldWrapper = styled.div`
+    /* margin-top: 20px; */
+    padding: 0 30px;
+    font-size: 14px;
+    font-weight: 700;
+
+    .radio-label {
+        font-size: 14px;
+        font-weight: 700;
+        padding: 2px;
+    }
+
+    .highlight{
+        display: inline-block;
+        position:relative;
+        font-weight: 700;
+    }
+
+    .highlight:after{
+        content:"";
+        position: absolute;
+        bottom:0;
+        left:0;
+        width: 100%;
+        height: 10px;
+        display: inline-block;
+        background: #b9c2e160;
+    }
+`;
+
 const TipFieldWrapper = styled.div`
     margin-top: 20px;
     padding:0 30px;
-
+    display: flex;
+    flex-direction: row-reverse;
     font-size: 14px;
+    text-align: right;
 
     @media all and (max-width:992px){
         padding:0 10px;
@@ -275,7 +316,7 @@ const TipFieldWrapper = styled.div`
         width: 100%;
         height: 10px;
         display: inline-block;
-        background: #e1d7b960;
+        background: #b9c2e160;
     }
 `;
 
@@ -283,5 +324,6 @@ export {
     Container,
     TableFieldWrapper,
     SelectorButtonFieldWrapper,
-    TipFieldWrapper
+    TipFieldWrapper,
+    SelectorRadioFieldWrapper
 }

@@ -109,7 +109,9 @@ const ReleaseListModalComponent = (props) => {
                 ></CombineOperators>
                 <InfoTextFieldView
                     element={
-                        <div>* 병합 기준은 출고 옵션코드입니다.</div>
+                        <div>
+                            ※ 병합 매칭 항목 : <span className='highlight'>{props.selectedMatchCode === 'optionCode' ? '[피아르 옵션코드]' : '[출고 옵션코드]'}</span>
+                        </div>
                     }
                 ></InfoTextFieldView>
                 {(releaseItemList?.length > 0) &&

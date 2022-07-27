@@ -250,7 +250,7 @@ const ProductSalesRevenueGraphComponent = (props) => {
         salesUnitDataset = {
             ...salesUnitDataset,
             type: 'bar',
-            label: '(판매) 주문 수량',
+            label: '(판매) 수량',
             data: unitValues,
             backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1],
             borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1],
@@ -296,7 +296,7 @@ const ProductSalesRevenueGraphComponent = (props) => {
             orderUnitDataset = {
                 ...orderUnitDataset,
                 type: 'line',
-                label: '(주문) 주문 수량',
+                label: '(주문) 수량',
                 data: unitValues,
                 backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1] + '88',
                 borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1] + '88',
@@ -400,7 +400,7 @@ const ProductSalesRevenueGraphComponent = (props) => {
         salesUnitDataset = {
             ...salesUnitDataset,
             type: 'bar',
-            label: '(판매) 주문 수량',
+            label: '(판매) 수량',
             data: unitValues,
             backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1],
             borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1],
@@ -447,7 +447,7 @@ const ProductSalesRevenueGraphComponent = (props) => {
             orderUnitDataset = {
                 ...orderUnitDataset,
                 type: 'line',
-                label: '(주문) 주문 수량',
+                label: '(주문) 수량',
                 data: unitValues,
                 backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1] + '88',
                 borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[1] + '88',
@@ -1031,6 +1031,7 @@ const ProductSalesRevenueGraphComponent = (props) => {
         let periodType = 'channelOrderDate';
         let searchColumnName = 'prodDefaultName'
         let salesYn = 'y'
+        let matchedCode = 'optionCode';
 
         if(!props.hideOrderGraph) {
             salesYn = null;
@@ -1047,6 +1048,7 @@ const ProductSalesRevenueGraphComponent = (props) => {
             salesYn: salesYn,
             searchColumnName: searchColumnName,
             searchQuery: label,
+            matchedCode: matchedCode,
             fixedSearchColumnName: searchColumnName,
             fixedSearchQuery: label
         }
@@ -1066,6 +1068,7 @@ const ProductSalesRevenueGraphComponent = (props) => {
         let endDate = getEndDate(query.endDate);
         let periodType = 'channelOrderDate';
         let salesYn = 'y'
+        let matchedCode = 'optionCode';
 
         if(!props.hideOrderGraph) {
             salesYn = null;
@@ -1083,6 +1086,7 @@ const ProductSalesRevenueGraphComponent = (props) => {
             salesYn: salesYn,
             searchColumnName: searchColumnName,
             searchQuery: label,
+            matchedCode: matchedCode,
             fixedSearchColumnName: searchColumnName,
             fixedSearchQuery: label,
             fixedSearchDay: searchDay

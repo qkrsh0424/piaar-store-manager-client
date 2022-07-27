@@ -1,13 +1,13 @@
 import { useReducer, useState } from "react";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
-import ReleaseOptionCodeModalComponent from "../../sales/release-option-code-modal/ReleaseOptionCodeModal.component";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
+import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
 import { Container, TableFieldWrapper } from "./CheckedOperator.styled";
 import OperatorFieldView from "./OperatorField.view";
 
 
-function TableFieldView({salesConfirmItem}) {
+function TableFieldView({salesConfirmItem, selectedMatchCode}) {
     return (
         <TableFieldWrapper>
             <div
@@ -16,7 +16,7 @@ function TableFieldView({salesConfirmItem}) {
                 <table cellSpacing="0">
                     <thead>
                         <tr className='fixed-header'>
-                            <th width='200'>피아르 옵션코드</th>
+                            <th width='200'><span className='highlight'>{selectedMatchCode === 'optionCode' ? '피아르 옵션코드' : '출고 옵션코드'}</span></th>
                             <th width='200'>$피아르 상품관리명</th>
                             <th width='200'>$피아르 옵션관리명</th>
                             <th width='150'>총 판매전환 수량</th>
@@ -32,7 +32,7 @@ function TableFieldView({salesConfirmItem}) {
                                     key={'sales-item-idx' + idx}
                                     className={`${isOutOfStock && 'tr-highlight'}`}
                                 >
-                                    <td>{r.optionCode}</td>
+                                    <td>{r[selectedMatchCode]}</td>
                                     <td>{r.prodDefaultName}</td>
                                     <td>{r.optionDefaultName}</td>
                                     <td>{r.unit}</td>
@@ -54,6 +54,8 @@ const CheckedOperatorComponent = (props) => {
     const [salesConfirmItem, dispatchSalesConfirmItem] = useReducer(salesConfirmItemReducer, initialSalesConfirmItem);
     const [releaseOptionCodeModalOpen, setReleaseOptionCodeModalOpen] = useState(false);
 
+    // 확인모달 창 열기
+    // 판매부족 수량 계산
     const onActionOpenSalesConfirmModal = () => {
         if (props.checkedOrderItemList?.length <= 0) {
             alert('데이터를 먼저 선택해 주세요.');
@@ -61,17 +63,17 @@ const CheckedOperatorComponent = (props) => {
         }
 
         // 판매 부족 수량 계산
-        let optionCode = new Set(props.checkedOrderItemList?.map(r => r.optionCode));
-        let salesItem = [...optionCode].map(r =>{
+        let matchedCode = new Set(props.checkedOrderItemList?.map(r => r[props.selectedMatchCode]));
+        let salesItem = [...matchedCode].map(r =>{
             return {
-                optionCode: r,
+                [props.selectedMatchCode]: r,
                 unit: 0
             }
         })
 
         props.checkedOrderItemList?.forEach(r => {
             salesItem = salesItem.map(r2 => {
-                if(r2.optionCode === r.optionCode) {
+                if(r2[props.selectedMatchCode] === r[props.selectedMatchCode]) {
                     return {
                         ...r2,
                         prodDefaultName: r.prodDefaultName,
@@ -193,8 +195,15 @@ const CheckedOperatorComponent = (props) => {
                 title={'판매 전환 확인 메세지'}
                 message={
                     <>
-                        <div className='info-text'>* [판매 부족 수량]을 확인해주세요.</div>
-                        <TableFieldView salesConfirmItem={salesConfirmItem}></TableFieldView>
+                        <div className='info-text'>
+                            <div>
+                                <span>* 현재 피아르 상품 & 옵션 매칭 코드는 </span>
+                                <span className='highlight'>{props.selectedMatchCode === 'optionCode' ? '[피아르 옵션코드]' : '[출고 옵션코드]'}</span>
+                                <span>입니다.</span>
+                            </div>
+                            <div>* [판매 부족 수량]을 확인해주세요.</div>
+                        </div>
+                        <TableFieldView salesConfirmItem={salesConfirmItem} selectedMatchCode={props.selectedMatchCode}></TableFieldView>
                         <div>[ {props.checkedOrderItemList?.length || 0} ] 건의 데이터를 판매 전환 하시겠습니까?</div>
                     </>
                 }

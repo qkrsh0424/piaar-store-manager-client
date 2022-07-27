@@ -363,6 +363,7 @@ const CheckedOperatorComponent = (props) => {
             >
                 <ReleaseListModalComponent
                     checkedOrderItemList={props.checkedOrderItemList}
+                    selectedMatchCode={props.selectedMatchCode}
 
                     // onConfirm={(optionCode) => onActionChangeReleaseOptionCode(optionCode)}
                     onActionDownloadReleaseItemList={onActionDownloadReleaseItemList}

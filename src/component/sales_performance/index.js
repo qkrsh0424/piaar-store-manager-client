@@ -93,11 +93,13 @@ const SalesPerformanceComponent = (props) => {
         let startDate = query.startDate ? getStartDate(query.startDate) : null;
         let endDate = query.endDate ? getEndDate(query.endDate) : null;
         let periodType = 'channelOrderDate';
+        let matchedCode = 'optionCode';
 
         let params = {
             startDate: startDate,
             endDate: endDate,
-            periodType: periodType
+            periodType: periodType,
+            matchedCode: matchedCode
         }
 
         await erpOrderItemDataConnect().searchAll(params)

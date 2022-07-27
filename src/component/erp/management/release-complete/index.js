@@ -35,6 +35,7 @@ const DEFAULT_HEADER_FIELDS = getDefaultHeaderFields();
 const ReleaseCompleteComponent = (props) => {
     const location = useLocation();
     const query = qs.parse(location.search);
+    const navigate = useNavigate();
 
     const {
         connected,
@@ -69,6 +70,7 @@ const ReleaseCompleteComponent = (props) => {
     const [downloadExcelList, dispatchDownloadExcelList] = useReducer(downloadExcelListReducer, initialDownloadExcelList);
     const [viewHeaderList, dispatchViewHeaderList] = useReducer(viewHeaderListReducer, initialViewHeaderList);
     const [releaseLocation, dispatchReleaseLocation] = useReducer(releaseLocationReducer, initialReleaseLocation);
+    const [selectedMatchCode, dispatchSelectedMatchCode] = useReducer(selectedMatchCodeReducer, initialSelectedMatchCode);
 
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
 
@@ -142,7 +144,7 @@ const ReleaseCompleteComponent = (props) => {
         let sortBy = query.sortBy || null;
         let sortDirection = query.sortDirection || null;
         let sort = sortFormatUtils().getSortWithSortElements(DEFAULT_HEADER_FIELDS, sortBy, sortDirection);
-
+        let matchedCode = query.matchedCode || null;
 
         let params = {
             releaseYn: 'y',
@@ -154,10 +156,11 @@ const ReleaseCompleteComponent = (props) => {
             searchQuery: searchQuery,
             page: page,
             size: size,
-            sort: sort
+            sort: sort,
+            matchedCode: matchedCode
         }
 
-        await erpOrderItemDataConnect().searchReleaseList(params)
+        await erpOrderItemDataConnect().searchList(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchOrderItemPage({
@@ -181,16 +184,16 @@ const ReleaseCompleteComponent = (props) => {
         let params = {
             ids: ids,
             releaseYn: 'y',
+            matchedCode: query.matchedCode || null
         }
 
-        await erpOrderItemDataConnect().refreshReleaseList(params)
+        await erpOrderItemDataConnect().refreshOrderList(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchCheckedOrderItemList({
                         type: 'SET_DATA',
                         payload: res.data.data
                     });
-                    console.log(params)
                 }
             })
             .catch(err => {
@@ -618,11 +621,16 @@ const ReleaseCompleteComponent = (props) => {
         })
     }
 
-    const _onAction_checkOrderItemAll = () => {
+    const _onAction_checkOrderItemAll = (releaseLocation) => {
         let newData = [];
         let idSet = new Set(checkedOrderItemList.map(r => r.id));
 
-        orderItemPage.content.forEach(r => {
+        let data = [...orderItemPage.content];
+        if(releaseLocation) {
+            data = data.filter(r => r.optionReleaseLocation === releaseLocation);
+        }
+
+        data.forEach(r => {
             if (idSet.has(r.id)) {
                 return;
             } else {
@@ -639,8 +647,12 @@ const ReleaseCompleteComponent = (props) => {
         });
     }
 
-    const _onAction_releaseOrderItemAll = () => {
-        let idSet = new Set(orderItemPage.content.map(r => r.id));
+    const _onAction_releaseOrderItemAll = (releaseLocation) => {
+        let data = [...orderItemPage.content];
+        if(releaseLocation) {
+            data = data.filter(r => r.optionReleaseLocation === releaseLocation);
+        }
+        let idSet = new Set(data.map(r => r.id));
 
         let newData = checkedOrderItemList.filter(r => {
             return !idSet.has(r.id);
@@ -783,6 +795,25 @@ const ReleaseCompleteComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    // 매핑 기준 변경 (피아르 옵션코드 & 출고 옵션코드)
+    const _onAction_changeMatchCode = (matchedCode) => {
+        dispatchSelectedMatchCode({
+            type: 'SET_DATA',
+            payload: matchedCode
+        })
+
+        query.matchedCode = matchedCode;
+
+        navigate(qs.stringifyUrl({
+            url: location.pathname,
+            query: { ...query }
+        }),
+            {
+                replace: true
+            }
+        )
+    }
+
     return (
         <>
             <Container>
@@ -797,11 +828,13 @@ const ReleaseCompleteComponent = (props) => {
                     orderItemList={orderItemPage?.content}
                     checkedOrderItemList={checkedOrderItemList}
                     releaseLocation={releaseLocation}
+                    selectedMatchCode={selectedMatchCode}
 
                     _onAction_checkOrderItem={_onAction_checkOrderItem}
                     _onAction_checkOrderItemAll={_onAction_checkOrderItemAll}
                     _onAction_releaseOrderItemAll={_onAction_releaseOrderItemAll}
                     _onSubmit_updateErpOrderItemOne={_onSubmit_updateErpOrderItemOne}
+                    _onAction_changeMatchCode={_onAction_changeMatchCode}
                 ></OrderItemTableComponent>
                 <OrderItemTablePagenationComponent
                     orderItemPage={orderItemPage}
@@ -810,6 +843,7 @@ const ReleaseCompleteComponent = (props) => {
                     viewHeader={viewHeader}
                     checkedOrderItemList={checkedOrderItemList}
                     downloadExcelList={downloadExcelList}
+                    selectedMatchCode={selectedMatchCode}
 
                     _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
                     _onSubmit_downloadOrderItemsExcel={_onSubmit_downloadOrderItemsExcel}
@@ -818,6 +852,7 @@ const ReleaseCompleteComponent = (props) => {
                     viewHeader={viewHeader}
                     checkedOrderItemList={checkedOrderItemList}
                     productOptionList={productOptionList}
+                    selectedMatchCode={selectedMatchCode}
 
                     _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
                     _onSubmit_changeSalesYnForOrderItemList={_onSubmit_changeSalesYnForOrderItemList}
@@ -894,6 +929,7 @@ const initialCheckedOrderItemList = [];
 const initialDownloadExcelList = null;
 const initialViewHeaderList = null;
 const initialReleaseLocation = null;
+const initialSelectedMatchCode = 'releaseOptionCode';
 
 const releaseLocationReducer = (state, action) => {
     switch (action.type) {
@@ -956,5 +992,13 @@ const downloadExcelListReducer = (state, action) => {
         case 'CLEAR':
             return null;
         default: return null;
+    }
+}
+
+const selectedMatchCodeReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        default: return initialSelectedMatchCode;
     }
 }

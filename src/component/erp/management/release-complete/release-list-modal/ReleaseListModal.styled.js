@@ -69,7 +69,6 @@ const InfoTextFieldWrapper = styled.div`
 
     .info-box{
         font-size: 14px;
-        color: #2C73D2;
         word-break: keep-all;
 
         @media all and (max-width: 992px){
@@ -77,6 +76,23 @@ const InfoTextFieldWrapper = styled.div`
         }
     }
 
+    .highlight{
+        display: inline-block;
+        position:relative;
+        font-weight: 700;
+        color: var(--erp-main-color);
+    }
+
+    .highlight:after{
+        content:"";
+        position: absolute;
+        bottom:0;
+        left:0;
+        width: 100%;
+        height: 10px;
+        display: inline-block;
+        background: #b9c2e160;
+    }
 `;
 
 const DownloadButtonFieldWrapper = styled.div`

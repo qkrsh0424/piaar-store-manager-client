@@ -45,12 +45,12 @@ const ItemAnalysisChartComponent = (props) => {
 
 
     useEffect(() => {
-        if(!props.erpItemAnalysisData) {
+        if(!(props.erpItemAnalysisData && props.erpReleaseItemAnalysisData)) {
             return;
         }
 
         onActionConvertAnalysisItem();
-    }, [props.erpItemAnalysisData]);
+    }, [props.erpItemAnalysisData, props.erpReleaseItemAnalysisData]);
 
     useEffect(() => {
         if(!(orderItemData && salesItemData && releaseCompleteItemData)) {
@@ -71,7 +71,7 @@ const ItemAnalysisChartComponent = (props) => {
     const onActionConvertAnalysisItem = () => {
         let data = [ ...props.erpItemAnalysisData ];
         let salesItem = data.filter(r => r.salesYn === 'y');
-        let releaseCompleteItem = data.filter(r => r.releaseYn === 'y');
+        let releaseCompleteItem = [ ...props.erpReleaseItemAnalysisData ];
 
         dispatchOrderItemData({
             type: 'INIT_DATA',
@@ -169,6 +169,7 @@ const ItemAnalysisChartComponent = (props) => {
         }else if(itemStatus === 'releaseCompleteItemData'){
             data = [...releaseCompleteItemData];
         }
+
 
         data.forEach(r => {
             matchColumn.add(r[column] || '미지정');

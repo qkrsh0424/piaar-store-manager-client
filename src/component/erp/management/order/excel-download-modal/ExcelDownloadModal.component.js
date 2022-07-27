@@ -4,12 +4,22 @@ import { dateToYYYYMMDDhhmmFile } from "../../../../../utils/dateFormatUtils";
 import { checkFileNameFormat } from "../../../../../utils/regexUtils";
 import CombineOperators from "./CombineOperators.view";
 import DownloadButtonFieldView from "./DownloadButtonField.view";
-import { Container } from "./ExcelDownloadModal.styled";
+import { Container, TipFieldWrapper } from "./ExcelDownloadModal.styled";
 import ExcelHeaderDisplayView from "./ExcelHeaderDisplay.view";
 import ExcelHeaderSelectorView from "./ExcelHeaderSelector.view";
 import InputFieldView from "./InputField.view";
 import PreviewTableView from "./PreviewTable.view";
 import TitleView from "./Title.view";
+
+function Tip({ selectedMatchCode }) {
+    return (
+        <TipFieldWrapper>
+            <div>
+                ※ 상품 매칭 항목 : <span className='highlight'>{selectedMatchCode === 'optionCode' ? '[피아르 옵션코드]' : '[출고 옵션코드]'}</span>
+            </div>
+        </TipFieldWrapper>
+    );
+}
 
 const defaultHeaderDetails = getDefaultHeaderDetails();
 
@@ -229,13 +239,15 @@ const ExcelDownloadModalComponent = (props) => {
                     _onAction_insulateDownloadOrderItemList={_onAction_insulateDownloadOrderItemList}
                     _onAction_insulateDownloadOrderItemListSelectOnly={_onAction_insulateDownloadOrderItemListSelectOnly}
                 ></CombineOperators>
+                <Tip selectedMatchCode={props.selectedMatchCode} />
                 {(downloadOrderItemList && props.viewHeader) &&
                     <PreviewTableView
                         viewHeader={props.viewHeader}
                         downloadOrderItemList={downloadOrderItemList}
                         checkedItemList={checkedItemList}
-                        isCheckedItem={isCheckedItem}
+                        selectedMatchCode={props.selectedMatchCode}
 
+                        isCheckedItem={isCheckedItem}
                         _onAction_checkItem={_onAction_checkItem}
                     ></PreviewTableView>
                 }

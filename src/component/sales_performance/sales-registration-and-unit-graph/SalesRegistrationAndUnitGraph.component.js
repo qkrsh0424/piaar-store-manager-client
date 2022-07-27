@@ -252,6 +252,7 @@ const SalesRegistrationAndUnitGraphComponent = (props) => {
         let endDate = null;
         let periodType = 'channelOrderDate';
         let salesYn = 'y';
+        let matchedCode = 'optionCode';
 
         // 주문그래프가 보여지는 경우
         if(!props.hideOrderGraph) {
@@ -293,7 +294,8 @@ const SalesRegistrationAndUnitGraphComponent = (props) => {
             startDate: startDate,
             endDate: endDate,
             periodType: periodType,
-            salesYn: salesYn
+            salesYn: salesYn,
+            matchedCode: matchedCode
         }
 
         await props._onAction_searchErpOrderGraphItemByParams(params);

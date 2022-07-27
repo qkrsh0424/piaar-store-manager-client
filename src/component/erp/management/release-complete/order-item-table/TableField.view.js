@@ -27,7 +27,7 @@ function FailedIcon() {
 }
 
 function TableHead({
-    viewHeader
+    viewHeader, selectedMatchCode
 }) {
     return (
         <thead>
@@ -67,8 +67,8 @@ function TableHead({
                                     ></SortButton>
                                 </div>
                             </div>
-                            {HIGHLIGHT_FIELDS.includes(r.matchedColumnName) &&
-                                <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '10%', background: '#e1d7b9' }}></div>
+                            {(HIGHLIGHT_FIELDS.includes(r.matchedColumnName) || r.matchedColumnName === selectedMatchCode) &&
+                                <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '10%', background: '#b9c2e1' }}></div>
                             }
                         </ResizableTh>
                     )
@@ -86,7 +86,6 @@ function TableHead({
 }
 
 const HIGHLIGHT_FIELDS = [
-    'releaseOptionCode',
     'categoryName',
     'prodDefaultName',
     'prodManagementName',
@@ -105,6 +104,7 @@ export default function TableFieldView(props) {
                 <table cellSpacing="0">
                     <TableHead
                         viewHeader={props.viewHeader}
+                        selectedMatchCode={props.selectedMatchCode}
                     />
                     <tbody>
                         {props.orderItemList &&

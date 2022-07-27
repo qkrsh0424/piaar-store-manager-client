@@ -4,7 +4,7 @@ import ConfirmMessageField from "./ConfirmMessageField.view";
 import HeaderFieldView from "./HeaderField.view";
 import InputFieldView from "./InputFieldView";
 import ListFieldView from "./ListField.view";
-import { Container, ListFieldWrapper } from "./ReleaseOptionCodeModal.styled";
+import { Container } from "./ReleaseOptionCodeModal.styled";
 import TableFieldView from "./TableFieldView.view";
 
 const ReleaseOptionCodeModalComponent = (props) => {
@@ -42,7 +42,7 @@ const ReleaseOptionCodeModalComponent = (props) => {
         <>
             <Container>
                 <HeaderFieldView
-                    element={'옵션 코드 변경'}
+                    element={'출고 옵션 코드 변경'}
                 ></HeaderFieldView>
                 {(!confirmModeOpen && props.productOptionList && props.productOptionList?.length > 0) &&
                     <>

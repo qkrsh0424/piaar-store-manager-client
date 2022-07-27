@@ -25,6 +25,24 @@ const MessageBox = styled.div`
         padding: 0 10px;
         font-size: 12px;
     }
+
+    .highlight{
+        display: inline-block;
+        position:relative;
+        font-weight: 800;
+        color: #006dff;
+    }
+
+    .highlight:after{
+        content:"";
+        position: absolute;
+        bottom:0;
+        left:0;
+        width: 100%;
+        height: 10px;
+        display: inline-block;
+        background: #b9c2e160;
+    }
 `;
 
 const MemoBox = styled.div`

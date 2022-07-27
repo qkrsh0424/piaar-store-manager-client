@@ -1,17 +1,26 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import qs from 'query-string';
-import { Container } from "./OrderItemTable.styled";
+import { Container, TipFieldWrapper } from "./OrderItemTable.styled";
 import SelectorButtonFieldView from "./SelectorButtonField.view";
 import TableFieldView from "./TableField.view";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
 import { dateToYYYYMMDDhhmmssWithInvalid } from "../../../../../utils/dateFormatUtils";
 import { useLocation, useNavigate } from "react-router-dom";
+import SelectorRadioFieldView from "./SelectorRadioField.view";
+
+function Tip({ selectedMatchCode }) {
+    return (
+        <TipFieldWrapper>
+            <div>
+                <span className='highlight'>{selectedMatchCode === 'optionCode' ? '[피아르 옵션코드]' : '[출고 옵션코드]'}</span> 
+                를 기준으로 매칭된 상품 데이터 정보를 불러옵니다.
+            </div>
+        </TipFieldWrapper>
+    );
+}
 
 const OrderItemTableComponent = (props) => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const query = qs.parse(location.search);
 
     const tableScrollRef = useRef();
 
@@ -22,15 +31,6 @@ const OrderItemTableComponent = (props) => {
     const [fixItemModalOpen, setFixItemModalOpen] = useState(false);
 
     const [searchReleaseLocationValue, dispatchSearchReleaseLocationValue] = useReducer(searchReleaseLocationValueReducer, initialSearchReleaseLocationValue);
-
-    useEffect(() => {
-        if(query.searchColumnName === 'optionReleaseLocation') {
-            dispatchSearchReleaseLocationValue({
-                type: 'SET_DATA',
-                payload: query.searchQuery
-            })
-        }
-    }, [])
 
     useEffect(() => {
         if (!props.orderItemList || props.orderItemList?.length <= 0) {
@@ -44,11 +44,10 @@ const OrderItemTableComponent = (props) => {
             tableScrollRef.current.scrollTop = 0;
         }
 
-        let data = [...props.orderItemList];
-        let sortedData = data.sort((a, b) => a.receiver.localeCompare(b.receiver));
+        let sortedData = props.orderItemList?.sort((a, b) => a.receiver.localeCompare(b.receiver));
 
         // 수령인+수취인전화번호 동일하다면 수령인 duplicationUser값 true로 변경
-        for (var i = 0; i < sortedData.length-1; i++) {
+        for (var i = 0; i < sortedData.length - 1; i++) {
             if ((sortedData[i].receiver === sortedData[i + 1].receiver)
                 && sortedData[i].receiverContact1 === sortedData[i + 1].receiverContact1) {
                 sortedData[i] = {
@@ -101,11 +100,11 @@ const OrderItemTableComponent = (props) => {
     }
 
     const onActionCheckOrderItemAll = () => {
-        props._onAction_checkOrderItemAll();
+        props._onAction_checkOrderItemAll(searchReleaseLocationValue);
     }
 
     const onActionReleaseOrderItemAll = () => {
-        props._onAction_releaseOrderItemAll();
+        props._onAction_releaseOrderItemAll(searchReleaseLocationValue);
     }
 
     const onActionfetchMoreOrderItems = async () => {
@@ -189,23 +188,18 @@ const OrderItemTableComponent = (props) => {
     }
 
     const onChangeReleaseLocationValue = (e) => {
-        let searchQuery = e.target.value;
+        let location = e.target.value;
         dispatchSearchReleaseLocationValue({
             type: 'SET_DATA',
-            payload: e.target.value
+            payload: location
         })
+    }
 
-        query.searchColumnName = 'optionReleaseLocation';
-        query.searchQuery = searchQuery
-
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
-            query: { ...query }
-        }),
-            {
-                replace: true
-            }
-        )
+    const onChangeSelectedMatchCode = (e) => {
+        e.stopPropagation();
+        
+        let matchedCode = e.target.value;
+        props._onAction_changeMatchCode(matchedCode);
     }
 
     return (
@@ -213,23 +207,31 @@ const OrderItemTableComponent = (props) => {
             <Container>
                 {(props.viewHeader && orderItemList) &&
                     <>
-                        <SelectorButtonFieldView
-                            releaseLocation={props.releaseLocation}
-                            searchReleaseLocationValue={searchReleaseLocationValue}
+                        <Tip selectedMatchCode={props.selectedMatchCode}></Tip>
+                        <div className="selector-box">
+                            <SelectorButtonFieldView
+                                releaseLocation={props.releaseLocation}
+                                searchReleaseLocationValue={searchReleaseLocationValue}
 
-                            onActionCheckOrderItemAll={onActionCheckOrderItemAll}
-                            onActionReleaseOrderItemAll={onActionReleaseOrderItemAll}
-                            onChangeReleaseLocationValue={onChangeReleaseLocationValue}
-                        ></SelectorButtonFieldView>
+                                onActionCheckOrderItemAll={onActionCheckOrderItemAll}
+                                onActionReleaseOrderItemAll={onActionReleaseOrderItemAll}
+                                onChangeReleaseLocationValue={onChangeReleaseLocationValue}
+                            ></SelectorButtonFieldView>
+                            <SelectorRadioFieldView
+                                selectedMatchCode={props.selectedMatchCode}
+                                onChangeSelectedMatchCode={onChangeSelectedMatchCode}
+                            ></SelectorRadioFieldView>
+                        </div>
                         <TableFieldView
                             tableScrollRef={tableScrollRef}
 
                             viewHeader={props.viewHeader}
                             orderItemList={orderItemList}
                             viewSize={viewSize}
+                            selectedMatchCode={props.selectedMatchCode}
+                            
                             isCheckedOne={isCheckedOne}
                             isCheckedAll={isCheckedAll}
-
                             onActionCheckOrderItem={onActionCheckOrderItem}
                             onActionCheckOrderItemAll={onActionCheckOrderItemAll}
                             onActionfetchMoreOrderItems={onActionfetchMoreOrderItems}

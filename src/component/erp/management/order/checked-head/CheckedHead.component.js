@@ -43,6 +43,7 @@ function ButtonField({
         </ButtonFieldWrapper>
     );
 }
+
 const CheckedHeadComponent = (props) => {
     const [downloadExcelModalOpen, setDownloadExcelModalOpen] = useState(false);
 
@@ -85,6 +86,7 @@ const CheckedHeadComponent = (props) => {
                     viewHeader={props.viewHeader}
                     checkedOrderItemList={props.checkedOrderItemList}
                     downloadExcelList={props.downloadExcelList}
+                    selectedMatchCode={props.selectedMatchCode}
 
                     onActionDownloadExcel={onActionDownloadExcel}
                 ></ExcelDownloadModalComponent>

@@ -1,7 +1,15 @@
 import React from 'react';
-import styled from 'styled-components';
 import { dateToYYYYMMDDhhmmss } from '../../../../../utils/dateFormatUtils';
-import { Container, PreviewTableWrapper, TableBox, TableWrapper } from './ExcelDownloadModal.styled';
+import { PreviewTableWrapper, TableBox } from './ExcelDownloadModal.styled';
+
+const HIGHLIGHT_FIELDS = [
+    'categoryName',
+    'prodDefaultName',
+    'prodManagementName',
+    'optionDefaultName',
+    'optionManagementName',
+    'optionStockUnit'
+];
 
 const Colgroup = ({ viewHeader }) => {
     return (
@@ -18,7 +26,7 @@ const Colgroup = ({ viewHeader }) => {
     );
 }
 
-const TableHead = ({ viewHeader }) => {
+const TableHead = ({ viewHeader, selectedMatchCode }) => {
     return (
         <thead>
             <tr>
@@ -26,7 +34,14 @@ const TableHead = ({ viewHeader }) => {
                 <th className="fixed-header" scope="col">선택</th>
                 {viewHeader.headerDetail.details.map((r, index) => {
                     return (
-                        <th key={index} className="fixed-header" scope="col">{r.customCellName}</th>
+                        <>
+                            <th key={index} className="fixed-header" scope="col">
+                                <div>{r.customCellName}</div>
+                                {(HIGHLIGHT_FIELDS.includes(r.matchedColumnName) || r.matchedColumnName === selectedMatchCode) &&
+                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '10%', background: '#b9c2e1' }}></div>
+                                }
+                            </th>
+                        </>
                     )
                 })}
             </tr>
@@ -94,6 +109,7 @@ const PreviewTableView = (props) => {
                     ></Colgroup>
                     <TableHead
                         viewHeader={props.viewHeader}
+                        selectedMatchCode={props.selectedMatchCode}
                     ></TableHead>
                     <TableBody
                         viewHeader={props.viewHeader}

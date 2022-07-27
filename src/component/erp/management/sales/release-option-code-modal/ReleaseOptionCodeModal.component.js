@@ -42,7 +42,7 @@ const ReleaseOptionCodeModalComponent = (props) => {
         <>
             <Container>
                 <HeaderFieldView
-                    element={'옵션 코드 변경'}
+                    element={'출고 옵션 코드 변경'}
                 ></HeaderFieldView>
                 {(!confirmModeOpen && props.productOptionList && props.productOptionList?.length > 0) &&
                     <>

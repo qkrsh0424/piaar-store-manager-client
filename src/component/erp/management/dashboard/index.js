@@ -17,6 +17,7 @@ const DashboardComponent = (props) => {
     const query = qs.parse(location.search);
 
     const [erpItemAnalysisData, dispatchErpItemAnalysisData] = useReducer(erpItemAnalysisDataReducer, initialErpItemAnalysisData);
+    const [erpReleaseItemAnalysisData, dispatchErpReleaseItemAnalysisData] = useReducer(erpReleaseItemAnalysisDataReducer, initialErpReleaseItemAnalysisData);
 
     const {
         open: backdropOpen,
@@ -45,6 +46,7 @@ const DashboardComponent = (props) => {
         async function fetchInit() {
             onActionOpenBackdrop();
             await __reqSearchErpOrderItem();
+            await __reqSearchErpReleaseItem();
             onActionCloseBackdrop();
         }
 
@@ -59,11 +61,13 @@ const DashboardComponent = (props) => {
         let startDate = query.startDate ? getStartDate(query.startDate) : null;
         let endDate = query.endDate ? getEndDate(query.endDate) : null;
         let periodType = 'registration';
+        let matchedCode = 'optionCode';
 
         let params = {
             startDate: startDate,
             endDate: endDate,
-            periodType: periodType
+            periodType: periodType,
+            matchedCode: matchedCode
         }
         await erpOrderItemDataConnect().searchBatch(params)
             .then(res => {
@@ -72,7 +76,42 @@ const DashboardComponent = (props) => {
                         type: 'INIT_DATA',
                         payload: res.data.data
                     })
-                    console.log(res.data.data);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqSearchErpReleaseItem = async () => {
+        let startDate = query.startDate ? getStartDate(query.startDate) : null;
+        let endDate = query.endDate ? getEndDate(query.endDate) : null;
+        let periodType = 'registration';
+        let matchedCode = 'releaseOptionCode';
+        let salesYn = 'y';
+        let releaseYn = 'y';
+
+        let params = {
+            startDate: startDate,
+            endDate: endDate,
+            periodType: periodType,
+            matchedCode: matchedCode,
+            salesYn: salesYn,
+            releaseYn: releaseYn
+        }
+        await erpOrderItemDataConnect().searchBatch(params)
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    dispatchErpReleaseItemAnalysisData({
+                        type: 'INIT_DATA',
+                        payload: res.data.data
+                    })
                 }
             })
             .catch(err => {
@@ -94,6 +133,7 @@ const DashboardComponent = (props) => {
 
                 <ItemAnalysisChartComponent
                     erpItemAnalysisData={erpItemAnalysisData}
+                    erpReleaseItemAnalysisData={erpReleaseItemAnalysisData}
                 ></ItemAnalysisChartComponent>
             </Container>
 
@@ -108,8 +148,20 @@ const DashboardComponent = (props) => {
 export default DashboardComponent;
 
 const initialErpItemAnalysisData = null;
+const initialErpReleaseItemAnalysisData = null;
 
 const erpItemAnalysisDataReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialErpItemAnalysisData;
+        default:
+            return state;
+    }
+}
+
+const erpReleaseItemAnalysisDataReducer = (state, action) => {
     switch(action.type) {
         case 'INIT_DATA':
             return action.payload;
