@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from "react";
 import { useLocation } from "react-router-dom";
 import qs from "query-string";
-import { getDifferenceBetweenStartDateAndEndDate } from "../../../utils/dateFormatUtils";
+import { getDifferenceBetweenStartDateAndEndDate, getEndDate, getStartDate } from "../../../utils/dateFormatUtils";
 import { Container, GraphTitleFieldWrapper } from "./SalesRevenueDetailTable.styled";
 import _ from "lodash";
 import TableFieldView from "./TableField.view";
@@ -131,6 +131,33 @@ const SalesRevenueDetailTableComponent = (props) => {
         })
     }
 
+    const onActionSearchNotSoldItem = async (date) => {
+        let startDate = '';
+        let endDate = '';
+        let periodType = 'channelOrderDate';
+        let salesYn = 'n';
+        let matchedCode = 'optionCode';
+
+        if(date === '전체') {
+            startDate = getStartDate(query.startDate);
+            endDate = getEndDate(query.endDate);
+        }else {
+            var d = new Date(date);
+            startDate = getStartDate(d);
+            endDate = getEndDate(d);
+        }
+
+        let params = {
+            startDate: startDate,
+            endDate: endDate,
+            periodType: periodType,
+            salesYn: salesYn,
+            matchedCode: matchedCode
+        }
+
+        await props._onAction_searchErpOrderGraphItemByParams(params);
+    }
+
     return(
         <Container>
             {tableData &&
@@ -149,6 +176,7 @@ const SalesRevenueDetailTableComponent = (props) => {
                     ></GraphTitleField>
                     <TableFieldView
                         tableData={tableData}
+                        onActionSearchNotSoldItem={onActionSearchNotSoldItem}
                     ></TableFieldView>
                 </div>
             }

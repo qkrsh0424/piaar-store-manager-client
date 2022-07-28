@@ -7,7 +7,7 @@ import { Container, InfoTextFieldWrapper } from "./SelectedGraphItemModal.styled
 import TableFieldView from "./TableField.view";
 import { dateToYYMMDD, getDayName, getEndDate, getStartDate } from "../../../utils/dateFormatUtils";
 
-// 판매성과 그래프 클릭시 - 발주 내역 헤더
+// 판매성과 그래프 or 테이블 클릭시 - 발주 내역 헤더
 const headerFields = [
     'channelOrderDate',
     'prodName',

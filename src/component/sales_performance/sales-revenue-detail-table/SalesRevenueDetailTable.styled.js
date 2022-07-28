@@ -96,6 +96,13 @@ const TableFieldWrapper = styled.div`
 
     .highlight-text {
         color: #4356cf;
+        
+        :hover {
+            background-color: #d9d2ff;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
     }
 `;
 

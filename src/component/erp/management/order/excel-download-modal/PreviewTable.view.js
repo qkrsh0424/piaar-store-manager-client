@@ -34,14 +34,12 @@ const TableHead = ({ viewHeader, selectedMatchCode }) => {
                 <th className="fixed-header" scope="col">선택</th>
                 {viewHeader.headerDetail.details.map((r, index) => {
                     return (
-                        <>
-                            <th key={index} className="fixed-header" scope="col">
-                                <div>{r.customCellName}</div>
-                                {(HIGHLIGHT_FIELDS.includes(r.matchedColumnName) || r.matchedColumnName === selectedMatchCode) &&
-                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '10%', background: '#b9c2e1' }}></div>
-                                }
-                            </th>
-                        </>
+                        <th key={index} className="fixed-header" scope="col">
+                            <div>{r.customCellName}</div>
+                            {(HIGHLIGHT_FIELDS.includes(r.matchedColumnName) || r.matchedColumnName === selectedMatchCode) &&
+                                <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '10%', background: '#b9c2e1' }}></div>
+                            }
+                        </th>
                     )
                 })}
             </tr>

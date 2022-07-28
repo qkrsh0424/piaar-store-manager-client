@@ -291,6 +291,8 @@ const SalesPerformanceComponent = (props) => {
             <SalesRevenueDetailTableComponent
                 erpItemData={erpItemData}
                 hideOrderGraph={hideOrderGraph}
+
+                _onAction_searchErpOrderGraphItemByParams={_onAction_searchErpOrderGraphItemByParams}
             ></SalesRevenueDetailTableComponent>
 
             <CommonModalComponent
