@@ -374,17 +374,6 @@ const OrderComponent = (props) => {
         __reqSearchProductOptionList();
         __reqSearchDownloadExcelHeaders();
     }, []);
-    
-    useEffect(() => {
-        if(!query.matchedCode) {
-            return;
-        }
-
-        dispatchSelectedMatchCode({
-            type: 'SET_DATA',
-            payload: query.matchedCode
-        })
-    }, []);
 
     useEffect(() => {
         async function fetchInit() {
@@ -395,6 +384,17 @@ const OrderComponent = (props) => {
 
         fetchInit();
     }, [location]);
+
+    useEffect(() => {
+        let matchedCode = query.matchedCode;
+
+        if (matchedCode) {
+            dispatchSelectedMatchCode({
+                type: 'SET_DATA',
+                payload: matchedCode
+            })
+        }
+    }, [query.matchedCode])
 
     useEffect(() => {
         if(!viewHeaderList) {

@@ -404,6 +404,17 @@ const SalesComponent = (props) => {
     }, [location]);
 
     useEffect(() => {
+        let matchedCode = query.matchedCode;
+
+        if (matchedCode) {
+            dispatchSelectedMatchCode({
+                type: 'SET_DATA',
+                payload: matchedCode
+            })
+        }
+    }, [query.matchedCode])
+
+    useEffect(() => {
         if(!viewHeaderList) {
             return;
         }

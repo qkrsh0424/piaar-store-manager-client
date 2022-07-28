@@ -137,7 +137,17 @@ const SearchOperatorComponent = (props) => {
                 ></DateSelectorFieldView>
                 <InfoTextField
                     element={
-                        ( <div>* 분석결과는 판매 데이터 기준입니다.</div> )
+                        (<div>* 분석결과는 판매 데이터 기준입니다.</div>)
+                    }
+                ></InfoTextField>
+                <InfoTextField
+                    element={
+                        (
+                            <div>
+                                {!props.hideOrderGraph && <span className='info-text'>* 판매데이터만 확인하려면 '주문데이터 숨기기' 체크박스를 체크해주세요.</span>}
+                                {props.hideOrderGraph && <span className='info-text'>* 주문데이터도 함께 확인하려면 '주문데이터 숨기기' 체크박스를 해제해주세요.</span>}
+                            </div>
+                        )
                     }
                 ></InfoTextField>
                 <CheckBoxField
@@ -146,7 +156,7 @@ const SearchOperatorComponent = (props) => {
                     onChange={onActionHideSalesGraph}
                 ></CheckBoxField>
             </Container>
-
+            
             {/* Modal */}
             <CommonModalComponent
                 open={dateRangePickerModalOpen}

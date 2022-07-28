@@ -21,10 +21,6 @@ function Tip({ selectedMatchCode }) {
 }
 
 const OrderItemTableComponent = (props) => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const query = qs.parse(location.search);
-
     const tableScrollRef = useRef();
 
     const [orderItemList, dispatchOrderItemList] = useReducer(orderItemListReducer, initialOrderItemList);
@@ -187,7 +183,6 @@ const OrderItemTableComponent = (props) => {
 
     const onChangeReleaseLocationValue = (e) => {
         let location = e.target.value;
-        console.log(e);
         dispatchSearchReleaseLocationValue({
             type: 'SET_DATA',
             payload: location
