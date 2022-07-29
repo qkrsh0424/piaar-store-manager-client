@@ -64,6 +64,7 @@ import ProductManagePage from './pages/product_manage/ProductManagePage';
 import StockAnalysisPage from './pages/stock_analysis/SalesAnalysisPage';
 import ErpManagementDashboardPage from './pages/erp/management/dashboard/ErpManagementDashboardPage';
 import SalesPerformancePage from './pages/sales_performance/SalesPerformancePage';
+import StockCyclePage from './pages/stock_cycle/StockCyclePage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -196,6 +197,8 @@ function App(props) {
                                             <Route path='/stock-analysis' element={<StockAnalysisPage />} />
 
                                             <Route path='/sales-performance' element={<SalesPerformancePage />} />
+
+                                            <Route path='/stock-cycle' element={<StockCyclePage />} />
 
                                             {/* PiaarErpManagement */}
                                             <Route path='/erp/management/dashboard' element={<ErpManagementDashboardPage />} />

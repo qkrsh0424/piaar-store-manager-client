@@ -8,7 +8,6 @@ import GraphFieldView from "./GraphField.view";
 import RevenueOperatorFieldView from "./RevenueOperatorField.view";
 import DetailRevenueGraphByDayOfWeekFieldView from "./DetailRevenueGraphByDayOfWeek.view";
 import { getDateToAnalysisRangeDateFormat, GraphDataset } from "../../../utils/graphDataUtils";
-import { ControlPointSharp } from "@material-ui/icons";
 
 function GraphTitleField({ element }) {
     return (

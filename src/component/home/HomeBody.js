@@ -125,6 +125,7 @@ const HomeBody = () => {
                                     <CustomLink2 href='https://analytics.piaar.co.kr'>분석기</CustomLink2>
                                     <CustomLink to='/sales-analysis'>판매 랭킹</CustomLink>
                                     <CustomLink to='/stock-analysis'>재고 자산</CustomLink>
+                                    <CustomLink to='/stock-cycle'>재고 주기</CustomLink>
                                 </LinkBox>
                             </GroupBox>
 

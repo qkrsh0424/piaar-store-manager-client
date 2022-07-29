@@ -198,7 +198,7 @@ function getStartDateByWeekNumber(date) {
 
 function getEndDateByWeekNumber(date) {
     var y = date.slice(0, 4);
-    var m = date.slice(5, 7)-1;
+    var m = date.slice(5, 7) - 1;
     var weekNum = date.slice(8, 9);
 
     var startOfMonth = new Date(y, m, 1);
@@ -213,6 +213,11 @@ function getWeekName() {
     return weekName;
 }
 
+function getDateOfLastSunDay() {
+    var date = new Date();
+    var day = date.getDay();
+    return new Date(date.setDate(date.getDate() - day));
+}
 
 export {
     diffTimeToHHmmss,
@@ -238,5 +243,6 @@ export {
     getEndDateOfMonth,
     dateToYYMMDD2,
     getStartDateByWeekNumber,
-    getEndDateByWeekNumber
+    getEndDateByWeekNumber,
+    getDateOfLastSunDay
 }

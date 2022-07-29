@@ -67,7 +67,7 @@ const SalesRegistrationAndUnitGraphComponent = (props) => {
             maintainAspectRatio: false,
             interaction: {
                 mode: 'index',
-                intersect: false,
+                intersect: true,
             },
             onClick: function (e, item) {
                 onActionSetGraphOption(e, item)

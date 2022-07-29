@@ -85,7 +85,7 @@ const SalesRevenueGraphComponent = (props) => {
             maintainAspectRatio: false,
             interaction: {
                 mode: 'index',
-                intersect: false,
+                intersect: true,
             },
             onClick: function (e, item) {
                 onActionSetGraphOption(e, item)
@@ -742,8 +742,8 @@ const SalesRevenueGraphComponent = (props) => {
         var idx = item[0].index;
         var label = graphLabels[idx];
 
-        let startDate ='';
-        let endDate ='';
+        let startDate = '';
+        let endDate = '';
         let periodType = 'channelOrderDate';
         let salesYn = 'y';
         let matchedCode = 'optionCode';
@@ -752,7 +752,7 @@ const SalesRevenueGraphComponent = (props) => {
         if(!props.hideOrderGraph) {
             salesYn = null;
         }
-
+        
         if(props.analysisDateRange === 'date') {
             var date = new Date(label);
             startDate = getStartDate(date);
