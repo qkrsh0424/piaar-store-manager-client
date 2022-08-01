@@ -174,12 +174,22 @@ function dateToYYYYMM(date) {
     return moment(d).format("YYYY-MM");
 }
 
+// function getWeekNumber(date) {
+//     let d = new Date(date);
+//     var currentDate = d.getDate()-1;
+//     var startOfMonth = new Date(d.setDate(1));
+//     var weekDay = startOfMonth.getDay();
+//     var weekNum = parseInt(((weekDay - 1) + currentDate) / 7) + 1;
+//     return weekNum;
+// }
+
 function getWeekNumber(date) {
     let d = new Date(date);
-    var currentDate = d.getDate()-1;
-    var startOfMonth = new Date(d.setDate(1));
-    var weekDay = startOfMonth.getDay();
-    var weekNum = parseInt(((weekDay - 1) + currentDate) / 7) + 1;
+    let d2 = new Date(date);
+    let currentDate = new Date(d.setDate(d.getDate()-1));
+    let startOfMonth = new Date(d2.setDate(1));
+    
+    var weekNum = moment(currentDate).week() - moment(startOfMonth).week() + 1;
     return weekNum;
 }
 

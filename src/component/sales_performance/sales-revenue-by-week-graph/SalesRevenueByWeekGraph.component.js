@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from "react";
 import { useLocation } from "react-router-dom";
 import qs from "query-string";
-import { getDayName, getDifferenceBetweenStartDateAndEndDate, getEndDate, getEndDateByWeekNumber, getEndDateOfMonth, getStartDate, getStartDateByWeekNumber, getStartDateOfMonth, getWeekName } from "../../../utils/dateFormatUtils";
+import { getDayName, getDifferenceBetweenStartDateAndEndDate, getEndDate, getStartDate, getWeekName } from "../../../utils/dateFormatUtils";
 import GraphFieldView from "./GraphField.view";
 import { Container, GraphTitleFieldWrapper } from "./SalesRevenueByWeekGraph.styled";
 import { getDateToAnalysisRangeDateFormat, GraphDataset } from "../../../utils/graphDataUtils";
