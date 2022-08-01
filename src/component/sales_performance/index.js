@@ -295,20 +295,22 @@ const SalesPerformanceComponent = (props) => {
                 _onAction_searchErpOrderGraphItemByParams={_onAction_searchErpOrderGraphItemByParams}
             ></SalesRevenueDetailTableComponent>
 
-            <CommonModalComponent
-                open={selectedGraphItemModalOpen}
-                maxWidth={'lg'}
+            {erpItemGraphData && graphSearchParam &&
+                <CommonModalComponent
+                    open={selectedGraphItemModalOpen}
+                    maxWidth={'lg'}
 
-                onClose={_onAction_closeSelectedGraphItemModal}
-            >
-                <SelectedGraphItemModalComponent
-                    erpItemGraphData={erpItemGraphData}
-                    graphSearchParam={graphSearchParam}
-                    hideOrderGraph={hideOrderGraph}
+                    onClose={_onAction_closeSelectedGraphItemModal}
+                >
+                    <SelectedGraphItemModalComponent
+                        erpItemGraphData={erpItemGraphData}
+                        graphSearchParam={graphSearchParam}
+                        hideOrderGraph={hideOrderGraph}
 
-                    _onAction_searchErpOrderItemByParams={_onAction_searchErpOrderItemByParams}
-                ></SelectedGraphItemModalComponent>
-            </CommonModalComponent>
+                        _onAction_searchErpOrderItemByParams={_onAction_searchErpOrderItemByParams}
+                    ></SelectedGraphItemModalComponent>
+                </CommonModalComponent>
+            }
 
             {/* Backdrop Loading */}
             <BackdropHookComponent

@@ -44,7 +44,8 @@ const OrderItemTableComponent = (props) => {
             tableScrollRef.current.scrollTop = 0;
         }
 
-        let sortedData = props.orderItemList?.sort((a, b) => a.receiver.localeCompare(b.receiver));
+        let data = [...props.orderItemList];
+        let sortedData = data?.sort((a, b) => a.receiver.localeCompare(b.receiver));
 
         // 수령인+수취인전화번호 동일하다면 수령인 duplicationUser값 true로 변경
         for (var i = 0; i < sortedData.length - 1; i++) {
