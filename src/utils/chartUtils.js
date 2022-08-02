@@ -18,14 +18,6 @@ function createGraphData(graph) {
     }
 }
 
-function createDoughnutGraphOption(option) {
-    return {
-        responsive: option.responsive,
-        plugins: option.plugins,
-        maintainAspectRatio: option.maintainAspectRatio
-    }
-}
-
 function createGraphOption(option) {
     return {
         responsive: option.responsive,
@@ -34,9 +26,10 @@ function createGraphOption(option) {
         interaction: option.interaction,
         maxBarThickness: option.maxBarThickness || 30,
         lineTension: option.lineTension || 0.3,
-        borderWidth: option.borderWidth || 2,
+        borderWidth: option.borderWidth || 0,
         plugins: {
             legend: {
+                position: option.plugins?.legend?.position || '',
                 labels: {
                     boxWidth: 12,
                 }
@@ -49,6 +42,5 @@ function createGraphOption(option) {
 
 export {
     createGraphData,
-    createDoughnutGraphOption,
     createGraphOption
 }

@@ -492,7 +492,8 @@ const ProductManageComponent = () => {
             <SelectorComponent
                 selectedCategoryId={selectedCategoryId}
                 categoryList={categoryList}
-                productViewList={productViewList}
+                productList={productList}
+                // productViewList={productViewList}
                 selectedProductId={selectedProductId}
 
                 _onAction_changeCategory={(categoryId) => _onAction_changeCategory(categoryId)}

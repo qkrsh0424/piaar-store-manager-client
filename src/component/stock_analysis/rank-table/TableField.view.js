@@ -1,7 +1,7 @@
 import { TableFieldWrapper, RankIcon } from "./RankTable.styled"
-import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import valueUtils from "../../../utils/valueUtils";
 import SortButton from "../../module/button/SortButton";
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 
 export default function TableFieldView(props) {
     return (
@@ -109,7 +109,7 @@ export default function TableFieldView(props) {
                                 >
                                     <td>
                                         <span>{index + 1} 위</span>
-                                        {index < 3 && <RankIcon rank={index + 1}><MilitaryTechIcon /></RankIcon>}
+                                        {index < 3 && <RankIcon rank={index + 1}><ThumbDownAltIcon /></RankIcon>}
                                     </td>
                                     <td>
                                         <span>{r.product.defaultName}</span>
@@ -127,7 +127,8 @@ export default function TableFieldView(props) {
                                         <span>{r.stockSumUnit}</span>
                                     </td>
                                     <td>
-                                        <span>{(r.stockProperty)?.toLocaleString()}원</span>
+                                        <span>{(r.stockProperty)?.toLocaleString()}원 </span>
+                                        <span>({((r.stockProperty) / (props.totalStockInfo?.totalStockProperty || 1)).toFixed(2) * 100}%)</span>
                                     </td>
                                     <td>
                                         <span>{(r.estimatedSalesPrice)?.toLocaleString()}원</span>

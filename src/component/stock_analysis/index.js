@@ -10,6 +10,7 @@ import RankBoardComponent from './rank-table/RankTable.component';
 import qs from 'query-string';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useReducer } from 'react';
+import AnalysisGraphComponent from './analysis-graph/AnalysisGraph.component';
 
 const Container = styled.div`
     padding: 0 5% 5% 5%;
@@ -215,20 +216,23 @@ const StockAnalysisComponent = (props) => {
 
     return (
         <Container>
+            <AnalysisGraphComponent
+                stockAnalysisViewList={stockAnalysisViewList}
+                totalStockInfo={totalStockInfo}
+            ></AnalysisGraphComponent>
+
             <OperatorComponent
                 productCategoryList={productCategoryList}
                 searchInputState={searchInputState}
 
                 _onAction_changeSearchInput={(searchInput) => _onAction_changeSearchInput(searchInput)}
-            >   
-            </OperatorComponent>
+            ></OperatorComponent>
 
             <RankBoardComponent
                 stockAnalysisViewList={stockAnalysisViewList}
                 totalStockInfo={totalStockInfo}
-            >
-            </RankBoardComponent>
-            
+            ></RankBoardComponent>
+
             {/* Backdrop Loading */}
             <BackdropHookComponent
                 open={backdropOpen}

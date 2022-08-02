@@ -24,8 +24,7 @@ const RankBoardComponent = (props) => {
                 totalStockInfo={props.totalStockInfo}
 
                 onActionOpenProductStockAnalysisModal={(productId) => onActionOpenProductStockAnalysisModal(productId)}
-            >
-            </TableFieldView>
+            ></TableFieldView>
             
             {/* Modal */}
             <CommonModalComponent
