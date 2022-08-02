@@ -7,7 +7,7 @@ const AnalysisGraphFieldView = (props) => {
         <AnalysisGraphFieldWrapper>
             {props.productAnalysisGraphData &&
                 <div className='chart-group'>
-                    <div className='chart-group-box'>
+                    <div>
                         <div className='chart-title'>
                             <span>1. 상품 재고자산 TOP{props.bestItemUnit}</span>
                         </div>
@@ -18,7 +18,7 @@ const AnalysisGraphFieldView = (props) => {
                             />
                         </div>
                     </div>
-                    <div className='chart-group-box'>
+                    <div>
                         <div className='chart-title'>
                             <span>2. 상품 재고수량 TOP{props.bestItemUnit}</span>
                         </div>
@@ -33,7 +33,7 @@ const AnalysisGraphFieldView = (props) => {
             }
             {props.optionAnalysisGraphData &&
                 <div className='chart-group'>
-                    <div className='chart-group-box'>
+                    <div>
                         <div className='chart-title'>
                             <span>3. 옵션 재고자산 TOP{props.bestItemUnit}</span>
                         </div>
@@ -44,7 +44,7 @@ const AnalysisGraphFieldView = (props) => {
                             />
                         </div>
                     </div>
-                    <div className='chart-group-box'>
+                    <div>
                         <div className='chart-title'>
                             <span>4. 옵션 재고수량 TOP{props.bestItemUnit}</span>
                         </div>

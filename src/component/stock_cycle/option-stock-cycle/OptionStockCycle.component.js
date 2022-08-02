@@ -106,7 +106,6 @@ const OptionStockCycleComponent = (props) => {
                 r2.stockStatus.productReceive.forEach(r3 => {
                     let createdAt = new Date(r3.createdAt);
                     if(createdAt >= startDate && createdAt <= endDate) {
-                        console.log(r3.receiveUnit);
                         receive += r3.receiveUnit;
                     }
                 })
@@ -135,8 +134,6 @@ const OptionStockCycleComponent = (props) => {
             cycleEndDate = new Date(startDate);
             cycleEndDate.setDate(cycleEndDate.getDate() - 1);
         })
-
-        console.log(data);
 
         // 재고주기
         viewWeek.forEach((r1, idx) => {
