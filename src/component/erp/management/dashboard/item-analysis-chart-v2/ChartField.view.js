@@ -1,7 +1,6 @@
 import { ChartFieldWrapper } from "./ItemAnalysisChart.styled";
-import { Chart as ChartJS, registerables } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
-import { createDashboardGraphData, createDoughnutGraphOption, createGraphData } from "../../../../../utils/chartUtils";
+import { Bar } from 'react-chartjs-2';
+import { createGraphData, createGraphOption } from "../../../../../utils/chartUtils";
 
 
 const DETAIL_CHART_COLUMN = ['salesChannel', 'categoryName', 'prodDefaultName'];
@@ -15,8 +14,6 @@ const graphOption = {
     },
     maintainAspectRatio: false
 }
-
-ChartJS.register(...registerables);
 
 
 export default function ChartFieldView(props) {
@@ -32,9 +29,9 @@ export default function ChartFieldView(props) {
                             if (props.doughnutGraphData.orderItemData[column].labels.length > 0)
                                 return (
                                     <div key={`erp-doughnut-chart-idx` + idx} className='chart-box'>
-                                        <Doughnut
+                                        <Bar
                                             data={createGraphData(props.doughnutGraphData.orderItemData[column])}
-                                            options={createDoughnutGraphOption(graphOption)}
+                                            options={createGraphOption(graphOption)}
                                         />
                                     </div>
                                 )
@@ -52,9 +49,9 @@ export default function ChartFieldView(props) {
                             if (props.doughnutGraphData.salesItemData[column].labels.length > 0)
                                 return (
                                     <div key={`erp-doughnut-chart-idx` + idx} className='chart-box'>
-                                        <Doughnut
+                                        <Bar
                                             data={createGraphData(props.doughnutGraphData.salesItemData[column])}
-                                            options={createDoughnutGraphOption(graphOption)}
+                                            options={createGraphOption(graphOption)}
                                         />
                                     </div>
                                 )
@@ -72,9 +69,9 @@ export default function ChartFieldView(props) {
                             if (props.doughnutGraphData.releaseCompleteItemData[column].labels.length > 0)
                                 return (
                                     <div key={`erp-doughnut-chart-idx` + idx} className='chart-box'>
-                                        <Doughnut
+                                        <Bar
                                             data={createGraphData(props.doughnutGraphData.releaseCompleteItemData[column])}
-                                            options={createDoughnutGraphOption(graphOption)}
+                                            options={createGraphOption(graphOption)}
                                         />
                                     </div>
                                 )

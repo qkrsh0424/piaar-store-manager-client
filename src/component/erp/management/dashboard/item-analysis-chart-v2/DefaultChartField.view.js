@@ -1,6 +1,5 @@
-import { Chart as ChartJS, registerables } from 'chart.js';
 import { Bar } from "react-chartjs-2";
-import { createGraphOption, createDashboardGraphData, createGraphData } from '../../../../../utils/chartUtils';
+import { createGraphOption, createGraphData } from '../../../../../utils/chartUtils';
 import { DefaultChartFieldWrapper } from "./ItemAnalysisChart.styled";
 
 
@@ -11,8 +10,6 @@ const graphOption = {
     indexAxis: 'y',
     maintainAspectRatio: false
 }
-
-ChartJS.register(...registerables);
 
 export default function DefaultChartFieldView(props) {
     return (
