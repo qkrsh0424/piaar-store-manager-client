@@ -1,10 +1,7 @@
-import {Chart as ChartJS, registerables } from 'chart.js';
 import _ from 'lodash';
 import { Bar } from 'react-chartjs-2';
 import { createGraphOption, createGraphData } from "../../../utils/chartUtils";
 import { GraphFieldWrapper } from './SalesRevenueGraph.styled';
-
-ChartJS.register(...registerables);
 
 const GraphFieldView = (props) => {
     return (

@@ -41,13 +41,14 @@ const StockAnalysisComponent = (props) => {
 
     useEffect(() => {
         async function fetchInit() {
-            onActionOpenBackdrop();
             const result = await __reqSearchStockAnalysis();
             _onAction_CalculateStockAnalysis(result);
             await __reqSearchProductCategory();
-            onActionCloseBackdrop();
         }
+        
+        onActionOpenBackdrop();
         fetchInit();
+        onActionCloseBackdrop();
     }, []);
 
     useEffect(() => {
@@ -171,7 +172,12 @@ const StockAnalysisComponent = (props) => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -184,7 +190,12 @@ const StockAnalysisComponent = (props) => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 

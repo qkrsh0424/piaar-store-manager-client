@@ -29,7 +29,7 @@ function createGraphOption(option) {
         borderWidth: option.borderWidth || 0,
         plugins: {
             legend: {
-                position: option.plugins?.legend?.position || '',
+                position: option.plugins?.legend?.position || 'top',
                 labels: {
                     boxWidth: 12,
                 }
