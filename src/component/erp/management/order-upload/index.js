@@ -1,4 +1,5 @@
 import { useEffect, useReducer, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { erpDownloadExcelHeaderDataConnect } from "../../../../data_connect/erpDownloadExcelHeaderDataConnect";
 import { erpOrderItemDataConnect } from "../../../../data_connect/erpOrderItemDataConnect";
 import { excelTranslatorDataConnect } from "../../../../data_connect/excelTranslatorDataConnect";
@@ -6,11 +7,17 @@ import { erpOrderItemSocket } from "../../../../data_connect/socket/erpOrderItem
 import { useBackdropHook, BackdropHookComponent } from "../../../../hooks/backdrop/useBackdropHook";
 import { useSocketConnectLoadingHook, SocketConnectLoadingHookComponent } from "../../../../hooks/loading/useSocketConnectLoadingHook";
 import { dateToYYYYMMDDhhmmssFile } from "../../../../utils/dateFormatUtils";
+import qs from 'query-string';
 import useSocketClient from "../../../../web-hooks/socket/useSocketClient";
+import CommonModalComponent from "../../../module/modal/CommonModalComponent";
+import ExcelPasswordInputModalComponent from "./excel-password-input-modal/ExcelPasswordInputModal.component";
 import OperatorComponent from "./operator/Operator.component";
 import PreviewTableComponent from "./preview-table/PreviewTable.component";
 
 const ErpOrderUploadComponent = (props) => {
+    const location = useLocation();
+    const query = qs.parse(location.search);
+
     const {
         connected,
         onPublish,
@@ -32,6 +39,9 @@ const ErpOrderUploadComponent = (props) => {
 
     const [excelDataList, dispatchExcelDataList] = useReducer(excelDataListReducer, initialExcelDataList);
     const [excelTranslatorData, dispatchExcelTranslatorData] = useReducer(excelTranslatorDataReducer, initialExcelTranslatorData);
+    const [excelPassword, dispatchExcelPassword] = useReducer(excelPasswordReducer, initialExcelPassword);
+    const [excelPasswordInputModalOpen, setExcelPasswordInputModalOpen] = useState(false);
+    const [formData, dispatchFormData] = useReducer(formDataReducer, initialFormData);
 
     useEffect(() => {
         if(excelTranslatorData) {
@@ -40,6 +50,32 @@ const ErpOrderUploadComponent = (props) => {
 
         __reqSearchExcelTranslator();
     }, []);
+
+    useEffect(() => {
+        async function uploadExcel(params) {
+            await __reqUploadExcelFile(formData, params);
+        }
+
+        if(!excelPassword) {
+            return;
+        }
+
+        // 암호화되지 않았다면 바로 엑셀 업로드, 그렇지 않다면 비밀번호 입력 모달 오픈
+        if (!excelPassword.isEncrypted) {
+            onActionOpenBackdrop();
+            let params = {};
+            if (query.headerId) {
+                params = {
+                    ...params,
+                    headerId: query.headerId
+                }
+            }
+            uploadExcel(params);
+            onActionCloseBackdrop();
+        }else {
+            setExcelPasswordInputModalOpen(true);
+        }
+    }, [excelPassword])
 
     const __reqSearchExcelTranslator = async () => {
         await excelTranslatorDataConnect().searchList()
@@ -63,23 +99,24 @@ const ErpOrderUploadComponent = (props) => {
             })
     }
 
-    const __reqUploadExcelFile = async (formData) => {
-        await erpOrderItemDataConnect().uploadExcelFile(formData)
+    const __reqCheckPwdForUploadedExcelFile = async (formData) => {
+        await erpOrderItemDataConnect().checkPwdForUploadedExcelFile(formData)
             .then(res => {
-                if (res.status === 200 && res.data.message === 'success') {
-                    if (excelDataList) {
-                        dispatchExcelDataList({
-                            type: 'SET_DATA',
-                            payload: [
-                                ...excelDataList,
-                                ...res.data.data
-                            ]
-                        });
-                        return;
-                    }
-                    dispatchExcelDataList({
-                        type: 'SET_DATA',
-                        payload: res.data.data
+                if (res.status === 200 && res.data.message === 'need_password') {
+                    dispatchExcelPassword({
+                        type: 'CHANGE_DATA',
+                        payload: {
+                            name: 'isEncrypted',
+                            value: true
+                        }
+                    })
+                }else {
+                    dispatchExcelPassword({
+                        type: 'CHANGE_DATA',
+                        payload: {
+                            name: 'isEncrypted',
+                            value: false
+                        }
                     })
                 }
             })
@@ -95,8 +132,8 @@ const ErpOrderUploadComponent = (props) => {
             })
     }
 
-    const __reqUploadExcelFileByOtherForm = async (headerId, formData) => {
-        await erpOrderItemDataConnect().uploadExcelFileByOtherForm(headerId, formData)
+    const __reqUploadExcelFile = async (formData, params) => {
+        await erpOrderItemDataConnect().uploadExcelFile(formData, params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     if (excelDataList) {
@@ -113,6 +150,8 @@ const ErpOrderUploadComponent = (props) => {
                         type: 'SET_DATA',
                         payload: res.data.data
                     })
+
+                    dispatchExcelPassword({type: 'CLEAR'})
                 }
             })
             .catch(err => {
@@ -209,16 +248,37 @@ const ErpOrderUploadComponent = (props) => {
         };
     }, [connected]);
 
-    const _onSubmit_uploadExcelFile = async (formData) => {
+    const _onSubmit_checkPasswordForUploadedExcelFile = async (formData) => {
+        dispatchFormData({
+            type: 'SET_DATA',
+            payload: formData
+        })
+
         onActionOpenBackdrop();
-        await __reqUploadExcelFile(formData);
+        await __reqCheckPwdForUploadedExcelFile(formData);
         onActionCloseBackdrop();
     }
 
-    const _onSubmit_uploadExcelFileByOtherForm = async (headerId, formData) => {
+    const _onSubmit_uploadExcelFile = async (password) => {
         onActionOpenBackdrop();
-        await __reqUploadExcelFileByOtherForm(headerId, formData);
+        let params = {};
+        if(excelPassword.isEncrypted) {
+            params = {
+                ...params,
+                excelPassword: password
+            }
+        }
+
+        if(query.headerId) {
+            params = {
+                ...params,
+                headerId: query.headerId
+            }
+        }
+
+        await __reqUploadExcelFile(formData, params);
         onActionCloseBackdrop();
+        _onAction_closeExcelPasswordInputModal();
     }
 
     const _onSubmit_createOrderItems = async () => {
@@ -264,6 +324,10 @@ const ErpOrderUploadComponent = (props) => {
         })
     }
 
+    const _onAction_closeExcelPasswordInputModal = () => {
+        setExcelPasswordInputModalOpen(false);
+    }
+
     return (
         <>
             {connected && excelTranslatorData &&
@@ -271,8 +335,7 @@ const ErpOrderUploadComponent = (props) => {
                     <OperatorComponent
                         excelTranslatorData={excelTranslatorData}
 
-                        _onSubmit_uploadExcelFile={(formData) => _onSubmit_uploadExcelFile(formData)}
-                        _onSubmit_uploadExcelFileByOtherForm={(headerId, formData) => _onSubmit_uploadExcelFileByOtherForm(headerId, formData)}
+                        _onSubmit_checkPasswordForUploadedExcelFile={_onSubmit_checkPasswordForUploadedExcelFile}
                         _onSubmit_createOrderItems={() => _onSubmit_createOrderItems()}
                         _onSubmit_downloadUploadExcelSample={_onSubmit_downloadUploadExcelSample}
                         _onSubmit_addSingleExcelData={_onSubmit_addSingleExcelData}
@@ -293,6 +356,21 @@ const ErpOrderUploadComponent = (props) => {
             <SocketConnectLoadingHookComponent
                 open={socketConnectLoadingOpen}
             ></SocketConnectLoadingHookComponent>
+
+            {/* Excel Password Input Modal */}
+            <CommonModalComponent
+                open={excelPasswordInputModalOpen}
+                maxWidth={'xs'}
+
+                onClose={_onAction_closeExcelPasswordInputModal}
+            >
+                <ExcelPasswordInputModalComponent
+                    excelPassword={excelPassword}
+
+                    _onSubmit_uploadExcelFile={_onSubmit_uploadExcelFile}
+                ></ExcelPasswordInputModalComponent>
+            </CommonModalComponent>
+
         </>
     );
 }
@@ -301,14 +379,16 @@ export default ErpOrderUploadComponent;
 
 const initialExcelDataList = null;
 const initialExcelTranslatorData = null;
+const initialExcelPassword = null;
+const initialFormData = null;
 
 const excelDataListReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
             return action.payload;
         case 'CLEAR':
-            return null;
-        default: return null;
+            return initialExcelDataList;
+        default: return {...state};
     }
 }
 
@@ -318,6 +398,31 @@ const excelTranslatorDataReducer = (state, action) => {
             return action.payload;
         case 'CLEAR':
             return initialExcelTranslatorData;
-        default: return initialExcelTranslatorData;
+        default: return {...state};
+    }
+}
+
+const excelPasswordReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
+        case 'CLEAR':
+            return initialExcelPassword;
+        default: return {...state};
+    }
+}
+
+const formDataReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialFormData;
+        default: return {...state};
     }
 }

@@ -93,11 +93,7 @@ const OperatorComponent = (props) => {
         var formData = new FormData();
         formData.append('file', files[0]);
 
-        if(!selectedExcelTranslator) {
-            props._onSubmit_uploadExcelFile(formData);
-        }else {
-            props._onSubmit_uploadExcelFileByOtherForm(selectedExcelTranslator.id, formData);
-        }
+        props._onSubmit_checkPasswordForUploadedExcelFile(formData);
     }
 
     const onActionSaveExcelData = () => {
