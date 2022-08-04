@@ -194,6 +194,21 @@ export default function OptionInfoFormFieldView(props) {
                         onChange={(e) => props.onChangeInputValue(e)}
                     />
                 </div>
+                <div className="input-group mb-3">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">
+                            안전재고 수량
+                        </span>
+                    </div>
+                    {console.log(props.modifyOption)}
+                    <input
+                        type="number"
+                        className='form-control'
+                        name='safetyStockUnit'
+                        value={props.modifyOption.safetyStockUnit ?? ''}
+                        onChange={(e) => props.onChangeInputValue(e)}
+                    />
+                </div>
 
                 <OptionPackageWrapper>
                     <div>

@@ -61,6 +61,7 @@ export default function OptionInfoFieldView(props) {
                                         <th scope="col" width='200'>색상</th>
                                         <th scope="col" width='200'>CNY</th>
                                         <th scope="col" width='200'>KRW</th>
+                                        <th scope="col" width='200'>안전재고 수량</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -104,6 +105,9 @@ export default function OptionInfoFieldView(props) {
                                         </td>
                                         <td>
                                             <input type='text' value={optionData.unitKrw} name='unitKrw' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>
+                                        </td>
+                                        <td>
+                                            <input type='number' value={optionData.safetyStockUnit} name='safetyStockUnit' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>
                                         </td>
                                     </tr>
                                 </tbody>

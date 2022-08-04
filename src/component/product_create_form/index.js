@@ -86,6 +86,7 @@ class ProductOption {
         this.unitKrw = '';
         this.totalPurchasePrice = 0;
         this.packageYn = 'n';
+        this.safetyStockUnit = 0;
         this.productCid = null;
         this.productId = productId;
     }
@@ -108,6 +109,7 @@ class ProductOption {
             unitKrw: this.unitKrw,
             totalPurchasePrice: this.totalPurchasePrice,
             packageYn: this.packageYn,
+            safetyStockUnit: this.safetyStockUnit,
             productCid: this.productCid,
             productId: this.productId
         }
