@@ -22,6 +22,7 @@ const ConditionSelectorFieldWrapper = styled.div`
         font-size: 14px;
         color: #ff5d5d;
         padding: 5px 0;
+        font-weight: 700;
     }
 
     .grid-box{

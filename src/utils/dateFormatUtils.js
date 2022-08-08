@@ -21,7 +21,7 @@ function getEndDate(date) {
     var d = new Date(date);
     d.setHours(23);
     d.setMinutes(59);
-    d.setSeconds(59);
+    d.setSeconds(0);
     // console.log(d);
     return d;
 }
