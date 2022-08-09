@@ -16,6 +16,7 @@ function CheckBoxField({ element, onClick, checked, name}) {
                     className='checkbox-input'
                     checked={checked}
                     name={name}
+                    readOnly    // div로 event처리를 위해
                 />
                 <span>{element}</span>
             </div>
