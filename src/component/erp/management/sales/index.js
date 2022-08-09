@@ -698,12 +698,16 @@ const SalesComponent = (props) => {
                         checkedOrderItemList={checkedOrderItemList}
                         releaseLocation={releaseLocation}
                         selectedMatchCode={selectedMatchCode}
+                        productOptionList={productOptionList}
 
                         _onAction_checkOrderItem={_onAction_checkOrderItem}
                         _onAction_checkOrderItemAll={_onAction_checkOrderItemAll}
                         _onAction_releaseOrderItemAll={_onAction_releaseOrderItemAll}
                         _onSubmit_updateErpOrderItemOne={_onSubmit_updateErpOrderItemOne}
                         _onAction_changeMatchCode={_onAction_changeMatchCode}
+
+                        _onSubmit_changeOptionCodeForOrderItemListInBatch={_onSubmit_changeOptionCodeForOrderItemListInBatch}
+                        _onSubmit_changeReleaseOptionCodeForOrderItemListInBatch={_onSubmit_changeReleaseOptionCodeForOrderItemListInBatch}
                     ></OrderItemTableComponent>
                     <OrderItemTablePagenationComponent
                         orderItemPage={orderItemPage}
@@ -735,7 +739,11 @@ const SalesComponent = (props) => {
                     <CheckedOrderItemTableComponent
                         viewHeader={viewHeader}
                         checkedOrderItemList={checkedOrderItemList}
+                        productOptionList={productOptionList}
+                        
                         _onAction_checkOrderItem={_onAction_checkOrderItem}
+                        _onSubmit_changeOptionCodeForOrderItemListInBatch={_onSubmit_changeOptionCodeForOrderItemListInBatch}
+                        _onSubmit_changeReleaseOptionCodeForOrderItemListInBatch={_onSubmit_changeReleaseOptionCodeForOrderItemListInBatch}
                     ></CheckedOrderItemTableComponent>
                 </Container>
             }

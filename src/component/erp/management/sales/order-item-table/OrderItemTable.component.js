@@ -8,6 +8,8 @@ import { Container, TipFieldWrapper } from "./OrderItemTable.styled";
 import SelectorButtonFieldView from "./SelectorButtonField.view";
 import TableFieldView from "./TableField.view";
 import SelectorRadioFieldView from "./SelectorRadioField.view";
+import OptionCodeModalComponent from "../../order/option-code-modal/OptionCodeModal.component";
+import ReleaseOptionCodeModalComponent from "../../order/release-option-code-modal/ReleaseOptionCodeModal.component";
 
 function Tip({ selectedMatchCode }) {
     return (
@@ -27,6 +29,9 @@ const OrderItemTableComponent = (props) => {
     const [viewSize, dispatchViewSize] = useReducer(viewSizeReducer, initialViewSize);
     const [fixTargetItem, dispatchFixTargetItem] = useReducer(fixTargetItemReducer, initialFixTargetItem);
 
+    const [checkedOrderItemList, dispatchCheckedOrderItemList] = useReducer(checkedOrderItemListReducer, initialCheckedOrderItemList);
+    const [optionCodeModalOpen, setOptionCodeModalOpen] = useState(false);
+    const [releaseOptionCodeModalOpen, setReleaseOptionCodeModalOpen] = useState(false);
     const [fixItemModalOpen, setFixItemModalOpen] = useState(false);
 
     const [searchReleaseLocationValue, dispatchSearchReleaseLocationValue] = useReducer(searchReleaseLocationValueReducer, initialSearchReleaseLocationValue);
@@ -194,6 +199,74 @@ const OrderItemTableComponent = (props) => {
         props._onAction_changeMatchCode(matchedCode);
     }
 
+    const onActionOpenOptionCodeModal = (e, itemId) => {
+        e.stopPropagation();
+
+        let data = orderItemList.filter(r => r.id === itemId);
+
+        dispatchCheckedOrderItemList({
+            type: 'SET_DATA',
+            payload: data
+        })
+
+        if (data?.length <= 0) {
+            alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        setOptionCodeModalOpen(true);
+    }
+
+    const onActionCloseOptionCodeModal = () => {
+        setOptionCodeModalOpen(false);
+    }
+
+    const onActionChangeOptionCode = (optionCode) => {
+        let data = [...checkedOrderItemList];
+        data = data.map(r => {
+            return {
+                ...r,
+                optionCode: optionCode
+            }
+        })
+        props._onSubmit_changeOptionCodeForOrderItemListInBatch(data);
+        onActionCloseOptionCodeModal();
+    }
+
+    const onActionOpenReleaseOptionCodeModal = (e, itemId) => {
+        e.stopPropagation();
+
+        let data = orderItemList.filter(r => r.id === itemId);
+        
+        dispatchCheckedOrderItemList({
+            type: 'SET_DATA',
+            payload: data
+        })
+
+        if (data?.length <= 0) {
+            alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        setReleaseOptionCodeModalOpen(true);
+    }
+
+    const onActionCloseReleaseOptionCodeModal = () => {
+        setReleaseOptionCodeModalOpen(false);
+    }
+
+    const onActionChangeReleaseOptionCode = (optionCode) => {
+        let data = [...checkedOrderItemList];
+        data = data.map(r => {
+            return {
+                ...r,
+                releaseOptionCode: optionCode
+            }
+        })
+        props._onSubmit_changeReleaseOptionCodeForOrderItemListInBatch(data);
+        onActionCloseReleaseOptionCodeModal();
+    }
+
     return (
         <>
             <Container>
@@ -227,6 +300,9 @@ const OrderItemTableComponent = (props) => {
                             onActionCheckOrderItemAll={onActionCheckOrderItemAll}
                             onActionfetchMoreOrderItems={onActionfetchMoreOrderItems}
                             onActionOpenFixItemModal={onActionOpenFixItemModal}
+
+                            onActionOpenOptionCodeModal={onActionOpenOptionCodeModal}
+                            onActionOpenReleaseOptionCodeModal={onActionOpenReleaseOptionCodeModal}
                         ></TableFieldView>
                     </>
                 }
@@ -251,6 +327,34 @@ const OrderItemTableComponent = (props) => {
                     ></FixOrderItemModalComponent>
                 </CommonModalComponent>
             }
+
+            {/* 옵션 코드 모달 */}
+            <CommonModalComponent
+                open={optionCodeModalOpen}
+
+                onClose={onActionCloseOptionCodeModal}
+            >
+                <OptionCodeModalComponent
+                    checkedOrderItemList={checkedOrderItemList}
+                    productOptionList={props.productOptionList}
+
+                    onConfirm={(optionCode) => onActionChangeOptionCode(optionCode)}
+                ></OptionCodeModalComponent>
+            </CommonModalComponent>
+
+            {/* 옵션 코드 모달 */}
+            <CommonModalComponent
+                open={releaseOptionCodeModalOpen}
+
+                onClose={onActionCloseReleaseOptionCodeModal}
+            >
+                <ReleaseOptionCodeModalComponent
+                    checkedOrderItemList={checkedOrderItemList}
+                    productOptionList={props.productOptionList}
+
+                    onConfirm={(optionCode) => onActionChangeReleaseOptionCode(optionCode)}
+                ></ReleaseOptionCodeModalComponent>
+            </CommonModalComponent>
         </>
     );
 }
@@ -261,6 +365,7 @@ const initialViewSize = 50;
 const initialFixTargetItem = null;
 const initialOrderItemList = [];
 const initialSearchReleaseLocationValue = null;
+const initialCheckedOrderItemList = null;
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
@@ -300,5 +405,15 @@ const searchReleaseLocationValueReducer = (state, action) => {
         case 'SET_DATA':
             return action.payload;
         default: return initialSearchReleaseLocationValue;
+    }
+}
+
+const checkedOrderItemListReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialCheckedOrderItemList;
+        default: return { ...state };
     }
 }

@@ -51,20 +51,20 @@ export default function TableFieldView(props) {
                                                 let matchedColumnName = r2.matchedColumnName;
                                                 if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt' || matchedColumnName === 'channelOrderDate') {
                                                     return (
-                                                        <td key={matchedColumnName}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
+                                                        <td key={`col-${matchedColumnName}`}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
                                                         )
                                                 }else if (matchedColumnName === 'optionCode') {
                                                     return (
-                                                        <td key={matchedColumnName} className='highlight-column' onClick={(e) => props.onActionOpenOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
+                                                        <td key={`col-${matchedColumnName}`} className='highlight-column' onClick={(e) => props.onActionOpenOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
                                                     )
                                                 }else if (matchedColumnName === 'releaseOptionCode') {
                                                     return (
-                                                        <td key={matchedColumnName} className='highlight-column' onClick={(e) => props.onActionOpenReleaseOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
+                                                        <td key={`col-${matchedColumnName}`} className='highlight-column' onClick={(e) => props.onActionOpenReleaseOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
                                                     )
                                                 }
                                                 return (
-                                                    <td key={matchedColumnName}
-                                                        className={`${r2.matchedColumnName === 'receiver' && r1[`duplicationUser`] && 'user-duplication'}`}
+                                                    <td key={`col-${matchedColumnName}`}
+                                                        className={`${(r2.matchedColumnName === 'receiver' && r1[`duplicationUser`]) ? 'user-duplication' : ''}`}
                                                     >
                                                         {r1[matchedColumnName]}
                                                     </td>
