@@ -37,11 +37,9 @@ const SelectorWrapper = styled.div`
 const CheckBoxFieldWrapper = styled.div`
     padding: 2px 0;
     font-weight: 600;
-    flex-direction: row-reverse;
 
     .checkbox-group {
-        display: flex;
-        gap: 10px;
+        display: inline-block;
         
         :hover {
             cursor: pointer;
