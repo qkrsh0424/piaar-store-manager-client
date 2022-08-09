@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Bar } from 'react-chartjs-2';
+import { Chart } from 'react-chartjs-2';
 import { createGraphOption, createGraphData } from "../../../utils/chartUtils";
 import { GraphFieldWrapper } from './SalesRevenueGraph.styled';
 
@@ -8,7 +8,7 @@ const GraphFieldView = (props) => {
         <GraphFieldWrapper>
             {props.searchItem === 'total' &&
                 <div className='graph-wrapper'>
-                    <Bar
+                    <Chart
                         data={createGraphData(props.revenueGraphData)}
                         options={createGraphOption(props.graphOption)}
                     />
@@ -16,7 +16,7 @@ const GraphFieldView = (props) => {
             }
             {props.searchItem === 'salesChannel' &&
                 <div className='graph-wrapper'>
-                    <Bar
+                    <Chart
                         data={createGraphData(props.revenueGraphData)}
                         options={createGraphOption(props.graphOption)}
                     />
@@ -24,7 +24,7 @@ const GraphFieldView = (props) => {
             }
             {props.searchItem === 'category' &&
                 <div className='graph-wrapper'>
-                    <Bar
+                    <Chart
                         data={createGraphData(props.revenueGraphData)}
                         options={createGraphOption(props.graphOption)}
                     />
@@ -37,13 +37,13 @@ const GraphFieldView = (props) => {
                     </div>
                     <div className='flex-box'>
                         <div className='graph-wrapper half-type-graph'>
-                            <Bar
+                            <Chart
                                 data={createGraphData(props.revenueGraphData?.revenue)}
                                 options={createGraphOption(props.graphOption)}
                             />
                         </div>
                         <div className='graph-wrapper half-type-graph'>
-                            <Bar
+                            <Chart
                                 data={createGraphData(props.revenueGraphData?.unit)}
                                 options={createGraphOption(props.graphOption)}
                             />

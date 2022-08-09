@@ -9,13 +9,6 @@ const Colgroup = ({  }) => {
             <col width={'100'}></col>
             <col width={'100'}></col>
             <col width={'100'}></col>
-            <col width={'100'}></col>
-            <col width={'100'}></col>
-            <col width={'100'}></col>
-            <col width={'100'}></col>
-            <col width={'100'}></col>
-            <col width={'100'}></col>
-            <col width={'100'}></col>
         </colgroup>
     );
 }
@@ -25,41 +18,35 @@ const TableHead = ({ }) => {
         <thead>
             <tr>
                 <th className="fixed-header" scope="col">유형</th>
-                <th className="fixed-header" scope="col">W1</th>
-                <th className="fixed-header" scope="col">W2</th>
-                <th className="fixed-header" scope="col">W3</th>
                 <th className="fixed-header" scope="col">W4</th>
-                <th className="fixed-header" scope="col">W5</th>
-                <th className="fixed-header" scope="col">W6</th>
-                <th className="fixed-header" scope="col">W7</th>
-                <th className="fixed-header" scope="col">W8</th>
-                <th className="fixed-header" scope="col">W9</th>
-                <th className="fixed-header" scope="col">W10</th>
-                <th className="fixed-header" scope="col">T</th>
+                <th className="fixed-header" scope="col">W3</th>
+                <th className="fixed-header" scope="col">W2</th>
+                <th className="fixed-header" scope="col">W1</th>
             </tr>
         </thead>
     );
 }
 
-const week = ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10', 'W11'];
 const tableItem = [
     {
         "rowName": "구매",
-        "rowMatchItem": "receive"
+        "rowMatchItem": "receiveForW"
     },
     {
         "rowName": "판매",
-        "rowMatchItem": "release"
+        "rowMatchItem": "releaseForW"
     },
     {
         "rowName": "재고",
-        "rowMatchItem": "stock"
+        "rowMatchItem": "stockForW"
     },
     {
         "rowName": "재고 주기",
-        "rowMatchItem": "cycle"
+        "rowMatchItem": "cycleForW"
     }
 ]
+
+const CYCLE_VIEW_WEEK = 4;
 
 const TableBody = ({ cycleData, outOfStockIdList }) => {
     return (
@@ -68,15 +55,18 @@ const TableBody = ({ cycleData, outOfStockIdList }) => {
                 return (
                     <tr key={item.rowMatchItem}>
                         <td className='fixed-col'>{item.rowName}</td>
-                        {week?.map((r, idx) => {
-                            let stockCycle = cycleData.stockCycle[week[idx]][item.rowMatchItem];
-                            return (
-                                <td 
-                                    key={`stock_cycle_idx` + idx}
-                                    className={`${week[idx] === 'W10' && item.rowMatchItem === 'cycle' 
-                                        && outOfStockIdList.includes(cycleData.option.id) && 'highlight-text'}`}
+                        {[...Array(CYCLE_VIEW_WEEK)].map((r, idx) => {
+                            let isOutOfStock = false;
+                            let isPromotionOption = false;
+                            if((idx+1) === CYCLE_VIEW_WEEK && item.rowMatchItem === 'cycleForW') {
+                                isOutOfStock = outOfStockIdList.includes(cycleData.optionId);
+                                isPromotionOption = cycleData.cycleForW1 >= 8 ? true : false;
+                            }
+                            return(
+                                <td key={'stock-cycle-idx' + idx}
+                                    className={`${isOutOfStock ? 'td-highlight' : ''} ${isPromotionOption ? 'promotion-option' : ''}`}
                                 >
-                                    {stockCycle}
+                                    {cycleData[item.rowMatchItem + (4 - idx)]}
                                 </td>
                             )
                         })}

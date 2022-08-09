@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import DrawerNavbarMain from '../../component/nav/DrawerNavbarMain';
-import StockCycleComponent from '../../component/stock_cycle_v3';
+import StockCycleComponent from '../../component/stock_cycle';
 
 const Container = styled.div`
 

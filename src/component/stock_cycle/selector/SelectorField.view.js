@@ -20,7 +20,7 @@ export default function SelectorFieldView(props) {
             <div className='select-group'>
                 <select
                     className='select-item'
-                    value={props.selectedProduct?.id || 'total'}
+                    value={props.selectedProduct.length === 1 ? props.selectedProduct?.id : 'total'}
                     onChange={props.onChangeSelectedProduct}
                 >
                     <option value='total'>상품 전체</option>

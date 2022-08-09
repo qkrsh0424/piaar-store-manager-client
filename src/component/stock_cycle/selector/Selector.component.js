@@ -2,6 +2,27 @@ import { useEffect, useReducer } from "react";
 import { Container } from "./Selector.styled"
 import SelectorFieldView from "./SelectorField.view";
 
+import { CheckBoxFieldWrapper } from "./Selector.styled";
+
+function CheckBoxField({ element, onClick, checked, name}) {
+    return (
+        <CheckBoxFieldWrapper >
+            <div
+                className={`checkbox-group ${name === 'showOutOfStockOption' ? 'out-of-stock' : ''}`}
+                onClick={onClick}
+            >
+                <input
+                    type='checkbox'
+                    className='checkbox-input'
+                    checked={checked}
+                    name={name}
+                />
+                <span>{element}</span>
+            </div>
+        </CheckBoxFieldWrapper>
+    )
+}
+
 const SelectorComponent = (props) => {
     const [productViewList, dispatchProductViewList] = useReducer(productViewListReducer, initialProductViewList);
     
@@ -29,17 +50,44 @@ const SelectorComponent = (props) => {
         props._onAction_changeSelectedProduct(e);
     }
 
+    const onActionChangeHideNonReleaseOption = (e) => {
+        e.stopPropagation();
+
+        props._onAction_changeHideNonReleaseOpiton();
+    }
+
+    const onActionChangeShowOutOfStockOption = (e) => {
+        e.stopPropagation();
+
+        props._onAction_changeShowOutOfStockOption();
+    }
+
     return (
         <Container>
             <SelectorFieldView
                 categoryList={props.categoryList}
                 productViewList={productViewList}
                 selectedCategory={props.selectedCategory}
-                selectedProduct={props.selectedProduct.product}
+                selectedProduct={props.selectedProduct}
 
                 onChangeSelectedCategory={onChangeSelectedCategory}
                 onChangeSelectedProduct={onChangeSelectedProduct}
             ></SelectorFieldView>
+            
+            <div className='checkbox-wrapper'>
+                <CheckBoxField
+                    element={'미판매 상품 숨기기'}
+                    checked={props.hideNonReleaseOption}
+                    name={'hideNonReleaseOption'}
+                    onClick={onActionChangeHideNonReleaseOption}
+                ></CheckBoxField>
+                <CheckBoxField
+                    element={'재고부족 예상 상품 표시'}
+                    checked={props.showOutOfStockOption}
+                    name={'showOutOfStockOption'}
+                    onClick={onActionChangeShowOutOfStockOption}
+                ></CheckBoxField>
+            </div>
         </Container>
     )
 }

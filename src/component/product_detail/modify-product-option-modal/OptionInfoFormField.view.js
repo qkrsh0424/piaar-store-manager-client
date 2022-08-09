@@ -200,7 +200,6 @@ export default function OptionInfoFormFieldView(props) {
                             안전재고 수량
                         </span>
                     </div>
-                    {console.log(props.modifyOption)}
                     <input
                         type="number"
                         className='form-control'

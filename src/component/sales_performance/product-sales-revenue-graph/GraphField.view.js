@@ -1,9 +1,6 @@
-import { Chart as ChartJS, registerables } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import { Chart } from "react-chartjs-2";
 import { createGraphOption, createGraphData } from "../../../utils/chartUtils";
 import { GraphFieldWrapper } from "./ProductSalesRevenueGraph.styled";
-
-ChartJS.register(...registerables);
 
 const GraphFieldView = (props) => {
     return (
@@ -13,13 +10,13 @@ const GraphFieldView = (props) => {
             </div>
             <div className='flex-box'>
                 <div className='half-type-graph graph-wrapper'>
-                    <Bar
+                    <Chart
                         data={createGraphData(props.optionRevenueGraphData?.revenue)}
                         options={createGraphOption(props.graphOption)}
                     />
                 </div>
                 <div className='half-type-graph graph-wrapper'>
-                    <Bar
+                    <Chart
                         data={createGraphData(props.optionRevenueGraphData?.unit)}
                         options={createGraphOption(props.graphOption)}
                     />

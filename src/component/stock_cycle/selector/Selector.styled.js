@@ -1,21 +1,26 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-    display: flex;
+    border-bottom: 1px solid #444;
+    padding: 0 20px;
+
+    .checkbox-wrapper {
+        padding: 10px 0;
+    }
 `;
 
 const SelectorWrapper = styled.div`
-    padding: 30px 20px;
+    padding-top: 20px;
     display: flex;
+    flex-wrap: wrap;
     gap: 15px;
     width: 100%;
-    border-bottom: 1px solid #d4d4d4;
 
     .select-item {
-        width: 260px;
+        width: 250px;
         height: 40px;
         padding: 0 10px;
-        border: 1px solid #ccc;
+        border: 1px solid #444;
         border-radius: 0;
         font-size: 14px;
         -webkit-appearance: none;
@@ -26,14 +31,34 @@ const SelectorWrapper = styled.div`
         &:focus{
             outline: none;
         }
+    }
+`;
 
-        @media screen and (max-width: 992px){
-            width: 70%;
+const CheckBoxFieldWrapper = styled.div`
+    padding: 2px 0;
+    font-weight: 600;
+    flex-direction: row-reverse;
+
+    .checkbox-group {
+        display: flex;
+        gap: 10px;
+        
+        :hover {
+            cursor: pointer;
         }
+    }
+
+    .checkbox-input {
+        margin: 5px;
+    }
+
+    .out-of-stock {
+        color: #ff0000;
     }
 `;
 
 export {
     Container,
-    SelectorWrapper
+    SelectorWrapper,
+    CheckBoxFieldWrapper
 }

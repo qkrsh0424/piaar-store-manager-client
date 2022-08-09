@@ -82,6 +82,10 @@ const CheckBoxFieldWrapper = styled.div`
     .checkbox-group {
         display: flex;
         gap: 10px;
+
+        :hover {
+            cursor: pointer;
+        }
     }
 
     .checkbox-input {

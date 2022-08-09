@@ -15,16 +15,18 @@ function InfoTextField({ element }) {
     )
 }
 
-function CheckBoxField({ element, onChange, checked }) {
+function CheckBoxField({ element, checked, onClick }) {
     return (
         <CheckBoxFieldWrapper>
-            <div className='checkbox-group'>
+            <div
+                className='checkbox-group'
+                onClick={onClick}
+            >
                 <input
                     type='checkbox'
                     className='checkbox-input'
                     checked={checked}
                     name='sales'
-                    onChange={onChange}
                 />
                 <span>{element}</span>
             </div>
@@ -153,7 +155,7 @@ const SearchOperatorComponent = (props) => {
                 <CheckBoxField
                     element={'주문 데이터 숨기기'}
                     checked={props.hideOrderGraph}
-                    onChange={onActionHideSalesGraph}
+                    onClick={onActionHideSalesGraph}
                 ></CheckBoxField>
             </Container>
             
