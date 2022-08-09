@@ -94,6 +94,14 @@ const TableFieldWrapper = styled.div`
             font-size: 10px;
         }
 
+        /* &:hover{
+            background: #2C73D260;
+            color: white;
+            font-weight: 600;
+        } */
+    }
+
+    table tbody tr .td-highlight {
         &:hover{
             background: #2C73D260;
             color: white;

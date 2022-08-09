@@ -99,11 +99,11 @@ export default function TableFieldView(props) {
                                             )
                                         } else if (matchedColumnName === 'optionCode') {
                                             return (
-                                                <td key={`col-${matchedColumnName}`} className='highlight-column' onClick={(e) => props.onActionOpenOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
+                                                <td key={`col-${matchedColumnName}`} className='td-highlight' onClick={(e) => props.onActionOpenOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
                                             )
                                         } else if (matchedColumnName === 'releaseOptionCode') {
                                             return (
-                                                <td key={`col-${matchedColumnName}`} className='highlight-column' onClick={(e) => props.onActionOpenReleaseOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
+                                                <td key={`col-${matchedColumnName}`} className='td-highlight' onClick={(e) => props.onActionOpenReleaseOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
                                             )
                                         }
                                         return (

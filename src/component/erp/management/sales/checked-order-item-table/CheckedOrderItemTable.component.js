@@ -74,7 +74,6 @@ const CheckedOrderItemTableComponent = (props) => {
     const onActionOpenOptionCodeModal = (e, itemId) => {
         e.stopPropagation();
 
-        console.log(itemId);
         let data = checkedOrderItemList.filter(r => r.id === itemId);
 
         dispatchCheckedOrderItem({

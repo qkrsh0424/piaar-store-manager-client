@@ -107,78 +107,83 @@ export default function TableFieldView(props) {
                         selectedMatchCode={props.selectedMatchCode}
                     />
                     <tbody>
-                        {props.orderItemList &&
-                            <>
-                                {props.orderItemList?.slice(0, props.viewSize).map((r1, rowIndex) => {
-                                    let checked = props.isCheckedOne(r1.id)
-                                    let isOutOfStock = r1.optionStockUnit !== null && r1.optionStockUnit <= 0;
-                                    return (
-                                        <tr
-                                            key={rowIndex}
-                                            className={`${checked && 'tr-active'} ${isOutOfStock && 'tr-highlight'}`}
-                                            onClick={(e) => props.onActionCheckOrderItem(e, r1)}
+                        {props.orderItemList?.slice(0, props.viewSize).map((r1, rowIndex) => {
+                            let checked = props.isCheckedOne(r1.id)
+                            let isOutOfStock = r1.optionStockUnit !== null && r1.optionStockUnit <= 0;
+                            return (
+                                <tr
+                                    key={`row-${rowIndex}`}
+                                    className={`${checked && 'tr-active'} ${isOutOfStock && 'tr-highlight'}`}
+                                    onClick={(e) => props.onActionCheckOrderItem(e, r1)}
+                                >
+                                    <td className={`fixed-col-left`}>
+                                        {r1.stockReflectYn === 'y' &&
+                                            <CorrectIcon />
+                                        }
+                                        {r1.stockReflectYn === 'n' &&
+                                            <FailedIcon />
+                                        }
+                                    </td>
+                                    <td style={{ cursor: 'pointer' }}>
+                                        <input type='checkbox' checked={checked} onChange={(e) => props.onActionCheckOrderItem(e, r1)}></input>
+                                    </td>
+                                    {props.viewHeader?.headerDetail.details?.map(r2 => {
+                                        let matchedColumnName = r2.matchedColumnName;
+                                        if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt' || matchedColumnName === 'channelOrderDate') {
+                                            return (
+                                                <td key={r2.cellNumber}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
+                                            )
+                                        } else if (matchedColumnName === 'optionCode') {
+                                            return (
+                                                <td key={`col-${matchedColumnName}`} className='td-highlight' onClick={(e) => props.onActionOpenOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
+                                            )
+                                        } else if (matchedColumnName === 'releaseOptionCode') {
+                                            return (
+                                                <td key={`col-${matchedColumnName}`} className='td-highlight' onClick={(e) => props.onActionOpenReleaseOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
+                                            )
+                                        }
+                                        return (
+                                            <td
+                                                key={`col-${matchedColumnName}`}
+                                                className={`${(r2.matchedColumnName === 'receiver' && r1[`duplicationUser`]) ? 'user-duplication' : ''}`}
+                                            >
+                                                {r1[matchedColumnName]}
+                                            </td>
+                                        )
+                                    })}
+                                    <td className='fixed-col-right'>
+                                        <button
+                                            type='button'
+                                            className='fix-button-el'
+                                            onClick={(e) => props.onActionOpenFixItemModal(e, r1)}
                                         >
-                                            <td className={`fixed-col-left`}>
-                                                {r1.stockReflectYn === 'y' &&
-                                                    <CorrectIcon />
-                                                }
-                                                {r1.stockReflectYn === 'n' &&
-                                                    <FailedIcon />
-                                                }
-                                            </td>
-                                            <td style={{ cursor: 'pointer' }}>
-                                                <input type='checkbox' checked={checked} onChange={(e) => props.onActionCheckOrderItem(e, r1)}></input>
-                                            </td>
-                                            {props.viewHeader?.headerDetail.details?.map(r2 => {
-                                                let matchedColumnName = r2.matchedColumnName;
-                                                if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt' || matchedColumnName === 'channelOrderDate') {
-                                                    return (
-                                                        <td key={r2.cellNumber}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
-                                                    )
-                                                }
-                                                return (
-                                                    <td key={r2.cellNumber}
-                                                        className={`${r2.matchedColumnName === 'receiver' && r1[`duplicationUser`] && 'user-duplication'}`}
-                                                    >
-                                                        {r1[matchedColumnName]}
-                                                    </td>
-                                                )
-                                            })}
-                                            <td className='fixed-col-right'>
-                                                <button
-                                                    type='button'
-                                                    className='fix-button-el'
-                                                    onClick={(e) => props.onActionOpenFixItemModal(e, r1)}
-                                                >
-                                                    <img
-                                                        src={'/assets/icon/edit_black_icon.png'}
-                                                        className='fix-button-icon'
-                                                        alt=""
-                                                    ></img>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                                <InfiniteScrollObserver
-                                    elementTagType={'tr'}
-                                    totalSize={props.orderItemList.length}
-                                    startOffset={0}
-                                    endOffset={props.viewSize}
-                                    fetchData={props.onActionfetchMoreOrderItems}
-                                    loadingElementTag={
-                                        <td style={{ textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#444', paddingLeft: '50px' }} colSpan={100}>
-                                            로딩중...
-                                        </td>
-                                    }
-                                    endElementTag={
-                                        <td style={{ textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#444', paddingLeft: '50px' }} colSpan={100}>
-                                            마지막 데이터 입니다.
-                                        </td>
-                                    }
-                                />
-                            </>
-                        }
+                                            <img
+                                                src={'/assets/icon/edit_black_icon.png'}
+                                                className='fix-button-icon'
+                                                alt=""
+                                            ></img>
+                                        </button>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                        <InfiniteScrollObserver
+                            elementTagType={'tr'}
+                            totalSize={props.orderItemList.length}
+                            startOffset={0}
+                            endOffset={props.viewSize}
+                            fetchData={props.onActionfetchMoreOrderItems}
+                            loadingElementTag={
+                                <td style={{ textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#444', paddingLeft: '50px' }} colSpan={100}>
+                                    로딩중...
+                                </td>
+                            }
+                            endElementTag={
+                                <td style={{ textAlign: 'left', fontSize: '12px', fontWeight: '600', color: '#444', paddingLeft: '50px' }} colSpan={100}>
+                                    마지막 데이터 입니다.
+                                </td>
+                            }
+                        />
                     </tbody>
                 </table>
                 {/* <InfiniteScrollObserver

@@ -94,7 +94,7 @@ const TableFieldWrapper = styled.div`
         } */
     }
 
-    table tbody tr .highlight-column {
+    table tbody tr .td-highlight {
         &:hover{
             background: #2C73D260;
             color: white;
