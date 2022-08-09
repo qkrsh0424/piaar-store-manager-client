@@ -130,10 +130,10 @@ const OptionStockCycleComponent = (props) => {
             payload: data
         })
 
-        dispatchTableViewData({
-            type: 'INIT_DATA',
-            payload: data
-        })
+        // dispatchTableViewData({
+        //     type: 'INIT_DATA',
+        //     payload: data
+        // })
 
         // W1의 재고주기로 위험군 세팅
         let outOfStockOption = data.filter(r => r.cycleForW1 <= STOCK_CYCLE_MINIMUM);
