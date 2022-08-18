@@ -244,8 +244,8 @@ const ProductManageComponent = () => {
             })
     }
 
-    const __reqModifyReceiveMemo = async (data) => {
-        await productReceiveDataConnect().putOne(data)
+    const __reqModifyReceiveMemo = async (params, data) => {
+        await productReceiveDataConnect().putOne(params, data)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
                     __reqSearchStockStatus(data.productOptionCid);
@@ -297,8 +297,8 @@ const ProductManageComponent = () => {
             })
     }
     
-    const __reqCreateProductReceiveList = async (data) => {
-        await productReceiveDataConnect().postList(data)
+    const __reqCreateProductReceiveList = async (params, data) => {
+        await productReceiveDataConnect().postList(params, data)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('입고등록 되었습니다.');
@@ -413,7 +413,10 @@ const ProductManageComponent = () => {
     // }
 
     const _onAction_modifyReceiveMemo = async (data) => {
-        await __reqModifyReceiveMemo(data);
+        let parmas = {
+            objectType: 'basic'
+        }
+        await __reqModifyReceiveMemo(parmas, data);
     }
 
     const _onAction_modifyReleaseMemo = async (data) => {
@@ -467,7 +470,11 @@ const ProductManageComponent = () => {
             type: 'SET_IS_SUBMIT',
             payload: true
         });
-        await __reqCreateProductReceiveList(data);
+
+        let params = {
+            objectType: 'basic'
+        }
+        await __reqCreateProductReceiveList(params, data);
         onActionCloseBackdrop();
         dispatchSubmitCheck({ 
             type: 'SET_IS_SUBMIT',
