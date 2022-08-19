@@ -7,7 +7,7 @@ export default function HeaderFieldView(props) {
     return(
         <HeaderFieldWrapper>
             <div className="header-top">
-                <div className="modal-title">출고등록</div>
+                <div className="modal-title">입고등록</div>
                 <IconButton className="modal-close-btn" aria-label="close" onClick={() => props.onActionCloseCreateReceiveModal()}>
                     <CloseIcon />
                 </IconButton>
