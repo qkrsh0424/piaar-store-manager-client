@@ -145,6 +145,7 @@ const ReleaseCompleteComponent = (props) => {
         let sortDirection = query.sortDirection || null;
         let sort = sortFormatUtils().getSortWithSortElements(DEFAULT_HEADER_FIELDS, sortBy, sortDirection);
         let matchedCode = query.matchedCode || null;
+        let objectType = 'm2oj';
 
         let params = {
             releaseYn: 'y',
@@ -157,10 +158,11 @@ const ReleaseCompleteComponent = (props) => {
             page: page,
             size: size,
             sort: sort,
-            matchedCode: matchedCode
+            matchedCode: matchedCode,
+            objectType: objectType
         }
 
-        await erpOrderItemDataConnect().searchList(params)
+        await erpOrderItemDataConnect().searchListByPage(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchOrderItemPage({
@@ -184,7 +186,8 @@ const ReleaseCompleteComponent = (props) => {
         let params = {
             ids: ids,
             releaseYn: 'y',
-            matchedCode: query.matchedCode || null
+            matchedCode: query.matchedCode || null,
+            objectType: 'm2oj'
         }
 
         await erpOrderItemDataConnect().refreshOrderList(params)

@@ -62,14 +62,16 @@ const DashboardComponent = (props) => {
         let endDate = query.endDate ? getEndDate(query.endDate) : null;
         let periodType = 'registration';
         let matchedCode = 'optionCode';
+        let objectType = 'basic';
 
         let params = {
             startDate: startDate,
             endDate: endDate,
             periodType: periodType,
-            matchedCode: matchedCode
+            matchedCode: matchedCode,
+            objectType: objectType
         }
-        await erpOrderItemDataConnect().searchBatch(params)
+        await erpOrderItemDataConnect().searchList(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchErpItemAnalysisData({
@@ -96,6 +98,7 @@ const DashboardComponent = (props) => {
         let matchedCode = 'releaseOptionCode';
         let salesYn = 'y';
         let releaseYn = 'y';
+        let objectType = 'basic';
 
         let params = {
             startDate: startDate,
@@ -103,9 +106,10 @@ const DashboardComponent = (props) => {
             periodType: periodType,
             matchedCode: matchedCode,
             salesYn: salesYn,
-            releaseYn: releaseYn
+            releaseYn: releaseYn,
+            objectType: objectType
         }
-        await erpOrderItemDataConnect().searchBatch(params)
+        await erpOrderItemDataConnect().searchList(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchErpReleaseItemAnalysisData({
