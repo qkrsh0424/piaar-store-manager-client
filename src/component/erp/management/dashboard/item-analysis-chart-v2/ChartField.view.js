@@ -1,5 +1,5 @@
 import { ChartFieldWrapper } from "./ItemAnalysisChart.styled";
-import { Bar } from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2';
 import { createGraphData, createGraphOption } from "../../../../../utils/chartUtils";
 
 
@@ -15,7 +15,6 @@ const graphOption = {
     maintainAspectRatio: false
 }
 
-
 export default function ChartFieldView(props) {
     return (
         <ChartFieldWrapper>
@@ -29,7 +28,7 @@ export default function ChartFieldView(props) {
                             if (props.doughnutGraphData.orderItemData[column].labels.length > 0)
                                 return (
                                     <div key={`erp-doughnut-chart-idx` + idx} className='chart-box'>
-                                        <Bar
+                                        <Doughnut
                                             data={createGraphData(props.doughnutGraphData.orderItemData[column])}
                                             options={createGraphOption(graphOption)}
                                         />
@@ -49,7 +48,7 @@ export default function ChartFieldView(props) {
                             if (props.doughnutGraphData.salesItemData[column].labels.length > 0)
                                 return (
                                     <div key={`erp-doughnut-chart-idx` + idx} className='chart-box'>
-                                        <Bar
+                                        <Doughnut
                                             data={createGraphData(props.doughnutGraphData.salesItemData[column])}
                                             options={createGraphOption(graphOption)}
                                         />
@@ -69,7 +68,7 @@ export default function ChartFieldView(props) {
                             if (props.doughnutGraphData.releaseCompleteItemData[column].labels.length > 0)
                                 return (
                                     <div key={`erp-doughnut-chart-idx` + idx} className='chart-box'>
-                                        <Bar
+                                        <Doughnut
                                             data={createGraphData(props.doughnutGraphData.releaseCompleteItemData[column])}
                                             options={createGraphOption(graphOption)}
                                         />
