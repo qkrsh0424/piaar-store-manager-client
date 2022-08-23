@@ -257,8 +257,8 @@ const ProductManageComponent = () => {
             })
     }
 
-    const __reqModifyReleaseMemo = async (data) => {
-        await productReleaseDataConnect().putOne(data)
+    const __reqModifyReleaseMemo = async (params, data) => {
+        await productReleaseDataConnect().putOne(params, data)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
                     __reqSearchStockStatus(data.productOptionCid);
@@ -283,8 +283,8 @@ const ProductManageComponent = () => {
     //         })
     // }
 
-    const __reqCreateProductReleaseList = async (data) => {
-        await productReleaseDataConnect().postList(data)
+    const __reqCreateProductReleaseList = async (params, data) => {
+        await productReleaseDataConnect().postList(params, data)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('출고등록 되었습니다.');
@@ -413,14 +413,17 @@ const ProductManageComponent = () => {
     // }
 
     const _onAction_modifyReceiveMemo = async (data) => {
-        let parmas = {
+        let params = {
             objectType: 'basic'
         }
-        await __reqModifyReceiveMemo(parmas, data);
+        await __reqModifyReceiveMemo(params, data);
     }
 
     const _onAction_modifyReleaseMemo = async (data) => {
-        await __reqModifyReleaseMemo(data);
+        let params = {
+            objectType: 'basic'
+        }
+        await __reqModifyReleaseMemo(params, data);
     }
 
     const _onAction_checkOneTr = (optionId) => {
@@ -456,7 +459,11 @@ const ProductManageComponent = () => {
             type: 'SET_IS_SUBMIT',
             payload: true
         });
-        await __reqCreateProductReleaseList(data);
+
+        let params = {
+            objectType: 'basic'
+        }
+        await __reqCreateProductReleaseList(params, data);
         onActionCloseBackdrop();
         dispatchSubmitCheck({ 
             type: 'SET_IS_SUBMIT',
