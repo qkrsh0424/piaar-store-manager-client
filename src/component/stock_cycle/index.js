@@ -42,7 +42,7 @@ const StockCycleComponent = (props) => {
     }, [])
 
     const __reqSearchCategoryList = async () => {
-        await productCategoryDataConnect().searchList()
+        await productCategoryDataConnect().searchAll()
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message == 'success') {
                     setCategoryList(res.data.data);
