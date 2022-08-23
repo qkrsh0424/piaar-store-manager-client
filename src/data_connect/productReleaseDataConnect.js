@@ -4,13 +4,14 @@ const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 
 const productReleaseDataConnect = () => {
     return {
-        postList: async function(data){
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-release/list`, data,{
+        // Unused api
+        searchList: async function(productOptionCid) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-release/batch/${productOptionCid}`,{
                 withCredentials: true
             })
         },
-        searchList: async function(productOptionCid) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-release/list/${productOptionCid}`,{
+        postList: async function(data){
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-release/batch`, data,{
                 withCredentials: true
             })
         },

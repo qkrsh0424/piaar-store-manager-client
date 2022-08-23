@@ -162,7 +162,7 @@ const ReleaseCompleteComponent = (props) => {
             objectType: objectType
         }
 
-        await erpOrderItemDataConnect().searchListByPage(params)
+        await erpOrderItemDataConnect().searchBatchByPage(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchOrderItemPage({

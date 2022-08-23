@@ -298,7 +298,7 @@ const ProductManageComponent = () => {
     }
     
     const __reqCreateProductReceiveList = async (params, data) => {
-        await productReceiveDataConnect().postList(params, data)
+        await productReceiveDataConnect().postBatch(params, data)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('입고등록 되었습니다.');

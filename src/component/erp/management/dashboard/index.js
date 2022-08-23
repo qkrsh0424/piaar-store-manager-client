@@ -71,7 +71,7 @@ const DashboardComponent = (props) => {
             matchedCode: matchedCode,
             objectType: objectType
         }
-        await erpOrderItemDataConnect().searchList(params)
+        await erpOrderItemDataConnect().searchBatch(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchErpItemAnalysisData({
@@ -109,7 +109,7 @@ const DashboardComponent = (props) => {
             releaseYn: releaseYn,
             objectType: objectType
         }
-        await erpOrderItemDataConnect().searchList(params)
+        await erpOrderItemDataConnect().searchBatch(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchErpReleaseItemAnalysisData({

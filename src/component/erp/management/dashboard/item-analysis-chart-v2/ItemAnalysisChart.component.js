@@ -206,7 +206,7 @@ const ItemAnalysisChartComponent = (props) => {
         bestGraphDataset = {
             ...bestGraphDataset,
             type: 'doughnut',
-            label: '주문 매출액',
+            label: '매출액',
             data: dataset,
             fill: true,
             borderColor: CHART_BG_COLOR,

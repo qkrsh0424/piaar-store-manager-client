@@ -22,19 +22,18 @@ const productReceiveDataConnect = () => {
         //     })
         // }
 
-        postList: async function (params, data) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-receive/list`, data, {
-                params,
-                withCredentials: true
-            })
-        },
         // Unused api
-        // productOptionCid -> productOptionId로 변경
-        searchList: async function (productOptionId) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-receive/list/${productOptionId}`, {
+        searchBatch: async function (productOptionId) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-receive/batch/${productOptionId}`, {
                 params: {
                     objectType: 'basic'
                 },
+                withCredentials: true
+            })
+        },
+        postBatch: async function (params, data) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-receive/batch`, data, {
+                params,
                 withCredentials: true
             })
         },

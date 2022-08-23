@@ -104,7 +104,7 @@ const SalesPerformanceComponent = (props) => {
             objectType: objectType
         }
 
-        await erpOrderItemDataConnect().searchList(params)
+        await erpOrderItemDataConnect().searchBatch(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchErpItemData({
@@ -125,13 +125,13 @@ const SalesPerformanceComponent = (props) => {
     }
     
     const __reqSearchErpOrderItemByParams = async (params) => {
-        let objectType = 'baisc';
+        let objectType = 'basic';
 
         params = {
             ...params,
             objectType
         }
-        await erpOrderItemDataConnect().searchList(params)
+        await erpOrderItemDataConnect().searchBatch(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchErpItemGraphData({
