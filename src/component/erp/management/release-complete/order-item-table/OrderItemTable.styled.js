@@ -111,10 +111,13 @@ const TableFieldWrapper = styled.div`
     }
 
     table tbody tr .td-highlight {
+        background: #d9e9ff60;
+
         &:hover{
             background: #2C73D260;
             color: white;
             font-weight: 600;
+            cursor: pointer;
         }
     }
 
