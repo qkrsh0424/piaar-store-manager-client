@@ -15,7 +15,6 @@ const graphOption = {
     maintainAspectRatio: false
 }
 
-
 export default function ChartFieldView(props) {
     return (
         <ChartFieldWrapper>
