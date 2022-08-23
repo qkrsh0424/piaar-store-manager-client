@@ -282,8 +282,8 @@ const ProductDetailComponent = () => {
             })
     }
 
-    const __reqDeleteProductDetail = async (detailCid) => {
-        await productDetailDataConnect().deleteOne(detailCid)
+    const __reqDeleteProductDetail = async (detailId) => {
+        await productDetailDataConnect().deleteOne(detailId)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('정상적으로 삭제되었습니다.');
@@ -387,8 +387,8 @@ const ProductDetailComponent = () => {
         await __reqDeleteProductOption(optionCid);
     }
 
-    const _onSubmit_deleteProductDetail = async (detailCid) => {
-        await __reqDeleteProductDetail(detailCid);
+    const _onSubmit_deleteProductDetail = async (detailId) => {
+        await __reqDeleteProductDetail(detailId);
     }
 
     const _onSubmit_createProductDetail = async (detailData) => {
@@ -474,7 +474,7 @@ const ProductDetailComponent = () => {
                 selectedOption={selectedOption}
                 detailViewList={detailViewList}
 
-                _onSubmit_deleteProductDetail={(detailCid) => _onSubmit_deleteProductDetail(detailCid)}
+                _onSubmit_deleteProductDetail={(detailId) => _onSubmit_deleteProductDetail(detailId)}
                 _onSubmit_createProductDetail={(detailData) => _onSubmit_createProductDetail(detailData)}
                 _onSubmit_modifyProductDetail={(detailData) => _onSubmit_modifyProductDetail(detailData)}
             ></DetailTableComponent>
