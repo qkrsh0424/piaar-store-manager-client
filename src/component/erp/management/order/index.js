@@ -146,6 +146,9 @@ const OrderComponent = (props) => {
         let sort = sortFormatUtils().getSortWithSortElements(DEFAULT_HEADER_FIELDS, sortBy, sortDirection);
         let matchedCode = query.matchedCode || null;
         let objectType = 'm2oj';
+        if(query.matchedCode === 'releaseOptionCode') {
+            objectType = 'releaseM2oj';   
+        }
 
         let params = {
             salesYn: 'n',
@@ -182,12 +185,20 @@ const OrderComponent = (props) => {
             })
     }
     const __reqRefreshOrderItemList = async (ids) => {
+
         let params = {
             ids: ids,
             salesYn: 'n',
             releaseYn: 'n',
             matchedCode: query.matchedCode || null,
             objectType: 'm2oj'
+        }
+
+        if(query.matchedCode === 'releaseOptionCode') {
+            params = {
+                ...params,
+                objectType: 'releaseM2oj'
+            }
         }
 
         await erpOrderItemDataConnect().refreshOrderList(params)

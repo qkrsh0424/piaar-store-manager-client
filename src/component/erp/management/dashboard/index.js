@@ -98,7 +98,7 @@ const DashboardComponent = (props) => {
         let matchedCode = 'releaseOptionCode';
         let salesYn = 'y';
         let releaseYn = 'y';
-        let objectType = 'basic';
+        let objectType = 'releaseBasic';
 
         let params = {
             startDate: startDate,

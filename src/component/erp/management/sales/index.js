@@ -141,6 +141,10 @@ const SalesComponent = (props) => {
         let matchedCode = query.matchedCode || null;
         let objectType = 'm2oj';
 
+        if(query.matchedCode === 'releaseOptionCode') {
+            objectType = 'releaseM2oj';
+        }
+
         let params = {
             salesYn: 'y',
             releaseYn: releaseYn,
@@ -182,6 +186,13 @@ const SalesComponent = (props) => {
             salesYn: 'y',
             matchedCode: query.matchedCode || null,
             objectType: 'm2oj'
+        }
+
+        if(query.matchedCode === 'releaseOptionCode') {
+            params = {
+                ...params,
+                objectType: 'releaseM2oj'
+            }
         }
 
         await erpOrderItemDataConnect().refreshOrderList(params)

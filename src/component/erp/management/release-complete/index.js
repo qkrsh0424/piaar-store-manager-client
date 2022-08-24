@@ -146,6 +146,9 @@ const ReleaseCompleteComponent = (props) => {
         let sort = sortFormatUtils().getSortWithSortElements(DEFAULT_HEADER_FIELDS, sortBy, sortDirection);
         let matchedCode = query.matchedCode || null;
         let objectType = 'm2oj';
+        if(query.matchedCode === 'releaseOptionCode') {
+            objectType = 'releaseM2oj';
+        }
 
         let params = {
             releaseYn: 'y',
@@ -188,6 +191,13 @@ const ReleaseCompleteComponent = (props) => {
             releaseYn: 'y',
             matchedCode: query.matchedCode || null,
             objectType: 'm2oj'
+        }
+
+        if(query.matchedCode === 'releaseOptionCode') {
+            params = {
+                ...params,
+                objectType: 'releaseM2oj'
+            }
         }
 
         await erpOrderItemDataConnect().refreshOrderList(params)
