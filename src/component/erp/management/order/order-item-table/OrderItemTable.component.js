@@ -350,7 +350,7 @@ const OrderItemTableComponent = (props) => {
                 ></OptionCodeModalComponent>
             </CommonModalComponent>
 
-            {/* 옵션 코드 모달 */}
+            {/* 출고 옵션 코드 모달 */}
             <CommonModalComponent
                 open={releaseOptionCodeModalOpen}
 

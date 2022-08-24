@@ -145,9 +145,9 @@ const ReleaseCompleteComponent = (props) => {
         let sortDirection = query.sortDirection || null;
         let sort = sortFormatUtils().getSortWithSortElements(DEFAULT_HEADER_FIELDS, sortBy, sortDirection);
         let matchedCode = query.matchedCode || null;
-        let objectType = 'm2oj';
-        if(query.matchedCode === 'releaseOptionCode') {
-            objectType = 'releaseM2oj';
+        let objectType = 'releaseBasic';
+        if(query.matchedCode === 'optionCode') {
+            objectType = 'basic';
         }
 
         let params = {
@@ -190,13 +190,13 @@ const ReleaseCompleteComponent = (props) => {
             ids: ids,
             releaseYn: 'y',
             matchedCode: query.matchedCode || null,
-            objectType: 'm2oj'
+            objectType: 'releaseBasic'
         }
 
-        if(query.matchedCode === 'releaseOptionCode') {
+        if(query.matchedCode === 'optionCode') {
             params = {
                 ...params,
-                objectType: 'releaseM2oj'
+                objectType: 'basic'
             }
         }
 

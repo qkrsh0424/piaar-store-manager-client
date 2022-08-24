@@ -78,7 +78,7 @@ const SalesComponent = (props) => {
 
     // Search
     const __reqSearchViewHeaderList = async () => {
-        await erpSalesHeaderDataConnect().searchList()
+        await erpSalesHeaderDataConnect().searchAll()
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchViewHeaderList({
@@ -139,10 +139,10 @@ const SalesComponent = (props) => {
         let sortDirection = query.sortDirection || null;
         let sort = sortFormatUtils().getSortWithSortElements(DEFAULT_HEADER_FIELDS, sortBy, sortDirection);
         let matchedCode = query.matchedCode || null;
-        let objectType = 'm2oj';
-
-        if(query.matchedCode === 'releaseOptionCode') {
-            objectType = 'releaseM2oj';
+        let objectType = 'releaseBasic';
+        
+        if(query.matchedCode === 'optionCode') {
+            objectType = 'basic';
         }
 
         let params = {
@@ -185,13 +185,13 @@ const SalesComponent = (props) => {
             ids: ids,
             salesYn: 'y',
             matchedCode: query.matchedCode || null,
-            objectType: 'm2oj'
+            objectType: 'releaseBasic'
         }
 
-        if(query.matchedCode === 'releaseOptionCode') {
+        if(query.matchedCode === 'optionCode') {
             params = {
                 ...params,
-                objectType: 'releaseM2oj'
+                objectType: 'basic'
             }
         }
 
