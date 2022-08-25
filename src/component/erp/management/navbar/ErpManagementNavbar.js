@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
+import { dateToYYYYMMDD } from '../../../../utils/dateFormatUtils';
 import CommonModalComponent from '../../../module/modal/CommonModalComponent';
 
 const Container = styled.div`
@@ -77,6 +77,12 @@ const ModalButtonBox = styled.div`
     }
 `;
 
+const startDate = dateToYYYYMMDD(new Date());
+const endDate = dateToYYYYMMDD(new Date());
+const orderDefaultPeriodType = 'registration';
+const salesDefaultPeriodType = 'sales';
+const releaseDefaultPeriodType = 'release';
+
 const thisRouters = [
     {
         name: '대시보드',
@@ -88,15 +94,18 @@ const thisRouters = [
     },
     {
         name: '주문 수집 관리',
-        pathname: '/erp/management/order'
+        pathname: '/erp/management/order',
+        params: `?periodType=${orderDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
     },
     {
         name: '판매 상태 관리',
-        pathname: '/erp/management/sales'
+        pathname: '/erp/management/sales',
+        params: `?periodType=${salesDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
     },
     {
         name: '출고 상태 관리',
-        pathname: '/erp/management/release-complete'
+        pathname: '/erp/management/release-complete',
+        params: `?periodType=${releaseDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
     },
     {
         name: '엑셀 폼 관리자',
@@ -143,7 +152,7 @@ const ErpManagementNavbar = (props) => {
                                 key={r.name}
                             >
                                 <Link
-                                    to={r.pathname}
+                                    to={r.pathname + (r.params || '')}
                                     replace={true}
                                 >
                                     <button
@@ -176,7 +185,7 @@ const ErpManagementNavbar = (props) => {
                 {thisRouters.map((r) => (
                     <Link
                         key={r.name}
-                        to={r.pathname}
+                        to={r.pathname + (r.params || '')}
                         replace={true}
                     >
                         <ModalButtonBox>
