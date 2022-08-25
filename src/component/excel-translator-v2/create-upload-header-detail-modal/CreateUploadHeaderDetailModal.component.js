@@ -83,7 +83,21 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
 
                 setDisabledBtn(true);
 
-                props.onActionStoreUploadHeaderForm(uploadHeaderDetails);
+                // cellNumber(헤더 순서) 설정
+                let targetUploadHeaderDetails = [...uploadHeaderDetails];
+                let newDetails = targetUploadHeaderDetails.map((r, idx) => {
+                    return {
+                        ...r,
+                        cellNumber: idx
+                    }
+                })
+
+                dispatchUploadHeaderDetails({
+                    type: 'SET_DATA',
+                    payload: newDetails
+                })
+
+                props.onActionStoreUploadHeaderForm(newDetails);
             },
             formUpload: async (e) => {
                 e.preventDefault();
@@ -107,9 +121,15 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
         },
         action: {
             addCell: () => {
+                // let newDetail = {
+                //     id: uuidv4(),
+                //     colData: '',
+                //     cellType: 'String'
+                // }
                 let newDetail = {
                     id: uuidv4(),
-                    colData: '',
+                    headerName: '',
+                    cellNumber: uploadHeaderDetails.length,
                     cellType: 'String'
                 }
 

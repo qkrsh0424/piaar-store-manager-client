@@ -10,9 +10,10 @@ import { dateToYYYYMMDDhhmmssFile } from "../../../../utils/dateFormatUtils";
 import qs from 'query-string';
 import useSocketClient from "../../../../web-hooks/socket/useSocketClient";
 import CommonModalComponent from "../../../module/modal/CommonModalComponent";
-import ExcelPasswordInputModalComponent from "./excel-password-input-modal/ExcelPasswordInputModal.component";
 import OperatorComponent from "./operator/Operator.component";
 import PreviewTableComponent from "./preview-table/PreviewTable.component";
+import { excelFormDataConnect } from "../../../../data_connect/excelFormDataConnect";
+import ExcelPasswordInputModalComponent from "../../../module/excel/check-password/excel-password-input-modal/ExcelPasswordInputModal.component";
 
 const ErpOrderUploadComponent = (props) => {
     const location = useLocation();
@@ -100,7 +101,7 @@ const ErpOrderUploadComponent = (props) => {
     }
 
     const __reqCheckPwdForUploadedExcelFile = async (formData) => {
-        await erpOrderItemDataConnect().checkPwdForUploadedExcelFile(formData)
+        await excelFormDataConnect().checkPwdForUploadedExcelFile(formData)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'need_password') {
                     dispatchExcelPassword({

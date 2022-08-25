@@ -4,11 +4,11 @@ const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 
 const erpOrderItemDataConnect = () => {
     return {
-        checkPwdForUploadedExcelFile: async function (formData) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/excel/upload/check-password`, formData, {
-                withCredentials: true
-            })
-        },
+        // checkPwdForUploadedExcelFile: async function (formData) {
+        //     return await axios.post(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/excel/upload/check-password`, formData, {
+        //         withCredentials: true
+        //     })
+        // },
         uploadExcelFile: async function (formData, params) {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/erp-order-items/excel/upload`, formData, {
                 params,
