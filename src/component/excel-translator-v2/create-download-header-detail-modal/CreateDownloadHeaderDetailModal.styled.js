@@ -1,6 +1,11 @@
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
+    .text-info {
+        font-size: 14px;
+        padding-left: 10px;
+        color: #6084ff !important;
+    }
 `;
 
 const HeadFieldWrapper = styled.div`

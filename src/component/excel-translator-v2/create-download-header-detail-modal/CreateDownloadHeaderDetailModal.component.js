@@ -15,6 +15,9 @@ import CustomCheckbox from '../../module/checkbox/CustomCheckbox';
 import CustomSelect from '../../module/select/CustomSelect';
 import { excelTranslatorDataConnect } from '../../../data_connect/excelTranslatorDataConnect';
 import SingleBlockButton from '../../module/button/SingleBlockButton';
+import { excelFormDataConnect } from '../../../data_connect/excelFormDataConnect';
+import CommonModalComponent from '../../module/modal/CommonModalComponent';
+import ExcelPasswordInputModalComponent from '../../module/excel/check-password/excel-password-input-modal/ExcelPasswordInputModal.component';
 
 const CreateDownloadHeaderDetailModalComponent = (props) => {
     const uploaderRef = useRef();
@@ -24,6 +27,10 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
 
     const [formLoaderOpen, setFormLoaderOpen] = useState(false);
     const [disabledBtn, setDisabledBtn] = useState(false);
+
+    const [excelPassword, dispatchExcelPassword] = useReducer(excelPasswordReducer, initialExcelPassword);
+    const [excelPasswordInputModalOpen, setExcelPasswordInputModalOpen] = useState(false);
+    const [formData, dispatchFormData] = useReducer(formDataReducer, initialFormData);
 
     useEffect(() => {
         if (!props.selectedTranslatorHeader || !props.selectedTranslatorHeader?.downloadHeaderDetail?.details) {
@@ -57,10 +64,30 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
 
     }, [disabledBtn])
 
+    useEffect(() => {
+        async function uploadExcel() {
+            let params = {
+                rowStartNumber : 1
+            }
+            await __downloadHeaderDetails.req.uploadExcelForm(params);
+        }
+
+        if(!excelPassword) {
+            return;
+        }
+
+        // 암호화되지 않았다면 바로 엑셀 업로드, 그렇지 않다면 비밀번호 입력 모달 오픈
+        if (!excelPassword.isEncrypted) {
+            uploadExcel();
+        }else {
+            setExcelPasswordInputModalOpen(true);
+        }
+    }, [excelPassword])
+
     const __downloadHeaderDetails = {
         req: {
-            uploadExcelForm: async (formData) => {
-                await excelTranslatorDataConnect().postHeaderFile(formData, 1)
+            uploadExcelForm: async (params) => {
+                await excelTranslatorDataConnect().postHeaderFile(formData, params)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             let returnedDetails = [...res.data.data.uploadedData.details];
@@ -81,6 +108,8 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
                             });
 
                             alert("양식이 성공적으로 업로드되었습니다. 양식 설정을 완료해주세요.");
+
+                            dispatchExcelPassword({type: 'CLEAR'})
                         }
                     })
                     .catch(err => {
@@ -91,6 +120,38 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
                             return;
                         }
                         alert(res.data.memo);
+                    })
+            },
+            checkPasswordForExcel: async (formData) => {
+                await excelFormDataConnect().checkPwdForUploadedExcelFile(formData)
+                    .then(res => {
+                        if (res.status === 200 && res.data.message === 'need_password') {
+                            dispatchExcelPassword({
+                                type: 'CHANGE_DATA',
+                                payload: {
+                                    name: 'isEncrypted',
+                                    value: true
+                                }
+                            })
+                        }else {
+                            dispatchExcelPassword({
+                                type: 'CHANGE_DATA',
+                                payload: {
+                                    name: 'isEncrypted',
+                                    value: false
+                                }
+                            })
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+        
+                        if (res?.status === 500) {
+                            alert('undefined error.')
+                            return;
+                        }
+        
+                        alert(res?.data.memo);
                     })
             }
         },
@@ -119,7 +180,13 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
                 var uploadedFormData = new FormData();
                 uploadedFormData.append('file', addFiles[0]);
 
-                await __downloadHeaderDetails.req.uploadExcelForm(uploadedFormData);
+                dispatchFormData({
+                    type: 'SET_DATA',
+                    payload: uploadedFormData
+                })
+
+                await __downloadHeaderDetails.req.checkPasswordForExcel(uploadedFormData);
+                // await __downloadHeaderDetails.req.uploadExcelForm(uploadedFormData);
             }
         },
         action: {
@@ -173,6 +240,18 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
                     payload: newDetails
                 })
                 __downloadHeaderDetails.action.formLoaderClose();
+            },
+            checkPassword: async (password) => {
+                let rowStartNumber = 1;
+                let excelPassword = password || null;
+                
+                let params = {
+                    rowStartNumber,
+                    excelPassword
+                }
+        
+                await __downloadHeaderDetails.req.uploadExcelForm(params);
+                _onAction_closeExcelPasswordInputModal();
             }
         },
         change: {
@@ -246,6 +325,10 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
                 })
             }
         }
+    }
+
+    const _onAction_closeExcelPasswordInputModal = () => {
+        setExcelPasswordInputModalOpen(false);
     }
 
     if (!downloadHeaderDetails) {
@@ -353,6 +436,7 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
                         </>
                     )}
                 />
+                <span className='text-info'>* 다운로드 양식 업로드 시 헤더는 1번에 위치해야 합니다.</span>
                 <ControlField
                     onActionFormLoaderOpen={__downloadHeaderDetails.action.formLoaderOpen}
                     onActionFormUploaderOpen={__downloadHeaderDetails.action.formUploaderOpen}
@@ -377,6 +461,20 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
                 onChange={__downloadHeaderDetails.submit.formUpload}
                 hidden
             />
+
+            {/* Excel Password Input Modal */}
+            <CommonModalComponent
+                open={excelPasswordInputModalOpen}
+                maxWidth={'xs'}
+
+                onClose={_onAction_closeExcelPasswordInputModal}
+            >
+                <ExcelPasswordInputModalComponent
+                    excelPassword={excelPassword}
+
+                    _onSubmit_uploadExcelFile={__downloadHeaderDetails.action.checkPassword}
+                ></ExcelPasswordInputModalComponent>
+            </CommonModalComponent>
         </Container >
     )
 }
@@ -539,4 +637,32 @@ function BodyField(props) {
             </div>
         </BodyFieldWrapper >
     );
+}
+
+const initialExcelPassword = null;
+const initialFormData = null;
+
+const excelPasswordReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
+        case 'CLEAR':
+            return initialExcelPassword;
+        default: return {...state};
+    }
+}
+
+const formDataReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialFormData;
+        default: return {...state};
+    }
 }

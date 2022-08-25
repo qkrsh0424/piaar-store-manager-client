@@ -17,9 +17,12 @@ import { excelFormDataConnect } from "../../../data_connect/excelFormDataConnect
 
 const CreateUploadHeaderDetailModalComponent = (props) => {
     const uploaderRef = useRef();
+    
     const [uploadHeaderDetails, dispatchUploadHeaderDetails] = useReducer(uploadHeaderDetailsReducer, initialUploadHeaderDetails);
+    
     const [formLoaderOpen, setFormLoaderOpen] = useState(false);
     const [disabledBtn, setDisabledBtn] = useState(false);
+    
     const [excelPassword, dispatchExcelPassword] = useReducer(excelPasswordReducer, initialExcelPassword);
     const [excelPasswordInputModalOpen, setExcelPasswordInputModalOpen] = useState(false);
     const [formData, dispatchFormData] = useReducer(formDataReducer, initialFormData);
@@ -104,6 +107,38 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
                         }
                         alert(res.data.memo);
                     })
+            },
+            checkPasswordForExcel: async (formData) => {
+                await excelFormDataConnect().checkPwdForUploadedExcelFile(formData)
+                    .then(res => {
+                        if (res.status === 200 && res.data.message === 'need_password') {
+                            dispatchExcelPassword({
+                                type: 'CHANGE_DATA',
+                                payload: {
+                                    name: 'isEncrypted',
+                                    value: true
+                                }
+                            })
+                        }else {
+                            dispatchExcelPassword({
+                                type: 'CHANGE_DATA',
+                                payload: {
+                                    name: 'isEncrypted',
+                                    value: false
+                                }
+                            })
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+        
+                        if (res?.status === 500) {
+                            alert('undefined error.')
+                            return;
+                        }
+        
+                        alert(res?.data.memo);
+                    })
             }
         },
         submit: {
@@ -150,7 +185,7 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
                     payload: uploadedFormData
                 })
         
-                await __reqCheckPwdForUploadedExcelFile(uploadedFormData);
+                await __uploadHeaderDetails.req.checkPasswordForExcel(uploadedFormData);
                 // await __uploadHeaderDetails.req.uploadExcelForm(uploadedFormData, props.selectedTranslatorHeader.rowStartNumber);
             }
         },
@@ -262,39 +297,6 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
                 })
             }
         }
-    }
-
-    const __reqCheckPwdForUploadedExcelFile = async (formData) => {
-        await excelFormDataConnect().checkPwdForUploadedExcelFile(formData)
-            .then(res => {
-                if (res.status === 200 && res.data.message === 'need_password') {
-                    dispatchExcelPassword({
-                        type: 'CHANGE_DATA',
-                        payload: {
-                            name: 'isEncrypted',
-                            value: true
-                        }
-                    })
-                }else {
-                    dispatchExcelPassword({
-                        type: 'CHANGE_DATA',
-                        payload: {
-                            name: 'isEncrypted',
-                            value: false
-                        }
-                    })
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-
-                if (res?.status === 500) {
-                    alert('undefined error.')
-                    return;
-                }
-
-                alert(res?.data.memo);
-            })
     }
 
     const _onAction_closeExcelPasswordInputModal = () => {
