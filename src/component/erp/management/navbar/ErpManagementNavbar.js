@@ -86,7 +86,8 @@ const releaseDefaultPeriodType = 'release';
 const thisRouters = [
     {
         name: '대시보드',
-        pathname: '/erp/management/dashboard'
+        pathname: '/erp/management/dashboard',
+        params: `?startDate=${startDate}&endDate=${endDate}`
     },
     {
         name: '주문 파일 업로드',

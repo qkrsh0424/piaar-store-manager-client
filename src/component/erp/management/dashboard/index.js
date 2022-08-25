@@ -25,22 +25,22 @@ const DashboardComponent = (props) => {
         onActionClose: onActionCloseBackdrop,
     } = useBackdropHook();
 
-    useEffect(() => {
-        let sDate = dateToYYYYMMDD(new Date());
-        let eDate = dateToYYYYMMDD(new Date());
+    // useEffect(() => {
+    //     let sDate = dateToYYYYMMDD(new Date());
+    //     let eDate = dateToYYYYMMDD(new Date());
 
-        query.startDate = sDate;
-        query.endDate = eDate;
+    //     query.startDate = sDate;
+    //     query.endDate = eDate;
 
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
-            query: { ...query }
-        }),
-            {
-                replace: true
-            }
-        )
-    }, [])
+    //     navigate(qs.stringifyUrl({
+    //         url: location.pathname,
+    //         query: { ...query }
+    //     }),
+    //         {
+    //             replace: true
+    //         }
+    //     )
+    // }, [])
 
     useEffect(() => {
         async function fetchInit() {
