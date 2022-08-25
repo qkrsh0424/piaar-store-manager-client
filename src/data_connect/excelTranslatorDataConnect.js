@@ -54,14 +54,12 @@ const excelTranslatorDataConnect = () => {
                 withCredentials: true
             })
         },
-        postHeaderFile: async function (formData, rowStartNumber) {
+        postHeaderFile: async function (formData, params) {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/excel-translator/upload/header`, formData, {
                 headers: {
                     "content-types": "multipart/form-data"
                 },
-                params: {
-                    rowStartNumber
-                },
+                params,
                 withCredentials: true
             })
         }

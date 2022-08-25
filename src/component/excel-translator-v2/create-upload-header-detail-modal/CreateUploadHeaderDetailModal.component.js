@@ -11,12 +11,18 @@ import MoveDownIcon from '@mui/icons-material/MoveDown';
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { excelTranslatorDataConnect } from "../../../data_connect/excelTranslatorDataConnect";
 import SingleBlockButton from "../../module/button/SingleBlockButton";
+import CommonModalComponent from "../../module/modal/CommonModalComponent";
+import ExcelPasswordInputModalComponent from "../../module/excel/check-password/excel-password-input-modal/ExcelPasswordInputModal.component";
+import { excelFormDataConnect } from "../../../data_connect/excelFormDataConnect";
 
 const CreateUploadHeaderDetailModalComponent = (props) => {
     const uploaderRef = useRef();
     const [uploadHeaderDetails, dispatchUploadHeaderDetails] = useReducer(uploadHeaderDetailsReducer, initialUploadHeaderDetails);
     const [formLoaderOpen, setFormLoaderOpen] = useState(false);
     const [disabledBtn, setDisabledBtn] = useState(false);
+    const [excelPassword, dispatchExcelPassword] = useReducer(excelPasswordReducer, initialExcelPassword);
+    const [excelPasswordInputModalOpen, setExcelPasswordInputModalOpen] = useState(false);
+    const [formData, dispatchFormData] = useReducer(formDataReducer, initialFormData);
 
     useEffect(() => {
         if (!props.selectedTranslatorHeader || !props.selectedTranslatorHeader?.uploadHeaderDetail?.details) {
@@ -42,10 +48,31 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
         return () => clearTimeout(timeout);
     }, [disabledBtn]);
 
+    useEffect(() => {
+        async function uploadExcel() {
+            let rowStartNumber = props.selectedTranslatorHeader.rowStartNumber || null;
+            let params = {
+                rowStartNumber
+            }
+            await __uploadHeaderDetails.req.uploadExcelForm(params);
+        }
+
+        if(!excelPassword) {
+            return;
+        }
+
+        // 암호화되지 않았다면 바로 엑셀 업로드, 그렇지 않다면 비밀번호 입력 모달 오픈
+        if (!excelPassword.isEncrypted) {
+            uploadExcel();
+        }else {
+            setExcelPasswordInputModalOpen(true);
+        }
+    }, [excelPassword])
+
     const __uploadHeaderDetails = {
         req: {
-            uploadExcelForm: async (formData, rowStartNumber) => {
-                await excelTranslatorDataConnect().postHeaderFile(formData, rowStartNumber)
+            uploadExcelForm: async (params) => {
+                await excelTranslatorDataConnect().postHeaderFile(formData, params)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             let returnedDetails = [...res.data.data.uploadedData.details];
@@ -64,6 +91,8 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
                                 payload: _.cloneDeep(newDetails)
                             })
                             alert("양식이 성공적으로 업로드되었습니다. 양식 설정을 완료해주세요.");
+                            
+                            dispatchExcelPassword({type: 'CLEAR'})
                         }
                     })
                     .catch(err => {
@@ -116,7 +145,13 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
                 var uploadedFormData = new FormData();
                 uploadedFormData.append('file', addFiles[0]);
 
-                await __uploadHeaderDetails.req.uploadExcelForm(uploadedFormData, props.selectedTranslatorHeader.rowStartNumber);
+                dispatchFormData({
+                    type: 'SET_DATA',
+                    payload: uploadedFormData
+                })
+        
+                await __reqCheckPwdForUploadedExcelFile(uploadedFormData);
+                // await __uploadHeaderDetails.req.uploadExcelForm(uploadedFormData, props.selectedTranslatorHeader.rowStartNumber);
             }
         },
         action: {
@@ -173,6 +208,18 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
                     payload: newDetails
                 })
                 __uploadHeaderDetails.action.formLoaderClose();
+            },
+            checkPassword: async (password) => {
+                let rowStartNumber = props.selectedTranslatorHeader.rowStartNumber || null;
+                let excelPassword = password || null;
+                
+                let params = {
+                    rowStartNumber,
+                    excelPassword
+                }
+        
+                await __uploadHeaderDetails.req.uploadExcelForm(params);
+                _onAction_closeExcelPasswordInputModal();
             }
         },
         change: {
@@ -215,6 +262,43 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
                 })
             }
         }
+    }
+
+    const __reqCheckPwdForUploadedExcelFile = async (formData) => {
+        await excelFormDataConnect().checkPwdForUploadedExcelFile(formData)
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'need_password') {
+                    dispatchExcelPassword({
+                        type: 'CHANGE_DATA',
+                        payload: {
+                            name: 'isEncrypted',
+                            value: true
+                        }
+                    })
+                }else {
+                    dispatchExcelPassword({
+                        type: 'CHANGE_DATA',
+                        payload: {
+                            name: 'isEncrypted',
+                            value: false
+                        }
+                    })
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (res?.status === 500) {
+                    alert('undefined error.')
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const _onAction_closeExcelPasswordInputModal = () => {
+        setExcelPasswordInputModalOpen(false);
     }
 
     if (!uploadHeaderDetails) {
@@ -338,6 +422,20 @@ const CreateUploadHeaderDetailModalComponent = (props) => {
                 onChange={__uploadHeaderDetails.submit.formUpload}
                 hidden
             />
+
+            {/* Excel Password Input Modal */}
+            <CommonModalComponent
+                open={excelPasswordInputModalOpen}
+                maxWidth={'xs'}
+
+                onClose={_onAction_closeExcelPasswordInputModal}
+            >
+                <ExcelPasswordInputModalComponent
+                    excelPassword={excelPassword}
+
+                    _onSubmit_uploadExcelFile={__uploadHeaderDetails.action.checkPassword}
+                ></ExcelPasswordInputModalComponent>
+            </CommonModalComponent>
         </Container>
     )
 }
@@ -446,4 +544,32 @@ function BodyField(props) {
             </div>
         </CreateFormFieldWrapper>
     );
+}
+
+const initialExcelPassword = null;
+const initialFormData = null;
+
+const excelPasswordReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
+        case 'CLEAR':
+            return initialExcelPassword;
+        default: return {...state};
+    }
+}
+
+const formDataReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialFormData;
+        default: return {...state};
+    }
 }

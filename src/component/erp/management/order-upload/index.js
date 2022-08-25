@@ -260,28 +260,6 @@ const ErpOrderUploadComponent = (props) => {
         onActionCloseBackdrop();
     }
 
-    const _onSubmit_uploadExcelFile = async (password) => {
-        onActionOpenBackdrop();
-        let params = {};
-        if(excelPassword.isEncrypted) {
-            params = {
-                ...params,
-                excelPassword: password
-            }
-        }
-
-        if(query.headerId) {
-            params = {
-                ...params,
-                headerId: query.headerId
-            }
-        }
-
-        await __reqUploadExcelFile(formData, params);
-        onActionCloseBackdrop();
-        _onAction_closeExcelPasswordInputModal();
-    }
-
     const _onSubmit_createOrderItems = async () => {
         if (!excelDataList || excelDataList.length <= 0) {
             return;
@@ -323,6 +301,28 @@ const ErpOrderUploadComponent = (props) => {
             type: 'SET_DATA',
             payload: data
         })
+    }
+
+    const _onSubmit_uploadExcelFile = async (password) => {
+        onActionOpenBackdrop();
+        let params = {};
+        if(excelPassword.isEncrypted) {
+            params = {
+                ...params,
+                excelPassword: password
+            }
+        }
+
+        if(query.headerId) {
+            params = {
+                ...params,
+                headerId: query.headerId
+            }
+        }
+
+        await __reqUploadExcelFile(formData, params);
+        onActionCloseBackdrop();
+        _onAction_closeExcelPasswordInputModal();
     }
 
     const _onAction_closeExcelPasswordInputModal = () => {
