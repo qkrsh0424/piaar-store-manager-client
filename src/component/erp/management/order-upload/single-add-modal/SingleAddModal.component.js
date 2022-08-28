@@ -3,6 +3,7 @@ import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
 import PageContentFieldView from "./PageContentField.view";
 import PageHeaderFieldView from "./PageHeaderField.view";
 import { Container } from "./SingleAddModal.styled";
+import { v4 as uuidv4 } from 'uuid';
 
 const DEFAULT_HEADER_DETAILS = getDefaultHeaderDetails();
 const SingleAddModalComponent = (props) => {
@@ -19,6 +20,16 @@ const SingleAddModalComponent = (props) => {
             payload: DEFAULT_HEADER_DETAILS.slice(1, 34)
         })
 
+    }, [])
+
+    useEffect(() => {
+        dispatchDataValue({
+            type: 'CHANGE_DATA',
+            payload: {
+                name: 'id',
+                value: uuidv4()
+            }
+        })
     }, [])
 
     const onActionChangeDataValue = (e) => {

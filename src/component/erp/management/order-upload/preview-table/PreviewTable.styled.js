@@ -79,6 +79,24 @@ const TableFieldWrapper = styled.div`
         border-right: 1px solid #e0e0e060;
     }
 
+    .table-box .fixed-col-right {
+        position: sticky;
+        background: white;
+        right: 0;
+        z-index:10;
+        border-left: 1px solid #e0e0e060;
+        box-shadow: -6px 0 10px -7px #e0e0e0;
+    }
+
+    .table-box .fixed-col-right-2 {
+        position: sticky;
+        background: white;
+        right: 48px;
+        z-index:10;
+        border-left: 1px solid #e0e0e060;
+        box-shadow: -6px 0 10px -7px #e0e0e0;
+    }
+
     .table-box .delete-button-el{
         position: relative;
         overflow: hidden;
@@ -115,6 +133,60 @@ const TableFieldWrapper = styled.div`
     .table-box::-webkit-scrollbar-thumb{
         background:#00000010;
         border-radius: 10px;
+    }
+
+    .fix-button-el{
+        width: 25px;
+        height: 25px;
+        position: relative;
+
+        padding: 0; 
+
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 3px;
+
+        cursor: pointer;
+
+        &:hover{
+            background: #2C73D2;
+            border: 1px solid #2C73D2;
+
+            & .fix-button-icon{
+                opacity: 1;
+                filter: invert(100%);
+            }
+        }
+
+        @media all and (max-width: 992px){
+            width: 18px;
+            height: 18px;
+        }
+    }
+    
+    .table-box .edit-button-el {
+        background-color: #d2d2d2;
+        border: 1px solid #d2d2d2;
+
+        &:hover{
+            background: #676767;
+            border: 1px solid #676767;
+
+            & .fix-button-icon{
+                opacity: 1;
+                filter: invert(100%);
+            }
+        }
+    }
+
+    .fix-button-icon{
+        width: 90%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+
+        transform: translate(-50%, -50%);
+        opacity: 0.6;
     }
 `;
 

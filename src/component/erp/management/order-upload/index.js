@@ -14,6 +14,7 @@ import OperatorComponent from "./operator/Operator.component";
 import PreviewTableComponent from "./preview-table/PreviewTable.component";
 import { excelFormDataConnect } from "../../../../data_connect/excelFormDataConnect";
 import ExcelPasswordInputModalComponent from "../../../module/excel/check-password/excel-password-input-modal/ExcelPasswordInputModal.component";
+import { v4 as uuidv4 } from 'uuid';
 
 const ErpOrderUploadComponent = (props) => {
     const location = useLocation();
@@ -329,6 +330,34 @@ const ErpOrderUploadComponent = (props) => {
         setExcelPasswordInputModalOpen(false);
     }
 
+    // 단일 erpOrderItem 업데이트
+    const _onAction_updateErpOrderItemOne = (targetItem) => {
+        let data = excelDataList.map(r => {
+            return r.id === targetItem.id ? targetItem : r;
+        })
+
+        dispatchExcelDataList({
+            type: 'SET_DATA',
+            payload: data
+        });
+    }
+
+    // 단일 erpOrderItem 복사. id값 설정.
+    const _onAction_copyErpOrderItemOne = (targetId) => {
+        let targetData = excelDataList.filter(r => r.id === targetId)[0];
+        targetData = {
+            ...targetData,
+            id: uuidv4()
+        }
+
+        let data = excelDataList.concat(targetData);
+
+        dispatchExcelDataList({
+            type: 'SET_DATA',
+            payload: data
+        });
+    }
+
     return (
         <>
             {connected && excelTranslatorData &&
@@ -345,6 +374,8 @@ const ErpOrderUploadComponent = (props) => {
                         excelDataList={excelDataList}
 
                         _onAction_deleteDataOne={_onAction_deleteDataOne}
+                        _onAction_updateErpOrderItemOne={_onAction_updateErpOrderItemOne}
+                        _onAction_copyErpOrderItemOne={_onAction_copyErpOrderItemOne}
                     ></PreviewTableComponent>
                 </>
             }
