@@ -2,7 +2,7 @@ import { useReducer, useState } from "react";
 import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
 import { dateToYYYYMMDDhhmmssWithInvalid } from "../../../../../utils/dateFormatUtils";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
-import FixOrderItemModalComponent from "../../order/fix-order-item-modal/FixOrderItemModal.component";
+import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
 import { Container } from "./PreviewTable.styled";
 import TableFieldView from "./TableField.view";
 
