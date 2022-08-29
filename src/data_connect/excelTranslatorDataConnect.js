@@ -24,11 +24,12 @@ const excelTranslatorDataConnect = () => {
                 withCredentials: true
             })
         },
-        postFile: async function (formData) {
+        postFile: async function (formData, params) {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/excel-translator/upload`, formData, {
                 headers: {
                     "content-types": "multipart/form-data"
                 },
+                params,
                 withCredentials: true
             })
         },
