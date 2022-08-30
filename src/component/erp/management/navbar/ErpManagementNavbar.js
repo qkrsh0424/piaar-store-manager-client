@@ -140,7 +140,6 @@ const ErpManagementNavbar = (props) => {
             releaseCompleteHeaderId: ''
         }
         setDefaultHeader(data);
-
     }, []);
 
     return (

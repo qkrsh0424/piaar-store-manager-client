@@ -1,5 +1,4 @@
 import { ControlButtonFieldWrapper } from "./Operator.styled";
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 function Button({ element, onClick, style }) {
     return (
@@ -26,7 +25,7 @@ export default function ControlButtonFieldView(props) {
                         onChange={props.onChangeExcelTranslator}
                     >
                         <option value=''>피아르</option>
-                        {props.excelTranslatorData?.map(r => {
+                        {props.excelTranslatorViewData?.map(r => {
                             return (
                                 <option key={r.id} value={r.id}>
                                     {`${r.uploadHeaderTitle} > ${r.downloadHeaderTitle} (헤더: ${r.rowStartNumber})`}
@@ -38,6 +37,12 @@ export default function ControlButtonFieldView(props) {
                         <Button
                             element={'양식 확인'}
                             onClick={props.onActionOpenExcelTranslatorSearchModal}
+                        ></Button>
+                    </div>
+                    <div>
+                        <Button
+                            element={'양식 설정'}
+                            onClick={props.onActionOpenExcelTranslatorFormControlModal}
                         ></Button>
                     </div>
                 </div>

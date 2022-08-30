@@ -54,6 +54,35 @@ const ControlButtonFieldWrapper = styled.div`
 
         &:focus{
             outline: none;
+            /* cursor: ; */
+        }
+
+        @media all and (max-width:992px) {
+            width: 100%;
+        }
+    }
+
+    .header-selector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 300px;
+        height: 40px;
+        border: 1px solid #e1e1e1;
+        border-radius: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        transition: opacity 0.1s linear;
+        /* background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center; */
+
+        &:hover {
+            /* cursor: pointer; */
+            background-color: var(--erp-main-color);
+            border: 1px solid #2C73D2;
+            color: #fff;
+            transition: 0.2s;
         }
 
         @media all and (max-width:992px) {
@@ -62,7 +91,6 @@ const ControlButtonFieldWrapper = styled.div`
     }
 
     .button-box{
-
         padding: 5px;
         
         @media only screen and (max-width:992px){
