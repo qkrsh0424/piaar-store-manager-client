@@ -5,42 +5,35 @@ const Container = styled.div`
 `;
 
 const HeaderContainer = styled.div`
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-
-    @media screen and (max-width: 992px){
-        grid-template-columns: repeat(1, 1fr);
-    }
+    display: flex;
+    align-items: center;
 `;
 
 const TitleSelectorWrapper = styled.div`
-    display: grid;
-    grid-template-columns: 50% auto;
+    display: flex;
     padding: 20px 0px;
     align-items: center;
+    flex-wrap: wrap;
 
     @media only screen and (max-width: 992px) {
         padding: 10px;
         grid-template-columns: 100%;
         row-gap: 20px;
         place-content: center;
+        flex-direction: column;
     }
 
     .selector {
         text-align: center;
+        width: 350px;
 
         @media only screen and (max-width: 992px) {
-            font-size: 10px;
-            grid-row: end;
+            width: 100%;
         }
     }
 
     .button-box {
         display: flex;
-
-        @media only screen and (max-width: 992px) {
-            justify-content: flex-end;
-        }
     }
 
     div button {
@@ -59,6 +52,11 @@ const TitleSelectorWrapper = styled.div`
         @media only screen and (max-width: 992px) {
             padding: 6px;
         }
+    }
+
+    .invert-icon {
+        opacity: 1;
+        filter: invert(100%);
     }
 `;
 

@@ -79,7 +79,7 @@ const OperatorComponent = (props) => {
     }, [location]);
 
     useEffect(() => {
-        if(!excelTranslatorViewFormIds) {
+        if(!(excelTranslatorViewFormIds && props.excelTranslatorData)) {
             return;
         }
 
@@ -89,7 +89,7 @@ const OperatorComponent = (props) => {
             type: 'SET_DATA',
             payload: data
         })
-    }, [excelTranslatorViewFormIds])
+    }, [props.excelTranslatorData, excelTranslatorViewFormIds])
 
     const onActionOpenFileUploader = () => {
         fileUploaderRef.current.click();

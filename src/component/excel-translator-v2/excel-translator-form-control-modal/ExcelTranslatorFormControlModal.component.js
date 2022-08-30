@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
-import { useLocalStorageHook } from "../../../../../hooks/local_storage/useLocalStorageHook";
-import valueUtils from "../../../../../utils/valueUtils";
+import { useLocalStorageHook } from "../../../hooks/local_storage/useLocalStorageHook";
+import valueUtils from "../../../utils/valueUtils";
 import ButtonFieldView from "./ButtonField.view";
 import { Container } from "./ExcelTranslatorFormControl.styled";
 import HeaderFieldView from "./HeaderField.view";
