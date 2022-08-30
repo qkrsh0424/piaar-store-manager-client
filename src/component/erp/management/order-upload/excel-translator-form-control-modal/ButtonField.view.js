@@ -17,8 +17,9 @@ export default function ButtonFieldView(props) {
                 </div>
                 <div>
                     <button
-                        type='submit'
+                        type='button'
                         className='button-el'
+                        onClick={props.onActionUpdateExcelTranslatorViewOrder}
                     >
                         저장
                         <Ripple color={'#e0e0e0'} duration={1000} />

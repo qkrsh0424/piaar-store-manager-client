@@ -7,18 +7,17 @@ import HeaderFieldView from "./HeaderField.view";
 import SelectorFieldView from "./SelectorField.view";
 
 const ExcelTranslatorFormControlModalComponent = (props) => {
-    const [excelTranslatorViewFormIds, setExcelTranslatorViewFormIds] = useLocalStorageHook("excelTranslatorViewOrder", []);
     
     const [excelTranslatorData, dispatchExcelTranslatorData] = useReducer(excelTranslatorDataReducer, initialExcelTranslatorData);
     const [excelTranslatorViewData, dispatchExcelTranslatorViewData] = useReducer(excelTranslatorViewDataReducer, initialExcelTranslatorViewData);
 
     useEffect(() => {
-        if(!(props.excelTranslatorData && excelTranslatorViewFormIds)) {
+        if(!(props.excelTranslatorData && props.excelTranslatorViewFormIds)) {
             return;
         }
 
-        let translator = props.excelTranslatorData.filter(r => !excelTranslatorViewFormIds.includes(r.id));
-        let viewTranslator = excelTranslatorViewFormIds.map(r => props.excelTranslatorData.filter(r2 => r2.id === r)[0]);
+        let translator = props.excelTranslatorData.filter(r => !props.excelTranslatorViewFormIds.includes(r.id));
+        let viewTranslator = props.excelTranslatorViewFormIds.map(r => props.excelTranslatorData.filter(r2 => r2.id === r)[0]);
 
         dispatchExcelTranslatorData({
             type: 'SET_DATA',
@@ -28,7 +27,7 @@ const ExcelTranslatorFormControlModalComponent = (props) => {
             type: 'SET_DATA',
             payload: viewTranslator
         })
-    }, [props.excelTranslatorData, excelTranslatorViewFormIds])
+    }, [props.excelTranslatorData, props.excelTranslatorViewFormIds])
 
     const onActionAddViewForm = (e, id) => {
         e.preventDefault();
@@ -84,7 +83,7 @@ const ExcelTranslatorFormControlModalComponent = (props) => {
     // 헤더 세팅 업데이트
     const onActionUpdateExcelTranslatorViewOrder = () => {
         let ids = excelTranslatorViewData.map(r => r.id);
-        setExcelTranslatorViewFormIds(ids);
+        props.onActionUpdateExcelTranslatorViewIds(ids);
     }
 
     // dnd 헤더 순서 설정

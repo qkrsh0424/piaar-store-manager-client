@@ -182,6 +182,19 @@ const OperatorComponent = (props) => {
         setExcelTranslatorFormControlModalOpen(false);
     }
 
+    const onActionUpdateExcelTranslatorViewIds = (ids) => {
+        setExcelTranslatorViewFormIds(ids);
+
+        navigate({
+            pathname: pathname
+        }, {
+            replace: true
+        })
+
+        onActionCloseExcelTranslatorFormControlModal();
+        alert('저장되었습니다.');
+    }
+
     return (
         <>
             <Layout>
@@ -243,8 +256,10 @@ const OperatorComponent = (props) => {
             >
                 <ExcelTranslatorFormControlModalComponent
                     excelTranslatorData={props.excelTranslatorData}
+                    excelTranslatorViewFormIds={excelTranslatorViewFormIds}
 
                     onActionCloseExcelTranslatorFormControlModal={onActionCloseExcelTranslatorFormControlModal}
+                    onActionUpdateExcelTranslatorViewIds={onActionUpdateExcelTranslatorViewIds}
                 ></ExcelTranslatorFormControlModalComponent>
             </CommonModalComponent>
         </>
