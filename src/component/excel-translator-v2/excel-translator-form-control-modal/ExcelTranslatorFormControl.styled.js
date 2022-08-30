@@ -93,7 +93,6 @@ const ButtonFieldWrapper = styled.div`
 
     .flex-box {
         display: flex;
-        /* flex-wrap: wrap; */
         justify-content: flex-end;
         gap: 10px;
 
@@ -105,10 +104,10 @@ const ButtonFieldWrapper = styled.div`
     .button-el {
         overflow: hidden;
         position: relative;
-        padding: 7px;
+        padding: 5px;
         width: 170px;
-        background: var(--erp-main-color);
-        border: 1px solid var(--erp-main-color);
+        background: var(--piaar-main-color);
+        border: 1px solid var(--piaar-main-color);
         border-radius: 2px;
         font-size: 16px;
         font-weight: 600;
@@ -146,10 +145,10 @@ const SelectorFieldWrapper = styled.div`
     }
 
     .box-info {
-        padding: 5px;
+        padding: 3px;
         place-content: center;
-        background-color: var(--erp-main-color);
-        border: 1px solid var(--erp-main-color);
+        background-color: var(--piaar-main-color);
+        border: 1px solid var(--piaar-main-color);
         color: white;
         font-weight: 600;
     }

@@ -12,10 +12,11 @@ const HeaderContainer = styled.div`
 const TitleSelectorWrapper = styled.div`
     display: flex;
     padding: 20px 0px;
-    align-items: center;
+    /* align-items: center; */
     flex-wrap: wrap;
 
     @media only screen and (max-width: 992px) {
+        width: 100%;
         padding: 10px;
         grid-template-columns: 100%;
         row-gap: 20px;
@@ -34,6 +35,10 @@ const TitleSelectorWrapper = styled.div`
 
     .button-box {
         display: flex;
+
+        @media only screen and (max-width: 992px) {
+            justify-content: flex-end;
+        }
     }
 
     div button {

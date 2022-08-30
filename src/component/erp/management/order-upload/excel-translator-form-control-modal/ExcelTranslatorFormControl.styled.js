@@ -105,7 +105,7 @@ const ButtonFieldWrapper = styled.div`
     .button-el {
         overflow: hidden;
         position: relative;
-        padding: 7px;
+        padding: 5px;
         width: 170px;
         background: var(--erp-main-color);
         border: 1px solid var(--erp-main-color);
@@ -146,7 +146,7 @@ const SelectorFieldWrapper = styled.div`
     }
 
     .box-info {
-        padding: 5px;
+        padding: 3px;
         place-content: center;
         background-color: var(--erp-main-color);
         border: 1px solid var(--erp-main-color);
