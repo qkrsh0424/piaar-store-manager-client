@@ -54,7 +54,7 @@ const ControlBarComponent = (props) => {
         }
 
         let data = excelTranslatorViewFormIds.map(r => props.excelTranslatorHeaderList.filter(r2 => r2.id === r)[0]);
-
+        
         dispatchExcelTranslatorViewData({
             type: 'SET_DATA',
             payload: data
