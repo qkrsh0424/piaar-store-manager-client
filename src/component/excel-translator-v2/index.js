@@ -246,8 +246,8 @@ const ExcelTranslatorComponent = () => {
 
     const __uploadedExcelData = {
         req: {
-            uploadExcelFile: async (formData) => {
-                await excelTranslatorDataConnect().postFile(formData)
+            uploadExcelFile: async (formData, params) => {
+                await excelTranslatorDataConnect().postFile(formData, params)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             setUploadedExcelData(res.data.data);
@@ -286,9 +286,9 @@ const ExcelTranslatorComponent = () => {
             }
         },
         action: {
-            uploadExcelFile: async (formData) => {
+            uploadExcelFile: async (formData, params) => {
                 onActionOpenBackdrop();
-                await __uploadedExcelData.req.uploadExcelFile(formData);
+                await __uploadedExcelData.req.uploadExcelFile(formData, params);
                 onActionCloseBackdrop();
             },
             downloadExcelFile: async (selectedHeader) => {
@@ -363,8 +363,8 @@ const ExcelTranslatorComponent = () => {
                 excelTranslatorHeaderList={excelTranslatorHeaderList}
                 uploadedExcelData={uploadedExcelData}
 
-                onActionUploadExcelFile={(formData) => __uploadedExcelData.action.uploadExcelFile(formData)}
-                onActionDownloadExcelFile={(selectedHeader) => __uploadedExcelData.action.downloadExcelFile(selectedHeader)}
+                onActionUploadExcelFile={__uploadedExcelData.action.uploadExcelFile}
+                onActionDownloadExcelFile={__uploadedExcelData.action.downloadExcelFile}
             />
 
             {/* Backdrop Loading */}

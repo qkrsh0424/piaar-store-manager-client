@@ -26,7 +26,7 @@ export default function TitleSelectorFieldView(props) {
                             defaultValue=''
                             sx={{ height: '43px' }}
                         >
-                            {props.excelTranslatorHeaderList?.map((data, idx) => {
+                            {props.excelTranslatorViewData?.map((data, idx) => {
                                 return (
                                     <MenuItem key={'excel_translator_title' + idx} value={data.id} sx={{ display: 'flex', padding: '5px 10px', justifyContent: 'space-around' }}>
                                         <span>{data.uploadHeaderTitle}</span>
@@ -49,6 +49,9 @@ export default function TitleSelectorFieldView(props) {
                     disabled={props.disabledBtn}
                 >
                     <DeleteForeverIcon />
+                </button>
+                <button type="button" onClick={props.onActionOpenExcelTranslatorFormControlModal}>
+                    <img className='invert-icon' src='./assets/icon/setting_black_icon.png' />
                 </button>
             </div>
         </TitleSelectorWrapper>

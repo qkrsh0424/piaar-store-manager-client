@@ -6,6 +6,8 @@ import SingleAddModalComponent from "../single-add-modal/SingleAddModal.componen
 import ControlButtonFieldView from "./ControlButtonField.view";
 import { Container, TipFieldWrapper, Wrapper } from "./Operator.styled";
 import { useLocation, useNavigate } from 'react-router-dom';
+import ExcelTranslatorFormControlModalComponent from "../excel-translator-form-control-modal/ExcelTranslatorFormControlModal.component";
+import { useLocalStorageHook } from "../../../../../hooks/local_storage/useLocalStorageHook";
 
 function Layout({ children }) {
     return (
@@ -54,6 +56,11 @@ const OperatorComponent = (props) => {
     const [selectedExcelTranslator, dispatchSelectedExcelTranslator] = useReducer(selectedExcelTranslatorReducer, initialSelectedExcelTranslator);
     const [excelTranslatorSearchModalOpen, setExcelTranslatorSearchodalOpen] = useState(false);
 
+    const [excelTranslatorViewFormIds, setExcelTranslatorViewFormIds] = useLocalStorageHook("excelTranslatorViewOrder", []);
+
+    const [excelTranslatorViewData, dispatchExcelTranslatorViewData] = useReducer(excelTranslatorViewDataReducer, initialExcelTranslatorViewData);
+    const [excelTranslatorFormControlModalOpen, setExcelTranslatorFormControlModalOpen] = useState(false);
+
     useEffect(() => {
         let headerId = params.headerId;
         
@@ -69,8 +76,20 @@ const OperatorComponent = (props) => {
             type: 'SET_DATA',
             payload: excelTranslatorHeader
         });
-
     }, [location]);
+
+    useEffect(() => {
+        if(!(excelTranslatorViewFormIds && props.excelTranslatorData)) {
+            return;
+        }
+
+        let data = excelTranslatorViewFormIds.map(r => props.excelTranslatorData.filter(r2 => r2.id === r)[0]);
+
+        dispatchExcelTranslatorViewData({
+            type: 'SET_DATA',
+            payload: data
+        })
+    }, [props.excelTranslatorData, excelTranslatorViewFormIds])
 
     const onActionOpenFileUploader = () => {
         fileUploaderRef.current.click();
@@ -155,6 +174,27 @@ const OperatorComponent = (props) => {
         }
     }
 
+    const onActionOpenExcelTranslatorFormControlModal = () => {
+        setExcelTranslatorFormControlModalOpen(true);
+    }
+
+    const onActionCloseExcelTranslatorFormControlModal = () => {
+        setExcelTranslatorFormControlModalOpen(false);
+    }
+
+    const onActionUpdateExcelTranslatorViewIds = (ids) => {
+        setExcelTranslatorViewFormIds(ids);
+
+        navigate({
+            pathname: pathname
+        }, {
+            replace: true
+        })
+
+        onActionCloseExcelTranslatorFormControlModal();
+        alert('저장되었습니다.');
+    }
+
     return (
         <>
             <Layout>
@@ -167,7 +207,7 @@ const OperatorComponent = (props) => {
                     hidden
                 />
                 <ControlButtonFieldView
-                    excelTranslatorData={props.excelTranslatorData}
+                    excelTranslatorViewData={excelTranslatorViewData}
                     selectedExcelTranslator={selectedExcelTranslator}
 
                     onActionOpenFileUploader={onActionOpenFileUploader}
@@ -176,6 +216,7 @@ const OperatorComponent = (props) => {
                     onActionOpenSingleAddModal={onActionOpenSingleAddModal}
                     onChangeExcelTranslator={onChangeExcelTranslator}
                     onActionOpenExcelTranslatorSearchModal={onActionOpenExcelTranslatorSearchModal}
+                    onActionOpenExcelTranslatorFormControlModal={onActionOpenExcelTranslatorFormControlModal}
                 ></ControlButtonFieldView>
                 <Tip></Tip>
             </Layout>
@@ -205,6 +246,22 @@ const OperatorComponent = (props) => {
                     onActionCloseExcelTranslatorSearchModal={onActionCloseExcelTranslatorSearchModal}
                 ></ExcelTranslatorSearchModalComponent>
             </CommonModalComponent>
+
+            {/* Excel Translator Control Modal */}
+            <CommonModalComponent
+                open={excelTranslatorFormControlModalOpen}
+                maxWidth={'md'}
+
+                onClose={onActionCloseExcelTranslatorFormControlModal}
+            >
+                <ExcelTranslatorFormControlModalComponent
+                    excelTranslatorData={props.excelTranslatorData}
+                    excelTranslatorViewFormIds={excelTranslatorViewFormIds}
+
+                    onActionCloseExcelTranslatorFormControlModal={onActionCloseExcelTranslatorFormControlModal}
+                    onActionUpdateExcelTranslatorViewIds={onActionUpdateExcelTranslatorViewIds}
+                ></ExcelTranslatorFormControlModalComponent>
+            </CommonModalComponent>
         </>
     );
 }
@@ -212,8 +269,19 @@ const OperatorComponent = (props) => {
 export default OperatorComponent;
 
 const initialSelectedExcelTranslator = '';
+const initialExcelTranslatorViewData = [];
 
 const selectedExcelTranslatorReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialSelectedExcelTranslator;
+        default: return initialSelectedExcelTranslator;
+    }
+}
+
+const excelTranslatorViewDataReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
             return action.payload;

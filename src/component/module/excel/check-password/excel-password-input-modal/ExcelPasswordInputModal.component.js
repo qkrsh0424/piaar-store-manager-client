@@ -1,6 +1,6 @@
 import { useReducer, useRef } from "react";
 import { useEffect } from "react";
-import { Container, HeaderFieldViewWrapper, InputFieldViewWrapper,ButtonFieldViewWrapper } from "./ExcelPasswordInputModal.styled";
+import { Container, HeaderFieldViewWrapper, InputFieldViewWrapper, ButtonFieldViewWrapper } from "./ExcelPasswordInputModal.styled";
 
 function HeaderFieldView() {
     return (
@@ -31,27 +31,27 @@ function ButtonFieldView() {
     )
 }
 
-const ExcelPasswordInputModalComponent = (props) => {
+const ExcelPasswordInputModalComponent = ({ excelPassword, _onSubmit_uploadExcelFile}) => {
     const passwordInputRef = useRef();
 
     const [passwordValue, dispatchPasswordValue] = useReducer(passwordValueReducer, initialPasswordValue);
 
     useEffect(() => {
-        if(!props.excelPassword) {
+        if(!excelPassword) {
             return;
         }
 
-        if(!props.excelPassword.isEncrypted) {
+        if(!excelPassword.isEncrypted) {
             return;
         }
 
         dispatchPasswordValue({
             type: 'SET_DATA',
-            payload: props.excelPassword
+            payload: excelPassword
         })
 
         passwordInputRef.current.focus();
-    }, [props.excelPassword])
+    }, [excelPassword])
 
     const onChangeExcelPassword = (e) => {
         dispatchPasswordValue({
@@ -67,7 +67,7 @@ const ExcelPasswordInputModalComponent = (props) => {
         e.preventDefault();
 
         let password = passwordValue.password;
-        props._onSubmit_uploadExcelFile(password);
+        _onSubmit_uploadExcelFile(password);
     }
 
     return(

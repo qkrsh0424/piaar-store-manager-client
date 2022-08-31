@@ -17,19 +17,21 @@ const HeaderFieldViewWrapper = styled.div`
 `;
 
 const InputFieldViewWrapper = styled.div`
+    width: 100%;
 
     input {
-        width: 250px;
+        width: 100%;
         border: 1px solid #bdbdbd;
         padding: 10px;
         font-size: 14px;
-        box-sizing: border-box;
     }
 `;
 
 const ButtonFieldViewWrapper = styled.div`
+    width: 40%;
+    
     .button-el {
-        width: 100px;
+        width: 100%;
         padding: 10px 0;
         font-size: 14px;
         font-weight: 500;

@@ -141,6 +141,7 @@ const ProductManageTableComponent = (props) => {
 
     const onActionOpenModifyProductOptionModal = async (e, productId, optionId) => {
         e.preventDefault();
+        e.stopPropagation();
 
         let product = props.productViewList.filter(r => r.product.id === productId)[0];
         let option = product.options.filter(r => r.id === optionId)[0];

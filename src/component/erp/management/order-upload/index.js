@@ -10,9 +10,11 @@ import { dateToYYYYMMDDhhmmssFile } from "../../../../utils/dateFormatUtils";
 import qs from 'query-string';
 import useSocketClient from "../../../../web-hooks/socket/useSocketClient";
 import CommonModalComponent from "../../../module/modal/CommonModalComponent";
-import ExcelPasswordInputModalComponent from "./excel-password-input-modal/ExcelPasswordInputModal.component";
 import OperatorComponent from "./operator/Operator.component";
 import PreviewTableComponent from "./preview-table/PreviewTable.component";
+import { excelFormDataConnect } from "../../../../data_connect/excelFormDataConnect";
+import ExcelPasswordInputModalComponent from "../../../module/excel/check-password/excel-password-input-modal/ExcelPasswordInputModal.component";
+import { v4 as uuidv4 } from 'uuid';
 
 const ErpOrderUploadComponent = (props) => {
     const location = useLocation();
@@ -100,7 +102,7 @@ const ErpOrderUploadComponent = (props) => {
     }
 
     const __reqCheckPwdForUploadedExcelFile = async (formData) => {
-        await erpOrderItemDataConnect().checkPwdForUploadedExcelFile(formData)
+        await excelFormDataConnect().checkPwdForUploadedExcelFile(formData)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'need_password') {
                     dispatchExcelPassword({
@@ -259,28 +261,6 @@ const ErpOrderUploadComponent = (props) => {
         onActionCloseBackdrop();
     }
 
-    const _onSubmit_uploadExcelFile = async (password) => {
-        onActionOpenBackdrop();
-        let params = {};
-        if(excelPassword.isEncrypted) {
-            params = {
-                ...params,
-                excelPassword: password
-            }
-        }
-
-        if(query.headerId) {
-            params = {
-                ...params,
-                headerId: query.headerId
-            }
-        }
-
-        await __reqUploadExcelFile(formData, params);
-        onActionCloseBackdrop();
-        _onAction_closeExcelPasswordInputModal();
-    }
-
     const _onSubmit_createOrderItems = async () => {
         if (!excelDataList || excelDataList.length <= 0) {
             return;
@@ -324,8 +304,58 @@ const ErpOrderUploadComponent = (props) => {
         })
     }
 
+    const _onSubmit_uploadExcelFile = async (password) => {
+        onActionOpenBackdrop();
+        let params = {};
+        if(excelPassword.isEncrypted) {
+            params = {
+                ...params,
+                excelPassword: password
+            }
+        }
+
+        if(query.headerId) {
+            params = {
+                ...params,
+                headerId: query.headerId
+            }
+        }
+
+        await __reqUploadExcelFile(formData, params);
+        onActionCloseBackdrop();
+        _onAction_closeExcelPasswordInputModal();
+    }
+
     const _onAction_closeExcelPasswordInputModal = () => {
         setExcelPasswordInputModalOpen(false);
+    }
+
+    // 단일 erpOrderItem 업데이트
+    const _onAction_updateErpOrderItemOne = (targetItem) => {
+        let data = excelDataList.map(r => {
+            return r.id === targetItem.id ? targetItem : r;
+        })
+
+        dispatchExcelDataList({
+            type: 'SET_DATA',
+            payload: data
+        });
+    }
+
+    // 단일 erpOrderItem 복사. id값 설정.
+    const _onAction_copyErpOrderItemOne = (targetId) => {
+        let targetData = excelDataList.filter(r => r.id === targetId)[0];
+        targetData = {
+            ...targetData,
+            id: uuidv4()
+        }
+
+        let data = excelDataList.concat(targetData);
+
+        dispatchExcelDataList({
+            type: 'SET_DATA',
+            payload: data
+        });
     }
 
     return (
@@ -344,6 +374,8 @@ const ErpOrderUploadComponent = (props) => {
                         excelDataList={excelDataList}
 
                         _onAction_deleteDataOne={_onAction_deleteDataOne}
+                        _onAction_updateErpOrderItemOne={_onAction_updateErpOrderItemOne}
+                        _onAction_copyErpOrderItemOne={_onAction_copyErpOrderItemOne}
                     ></PreviewTableComponent>
                 </>
             }

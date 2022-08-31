@@ -7,6 +7,8 @@ import CommonModalComponent from '../../module/modal/CommonModalComponent';
 import CreateTranslatorHeaderModal from '../create-translator-header-modal/CreateTranslatorHeaderModal.component';
 import ModifyTranslatorHeaderModal from '../modify-translator-header-modal/ModifyTranslatorHeaderModal.component';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocalStorageHook } from '../../../hooks/local_storage/useLocalStorageHook';
+import ExcelTranslatorFormControlModalComponent from '../excel-translator-form-control-modal/ExcelTranslatorFormControlModal.component';
 
 const ControlBarComponent = (props) => {
     const location = useLocation();
@@ -18,6 +20,10 @@ const ControlBarComponent = (props) => {
     const [selectedTranslatorHeader, dispatchSelectedTranslatorHeader] = useReducer(selectedTranslatorHeaderReducer, initialSelectedTranslatorHeader);
     const [createTranslatorHeaderModalOpen, setCreateTranslatorHeaderModalOpen] = useState(false);
     const [modifyTranslatorHeaderModalOpen, setModifyTranslatorHeaderModalOpen] = useState(false);
+
+    const [excelTranslatorViewFormIds, setExcelTranslatorViewFormIds] = useLocalStorageHook("excelTranslatorViewOrder", []);
+    const [excelTranslatorViewData, dispatchExcelTranslatorViewData] = useReducer(excelTranslatorViewDataReducer, initialExcelTranslatorViewData);
+    const [excelTranslatorFormControlModalOpen, setExcelTranslatorFormControlModalOpen] = useState(false);
 
     const [disabledBtn, setDisabledBtn] = useState(false);
 
@@ -41,6 +47,19 @@ const ControlBarComponent = (props) => {
             payload: headerTitleState
         });
     }, [params.headerId, props.excelTranslatorHeaderList]);
+
+    useEffect(() => {
+        if(!(excelTranslatorViewFormIds && props.excelTranslatorHeaderList)) {
+            return;
+        }
+
+        let data = excelTranslatorViewFormIds.map(r => props.excelTranslatorHeaderList.filter(r2 => r2.id === r)[0]);
+        
+        dispatchExcelTranslatorViewData({
+            type: 'SET_DATA',
+            payload: data
+        })
+    }, [props.excelTranslatorHeaderList, excelTranslatorViewFormIds])
 
     useEffect(() => {
         if (!disabledBtn) {
@@ -118,11 +137,32 @@ const ControlBarComponent = (props) => {
         }
     }
 
+    const onActionOpenExcelTranslatorFormControlModal = () => {
+        setExcelTranslatorFormControlModalOpen(true);
+    }
+
+    const onActionCloseExcelTranslatorFormControlModal = () => {
+        setExcelTranslatorFormControlModalOpen(false);
+    }
+
+    const onActionUpdateExcelTranslatorViewIds = (ids) => {
+        setExcelTranslatorViewFormIds(ids);
+
+        navigate({
+            pathname: pathname
+        }, {
+            replace: true
+        })
+
+        onActionCloseExcelTranslatorFormControlModal();
+        alert('저장되었습니다.');
+    }
+
     return (
         <Container>
             <HeaderContainer>
                 <TitleSelectorFieldView
-                    excelTranslatorHeaderList={props.excelTranslatorHeaderList}
+                    excelTranslatorViewData={excelTranslatorViewData}
                     selectedTranslatorHeader={selectedTranslatorHeader}
                     disabledBtn={disabledBtn}
 
@@ -130,6 +170,7 @@ const ControlBarComponent = (props) => {
                     onCreateTranslatorHeaderModalOpen={__selectedTranslatorHeader.action.openCreateTranslatorHeaderModal}
                     onModifyTranslatorHeaderModalOpen={__selectedTranslatorHeader.action.openModifyTranslatorHeaderModal}
                     onActionDeleteTranslatorHeader={__selectedTranslatorHeader.submit.deleteTranslatorHeader}
+                    onActionOpenExcelTranslatorFormControlModal={onActionOpenExcelTranslatorFormControlModal}
                 />
             </HeaderContainer>
 
@@ -161,12 +202,32 @@ const ControlBarComponent = (props) => {
                     />
                 </CommonModalComponent>
             }
+
+            {/* Excel Translator Control Modal */}
+            {excelTranslatorFormControlModalOpen &&
+                <CommonModalComponent
+                    open={excelTranslatorFormControlModalOpen}
+                    maxWidth={'md'}
+
+                    onClose={onActionCloseExcelTranslatorFormControlModal}
+                >
+                    <ExcelTranslatorFormControlModalComponent
+                        excelTranslatorData={props.excelTranslatorHeaderList}
+                        excelTranslatorViewFormIds={excelTranslatorViewFormIds}
+
+                        onActionCloseExcelTranslatorFormControlModal={onActionCloseExcelTranslatorFormControlModal}
+                        onActionUpdateExcelTranslatorViewIds={onActionUpdateExcelTranslatorViewIds}
+                    ></ExcelTranslatorFormControlModalComponent>
+                </CommonModalComponent>
+            }
         </Container>
     )
 }
 export default ControlBarComponent;
 
 const initialSelectedTranslatorHeader = null;
+const initialSelectedExcelTranslator = '';
+const initialExcelTranslatorViewData = [];
 
 const selectedTranslatorHeaderReducer = (state, action) => {
     switch (action.type) {
@@ -175,5 +236,25 @@ const selectedTranslatorHeaderReducer = (state, action) => {
         case 'CLEAR':
             return null;
         default: return { ...state }
+    }
+}
+
+const selectedExcelTranslatorReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialSelectedExcelTranslator;
+        default: return initialSelectedExcelTranslator;
+    }
+}
+
+const excelTranslatorViewDataReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialSelectedExcelTranslator;
+        default: return initialSelectedExcelTranslator;
     }
 }

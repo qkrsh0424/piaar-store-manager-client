@@ -27,6 +27,20 @@ export default function TableFieldView(props) {
                                     <th key={index} className="fixed-header" scope="col">{data.originCellName}</th>
                                 )
                             })}
+                            <th
+                                className="fixed-header fixed-col-right-2"
+                                style={{ zIndex: 12 }}
+                                width={50}
+                            >
+                                복사
+                            </th>
+                            <th
+                                className="fixed-header fixed-col-right"
+                                style={{ zIndex: 12 }}
+                                width={50}
+                            >
+                                수정
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,6 +98,32 @@ export default function TableFieldView(props) {
                                     <td>{rowData.managementMemo8}</td>
                                     <td>{rowData.managementMemo9}</td>
                                     <td>{rowData.managementMemo10}</td>
+                                    <td className='fixed-col-right-2'>
+                                        <button
+                                            type='button'
+                                            className='fix-button-el'
+                                            onClick={(e) => props.onActionCopyErpOrderItem(e, rowData.id)}
+                                        >
+                                            <img
+                                                src={'/assets/icon/content_copy_icon.png'}
+                                                className='fix-button-icon'
+                                                alt=""
+                                            ></img>
+                                        </button>
+                                    </td>
+                                    <td className='fixed-col-right'>
+                                        <button
+                                            type='button'
+                                            className='fix-button-el edit-button-el'
+                                            onClick={(e) => props.onActionOpenFixItemModal(e, rowData)}
+                                        >
+                                            <img
+                                                src={'/assets/icon/edit_black_icon.png'}
+                                                className='fix-button-icon'
+                                                alt=""
+                                            ></img>
+                                        </button>
+                                    </td>
                                 </tr>
                             )
                         })}
