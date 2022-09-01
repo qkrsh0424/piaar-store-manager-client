@@ -107,7 +107,8 @@ export default function OptionInfoFormFieldView(props) {
                         className='form-control'
                         name='stockUnit'
                         value={props.createOption.stockUnit}
-                        onChange={(e) => props.onChangeInputValue(e)}
+                        // onChange={(e) => props.onChangeInputValue(e)}
+                        disabled
                     />
                 </div>
                 <div className="input-group mb-3">

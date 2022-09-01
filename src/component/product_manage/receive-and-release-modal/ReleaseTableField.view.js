@@ -21,7 +21,7 @@ export default function ReleaseTableFieldView(props) {
                             <span>옵션관리코드</span>
                         </th>
                         <th scope="col">
-                            <span>출고개수</span>
+                            <span>출고수량</span>
                         </th>
                         <th scope="col" className="large-cell">
                             <span>출고메모</span>

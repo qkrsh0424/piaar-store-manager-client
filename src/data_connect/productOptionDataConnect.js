@@ -4,22 +4,25 @@ const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 
 const productOptionDataConnect = () => {
     return {
-        getList: async function () {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/list`, {
+        searchAll: async function (params) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-options/all`, {
+                params,
                 withCredentials: true
             })
         },
-        searchOptionListByProduct: async function (productCid) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/list/${productCid}`, {
+        // Unused API
+        searchBatchByProductCid: async function (productCid) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-options/batch/${productCid}`, {
                 withCredentials: true
             })
         },
-        postOne: async function(productOption){
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-option/one`, productOption,{
+        // Unused API
+        postOne: async function(productOption) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-options`, productOption, {
                 withCredentials: true
             })
         },
-        postOptionAndPackages: async function(productOption){
+        postOptionAndPackages: async function(productOption) {
             let optionDto = {
                 id: productOption.id,
                 code: productOption.code,
@@ -48,12 +51,13 @@ const productOptionDataConnect = () => {
                 optionDto: optionDto,
                 packageDtos: packageDtos
             }
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-option/option-packages`, json, {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-options/option-packages`, json, {
                 withCredentials: true
             })
         },
+        // Unused API
         putOne: async function (productOption) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/product-option/one`, productOption, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/product-options`, productOption, {
                 withCredentials: true
             })
         },
@@ -87,46 +91,61 @@ const productOptionDataConnect = () => {
                 packageDtos: packageDtos
             }
 
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/product-option/option-packages`, json, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/product-options/option-packages`, json, {
                 withCredentials: true
             })
         },
-        deleteOne: async function(optionCid){
-            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product-option/one/${optionCid}`,{
+        // deleteOne: async function(optionCid){
+        //     return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product-options/one/${optionCid}`,{
+        //         withCredentials: true
+        //     })
+        // },
+        deleteOne: async function(parentOptionId){
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product-options/${parentOptionId}`,{
                 withCredentials: true
             })
         },
-        searchStockStatus: async function(optionCid) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/${optionCid}`, {
+        // Deprecated API
+        // searchStockStatus: async function(optionCid) {
+        //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-options/stock/status/${optionCid}`, {
+        //         withCredentials: true
+        //     })
+        // },
+        // Unused API
+        // searchAllStockStatus: async function() {
+        //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-options/stock/status/list`, {
+        //         withCredentials: true
+        //     })
+        // },
+        // Deprecated API
+        // searchListStockStatus: async function(startDate, endDate) {
+        //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-options/stock/status`, {
+        //         params: {
+        //             startDate: startDate,
+        //             endDate: endDate
+        //         },
+        //         withCredentials: true
+        //     })
+        // },
+        searchForStockStatus: async function(params) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-options/stock/status`, {
+                params,
                 withCredentials: true
             })
         },
-        searchAllStockStatus: async function() {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/list`, {
-                withCredentials: true
-            })
-        },
-        searchListStockStatus: async function(startDate, endDate) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status`, {
-                params: {
-                    startDate: startDate,
-                    endDate: endDate
-                },
-                withCredentials: true
-            })
-        },
-        searchList: async function () {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/list-m2oj`, {
-                withCredentials: true
-            })
-        },
+        // Deprecated API
+        // searchList: async function () {
+        //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-options/list-m2oj`, {
+        //         withCredentials: true
+        //     })
+        // },
         searchReleaseLocation: async function () {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/release-location`, {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-options/release-location`, {
                 withCredentials: true
             })
         },
         searchStockCycle: async function (params) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock-cycle`, {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-options/stock-cycle`, {
                 params,
                 withCredentials: true
             })

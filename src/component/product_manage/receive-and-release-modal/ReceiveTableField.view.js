@@ -21,7 +21,7 @@ export default function ReceiveTableFieldView(props) {
                             <span>옵션관리코드</span>
                         </th>
                         <th scope="col">
-                            <span>입고개수</span>
+                            <span>입고수량</span>
                         </th>
                         <th scope="col" className="large-cell">
                             <span>입고메모</span>

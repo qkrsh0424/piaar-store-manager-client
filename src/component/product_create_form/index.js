@@ -140,8 +140,11 @@ const ProductCreateComponent = () => {
 
     useEffect(() => {
         async function fetchInit() {
+            let params = {
+                objectType: 'basic'
+            }
             await __reqSearchProductCategory();
-            await __reqSearchProductOption();
+            await __reqSearchProductOption(params);
         }
         fetchInit();
     }, []);
@@ -172,8 +175,8 @@ const ProductCreateComponent = () => {
             })
     }
 
-    const __reqSearchProductOption = async () => {
-        await productOptionDataConnect().getList()
+    const __reqSearchProductOption = async (params) => {
+        await productOptionDataConnect().searchAll(params)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
                     setOptionList(res.data.data);

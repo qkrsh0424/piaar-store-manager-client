@@ -112,8 +112,8 @@ const OrderComponent = (props) => {
             })
     }
 
-    const __reqSearchProductOptionList = async () => {
-        await productOptionDataConnect().searchList()
+    const __reqSearchProductOptionList = async (params) => {
+        await productOptionDataConnect().searchAll(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchProductOptionList({
@@ -384,9 +384,12 @@ const OrderComponent = (props) => {
     }
 
     useEffect(() => {
+        let params = {
+            objectType: 'm2oj'
+        }
         __reqSearchReleaseLocationOfProductOption();
         __reqSearchViewHeaderList();
-        __reqSearchProductOptionList();
+        __reqSearchProductOptionList(params);
         __reqSearchDownloadExcelHeaders();
     }, []);
 

@@ -190,8 +190,8 @@ const ProductManageTableComponent = (props) => {
         if (window.confirm('옵션을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
             let product = props.productViewList.filter(r => r.product.id === productId)[0];
             let option = product.options.filter(r => r.id === productOptionId)[0];
-            let optionCid = option.cid;
-            await props._onSubmit_deleteProductOption(optionCid);
+            let optionId = option.id;
+            await props._onSubmit_deleteProductOption(optionId);
         }
     }
 
