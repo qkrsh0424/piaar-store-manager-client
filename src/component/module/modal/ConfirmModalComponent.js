@@ -43,6 +43,59 @@ const MessageBox = styled.div`
         display: inline-block;
         background: #b9c2e160;
     }
+
+    .info-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 40px;
+    }
+
+    .info-box {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-title {
+        width: 100px;
+    }
+
+    .text-input {
+        margin: 0 10px;
+        width: 250px;
+        height: 100px;
+        padding: 5px;
+        border: 1px solid #e1e1e1;
+        border-radius: 3px;
+        font-size: 14px;
+        box-sizing: border-box;
+        resize: both;
+    }
+
+    .select-item{
+        margin: 0 10px;
+        width: 250px;
+        height: 45px;
+        padding: 5px;
+        border: 1px solid #e1e1e1;
+        border-radius: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+
+        &:focus{
+            outline: none;
+        }
+
+        @media all and (max-width:992px) {
+            width: 100%;
+            margin: 10px 0 0 0;
+        }
+    }
 `;
 
 const MemoBox = styled.div`
@@ -139,7 +192,7 @@ const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, _onSubmit
                     <form onSubmit={(e) => _onSubmit(e, confirmInputValue.memo)}>
                         <MemoBox>
                             <div className='form-title'>메모</div>
-                            <input placeholder='재고반영 메모를 입력해주세요.' name='memo' onChange={onChangeInputValue} value={confirmInputValue?.memo || ''}></input>
+                            <input placeholder='메모를 입력해주세요.' name='memo' onChange={onChangeInputValue} value={confirmInputValue?.memo || ''}></input>
                         </MemoBox>
                         <ButtonWrapper>
                             <ButtonBox>

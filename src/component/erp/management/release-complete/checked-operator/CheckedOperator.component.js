@@ -1,5 +1,4 @@
-import { useState } from "react";
-import Ripple from "../../../../module/button/Ripple";
+import { useReducer, useState } from "react";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
@@ -19,6 +18,9 @@ const CheckedOperatorComponent = (props) => {
     const [reflectStockConfirmModalOpen, setReflectStockConfirmModalOpen] = useState(false);
     const [cancelStockConfirmModalOpen, setCancelStockConfirmModalOpen] = useState(false);
     const [releaseListModalOpen, setReleaseListModalOpen] = useState(false);
+    const [returnConfirmModalOpen, setReturnConfirmModalOpen] = useState(false);
+
+    const [returnReason, dispatchReturnReason] = useReducer(returnReasonReducer, initialReturnReason);
 
     const onActionOpenSalesConfirmModal = () => {
         if (props.checkedOrderItemList?.length <= 0) {
@@ -250,6 +252,53 @@ const CheckedOperatorComponent = (props) => {
         props._onAction_downloadReleaseItemList(data);
     }
 
+    const onActionOpenReturnConfirmModal = () => {
+        if (props.checkedOrderItemList?.length <= 0) {
+            alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        setReturnConfirmModalOpen(true);
+    }
+
+    const onActionCloseReturnConfirmModal = () => {
+        setReturnConfirmModalOpen(false);
+
+        dispatchReturnReason({
+            type: 'CLEAR'
+        })
+    }
+
+    const onChangeSelectReturnType = (e) => {
+        e.preventDefault();
+
+        dispatchReturnReason({
+            type: 'SET_DATA',
+            payload: {
+                name: e.target.name,
+                value: e.target.value
+            }
+        })
+    }
+
+    const onActionConfirmReturn = () => {
+        if(!returnReason || !returnReason.typeCid) {
+            alert('반품 요청 사유는 필수값입니다.');
+            return;
+        }
+
+        let body = props.checkedOrderItemList?.map(r => {
+            return {
+                returnReasonTypeCid: returnReason.typeCid,
+                returnReasonDetail: returnReason.detail,
+                erpOrderItemId: r.id
+            }
+        });
+        
+        props._onAction_createReturnItem(body);
+        onActionCloseReturnConfirmModal();
+    }
+
     return (
         <>
             <Container>
@@ -264,6 +313,7 @@ const CheckedOperatorComponent = (props) => {
                     onActionOpenCancelStockConfirmModal={onActionOpenCancelStockConfirmModal}
                     onActionOpenReleaseListModal={onActionOpenReleaseListModal}
                     onActionCloseReleaseListModal={onActionCloseReleaseListModal}
+                    onActionOpenReturnConfirmModal={onActionOpenReturnConfirmModal}
                 />
             </Container>
 
@@ -295,6 +345,48 @@ const CheckedOperatorComponent = (props) => {
                 onConfirm={onActionConfirmRelease}
                 onClose={onActionCloseReleaseConfirmModal}
             />
+            {/* 반품 처리 확인 모달 */}
+            <ConfirmModalComponent
+                open={returnConfirmModalOpen}
+                title={'판품 처리 확인 메세지'}
+                message={
+                    <>
+                        <div className='info-wrapper'>
+                            <div className='info-box'>
+                                <span className='input-title'>반품 요청사유</span>
+                                <div>
+                                    <select
+                                        className='select-item'
+                                        name='typeCid'
+                                        value={returnReason?.typeCid || ''}
+                                        onChange={onChangeSelectReturnType}
+                                    >
+                                        <option value=''>선택</option>
+                                        {props.returnTypeList?.map(r => {
+                                            return (
+                                                <option key={`return-type-idx` + r.cid} value={r.cid}>{r.type}</option>
+                                            )
+                                        })}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <span className='input-title'>반품 상세사유</span>
+                                <div>
+                                    <textarea className='text-input' name='detail' onChange={onChangeSelectReturnType} value={returnReason?.detail || ''} placeholder='반품요청 상세 사유를 입력해 주세요.' />
+                                </div>
+                            </div>
+                        </div>
+                        <div>[ {props.checkedOrderItemList?.length || 0} ] 건의 데이터를 반품 처리 하시겠습니까? </div>
+                    </>
+                }
+
+                maxWidth={'sm'}
+                onConfirm={onActionConfirmReturn}
+                onClose={onActionCloseReturnConfirmModal}
+            />
+
+
             {/* 옵션 코드 변경 모달 */}
             <CommonModalComponent
                 open={optionCodeModalOpen}
@@ -365,7 +457,6 @@ const CheckedOperatorComponent = (props) => {
                     checkedOrderItemList={props.checkedOrderItemList}
                     selectedMatchCode={props.selectedMatchCode}
 
-                    // onConfirm={(optionCode) => onActionChangeReleaseOptionCode(optionCode)}
                     onActionDownloadReleaseItemList={onActionDownloadReleaseItemList}
                 ></ReleaseListModalComponent>
             </CommonModalComponent>
@@ -373,3 +464,20 @@ const CheckedOperatorComponent = (props) => {
     );
 }
 export default CheckedOperatorComponent;
+
+const initialReturnReason = null;
+
+const returnReasonReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'SET_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
+        case 'CLEAR':
+            return initialReturnReason;
+        default: return initialReturnReason;
+    }
+}
