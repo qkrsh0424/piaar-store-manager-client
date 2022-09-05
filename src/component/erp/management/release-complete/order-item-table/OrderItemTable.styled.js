@@ -58,7 +58,7 @@ const TableFieldWrapper = styled.div`
         vertical-align: middle !important;
         text-align: center;
         background: #fff;
-        border-bottom: 1px solid #c0c0c0;
+        /* border-bottom: 1px solid #c0c0c0; */
         color: #000;
         font-weight: 700;
         padding: 10px;
@@ -128,8 +128,8 @@ const TableFieldWrapper = styled.div`
     .table-box .fixed-header {
         position: sticky;
         top: 0;
-        z-index:11;
         background: white;
+        box-shadow: 0 -0.5px 0 0 #e0e0e0 inset;
     }
     
     table tbody tr .user-duplication {
@@ -141,8 +141,7 @@ const TableFieldWrapper = styled.div`
         background: white;
         left: 0;
         z-index:10;
-        border-right: 1px solid #e0e0e060;
-        box-shadow: 6px 0 10px -7px #e0e0e0;
+        box-shadow: -0.5px 0 0 0 #e0e0e0 inset;
     }
     
     .table-box .fixed-col-right {
@@ -150,8 +149,15 @@ const TableFieldWrapper = styled.div`
         background: white;
         right: 0;
         z-index:10;
-        border-left: 1px solid #e0e0e060;
-        box-shadow: -6px 0 10px -7px #e0e0e0;
+        box-shadow: 0.5px 0 0 0 #e0e0e0 inset;
+    }
+
+    .table-box .fixed-col-right2 {
+        position: sticky;
+        background: white;
+        right: 50px;
+        z-index:10;
+        box-shadow: 0.5px 0 0 0 #e0e0e0 inset;
     }
 
     .table-box::-webkit-scrollbar{

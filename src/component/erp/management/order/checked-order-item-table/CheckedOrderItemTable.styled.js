@@ -115,6 +115,7 @@ const TableFieldWrapper = styled.div`
         position: sticky;
         top: 0;
         z-index:10;
+        box-shadow: 0 -0.5px 0 0 #e0e0e0 inset;
     }
 
     .table-box::-webkit-scrollbar{

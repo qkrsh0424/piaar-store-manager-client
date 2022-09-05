@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
 import { dateToYYYYMMDDhhmmss } from '../../../../../utils/dateFormatUtils';
 import SortButton from '../../../../module/button/SortButton';
 import InfiniteScrollObserver from '../../../../module/observer/InfiniteScrollObserver';
@@ -23,21 +22,22 @@ function TableHead({
     return (
         <thead>
             <tr>
-                <ResizableTh
+                <th
                     className="fixed-header fixed-col-left"
                     width={50}
                     style={{
-                        zIndex: 12
+                        zIndex: 12,
+                        boxShadow: '-0.5px -0.5px 0 0 #e0e0e0 inset'
                     }}
                 >
                     <div>출고됨</div>
-                </ResizableTh>
-                <ResizableTh
+                </th>
+                <th
                     className="fixed-header"
                     width={50}
                 >
                     <div>선택</div>
-                </ResizableTh>
+                </th>
                 {viewHeader?.headerDetail.details?.map((r, index) => {
                     return (
                         <ResizableTh
@@ -66,13 +66,13 @@ function TableHead({
                         </ResizableTh>
                     )
                 })}
-                <ResizableTh
+                <th
                     className="fixed-header fixed-col-right"
                     width={50}
-                    style={{ zIndex: 12 }}
+                    style={{ zIndex: 12, boxShadow: '0.5px -0.5px 0 0 #e0e0e0 inset' }}
                 >
                     수정
-                </ResizableTh>
+                </th>
             </tr>
         </thead>
     );

@@ -26,25 +26,47 @@ function FailedIcon() {
     );
 }
 
+function ReturnIcon({ isReturned }) {
+    if (isReturned === 'y') {
+        return (
+            <img
+                src='/assets/icon/return_color_icon.png'
+                style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                alt=""
+                loading='lazy'
+            ></img>
+        )
+    } else {
+        return (
+            <img
+                src='/assets/icon/return_black_icon.png'
+                style={{ width: '15px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                alt=""
+                loading='lazy'
+            ></img>
+        )
+    }
+}
+
 function TableHead({
     viewHeader, selectedMatchCode
 }) {
     return (
         <thead>
             <tr>
-                <ResizableTh
+                <th
                     className="fixed-header fixed-col-left"
-                    style={{ zIndex: '12' }}
+                    style={{ zIndex: '12', boxShadow: '-0.5px -0.5px 0 0 #e0e0e0 inset' }}
                     width={80}
                 >
                     재고 반영
-                </ResizableTh>
-                <ResizableTh
+                </th>
+                <th
                     className="fixed-header"
                     width={50}
                 >
                     선택
-                </ResizableTh>
+                </th>
                 {viewHeader?.headerDetail.details?.map((r, index) => {
                     return (
                         <ResizableTh
@@ -73,9 +95,16 @@ function TableHead({
                         </ResizableTh>
                     )
                 })}
+                <th
+                    className="fixed-header fixed-col-right2"
+                    style={{ zIndex: 12, boxShadow: '0.5px -0.5px 0 0 #e0e0e0 inset' }}
+                    width={55}
+                >
+                    반품됨
+                </th>
                 <ResizableTh
                     className="fixed-header fixed-col-right"
-                    style={{ zIndex: 12 }}
+                    style={{ zIndex: 12, boxShadow: '0.5px -0.5px 0 0 #e0e0e0 inset' }}
                     width={50}
                 >
                     수정
@@ -151,6 +180,14 @@ export default function TableFieldView(props) {
                                             </td>
                                         )
                                     })}
+                                    <td className='fixed-col-right2'>
+                                        {r1.returnYn === 'y' &&
+                                            <ReturnIcon isReturned={r1.returnYn} />
+                                        }
+                                        {r1.returnYn === 'n' &&
+                                            <ReturnIcon isReturned={r1.returnYn} />
+                                        }
+                                    </td>
                                     <td className='fixed-col-right'>
                                         <button
                                             type='button'

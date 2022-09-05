@@ -38,7 +38,7 @@ const TableFieldWrapper = styled.div`
         padding: 10px;
         font-size: 12px;
         font-weight: 700;
-        border-bottom: 1px solid #e0e0e0;
+        /* border-bottom: 1px solid #e0e0e0; */
     }
 
     table tbody tr{
@@ -69,14 +69,15 @@ const TableFieldWrapper = styled.div`
         position: sticky;
         top: 0;
         z-index:10;
+        box-shadow: 0 -0.5px 0 0 #e0e0e0 inset;
     }
 
-    .table-box .fixed-col {
+    .table-box .fixed-col-left {
         position: sticky;
         background: white;
         left: 0;
         z-index:11;
-        border-right: 1px solid #e0e0e060;
+        box-shadow: -0.5px 0 0 0 #e0e0e0 inset;
     }
 
     .table-box .fixed-col-right {
@@ -84,17 +85,15 @@ const TableFieldWrapper = styled.div`
         background: white;
         right: 0;
         z-index:10;
-        border-left: 1px solid #e0e0e060;
-        box-shadow: -6px 0 10px -7px #e0e0e0;
+        box-shadow: 0.5px 0 0 0 #e0e0e0 inset;
     }
 
-    .table-box .fixed-col-right-2 {
+    .table-box .fixed-col-right2 {
         position: sticky;
         background: white;
-        right: 48px;
+        right: 50px;
         z-index:10;
-        border-left: 1px solid #e0e0e060;
-        box-shadow: -6px 0 10px -7px #e0e0e0;
+        box-shadow: 0.5px 0 0 0 #e0e0e0 inset;
     }
 
     .table-box .delete-button-el{

@@ -12,12 +12,12 @@ export default function TableFieldView(props) {
                 <table cellSpacing="0">
                     <thead>
                         <tr>
-                            <ResizableTh
+                            <th
                                 className="fixed-header"
                                 width={50}
                             >
                                 선택
-                            </ResizableTh>
+                            </th>
                             {props.viewHeader?.headerDetail.details?.map((r, index) => {
                                 return (
                                     <ResizableTh

@@ -520,6 +520,19 @@ const ReleaseCompleteComponent = (props) => {
             })
     }
 
+    const __reqChangeReturnYnForOrderItemListSocket = async (body) => {
+        await erpOrderItemSocket().changeReturnYnForList(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            });
+    }
+
     const __reqCreateReturnItemList = async (body) => {
         await erpReturnItemDataConnect().createBatch(body)
             .then(res => {
@@ -870,7 +883,13 @@ const ReleaseCompleteComponent = (props) => {
         )
     }
 
-    const _onAction_createReturnItem = async (body) => {
+    const _onSubmit_changeReturnYnForOrderItemList = async (data) => {
+        onActionOpenBackdrop();
+        await __reqChangeReturnYnForOrderItemListSocket(data);
+        onActionCloseBackdrop();
+    }
+
+    const _onSubmit_createReturnItem = async (body) => {
         onActionOpenBackdrop();
         await __reqCreateReturnItemList(body);
         onActionCloseBackdrop();
@@ -932,7 +951,8 @@ const ReleaseCompleteComponent = (props) => {
                     _onAction_reflectStock={_onAction_reflectStock}
                     _onAction_cancelStock={_onAction_cancelStock}
                     _onAction_downloadReleaseItemList={_onAction_downloadReleaseItemList}
-                    _onAction_createReturnItem={_onAction_createReturnItem}
+                    _onSubmit_createReturnItem={_onSubmit_createReturnItem}
+                    _onSubmit_changeReturnYnForOrderItemList={_onSubmit_changeReturnYnForOrderItemList}
                 ></CheckedOperatorComponent>
                 <CheckedOrderItemTableComponent
                     viewHeader={viewHeader}

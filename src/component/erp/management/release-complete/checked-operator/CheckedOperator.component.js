@@ -295,7 +295,15 @@ const CheckedOperatorComponent = (props) => {
             }
         });
         
-        props._onAction_createReturnItem(body);
+        let data = props.checkedOrderItemList.map(r => {
+            return {
+                ...r,
+                returnYn: 'y'
+            }
+        })
+
+        props._onSubmit_changeReturnYnForOrderItemList(data);
+        props._onSubmit_createReturnItem(body);
         onActionCloseReturnConfirmModal();
     }
 
