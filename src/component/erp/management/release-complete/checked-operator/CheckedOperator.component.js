@@ -282,27 +282,35 @@ const CheckedOperatorComponent = (props) => {
     }
 
     const onActionConfirmReturn = () => {
-        if(!returnReason || !returnReason.typeCid) {
-            alert('반품 요청 사유는 필수값입니다.');
+        if(!returnReason || !returnReason.type) {
+            alert('반품 요청 사유는 필수값입니다. 다시 시도해주세요.');
+            onActionCloseReturnConfirmModal();
             return;
         }
 
+        // 반품 처리 여부
+        let uniqueCodes = [];
+        props.checkedOrderItemList.forEach(r => {
+            if (r.returnYn === 'y') {
+                uniqueCodes.push(r.uniqueCode);
+            }
+        });
+
+        if (uniqueCodes.length > 0) {
+            alert(`이미 반품처리된 데이터가 있습니다.\n반품된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
+            onActionCloseReturnConfirmModal();
+            return;
+        }
+
+        // 반품 데이터 생성
         let body = props.checkedOrderItemList?.map(r => {
             return {
-                returnReasonTypeCid: returnReason.typeCid,
+                returnReasonType: returnReason.type,
                 returnReasonDetail: returnReason.detail,
                 erpOrderItemId: r.id
             }
         });
-        
-        let data = props.checkedOrderItemList.map(r => {
-            return {
-                ...r,
-                returnYn: 'y'
-            }
-        })
 
-        props._onSubmit_changeReturnYnForOrderItemList(data);
         props._onSubmit_createReturnItem(body);
         onActionCloseReturnConfirmModal();
     }
@@ -365,14 +373,14 @@ const CheckedOperatorComponent = (props) => {
                                 <div>
                                     <select
                                         className='select-item'
-                                        name='typeCid'
-                                        value={returnReason?.typeCid || ''}
+                                        name='type'
+                                        value={returnReason?.type || ''}
                                         onChange={onChangeSelectReturnType}
                                     >
                                         <option value=''>선택</option>
                                         {props.returnTypeList?.map(r => {
                                             return (
-                                                <option key={`return-type-idx` + r.cid} value={r.cid}>{r.type}</option>
+                                                <option key={`return-type-idx` + r.cid} value={r.type}>{r.type}</option>
                                             )
                                         })}
                                     </select>

@@ -533,11 +533,12 @@ const ReleaseCompleteComponent = (props) => {
             });
     }
 
-    const __reqCreateReturnItemList = async (body) => {
+    const __reqCreateReturnItemList = async (body, changeReturnYn) => {
         await erpReturnItemDataConnect().createBatch(body)
             .then(res => {
                 if (res.status === 200) {
                     alert('처리되었습니다.');
+                    changeReturnYn();     // erp order item의 returnYn항목 수정
                     return;
                 }
             })
@@ -891,7 +892,17 @@ const ReleaseCompleteComponent = (props) => {
 
     const _onSubmit_createReturnItem = async (body) => {
         onActionOpenBackdrop();
-        await __reqCreateReturnItemList(body);
+        // 반품 데이터 생성 후, 생성 성공된다면 erp order item의 returnYn을 수정
+        await __reqCreateReturnItemList(body, async () => {
+            let data = checkedOrderItemList.map(r => {
+                return {
+                    ...r,
+                    returnYn: 'y'
+                }
+            })
+
+            await _onSubmit_changeReturnYnForOrderItemList(data);
+        });
         onActionCloseBackdrop();
     }
 
@@ -952,7 +963,6 @@ const ReleaseCompleteComponent = (props) => {
                     _onAction_cancelStock={_onAction_cancelStock}
                     _onAction_downloadReleaseItemList={_onAction_downloadReleaseItemList}
                     _onSubmit_createReturnItem={_onSubmit_createReturnItem}
-                    _onSubmit_changeReturnYnForOrderItemList={_onSubmit_changeReturnYnForOrderItemList}
                 ></CheckedOperatorComponent>
                 <CheckedOrderItemTableComponent
                     viewHeader={viewHeader}
