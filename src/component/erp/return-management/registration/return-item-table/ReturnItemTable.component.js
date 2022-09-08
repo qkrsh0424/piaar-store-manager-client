@@ -2,12 +2,8 @@ import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { Container, TipFieldWrapper } from "./ReturnItemTable.styled";
 import SelectorButtonFieldView from "./SelectorButtonField.view";
 import TableFieldView from "./TableField.view";
-// import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
-// import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
-import { dateToYYYYMMDDhhmmssWithInvalid } from "../../../../../utils/dateFormatUtils";
-import SelectorRadioFieldView from "./SelectorRadioField.view";
-// import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
-// import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
+import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
+import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
 
 function Tip() {
     return (
@@ -27,14 +23,9 @@ const ReturnItemTableComponent = (props) => {
     const [returnItemList, dispatchReturnItemList] = useReducer(returnItemListReducer, initialReturnItemList);
     
     const [viewSize, dispatchViewSize] = useReducer(viewSizeReducer, initialViewSize);
-    // const [fixTargetItem, dispatchFixTargetItem] = useReducer(fixTargetItemReducer, initialFixTargetItem);
-    
-    // const [checkedReturnItemList, dispatchCheckedReturnItemList] = useReducer(checkedReturnItemListReducer, initialCheckedReturnItemList);
-    // const [optionCodeModalOpen, setOptionCodeModalOpen] = useState(false);
-    // const [releaseOptionCodeModalOpen, setReleaseOptionCodeModalOpen] = useState(false);
-    // const [fixItemModalOpen, setFixItemModalOpen] = useState(false);
+    const [fixTargetItem, dispatchFixTargetItem] = useReducer(fixTargetItemReducer, initialFixTargetItem);
 
-    const [searchReleaseLocationValue, dispatchSearchReleaseLocationValue] = useReducer(searchReleaseLocationValueReducer, initialSearchReleaseLocationValue);
+    const [fixItemModalOpen, setFixItemModalOpen] = useState(false);
 
     useEffect(() => {
         if (!props.returnItemList || props.returnItemList?.length <= 0) {
@@ -86,160 +77,64 @@ const ReturnItemTableComponent = (props) => {
         })
     }, [props.returnItemList]);
 
-    // const onActionOpenFixItemModal = (e, orderItem) => {
-    //     e.stopPropagation();
-    //     let targetData = {...orderItem};
+    const isCheckedOne = useCallback((id) => {
+        return props.checkedReturnItemList.some(r => r.id === id);
+    }, [props.checkedReturnItemList])
 
-    //     targetData.channelOrderDate = dateToYYYYMMDDhhmmssWithInvalid(orderItem.channelOrderDate, '');
-    //     dispatchFixTargetItem({
-    //         type: 'SET_DATA',
-    //         payload: targetData
-    //     })
-    //     setFixItemModalOpen(true);
-    // }
+    const onActionOpenFixItemModal = (e, returnItem) => {
+        e.stopPropagation();
+        let targetData = {...returnItem};
 
-    // const onActionCloseFixItemModal = () => {
-    //     dispatchFixTargetItem({
-    //         type: 'CLEAR'
-    //     })
-    //     setFixItemModalOpen(false);
-    // }
-
-    // const onChangeFixTargetItem = (e) => {
-    //     let name = e.target.name;
-    //     let value = e.target.value;
-
-    //     dispatchFixTargetItem({
-    //         type: 'CHANGE_DATA',
-    //         payload: {
-    //             name: name,
-    //             value: value
-    //         }
-    //     })
-    // }
-
-    // const onActionConfirmUpdateFixOrderItem = (e) => {
-    //     e.preventDefault();
-    //     if (!fixTargetItem.uniqueCode) {
-    //         alert('[피아르 고유번호] 는 필수 입력 값 입니다.');
-    //         return;
-    //     }
-
-    //     if (!fixTargetItem.prodName) {
-    //         alert('[상품명] 은 필수 입력 값 입니다.');
-    //         return;
-    //     }
-
-    //     if (!fixTargetItem.optionName) {
-    //         alert('[옵션정보] 는 필수 입력 값 입니다.');
-    //         return;
-    //     }
-
-    //     if (!fixTargetItem.unit || fixTargetItem.unit <= 0 || isNaN(fixTargetItem.unit)) {
-    //         alert('[수량]  은 필수 항목이며, 1 이상의 숫자값만 허용됩니다.');
-    //         return;
-    //     }
-
-    //     if (!fixTargetItem.receiver) {
-    //         alert('[수취인명] 은 필수 입력 값 입니다.');
-    //         return;
-    //     }
-
-    //     if (!fixTargetItem.receiverContact1) {
-    //         alert('[전화번호1] 은 필수 입력 값 입니다.');
-    //         return;
-    //     }
-
-    //     if (!fixTargetItem.destination) {
-    //         alert('[주소] 는 필수 입력 값 입니다.');
-    //         return;
-    //     }
-    //     props._onSubmit_updateErpOrderItemOne(fixTargetItem);
-    //     onActionCloseFixItemModal();
-    // }
-
-    const onChangeReleaseLocationValue = (e) => {
-        let location = e.target.value;
-        dispatchSearchReleaseLocationValue({
+        dispatchFixTargetItem({
             type: 'SET_DATA',
-            payload: location
+            payload: targetData
+        })
+        setFixItemModalOpen(true);
+    }
+
+    const onActionCloseFixItemModal = () => {
+        dispatchFixTargetItem({
+            type: 'CLEAR'
+        })
+        setFixItemModalOpen(false);
+    }
+
+    const onChangeFixTargetItem = (e) => {
+        let name = e.target.name;
+        let value = e.target.value;
+
+        dispatchFixTargetItem({
+            type: 'CHANGE_DATA',
+            payload: {
+                name: name,
+                value: value
+            }
         })
     }
 
-    const onChangeSelectedMatchCode = (e) => {
-        e.stopPropagation();
+    const onActionConfirmUpdateFixOrderItem = (e) => {
+        e.preventDefault();
         
-        let matchedCode = e.target.value;
-        props._onAction_changeMatchCode(matchedCode);
+        if (!fixTargetItem.returnReasonType) {
+            alert('[반품요청사유] 는 필수 입력 값 입니다.');
+            return;
+        }
+        props._onSubmit_updateErpReturnItemOne(fixTargetItem);
+        onActionCloseFixItemModal();
     }
 
-    // const onActionOpenOptionCodeModal = (e, itemId) => {
-    //     e.stopPropagation();
+    const onActionCheckReturnItem = (e, returnItem) => {
+        e.stopPropagation();
+        props._onAction_checkReturnItem(e, returnItem);
+    }
 
-    //     let data = returnItemList.filter(r => r.id === itemId);
+    const onActionCheckReturnItemAll = () => {
+        props._onAction_checkReturnItemAll();
+    }
 
-    //     dispatchCheckedReturnItemList({
-    //         type: 'SET_DATA',
-    //         payload: data
-    //     })
-
-    //     if (data?.length <= 0) {
-    //         alert('데이터를 먼저 선택해 주세요.');
-    //         return;
-    //     }
-
-    //     setOptionCodeModalOpen(true);
-    // }
-
-    // const onActionCloseOptionCodeModal = () => {
-    //     setOptionCodeModalOpen(false);
-    // }
-
-    // const onActionChangeOptionCode = (optionCode) => {
-    //     let data = [...checkedReturnItemList];
-    //     data = data.map(r => {
-    //         return {
-    //             ...r,
-    //             optionCode: optionCode
-    //         }
-    //     })
-    //     props._onSubmit_changeOptionCodeForOrderItemListInBatch(data);
-    //     onActionCloseOptionCodeModal();
-    // }
-
-    // const onActionOpenReleaseOptionCodeModal = (e, itemId) => {
-    //     e.stopPropagation();
-
-    //     let data = returnItemList.filter(r => r.id === itemId);
-        
-    //     dispatchCheckedReturnItemList({
-    //         type: 'SET_DATA',
-    //         payload: data
-    //     })
-
-    //     if (data?.length <= 0) {
-    //         alert('데이터를 먼저 선택해 주세요.');
-    //         return;
-    //     }
-
-    //     setReleaseOptionCodeModalOpen(true);
-    // }
-
-    // const onActionCloseReleaseOptionCodeModal = () => {
-    //     setReleaseOptionCodeModalOpen(false);
-    // }
-
-    // const onActionChangeReleaseOptionCode = (optionCode) => {
-    //     let data = [...checkedReturnItemList];
-    //     data = data.map(r => {
-    //         return {
-    //             ...r,
-    //             releaseOptionCode: optionCode
-    //         }
-    //     })
-    //     props._onSubmit_changeReleaseOptionCodeForOrderItemListInBatch(data);
-    //     onActionCloseReleaseOptionCodeModal();
-    // }
+    const onActionReleaseReturnItemAll = () => {
+        props._onAction_releaseReturnItemAll();
+    }
 
     return (
         <>
@@ -249,8 +144,9 @@ const ReturnItemTableComponent = (props) => {
                         <div className="selector-box">
                             <SelectorButtonFieldView
                                 releaseLocation={props.releaseLocation}
-                                searchReleaseLocationValue={searchReleaseLocationValue}
-                                onChangeReleaseLocationValue={onChangeReleaseLocationValue}
+
+                                onActionCheckReturnItemAll={onActionCheckReturnItemAll}
+                                onActionReleaseReturnItemAll={onActionReleaseReturnItemAll}
                             ></SelectorButtonFieldView>
                             <Tip></Tip>
                         </div>
@@ -260,7 +156,10 @@ const ReturnItemTableComponent = (props) => {
                             viewHeader={props.viewHeader}
                             returnItemList={returnItemList}
                             viewSize={viewSize}
-                            selectedMatchCode={props.selectedMatchCode}
+
+                            isCheckedOne={isCheckedOne}
+                            onActionCheckReturnItem={onActionCheckReturnItem}
+                            onActionOpenFixItemModal={onActionOpenFixItemModal}
                         ></TableFieldView>
                     </>
                 }
@@ -268,7 +167,9 @@ const ReturnItemTableComponent = (props) => {
                     <div style={{ textAlign: 'center', padding: '100px 0', fontWeight: '600' }}>뷰 헤더를 먼저 설정해 주세요.</div>
                 }
             </Container>
-            {/* {(fixItemModalOpen && fixTargetItem) &&
+            
+            {/* 단건 수정 모달 */}
+            {(fixItemModalOpen && fixTargetItem) &&
                 <CommonModalComponent
                     open={fixItemModalOpen}
                     fullWidth={true}
@@ -284,35 +185,7 @@ const ReturnItemTableComponent = (props) => {
                         onActionConfirmUpdateFixOrderItem={onActionConfirmUpdateFixOrderItem}
                     ></FixOrderItemModalComponent>
                 </CommonModalComponent>
-            } */}
-
-            {/* 옵션 코드 모달 */}
-            {/* <CommonModalComponent
-                open={optionCodeModalOpen}
-
-                onClose={onActionCloseOptionCodeModal}
-            >
-                <OptionCodeModalComponent
-                    checkedReturnItemList={checkedReturnItemList}
-                    productOptionList={props.productOptionList}
-
-                    onConfirm={(optionCode) => onActionChangeOptionCode(optionCode)}
-                ></OptionCodeModalComponent>
-            </CommonModalComponent> */}
-
-            {/* 옵션 코드 모달 */}
-            {/* <CommonModalComponent
-                open={releaseOptionCodeModalOpen}
-
-                onClose={onActionCloseReleaseOptionCodeModal}
-            >
-                <ReleaseOptionCodeModalComponent
-                    checkedReturnItemList={checkedReturnItemList}
-                    productOptionList={props.productOptionList}
-
-                    onConfirm={(optionCode) => onActionChangeReleaseOptionCode(optionCode)}
-                ></ReleaseOptionCodeModalComponent>
-            </CommonModalComponent> */}
+            }
         </>
     );
 }
@@ -322,8 +195,6 @@ export default ReturnItemTableComponent;
 const initialViewSize = 50;
 const initialFixTargetItem = null;
 const initialReturnItemList = [];
-const initialSearchReleaseLocationValue = null;
-const initialCheckedReturnItemList = null;
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
@@ -355,13 +226,5 @@ const returnItemListReducer = (state, action) => {
         case 'CLEAR':
             return initialReturnItemList;
         default: return initialReturnItemList;
-    }
-}
-
-const searchReleaseLocationValueReducer = (state, action) => {
-    switch (action.type) {
-        case 'SET_DATA':
-            return action.payload;
-        default: return initialSearchReleaseLocationValue;
     }
 }

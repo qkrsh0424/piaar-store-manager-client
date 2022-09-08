@@ -49,13 +49,13 @@ const ViewHeaderSettingModalComponent = (props) => {
             return;
         }
 
-        dispatchViewHeaderDetails({
-            type: 'SET_DATA',
-            payload: viewHeader.headerDetail.details
-        })
         dispatchViewHeaderTitle({
             type: 'SET_DATA',
             payload: viewHeader.headerTitle
+        })
+        dispatchViewHeaderDetails({
+            type: 'SET_DATA',
+            payload: viewHeader.headerDetail.details
         })
     }, [viewHeader])
 
@@ -71,13 +71,13 @@ const ViewHeaderSettingModalComponent = (props) => {
             return;
         }
 
-        dispatchViewHeaderDetails({
-            type: 'SET_DATA',
-            payload: createViewHeader.headerDetail.details
-        })
         dispatchViewHeaderTitle({
             type: 'SET_DATA',
             payload: createViewHeader.headerTitle
+        })
+        dispatchViewHeaderDetails({
+            type: 'SET_DATA',
+            payload: createViewHeader.headerDetail.details
         })
     }, [createViewHeader])
 
@@ -99,6 +99,11 @@ const ViewHeaderSettingModalComponent = (props) => {
                     return;
                 }
 
+                if(!viewHeaderTitle) {
+                    alert('뷰 헤더 이름을 먼저 설정해주세요.');
+                    return;
+                }
+                
                 let body = null;
                 if(!createViewHeader){
                     body = {
@@ -108,13 +113,9 @@ const ViewHeaderSettingModalComponent = (props) => {
                             details: viewHeaderDetails
                         }
                     }
-                    console.log(body);
-                    // props._onSubmit_modifyViewHeader(body);
+
+                    props._onSubmit_modifyViewHeader(body);
                 }else {
-                    if(!viewHeaderTitle) {
-                        alert('뷰 헤더 이름을 먼저 설정해주세요.');
-                        return;
-                    }
                     body = {
                         ...viewHeader,
                         id: uuidv4(),
@@ -123,8 +124,8 @@ const ViewHeaderSettingModalComponent = (props) => {
                             details: viewHeaderDetails
                         }
                     }
-                    console.log(body);
-                    // props._onSubmit_createViewHeader(body);
+
+                    props._onSubmit_createViewHeader(body);
                 }
             }
         },

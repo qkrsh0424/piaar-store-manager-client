@@ -80,17 +80,16 @@ export default function TableFieldView(props) {
                     />
                     <tbody>
                         {props.returnItemList?.slice(0, props.viewSize).map((r1, rowIndex) => {
-                            let checked = false;
-                            // let checked = props.isCheckedOne(r1.id)
+                            let checked = props.isCheckedOne(r1.id);
                             let isOutOfStock = r1.optionStockUnit !== null && r1.optionStockUnit <= 0;
                             return (
                                 <tr
                                     key={`row-${rowIndex}`}
                                     className={`${checked && 'tr-active'} ${isOutOfStock && 'tr-highlight'}`}
-                                    onClick={(e) => props.onActionCheckOrderItem(e, r1)}
+                                    onClick={(e) => props.onActionCheckReturnItem(e, r1)}
                                 >
                                     <td style={{ cursor: 'pointer' }}>
-                                        <input type='checkbox' checked={checked} onChange={(e) => props.onActionCheckOrderItem(e, r1)}></input>
+                                        <input type='checkbox' checked={checked} onChange={(e) => props.onActionCheckReturnItem(e, r1)}></input>
                                     </td>
                                     {props.viewHeader?.headerDetail.details?.map(r2 => {
                                         let matchedColumnName = r2.matchedColumnName;

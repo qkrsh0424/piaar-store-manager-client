@@ -23,12 +23,12 @@ export default function SelectorButtonFieldView(props) {
                     <button
                         type='button'
                         className='button-el'
-                        onClick={props.onActionCheckOrderItemAll}
+                        onClick={props.onActionCheckReturnItemAll}
                     >전체 선택</button>
                     <button
                         type='button'
                         className='button-el'
-                        onClick={props.onActionReleaseOrderItemAll}
+                        onClick={props.onActionReleaseReturnItemAll}
                     >전체 해제</button>
                 </div>
             </div>

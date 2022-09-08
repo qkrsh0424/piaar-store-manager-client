@@ -682,7 +682,7 @@ const OrderComponent = (props) => {
                         _onAction_changeMatchCode={_onAction_changeMatchCode}
                         _onSubmit_changeOptionCodeForOrderItemListInBatch={_onSubmit_changeOptionCodeForOrderItemListInBatch}
                         _onSubmit_changeReleaseOptionCodeForOrderItemListInBatch={_onSubmit_changeReleaseOptionCodeForOrderItemListInBatch}
-                        ></OrderItemTableComponent>
+                    ></OrderItemTableComponent>
                     <OrderItemTablePagenationComponent
                         orderItemPage={orderItemPage}
                     ></OrderItemTablePagenationComponent>
@@ -701,7 +701,6 @@ const OrderComponent = (props) => {
                         productOptionList={productOptionList}
                         selectedMatchCode={selectedMatchCode}
 
-                        _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
                         _onSubmit_changeSalesYnForOrderItemList={_onSubmit_changeSalesYnForOrderItemList}
                         _onSubmit_deleteOrderItemList={_onSubmit_deleteOrderItemList}
                         _onSubmit_changeOptionCodeForOrderItemListInBatch={_onSubmit_changeOptionCodeForOrderItemListInBatch}

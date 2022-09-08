@@ -14,6 +14,11 @@ const erpReturnItemDataConnect = () => {
                 params: params,
                 withCredentials: true
             })
+        },
+        refreshReturnList: async function (params) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/erp-return-items/action-refresh`, params, {
+                withCredentials: true
+            })
         }
     }
 }
