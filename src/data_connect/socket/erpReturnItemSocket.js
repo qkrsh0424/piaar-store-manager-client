@@ -8,6 +8,21 @@ const erpReturnItemSocket = () => {
             return await axios.put(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items`, body, {
                 withCredentials: true
             })
+        },
+        changeCollectYnForList: async function (body) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch/collect-yn`, body, {
+                withCredentials: true
+            })
+        },
+        deleteBatch: async function (params) {
+            return await axios.post(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch-delete`, params, {
+                withCredentials: true
+            })
+        },
+        changeReturnReasonForListInBatch: async function (body) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch/return-reason`, body, {
+                withCredentials: true
+            })
         }
     }
 }

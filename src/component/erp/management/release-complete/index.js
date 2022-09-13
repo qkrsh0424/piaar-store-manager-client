@@ -1032,7 +1032,6 @@ const initialDownloadExcelList = null;
 const initialViewHeaderList = null;
 const initialReleaseLocation = null;
 const initialSelectedMatchCode = 'releaseOptionCode';
-
 const initialReturnTypeList = null;
 
 const releaseLocationReducer = (state, action) => {

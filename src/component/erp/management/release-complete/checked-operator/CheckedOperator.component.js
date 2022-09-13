@@ -305,6 +305,7 @@ const CheckedOperatorComponent = (props) => {
         // 반품 데이터 생성
         let body = props.checkedOrderItemList?.map(r => {
             return {
+                receiveLocation: r.optionReleaseLocation,
                 returnReasonType: returnReason.type,
                 returnReasonDetail: returnReason.detail,
                 erpOrderItemId: r.id
@@ -364,7 +365,7 @@ const CheckedOperatorComponent = (props) => {
             {/* 반품 처리 확인 모달 */}
             <ConfirmModalComponent
                 open={returnConfirmModalOpen}
-                title={'판품 처리 확인 메세지'}
+                title={'반품 처리 확인 메세지'}
                 message={
                     <>
                         <div className='info-wrapper'>

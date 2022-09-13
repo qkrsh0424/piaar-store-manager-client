@@ -92,28 +92,39 @@ export default function TableFieldView(props) {
                                         <input type='checkbox' checked={checked} onChange={(e) => props.onActionCheckReturnItem(e, r1)}></input>
                                     </td>
                                     {props.viewHeader?.headerDetail.details?.map(r2 => {
-                                        let matchedColumnName = r2.matchedColumnName;
-                                        if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt' || matchedColumnName === 'channelOrderDate') {
+                                        let isOrderHeader = (r2.matchedColumnName).startsWith('order_');
+                                        let matchedColumnName = isOrderHeader ? r2.matchedColumnName.substr(6) : r2.matchedColumnName;
+
+                                        if(isOrderHeader) {     // 출고 데이터
+                                            if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt' || matchedColumnName === 'channelOrderDate') {
+                                                return (
+                                                    <td key={`col-order-${matchedColumnName}`}>{r1.erpOrderItem[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1.erpOrderItem[matchedColumnName]) : ""}</td>
+                                                )
+                                            }
                                             return (
-                                                <td key={`col-${matchedColumnName}`}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
+                                                <td 
+                                                    key={`col-order-${matchedColumnName}`}
+                                                    className={`${(matchedColumnName === 'receiver' && r1[`duplicationUser`]) ? 'user-duplication' : ''}`}
+                                                >
+                                                    {r1.erpOrderItem[matchedColumnName]}
+                                                </td>
                                             )
-                                        } else if (matchedColumnName === 'optionCode') {
+                                        }else {     // 반품 데이터
+                                            if (matchedColumnName === 'createdAt' || matchedColumnName === 'holdAt' || matchedColumnName === 'collectAt' || matchedColumnName === 'collectCompleteAt'
+                                                || matchedColumnName === 'returnCompleteAt' || matchedColumnName === 'returnRejectAt') {
+                                                return (
+                                                    <td key={`col-${matchedColumnName}`}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
+                                                )
+                                            }
                                             return (
-                                                <td key={`col-${matchedColumnName}`} className='td-highlight' onClick={(e) => props.onActionOpenOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
-                                            )
-                                        } else if (matchedColumnName === 'releaseOptionCode') {
-                                            return (
-                                                <td key={`col-${matchedColumnName}`} className='td-highlight' onClick={(e) => props.onActionOpenReleaseOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
+                                                <td 
+                                                    key={`col-${matchedColumnName}`}
+                                                    className={`${(matchedColumnName === 'receiver' && r1[`duplicationUser`]) ? 'user-duplication' : ''}`}
+                                                >
+                                                    {r1[matchedColumnName]}
+                                                </td>
                                             )
                                         }
-                                        return (
-                                            <td 
-                                                key={`col-${matchedColumnName}`}
-                                                className={`${(matchedColumnName === 'receiver' && r1[`duplicationUser`]) ? 'user-duplication' : ''}`}
-                                            >
-                                                {r1[matchedColumnName]}
-                                            </td>
-                                        )
                                     })}
                                     <td className='fixed-col-right'>
                                         <button
