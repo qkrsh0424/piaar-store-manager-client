@@ -470,7 +470,7 @@ const ProductCreateFormComponent = (props) => {
 
                         onChangeProductInputValue={(e) => onChangeProductInputValue(e)}
                     ></CodeInfoFieldView>
-                    <ImportInfoFieldView
+                    {/* <ImportInfoFieldView
                         createProductData={createProductData}
 
                         onChangeProductInputValue={(e) => onChangeProductInputValue(e)}
@@ -479,7 +479,7 @@ const ProductCreateFormComponent = (props) => {
                         createProductData={createProductData}
 
                         onChangeProductInputValue={(e) => onChangeProductInputValue(e)}
-                    ></DefaultDetailInfoFieldView>
+                    ></DefaultDetailInfoFieldView> */}
 
                     {/* 옵션 정보 */}
                     <OptionHeaderFieldView></OptionHeaderFieldView>

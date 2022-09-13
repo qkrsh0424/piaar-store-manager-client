@@ -21,9 +21,9 @@ export default function CodeInfoFieldView(props) {
 
                 <div className="input-group mb-3">
                     <div className="input-group-prepend">
-                        <span className="input-group-text">네이버 상품번호</span>
+                        <span className="input-group-text">상품관리번호</span>
                     </div>
-                    <input type="text" className='form-control' name='naverProductCode' value={props.modifyProductData.naverProductCode ?? ''} onChange={(e) => props.onChangeProductInputValue(e)} />
+                    <input type="text" className='form-control' name='managementNumber' value={props.modifyProductData.managementNumber ?? ''} onChange={(e) => props.onChangeProductInputValue(e)} />
                 </div>
             </div>
         </ProductInfoInputWrapper>

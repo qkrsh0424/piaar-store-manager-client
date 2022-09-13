@@ -5,8 +5,6 @@ import StockReflectedSelectorFieldView from "./StockReflectedSelectorField.view"
 import CategorySelectorFieldView from "./CategorySelectorField.view";
 import ImageSelectorFieldView from "./ImageSelectorField.view";
 import CodeInfoFieldView from "./CodeInfoField.view";
-import ImportInfoFieldView from "./ImportInfoField.view";
-import DefaultDetailInfoFieldView from "./DefaultDetailInfoField.view";
 import DefaultInfoFieldView from "./DefaultInfoField.view";
 import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
 
@@ -164,7 +162,7 @@ const ModifyProductModalComponent = (props) => {
 
                     onChangeProductInputValue={(e) => onChangeProductInputValue(e)}
                 ></CodeInfoFieldView>
-                <ImportInfoFieldView
+                {/* <ImportInfoFieldView
                     modifyProductData={modifyProductData}
 
                     onChangeProductInputValue={(e) => onChangeProductInputValue(e)}
@@ -173,7 +171,7 @@ const ModifyProductModalComponent = (props) => {
                     modifyProductData={modifyProductData}
 
                     onChangeProductInputValue={(e) => onChangeProductInputValue(e)}
-                ></DefaultDetailInfoFieldView>
+                ></DefaultDetailInfoFieldView> */}
                 <div>
                     <button type="submit" className="submit-btn" disabled={props.submitCheck}>등록</button>
                 </div>

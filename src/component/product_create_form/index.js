@@ -17,20 +17,12 @@ class Product {
         this.id = uuidv4();
         this.code = '';
         this.manufacturingCode = '';
-        this.naverProductCode = '';
+        this.managementNumber = '';
         this.defaultName = '';
         this.managementName = '';
         this.imageUrl = '';
         this.imageFileName = '';
         this.memo = '';
-        this.hsCode = '';
-        this.style = '';
-        this.tariffRate = 0;
-        this.defaultWidth = 0;
-        this.defaultLength = 0;
-        this.defaultHeight = 0;
-        this.defaultQuantity = 0;
-        this.defaultWeight = 0;
         this.purchaseUrl = '';
         this.defaultTotalPurchasePrice = 0;
         this.stockManagement = false;
@@ -45,20 +37,12 @@ class Product {
             id: this.id,
             code: this.code,
             manufacturingCode: this.manufacturingCode,
-            naverProductCode: this.naverProductCode,
+            managementNumber: this.managementNumber,
             defaultName: this.defaultName,
             managementName: this.managementName,
             imageUrl: this.imageUrl,
             imageFileName: this.imageFileName,
             memo: this.memo,
-            hsCode: this.hsCode,
-            style: this.style,
-            tariffRate: this.tariffRate,
-            defaultWidth: this.defaultWidth,
-            defaultLength: this.defaultLength,
-            defaultHeight: this.defaultHeight,
-            defaultQuantity: this.defaultQuantity,
-            defaultWeight: this.defaultWeight,
             purchaseUrl: this.purchaseUrl,
             defaultTotalPurchasePrice: this.defaultTotalPurchasePrice,
             stockManagement: this.stockManagement,

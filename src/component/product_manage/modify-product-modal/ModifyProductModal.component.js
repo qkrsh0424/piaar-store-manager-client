@@ -164,7 +164,7 @@ const ModifyProductModalComponent = (props) => {
 
                     onChangeProductInputValue={(e) => onChangeProductInputValue(e)}
                 ></CodeInfoFieldView>
-                <ImportInfoFieldView
+                {/* <ImportInfoFieldView
                     modifyProductData={modifyProductData}
 
                     onChangeProductInputValue={(e) => onChangeProductInputValue(e)}
@@ -173,7 +173,7 @@ const ModifyProductModalComponent = (props) => {
                     modifyProductData={modifyProductData}
 
                     onChangeProductInputValue={(e) => onChangeProductInputValue(e)}
-                ></DefaultDetailInfoFieldView>
+                ></DefaultDetailInfoFieldView> */}
                 <div>
                     <button type="submit" className="submit-btn" disabled={props.submitCheck}>등록</button>
                 </div>
