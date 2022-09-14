@@ -94,6 +94,11 @@ const productDataConnect = () => {
                 withCredentials: true
             })
         },
+        patchOne: async function (product) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/api/v1/product`, product, {
+                withCredentials: true
+            })
+        },
         deleteOne: async function (productCid) {
             return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product/one/${productCid}`, {
                 withCredentials: true

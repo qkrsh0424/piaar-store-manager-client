@@ -18,7 +18,7 @@ export default function ProductManageTableFieldView(props) {
                         }
                         <th className='fixedHeader' scope="col" width='250'>상품식별코드</th>
                         <th className='fixedHeader' scope="col" width='140'>상품이미지</th>
-                        
+                        <th className='fixedHeader' scope="col" width='200'>상세페이지</th>
                         {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&
                             <th className='fixedHeader' scope="col" width='200'>상품관리</th>
                         }
@@ -85,6 +85,11 @@ export default function ProductManageTableFieldView(props) {
                                                     <img src='/images/icon/no-image.jpg' title='no-image' />
                                                 }
                                             </div>
+                                        </div>
+                                    </th>
+                                    <th rowSpan={product.options.length + 1}>
+                                        <div>
+                                            <button type='button' className="detail-btn" onClick={() => props.onActionOpenProductDetailPageModal(product.product.id)}>상세페이지</button>
                                         </div>
                                     </th>
                                     {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&

@@ -9,6 +9,7 @@ import ModifyProductOptionModalComponent from '../modify-product-option-modal/Mo
 import StockStatusModalComponent from '../stock-status-modal/StockStatusModal.component';
 import CreateProductOptionModalComponent from '../create-product-option-modal/CreateProductOptionModal.component';
 import SubOptionCodeModalComponent from '../sub-option-code-modal/SubOptionCodeModal.component';
+import ProductDetailPageModalComponent from '../product-detail-page-modal/ProductDetailPageModal.component';
 
 class ProductOption {
     constructor(productId, optionDefaultName = '', optionManagementName = '') {
@@ -74,7 +75,10 @@ const ProductManageTableComponent = (props) => {
     const [stockStatusListData, setStockStatusListData] = useState(null);
 
     const [subOptionCodeModalOpen, setSubOptionCodeModalOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const [selectedProductOptionData, setSelectedProductOptionData] = useState(null);
+
+    const [productDetailPageModalOpen, setProductDetailPageModalOpen] = useState(false);
 
     useEffect(() => {
         if(!props.stockStatusList) {
@@ -210,7 +214,6 @@ const ProductManageTableComponent = (props) => {
         let product = props.productViewList.filter(r => r.product.id === productId)[0];
         let option = product.options.filter(r => r.id === optionId)[0];
 
-        // await props._onAction_searchSubOptionCode(option.id);
         setSubOptionCodeModalOpen(true);
         setSelectedProductOptionData(option);
     }
@@ -236,6 +239,35 @@ const ProductManageTableComponent = (props) => {
         await props._onAction_deleteSubOptionCode(subOptionId);
     }
 
+    const onActionOpenProductDetailPageModal = async (productId) => {
+        let product = props.productViewList.filter(r => r.product.id === productId)[0];
+
+        setSelectedProduct(product);
+        await props._onAction_searchProductDetailPage(productId);
+        setProductDetailPageModalOpen(true);
+    }
+    
+    const onActionCloseProductDetailPageModal = () => {
+        setProductDetailPageModalOpen(false);
+    }
+
+    const onSubmitCreateProductDetailPage = async (data) => {
+        await props._onSubmit_createProductDetailPage(data);
+    }
+
+    const onSubmitModifyProductDetailPage = async (data) => {
+        await props._onSubmit_modifyProductDetailPage(data);
+    }
+     
+    const onActionDeleteProductDetailPage = async (data) => {
+        await props._onAction_deleteProductDetailPage(data);
+    }
+    
+    const onActionUpdateProductDetailPageOfSelectedProduct = async (data) => {
+        await props._onAction_updateProductDetailPageOfSelectedProduct(data);
+        onActionCloseProductDetailPageModal();
+    }
+
     return (
         <Container>
             <ProductManageTableFieldView
@@ -252,6 +284,7 @@ const ProductManageTableComponent = (props) => {
                 checkAll={() => props._onAction_checkAll()}
                 isCheckedAll={() => props._onAction_isCheckedAll()}
                 isChecked={(optionId) => props._onAction_isChecked(optionId)}
+                onActionOpenProductDetailPageModal={onActionOpenProductDetailPageModal}
             ></ProductManageTableFieldView>
 
             {/* Product Modify Modal */}
@@ -272,6 +305,26 @@ const ProductManageTableComponent = (props) => {
                     onActionCloseModifyProductModal={() => onActionCloseModifyProductModal()}
                     onActionModifyProduct={(data) => onActionModifyProduct(data)}
                 ></ModifyProductModalComponent>
+            </CommonModalComponent>
+
+            {/* ProductOption Modify Modal */}
+            <CommonModalComponent
+                open={productDetailPageModalOpen}
+                maxWidth={'sm'}
+                fullWidth={true}
+
+                onClose={onActionCloseProductDetailPageModal}
+            >
+                <ProductDetailPageModalComponent
+                    productDetailPageDataList={props.productDetailPageDataList}
+                    selectedProduct={selectedProduct}
+
+                    onActionCloseProductDetailPageModal={onActionCloseProductDetailPageModal}
+                    onSubmitCreateProductDetailPage={onSubmitCreateProductDetailPage}
+                    onSubmitModifyProductDetailPage={onSubmitModifyProductDetailPage}
+                    onActionDeleteProductDetailPage={onActionDeleteProductDetailPage}
+                    onActionUpdateProductDetailPageOfSelectedProduct={onActionUpdateProductDetailPageOfSelectedProduct}
+                ></ProductDetailPageModalComponent>
             </CommonModalComponent>
 
             {/* ProductOption Create Modal */}

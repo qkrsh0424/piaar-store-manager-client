@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import { optionPackageDataConnect } from '../../data_connect/optionPackageDataConnect';
 import { productCategoryDataConnect } from '../../data_connect/productCategoryDataConnect';
 import { productDataConnect } from '../../data_connect/productDataConnect';
+import { productDetailPageDataConnect } from '../../data_connect/productDetailPageDataConnect';
 import { productOptionDataConnect } from '../../data_connect/productOptionDataConnect';
 import { productReceiveDataConnect } from '../../data_connect/productReceiveDataConnect';
 import { productReleaseDataConnect } from '../../data_connect/productReleaseDataConnect';
 import { subOptionCodeDataConnect } from '../../data_connect/subOptionCodeDataConnect';
 
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
-import { dateToYYYYMMDD, getEndDate, getStartDate } from '../../utils/dateFormatUtils';
+import { getEndDate, getStartDate } from '../../utils/dateFormatUtils';
 import ProductManageNavComponent from './product-manage-nav/ProductManageNav.component';
 import ProductManageTableComponent from './product-manage-table/ProductManageTable.component';
 import SelectorComponent from './selector/Selector.component';
@@ -40,6 +41,7 @@ const ProductManageComponent = () => {
     const [optionReleaseStatusData, setOptionReleaseStatusData] = useState(null);
 
     const [subOptionCodeData, setSubOptionCodeData] = useState(null);
+    const [productDetailPageDataList, setProductDetailPageDataList] = useState(null);
 
     const {
         open: backdropOpen,
@@ -118,7 +120,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             });
     }
 
@@ -131,7 +138,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
 
@@ -144,7 +156,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
 
@@ -158,7 +175,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
 
@@ -172,7 +194,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
 
@@ -186,7 +213,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             });
     }
 
@@ -200,7 +232,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
 
@@ -213,7 +250,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
 
@@ -227,7 +269,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
 
@@ -240,7 +287,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
 
@@ -253,7 +305,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
 
@@ -266,22 +323,14 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
-
-    // const __reqSearchSubOptionCode = async (optionId) => {
-    //     await subOptionCodeDataConnect().searchListByProductOptionId(optionId)
-    //         .then(res => {
-    //             if (res.status == 200 && res.data && res.data.message == 'success') {
-    //                 setSubOptionCodeData(res.data.data);
-    //             }
-    //         })
-    //         .catch(err => {
-    //             let res = err.response;
-    //             alert(res?.data?.memo);
-    //         })
-    // }
 
     const __reqCreateProductReleaseList = async (data) => {
         await productReleaseDataConnect().postList(data)
@@ -293,7 +342,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
     
@@ -307,7 +361,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 
@@ -324,7 +383,12 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
 
@@ -338,7 +402,98 @@ const ProductManageComponent = () => {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqSearchProductDetailPage = async (productId) => {
+        await productDetailPageDataConnect().searchBatch(productId)
+            .then(res => {
+                if (res.status == 200 && res.data && res.data.message == 'success') {
+                    setProductDetailPageDataList(res.data.data);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqCreateProductDetailPage = async (data) => {
+        await productDetailPageDataConnect().createOne(data)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqDeleteProductDetailPage = async (pageId) => {
+        await productDetailPageDataConnect().deleteOne(pageId)
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    alert('정상적으로 삭제되었습니다.');
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqModifyProductDetailPage = async (data) => {
+        await productDetailPageDataConnect().updateOne(data)
+            .then(res => {
+                if (res.status == 200 && res.data.message == 'success') {
+                    alert('정상적으로 수정되었습니다.');
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqChangeProduct = async function (product) {
+        await productDataConnect().patchOne(product)
+            .then(res => {
+                if (res.status == 200 && res.data && res.data.message == 'success') {
+                    alert('정상적으로 저장되었습니다.');
+                    setDataChangedTrigger(true);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                
+                alert(res?.data.memo);
             })
     }
 
@@ -407,10 +562,6 @@ const ProductManageComponent = () => {
     const _onAction_searchStockStatus = async (optionCid) => {
         await __reqSearchStockStatus(optionCid);
     }
-
-    // const _onAction_searchSubOptionCode = async (optionId) => {
-    //     await __reqSearchSubOptionCode(optionId);
-    // }
 
     const _onAction_modifyReceiveMemo = async (data) => {
         await __reqModifyReceiveMemo(data);
@@ -487,6 +638,43 @@ const ProductManageComponent = () => {
         onActionCloseBackdrop();
     }
 
+    const _onAction_searchProductDetailPage = async (productId) => {
+        onActionOpenBackdrop();
+        await __reqSearchProductDetailPage(productId);
+        onActionCloseBackdrop();
+    }
+
+    const _onSubmit_createProductDetailPage = async (data) => {
+        onActionOpenBackdrop();
+        await __reqCreateProductDetailPage(data);
+        await __reqSearchProductDetailPage(data.productId);
+        onActionCloseBackdrop();
+    }
+
+    const _onSubmit_modifyProductDetailPage = async (data) => {
+        onActionOpenBackdrop();
+        await __reqModifyProductDetailPage(data);
+        await __reqSearchProductDetailPage(data.productId);
+        onActionCloseBackdrop();
+    }
+
+    const _onAction_deleteProductDetailPage = async (data) => {
+        onActionOpenBackdrop();
+        await __reqDeleteProductDetailPage(data.id);
+        await __reqSearchProductDetailPage(data.productId);
+        onActionCloseBackdrop();
+    }
+
+    const _onAction_updateProductDetailPageOfSelectedProduct = async (detailPage) => {
+        onActionOpenBackdrop();
+        let data = {
+            id: detailPage.productId,
+            productDetailPageId: detailPage.id
+        }
+        await __reqChangeProduct(data);
+        onActionCloseBackdrop();
+    }
+
     return (
         <Container>
             <SelectorComponent
@@ -508,6 +696,7 @@ const ProductManageComponent = () => {
                 optionPackage={optionPackage}
                 stockStatusList={stockStatusList}
                 subOptionCodeData={subOptionCodeData}
+                productDetailPageDataList={productDetailPageDataList}
 
                 onActionOpenBackdrop={onActionOpenBackdrop}
                 onActionCloseBackdrop={onActionCloseBackdrop}
@@ -525,6 +714,11 @@ const ProductManageComponent = () => {
                 _onAction_isCheckedAll={() => _onAction_isCheckedAll()}
                 _onAction_isChecked={(optionId) => _onAction_isChecked(optionId)}
                 _onAction_deleteSubOptionCode={(subOptionId) => _onAction_deleteSubOptionCode(subOptionId)}
+                _onAction_searchProductDetailPage={_onAction_searchProductDetailPage}
+                _onSubmit_createProductDetailPage={_onSubmit_createProductDetailPage}
+                _onSubmit_modifyProductDetailPage={_onSubmit_modifyProductDetailPage}
+                _onAction_deleteProductDetailPage={_onAction_deleteProductDetailPage}
+                _onAction_updateProductDetailPageOfSelectedProduct={_onAction_updateProductDetailPageOfSelectedProduct}
             ></ProductManageTableComponent>
 
             <ProductManageNavComponent

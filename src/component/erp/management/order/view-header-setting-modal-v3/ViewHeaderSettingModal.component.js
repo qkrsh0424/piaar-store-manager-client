@@ -298,7 +298,6 @@ const ViewHeaderSettingModalComponent = (props) => {
                 <SelectorFieldView
                     viewHeaderList={props.viewHeaderList}
                     viewHeader={viewHeader}
-                    createViewHeader={createViewHeader}
 
                     onChangeSelectedViewHeaderTitle={__viewHeader.change.selectedHeader}
                     onActionCreateViewHeader={__viewHeader.action.createHeader}
