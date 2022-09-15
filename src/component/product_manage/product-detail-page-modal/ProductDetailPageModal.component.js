@@ -2,12 +2,12 @@ import { Container, HeaderFieldWrapper } from "./ProductDetailPageModal.styled";
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import SelectorFieldView from "./SelectorField.view";
-import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useReducer, useState } from "react";
 import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
 import InputFieldView from "./InputField.view";
 import ImageSelectorFieldView from "./ImageSelectorField.view";
 import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
+import { imageFileUploaderDataConnect } from "../../../data_connect/imageFileUploaderDataConnect";
 
 function HeaderFieldView(props) {
     return(
@@ -21,6 +21,9 @@ function HeaderFieldView(props) {
         </HeaderFieldWrapper>
     )
 }
+
+// 상세페이지 최대 사이즈 12MB
+const DETAIL_PAGE_MAX_SIZE = 12000000;
 
 const ProductDetailPageModalComponent = (props) => {
     const [detailPage, dispatchDetailPage] = useReducer(detailPageReducer, initialDetailPage);
@@ -37,7 +40,12 @@ const ProductDetailPageModalComponent = (props) => {
     } = useImageFileUploaderHook();
 
     useEffect(() => {
-        if(!(props.selectedProduct && props.selectedProduct.product.productDetailPageId)) {
+        if(!props.selectedProduct) {
+            return;
+        }
+
+        let pageId = props.selectedProduct.product.productDetailPageId;
+        if(!pageId) {
             return;
         }
 
@@ -45,7 +53,6 @@ const ProductDetailPageModalComponent = (props) => {
             return;
         }
 
-        let pageId = props.selectedProduct.product.productDetailPageId;
         let data = props.productDetailPageDataList.filter(r => r.id === pageId)[0];
 
         dispatchDetailPage({
@@ -90,6 +97,11 @@ const ProductDetailPageModalComponent = (props) => {
 
         if(e.target.files.length === 0) return;
 
+        if(e.target.files[0].size >= DETAIL_PAGE_MAX_SIZE) {
+            alert('파일 사이즈 초과로 업로드할 수 없습니다.\n사이즈가 12MB 미만의 이미지를 업로드해주세요.');
+            return;
+        }
+
         onActionOpenBackdrop();
         let imageInfo = await __reqUploadImageFile(e);
         onActionCloseBackdrop();
@@ -122,6 +134,7 @@ const ProductDetailPageModalComponent = (props) => {
             return;
         }
 
+        // 새로 생성되는 데이터면 create 수정되는 데이터면 modify 함수 호출
         if(isCreateData) {
             await props.onSubmitCreateProductDetailPage(detailPage);
         }else {
@@ -130,20 +143,20 @@ const ProductDetailPageModalComponent = (props) => {
 
         dispatchDetailPage({
             type: 'CLEAR'
-        })
+        });
+        setIsCreateData(false);
     }
 
     const onChangeSelectedProductDetailPage = (e) => {
         e.preventDefault();
-        let pageId = e.target.value;
         
+        let pageId = e.target.value;
         let data = props.productDetailPageDataList.filter(r => r.id === pageId)[0];
 
         dispatchDetailPage({
             type: 'INIT_DATA',
             payload: data
         })
-
         setIsCreateData(false);
     }
 
@@ -153,11 +166,13 @@ const ProductDetailPageModalComponent = (props) => {
             return;
         }
 
-        await props.onActionDeleteProductDetailPage(detailPage);
-
-        dispatchDetailPage({
-            type: 'CLEAR'
-        })
+        if(window.confirm("선택된 상세페이지를 제거하시겠습니까?")) {
+            await props.onActionDeleteProductDetailPage(detailPage);
+            
+            dispatchDetailPage({
+                type: 'CLEAR'
+            })
+        }
     }
 
     const onActionUpdateProductDetailPageOfSelectedProduct = async () => {
@@ -165,6 +180,10 @@ const ProductDetailPageModalComponent = (props) => {
             await props.onActionUpdateProductDetailPageOfSelectedProduct(detailPage);
             return;
         }
+    }
+
+    const onActionDownloadProductDetailPage = async () => {
+        await imageFileUploaderDataConnect().downloadByUrl(detailPage.imageUrl, detailPage.title);
     }
 
     return (
@@ -183,6 +202,7 @@ const ProductDetailPageModalComponent = (props) => {
                     onChangeSelectedProductDetailPage={onChangeSelectedProductDetailPage}
                     onActionDeleteProductDetailPage={onActionDeleteProductDetailPage}
                     onActionUpdateProductDetailPageOfSelectedProduct={onActionUpdateProductDetailPageOfSelectedProduct}
+                    onActionDownloadProductDetailPage={onActionDownloadProductDetailPage}
                 ></SelectorFieldView>
 
                 {detailPage &&

@@ -646,9 +646,17 @@ const ProductManageComponent = () => {
 
     const _onSubmit_createProductDetailPage = async (data) => {
         onActionOpenBackdrop();
+        dispatchSubmitCheck({ 
+            type: 'SET_IS_SUBMIT',
+            payload: true
+        });
         await __reqCreateProductDetailPage(data);
         await __reqSearchProductDetailPage(data.productId);
         onActionCloseBackdrop();
+        dispatchSubmitCheck({ 
+            type: 'SET_IS_SUBMIT',
+            payload: false
+        });
     }
 
     const _onSubmit_modifyProductDetailPage = async (data) => {
@@ -681,7 +689,6 @@ const ProductManageComponent = () => {
                 selectedCategoryId={selectedCategoryId}
                 categoryList={categoryList}
                 productList={productList}
-                // productViewList={productViewList}
                 selectedProductId={selectedProductId}
 
                 _onAction_changeCategory={(categoryId) => _onAction_changeCategory(categoryId)}

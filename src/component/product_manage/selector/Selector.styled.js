@@ -6,6 +6,7 @@ const Container = styled.div`
 `;
 
 const SelectorWrapper = styled.div`
+    
     select {
         padding: 3px;
         margin: 10px;
@@ -20,10 +21,6 @@ const SelectorWrapper = styled.div`
         
         &:focus{
             outline: none;
-        }
-    
-        @media only screen and (max-width: 992px) {
-            width: 50%;
         }
     
         @media only screen and (max-width:768px){

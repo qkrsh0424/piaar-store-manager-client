@@ -12,7 +12,7 @@ export default function SelectorFieldView(props) {
                 <div className="selector-box">
                     <Box sx={{ display: 'flex' }}>
                         <FormControl sx={{ width: '100%', height: '35px' }}>
-                            <InputLabel id="title-select-id" sx={{ top: '-10px' }} name='headerTitle'>상세페이지 선택</InputLabel>
+                            <InputLabel id="title-select-id" sx={{ top: '-10px' }} name='headerTitle'>선택</InputLabel>
                             <Select
                                 labelId="title-select-id"
                                 id="title-select"
@@ -81,6 +81,19 @@ export default function SelectorFieldView(props) {
                             ></img>
                         </button>
                     }
+
+                    <button
+                        type='button'
+                        className='image-button-el'
+                        onClick={props.onActionDownloadProductDetailPage}
+                        disabled={!(props.detailPage && !props.isCreateData)}
+                    >
+                        <img
+                            className='image-button-icon'
+                            src='/assets/icon/download_icon.png'
+                            alt=""
+                        ></img>
+                    </button>
                 </div>
             </div>
         </SelectorFieldWrapper>
