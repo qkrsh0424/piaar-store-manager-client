@@ -11,7 +11,7 @@ const productDataConnect = () => {
                 let productDto = {
                     id: productListData[i].id,
                     code: productListData[i].code,
-                    naverProductCode: productListData[i].naverProductCode,
+                    managementNumber: productListData[i].managementNumber,
                     defaultName: productListData[i].defaultName,
                     imageFileName: productListData[i].imageFileName,
                     imageUrl: productListData[i].imageUrl,
@@ -19,14 +19,6 @@ const productDataConnect = () => {
                     managementName: productListData[i].managementName,
                     manufacturingCode: productListData[i].manufacturingCode,
                     memo: productListData[i].memo,
-                    hsCode: productListData[i].hsCode,
-                    style: productListData[i].style,
-                    tariffRate: productListData[i].tariffRate,
-                    defaultWidth: productListData[i].defaultWidth,
-                    defaultLength: productListData[i].defaultLength,
-                    defaultHeight: productListData[i].defaultHeight,
-                    defaultQuantity: productListData[i].defaultQuantity,
-                    defaultWeight: productListData[i].defaultWeight,
                     defaultTotalPurchasePrice: productListData[i].defaultTotalPurchasePrice,
                     stockManagement: productListData[i].stockManagement,
                     productCategoryCid: productListData[i].productCategoryCid
@@ -48,7 +40,7 @@ const productDataConnect = () => {
             let productDto = {
                 id: productData.id,
                 code: productData.code,
-                naverProductCode: productData.naverProductCode,
+                managementNumber: productData.managementNumber,
                 defaultName: productData.defaultName,
                 imageFileName: productData.imageFileName,
                 imageUrl: productData.imageUrl,
@@ -56,14 +48,6 @@ const productDataConnect = () => {
                 managementName: productData.managementName,
                 manufacturingCode: productData.manufacturingCode,
                 memo: productData.memo,
-                hsCode: productData.hsCode,
-                style: productData.style,
-                tariffRate: productData.tariffRate,
-                defaultWidth: productData.defaultWidth,
-                defaultLength: productData.defaultLength,
-                defaultHeight: productData.defaultHeight,
-                defaultQuantity: productData.defaultQuantity,
-                defaultWeight: productData.defaultWeight,
                 defaultTotalPurchasePrice: productData.defaultTotalPurchasePrice,
                 stockManagement: productData.stockManagement,
                 productCategoryCid: productData.productCategoryCid
@@ -107,6 +91,11 @@ const productDataConnect = () => {
         },
         putOne: async function (product) {
             return await axios.put(`${API_SERVER_ADDRESS}/api/v1/product/one`, product, {
+                withCredentials: true
+            })
+        },
+        patchOne: async function (product) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/api/v1/product`, product, {
                 withCredentials: true
             })
         },

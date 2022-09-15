@@ -18,16 +18,12 @@ class ProductOption {
         this.code = '';
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
-        this.nosUniqueCode = '';
         this.salesPrice = 0;
         this.stockUnit = 0;
         this.status = '준비중';
         this.memo = '';
         this.imageUrl = '';
         this.imageFileName = '';
-        this.color = '';
-        this.unitCny = '';
-        this.unitKrw = '';
         this.totalPurchasePrice = 0;
         this.packageYn = 'n';
         this.safetyStockUnit = 0;
@@ -41,16 +37,12 @@ class ProductOption {
             code: this.code,
             defaultName: this.defaultName,
             managementName: this.managementName,
-            nosUniqueCode: this.nosUniqueCode,
             salesPrice: this.salesPrice,
             stockUnit: this.stockUnit,
             status: this.status,
             memo: this.memo,
             imageUrl: this.imageUrl,
             imageFileName: this.imageFileName,
-            color: this.color,
-            unitCny: this.unitCny,
-            unitKrw: this.unitKrw,
             totalPurchasePrice: this.totalPurchasePrice,
             packageYn: this.packageYn,
             safetyStockUnit: this.safetyStockUnit,

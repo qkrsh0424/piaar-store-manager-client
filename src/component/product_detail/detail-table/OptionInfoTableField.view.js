@@ -29,28 +29,12 @@ export default function OptionInfoTableFieldView(props) {
                             <span className="info-text">{props.selectedOption.code}</span>
                         </div>
                         <div className="grid-span-2">
-                            <span>노스노스 고유코드 :</span>
-                            <span className="info-text">{props.selectedOption.nosUniqueCode}</span>
-                        </div>
-                        <div className="grid-span-2">
                             <span>판매가 :</span>
                             <span className="into-text">{props.selectedOption.salesPrice}</span>
                         </div>
                         <div className="grid-span-2">
                             <span>재고수량 :</span>
                             <span className="into-text">{props.selectedOption.stockSumUnit}</span>
-                        </div>
-                        <div className="grid-span-2">
-                            <span>색상 :</span>
-                            <span className="into-text">{props.selectedOption.color}</span>
-                        </div>
-                        <div className="grid-span-2">
-                            <span>CNY :</span>
-                            <span className="into-text">{props.selectedOption.unitCny}</span>
-                        </div>
-                        <div className="grid-span-2">
-                            <span>KRW :</span>
-                            <span className="into-text">{props.selectedOption.unitKrw}</span>
                         </div>
                         <div className="grid-span-2">
                             <span>세트상품 :</span>

@@ -359,9 +359,6 @@ const OrderRegistrationNaverBody = (props) => {
                                         <HeaderTh className="fixed-header medium-cell" scope="col">
                                             <span>수령인</span>
                                         </HeaderTh>
-                                        <HeaderTh className="fixed-header" scope="col">
-                                            <span>노스노스 고유코드</span>
-                                        </HeaderTh>
                                         <HeaderTh className="fixed-header large-cell" scope="col">
                                             <span>상품상세</span>
                                         </HeaderTh>

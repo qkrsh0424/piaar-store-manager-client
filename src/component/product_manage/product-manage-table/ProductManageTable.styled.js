@@ -74,6 +74,15 @@ const ProductManageTableWrapper = styled.div`
         font-weight: 600;
     }
 
+    .detail-btn {
+        padding: 3px 8px;
+        background: rgb(159, 160, 241);
+        color:white;
+        border:1px solid rgb(159, 160, 241);
+        border-radius: 3px;
+        font-weight: 600;
+    }
+
     .option-control button {
         padding:3px 8px;
         background: #7a7bda;

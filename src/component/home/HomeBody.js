@@ -138,7 +138,7 @@ const HomeBody = () => {
                                 </LinkBox>
                             </GroupBox>
 
-                            <GroupBox>
+                            {/* <GroupBox>
                                 <GroupTitle>네이버</GroupTitle>
                                 <LinkBox>
                                     <CustomLink to='/delivery-ready/naver'>배송준비</CustomLink>
@@ -154,7 +154,7 @@ const HomeBody = () => {
                                     <CustomLink to='/delivery-ready/coupang'>배송준비</CustomLink>
                                     <CustomLink to='/shipment/packing-list/coupang'>배송준비 데이터 추출기</CustomLink>
                                 </LinkBox>
-                            </GroupBox>
+                            </GroupBox> */}
 
                             <GroupBox>
                                 <GroupTitle>기타</GroupTitle>

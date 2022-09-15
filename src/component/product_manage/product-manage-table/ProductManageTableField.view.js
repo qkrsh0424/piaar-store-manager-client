@@ -18,7 +18,7 @@ export default function ProductManageTableFieldView(props) {
                         }
                         <th className='fixedHeader' scope="col" width='250'>상품식별코드</th>
                         <th className='fixedHeader' scope="col" width='140'>상품이미지</th>
-                        
+                        <th className='fixedHeader' scope="col" width='200'>상세페이지</th>
                         {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&
                             <th className='fixedHeader' scope="col" width='200'>상품관리</th>
                         }
@@ -30,7 +30,6 @@ export default function ProductManageTableFieldView(props) {
                         </th>
                         <th className='fixedHeader' scope="col" width='200'>옵션관리코드</th>
                         <th className='fixedHeader' scope="col" width='100'>세트상품 여부</th>
-                        {/* <th className='fixedHeader' scope="col" width='150'>노스노스 고유코드</th> */}
                         <th className='fixedHeader' scope="col" width='200'>옵션명</th>
                         <th className='fixedHeader' scope="col" width='200'>옵션관리명</th>
                         <th className='fixedHeader' scope="col" width='100'>재고수량</th>
@@ -87,6 +86,11 @@ export default function ProductManageTableFieldView(props) {
                                             </div>
                                         </div>
                                     </th>
+                                    <th rowSpan={product.options.length + 1}>
+                                        <div>
+                                            <button type='button' className="detail-btn" onClick={() => props.onActionOpenProductDetailPageModal(product.product.id)}>상세페이지</button>
+                                        </div>
+                                    </th>
                                     {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&
                                         <th rowSpan={product.options.length + 1}>
                                             <div>
@@ -126,7 +130,6 @@ export default function ProductManageTableFieldView(props) {
                                             </td>
                                             <td>{option.code}</td>
                                             <td style={{ fontWeight: '800' }}>{option.packageYn === 'y' ? 'O' : '-'}</td>
-                                            {/* <td>{option.nosUniqueCode}</td> */}
                                             <td>{option.defaultName}</td>
                                             <td>{option.managementName}</td>
                                             <td style={{ fontWeight: '800' }}>{option.stockSumUnit}</td>
