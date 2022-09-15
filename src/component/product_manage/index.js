@@ -51,10 +51,14 @@ const ProductManageComponent = () => {
 
     useEffect(() => {
         async function fetchInit() {
+            let params = {
+                objectType: 'basic'
+            }
+
             onActionOpenBackdrop();
             await __reqSearchCategoryList();
             await __reqSearchProductListFj();
-            await __reqSearchOptionList();
+            await __reqSearchOptionList(params);
             onActionCloseBackdrop();
 
             dispatchSubmitCheck({
@@ -72,9 +76,12 @@ const ProductManageComponent = () => {
     useEffect(() => {
         async function searchAll() {
             if (dataChangedTrigger) {
+                let params = {
+                    objectType: 'basic'
+                }
                 onActionOpenBackdrop();
                 await __reqSearchProductListFj();
-                await __reqSearchOptionList();
+                await __reqSearchOptionList(params);
                 onActionCloseBackdrop();
             }
             setDataChangedTrigger(false);
@@ -129,8 +136,8 @@ const ProductManageComponent = () => {
             });
     }
 
-    const __reqSearchOptionList = async () => {
-        await productOptionDataConnect().getList()
+    const __reqSearchOptionList = async (params) => {
+        await productOptionDataConnect().searchAll(params)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     setOptionList(res.data.data);
@@ -148,7 +155,7 @@ const ProductManageComponent = () => {
     }
 
     const __reqSearchCategoryList = async () => {
-        await productCategoryDataConnect().searchList()
+        await productCategoryDataConnect().searchAll()
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     setCategoryList(res.data.data);
@@ -259,8 +266,8 @@ const ProductManageComponent = () => {
             })
     }
 
-    const __reqDeleteProductOption = async (productCid) => {
-        await productOptionDataConnect().deleteOne(productCid)
+    const __reqDeleteProductOption = async (optionId) => {
+        await productOptionDataConnect().deleteOne(optionId)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('정상적으로 삭제되었습니다.');
@@ -278,8 +285,8 @@ const ProductManageComponent = () => {
             })
     }
 
-    const __reqSearchStockStatus = async (optionCid) => {
-        await productOptionDataConnect().searchStockStatus(optionCid)
+    const __reqSearchStockStatus = async (params) => {
+        await productOptionDataConnect().searchForStockStatus(params)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     setStockStatusList(res.data.data);
@@ -296,11 +303,15 @@ const ProductManageComponent = () => {
             })
     }
 
-    const __reqModifyReceiveMemo = async (data) => {
-        await productReceiveDataConnect().putOne(data)
+    const __reqModifyReceiveMemo = async (params, data) => {
+        await productReceiveDataConnect().putOne(params, data)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
-                    __reqSearchStockStatus(data.productOptionCid);
+                    let params2 = {
+                        objectType: 'basic',
+                        optionCid: data.productOptionCid,
+                    }
+                    __reqSearchStockStatus(params2);
                 }
             })
             .catch(err => {
@@ -314,11 +325,15 @@ const ProductManageComponent = () => {
             })
     }
 
-    const __reqModifyReleaseMemo = async (data) => {
-        await productReleaseDataConnect().putOne(data)
+    const __reqModifyReleaseMemo = async (params, data) => {
+        await productReleaseDataConnect().putOne(params, data)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
-                    __reqSearchStockStatus(data.productOptionCid);
+                    let params2 = {
+                        objectType: 'basic',
+                        optionCid: data.productOptionCid
+                    }
+                    __reqSearchStockStatus(params2);
                 }
             })
             .catch(err => {
@@ -332,8 +347,8 @@ const ProductManageComponent = () => {
             })
     }
 
-    const __reqCreateProductReleaseList = async (data) => {
-        await productReleaseDataConnect().postList(data)
+    const __reqCreateProductReleaseList = async (params, data) => {
+        await productReleaseDataConnect().postList(params, data)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('출고등록 되었습니다.');
@@ -351,8 +366,8 @@ const ProductManageComponent = () => {
             })
     }
     
-    const __reqCreateProductReceiveList = async (data) => {
-        await productReceiveDataConnect().postList(data)
+    const __reqCreateProductReceiveList = async (params, data) => {
+        await productReceiveDataConnect().postBatch(params, data)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('입고등록 되었습니다.');
@@ -374,7 +389,12 @@ const ProductManageComponent = () => {
         var start = startDate ? getStartDate(new Date(startDate)) : null;
         var end = endDate ? getEndDate(new Date(endDate)) : null;
 
-        await productOptionDataConnect().searchListStockStatus(start, end)
+        let params = {
+            objectType: 'm2oj',
+            startDate: start,
+            endDate: end
+        }
+        await productOptionDataConnect().searchForStockStatus(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     setOptionReceiveStatusData(res.data.data.productReceive);
@@ -555,20 +575,31 @@ const ProductManageComponent = () => {
         await __reqSearchOptionPackage(optionId);
     }
 
-    const _onSubmit_deleteProductOption = async (optionCid) => {
-        await __reqDeleteProductOption(optionCid);
+    const _onSubmit_deleteProductOption = async (optionId) => {
+        await __reqDeleteProductOption(optionId);
     }
 
     const _onAction_searchStockStatus = async (optionCid) => {
-        await __reqSearchStockStatus(optionCid);
+        let params = {
+            objectType: 'basic',
+            optionCid
+        }
+
+        await __reqSearchStockStatus(params);
     }
 
     const _onAction_modifyReceiveMemo = async (data) => {
-        await __reqModifyReceiveMemo(data);
+        let params = {
+            objectType: 'basic'
+        }
+        await __reqModifyReceiveMemo(params, data);
     }
 
     const _onAction_modifyReleaseMemo = async (data) => {
-        await __reqModifyReleaseMemo(data);
+        let params = {
+            objectType: 'basic'
+        }
+        await __reqModifyReleaseMemo(params, data);
     }
 
     const _onAction_checkOneTr = (optionId) => {
@@ -604,7 +635,11 @@ const ProductManageComponent = () => {
             type: 'SET_IS_SUBMIT',
             payload: true
         });
-        await __reqCreateProductReleaseList(data);
+
+        let params = {
+            objectType: 'basic'
+        }
+        await __reqCreateProductReleaseList(params, data);
         onActionCloseBackdrop();
         dispatchSubmitCheck({ 
             type: 'SET_IS_SUBMIT',
@@ -618,7 +653,11 @@ const ProductManageComponent = () => {
             type: 'SET_IS_SUBMIT',
             payload: true
         });
-        await __reqCreateProductReceiveList(data);
+
+        let params = {
+            objectType: 'basic'
+        }
+        await __reqCreateProductReceiveList(params, data);
         onActionCloseBackdrop();
         dispatchSubmitCheck({ 
             type: 'SET_IS_SUBMIT',
@@ -712,7 +751,7 @@ const ProductManageComponent = () => {
                 _onSubmit_createProductOption={(optionData) => _onSubmit_createProductOption(optionData)}
                 _onSubmit_modifyProductOption={(optionData) => _onSubmit_modifyProductOption(optionData)}
                 _onAction_searchOptionPackage={(optionId) => _onAction_searchOptionPackage(optionId)}
-                _onSubmit_deleteProductOption={(optionCid) => _onSubmit_deleteProductOption(optionCid)}
+                _onSubmit_deleteProductOption={(optionId) => _onSubmit_deleteProductOption(optionId)}
                 _onAction_searchStockStatus={(optionCid) => _onAction_searchStockStatus(optionCid)}
                 _onAction_modifyReceiveMemo={(data) => _onAction_modifyReceiveMemo(data)}
                 _onAction_modifyReleaseMemo={(data) => _onAction_modifyReleaseMemo(data)}

@@ -5,8 +5,8 @@ export default function TableFieldView(props) {
     return(
         <TableFieldWrapper>
             <div className="status-box">
-                <span className="receive-box">입고</span>
-                <span className="release-box">출고</span>
+                <span className="color-box">입고</span>
+                <span className="color-box release-item">출고</span>
             </div>
             <div className='table-container'>
                 <table className='table table-sm' style={{ tableLayout: 'fixed' }}>
@@ -16,7 +16,7 @@ export default function TableFieldView(props) {
                                 <span>입출고 날짜</span>
                             </th>
                             <th scope='col' width='150'>
-                                <span>입출고 개수</span>
+                                <span>입출고 수량</span>
                             </th>
                             <th scope='col' width='300' className='status-memo'>
                                 <span>메모</span>
@@ -27,7 +27,7 @@ export default function TableFieldView(props) {
                         </tr>
                     </thead>
 
-                    <tbody className="data-container">
+                    <tbody>
                         {props.stockStatusListData?.map((data) => {
                             return (
                                 <tr

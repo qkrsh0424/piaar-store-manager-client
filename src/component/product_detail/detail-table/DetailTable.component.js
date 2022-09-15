@@ -103,8 +103,10 @@ const DetailTableComponent = (props) => {
             return;
         }
 
+        let detailId = props.detailViewList.filter(r => r.cid === parseInt(query.detailCid))[0]?.id;
+
         if (window.confirm('정말로 삭제하시겠습니까?')) {
-            await props._onSubmit_deleteProductDetail(query.detailCid);
+            await props._onSubmit_deleteProductDetail(detailId);
         }
     }
 

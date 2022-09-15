@@ -227,11 +227,11 @@ const ItemSelectorComponent = (props) => {
         if(!query.optionCid) {
             alert('옵션을 먼저 선택해주세요.');
             return;
-        }
-        
+        } 
 
         if (window.confirm('옵션을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
-            await props._onSubmit_deleteProductOption(query.optionCid);
+            let parentOptionId = props.optionViewList.filter(r => r.cid === parseInt(query.optionCid))[0]?.id;
+            await props._onSubmit_deleteProductOption(parentOptionId);
         }
     }
 

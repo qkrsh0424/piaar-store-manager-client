@@ -37,23 +37,46 @@ const TableFieldWrapper = styled.div`
 
     .status-box {
         font-weight: 400;
-        padding: 10px;
+        padding: 15px 5px;
     }
 
-    .status-box span {
+    .status-box .color-box {
         border: none;
         margin: 4px;
         padding: 5px 15px;
-        border-radius: 3px;
         background: #c8cef7;
     }
 
-    .release-box {
+    .release-item {
         background: #d8def5 !important;
     }
 
-    table {
+    .fixed-header {
+        position: sticky;
+        top: -1px;
+        z-index: 5;
+        background-color: #fff;
+    }
+
+    .table-container {
+        height: 500px;
+        overflow: auto;
+        text-align: center;
+        overflow: auto;
+    }
+
+    table{
+        position:relative;
+        text-align: center;
+        width: fit-content;
+        table-layout: fixed;
+        border: none;
         border: 1px solid #c8c8c8;
+    }
+
+    table thead tr th {
+        background: #fff;
+        border-bottom: 1px solid #e9e9e9;
     }
 
     tbody tr {
@@ -72,11 +95,6 @@ const TableFieldWrapper = styled.div`
 
     tbody .release-list {
         background: #d8def5;
-    }
-
-    .table-container {
-        text-align: center;
-        overflow: auto;
     }
 `;
 

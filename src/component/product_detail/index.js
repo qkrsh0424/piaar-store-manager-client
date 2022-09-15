@@ -64,8 +64,11 @@ const ProductDetailComponent = () => {
     useEffect(() => {
         async function searchAll() {
             if (dataChangedTrigger) {
+                let params = {
+                    objectType: 'basic'
+                }
                 await __reqSearchProduct();
-                await __reqSearchOption();
+                await __reqSearchOption(params);
                 await __reqSearchProductDetail();
             }
             setDataChangedTrigger(false);
@@ -99,8 +102,12 @@ const ProductDetailComponent = () => {
             if (query.productCid !== '0' && !query.productCid) {
                 return;
             }
+            
+            let params = {
+                objectType: 'basic'
+            }
 
-            await __reqSearchOption();
+            await __reqSearchOption(params);
         }
         searchOption();
     }, [query.productCid]);
@@ -203,7 +210,7 @@ const ProductDetailComponent = () => {
 
 
     const __reqSearchProductCategory = async () => {
-        await productCategoryDataConnect().searchList()
+        await productCategoryDataConnect().searchAll()
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {
                     setCategoryList(res.data.data);
@@ -228,8 +235,8 @@ const ProductDetailComponent = () => {
             })
     }
 
-    const __reqSearchOption = async () => {
-        await productOptionDataConnect().getList()
+    const __reqSearchOption = async (params) => {
+        await productOptionDataConnect().searchAll(params)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     setOptionList(res.data.data);
@@ -268,8 +275,8 @@ const ProductDetailComponent = () => {
             })
     }
 
-    const __reqDeleteProductOption = async (productCid) => {
-        await productOptionDataConnect().deleteOne(productCid)
+    const __reqDeleteProductOption = async (optionId) => {
+        await productOptionDataConnect().deleteOne(optionId)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('정상적으로 삭제되었습니다.');
@@ -282,8 +289,8 @@ const ProductDetailComponent = () => {
             })
     }
 
-    const __reqDeleteProductDetail = async (detailCid) => {
-        await productDetailDataConnect().deleteOne(detailCid)
+    const __reqDeleteProductDetail = async (detailId) => {
+        await productDetailDataConnect().deleteOne(detailId)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('정상적으로 삭제되었습니다.');
@@ -383,12 +390,12 @@ const ProductDetailComponent = () => {
         await __reqDeleteProduct(productCid);
     }
 
-    const _onSubmit_deleteProductOption = async (optionCid) => {
-        await __reqDeleteProductOption(optionCid);
+    const _onSubmit_deleteProductOption = async (optionId) => {
+        await __reqDeleteProductOption(optionId);
     }
 
-    const _onSubmit_deleteProductDetail = async (detailCid) => {
-        await __reqDeleteProductDetail(detailCid);
+    const _onSubmit_deleteProductDetail = async (detailId) => {
+        await __reqDeleteProductDetail(detailId);
     }
 
     const _onSubmit_createProductDetail = async (detailData) => {
@@ -462,7 +469,7 @@ const ProductDetailComponent = () => {
                 onActionCloseBackdrop={onActionCloseBackdrop}
 
                 _onSubmit_deleteProduct={(productCid) => _onSubmit_deleteProduct(productCid)}
-                _onSubmit_deleteProductOption={(optionCid) => _onSubmit_deleteProductOption(optionCid)}
+                _onSubmit_deleteProductOption={(optionId) => _onSubmit_deleteProductOption(optionId)}
                 _onSubmit_modifyProduct={(modifyProductData) => _onSubmit_modifyProduct(modifyProductData)}
                 _onSubmit_createProductOption={(createOptionData) => _onSubmit_createProductOption(createOptionData)}
                 _onSubmit_modifyProductOption={(modifyOptionData) => _onSubmit_modifyProductOption(modifyOptionData)}
@@ -474,7 +481,7 @@ const ProductDetailComponent = () => {
                 selectedOption={selectedOption}
                 detailViewList={detailViewList}
 
-                _onSubmit_deleteProductDetail={(detailCid) => _onSubmit_deleteProductDetail(detailCid)}
+                _onSubmit_deleteProductDetail={(detailId) => _onSubmit_deleteProductDetail(detailId)}
                 _onSubmit_createProductDetail={(detailData) => _onSubmit_createProductDetail(detailData)}
                 _onSubmit_modifyProductDetail={(detailData) => _onSubmit_modifyProductDetail(detailData)}
             ></DetailTableComponent>

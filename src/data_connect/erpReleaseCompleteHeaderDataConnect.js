@@ -4,8 +4,8 @@ const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 
 const erpReleaseCompleteHeaderDataConnect = () => {
     return {
-        searchList: async function () {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/erp-release-complete-headers`, {
+        searchAll: async function () {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/erp-release-complete-headers/all`, {
                 withCredentials: true
             })
         },

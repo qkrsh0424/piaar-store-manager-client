@@ -94,15 +94,17 @@ const SalesPerformanceComponent = (props) => {
         let endDate = query.endDate ? getEndDate(query.endDate) : null;
         let periodType = 'channelOrderDate';
         let matchedCode = 'optionCode';
+        let objectType = 'm2oj';
 
         let params = {
             startDate: startDate,
             endDate: endDate,
             periodType: periodType,
-            matchedCode: matchedCode
+            matchedCode: matchedCode,
+            objectType: objectType
         }
 
-        await erpOrderItemDataConnect().searchAll(params)
+        await erpOrderItemDataConnect().searchBatch(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchErpItemData({
@@ -123,6 +125,12 @@ const SalesPerformanceComponent = (props) => {
     }
     
     const __reqSearchErpOrderItemByParams = async (params) => {
+        let objectType = 'basic';
+
+        params = {
+            ...params,
+            objectType
+        }
         await erpOrderItemDataConnect().searchBatch(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
@@ -144,7 +152,7 @@ const SalesPerformanceComponent = (props) => {
     }
 
     const __reqSearchProductCategory = async () => {
-        await productCategoryDataConnect().searchList()
+        await productCategoryDataConnect().searchAll()
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchCategoryList({

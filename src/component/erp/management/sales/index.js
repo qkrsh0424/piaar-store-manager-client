@@ -78,7 +78,7 @@ const SalesComponent = (props) => {
 
     // Search
     const __reqSearchViewHeaderList = async () => {
-        await erpSalesHeaderDataConnect().searchList()
+        await erpSalesHeaderDataConnect().searchAll()
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchViewHeaderList({
@@ -111,8 +111,8 @@ const SalesComponent = (props) => {
             })
     }
 
-    const __reqSearchProductOptionList = async () => {
-        await productOptionDataConnect().searchList()
+    const __reqSearchProductOptionList = async (params) => {
+        await productOptionDataConnect().searchAll(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchProductOptionList({
@@ -139,6 +139,11 @@ const SalesComponent = (props) => {
         let sortDirection = query.sortDirection || null;
         let sort = sortFormatUtils().getSortWithSortElements(DEFAULT_HEADER_FIELDS, sortBy, sortDirection);
         let matchedCode = query.matchedCode || null;
+        let objectType = 'releaseBasic';
+        
+        if(query.matchedCode === 'optionCode') {
+            objectType = 'basic';
+        }
 
         let params = {
             salesYn: 'y',
@@ -151,10 +156,11 @@ const SalesComponent = (props) => {
             page: page,
             size: size,
             sort: sort,
-            matchedCode: matchedCode
+            matchedCode: matchedCode,
+            objectType: objectType
         }
 
-        await erpOrderItemDataConnect().searchList(params)
+        await erpOrderItemDataConnect().searchBatchByPage(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchOrderItemPage({
@@ -178,7 +184,15 @@ const SalesComponent = (props) => {
         let params = {
             ids: ids,
             salesYn: 'y',
-            matchedCode: query.matchedCode || null
+            matchedCode: query.matchedCode || null,
+            objectType: 'releaseBasic'
+        }
+
+        if(query.matchedCode === 'optionCode') {
+            params = {
+                ...params,
+                objectType: 'basic'
+            }
         }
 
         await erpOrderItemDataConnect().refreshOrderList(params)
@@ -376,9 +390,13 @@ const SalesComponent = (props) => {
     }
 
     useEffect(() => {
+        let params = {
+            objectType: 'm2oj'
+        }
+
         __reqSearchReleaseLocationOfProductOption();
         __reqSearchViewHeaderList();
-        __reqSearchProductOptionList();
+        __reqSearchProductOptionList(params);
         __reqSearchDownloadExcelHeaders();
     }, []);
 
