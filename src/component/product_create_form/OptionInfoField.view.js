@@ -52,15 +52,11 @@ export default function OptionInfoFieldView(props) {
                                         <th scope="col" width='200'>옵션명 <i className="icon-must" aria-label="필수항목"></i></th>
                                         <th scope="col" width='200'>관리옵션명 <i className="icon-must" aria-label="필수항목"></i></th>
                                         <th scope="col" width='200'>관리코드</th>
-                                        <th scope="col" width='200'>노스노스 고유코드</th>
                                         <th scope="col" width='200'>판매가</th>
                                         <th scope="col" width='200'>매입총합계</th>
                                         <th scope="col" width='200'>상태</th>
                                         <th scope="col" width='200'>출고지</th>
                                         <th scope="col" width='200'>비고</th>
-                                        <th scope="col" width='200'>색상</th>
-                                        <th scope="col" width='200'>CNY</th>
-                                        <th scope="col" width='200'>KRW</th>
                                         <th scope="col" width='200'>안전재고 수량</th>
                                     </tr>
                                 </thead>
@@ -80,9 +76,6 @@ export default function OptionInfoFieldView(props) {
                                             <input type='text' value={optionData.code} name='code' disabled></input>
                                         </td>
                                         <td>
-                                            <input type='text' value={optionData.nosUniqueCode} name='nosUniqueCode' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>
-                                        </td>
-                                        <td>
                                             <input type='number' value={optionData.salesPrice} name='salesPrice' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>
                                         </td>
                                         <td>
@@ -96,15 +89,6 @@ export default function OptionInfoFieldView(props) {
                                         </td>
                                         <td>
                                             <input type='text' value={optionData.memo} name='memo' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>
-                                        </td>
-                                        <td>
-                                            <input type='text' value={optionData.color} name='color' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>
-                                        </td>
-                                        <td>
-                                            <input type='text' value={optionData.unitCny} name='unitCny' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>
-                                        </td>
-                                        <td>
-                                            <input type='text' value={optionData.unitKrw} name='unitKrw' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>
                                         </td>
                                         <td>
                                             <input type='number' value={optionData.safetyStockUnit} name='safetyStockUnit' onChange={(e) => props.onChangeOptionInputValue(e, optionData.id)}></input>

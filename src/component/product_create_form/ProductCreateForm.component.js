@@ -5,10 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { useImageFileUploaderHook } from '../../hooks/uploader/useImageFileUploaderHook';
 import CategorySelectorFieldView from './CategorySelectorField.view';
 import CodeInfoFieldView from './CodeInfoField.view';
-import DefaultDetailInfoFieldView from './DefaultDetailInfoField.view';
 import DefaultInfoFieldView from './DefaultInfoField.view';
 import ImageSelectorFieldView from './ImageSelectorField.view';
-import ImportInfoFieldView from './ImportInfoField.view';
 import OptionHeaderFieldView from './OptionHeaderField.view';
 import OptionInfoFieldView from './OptionInfoField.view';
 
@@ -21,7 +19,6 @@ class ProductOption {
         this.code = '';
         this.defaultName = optionDefaultName;
         this.managementName = optionManagementName;
-        this.nosUniqueCode = '';
         this.salesPrice = 0;
         this.stockUnit = 0;
         this.status = '준비중';
@@ -29,10 +26,8 @@ class ProductOption {
         this.releaseLocation = '';
         this.imageUrl = '';
         this.imageFileName = '';
-        this.color = '';
-        this.unitCny = '';
-        this.unitKrw = '';
         this.totalPurchasePrice = 0;
+        this.safetyStockUnit = 0;
         this.packageYn = 'n';
         this.productCid = null;
         this.productId = productId;
@@ -44,7 +39,6 @@ class ProductOption {
             code: this.code,
             defaultName: this.defaultName,
             managementName: this.managementName,
-            nosUniqueCode: this.nosUniqueCode,
             salesPrice: this.salesPrice,
             stockUnit: this.stockUnit,
             status: this.status,
@@ -52,10 +46,8 @@ class ProductOption {
             memo: this.memo,
             imageUrl: this.imageUrl,
             imageFileName: this.imageFileName,
-            color: this.color,
-            unitCny: this.unitCny,
-            unitKrw: this.unitKrw,
             totalPurchasePrice: this.totalPurchasePrice,
+            safetyStockUnit: this.safetyStockUnit,
             packageYn: this.packageYn,
             productCid: this.productCid,
             productId: this.productId

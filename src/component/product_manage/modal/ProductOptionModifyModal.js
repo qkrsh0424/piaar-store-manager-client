@@ -219,21 +219,6 @@ const ProductOptionModifyModal = (props) => {
                                 <div className="input-group mb-3">
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">
-                                            노스노스 고유코드
-                                        </span>
-                                    </div>
-                                    <CommonInputEl
-                                        type="text"
-                                        className='form-control'
-                                        name='nosUniqueCode'
-                                        value={props.productOptionModifyData.nosUniqueCode ?? ''}
-                                        onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
-                                    />
-
-                                </div>
-                                <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text">
                                             상품가격
                                         </span>
                                     </div>
@@ -316,20 +301,6 @@ const ProductOptionModifyModal = (props) => {
                                         className='form-control'
                                         name='unitCny'
                                         value={props.productOptionModifyData.unitCny ?? ''}
-                                        onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
-                                    />
-                                </div>
-                                <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <span className="input-group-text">
-                                            KRW
-                                        </span>
-                                    </div>
-                                    <CommonInputEl
-                                        type="text"
-                                        className='form-control'
-                                        name='unitKrw'
-                                        value={props.productOptionModifyData.unitKrw ?? ''}
                                         onChange={(e) => props.__handleEventControl().productOption().modifyDataOnChangeInputValue(e)}
                                     />
                                 </div>

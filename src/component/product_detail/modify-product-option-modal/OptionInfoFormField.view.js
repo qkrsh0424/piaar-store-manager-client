@@ -57,20 +57,6 @@ export default function OptionInfoFormFieldView(props) {
                 <div className="input-group mb-3">
                     <div className="input-group-prepend">
                         <span className="input-group-text">
-                            노스노스 고유코드
-                        </span>
-                    </div>
-                    <input
-                        type="text"
-                        className='form-control'
-                        name='nosUniqueCode'
-                        value={props.modifyOption.nosUniqueCode ?? ''}
-                        onChange={(e) => props.onChangeInputValue(e)}
-                    />
-                </div>
-                <div className="input-group mb-3">
-                    <div className="input-group-prepend">
-                        <span className="input-group-text">
                             판매가
                         </span>
                     </div>
@@ -149,48 +135,6 @@ export default function OptionInfoFormFieldView(props) {
                         className='form-control'
                         name='memo'
                         value={props.modifyOption.memo ?? ''}
-                        onChange={(e) => props.onChangeInputValue(e)}
-                    />
-                </div>
-                <div className="input-group mb-3">
-                    <div className="input-group-prepend">
-                        <span className="input-group-text">
-                            색상
-                        </span>
-                    </div>
-                    <input
-                        type="text"
-                        className='form-control'
-                        name='color'
-                        value={props.modifyOption.color ?? ''}
-                        onChange={(e) => props.onChangeInputValue(e)}
-                    />
-                </div>
-                <div className="input-group mb-3">
-                    <div className="input-group-prepend">
-                        <span className="input-group-text">
-                            CNY
-                        </span>
-                    </div>
-                    <input
-                        type="text"
-                        className='form-control'
-                        name='unitCny'
-                        value={props.modifyOption.unitCny ?? ''}
-                        onChange={(e) => props.onChangeInputValue(e)}
-                    />
-                </div>
-                <div className="input-group mb-3">
-                    <div className="input-group-prepend">
-                        <span className="input-group-text">
-                            KRW
-                        </span>
-                    </div>
-                    <input
-                        type="text"
-                        className='form-control'
-                        name='unitKrw'
-                        value={props.modifyOption.unitKrw ?? ''}
                         onChange={(e) => props.onChangeInputValue(e)}
                     />
                 </div>
