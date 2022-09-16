@@ -215,6 +215,7 @@ const InputFieldWrapper  = styled.div`
 
 const ImageSelectorWrapper = styled.div`
     min-height: 50vh;
+    max-height: 50vh;
     padding: 50px 0;
 
     input {

@@ -17,7 +17,7 @@ const ExcelTranslatorFormControlModalComponent = (props) => {
         }
 
         let translator = props.excelTranslatorData.filter(r => !props.excelTranslatorViewFormIds.includes(r.id));
-        let viewTranslator = props.excelTranslatorViewFormIds.map(r => props.excelTranslatorData.filter(r2 => r2.id === r)[0]);
+        let viewTranslator = props.excelTranslatorData.filter(r => props.excelTranslatorViewFormIds.filter(r2 => r.id === r2)[0]);
 
         dispatchExcelTranslatorData({
             type: 'SET_DATA',
