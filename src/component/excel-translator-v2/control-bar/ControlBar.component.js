@@ -114,8 +114,11 @@ const ControlBarComponent = (props) => {
         submit: {
             createTranslatorHeader: async (body) => {
                 await props.onSubmitCreateTranslatorHeader(body);
-
+                
                 __selectedTranslatorHeader.action.closeCreateTranslatorHeaderModal();
+                
+                // excelTranslatorViewOrder에 지금 생성한 헤더 추가
+                setExcelTranslatorViewFormIds([...excelTranslatorViewFormIds, body.id]);
             },
             modifyTranslatorHeader: async (body) => {
                 await props.onSubmitModifyExcelTranslatorHeader(body);
@@ -226,7 +229,6 @@ const ControlBarComponent = (props) => {
 export default ControlBarComponent;
 
 const initialSelectedTranslatorHeader = null;
-const initialSelectedExcelTranslator = '';
 const initialExcelTranslatorViewData = [];
 
 const selectedTranslatorHeaderReducer = (state, action) => {
@@ -239,22 +241,12 @@ const selectedTranslatorHeaderReducer = (state, action) => {
     }
 }
 
-const selectedExcelTranslatorReducer = (state, action) => {
-    switch (action.type) {
-        case 'SET_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialSelectedExcelTranslator;
-        default: return initialSelectedExcelTranslator;
-    }
-}
-
 const excelTranslatorViewDataReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
             return action.payload;
         case 'CLEAR':
-            return initialSelectedExcelTranslator;
-        default: return initialSelectedExcelTranslator;
+            return initialExcelTranslatorViewData;
+        default: return initialExcelTranslatorViewData;
     }
 }
