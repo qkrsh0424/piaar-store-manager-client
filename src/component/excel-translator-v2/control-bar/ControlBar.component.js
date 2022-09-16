@@ -53,7 +53,7 @@ const ControlBarComponent = (props) => {
             return;
         }
 
-        let data = excelTranslatorViewFormIds.map(r => props.excelTranslatorHeaderList.filter(r2 => r2.id === r)[0]);
+        let data = props.excelTranslatorHeaderList.filter(r => excelTranslatorViewFormIds.filter(r2 => r.id === r2)[0]);
         
         dispatchExcelTranslatorViewData({
             type: 'SET_DATA',
@@ -114,8 +114,11 @@ const ControlBarComponent = (props) => {
         submit: {
             createTranslatorHeader: async (body) => {
                 await props.onSubmitCreateTranslatorHeader(body);
-
+                
                 __selectedTranslatorHeader.action.closeCreateTranslatorHeaderModal();
+
+                // excelTranslatorViewOrder에 지금 생성한 헤더 추가
+                setExcelTranslatorViewFormIds([...excelTranslatorViewFormIds, body.id]);
             },
             modifyTranslatorHeader: async (body) => {
                 await props.onSubmitModifyExcelTranslatorHeader(body);
