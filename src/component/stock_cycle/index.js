@@ -32,8 +32,12 @@ const StockCycleComponent = (props) => {
 
     useEffect(() => {
         async function fetchInit() {
+            let params = {
+                objectType: 'fj'
+            }
+            
             await __reqSearchCategoryList();
-            await __reqSearchProductListFj();
+            await __reqSearchProductListFj(params);
         }
         
         onActionOpenBackdrop();
@@ -59,8 +63,8 @@ const StockCycleComponent = (props) => {
             })
     }
 
-    const __reqSearchProductListFj = async () => {
-        await productDataConnect().getListFj()
+    const __reqSearchProductListFj = async (params) => {
+        await productDataConnect().searchAll(params)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message == 'success') {
                     setProductList(res.data.data);

@@ -60,9 +60,12 @@ const SalesPerformanceComponent = (props) => {
         }
 
         async function fetchProduct() {
+            let params = {
+                objectType: 'basic'
+            }
             onActionOpenBackdrop();
             await __reqSearchProductCategory();
-            await __reqSearchProduct();
+            await __reqSearchProduct(params);
             onActionCloseBackdrop();
         }
 
@@ -172,8 +175,8 @@ const SalesPerformanceComponent = (props) => {
             })
     }
 
-    const __reqSearchProduct = async () => {
-        await productDataConnect().getList()
+    const __reqSearchProduct = async (params) => {
+        await productDataConnect().searchAll(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchProductList({

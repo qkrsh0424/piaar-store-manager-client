@@ -83,7 +83,7 @@ const OperatorComponent = (props) => {
             return;
         }
 
-        let data = excelTranslatorViewFormIds.map(r => props.excelTranslatorData.filter(r2 => r2.id === r)[0]);
+        let data = props.excelTranslatorData.filter(r => excelTranslatorViewFormIds.filter(r2 => r.id === r2)[0]);
 
         dispatchExcelTranslatorViewData({
             type: 'SET_DATA',

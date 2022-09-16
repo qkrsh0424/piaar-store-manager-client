@@ -139,7 +139,7 @@ const ProductCreateComponent = () => {
     }
 
     const __reqCreateProductAndOptions = async (data) => {
-        await productDataConnect().postCreate(data)
+        await productDataConnect().createOne(data)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
                     navigate(location.state.prevUrl);

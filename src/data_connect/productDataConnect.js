@@ -4,37 +4,19 @@ const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 
 const productDataConnect = () => {
     return {
-        postCreateList: async function (productListData) {
-            let jsonArr = [];
-
-            for (let i = 0; i < productListData.length; i++) {
-                let productDto = {
-                    id: productListData[i].id,
-                    code: productListData[i].code,
-                    managementNumber: productListData[i].managementNumber,
-                    defaultName: productListData[i].defaultName,
-                    imageFileName: productListData[i].imageFileName,
-                    imageUrl: productListData[i].imageUrl,
-                    purchaseUrl: productListData[i].purchaseUrl,
-                    managementName: productListData[i].managementName,
-                    manufacturingCode: productListData[i].manufacturingCode,
-                    memo: productListData[i].memo,
-                    defaultTotalPurchasePrice: productListData[i].defaultTotalPurchasePrice,
-                    stockManagement: productListData[i].stockManagement,
-                    productCategoryCid: productListData[i].productCategoryCid
-                }
-                let optionDtos = productListData[i].productOptions
-                let json = {
-                    productDto: productDto,
-                    optionDtos: optionDtos
-                }
-                jsonArr.push(json)
-            }
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product/list`, jsonArr, {
+        searchAll: async function(params){
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/products/all`, {
+                params,
                 withCredentials: true
             })
         },
-        postCreate: async function (productData) {
+        searchBatchOfManagedStock: async function (params) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/products/batch/stock`, {
+                params,
+                withCredentials: true
+            })
+        },
+        createOne: async function (productData) {
             let json = {};
             
             let productDto = {
@@ -65,42 +47,53 @@ const productDataConnect = () => {
                 }
             }
 
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product/one`, json, {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/products`, json, {
                 withCredentials: true
             })
         },
-        getStockListFj: async function () {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list-fj/stock`, {
-                withCredentials: true
-            })
-        },
-        getList: async function(){
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list`, {
-                withCredentials: true
-            })
-        },
-        getListFj: async function () {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list-fj`, {
-                withCredentials: true
-            })
-        },
-        searchProductListByCategory: async function (categoryCid) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list/${categoryCid}`, {
+        // Unused API
+        createBatch: async function (productListData) {
+            let jsonArr = [];
+
+            for (let i = 0; i < productListData.length; i++) {
+                let productDto = {
+                    id: productListData[i].id,
+                    code: productListData[i].code,
+                    managementNumber: productListData[i].managementNumber,
+                    defaultName: productListData[i].defaultName,
+                    imageFileName: productListData[i].imageFileName,
+                    imageUrl: productListData[i].imageUrl,
+                    purchaseUrl: productListData[i].purchaseUrl,
+                    managementName: productListData[i].managementName,
+                    manufacturingCode: productListData[i].manufacturingCode,
+                    memo: productListData[i].memo,
+                    defaultTotalPurchasePrice: productListData[i].defaultTotalPurchasePrice,
+                    stockManagement: productListData[i].stockManagement,
+                    productCategoryCid: productListData[i].productCategoryCid
+                }
+                let optionDtos = productListData[i].productOptions
+                let json = {
+                    productDto: productDto,
+                    optionDtos: optionDtos
+                }
+                jsonArr.push(json)
+            }
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/products/batch`, jsonArr, {
                 withCredentials: true
             })
         },
         putOne: async function (product) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/product/one`, product, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/products`, product, {
                 withCredentials: true
             })
         },
         patchOne: async function (product) {
-            return await axios.patch(`${API_SERVER_ADDRESS}/api/v1/product`, product, {
+            return await axios.patch(`${API_SERVER_ADDRESS}/api/v1/products`, product, {
                 withCredentials: true
             })
         },
-        deleteOne: async function (productCid) {
-            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product/one/${productCid}`, {
+        deleteOne: async function (productId) {
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/products/${productId}`, {
                 withCredentials: true
             })
         }

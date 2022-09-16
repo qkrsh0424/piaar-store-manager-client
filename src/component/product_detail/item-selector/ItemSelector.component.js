@@ -219,7 +219,8 @@ const ItemSelectorComponent = (props) => {
         }
 
         if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
-            await props._onSubmit_deleteProduct(query.productCid);
+            let productId = props.productViewList.filter(r => r.cid === parseInt(query.productCid))[0];
+            await props._onSubmit_deleteProduct(productId);
         }
     }
 
