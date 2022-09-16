@@ -51,14 +51,17 @@ const ProductManageComponent = () => {
 
     useEffect(() => {
         async function fetchInit() {
-            let params = {
+            let productParams = {
+                objectType: 'fj'
+            }
+            let optionParams = {
                 objectType: 'basic'
             }
 
             onActionOpenBackdrop();
             await __reqSearchCategoryList();
-            await __reqSearchProductListFj();
-            await __reqSearchOptionList(params);
+            await __reqSearchProductListFj(productParams);
+            await __reqSearchOptionList(optionParams);
             onActionCloseBackdrop();
 
             dispatchSubmitCheck({
@@ -76,12 +79,16 @@ const ProductManageComponent = () => {
     useEffect(() => {
         async function searchAll() {
             if (dataChangedTrigger) {
-                let params = {
+                let productParams = {
+                    objectType: 'fj'
+                }
+                let optionParams = {
                     objectType: 'basic'
                 }
+                
                 onActionOpenBackdrop();
-                await __reqSearchProductListFj();
-                await __reqSearchOptionList(params);
+                await __reqSearchProductListFj(productParams);
+                await __reqSearchOptionList(optionParams);
                 onActionCloseBackdrop();
             }
             setDataChangedTrigger(false);
@@ -117,8 +124,8 @@ const ProductManageComponent = () => {
         setSelectedProductId('total');
     }, [selectedCategoryId]);
 
-    const __reqSearchProductListFj = async () => {
-        await productDataConnect().getStockListFj()
+    const __reqSearchProductListFj = async (param) => {
+        await productDataConnect().searchBatchOfManagedStock(param)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     setProductList(res.data.data);
@@ -191,8 +198,8 @@ const ProductManageComponent = () => {
             })
     }
 
-    const __reqDeleteProduct = async (productCid) => {
-        await productDataConnect().deleteOne(productCid)
+    const __reqDeleteProduct = async (productId) => {
+        await productDataConnect().deleteOne(productId)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('정상적으로 삭제되었습니다.');
@@ -539,8 +546,8 @@ const ProductManageComponent = () => {
         });
     }
 
-    const _onSubmit_deleteProduct = async (productCid) => {
-        await __reqDeleteProduct(productCid);
+    const _onSubmit_deleteProduct = async (productId) => {
+        await __reqDeleteProduct(productId);
     }
 
     const _onSubmit_createProductOption = async (createOptionData) => {
@@ -747,7 +754,7 @@ const ProductManageComponent = () => {
                 onActionOpenBackdrop={onActionOpenBackdrop}
                 onActionCloseBackdrop={onActionCloseBackdrop}
                 _onSubmit_modifyProduct={(productData) => _onSubmit_modifyProduct(productData)}
-                _onSubmit_deleteProduct={(productCid) => _onSubmit_deleteProduct(productCid)}
+                _onSubmit_deleteProduct={(productId) => _onSubmit_deleteProduct(productId)}
                 _onSubmit_createProductOption={(optionData) => _onSubmit_createProductOption(optionData)}
                 _onSubmit_modifyProductOption={(optionData) => _onSubmit_modifyProductOption(optionData)}
                 _onAction_searchOptionPackage={(optionId) => _onAction_searchOptionPackage(optionId)}

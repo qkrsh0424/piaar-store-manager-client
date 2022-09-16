@@ -67,7 +67,8 @@ const ProductDetailComponent = () => {
                 let params = {
                     objectType: 'basic'
                 }
-                await __reqSearchProduct();
+
+                await __reqSearchProduct(params);
                 await __reqSearchOption(params);
                 await __reqSearchProductDetail();
             }
@@ -222,8 +223,8 @@ const ProductDetailComponent = () => {
             })
     }
 
-    const __reqSearchProduct = async () => {
-        await productDataConnect().getList()
+    const __reqSearchProduct = async (params) => {
+        await productDataConnect().searchAll(params)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     setProductList(res.data.data);
@@ -261,8 +262,8 @@ const ProductDetailComponent = () => {
             })
     }
 
-    const __reqDeleteProduct = async (productCid) => {
-        await productDataConnect().deleteOne(productCid)
+    const __reqDeleteProduct = async (productId) => {
+        await productDataConnect().deleteOne(productId)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     alert('정상적으로 삭제되었습니다.');
@@ -386,8 +387,8 @@ const ProductDetailComponent = () => {
             })
     }
 
-    const _onSubmit_deleteProduct = async (productCid) => {
-        await __reqDeleteProduct(productCid);
+    const _onSubmit_deleteProduct = async (productId) => {
+        await __reqDeleteProduct(productId);
     }
 
     const _onSubmit_deleteProductOption = async (optionId) => {
@@ -468,7 +469,7 @@ const ProductDetailComponent = () => {
                 onActionOpenBackdrop={onActionOpenBackdrop}
                 onActionCloseBackdrop={onActionCloseBackdrop}
 
-                _onSubmit_deleteProduct={(productCid) => _onSubmit_deleteProduct(productCid)}
+                _onSubmit_deleteProduct={(productId) => _onSubmit_deleteProduct(productId)}
                 _onSubmit_deleteProductOption={(optionId) => _onSubmit_deleteProductOption(optionId)}
                 _onSubmit_modifyProduct={(modifyProductData) => _onSubmit_modifyProduct(modifyProductData)}
                 _onSubmit_createProductOption={(createOptionData) => _onSubmit_createProductOption(createOptionData)}
