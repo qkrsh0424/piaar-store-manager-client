@@ -14,6 +14,26 @@ const erpReturnItemSocket = () => {
                 withCredentials: true
             })
         },
+        changeCollectCompleteYnForList: async function (body) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch/collect-complete-yn`, body, {
+                withCredentials: true
+            })
+        },
+        changeReturnCompleteYnForList: async function (body) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch/return-complete-yn`, body, {
+                withCredentials: true
+            })
+        },
+        changeHoldYnForList: async function (body) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch/hold-yn`, body, {
+                withCredentials: true
+            })
+        },
+        changeReturnRejectYnForList: async function (body) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch/return-reject-yn`, body, {
+                withCredentials: true
+            })
+        },
         deleteBatch: async function (params) {
             return await axios.post(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch-delete`, params, {
                 withCredentials: true
@@ -21,6 +41,22 @@ const erpReturnItemSocket = () => {
         },
         changeReturnReasonForListInBatch: async function (body) {
             return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch/return-reason`, body, {
+                withCredentials: true
+            })
+        },
+        actionReflectDefective: async function (body, memo) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/defective/action-reflect`, body, {
+                params: {
+                    memo
+                },
+                withCredentials: true
+            })
+        },
+        actionCancelDefective: async function (body, memo) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/defective/action-cancel`, body, {
+                params: {
+                    memo
+                },
                 withCredentials: true
             })
         }

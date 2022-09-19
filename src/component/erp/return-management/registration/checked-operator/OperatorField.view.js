@@ -40,9 +40,9 @@ export default function OperatorFieldView(props) {
                         <button
                             type='button'
                             className='button-el'
-                            onClick={props.onActionOpenExchangeConfirmModal}
+                            // onClick={props.onActionOpenExchangeConfirmModal}
                         >
-                            교환 전환
+                            교환 전환(TODO)
                             <Ripple color={'#e0e0e0'} duration={1000}></Ripple>
                         </button>
                     </div>

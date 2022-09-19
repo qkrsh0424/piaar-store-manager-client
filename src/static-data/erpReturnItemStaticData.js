@@ -166,12 +166,6 @@ const staticDefaultHeaderDetails = [
 ];
 
 function getReturnDefaultHeaderDetails() {
-    // let result = staticDefaultHeaderDetails.map((r, index) => {
-    //     return {
-    //         ...r,
-    //         cellNumber: index
-    //     }
-    // })
     let orderDetails = getDefaultHeaderDetails().map(r => {
         return {
             ...r,
@@ -188,6 +182,15 @@ function getReturnDefaultHeaderDetails() {
     return result;
 }
 
+function getReturnDefaultHeaderFields() {
+    let result = getReturnDefaultHeaderDetails().headerDetail.details.map(r => {
+        return r.matchedColumnName;
+    })
+
+    return result;
+}
+
 export {
-    getReturnDefaultHeaderDetails
+    getReturnDefaultHeaderDetails,
+    getReturnDefaultHeaderFields
 }

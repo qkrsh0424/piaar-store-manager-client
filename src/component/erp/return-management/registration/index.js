@@ -7,7 +7,7 @@ import ReturnItemTableComponent from "./return-item-table/ReturnItemTable.compon
 import SearchOperatorComponent from "./search-operator/SearchOperator.component";
 import { useReducer, useState } from "react";
 import { erpReturnItemDataConnect } from "../../../../data_connect/erpReturnItemDataConnect";
-import { getReturnDefaultHeaderDetails } from "../../../../static-data/erpReturnItemStaticData";
+import { getReturnDefaultHeaderDetails, getReturnDefaultHeaderFields } from "../../../../static-data/erpReturnItemStaticData";
 import { useEffect } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import CommonModalComponent from "../../../module/modal/CommonModalComponent";
@@ -24,12 +24,13 @@ import CheckedHeadComponent from "./checked-head/CheckedHead.component";
 import CheckedOperatorComponent from "./checked-operator/CheckedOperator.component";
 import CheckedReturnItemTableComponent from "./checked-return-item-table/CheckedReturnItemTable.component";
 import { returnReasonTypeDataConnect } from "../../../../data_connect/returnReasonTypeDataConnect";
+import { sortFormatUtils } from "../../../../utils/sortFormatUtils";
 
 const Container = styled.div`
     margin-bottom: 100px;
 `;
 
-const DEFAULT_HEADER_FIELDS = getReturnDefaultHeaderDetails();
+const DEFAULT_HEADER_FIELDS = getReturnDefaultHeaderFields();
 
 const RegistrationComponent = (props) => {
     const location = useLocation();
@@ -102,8 +103,7 @@ const RegistrationComponent = (props) => {
         let size = query.size || null;
         let sortBy = query.sortBy || null;
         let sortDirection = query.sortDirection || null;
-        // let sort = sortFormatUtils().getSortWithSortElements(DEFAULT_HEADER_FIELDS, sortBy, sortDirection);
-        let sort = null;
+        let sort = sortFormatUtils().getSortWithSortElements(DEFAULT_HEADER_FIELDS, sortBy, sortDirection);
         let matchedCode = query.matchedCode || null;
 
         let params = {
@@ -285,7 +285,6 @@ const RegistrationComponent = (props) => {
     useEffect(() => {
         __reqSearchViewHeaderList();
         __reqSearchReturnTypeList();
-        // __reqSearchProductOptionList();
     }, []);
 
     useEffect(() => {

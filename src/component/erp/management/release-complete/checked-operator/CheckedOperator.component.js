@@ -289,15 +289,26 @@ const CheckedOperatorComponent = (props) => {
         }
 
         // 반품 처리 여부
-        let uniqueCodes = [];
+        let returnedUniqueCodes = [];
+        let notReflectedStockUniqueCodes = [];
         props.checkedOrderItemList.forEach(r => {
+            if(r.stockReflectYn === 'n') {
+                notReflectedStockUniqueCodes.push(r.uniqueCode);
+            }
+
             if (r.returnYn === 'y') {
-                uniqueCodes.push(r.uniqueCode);
+                returnedUniqueCodes.push(r.uniqueCode);
             }
         });
 
-        if (uniqueCodes.length > 0) {
-            alert(`이미 반품처리된 데이터가 있습니다.\n반품된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
+        if (notReflectedStockUniqueCodes.length > 0) {
+            alert(`재고 미반영 데이터가 있습니다.\n재고 미반영 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${notReflectedStockUniqueCodes.join('\n')}`);
+            onActionCloseReturnConfirmModal();
+            return;
+        }
+
+        if (returnedUniqueCodes.length > 0) {
+            alert(`이미 반품처리된 데이터가 있습니다.\n반품된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${returnedUniqueCodes.join('\n')}`);
             onActionCloseReturnConfirmModal();
             return;
         }

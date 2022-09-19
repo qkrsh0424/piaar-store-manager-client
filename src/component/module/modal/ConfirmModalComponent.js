@@ -14,7 +14,7 @@ const TitleBox = styled.div`
 `;
 
 const MessageBox = styled.div`
-    padding: 20px 10px 30px 10px;
+    padding: 20px 10px 10px 10px;
     font-size: 14px;
     font-weight: 600;
     text-align: center;
@@ -96,6 +96,31 @@ const MessageBox = styled.div`
             margin: 10px 0 0 0;
         }
     }
+
+    .receive-memo {
+        padding: 15px;
+        font-size: 14px;
+        display: grid;
+        width: 100%;
+        grid-template-columns: 100px auto;
+        align-items: center;
+
+        .form-title {
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        input {
+            height: 30px;
+            border: 1px solid #bdbdbd;
+            padding: 10px;
+            font-size: 14px;
+            box-sizing: border-box;
+            border-radius: 3px;
+        }
+    }
 `;
 
 const MemoBox = styled.div`
@@ -144,20 +169,31 @@ const ButtonBox = styled.div`
     }
 `;
 
-const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, _onSubmit, onClose, title, message, memo, ...props }) => {
+const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, _onSubmit, onClose, title, message, memo, defaultMemo, ...props }) => {
     const [buttonDisabled, setButtonDisabled] = useState(false);
     const [confirmInputValue, dispatchConfirmInputValue] = useReducer(confirmInputValueReducer, initialConfirmInputValue);
 
     useEffect(() => {
         setButtonDisabled(false);
-        dispatchConfirmInputValue({
-            type: 'SET_DATA',
-            payload: {
-                name: 'memo',
-                value: ''
-            }
-        });
-    }, [open])
+
+        if(defaultMemo) {
+            dispatchConfirmInputValue({
+                type: 'CHANGE_DATA',
+                payload: {
+                    name: 'memo',
+                    value: defaultMemo
+                }
+            });
+        }else {
+            dispatchConfirmInputValue({
+                type: 'CHANGE_DATA',
+                payload: {
+                    name: 'memo',
+                    value: ''
+                }
+            });
+        }
+    }, [open, defaultMemo])
 
     const _onConfirm = () => {
         setButtonDisabled(true);

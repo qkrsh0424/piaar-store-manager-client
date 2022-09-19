@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
 import { dateToYYYYMMDD } from '../../../../utils/dateFormatUtils';
 import CommonModalComponent from '../../../module/modal/CommonModalComponent';
 
