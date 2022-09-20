@@ -148,6 +148,14 @@ const TableFieldWrapper = styled.div`
         box-shadow: -0.5px 0 0 0 #e0e0e0 inset;
     }
 
+    .table-box .fixed-col-left2 {
+        position: sticky;
+        background: white;
+        left: 70px;
+        z-index:10;
+        box-shadow: -0.5px 0 0 0 #e0e0e0 inset;
+    }
+
     .table-box .fixed-col-right {
         position: sticky;
         background: white;

@@ -100,7 +100,7 @@ const thisRouters = [
         params: `?periodType=${collectedDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
     },
     {
-        name: '처리완료',
+        name: '반품완료',
         pathname: '/erp/return-management/completed',
         params: `?periodType=${completedDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
     }

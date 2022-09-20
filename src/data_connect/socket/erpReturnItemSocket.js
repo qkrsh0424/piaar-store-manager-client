@@ -44,19 +44,26 @@ const erpReturnItemSocket = () => {
                 withCredentials: true
             })
         },
-        actionReflectDefective: async function (body, memo) {
+        actionReflectDefective: async function (body, params) {
             return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/defective/action-reflect`, body, {
-                params: {
-                    memo
-                },
+                params,
                 withCredentials: true
             })
         },
-        actionCancelDefective: async function (body, memo) {
+        actionCancelDefective: async function (body, params) {
             return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/defective/action-cancel`, body, {
-                params: {
-                    memo
-                },
+                params,
+                withCredentials: true
+            })
+        },
+        actionReflectStock: async function (body, params) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/stock/action-reflect`, body, {
+                params,
+                withCredentials: true
+            })
+        },
+        actionCancelStock: async function (body) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/stock/action-cancel`, body, {
                 withCredentials: true
             })
         }

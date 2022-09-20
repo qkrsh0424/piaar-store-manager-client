@@ -92,6 +92,18 @@ const CheckedOperatorComponent = (props) => {
 
     // 수거완료 취소 처리
     const onActionOpenCollectedConfirmModal = () => {
+        let uniqueCodes = [];
+        props.checkedReturnItemList.forEach(r => {
+            if (r.returnRejectYn === 'y') {
+                uniqueCodes.push(r.erpOrderItem.uniqueCode);
+            }
+        });
+
+        if (uniqueCodes.length > 0) {
+            alert(`반품거절된 데이터가 있습니다.\n반품거절된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
+            return;
+        }
+
         if (props.checkedReturnItemList?.length <= 0) {
             alert('데이터를 먼저 선택해 주세요.');
             return;
@@ -116,10 +128,22 @@ const CheckedOperatorComponent = (props) => {
         onActionCloseCollectedConfirmModal();
     }
 
-    // 처리완료 처리
+    // 반품완료 처리
     const onActionOpenCompletedConfirmModal = () => {
         if (props.checkedReturnItemList?.length <= 0) {
             alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        let uniqueCodes = [];
+        props.checkedReturnItemList.forEach(r => {
+            if (r.returnRejectYn === 'y') {
+                uniqueCodes.push(r.erpOrderItem.uniqueCode);
+            }
+        });
+
+        if (uniqueCodes.length > 0) {
+            alert(`반품거절된 데이터가 있습니다.\n반품거절된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
             return;
         }
 
@@ -131,20 +155,6 @@ const CheckedOperatorComponent = (props) => {
     }
 
     const onActionConfirmCompleted = () => {
-        // 반품거절 처리 여부
-       let uniqueCodes = [];
-       props.checkedReturnItemList.forEach(r => {
-           if (r.returnRejectYn === 'y') {
-               uniqueCodes.push(r.erpOrderItem.uniqueCode);
-           }
-       });
-
-       if (uniqueCodes.length > 0) {
-           alert(`반품거절된 데이터가 있습니다.\n반품거절 처리된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
-           onActionCloseReturnRejectCancelConfirmModal();
-           return;
-       }
-
         let data = props.checkedReturnItemList.map(r => {
             return {
                 ...r,
@@ -227,13 +237,13 @@ const CheckedOperatorComponent = (props) => {
                 onClose={onActionCloseCollectedConfirmModal}
             ></ConfirmModalComponent>
 
-            {/* 처리완료 처리 확인 모달 */}
+            {/* 반품완료 처리 확인 모달 */}
             <ConfirmModalComponent
                 open={completedConfirmModalOpen}
-                title={'처리완료 확인 메세지'}
+                title={'반품완료 확인 메세지'}
                 message={
                     <>
-                        <div>[ {props.checkedReturnItemList?.length || 0} ] 건의 데이터를 반품 처리완료 하시겠습니까?</div>
+                        <div>[ {props.checkedReturnItemList?.length || 0} ] 건의 데이터를 반품완료 처리하시겠습니까?</div>
                     </>
                 }
                 onConfirm={onActionConfirmCompleted}

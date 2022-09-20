@@ -271,8 +271,8 @@ const CompletedComponent = (props) => {
             })
     }
 
-    const __reqActionReflectDefective = async (body, memo) => {
-        await erpReturnItemSocket().actionReflectDefective(body, memo)
+    const __reqActionReflectDefective = async (body, params) => {
+        await erpReturnItemSocket().actionReflectDefective(body, params)
             .then(res => {
                 if (res.status === 200) {
                     alert("처리되었습니다.");
@@ -291,9 +291,9 @@ const CompletedComponent = (props) => {
             })
     }
 
-    const __reqActionCancelDefective = async (body, memo) => {
+    const __reqActionCancelDefective = async (body, params) => {
         console.log(body);
-        await erpReturnItemSocket().actionCancelDefective(body, memo)
+        await erpReturnItemSocket().actionCancelDefective(body, params)
             .then(res => {
                 if (res.status === 200) {
                     alert("처리되었습니다.");
@@ -332,6 +332,48 @@ const CompletedComponent = (props) => {
 
                 alert(res?.data?.memo);
             })
+    }
+    
+    const __reqActionReflectStock = async (body, params) => {
+        await erpReturnItemSocket().actionReflectStock(body, params)
+            .then(res => {
+                if (res.status === 200) {
+                    alert("처리되었습니다.");
+                    return;
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data?.memo);
+            })
+            ;
+    }
+
+    const __reqActionCancelStock = async (body) => {
+        await erpReturnItemSocket().actionCancelStock(body)
+            .then(res => {
+                if (res.status === 200) {
+                    alert("처리되었습니다.");
+                    return;
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data?.memo);
+            })
+            ;
     }
 
     useEffect(() => {
@@ -548,7 +590,7 @@ const CompletedComponent = (props) => {
         })
     }
 
-    // 처리완료 취소 커밋
+    // 반품완료 취소 커밋
     const _onSubmit_changeReturnCompleteYnForReturnItemList = async (body) => {
         onActionOpenBackdrop();
         await __reqChangeReturnCompleteYnForReturnItemListSocket(body);
@@ -562,15 +604,35 @@ const CompletedComponent = (props) => {
         onActionCloseBackdrop();
     }
 
-    const _onSubmit_reflectDefective = async (memo) => {
+    const _onSubmit_reflectDefective = async (params) => {
         onActionOpenBackdrop();
-        await __reqActionReflectDefective(checkedReturnItemList[0], memo)
+        await __reqActionReflectDefective(checkedReturnItemList[0], params)
         onActionCloseBackdrop();
     }
 
-    const _onSubmit_cancelDefective = async (memo) => {
+    const _onSubmit_cancelDefective = async (params) => {
         onActionOpenBackdrop();
-        await __reqActionCancelDefective(checkedReturnItemList[0], memo);
+        await __reqActionCancelDefective(checkedReturnItemList[0], params);
+        onActionCloseBackdrop();
+    }
+    
+    const _onAction_searchReleaseData = async (orderItemId) => {
+        onActionOpenBackdrop();
+        await __reqActionSearchReleaseData(orderItemId);
+        onActionCloseBackdrop();
+    }
+
+    // 선택된 데이터 재고 반영
+    const _onAction_reflectStock = async (params) => {
+        onActionOpenBackdrop();
+        await __reqActionReflectStock(checkedReturnItemList[0], params);
+        onActionCloseBackdrop();
+    }
+
+    // 선택된 데이터 재고 취소
+    const _onAction_cancelStock = async () => {
+        onActionOpenBackdrop();
+        await __reqActionCancelStock(checkedReturnItemList[0]);
         onActionCloseBackdrop();
     }
 
@@ -613,7 +675,9 @@ const CompletedComponent = (props) => {
                         _onSubmit_deleteReturnItemList={_onSubmit_deleteReturnItemList}
                         _onSubmit_reflectDefective={_onSubmit_reflectDefective}
                         _onSubmit_cancelDefective={_onSubmit_cancelDefective}
-                        __reqActionSearchReleaseData={__reqActionSearchReleaseData}
+                        _onAction_searchReleaseData={_onAction_searchReleaseData}
+                        _onAction_reflectStock={_onAction_reflectStock}
+                        _onAction_cancelStock={_onAction_cancelStock}
                     ></CheckedOperatorComponent>
                     <CheckedReturnItemTableComponent
                         viewHeader={viewHeader}

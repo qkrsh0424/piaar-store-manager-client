@@ -6,9 +6,13 @@ import OperatorFieldView from "./OperatorField.view";
 const CheckedOperatorComponent = (props) => {
     const [defectiveProductConfirmModalOpen, setDefectiveProductConfirmModalOpen] = useState(false);
     const [defectiveProductCancelConfirmModalOpen, setDefectiveProductCancelConfirmModalOpen] = useState(false);
+    
+    const [reflectStockConfirmModalOpen, setReflectStockConfirmModalOpen] = useState(false);
+    const [cancelStockConfirmModalOpen, setCancelStockConfirmModalOpen] = useState(false);
+    
     const [completedConfirmModalOpen, setCompletedConfirmModalOpen] = useState(false);
-    const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState(false);
     const [orderItemReleaseData, dispatchOrderItemReleaseData] = useReducer(orderItemReleaseDataReducer, initialOrderItemReleaseData);
+
 
     useEffect(() => {
         if(!props.orderItemReleaseData) {
@@ -25,6 +29,19 @@ const CheckedOperatorComponent = (props) => {
     const onActionOpenCompletedConfirmModal = () => {
         if (props.checkedReturnItemList?.length <= 0) {
             alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        let uniqueCodes = [];
+        props.checkedReturnItemList.forEach(r => {
+            if(r.defectiveYn === 'y') {
+                uniqueCodes.push(r.erpOrderItem.uniqueCode);
+            }
+        });
+
+        if (uniqueCodes.length > 0) {
+            alert(`불량상품으로 등록된 데이터가 있습니다.\n불량상품으로 등록된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
+            onActionCloseCancelStockConfirmModal();
             return;
         }
 
@@ -47,24 +64,6 @@ const CheckedOperatorComponent = (props) => {
         onActionCloseCompletedConfirmModal();
     }
 
-    const onActionOpenDeleteConfirmModal = () => {
-        if (props.checkedReturnItemList?.length <= 0) {
-            alert('데이터를 먼저 선택해 주세요.');
-            return;
-        }
-
-        setDeleteConfirmModalOpen(true);
-    }
-
-    const onActionCloseDeleteConfirmModal = () => {
-        setDeleteConfirmModalOpen(false);
-    }
-
-    const onActionConfirmDelete = () => {
-        props._onSubmit_deleteReturnItemList(props.checkedReturnItemList);
-        onActionCloseDeleteConfirmModal();
-    }
-
     // 불량상품 처리
     const onActionOpenDefectiveProductConfirmModal = async () => {
         if (props.checkedReturnItemList?.length <= 0) {
@@ -78,7 +77,7 @@ const CheckedOperatorComponent = (props) => {
         }
 
         let defectiveDataId = props.checkedReturnItemList[0]?.erpOrderItem?.id;
-        await props.__reqActionSearchReleaseData(defectiveDataId);
+        await props._onAction_searchReleaseData(defectiveDataId);
         setDefectiveProductConfirmModalOpen(true);
     }
 
@@ -89,7 +88,7 @@ const CheckedOperatorComponent = (props) => {
         setDefectiveProductConfirmModalOpen(false);
     }
 
-    const onSubmitDefectiveProduct = (e, memo) => {
+    const onSubmitDefectiveProduct = (e, params) => {
         e.preventDefault();
 
         let uniqueCodes = [];
@@ -105,7 +104,7 @@ const CheckedOperatorComponent = (props) => {
             return;
         }
 
-        props._onSubmit_reflectDefective(memo);
+        props._onSubmit_reflectDefective(params);
         onActionCloseDefectiveProductConfirmModal(e);
     }
 
@@ -122,7 +121,7 @@ const CheckedOperatorComponent = (props) => {
         }
 
         let defectiveDataId = props.checkedReturnItemList[0]?.erpOrderItem?.id;
-        await props.__reqActionSearchReleaseData(defectiveDataId);
+        await props._onAction_searchReleaseData(defectiveDataId);
 
         setDefectiveProductCancelConfirmModalOpen(true);
     }
@@ -135,7 +134,7 @@ const CheckedOperatorComponent = (props) => {
     }
 
     // 불량상품 취소 처리
-    const onSubmitCancelDefectiveProduct = (e, memo) => {
+    const onSubmitCancelDefectiveProduct = (e, params) => {
         e.preventDefault();
 
         let uniqueCodes = [];
@@ -151,9 +150,94 @@ const CheckedOperatorComponent = (props) => {
             return;
         }
 
-        props._onSubmit_cancelDefective(memo);
+        props._onSubmit_cancelDefective(params);
         onActionCloseDefectiveProductCancelConfirmModal(e);
     }
+
+    // 재고 반영 모달 OPEN
+    const onActionOpenReflectStockConfirmModal = async () => {
+        if (props.checkedReturnItemList?.length <= 0) {
+            alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        if (props.checkedReturnItemList?.length > 1) {
+            alert('반품 재고반영은 단건만 가능합니다.');
+            return;
+        }
+
+        let reflectStockId = props.checkedReturnItemList[0]?.erpOrderItem?.id;
+        await props._onAction_searchReleaseData(reflectStockId);
+        setReflectStockConfirmModalOpen(true);
+    }
+
+    // 재고 반영 모달 CLOSE
+    const onActionCloseReflectStockConfirmModal = (e) => {
+        e.preventDefault();
+
+        dispatchOrderItemReleaseData({ type : 'CLEAR' });
+        setReflectStockConfirmModalOpen(false);
+    }
+
+    // 재고 반영 서밋
+    const onSubmitReflectStock = (e, params) => {
+        e.preventDefault();
+
+        let data = props.checkedReturnItemList[0];
+
+        if(data.defectiveYn === 'y') {
+            alert(`불량상품으로 등록된 데이터가 있습니다.\n불량상품으로 등록된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${data.uniqueCode}`);
+            onActionCloseReflectStockConfirmModal(e);
+            return;
+        }
+
+        if(data.stockReflectYn === 'y') {
+            alert(`이미 재고 반영된 데이터가 있습니다.\n재고에 반영된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${data.uniqueCode}`);
+            onActionCloseReflectStockConfirmModal(e);
+            return;
+        }
+
+        if (data.erpOrderItem.unit < params.unit) {
+            alert('반품 재고반영 수량은 출고상품 수량보다 클 수 없습니다.\n반품 수량을 한번 더 확인해주세요.');
+            onActionCloseReflectStockConfirmModal(e);
+            return;
+        }
+
+        props._onAction_reflectStock(params);
+        onActionCloseReflectStockConfirmModal(e);
+    }
+
+    // 재고 취소 모달 OPEN
+    const onActionOpenCancelStockConfirmModal = () => {
+        if (props.checkedReturnItemList?.length <= 0) {
+            alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        if (props.checkedReturnItemList?.length > 1) {
+            alert('반품 재고반영 취소는 단건만 가능합니다.');
+            return;
+        }
+        setCancelStockConfirmModalOpen(true);
+    }
+
+    // 재고 취소 모달 CLOSE
+    const onActionCloseCancelStockConfirmModal = () => {
+        setCancelStockConfirmModalOpen(false);
+    }
+
+    const onSubmitCancelStock = () => {
+        let data = props.checkedReturnItemList[0];
+        if(data.stockReflectYn === 'n') {
+            alert(`재고에 반영되지 않은 데이터가 있습니다.\n재고 반영되지 않은 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${data.uniqueCode}`);
+            onActionCloseReflectStockConfirmModal();
+            return;
+        }
+
+        props._onAction_cancelStock();
+        onActionCloseCancelStockConfirmModal();
+    }
+
 
     return (
         <>
@@ -162,7 +246,8 @@ const CheckedOperatorComponent = (props) => {
                     onActionOpenDefectiveProductConfirmModal={onActionOpenDefectiveProductConfirmModal}
                     onActionOpenDefectiveProductCancelConfirmModal={onActionOpenDefectiveProductCancelConfirmModal}
                     onActionOpenCompletedConfirmModal={onActionOpenCompletedConfirmModal}
-                    onActionOpenDeleteConfirmModal={onActionOpenDeleteConfirmModal}
+                    onActionOpenReflectStockConfirmModal={onActionOpenReflectStockConfirmModal}
+                    onActionOpenCancelStockConfirmModal={onActionOpenCancelStockConfirmModal}
                 ></OperatorFieldView>
             </Container>
 
@@ -178,7 +263,7 @@ const CheckedOperatorComponent = (props) => {
                 memo={true}
                 defaultMemo={orderItemReleaseData?.memo}
 
-                _onSubmit={(e, memo) => onSubmitDefectiveProduct(e, memo)}
+                _onSubmit={(e, params) => onSubmitDefectiveProduct(e, params)}
                 onClose={onActionCloseDefectiveProductConfirmModal}
             ></ConfirmModalComponent>
 
@@ -194,37 +279,43 @@ const CheckedOperatorComponent = (props) => {
                 memo={true}
                 defaultMemo={orderItemReleaseData?.memo}
 
-                _onSubmit={(e, memo) => onSubmitCancelDefectiveProduct(e, memo)}
+                _onSubmit={(e, params) => onSubmitCancelDefectiveProduct(e, params)}
                 onClose={onActionCloseDefectiveProductCancelConfirmModal}
             ></ConfirmModalComponent>
 
-            {/* 처리완료 취소 확인 모달 */}
+            {/* 재고 반영 모달 */}
+            <ConfirmModalComponent
+                open={reflectStockConfirmModalOpen}
+                title={'재고 반영 확인 메세지'}
+                message={`[ ${props.checkedReturnItemList?.length || 0} ] 건의 데이터를 재고 반영 하시겠습니까?`}
+                memo={true}
+                defaultMemo={orderItemReleaseData?.memo}
+                defaultUnit={orderItemReleaseData?.releaseUnit}
+
+                _onSubmit={(e, params) => onSubmitReflectStock(e, params)}
+                onClose={onActionCloseReflectStockConfirmModal}
+            />
+            {/* 재고 취소 모달 */}
+            <ConfirmModalComponent
+                open={cancelStockConfirmModalOpen}
+                title={'재고 취소 확인 메세지'}
+                message={`[ ${props.checkedReturnItemList?.length || 0} ] 건의 데이터를 재고 취소 하시겠습니까?`}
+
+                onConfirm={onSubmitCancelStock}
+                onClose={onActionCloseCancelStockConfirmModal}
+            />
+
+            {/* 반품완료 취소 확인 모달 */}
             <ConfirmModalComponent
                 open={completedConfirmModalOpen}
-                title={'처리완료 취소 확인 메세지'}
+                title={'반품완료 취소 확인 메세지'}
                 message={
                     <>
-                        <div>[ {props.checkedReturnItemList?.length || 0} ] 건의 데이터를 반품 처리완료 취소하시겠습니까?</div>
+                        <div>[ {props.checkedReturnItemList?.length || 0} ] 건의 반품완료 데이터를 취소하시겠습니까?</div>
                     </>
                 }
                 onConfirm={onActionConfirmCompleted}
                 onClose={onActionCloseCompletedConfirmModal}
-            ></ConfirmModalComponent>
-            
-            {/* 데이터 일괄 삭제 확인 모달 */}
-            <ConfirmModalComponent
-                open={deleteConfirmModalOpen}
-                title={'데이터 삭제 확인 메세지'}
-                message={
-                    <>
-                        <div>[ {props.checkedReturnItemList?.length || 0} ] 건의 데이터를 <span style={{ color: '#FF605C' }}>영구 삭제</span> 합니다.</div>
-                        <div>삭제된 데이터는 복구되지 않습니다.</div>
-                        <div>계속 진행 하시겠습니까?</div>
-                    </>
-                }
-
-                onConfirm={onActionConfirmDelete}
-                onClose={onActionCloseDeleteConfirmModal}
             ></ConfirmModalComponent>
         </>
     );

@@ -13,11 +13,17 @@ export default function DetailSearchFieldView(props) {
                 >
                     <option value=''>전체</option>
                     {props.viewHeader?.headerDetail?.details?.map(r => {
-                        let bool = props.defaultHeaderDetails.map(r2 => r2.allowedSearch ? r2.matchedColumnName : null).includes(r.matchedColumnName);
+                        let bool = props.defaultHeaderDetails?.headerDetail?.details?.map(r2 => r2.allowedSearch ? r2.matchedColumnName : null).includes(r.matchedColumnName);
                         if (bool) {
-                            return (
-                                <option key={r.matchedColumnName} value={r.matchedColumnName}>{r.customCellName}({r.originCellName})</option>
-                            );
+                            if(r.matchedColumnName?.startsWith('order_')){
+                                return (
+                                    <option key={r.matchedColumnName} value={r.matchedColumnName}>출고_{r.customCellName}({r.originCellName})</option>
+                                );
+                            }else {
+                                return (
+                                    <option key={r.matchedColumnName} value={r.matchedColumnName}>{r.customCellName}({r.originCellName})</option>
+                                );
+                            }
                         }
                         return null;
                     })}

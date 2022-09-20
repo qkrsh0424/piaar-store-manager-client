@@ -186,7 +186,7 @@ const CheckedOperatorComponent = (props) => {
     }
 
     // 재고 반영 서밋
-    const onSubmitReflectStock = (e, memo) => {
+    const onSubmitReflectStock = (e, params) => {
         e.preventDefault();
 
         let uniqueCodes = [];
@@ -201,7 +201,7 @@ const CheckedOperatorComponent = (props) => {
             onActionCloseReflectStockConfirmModal(e);
             return;
         }
-        props._onAction_reflectStock(memo);
+        props._onAction_reflectStock(params);
         onActionCloseReflectStockConfirmModal(e);
     }
 
@@ -460,7 +460,7 @@ const CheckedOperatorComponent = (props) => {
                 message={`[ ${props.checkedOrderItemList?.length || 0} ] 건의 데이터를 재고 반영 하시겠습니까?`}
                 memo={true}
 
-                _onSubmit={(e, memo) => onSubmitReflectStock(e, memo)}
+                _onSubmit={(e, params) => onSubmitReflectStock(e, params)}
                 onClose={onActionCloseReflectStockConfirmModal}
             />
             {/* 재고 취소 모달 */}

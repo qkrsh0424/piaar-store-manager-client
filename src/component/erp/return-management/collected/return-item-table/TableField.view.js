@@ -5,12 +5,41 @@ import { TableFieldWrapper } from './ReturnItemTable.styled';
 import SortButton from '../../../../module/button/SortButton'
 import ResizableTh from '../../../../module/table/ResizableTh';
 
+function ReturnIcon({ isReturned }) {
+    if (isReturned === 'y') {
+        return (
+            <img
+                src='/assets/icon/return_color_icon.png'
+                style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                alt=""
+                loading='lazy'
+            ></img>
+        )
+    } else {
+        return (
+            <img
+                src='/assets/icon/return_black_icon.png'
+                style={{ width: '15px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                alt=""
+                loading='lazy'
+            ></img>
+        )
+    }
+}
+
 function TableHead({
     viewHeader, selectedMatchCode
 }) {
     return (
         <thead>
             <tr>
+                <th
+                    className="fixed-header fixed-col-left"
+                    style={{ zIndex: '12', boxShadow: '-0.5px -0.5px 0 0 #e0e0e0 inset' }}
+                    width={80}
+                >
+                    반품 거절
+                </th>
                 <th
                     className="fixed-header"
                     width={50}
@@ -88,6 +117,9 @@ export default function TableFieldView(props) {
                                     className={`${checked && 'tr-active'} ${isOutOfStock && 'tr-highlight'}`}
                                     onClick={(e) => props.onActionCheckReturnItem(e, r1)}
                                 >
+                                    <td className={`fixed-col-left`}>
+                                        <ReturnIcon isReturned={r1.returnRejectYn} />
+                                    </td>
                                     <td style={{ cursor: 'pointer' }}>
                                         <input type='checkbox' checked={checked} onChange={(e) => props.onActionCheckReturnItem(e, r1)}></input>
                                     </td>

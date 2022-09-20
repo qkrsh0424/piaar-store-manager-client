@@ -8,8 +8,6 @@ const CheckedOperatorComponent = (props) => {
     const [collectedConfirmModalOpen, setCollectedConfirmModalOpen] = useState(false);
     const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState(false);
 
-    // 확인모달 창 열기
-    // 판매부족 수량 계산
     const onActionOpenCollectingConfirmModal = () => {
         if (props.checkedReturnItemList?.length <= 0) {
             alert('데이터를 먼저 선택해 주세요.');

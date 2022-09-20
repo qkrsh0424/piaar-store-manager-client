@@ -73,7 +73,7 @@ export default function OperatorFieldView(props) {
                             className='button-el'
                             onClick={props.onActionOpenCompletedConfirmModal}
                         >
-                            반품 처리완료
+                            반품완료 처리
                             <Ripple color={'#e0e0e0'} duration={1000}></Ripple>
                         </button>
                     </div>

@@ -33,6 +33,33 @@ export default function OperatorFieldView(props) {
             </ControlWrapper>
             <ControlWrapper>
                 <div className='title-box'>
+                    재고 관리
+                </div>
+                <ButtonWrapper>
+                    <div className='button-box'>
+                        <button
+                            type='button'
+                            className='button-el'
+                            onClick={props.onActionOpenReflectStockConfirmModal}
+                        >
+                            재고 반영
+                            <Ripple color={'#e0e0e0'} duration={1000}></Ripple>
+                        </button>
+                    </div>
+                    <div className='button-box'>
+                        <button
+                            type='button'
+                            className='button-el'
+                            onClick={props.onActionOpenCancelStockConfirmModal}
+                        >
+                            재고 반영 취소
+                            <Ripple color={'#e0e0e0'} duration={1000}></Ripple>
+                        </button>
+                    </div>
+                </ButtonWrapper>
+            </ControlWrapper>
+            <ControlWrapper>
+                <div className='title-box'>
                     상태 관리
                 </div>
                 <ButtonWrapper>
@@ -42,17 +69,7 @@ export default function OperatorFieldView(props) {
                             className='button-el'
                             onClick={props.onActionOpenCompletedConfirmModal}
                         >
-                            반품 처리완료 취소
-                            <Ripple color={'#e0e0e0'} duration={1000}></Ripple>
-                        </button>
-                    </div>
-                    <div className='button-box'>
-                        <button
-                            type='button'
-                            className='danger-button-el'
-                            onClick={props.onActionOpenDeleteConfirmModal}
-                        >
-                            영구 삭제
+                            반품완료 취소
                             <Ripple color={'#e0e0e0'} duration={1000}></Ripple>
                         </button>
                     </div>

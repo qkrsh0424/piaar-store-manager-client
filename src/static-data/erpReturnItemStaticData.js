@@ -138,8 +138,8 @@ const staticDefaultHeaderDetails = [
     },
     {
         "cellNumber": 15,
-        "customCellName": "!처리완료일",
-        "originCellName": "!처리완료일",
+        "customCellName": "!반품완료일",
+        "originCellName": "!반품완료일",
         "matchedColumnName": "returnCompleteAt",
         "allowedSearch": false,
         "requiredFlag": false,

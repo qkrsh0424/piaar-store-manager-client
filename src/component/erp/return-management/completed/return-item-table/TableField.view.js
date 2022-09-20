@@ -1,9 +1,30 @@
-import { useEffect, useRef } from 'react';
 import { dateToYYYYMMDDhhmmss } from '../../../../../utils/dateFormatUtils';
 import InfiniteScrollObserver from '../../../../module/observer/InfiniteScrollObserver';
 import { TableFieldWrapper } from './ReturnItemTable.styled';
 import SortButton from '../../../../module/button/SortButton'
 import ResizableTh from '../../../../module/table/ResizableTh';
+
+function CorrectIcon() {
+    return (
+        <img
+            src='/assets/icon/correct_icon.png'
+            style={{ width: '15px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+            alt=""
+            loading='lazy'
+        ></img>
+    );
+}
+
+function FailedIcon() {
+    return (
+        <img
+            src='/assets/icon/failed_icon.png'
+            style={{ width: '15px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+            alt=""
+            loading='lazy'
+        ></img>
+    );
+}
 
 function TableHead({
     viewHeader, selectedMatchCode
@@ -11,6 +32,20 @@ function TableHead({
     return (
         <thead>
             <tr>
+                <th
+                    className="fixed-header fixed-col-left"
+                    style={{ zIndex: '12', boxShadow: '-0.5px -0.5px 0 0 #e0e0e0 inset' }}
+                    width={70}
+                >
+                    재고 반영
+                </th>
+                <th
+                    className="fixed-header fixed-col-left2"
+                    style={{ zIndex: '12', boxShadow: '-0.5px -0.5px 0 0 #e0e0e0 inset' }}
+                    width={70}
+                >
+                    불량 상품
+                </th>
                 <th
                     className="fixed-header"
                     width={50}
@@ -88,6 +123,22 @@ export default function TableFieldView(props) {
                                     className={`${checked && 'tr-active'} ${isOutOfStock && 'tr-highlight'}`}
                                     onClick={(e) => props.onActionCheckReturnItem(e, r1)}
                                 >
+                                    <td className={`fixed-col-left`}>
+                                        {r1.stockReflectYn === 'y' &&
+                                            <CorrectIcon />
+                                        }
+                                        {r1.stockReflectYn === 'n' &&
+                                            <FailedIcon />
+                                        }
+                                    </td>
+                                    <td className={`fixed-col-left2`}>
+                                        {r1.defectiveYn === 'y' &&
+                                            <CorrectIcon />
+                                        }
+                                        {r1.defectiveYn === 'n' &&
+                                            <FailedIcon />
+                                        }
+                                    </td>
                                     <td style={{ cursor: 'pointer' }}>
                                         <input type='checkbox' checked={checked} onChange={(e) => props.onActionCheckReturnItem(e, r1)}></input>
                                     </td>

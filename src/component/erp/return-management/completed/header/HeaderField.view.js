@@ -5,7 +5,7 @@ export default function HeaderFieldView(props) {
     return (
         <HeaderFieldWrapper>
             <div className='common-box'>
-                <div className='title'>반품 처리완료</div>
+                <div className='title'>반품 완료</div>
             </div>
             <div className='common-box'>
                 <div

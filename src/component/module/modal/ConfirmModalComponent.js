@@ -169,31 +169,37 @@ const ButtonBox = styled.div`
     }
 `;
 
-const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, _onSubmit, onClose, title, message, memo, defaultMemo, ...props }) => {
+const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, _onSubmit, onClose, title, message, memo, defaultUnit, defaultMemo, ...props }) => {
     const [buttonDisabled, setButtonDisabled] = useState(false);
     const [confirmInputValue, dispatchConfirmInputValue] = useReducer(confirmInputValueReducer, initialConfirmInputValue);
 
     useEffect(() => {
         setButtonDisabled(false);
 
-        if(defaultMemo) {
-            dispatchConfirmInputValue({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: 'memo',
-                    value: defaultMemo
-                }
-            });
-        }else {
-            dispatchConfirmInputValue({
-                type: 'CHANGE_DATA',
-                payload: {
-                    name: 'memo',
-                    value: ''
-                }
-            });
+        let data = {
+            memo: '',
+            unit: 0
         }
-    }, [open, defaultMemo])
+
+        if (defaultMemo) {
+            data = {
+                ...data,
+                memo: defaultMemo
+            }
+        }
+
+        if (defaultUnit) {
+            data = {
+                ...data,
+                unit: defaultUnit
+            }
+        }
+
+        dispatchConfirmInputValue({
+            type: 'INIT_DATA',
+            payload: data
+        });
+    }, [open, defaultMemo, defaultUnit])
 
     const _onConfirm = () => {
         setButtonDisabled(true);
@@ -225,11 +231,17 @@ const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, _onSubmit
                     {message || '정말로 판매 전환 하시겠습니까?'}
                 </MessageBox>
                 {memo &&
-                    <form onSubmit={(e) => _onSubmit(e, confirmInputValue.memo)}>
+                    <form onSubmit={(e) => _onSubmit(e, confirmInputValue)}>
                         <MemoBox>
                             <div className='form-title'>메모</div>
-                            <input placeholder='메모를 입력해주세요.' name='memo' onChange={onChangeInputValue} value={confirmInputValue?.memo || ''}></input>
+                            <input type='text' placeholder='메모를 입력해주세요.' name='memo' onChange={onChangeInputValue} value={confirmInputValue?.memo || ''}></input>
                         </MemoBox>
+                        {defaultUnit &&
+                            <MemoBox>
+                                <div className='form-title'>반품수량</div>
+                                <input type='number' placeholder='반품수량을 입력해주세요.' name='unit' onChange={onChangeInputValue} value={confirmInputValue?.unit || defaultUnit}></input>
+                            </MemoBox>
+                        }
                         <ButtonWrapper>
                             <ButtonBox>
                                 <button
@@ -280,7 +292,7 @@ const initialConfirmInputValue = null;
 
 const confirmInputValueReducer = (state, action) => {
     switch (action.type) {
-        case 'SET_DATA':
+        case 'INIT_DATA':
             return action.payload;
         case 'CHANGE_DATA':
             return {
