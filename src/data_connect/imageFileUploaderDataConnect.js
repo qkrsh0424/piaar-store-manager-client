@@ -15,6 +15,22 @@ const imageFileUploaderDataConnect = () => {
                 },
                 withCredentials: true
             })
+        },
+        postBatchToCloud: async function (e) {
+            let formDataList = [];
+            const formData = new FormData();
+            
+            [...e.target.files]?.forEach(file => {
+                formData.append('files', file);
+                formDataList.push(formData);
+            })
+
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/file-upload/cloud`, formData, {
+                headers: {
+                    "content-types": "multipart/form-data"
+                },
+                withCredentials: true
+            })
         }
     }
 }

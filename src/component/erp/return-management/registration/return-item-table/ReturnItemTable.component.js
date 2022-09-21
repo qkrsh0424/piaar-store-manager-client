@@ -4,6 +4,7 @@ import SelectorButtonFieldView from "./SelectorButtonField.view";
 import TableFieldView from "./TableField.view";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
+import ReturnProductImageModalComponent from "../return-product-image-modal/ReturnProductImageModal.component";
 
 function Tip() {
     return (
@@ -21,11 +22,13 @@ const ReturnItemTableComponent = (props) => {
     const tableScrollRef = useRef();
 
     const [returnItemList, dispatchReturnItemList] = useReducer(returnItemListReducer, initialReturnItemList);
+    const [selectedReturnItem, dispatchSelectedReturnItem] = useReducer(selectedReturnItemReducer, initialSelectedReturnItem);
     
     const [viewSize, dispatchViewSize] = useReducer(viewSizeReducer, initialViewSize);
     const [fixTargetItem, dispatchFixTargetItem] = useReducer(fixTargetItemReducer, initialFixTargetItem);
 
     const [fixItemModalOpen, setFixItemModalOpen] = useState(false);
+    const [returnProductImageModalOpen, setReturnProductImageModalOpen] = useState(false);
 
     useEffect(() => {
         if (!props.returnItemList || props.returnItemList?.length <= 0) {
@@ -44,8 +47,8 @@ const ReturnItemTableComponent = (props) => {
 
         // 수령인+수취인전화번호 동일하다면 수령인 duplicationUser값 true로 변경
         for (var i = 0; i < sortedData.length - 1; i++) {
-            if ((sortedData[i].receiver === sortedData[i + 1].receiver)
-                && sortedData[i].receiverContact1 === sortedData[i + 1].receiverContact1) {
+            if ((sortedData[i].erpOrderItem.receiver === sortedData[i + 1].erpOrderItem.receiver)
+                && sortedData[i].erpOrderItem.receiverContact1 === sortedData[i + 1].erpOrderItem.receiverContact1) {
                 sortedData[i] = {
                     ...sortedData[i],
                     duplicationUser: true
@@ -136,6 +139,40 @@ const ReturnItemTableComponent = (props) => {
         props._onAction_releaseReturnItemAll();
     }
 
+    const onActionOpenReturnProductImageModal = async (e, returnItem) => {
+        e.stopPropagation();
+
+        // 현재 returnItem이 가리키는 erpOrderItem의 releaseOptionCode와 매칭되는 productOptionId를 추출.
+        let optionId = props.productOptionList?.filter(r => r.code === returnItem.erpOrderItem.releaseOptionCode)[0]?.id;
+
+        returnItem = {
+            ...returnItem,
+            productOptionId: optionId
+        }
+
+        dispatchSelectedReturnItem({
+            type: 'SET_DATA',
+            payload: returnItem
+        })
+
+        await props._onAction_searchReturnProductImage(returnItem.id);
+        setReturnProductImageModalOpen(true);
+    }
+
+    const onActionCloseReturnProductImageModal = () => {
+        setReturnProductImageModalOpen(false);
+    }
+
+    const onSubmitCreateReturnProductImage = (imageList) => {
+        props._onSubmit_createReturnProductImage(imageList);
+        onActionCloseReturnProductImageModal();
+    }
+
+    const onActionDeleteReturnProductImage = async (id) => {
+        await props._onAction_deleteReturnProudctImage(id);
+        await props._onAction_searchReturnProductImage(selectedReturnItem.id);
+    }
+
     return (
         <>
             <Container>
@@ -160,6 +197,7 @@ const ReturnItemTableComponent = (props) => {
                             isCheckedOne={isCheckedOne}
                             onActionCheckReturnItem={onActionCheckReturnItem}
                             onActionOpenFixItemModal={onActionOpenFixItemModal}
+                            onActionOpenReturnProductImageModal={onActionOpenReturnProductImageModal}
                         ></TableFieldView>
                     </>
                 }
@@ -186,6 +224,23 @@ const ReturnItemTableComponent = (props) => {
                     ></FixOrderItemModalComponent>
                 </CommonModalComponent>
             }
+
+            {/* 반품 이미지 등록 모달 */}
+            <CommonModalComponent
+                open={returnProductImageModalOpen}
+
+                onClose={onActionCloseReturnProductImageModal}
+            >
+                <ReturnProductImageModalComponent
+                    checkedOrderItemList={props.checkedOrderItemList}
+                    returnProductImageList={props.returnProductImageList}
+                    selectedReturnItem={selectedReturnItem}
+
+                    onSubmitCreateReturnProductImage={onSubmitCreateReturnProductImage}
+                    onActionDeleteReturnProductImage={onActionDeleteReturnProductImage}
+                    onActionCloseReturnProductImageModal={onActionCloseReturnProductImageModal}
+                ></ReturnProductImageModalComponent>
+            </CommonModalComponent>
         </>
     );
 }
@@ -195,6 +250,7 @@ export default ReturnItemTableComponent;
 const initialViewSize = 50;
 const initialFixTargetItem = null;
 const initialReturnItemList = [];
+const initialSelectedReturnItem = null;
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
@@ -228,3 +284,14 @@ const returnItemListReducer = (state, action) => {
         default: return initialReturnItemList;
     }
 }
+
+const selectedReturnItemReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialSelectedReturnItem;
+        default: return initialSelectedReturnItem;
+    }
+}
+

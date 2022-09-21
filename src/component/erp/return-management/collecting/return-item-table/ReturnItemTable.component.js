@@ -44,8 +44,8 @@ const ReturnItemTableComponent = (props) => {
 
         // 수령인+수취인전화번호 동일하다면 수령인 duplicationUser값 true로 변경
         for (var i = 0; i < sortedData.length - 1; i++) {
-            if ((sortedData[i].receiver === sortedData[i + 1].receiver)
-                && sortedData[i].receiverContact1 === sortedData[i + 1].receiverContact1) {
+            if ((sortedData[i].erpOrderItem.receiver === sortedData[i + 1].erpOrderItem.receiver)
+                && sortedData[i].erpOrderItem.receiverContact1 === sortedData[i + 1].erpOrderItem.receiverContact1) {
                 sortedData[i] = {
                     ...sortedData[i],
                     duplicationUser: true

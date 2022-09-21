@@ -63,9 +63,7 @@ export default function TableFieldView(props) {
                                                     )
                                                 }
                                                 return (
-                                                    <td key={`col-${matchedColumnName}`}
-                                                        className={`${(r2.matchedColumnName === 'receiver' && r1[`duplicationUser`]) ? 'user-duplication' : ''}`}
-                                                    >
+                                                    <td key={`col-${matchedColumnName}`}>
                                                         {r1[matchedColumnName]}
                                                     </td>
                                                 )

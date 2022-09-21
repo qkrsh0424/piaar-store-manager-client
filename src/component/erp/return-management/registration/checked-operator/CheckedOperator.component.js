@@ -61,43 +61,12 @@ const CheckedOperatorComponent = (props) => {
             return;
         }
 
+        if (props.checkedReturnItemList?.length > 1) {
+            alert('반품 요청 사유 변경은 단건만 가능합니다.');
+            return;
+        }
+
         setReturnReasonModalOpen(true);
-    }
-
-    const onActionCloseReturnReasonTypeModal = () => {
-        setReturnReasonModalOpen(false);
-    }
-
-    const onActionChangeReturnReasonType = (reasonType) => {
-        let data = [...props.checkedReturnItemList];
-        data = data.map(r => {
-            return {
-                ...r,
-                returnReasonType: reasonType
-            }
-        })
-        props._onSubmit_changeReturnReasonTypeForReturnItemListInBatch(data);
-        onActionCloseReturnReasonTypeModal();
-    }
-
-    const onActionCloseReturnConfirmModal = () => {
-        setReturnReasonModalOpen(false);
-
-        dispatchReturnReason({
-            type: 'CLEAR'
-        })
-    }
-
-    const onChangeSelectReturnType = (e) => {
-        e.preventDefault();
-
-        dispatchReturnReason({
-            type: 'SET_DATA',
-            payload: {
-                name: e.target.name,
-                value: e.target.value
-            }
-        })
     }
 
     const onActionConfirmReturn = () => {
@@ -118,6 +87,26 @@ const CheckedOperatorComponent = (props) => {
 
         props._onSubmit_changeReturnReasonForReturnItemListInBatch(body);
         onActionCloseReturnConfirmModal();
+    }
+
+    const onActionCloseReturnConfirmModal = () => {
+        setReturnReasonModalOpen(false);
+
+        dispatchReturnReason({
+            type: 'CLEAR'
+        })
+    }
+
+    const onChangeSelectReturnType = (e) => {
+        e.preventDefault();
+
+        dispatchReturnReason({
+            type: 'SET_DATA',
+            payload: {
+                name: e.target.name,
+                value: e.target.value
+            }
+        })
     }
 
     return (

@@ -6,7 +6,7 @@ export default function OperatorFieldView(props) {
         <OperatorFieldWrapper>
             <ControlWrapper>
                 <div className='title-box'>
-                    데이터 일괄 처리
+                    데이터 단건 처리
                 </div>
                 <ButtonWrapper>
                     <div className='button-box'>

@@ -115,12 +115,20 @@ export default function TableFieldView(props) {
                                                 return (
                                                     <td key={`col-${matchedColumnName}`}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
                                                 )
+                                            } else if (matchedColumnName === 'returnReasonDetail') {
+                                                return (
+                                                    <td
+                                                        key={`col-${matchedColumnName}`}
+                                                        className='td-highlight'
+                                                        onClick={(e) => props.onActionOpenReturnProductImageModal(e, r1)}
+                                                    >
+                                                        {r1[matchedColumnName]}
+                                                    </td>
+                                                )
                                             }
+                                            
                                             return (
-                                                <td 
-                                                    key={`col-${matchedColumnName}`}
-                                                    className={`${(matchedColumnName === 'receiver' && r1[`duplicationUser`]) ? 'user-duplication' : ''}`}
-                                                >
+                                                <td key={`col-${matchedColumnName}`}>
                                                     {r1[matchedColumnName]}
                                                 </td>
                                             )
