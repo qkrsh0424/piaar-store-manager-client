@@ -65,9 +65,21 @@ const CheckedOperatorComponent = (props) => {
         onActionCloseDeleteConfirmModal();
     }
 
-    const onActionOpenOptionCodeModal = () => {
+    const onActionOpenOptionCodeModal = (e) => {
         if (props.checkedOrderItemList?.length <= 0) {
             alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        let uniqueCodes = [];
+        props.checkedOrderItemList.forEach(r => {
+            if (r.returnYn === 'y') {
+                uniqueCodes.push(r.uniqueCode);
+            }
+        });
+
+        if (uniqueCodes.length > 0) {
+            alert(`반품처리된 데이터가 있습니다.\n반품처리된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
             return;
         }
 
@@ -96,6 +108,13 @@ const CheckedOperatorComponent = (props) => {
             return;
         }
 
+        let alreadyReflected = props.checkedOrderItemList.filter(r => r.stockReflectYn === 'y');
+        if (alreadyReflected && alreadyReflected.length > 0) {
+            alert('이미 재고에 반영된 데이터가 있습니다. 해당 데이터의 재고 반영을 취소 후 진행해 주시기 바랍니다.');
+            onActionCloseReleaseConfirmModal();
+            return;
+        }
+
         setReleaseConfirmModalOpen(true);
     }
 
@@ -104,12 +123,6 @@ const CheckedOperatorComponent = (props) => {
     }
 
     const onActionConfirmRelease = () => {
-        let alreadyReflected = props.checkedOrderItemList.filter(r => r.stockReflectYn === 'y');
-        if (alreadyReflected && alreadyReflected.length > 0) {
-            alert('이미 재고에 반영된 데이터가 있습니다. 해당 데이터의 재고 반영을 취소 후 진행해 주시기 바랍니다.');
-            onActionCloseReleaseConfirmModal();
-            return;
-        }
         let data = props.checkedOrderItemList.map(r => {
             return {
                 ...r,
@@ -126,6 +139,19 @@ const CheckedOperatorComponent = (props) => {
             alert('데이터를 먼저 선택해 주세요.');
             return;
         }
+
+        let uniqueCodes = [];
+        props.checkedOrderItemList.forEach(r => {
+            if (r.returnYn === 'y') {
+                uniqueCodes.push(r.uniqueCode);
+            }
+        });
+
+        if (uniqueCodes.length > 0) {
+            alert(`반품처리된 데이터가 있습니다.\n반품처리된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
+            return;
+        }
+        
         setReleaseOptionCodeModalOpen(true);
     }
 
@@ -171,23 +197,11 @@ const CheckedOperatorComponent = (props) => {
     }
 
     // 재고 반영 모달 OPEN
-    const onActionOpenReflectStockConfirmModal = () => {
+    const onActionOpenReflectStockConfirmModal = (e) => {
         if (props.checkedOrderItemList?.length <= 0) {
             alert('데이터를 먼저 선택해 주세요.');
             return;
         }
-        setReflectStockConfirmModalOpen(true);
-    }
-
-    // 재고 반영 모달 CLOSE
-    const onActionCloseReflectStockConfirmModal = (e) => {
-        e.preventDefault();
-        setReflectStockConfirmModalOpen(false);
-    }
-
-    // 재고 반영 서밋
-    const onSubmitReflectStock = (e, params) => {
-        e.preventDefault();
 
         let uniqueCodes = [];
         props.checkedOrderItemList.forEach(r => {
@@ -201,16 +215,55 @@ const CheckedOperatorComponent = (props) => {
             onActionCloseReflectStockConfirmModal(e);
             return;
         }
+
+        setReflectStockConfirmModalOpen(true);
+    }
+
+    // 재고 반영 모달 CLOSE
+    const onActionCloseReflectStockConfirmModal = (e) => {
+        e.preventDefault();
+        setReflectStockConfirmModalOpen(false);
+    }
+
+    // 재고 반영 서밋
+    const onSubmitReflectStock = (e, params) => {
+        e.preventDefault();
+
         props._onAction_reflectStock(params);
         onActionCloseReflectStockConfirmModal(e);
     }
 
     // 재고 취소 모달 OPEN
-    const onActionOpenCancelStockConfirmModal = () => {
+    const onActionOpenCancelStockConfirmModal = (e) => {
         if (props.checkedOrderItemList?.length <= 0) {
             alert('데이터를 먼저 선택해 주세요.');
             return;
         }
+
+        let uniqueCodes = [];
+        let returnUniqueCodes = [];
+        props.checkedOrderItemList.forEach(r => {
+            if (r.stockReflectYn === 'n') {
+                uniqueCodes.push(r.uniqueCode);
+            }
+
+            if(r.returnYn === 'y') {
+                returnUniqueCodes.push(r.uniqueCode);
+            }
+        });
+
+        if (uniqueCodes.length > 0) {
+            alert(`재고에 반영되지 않은 데이터가 있습니다.\n재고 반영되지 않은 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
+            onActionCloseCancelStockConfirmModal();
+            return;
+        }
+
+        if(returnUniqueCodes.length > 0) {
+            alert(`반품처리된 데이터가 있습니다.\n반품처리된 데이터를 제외 후 다시 시도해주세요.\n\n고유번호:\n${returnUniqueCodes.join('\n')}`);
+            onActionCloseCancelStockConfirmModal(e);
+            return;
+        }
+
         setCancelStockConfirmModalOpen(true);
     }
 
@@ -220,18 +273,6 @@ const CheckedOperatorComponent = (props) => {
     }
 
     const onSubmitCancelStock = () => {
-        let uniqueCodes = [];
-        props.checkedOrderItemList.forEach(r => {
-            if (r.stockReflectYn === 'n') {
-                uniqueCodes.push(r.uniqueCode);
-            }
-        });
-
-        if (uniqueCodes.length > 0) {
-            alert(`재고에 반영되지 않은 데이터가 있습니다.\n재고 반영되지 않은 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
-            onActionCloseCancelStockConfirmModal();
-            return;
-        }
         props._onAction_cancelStock();
         onActionCloseCancelStockConfirmModal();
     }

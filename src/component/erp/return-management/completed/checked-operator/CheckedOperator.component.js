@@ -33,18 +33,24 @@ const CheckedOperatorComponent = (props) => {
         }
 
         let uniqueCodes = [];
+        let stockReflectUniqueCodes = [];
         props.checkedReturnItemList.forEach(r => {
             if(r.defectiveYn === 'y') {
                 uniqueCodes.push(r.erpOrderItem.uniqueCode);
+            }
+            if(r.stockReflectYn === 'y') {
+                stockReflectUniqueCodes.push(r.erpOrderItem.uniqueCode);
             }
         });
 
         if (uniqueCodes.length > 0) {
             alert(`불량상품으로 등록된 데이터가 있습니다.\n불량상품으로 등록된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
-            onActionCloseCancelStockConfirmModal();
             return;
         }
-
+        if (stockReflectUniqueCodes.length > 0) {
+            alert(`재고반영된 데이터가 있습니다.\n재고반영된 데이터를 제외 후 다시 시도해 주세요..\n\n고유번호:\n${stockReflectUniqueCodes.join('\n')}`);
+            return;
+        }
         setCompletedConfirmModalOpen(true);
     }
 
@@ -70,13 +76,22 @@ const CheckedOperatorComponent = (props) => {
             alert('데이터를 먼저 선택해 주세요.');
             return;
         }
-
         if (props.checkedReturnItemList?.length > 1) {
             alert('불량상품은 단건 등록만 가능합니다.');
             return;
         }
 
-        let defectiveDataId = props.checkedReturnItemList[0]?.erpOrderItem?.id;
+        let data = props.checkedReturnItemList[0];
+        if (data.stockReflectYn === 'y') {
+            alert('재고반영된 데이터는 불량상품으로 등록할 수 없습니다.');
+            return;
+        }
+        if (data.defectiveYn === 'y') {
+            alert('이미 불량상품으로 등록된 데이터입니다.');
+            return;
+        }
+
+        let defectiveDataId = data.erpOrderItem?.id;
         await props._onAction_searchReleaseData(defectiveDataId);
         setDefectiveProductConfirmModalOpen(true);
     }
@@ -91,19 +106,6 @@ const CheckedOperatorComponent = (props) => {
     const onSubmitDefectiveProduct = (e, params) => {
         e.preventDefault();
 
-        let uniqueCodes = [];
-        props.checkedReturnItemList.forEach(r => {
-            if (r.defectiveYn === 'y') {
-                uniqueCodes.push(r.erpOrderItem.uniqueCode);
-            }
-        });
-
-        if (uniqueCodes.length > 0) {
-            alert(`이미 불량상품 처리된 데이터가 있습니다.\n불량상품 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
-            onActionCloseDefectiveProductConfirmModal(e);
-            return;
-        }
-
         props._onSubmit_reflectDefective(params);
         onActionCloseDefectiveProductConfirmModal(e);
     }
@@ -114,13 +116,18 @@ const CheckedOperatorComponent = (props) => {
             alert('데이터를 먼저 선택해 주세요.');
             return;
         }
-
         if (props.checkedReturnItemList?.length > 1) {
             alert('불량상품 취소는 단건만 가능합니다.');
             return;
         }
 
-        let defectiveDataId = props.checkedReturnItemList[0]?.erpOrderItem?.id;
+        let data = props.checkedReturnItemList[0];
+        if (data.defectiveYn === 'n') {
+            alert('불량상품으로 등록된 데이터가 존재하지 않습니다.');
+            return;
+        }
+
+        let defectiveDataId = data.erpOrderItem?.id;
         await props._onAction_searchReleaseData(defectiveDataId);
 
         setDefectiveProductCancelConfirmModalOpen(true);
@@ -137,19 +144,6 @@ const CheckedOperatorComponent = (props) => {
     const onSubmitCancelDefectiveProduct = (e, params) => {
         e.preventDefault();
 
-        let uniqueCodes = [];
-        props.checkedReturnItemList.forEach(r => {
-            if (r.defectiveYn === 'n') {
-                uniqueCodes.push(r.erpOrderItem.uniqueCode);
-            }
-        });
-
-        if (uniqueCodes.length > 0) {
-            alert(`불량상품으로 처리되지 않은 데이터가 있습니다.\n불량상품이 아닌 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
-            onActionCloseDefectiveProductCancelConfirmModal(e);
-            return;
-        }
-
         props._onSubmit_cancelDefective(params);
         onActionCloseDefectiveProductCancelConfirmModal(e);
     }
@@ -160,13 +154,22 @@ const CheckedOperatorComponent = (props) => {
             alert('데이터를 먼저 선택해 주세요.');
             return;
         }
-
         if (props.checkedReturnItemList?.length > 1) {
             alert('반품 재고반영은 단건만 가능합니다.');
             return;
         }
 
-        let reflectStockId = props.checkedReturnItemList[0]?.erpOrderItem?.id;
+        let data = props.checkedReturnItemList[0];
+        if(data.defectiveYn === 'y') {
+            alert('불량상품으로 등록된 데이터는 재고 반영할 수 없습니다.');
+            return;
+        }
+        if(data.stockReflectYn === 'y') {
+            alert('이미 재고반영된 데이터입니다.');
+            return;
+        }
+
+        let reflectStockId = data.erpOrderItem?.id;
         await props._onAction_searchReleaseData(reflectStockId);
         setReflectStockConfirmModalOpen(true);
     }
@@ -184,19 +187,6 @@ const CheckedOperatorComponent = (props) => {
         e.preventDefault();
 
         let data = props.checkedReturnItemList[0];
-
-        if(data.defectiveYn === 'y') {
-            alert(`불량상품으로 등록된 데이터가 있습니다.\n불량상품으로 등록된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${data.uniqueCode}`);
-            onActionCloseReflectStockConfirmModal(e);
-            return;
-        }
-
-        if(data.stockReflectYn === 'y') {
-            alert(`이미 재고 반영된 데이터가 있습니다.\n재고에 반영된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${data.uniqueCode}`);
-            onActionCloseReflectStockConfirmModal(e);
-            return;
-        }
-
         if (data.erpOrderItem.unit < params.unit) {
             alert('반품 재고반영 수량은 출고상품 수량보다 클 수 없습니다.\n반품 수량을 한번 더 확인해주세요.');
             onActionCloseReflectStockConfirmModal(e);
@@ -213,11 +203,17 @@ const CheckedOperatorComponent = (props) => {
             alert('데이터를 먼저 선택해 주세요.');
             return;
         }
-
         if (props.checkedReturnItemList?.length > 1) {
             alert('반품 재고반영 취소는 단건만 가능합니다.');
             return;
         }
+
+        let data = props.checkedReturnItemList[0];
+        if(data.stockReflectYn === 'n') {
+            alert('재고반영된 데이터가 존재하지 않습니다');
+            return;
+        }
+
         setCancelStockConfirmModalOpen(true);
     }
 
@@ -227,13 +223,6 @@ const CheckedOperatorComponent = (props) => {
     }
 
     const onSubmitCancelStock = () => {
-        let data = props.checkedReturnItemList[0];
-        if(data.stockReflectYn === 'n') {
-            alert(`재고에 반영되지 않은 데이터가 있습니다.\n재고 반영되지 않은 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${data.uniqueCode}`);
-            onActionCloseReflectStockConfirmModal();
-            return;
-        }
-
         props._onAction_cancelStock();
         onActionCloseCancelStockConfirmModal();
     }

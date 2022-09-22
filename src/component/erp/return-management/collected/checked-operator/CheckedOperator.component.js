@@ -16,20 +16,16 @@ const CheckedOperatorComponent = (props) => {
             alert('데이터를 먼저 선택해 주세요.');
             return;
         }
+        if (props.checkedReturnItemList?.length > 1) {
+            alert('반품거절 처리는 단건만 가능합니다.');
+            return;
+        }
 
-       // 반품 처리 여부
-       let uniqueCodes = [];
-       props.checkedReturnItemList.forEach(r => {
-           if (r.returnRejectYn === 'y') {
-               uniqueCodes.push(r.erpOrderItem.uniqueCode);
-           }
-       });
-
-       if (uniqueCodes.length > 0) {
-           alert(`이미 반품거절된 데이터가 있습니다.\n반품거절된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
-           onActionCloseReturnRejectConfirmModal();
-           return;
-       }
+        let data = props.checkedReturnItemList[0];
+        if(data.returnRejectYn === 'y') {
+            alert('이미 반품거절된 데이터입니다.');
+            return;
+        }
 
         setReturnRejectConfirmModalOpen(true);
     }
@@ -56,20 +52,16 @@ const CheckedOperatorComponent = (props) => {
             alert('데이터를 먼저 선택해 주세요.');
             return;
         }
+        if (props.checkedReturnItemList?.length > 1) {
+            alert('반품거절 취소는 단건만 가능합니다.');
+            return;
+        }
 
-       // 반품 처리 여부
-       let uniqueCodes = [];
-       props.checkedReturnItemList.forEach(r => {
-           if (r.returnRejectYn === 'n') {
-               uniqueCodes.push(r.erpOrderItem.uniqueCode);
-           }
-       });
-
-       if (uniqueCodes.length > 0) {
-           alert(`반품 거절되지 않은 데이터가 있습니다.\n반품거절 처리되지 않은 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
-           onActionCloseReturnRejectCancelConfirmModal();
-           return;
-       }
+        let data = props.checkedReturnItemList[0];
+        if(data.returnRejectYn === 'n') {
+            alert('반품거절 처리된 데이터가 존재하지 않습니다.');
+            return;
+        }
 
         setReturnRejectCancelConfirmModalOpen(true);
     }
@@ -92,23 +84,21 @@ const CheckedOperatorComponent = (props) => {
 
     // 수거완료 취소 처리
     const onActionOpenCollectedConfirmModal = () => {
+        if (props.checkedReturnItemList?.length <= 0) {
+            alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
         let uniqueCodes = [];
         props.checkedReturnItemList.forEach(r => {
             if (r.returnRejectYn === 'y') {
                 uniqueCodes.push(r.erpOrderItem.uniqueCode);
             }
         });
-
         if (uniqueCodes.length > 0) {
             alert(`반품거절된 데이터가 있습니다.\n반품거절된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
             return;
         }
-
-        if (props.checkedReturnItemList?.length <= 0) {
-            alert('데이터를 먼저 선택해 주세요.');
-            return;
-        }
-
         setCollectedConfirmModalOpen(true);
     }
 
@@ -141,12 +131,10 @@ const CheckedOperatorComponent = (props) => {
                 uniqueCodes.push(r.erpOrderItem.uniqueCode);
             }
         });
-
         if (uniqueCodes.length > 0) {
             alert(`반품거절된 데이터가 있습니다.\n반품거절된 데이터를 제외 후 다시 시도해 주세요.\n\n고유번호:\n${uniqueCodes.join('\n')}`);
             return;
         }
-
         setCompletedConfirmModalOpen(true);
     }
 
@@ -172,7 +160,6 @@ const CheckedOperatorComponent = (props) => {
             alert('데이터를 먼저 선택해 주세요.');
             return;
         }
-
         setDeleteConfirmModalOpen(true);
     }
 
