@@ -288,11 +288,6 @@ const RegistrationComponent = (props) => {
 
     const __reqCreateReturnProductImage = async (data) => {
         await returnProductImageDataConnect().createBatch(data)
-            .then(res => {
-                if (res.status === 200 && res.data.message === 'success') {
-                    alert('저장되었습니다.');
-                }
-            })
             .catch(err => {
                 let res = err.response;
                 if (res?.status === 500) {
@@ -348,11 +343,6 @@ const RegistrationComponent = (props) => {
 
     const __reqDeleteReturnProductImage = async (imageId) => {
         await returnProductImageDataConnect().deleteOne(imageId)
-            .then(res => {
-                if (res.status === 200 && res.data.message === 'success') {
-                    alert('정상적으로 삭제되었습니다.')
-                }
-            })
             .catch(err => {
                 let res = err.response;
                 if (res?.status === 500) {
@@ -720,11 +710,11 @@ export default RegistrationComponent;
 
 const initialViewHeader = null;
 const initialCheckedReturnItemList = [];
-const initialProductOptionList = null;
 const initialReturnItemPage = null;
 const initialViewHeaderList = null;
 const initialReturnTypeList = null;
 const initialReturnProductImageList = [];
+const initialProductOptionList = null;
 
 const returnItemPageReducer = (state, action) => {
     switch (action.type) {

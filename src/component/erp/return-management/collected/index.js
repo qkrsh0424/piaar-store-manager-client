@@ -25,6 +25,8 @@ import CheckedOperatorComponent from "./checked-operator/CheckedOperator.compone
 import CheckedReturnItemTableComponent from "./checked-return-item-table/CheckedReturnItemTable.component";
 import { returnReasonTypeDataConnect } from "../../../../data_connect/returnReasonTypeDataConnect";
 import { sortFormatUtils } from "../../../../utils/sortFormatUtils";
+import { returnProductImageDataConnect } from "../../../../data_connect/returnProductImageDataConnect";
+import { productOptionDataConnect } from "../../../../data_connect/productOptionDataConnect";
 
 const Container = styled.div`
     margin-bottom: 100px;
@@ -69,6 +71,8 @@ const CollectedComponent = (props) => {
     const [viewHeaderList, dispatchViewHeaderList] = useReducer(viewHeaderListReducer, initialViewHeaderList);
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
     const [returnTypeList, dispatchReturnTypeList] = useReducer(returnTypeListReducer, initialReturnTypeList);
+    const [productOptionList, dispatchProductOptionList] = useReducer(productOptionListReducer, initialProductOptionList);
+    const [returnProductImageList, dispatchReturnProductImageList] = useReducer(returnProductImageListReducer, initialReturnProductImageList);
 
     const [defaultHeader, setDefaultHeader] = useLocalStorageHook("returnDefaultHeader", null);
 
@@ -295,9 +299,78 @@ const CollectedComponent = (props) => {
             })
     }
 
+    const __reqCreateReturnProductImage = async (data) => {
+        await returnProductImageDataConnect().createBatch(data)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqSearchProductOptionList = async () => {
+        await productOptionDataConnect().getList()
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    dispatchProductOptionList({
+                        type: 'INIT_DATA',
+                        payload: res.data.data
+                    })
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqSearchReturnProductImage = async (returnItemId) => {
+        await returnProductImageDataConnect().searchBatchByErpReturnItemId(returnItemId)
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    dispatchReturnProductImageList({
+                        type: 'INIT_DATA',
+                        payload: res.data.data
+                    })
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqDeleteReturnProductImage = async (imageId) => {
+        await returnProductImageDataConnect().deleteOne(imageId)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
     useEffect(() => {
         __reqSearchViewHeaderList();
         __reqSearchReturnTypeList();
+        __reqSearchProductOptionList();
     }, []);
 
     useEffect(() => {
@@ -535,6 +608,24 @@ const CollectedComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    const _onSubmit_createReturnProductImage = async (imageList) => {
+        onActionOpenBackdrop();
+        await __reqCreateReturnProductImage(imageList);
+        onActionCloseBackdrop();
+    }
+
+    const _onAction_searchReturnProductImage = async (returnItemId) => {
+        onActionOpenBackdrop();
+        await __reqSearchReturnProductImage(returnItemId);
+        onActionCloseBackdrop();
+    }
+
+    const _onAction_deleteReturnProudctImage = async (id) => {
+        onActionOpenBackdrop();
+        await __reqDeleteReturnProductImage(id);
+        onActionCloseBackdrop();
+    }
+
     return (
         <>
             {connected &&
@@ -549,11 +640,16 @@ const CollectedComponent = (props) => {
                         viewHeader={viewHeader}
                         returnItemList={returnItemPage?.content}
                         checkedReturnItemList={checkedReturnItemList}
+                        productOptionList={productOptionList}
+                        returnProductImageList={returnProductImageList}
 
                         _onAction_checkReturnItem={_onAction_checkReturnItem}
                         _onAction_checkReturnItemAll={_onAction_checkReturnItemAll}
                         _onAction_releaseReturnItemAll={_onAction_releaseReturnItemAll}
                         _onSubmit_updateErpReturnItemOne={_onSubmit_updateErpReturnItemOne}
+                        _onSubmit_createReturnProductImage={_onSubmit_createReturnProductImage}
+                        _onAction_searchReturnProductImage={_onAction_searchReturnProductImage}
+                        _onAction_deleteReturnProudctImage={_onAction_deleteReturnProudctImage}
                     ></ReturnItemTableComponent>
                     <ReturnItemTablePagenationComponent
                         returnItemPage={returnItemPage}
@@ -637,6 +733,8 @@ const initialCheckedReturnItemList = [];
 const initialReturnItemPage = null;
 const initialViewHeaderList = null;
 const initialReturnTypeList = null;
+const initialReturnProductImageList = [];
+const initialProductOptionList = null;
 
 const returnItemPageReducer = (state, action) => {
     switch (action.type) {
@@ -681,5 +779,28 @@ const returnTypeListReducer = (state, action) => {
         case 'CLEAR':
             return initialReturnTypeList;
         default: return initialReturnTypeList;
+    }
+}
+
+const productOptionListReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        default: return null;
+    }
+}
+
+const returnProductImageListReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
+        case 'CLEAR':
+            return initialReturnProductImageList;
+        default: return initialReturnProductImageList;
     }
 }
