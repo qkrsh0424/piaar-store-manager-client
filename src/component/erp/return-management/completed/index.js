@@ -105,6 +105,8 @@ const CompletedComponent = (props) => {
         let searchColumnName = query.searchColumnName || null;
         let searchQuery = query.searchQuery || null;
         let periodType = query.periodType || null;
+        let stockReflectYn = query.stockReflectYn || null;
+        let defectiveYn = query.defectiveYn || null;
         let page = query.page || null;
         let size = query.size || null;
         let sortBy = query.sortBy || null;
@@ -119,6 +121,8 @@ const CompletedComponent = (props) => {
             startDate: startDate,
             endDate: endDate,
             periodType: periodType,
+            stockReflectYn: stockReflectYn,
+            defectiveYn: defectiveYn,
             searchColumnName: searchColumnName,
             searchQuery: searchQuery,
             page: page,

@@ -7,7 +7,7 @@ import ReturnItemTableComponent from "./return-item-table/ReturnItemTable.compon
 import SearchOperatorComponent from "./search-operator/SearchOperator.component";
 import { useReducer, useState } from "react";
 import { erpReturnItemDataConnect } from "../../../../data_connect/erpReturnItemDataConnect";
-import { getReturnDefaultHeaderDetails, getReturnDefaultHeaderFields } from "../../../../static-data/erpReturnItemStaticData";
+import { getReturnDefaultHeaderFields } from "../../../../static-data/erpReturnItemStaticData";
 import { useEffect } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import CommonModalComponent from "../../../module/modal/CommonModalComponent";
@@ -103,6 +103,7 @@ const CollectedComponent = (props) => {
         let searchColumnName = query.searchColumnName || null;
         let searchQuery = query.searchQuery || null;
         let periodType = query.periodType || null;
+        let returnRejectYn = query.returnRejectYn || null;
         let page = query.page || null;
         let size = query.size || null;
         let sortBy = query.sortBy || null;
@@ -117,6 +118,7 @@ const CollectedComponent = (props) => {
             startDate: startDate,
             endDate: endDate,
             periodType: periodType,
+            returnRejectYn: returnRejectYn,
             searchColumnName: searchColumnName,
             searchQuery: searchQuery,
             page: page,
