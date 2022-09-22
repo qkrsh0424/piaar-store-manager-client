@@ -59,7 +59,8 @@ const MessageBox = styled.div`
     }
 
     .input-title {
-        width: 100px;
+        text-align: left;
+        width: 140px;
     }
 
     .text-input {
@@ -72,6 +73,15 @@ const MessageBox = styled.div`
         font-size: 14px;
         box-sizing: border-box;
         resize: both;
+    }
+
+    .input-value input {
+        width: 250px;
+        height: 40px;
+        padding: 5px;
+        border: 1px solid #e1e1e1;
+        border-radius: 3px;
+        font-size: 14px;
     }
 
     .select-item{
