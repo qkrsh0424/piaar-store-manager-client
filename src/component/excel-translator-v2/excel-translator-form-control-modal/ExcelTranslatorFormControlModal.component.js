@@ -17,7 +17,11 @@ const ExcelTranslatorFormControlModalComponent = (props) => {
         }
 
         let translator = props.excelTranslatorData.filter(r => !props.excelTranslatorViewFormIds.includes(r.id));
-        let viewTranslator = props.excelTranslatorData.filter(r => props.excelTranslatorViewFormIds.filter(r2 => r.id === r2)[0]);
+        let viewTranslator = [];
+        props.excelTranslatorViewFormIds.forEach(r =>{
+            let matchedHeader = props.excelTranslatorData.filter(r2 => r === r2.id)[0];
+            if(matchedHeader) viewTranslator.push(matchedHeader);
+        });
 
         dispatchExcelTranslatorData({
             type: 'SET_DATA',
@@ -83,6 +87,7 @@ const ExcelTranslatorFormControlModalComponent = (props) => {
     // 헤더 세팅 업데이트
     const onActionUpdateExcelTranslatorViewOrder = () => {
         let ids = excelTranslatorViewData.map(r => r.id);
+
         props.onActionUpdateExcelTranslatorViewIds(ids);
     }
 

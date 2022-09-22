@@ -119,6 +119,8 @@ const TableFieldWrapper = styled.div`
             font-weight: 600;
             cursor: pointer;
         }
+
+        
     }
 
     table tbody tr .user-duplication {

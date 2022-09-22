@@ -13,7 +13,7 @@ export default function ProductManageTableFieldView(props) {
             <table className="table table-sm" style={{ tableLayout: 'fixed' }}>
                 <thead>
                     <tr>
-                        {userRdx.userInfo && ['ROLE_MANAGER', 'ROLE_ADMIN'].includes(userRdx.userInfo.roles) &&
+                        {userRdx.userInfo && ['ROLE_MANAGER', 'ROLE_ADMIN', 'ROLE_SUPERADMIN'].includes(userRdx.userInfo.roles) &&
                             <th className='fixedHeader' scope="col" width='100'>컨트롤</th>
                         }
                         <th className='fixedHeader' scope="col" width='250'>상품식별코드</th>
@@ -51,7 +51,7 @@ export default function ProductManageTableFieldView(props) {
                         return (
                             <React.Fragment key={productIdx}>
                                 <tr style={{ background: productIdx % 2 === 1 ? '#f8f8f8' : '#ffffff' }}>
-                                    {userRdx && userRdx.isLoading === false && userRdx.userInfo && ['ROLE_MANAGER', 'ROLE_ADMIN'].includes(userRdx.userInfo.roles) &&
+                                    {userRdx && userRdx.isLoading === false && userRdx.userInfo && ['ROLE_MANAGER', 'ROLE_ADMIN', 'ROLE_SUPERADMIN'].includes(userRdx.userInfo.roles) &&
                                         <th rowSpan={product.options.length + 1} className="control-btn">
                                             <div>
                                                 <button
