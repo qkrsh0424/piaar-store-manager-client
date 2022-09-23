@@ -147,7 +147,7 @@ const CheckedOperatorComponent = (props) => {
                             <div className='info-box'>
                                 <span className='input-title'>반품 상세사유</span>
                                 <div>
-                                    <textarea className='text-input' name='detail' onChange={onChangeSelectReturnType} value={returnReason?.detail || ''} placeholder='반품요청 상세 사유를 입력해 주세요.' />
+                                    <textarea className='text-input' name='detail' onChange={onChangeSelectReturnType} value={returnReason?.detail || ''} placeholder={`반품요청 상세 사유를 입력해 주세요.\n(300자 이내)`} />
                                 </div>
                             </div>
                         </div>

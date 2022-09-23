@@ -506,7 +506,7 @@ const CheckedOperatorComponent = (props) => {
                                         name='returnReasonDetail'
                                         onChange={onChangeSelectReturnType}
                                         value={returnRegistrationInfo?.returnReasonDetail || ''}
-                                        placeholder='반품요청 상세 사유를 입력해 주세요.'
+                                        placeholder={`반품요청 상세 사유를 입력해 주세요.\n(300자 이내)`}
                                     />
                                 </div>
                             </div>

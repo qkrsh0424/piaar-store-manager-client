@@ -18,7 +18,8 @@ function CorrectIcon() {
 function FailedIcon() {
     return (
         <img
-            src='/assets/icon/failed_icon.png'
+            // src='/assets/icon/failed_icon.png'
+            src='/assets/icon/clear_black_icon.png'
             style={{ width: '15px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
             alt=""
             loading='lazy'

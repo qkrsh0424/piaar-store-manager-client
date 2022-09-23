@@ -29,11 +29,6 @@ const erpReturnItemSocket = () => {
                 withCredentials: true
             })
         },
-        changeHoldYnForList: async function (body) {
-            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch/hold-yn`, body, {
-                withCredentials: true
-            })
-        },
         changeReturnRejectYnForList: async function (body) {
             return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch/return-reject-yn`, body, {
                 withCredentials: true
