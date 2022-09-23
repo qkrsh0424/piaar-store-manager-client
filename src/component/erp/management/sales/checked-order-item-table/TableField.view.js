@@ -31,19 +31,19 @@ export default function TableFieldView(props) {
                     </colgroup> */}
                     <thead>
                         <tr>
-                            <ResizableTh
+                            <th
                                 className="fixed-header fixed-col-left"
-                                style={{ zIndex: '12' }}
+                                style={{ zIndex: '12', boxShadow: '-0.5px -0.5px 0 0 #e0e0e0 inset' }}
                                 width={80}
                             >
                                 출고됨
-                            </ResizableTh>
-                            <ResizableTh
+                            </th>
+                            <th
                                 className="fixed-header"
                                 width={50}
                             >
                                 선택
-                            </ResizableTh>
+                            </th>
                             {props.viewHeader?.headerDetail.details?.map((r, index) => {
                                 return (
                                     <ResizableTh

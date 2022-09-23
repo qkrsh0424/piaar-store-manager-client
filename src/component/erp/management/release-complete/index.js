@@ -25,6 +25,9 @@ import { erpOrderItemSocket } from '../../../../data_connect/socket/erpOrderItem
 import { erpReleaseCompleteHeaderSocket } from '../../../../data_connect/socket/erpReleaseCompleteHeaderSocket';
 import CheckedHeadComponent from './checked-head/CheckedHead.component';
 import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
+import { returnReasonTypeDataConnect } from '../../../../data_connect/returnReasonTypeDataConnect';
+import { erpReturnItemDataConnect } from '../../../../data_connect/erpReturnItemDataConnect';
+import { erpReturnItemSocket } from '../../../../data_connect/socket/erpReturnItemSocket';
 
 const Container = styled.div`
     margin-bottom: 100px;
@@ -71,6 +74,8 @@ const ReleaseCompleteComponent = (props) => {
     const [viewHeaderList, dispatchViewHeaderList] = useReducer(viewHeaderListReducer, initialViewHeaderList);
     const [releaseLocation, dispatchReleaseLocation] = useReducer(releaseLocationReducer, initialReleaseLocation);
     const [selectedMatchCode, dispatchSelectedMatchCode] = useReducer(selectedMatchCodeReducer, initialSelectedMatchCode);
+
+    const [returnTypeList, dispatchReturnTypeList] = useReducer(returnTypeListReducer, initialReturnTypeList);
 
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
 
@@ -406,8 +411,8 @@ const ReleaseCompleteComponent = (props) => {
             ;
     }
 
-    const __reqActionReflectStock = async (body, memo) => {
-        await erpOrderItemSocket().actionReflectStock(body, memo)
+    const __reqActionReflectStock = async (body, params) => {
+        await erpOrderItemSocket().actionReflectStock(body, params)
             .then(res => {
                 if (res.status === 200) {
                     alert(res.data.memo);
@@ -495,11 +500,66 @@ const ReleaseCompleteComponent = (props) => {
             })
     }
 
+    const __reqSearchReturnTypeList = async () => {
+        await returnReasonTypeDataConnect().searchAll()
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    dispatchReturnTypeList({
+                        type: 'INIT_DATA',
+                        payload: res.data.data
+                    })
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqChangeReturnYnForOrderItemListSocket = async (body) => {
+        await erpOrderItemSocket().changeReturnYnForList(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            });
+    }
+
+    const __reqCreateReturnItemList = async (body, changeReturnYn) => {
+        await erpReturnItemSocket().createBatch(body)
+            .then(res => {
+                if (res.status === 200) {
+                    alert('처리되었습니다.');
+                    changeReturnYn();     // erp order item의 returnYn항목 수정
+                    return;
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
     useEffect(() => {
         __reqSearchReleaseLocationOfProductOption();
         __reqSearchViewHeaderList();
         __reqSearchProductOptionList();
         __reqSearchDownloadExcelHeaders();
+        __reqSearchReturnTypeList();
     }, []);
 
     useEffect(() => {
@@ -745,9 +805,9 @@ const ReleaseCompleteComponent = (props) => {
     }
 
     // 선택된 데이터 재고 반영
-    const _onAction_reflectStock = async (memo) => {
+    const _onAction_reflectStock = async (params) => {
         onActionOpenBackdrop();
-        await __reqActionReflectStock(checkedOrderItemList, memo);
+        await __reqActionReflectStock(checkedOrderItemList, params);
         onActionCloseBackdrop();
     }
 
@@ -825,6 +885,28 @@ const ReleaseCompleteComponent = (props) => {
         )
     }
 
+    const _onSubmit_changeReturnYnForOrderItemList = async (data) => {
+        onActionOpenBackdrop();
+        await __reqChangeReturnYnForOrderItemListSocket(data);
+        onActionCloseBackdrop();
+    }
+
+    const _onSubmit_createReturnItem = async (body) => {
+        onActionOpenBackdrop();
+        // 반품 데이터 생성 후, 생성 성공된다면 erp order item의 returnYn을 수정
+        await __reqCreateReturnItemList(body, async () => {
+            let data = checkedOrderItemList.map(r => {
+                return {
+                    ...r,
+                    returnYn: 'y'
+                }
+            })
+
+            await _onSubmit_changeReturnYnForOrderItemList(data);
+        });
+        onActionCloseBackdrop();
+    }
+
     return (
         <>
             <Container>
@@ -868,6 +950,7 @@ const ReleaseCompleteComponent = (props) => {
                     checkedOrderItemList={checkedOrderItemList}
                     productOptionList={productOptionList}
                     selectedMatchCode={selectedMatchCode}
+                    returnTypeList={returnTypeList}
 
                     _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
                     _onSubmit_changeSalesYnForOrderItemList={_onSubmit_changeSalesYnForOrderItemList}
@@ -880,6 +963,7 @@ const ReleaseCompleteComponent = (props) => {
                     _onAction_reflectStock={_onAction_reflectStock}
                     _onAction_cancelStock={_onAction_cancelStock}
                     _onAction_downloadReleaseItemList={_onAction_downloadReleaseItemList}
+                    _onSubmit_createReturnItem={_onSubmit_createReturnItem}
                 ></CheckedOperatorComponent>
                 <CheckedOrderItemTableComponent
                     viewHeader={viewHeader}
@@ -949,6 +1033,7 @@ const initialDownloadExcelList = null;
 const initialViewHeaderList = null;
 const initialReleaseLocation = null;
 const initialSelectedMatchCode = 'releaseOptionCode';
+const initialReturnTypeList = null;
 
 const releaseLocationReducer = (state, action) => {
     switch (action.type) {
@@ -1019,5 +1104,15 @@ const selectedMatchCodeReducer = (state, action) => {
         case 'SET_DATA':
             return action.payload;
         default: return initialSelectedMatchCode;
+    }
+}
+
+const returnTypeListReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialReturnTypeList;
+        default: return initialReturnTypeList;
     }
 }

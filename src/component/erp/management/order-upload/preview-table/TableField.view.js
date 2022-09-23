@@ -17,8 +17,8 @@ export default function TableFieldView(props) {
                     <thead>
                         <tr>
                             <th
-                                className="fixed-header fixed-col"
-                                style={{ zIndex: '12' }}
+                                className="fixed-header fixed-col-left"
+                                style={{ zIndex: '12', boxShadow: '-0.5px -0.5px 0 0 #e0e0e0 inset' }}
                             >
                                 삭제
                             </th>
@@ -28,15 +28,15 @@ export default function TableFieldView(props) {
                                 )
                             })}
                             <th
-                                className="fixed-header fixed-col-right-2"
-                                style={{ zIndex: 12 }}
+                                className="fixed-header fixed-col-right2"
+                                style={{ zIndex: 12, boxShadow: '0.5px -0.5px 0 0 #e0e0e0 inset' }}
                                 width={50}
                             >
                                 복사
                             </th>
                             <th
                                 className="fixed-header fixed-col-right"
-                                style={{ zIndex: 12 }}
+                                style={{ zIndex: 12, boxShadow: '0.5px -0.5px 0 0 #e0e0e0 inset' }}
                                 width={50}
                             >
                                 수정
@@ -48,7 +48,7 @@ export default function TableFieldView(props) {
                             return (
                                 <tr key={rowIndex}>
                                     <td
-                                        className="fixed-col"
+                                        className="fixed-col-left"
                                     >
                                         <button
                                             type='button'
@@ -98,7 +98,7 @@ export default function TableFieldView(props) {
                                     <td>{rowData.managementMemo8}</td>
                                     <td>{rowData.managementMemo9}</td>
                                     <td>{rowData.managementMemo10}</td>
-                                    <td className='fixed-col-right-2'>
+                                    <td className='fixed-col-right2'>
                                         <button
                                             type='button'
                                             className='fix-button-el'

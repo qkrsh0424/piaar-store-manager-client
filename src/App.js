@@ -65,6 +65,10 @@ import StockAnalysisPage from './pages/stock_analysis/SalesAnalysisPage';
 import ErpManagementDashboardPage from './pages/erp/management/dashboard/ErpManagementDashboardPage';
 import SalesPerformancePage from './pages/sales_performance/SalesPerformancePage';
 import StockCyclePage from './pages/stock_cycle/StockCyclePage';
+import ErpReturnManagementRegistrationPage from './pages/erp/return-management/registration/ErpReturnManagementRegistrationPage';
+import ErpReturnManagementCollectingPage from './pages/erp/return-management/collecting/ErpReturnManagementCollectingPage';
+import ErpReturnManagementCollectedPage from './pages/erp/return-management/collected/ErpReturnManagementCollectedPage';
+import ErpReturnManagementCompletedPage from './pages/erp/return-management/completed/ErpReturnManagementCompletedPage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -207,6 +211,12 @@ function App(props) {
                                             <Route path='/erp/management/sales' element={<ErpManagementSalesPage />} />
                                             <Route path='/erp/management/release-complete' element={<ErpManagementReleaseCompletePage />} />
                                             <Route path='/erp/management/excel' element={<ErpManagementExcelFormPage />} />
+
+                                            {/* PiaarErpReturnManagement */}
+                                            <Route path='/erp/return-management/registration' element={<ErpReturnManagementRegistrationPage />} />
+                                            <Route path='/erp/return-management/collecting' element={<ErpReturnManagementCollectingPage />} />
+                                            <Route path='/erp/return-management/collected' element={<ErpReturnManagementCollectedPage />} />
+                                            <Route path='/erp/return-management/completed' element={<ErpReturnManagementCompletedPage />} />
                                         </Routes>
                                     )
                             )

@@ -214,6 +214,11 @@ const OrderItemTableComponent = (props) => {
             return;
         }
 
+        if (data[0].returnYn === 'y') {
+            alert('반품처리된 데이터는 옵션코드 및 출고옵션코드를 변경할 수 없습니다.');
+            return;
+        }
+
         setOptionCodeModalOpen(true);
     }
 
@@ -245,6 +250,11 @@ const OrderItemTableComponent = (props) => {
 
         if (data?.length <= 0) {
             alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        if (data[0].returnYn === 'y') {
+            alert('반품처리된 데이터는 옵션코드 및 출고옵션코드를 변경할 수 없습니다.');
             return;
         }
 

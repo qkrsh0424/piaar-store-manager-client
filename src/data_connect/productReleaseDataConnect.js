@@ -18,6 +18,11 @@ const productReleaseDataConnect = () => {
             return await axios.put(`${API_SERVER_ADDRESS}/api/v1/product-release/one`, data, {
                 withCredentials: true
             })
+        },
+        searchOneByErpOrderItemId: async function (orderItemId) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-release/erp-order-item/${orderItemId}`,{
+                withCredentials: true
+            })
         }
     }
 }

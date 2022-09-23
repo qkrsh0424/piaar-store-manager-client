@@ -133,7 +133,7 @@ const HomeBody = () => {
                                 <GroupTitle>피아르</GroupTitle>
                                 <LinkBox>
                                     <CustomLink to='/erp/management/order-upload'>피아르 주문 & 출고 관리</CustomLink>
-                                    <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
+                                    <CustomLink to='/erp/return-management/registration'>피아르 반품 관리</CustomLink>
                                     <CustomLink to='/sales-performance'>판매 성과</CustomLink>
                                 </LinkBox>
                             </GroupBox>
@@ -160,12 +160,15 @@ const HomeBody = () => {
                                 <GroupTitle>기타</GroupTitle>
                                 <LinkBox>
                                     {
-                                        userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
+                                        userRdx.userInfo && 
+                                            (([userRdx.userInfo.roles].some(r => ["ROLE_ADMIN", "ROLE_MANAGER", "ROLE_SUPERADMIN"].includes(r)))
+                                        ) ?
                                             <CustomLink to='/account-book'>부기관리</CustomLink>
                                             :
                                             <></>
                                     }
                                     <CustomLink to='/commute-record'>출/퇴근 기록</CustomLink>
+                                    <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
                                 </LinkBox>
                             </GroupBox>
                         </>

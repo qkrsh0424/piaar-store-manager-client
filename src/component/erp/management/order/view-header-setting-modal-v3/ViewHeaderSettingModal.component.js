@@ -290,9 +290,8 @@ const ViewHeaderSettingModalComponent = (props) => {
 
     return(
         <>
-        <Container>
-            <HeaderFieldView
-                    onSubmitSaveAndModify={__createHeaderDetails.submit.saveAndModify}
+            <Container>
+                <HeaderFieldView
                     onActionCloseModal={props._onAction_closeHeaderSettingModal}
                 ></HeaderFieldView>
                 <SelectorFieldView
@@ -303,7 +302,6 @@ const ViewHeaderSettingModalComponent = (props) => {
                     onChangeSelectedViewHeaderTitle={__viewHeader.change.selectedHeader}
                     onActionCreateViewHeader={__viewHeader.action.createHeader}
                     onActionDeleteSelectedViewHeader={__viewHeader.action.deleteOne}
-                    onSubmitSaveAndModifyViewHeader={__createHeaderDetails.submit.saveAndModify}
                 ></SelectorFieldView>
                 {viewHeaderDetails &&
                     <>

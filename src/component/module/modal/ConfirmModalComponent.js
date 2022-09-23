@@ -14,7 +14,7 @@ const TitleBox = styled.div`
 `;
 
 const MessageBox = styled.div`
-    padding: 20px 10px 30px 10px;
+    padding: 20px 10px 10px 10px;
     font-size: 14px;
     font-weight: 600;
     text-align: center;
@@ -42,6 +42,94 @@ const MessageBox = styled.div`
         height: 10px;
         display: inline-block;
         background: #b9c2e160;
+    }
+
+    .info-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 40px;
+    }
+
+    .info-box {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-title {
+        text-align: left;
+        width: 140px;
+    }
+
+    .text-input {
+        margin: 0 10px;
+        width: 250px;
+        height: 100px;
+        padding: 5px;
+        border: 1px solid #e1e1e1;
+        border-radius: 3px;
+        font-size: 14px;
+        box-sizing: border-box;
+        resize: both;
+    }
+
+    .input-value input {
+        width: 250px;
+        height: 40px;
+        padding: 5px;
+        border: 1px solid #e1e1e1;
+        border-radius: 3px;
+        font-size: 14px;
+    }
+
+    .select-item{
+        margin: 0 10px;
+        width: 250px;
+        height: 45px;
+        padding: 5px;
+        border: 1px solid #e1e1e1;
+        border-radius: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+
+        &:focus{
+            outline: none;
+        }
+
+        @media all and (max-width:992px) {
+            width: 100%;
+            margin: 10px 0 0 0;
+        }
+    }
+
+    .receive-memo {
+        padding: 15px;
+        font-size: 14px;
+        display: grid;
+        width: 100%;
+        grid-template-columns: 100px auto;
+        align-items: center;
+
+        .form-title {
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        input {
+            height: 30px;
+            border: 1px solid #bdbdbd;
+            padding: 10px;
+            font-size: 14px;
+            box-sizing: border-box;
+            border-radius: 3px;
+        }
     }
 `;
 
@@ -91,20 +179,37 @@ const ButtonBox = styled.div`
     }
 `;
 
-const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, _onSubmit, onClose, title, message, memo, ...props }) => {
+const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, _onSubmit, onClose, title, message, memo, defaultUnit, defaultMemo, ...props }) => {
     const [buttonDisabled, setButtonDisabled] = useState(false);
     const [confirmInputValue, dispatchConfirmInputValue] = useReducer(confirmInputValueReducer, initialConfirmInputValue);
 
     useEffect(() => {
         setButtonDisabled(false);
-        dispatchConfirmInputValue({
-            type: 'SET_DATA',
-            payload: {
-                name: 'memo',
-                value: ''
+
+        let data = {
+            memo: '',
+            unit: 0
+        }
+
+        if (defaultMemo) {
+            data = {
+                ...data,
+                memo: defaultMemo
             }
+        }
+
+        if (defaultUnit) {
+            data = {
+                ...data,
+                unit: defaultUnit
+            }
+        }
+
+        dispatchConfirmInputValue({
+            type: 'INIT_DATA',
+            payload: data
         });
-    }, [open])
+    }, [open, defaultMemo, defaultUnit])
 
     const _onConfirm = () => {
         setButtonDisabled(true);
@@ -136,11 +241,17 @@ const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, _onSubmit
                     {message || '정말로 판매 전환 하시겠습니까?'}
                 </MessageBox>
                 {memo &&
-                    <form onSubmit={(e) => _onSubmit(e, confirmInputValue.memo)}>
+                    <form onSubmit={(e) => _onSubmit(e, confirmInputValue)}>
                         <MemoBox>
                             <div className='form-title'>메모</div>
-                            <input placeholder='재고반영 메모를 입력해주세요.' name='memo' onChange={onChangeInputValue} value={confirmInputValue?.memo || ''}></input>
+                            <input type='text' placeholder='메모를 입력해주세요.' name='memo' onChange={onChangeInputValue} value={confirmInputValue?.memo || ''}></input>
                         </MemoBox>
+                        {defaultUnit &&
+                            <MemoBox>
+                                <div className='form-title'>반품수량</div>
+                                <input type='number' placeholder='반품수량을 입력해주세요.' name='unit' onChange={onChangeInputValue} value={confirmInputValue?.unit || defaultUnit}></input>
+                            </MemoBox>
+                        }
                         <ButtonWrapper>
                             <ButtonBox>
                                 <button
@@ -191,7 +302,7 @@ const initialConfirmInputValue = null;
 
 const confirmInputValueReducer = (state, action) => {
     switch (action.type) {
-        case 'SET_DATA':
+        case 'INIT_DATA':
             return action.payload;
         case 'CHANGE_DATA':
             return {
