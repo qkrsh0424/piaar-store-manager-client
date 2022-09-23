@@ -87,17 +87,17 @@ const thisRouters = [
     {
         name: '반품 접수',
         pathname: '/erp/return-management/registration',
-        params: `?periodType=${registrationDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
+        // params: `?periodType=${registrationDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
     },
     {
         name: '수거중',
         pathname: '/erp/return-management/collecting',
-        params: `?periodType=${collectingDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
+        // params: `?periodType=${collectingDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
     },
     {
         name: '수거완료',
         pathname: '/erp/return-management/collected',
-        params: `?periodType=${collectedDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
+        // params: `?periodType=${collectedDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
     },
     {
         name: '반품완료',

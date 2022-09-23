@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import ErpReturnManagementNavbar from '../../../../component/erp/management/navbar/ErpReturnManagementNavbar';
+import ErpReturnManagementNavbar from '../../../../component/erp/return-management/navbar/ErpReturnManagementNavbar';
 import RegistrationComponent from '../../../../component/erp/return-management/registration';
 import DrawerNavbarMain from '../../../../component/nav/DrawerNavbarMain';
 
