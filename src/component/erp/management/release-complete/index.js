@@ -27,6 +27,7 @@ import CheckedHeadComponent from './checked-head/CheckedHead.component';
 import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
 import { returnReasonTypeDataConnect } from '../../../../data_connect/returnReasonTypeDataConnect';
 import { erpReturnItemDataConnect } from '../../../../data_connect/erpReturnItemDataConnect';
+import { erpReturnItemSocket } from '../../../../data_connect/socket/erpReturnItemSocket';
 
 const Container = styled.div`
     margin-bottom: 100px;
@@ -534,7 +535,7 @@ const ReleaseCompleteComponent = (props) => {
     }
 
     const __reqCreateReturnItemList = async (body, changeReturnYn) => {
-        await erpReturnItemDataConnect().createBatch(body)
+        await erpReturnItemSocket().createBatch(body)
             .then(res => {
                 if (res.status === 200) {
                     alert('처리되었습니다.');
