@@ -51,7 +51,8 @@ function ReturnIcon({ isReturned, onClick }) {
             >
                 <img
                     src='/assets/icon/return_black_icon.png'
-                    style={{ width: '15px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                    className='fix-button-icon'
+                    style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
                     alt=""
                     loading='lazy'
                 ></img>

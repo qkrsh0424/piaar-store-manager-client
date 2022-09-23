@@ -159,6 +159,14 @@ const TableFieldWrapper = styled.div`
         box-shadow: 0.5px 0 0 0 #e0e0e0 inset;
     }
 
+    .table-box .fixed-col-right2 {
+        position: sticky;
+        background: white;
+        right: 50px;
+        z-index:10;
+        box-shadow: 0.5px 0 0 0 #e0e0e0 inset;
+    }
+
     .table-box::-webkit-scrollbar{
         background: #e1e1e130;
         height:7px;

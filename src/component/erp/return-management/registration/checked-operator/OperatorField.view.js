@@ -6,23 +6,6 @@ export default function OperatorFieldView(props) {
         <OperatorFieldWrapper>
             <ControlWrapper>
                 <div className='title-box'>
-                    데이터 단건 처리
-                </div>
-                <ButtonWrapper>
-                    <div className='button-box'>
-                        <button
-                            type='button'
-                            className='button-el'
-                            onClick={props.onActionOpenReturnReasonTypeModal}
-                        >
-                            반품 요청 사유 변경
-                            <Ripple color={'#e0e0e0'} duration={1000}></Ripple>
-                        </button>
-                    </div>
-                </ButtonWrapper>
-            </ControlWrapper>
-            <ControlWrapper>
-                <div className='title-box'>
                     상태 관리
                 </div>
                 <ButtonWrapper>

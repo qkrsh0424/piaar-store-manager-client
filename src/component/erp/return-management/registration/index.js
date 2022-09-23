@@ -252,8 +252,8 @@ const RegistrationComponent = (props) => {
             })
     }
 
-    const __reqChangeReturnReasonForReturnItemListInBatchSocket = async function (body) {
-        await erpReturnItemSocket().changeReturnReasonForListInBatch(body)
+    const __reqChangeReturnReasonForReturnItem = async function (body) {
+        await erpReturnItemSocket().changeReturnReason(body)
             .catch(err => {
                 let res = err.response;
                 if (res?.status === 500) {
@@ -583,9 +583,9 @@ const RegistrationComponent = (props) => {
         onActionCloseBackdrop()
     }
 
-    const _onSubmit_changeReturnReasonForReturnItemListInBatch = async (body) => {
+    const _onSubmit_changeReturnReasonForReturnItem = async (body) => {
         onActionOpenBackdrop()
-        await __reqChangeReturnReasonForReturnItemListInBatchSocket(body);
+        await __reqChangeReturnReasonForReturnItem(body);
         onActionCloseBackdrop()
     }
 
@@ -623,6 +623,7 @@ const RegistrationComponent = (props) => {
                         checkedReturnItemList={checkedReturnItemList}
                         productOptionList={productOptionList}
                         returnProductImageList={returnProductImageList}
+                        returnTypeList={returnTypeList}
 
                         _onAction_checkReturnItem={_onAction_checkReturnItem}
                         _onAction_checkReturnItemAll={_onAction_checkReturnItemAll}
@@ -631,6 +632,7 @@ const RegistrationComponent = (props) => {
                         _onSubmit_createReturnProductImage={_onSubmit_createReturnProductImage}
                         _onAction_searchReturnProductImage={_onAction_searchReturnProductImage}
                         _onAction_deleteReturnProudctImage={_onAction_deleteReturnProudctImage}
+                        _onSubmit_changeReturnReasonForReturnItem={_onSubmit_changeReturnReasonForReturnItem}
                     ></ReturnItemTableComponent>
                     <ReturnItemTablePagenationComponent
                         returnItemPage={returnItemPage}
@@ -644,11 +646,9 @@ const RegistrationComponent = (props) => {
                     <CheckedOperatorComponent
                         viewHeader={viewHeader}
                         checkedReturnItemList={checkedReturnItemList}
-                        returnTypeList={returnTypeList}
 
                         _onSubmit_changeCollectYnForReturnItemList={_onSubmit_changeCollectYnForReturnItemList}
                         _onSubmit_deleteReturnItemList={_onSubmit_deleteReturnItemList}
-                        _onSubmit_changeReturnReasonForReturnItemListInBatch={_onSubmit_changeReturnReasonForReturnItemListInBatch}
                     ></CheckedOperatorComponent>
                     <CheckedReturnItemTableComponent
                         viewHeader={viewHeader}

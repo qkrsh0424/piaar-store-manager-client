@@ -25,28 +25,6 @@ function FailedIcon() {
     );
 }
 
-function ReturnIcon({ isReturned }) {
-    if (isReturned === 'y') {
-        return (
-            <img
-                src='/assets/icon/return_color_icon.png'
-                style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                alt=""
-                loading='lazy'
-            ></img>
-        )
-    } else {
-        return (
-            <img
-                src='/assets/icon/return_black_icon.png'
-                style={{ width: '15px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                alt=""
-                loading='lazy'
-            ></img>
-        )
-    }
-}
-
 export default function TableFieldView(props) {
     return (
         <TableFieldWrapper>
@@ -81,13 +59,6 @@ export default function TableFieldView(props) {
                                     </ResizableTh>
                                 )
                             })}
-                            <th
-                                className="fixed-header fixed-col-right"
-                                style={{ zIndex: 12, boxShadow: '0.5px -0.5px 0 0 #e0e0e0 inset' }}
-                                width={55}
-                            >
-                                반품됨
-                            </th>
                         </tr>
                     </thead>
 
@@ -135,14 +106,6 @@ export default function TableFieldView(props) {
                                             </td>
                                         )
                                     })}
-                                    <td className='fixed-col-right'>
-                                        {r1.returnYn === 'y' &&
-                                            <ReturnIcon isReturned={r1.returnYn} />
-                                        }
-                                        {r1.returnYn === 'n' &&
-                                            <ReturnIcon isReturned={r1.returnYn} />
-                                        }
-                                    </td>
                                 </tr>
                             )
 
@@ -166,23 +129,6 @@ export default function TableFieldView(props) {
                         />
                     </tbody>
                 </table>
-                {/* <InfiniteScrollObserver
-                    elementTagType={'div'}
-                    totalSize={props.checkedOrderItemList.length}
-                    startOffset={0}
-                    endOffset={props.viewSize}
-                    fetchData={props.onActionfetchMoreOrderItems}
-                    loadingElementTag={
-                        <p style={{ textAlign: 'center', fontSize: '14px', fontWeight: '600', color: '#444' }}>
-                            로딩중...
-                        </p>
-                    }
-                    endElementTag={
-                        <p style={{ textAlign: 'center', fontSize: '14px', fontWeight: '600', color: '#444' }}>
-                            마지막 데이터 입니다.
-                        </p>
-                    }
-                /> */}
             </div>
         </TableFieldWrapper>
     );

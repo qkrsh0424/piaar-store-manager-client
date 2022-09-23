@@ -39,8 +39,8 @@ const erpReturnItemSocket = () => {
                 withCredentials: true
             })
         },
-        changeReturnReasonForListInBatch: async function (body) {
-            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch/return-reason`, body, {
+        changeReturnReason: async function (body) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/return-reason`, body, {
                 withCredentials: true
             })
         },
