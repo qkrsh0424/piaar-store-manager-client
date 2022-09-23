@@ -32,7 +32,7 @@ const ReturnItemTableComponent = (props) => {
     const [returnProductImageModalOpen, setReturnProductImageModalOpen] = useState(false);
 
     const [returnReasonModalOpen, setReturnReasonModalOpen] = useState(false);
-    const [returnReason, dispatchReturnReason] = useReducer(returnReasonReducer, initialReturnReason);
+    // const [returnReason, dispatchReturnReason] = useReducer(returnReasonReducer, initialReturnReason);
 
     useEffect(() => {
         if (!props.returnItemList || props.returnItemList?.length <= 0) {
@@ -195,36 +195,30 @@ const ReturnItemTableComponent = (props) => {
     }
 
     const onActionConfirmReturn = () => {
-        if(!returnReason || !returnReason.type) {
+        if(!selectedReturnItem || !selectedReturnItem.returnReasonType) {
             alert('반품 요청 사유는 필수값입니다. 다시 시도해주세요.');
             onActionCloseReturnConfirmModal();
             return;
         }
 
         // 반품 데이터 생성
-        let body = {
-            ...selectedReturnItem,
-            returnReasonType: returnReason.type,
-            returnReasonDetail: returnReason.detail
-        }
-
-        props._onSubmit_changeReturnReasonForReturnItem(body);
+        props._onSubmit_changeReturnReasonForReturnItem(selectedReturnItem);
         onActionCloseReturnConfirmModal();
     }
 
     const onActionCloseReturnConfirmModal = () => {
         setReturnReasonModalOpen(false);
 
-        dispatchReturnReason({
-            type: 'CLEAR'
-        })
+        // dispatchReturnReason({
+        //     type: 'CLEAR'
+        // })
     }
 
-    const onChangeSelectReturnType = (e) => {
+    const onChangeSelectedReturnItem = (e) => {
         e.preventDefault();
 
-        dispatchReturnReason({
-            type: 'SET_DATA',
+        dispatchSelectedReturnItem({
+            type: 'CHANGE_DATA',
             payload: {
                 name: e.target.name,
                 value: e.target.value
@@ -313,9 +307,10 @@ const ReturnItemTableComponent = (props) => {
                                 <div>
                                     <select
                                         className='select-item'
-                                        name='type'
-                                        value={returnReason?.type || ''}
-                                        onChange={onChangeSelectReturnType}
+                                        name='returnReasonType'
+                                        value={selectedReturnItem?.returnReasonType || ''}
+                                        // value={returnReason?.type || ''}
+                                        onChange={onChangeSelectedReturnItem}
                                     >
                                         <option value=''>선택</option>
                                         {props.returnTypeList?.map(r => {
@@ -329,11 +324,11 @@ const ReturnItemTableComponent = (props) => {
                             <div className='info-box'>
                                 <span className='input-title'>반품 상세사유</span>
                                 <div>
-                                    <textarea className='text-input' name='detail' onChange={onChangeSelectReturnType} value={returnReason?.detail || ''} placeholder={`반품요청 상세 사유를 입력해 주세요.\n(300자 이내)`} />
+                                    <textarea className='text-input' name='returnReasonDetail' onChange={onChangeSelectedReturnItem} value={selectedReturnItem?.returnReasonDetail || ''} placeholder={`반품요청 상세 사유를 입력해 주세요.\n(300자 이내)`} />
                                 </div>
                             </div>
                         </div>
-                        <div>[ {props.checkedReturnItemList?.length || 0} ] 건의 데이터의 반품 요청 사유를 변경하시겠습니까? </div>
+                        <div>선택된 데이터의 반품 요청 사유를 변경하시겠습니까? </div>
                     </>
                 }
 
@@ -351,7 +346,7 @@ const initialViewSize = 50;
 const initialFixTargetItem = null;
 const initialReturnItemList = [];
 const initialSelectedReturnItem = null;
-const initialReturnReason = null;
+// const initialReturnReason = null;
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
@@ -390,23 +385,28 @@ const selectedReturnItemReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
             return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
         case 'CLEAR':
             return initialSelectedReturnItem;
         default: return initialSelectedReturnItem;
     }
 }
 
-const returnReasonReducer = (state, action) => {
-    switch(action.type) {
-        case 'INIT_DATA':
-            return action.payload;
-        case 'SET_DATA':
-            return {
-                ...state,
-                [action.payload.name]: action.payload.value
-            }
-        case 'CLEAR':
-            return initialReturnReason;
-        default: return initialReturnReason;
-    }
-}
+// const returnReasonReducer = (state, action) => {
+//     switch(action.type) {
+//         case 'INIT_DATA':
+//             return action.payload;
+//         case 'SET_DATA':
+//             return {
+//                 ...state,
+//                 [action.payload.name]: action.payload.value
+//             }
+//         case 'CLEAR':
+//             return initialReturnReason;
+//         default: return initialReturnReason;
+//     }
+// }
