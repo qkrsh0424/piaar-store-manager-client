@@ -34,8 +34,8 @@ const erpOrderItemSocket = () => {
                 withCredentials: true
             })
         },
-        changeReturnYnForList: async function (body) {
-            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-order-items/batch/return-yn`, body, {
+        changeReturnYn: async function (body) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-order-items/return-yn`, body, {
                 withCredentials: true
             })
         },

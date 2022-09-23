@@ -26,24 +26,36 @@ function FailedIcon() {
     );
 }
 
-function ReturnIcon({ isReturned }) {
+function ReturnIcon({ isReturned, onClick }) {
     if (isReturned === 'y') {
         return (
-            <img
-                src='/assets/icon/return_color_icon.png'
-                style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                alt=""
-                loading='lazy'
-            ></img>
+            <button
+                type='button'
+                className='fix-button-el'
+                onClick={onClick}
+            >
+                <img
+                    src='/assets/icon/return_color_icon.png'
+                    style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                    alt=""
+                    loading='lazy'
+                ></img>
+            </button>
         )
     } else {
         return (
-            <img
-                src='/assets/icon/return_black_icon.png'
-                style={{ width: '15px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                alt=""
-                loading='lazy'
-            ></img>
+            <button
+                type='button'
+                className='fix-button-el'
+                onClick={onClick}
+            >
+                <img
+                    src='/assets/icon/return_black_icon.png'
+                    style={{ width: '15px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                    alt=""
+                    loading='lazy'
+                ></img>
+            </button >
         )
     }
 }
@@ -182,10 +194,10 @@ export default function TableFieldView(props) {
                                     })}
                                     <td className='fixed-col-right2'>
                                         {r1.returnYn === 'y' &&
-                                            <ReturnIcon isReturned={r1.returnYn} />
+                                            <ReturnIcon isReturned={r1.returnYn} onClick={() => alert('반품 취소는 반품관리 페이지에서만 가능합니다.')} />
                                         }
                                         {r1.returnYn === 'n' &&
-                                            <ReturnIcon isReturned={r1.returnYn} />
+                                            <ReturnIcon isReturned={r1.returnYn} onClick={(e) => props.onActionOpenReturnConfirmModal(e, r1.id)} />
                                         }
                                     </td>
                                     <td className='fixed-col-right'>

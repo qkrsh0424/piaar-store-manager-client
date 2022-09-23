@@ -4,8 +4,8 @@ const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 
 const erpReturnItemSocket = () => {
     return {
-        createBatch: async function (body) {
-            return await axios.post(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch`, body, {
+        createOne: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items`, body, {
                 withCredentials: true
             })
         },

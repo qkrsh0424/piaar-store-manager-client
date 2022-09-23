@@ -521,8 +521,8 @@ const ReleaseCompleteComponent = (props) => {
             })
     }
 
-    const __reqChangeReturnYnForOrderItemListSocket = async (body) => {
-        await erpOrderItemSocket().changeReturnYnForList(body)
+    const __reqChangeReturnYnForOrderItemSocket = async (body) => {
+        await erpOrderItemSocket().changeReturnYn(body)
             .catch(err => {
                 let res = err.response;
                 if (res?.status === 500) {
@@ -535,7 +535,7 @@ const ReleaseCompleteComponent = (props) => {
     }
 
     const __reqCreateReturnItemList = async (body, changeReturnYn) => {
-        await erpReturnItemSocket().createBatch(body)
+        await erpReturnItemSocket().createOne(body)
             .then(res => {
                 if (res.status === 200) {
                     alert('처리되었습니다.');
@@ -885,9 +885,9 @@ const ReleaseCompleteComponent = (props) => {
         )
     }
 
-    const _onSubmit_changeReturnYnForOrderItemList = async (data) => {
+    const _onSubmit_changeReturnYnForOrderItem = async (data) => {
         onActionOpenBackdrop();
-        await __reqChangeReturnYnForOrderItemListSocket(data);
+        await __reqChangeReturnYnForOrderItemSocket(data);
         onActionCloseBackdrop();
     }
 
@@ -895,14 +895,13 @@ const ReleaseCompleteComponent = (props) => {
         onActionOpenBackdrop();
         // 반품 데이터 생성 후, 생성 성공된다면 erp order item의 returnYn을 수정
         await __reqCreateReturnItemList(body, async () => {
-            let data = checkedOrderItemList.map(r => {
-                return {
-                    ...r,
-                    returnYn: 'y'
-                }
-            })
+            let data = orderItemPage?.content?.filter(r => r.id === body.erpOrderItemId)[0];
+            data = {
+                ...data,
+                returnYn: 'y'
+            }
 
-            await _onSubmit_changeReturnYnForOrderItemList(data);
+            await _onSubmit_changeReturnYnForOrderItem(data);
         });
         onActionCloseBackdrop();
     }
@@ -923,6 +922,7 @@ const ReleaseCompleteComponent = (props) => {
                     releaseLocation={releaseLocation}
                     selectedMatchCode={selectedMatchCode}
                     productOptionList={productOptionList}
+                    returnTypeList={returnTypeList}
 
                     _onAction_checkOrderItem={_onAction_checkOrderItem}
                     _onAction_checkOrderItemAll={_onAction_checkOrderItemAll}
@@ -932,6 +932,7 @@ const ReleaseCompleteComponent = (props) => {
 
                     _onSubmit_changeOptionCodeForOrderItemListInBatch={_onSubmit_changeOptionCodeForOrderItemListInBatch}
                     _onSubmit_changeReleaseOptionCodeForOrderItemListInBatch={_onSubmit_changeReleaseOptionCodeForOrderItemListInBatch}
+                    _onSubmit_createReturnItem={_onSubmit_createReturnItem}
                 ></OrderItemTableComponent>
                 <OrderItemTablePagenationComponent
                     orderItemPage={orderItemPage}
@@ -950,7 +951,6 @@ const ReleaseCompleteComponent = (props) => {
                     checkedOrderItemList={checkedOrderItemList}
                     productOptionList={productOptionList}
                     selectedMatchCode={selectedMatchCode}
-                    returnTypeList={returnTypeList}
 
                     _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
                     _onSubmit_changeSalesYnForOrderItemList={_onSubmit_changeSalesYnForOrderItemList}
@@ -963,7 +963,6 @@ const ReleaseCompleteComponent = (props) => {
                     _onAction_reflectStock={_onAction_reflectStock}
                     _onAction_cancelStock={_onAction_cancelStock}
                     _onAction_downloadReleaseItemList={_onAction_downloadReleaseItemList}
-                    _onSubmit_createReturnItem={_onSubmit_createReturnItem}
                 ></CheckedOperatorComponent>
                 <CheckedOrderItemTableComponent
                     viewHeader={viewHeader}

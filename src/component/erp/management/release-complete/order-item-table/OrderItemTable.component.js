@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { dateToYYYYMMDDhhmmssWithInvalid } from "../../../../../utils/dateFormatUtils";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
+import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
 import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
 import { Container, TipFieldWrapper } from "./OrderItemTable.styled";
 import SelectorButtonFieldView from "./SelectorButtonField.view";
@@ -37,6 +38,9 @@ const OrderItemTableComponent = (props) => {
     const [fixItemModalOpen, setFixItemModalOpen] = useState(false);
 
     const [searchReleaseLocationValue, dispatchSearchReleaseLocationValue] = useReducer(searchReleaseLocationValueReducer, initialSearchReleaseLocationValue);
+
+    const [returnConfirmModalOpen, setReturnConfirmModalOpen] = useState(false);
+    const [returnRegistrationInfo, dispatchReturnRegistrationInfo] = useReducer(returnRegistrationReducer, initialReturnRegistration);
     
     useEffect(() => {
         if (!props.orderItemList || props.orderItemList?.length <= 0) {
@@ -277,6 +281,86 @@ const OrderItemTableComponent = (props) => {
         onActionCloseReleaseOptionCodeModal();
     }
 
+    const onActionOpenReturnConfirmModal = (e, itemId) => {
+        e.stopPropagation();
+
+        let data = orderItemList.filter(r => r.id === itemId)[0];
+
+        if (!data) {
+            alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        if(data.stockReflectYn === 'n') {
+            alert('재고 미반영 데이터는 반품등록이 불가능합니다.');
+            return;
+        }
+
+        if(data.returnYn === 'y') {
+            alert('이미 반품접수된 데이터입니다.');
+            return;
+        }
+
+        // erp order item값을 참고해 설정하는 값
+        // 반품 택배사, 반품 배송방식, 반품 입고지
+        let returnInfo = {
+            courier: data.courier,
+            transportType: data.transportType,
+            receiveLocation: data.optionReleaseLocation,
+            erpOrderItemId: data.id
+        }
+
+        dispatchReturnRegistrationInfo({
+            type: 'INIT_DATA',
+            payload: returnInfo
+        });
+        setReturnConfirmModalOpen(true);
+    }
+
+    const onActionCloseReturnConfirmModal = () => {
+        setReturnConfirmModalOpen(false);
+
+        dispatchReturnRegistrationInfo({
+            type: 'CLEAR'
+        })
+    }
+
+    const onChangeSelectReturnType = (e) => {
+        e.preventDefault();
+
+        dispatchReturnRegistrationInfo({
+            type: 'SET_DATA',
+            payload: {
+                name: e.target.name,
+                value: e.target.value
+            }
+        })
+    }
+
+    const onActionConfirmReturn = () => {
+        if(!returnRegistrationInfo || !returnRegistrationInfo.returnReasonType) {
+            alert('반품 요청 사유는 필수값입니다. 다시 시도해주세요.');
+            onActionCloseReturnConfirmModal();
+            return;
+        }
+
+        // 반품 데이터 생성
+        // erp order item을 참고하는 항목
+        // 출고지 -> 반품입고지 / 택배사 -> 반품 택배사 / 배송방식 -> 반품 배송방식
+        let body = {
+            courier: returnRegistrationInfo.courier,
+            transportType: returnRegistrationInfo.transportType,
+            deliveryChargeReturnType: returnRegistrationInfo.deliveryChargeReturnType,
+            receiveLocation: returnRegistrationInfo.receiveLocation,
+            returnReasonType: returnRegistrationInfo.returnReasonType,
+            returnReasonDetail: returnRegistrationInfo.returnReasonDetail,
+            erpOrderItemId: returnRegistrationInfo.erpOrderItemId
+        };
+
+        props._onSubmit_createReturnItem(body)
+        onActionCloseReturnConfirmModal();
+    }
+
     return (
         <>
             <Container>
@@ -313,6 +397,7 @@ const OrderItemTableComponent = (props) => {
 
                             onActionOpenOptionCodeModal={onActionOpenOptionCodeModal}
                             onActionOpenReleaseOptionCodeModal={onActionOpenReleaseOptionCodeModal}
+                            onActionOpenReturnConfirmModal={onActionOpenReturnConfirmModal}
                         ></TableFieldView>
                     </>
                 }
@@ -365,6 +450,105 @@ const OrderItemTableComponent = (props) => {
                     onConfirm={(optionCode) => onActionChangeReleaseOptionCode(optionCode)}
                 ></ReleaseOptionCodeModalComponent>
             </CommonModalComponent>
+
+            {/* 반품 처리 확인 모달 */}
+            <ConfirmModalComponent
+                open={returnConfirmModalOpen}
+                title={'반품 접수'}
+                message={
+                    <>
+                        <div className='info-wrapper'>
+                            <div className='info-box'>
+                                <span className='input-title'>반품 택배사</span>
+                                <div className='input-value'>
+                                    <input
+                                        type='text'
+                                        name='courier'
+                                        value={returnRegistrationInfo?.courier || ''}
+                                        onChange={onChangeSelectReturnType}
+                                    />
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <span className='input-title'>반품 배송방식</span>
+                                <div className='input-value'>
+                                    <input
+                                        type='text'
+                                        name='transportType'
+                                        value={returnRegistrationInfo?.transportType || ''}
+                                        onChange={onChangeSelectReturnType}
+                                    />
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <span className='input-title'>반품배송비 입금방식</span>
+                                <div className='input-value'>
+                                    <input
+                                        type='text'
+                                        name='deliveryChargeReturnType'
+                                        value={returnRegistrationInfo?.deliveryChargeReturnType || ''}
+                                        onChange={onChangeSelectReturnType}    
+                                    />
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <span className='input-title'>반품 입고지</span>
+                                <div className='input-value'>
+                                    <input
+                                        type='text'
+                                        name='receiveLocation'
+                                        value={returnRegistrationInfo?.receiveLocation || ''}
+                                        onChange={onChangeSelectReturnType}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className='info-wrapper'>
+                            <div className='info-box'>
+                                <div className='input-title'>
+                                    <span style={{ color: 'red' }}>* </span>
+                                    <span className='input-title'>반품 요청사유</span>
+                                </div>
+                                <div>
+                                    <select
+                                        className='select-item'
+                                        name='returnReasonType'
+                                        value={returnRegistrationInfo?.returnReasonType || ''}
+                                        onChange={onChangeSelectReturnType}
+                                        required
+                                    >
+                                        <option value=''>선택</option>
+                                        {props.returnTypeList?.map(r => {
+                                            return (
+                                                <option key={`return-type-idx` + r.cid} value={r.type}>{r.type}</option>
+                                            )
+                                        })}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <div className='input-title'>
+                                    <span className='input-title'>반품 상세사유</span>
+                                </div>
+                                <div>
+                                    <textarea
+                                        className='text-input'
+                                        name='returnReasonDetail'
+                                        onChange={onChangeSelectReturnType}
+                                        value={returnRegistrationInfo?.returnReasonDetail || ''}
+                                        placeholder={`반품요청 상세 사유를 입력해 주세요.\n(300자 이내)`}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div>선택된 데이터를 반품 처리 하시겠습니까? </div>
+                    </>
+                }
+
+                maxWidth={'sm'}
+                onConfirm={onActionConfirmReturn}
+                onClose={onActionCloseReturnConfirmModal}
+            />
         </>
     );
 }
@@ -376,6 +560,7 @@ const initialFixTargetItem = null;
 const initialOrderItemList = [];
 const initialSearchReleaseLocationValue = null;
 const initialCheckedOrderItemList = null;
+const initialReturnRegistration = null;
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
@@ -425,5 +610,20 @@ const checkedOrderItemListReducer = (state, action) => {
         case 'CLEAR':
             return initialCheckedOrderItemList;
         default: return { ...state };
+    }
+}
+
+const returnRegistrationReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'SET_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
+        case 'CLEAR':
+            return initialReturnRegistration;
+        default: return initialReturnRegistration;
     }
 }
