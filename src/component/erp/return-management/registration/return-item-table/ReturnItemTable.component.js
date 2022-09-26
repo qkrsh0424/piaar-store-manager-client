@@ -322,7 +322,7 @@ const ReturnItemTableComponent = (props) => {
                                 </div>
                             </div>
                         </div>
-                        <div>선택된 데이터의 반품 요청 사유를 변경하시겠습니까? </div>
+                        <div>선택된 데이터의 반품 요청 사유를 변경하시겠습니까?</div>
                     </>
                 }
 

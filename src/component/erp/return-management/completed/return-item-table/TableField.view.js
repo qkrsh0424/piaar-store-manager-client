@@ -4,26 +4,56 @@ import { TableFieldWrapper } from './ReturnItemTable.styled';
 import SortButton from '../../../../module/button/SortButton'
 import ResizableTh from '../../../../module/table/ResizableTh';
 
-function CorrectIcon() {
+function CorrectIcon({ onClick }) {
     return (
-        <img
-            src='/assets/icon/correct_icon.png'
-            style={{ width: '15px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-            alt=""
-            loading='lazy'
-        ></img>
+        <button
+            type='button'
+            className='fix-button-el'
+            onClick={onClick}
+        >
+            <img
+                src='/assets/icon/correct_icon.png'
+                style={{ width: '18px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                alt=""
+                loading='lazy'
+            ></img>
+        </button>
     );
 }
 
-function FailedIcon() {
+function FailedIcon({ onClick }) {
     return (
-        <img
-            // src='/assets/icon/failed_icon.png'
-            src='/assets/icon/clear_black_icon.png'
-            style={{ width: '15px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-            alt=""
-            loading='lazy'
-        ></img>
+        <button
+            type='button'
+            className='fix-button-el'
+            onClick={onClick}
+        >
+            <img
+                src='/assets/icon/clear_black_icon.png'
+                className='fix-button-icon'
+                style={{ width: '18px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                alt=""
+                loading='lazy'
+            ></img>
+        </button>
+    );
+}
+
+function ImageIcon({ onClick }) {
+    return (
+        <button
+            type='button'
+            className='fix-button-el'
+            onClick={onClick}
+        >
+            <img
+                src='/assets/icon/photo_black_icon.png'
+                className='fix-button-icon'
+                style={{ width: '22px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)'}}
+                alt=""
+                loading='lazy'
+            ></img>
+        </button>
     );
 }
 
@@ -82,6 +112,13 @@ function TableHead({
                     )
                 })}
                 <th
+                    className="fixed-header fixed-col-right2"
+                    style={{ zIndex: 12, boxShadow: '0.5px -0.5px 0 0 #e0e0e0 inset' }}
+                    width={60}
+                >
+                    이미지
+                </th>
+                <th
                     className="fixed-header fixed-col-right"
                     style={{ zIndex: 12, boxShadow: '0.5px -0.5px 0 0 #e0e0e0 inset' }}
                     width={50}
@@ -125,19 +162,17 @@ export default function TableFieldView(props) {
                                     onClick={(e) => props.onActionCheckReturnItem(e, r1)}
                                 >
                                     <td className={`fixed-col-left`}>
-                                        {r1.stockReflectYn === 'y' &&
-                                            <CorrectIcon />
-                                        }
-                                        {r1.stockReflectYn === 'n' &&
-                                            <FailedIcon />
+                                        {r1.stockReflectYn === 'y' ?
+                                            <CorrectIcon onClick={(e) => props.onActionOpenCancelStockConfirmModal(e, r1.id)} />
+                                            :
+                                            <FailedIcon onClick={(e) => props.onActionOpenReflectStockConfirmModal(e, r1.id)} />
                                         }
                                     </td>
                                     <td className={`fixed-col-left2`}>
-                                        {r1.defectiveYn === 'y' &&
-                                            <CorrectIcon />
-                                        }
-                                        {r1.defectiveYn === 'n' &&
-                                            <FailedIcon />
+                                        {r1.defectiveYn === 'y' ?
+                                            <CorrectIcon onClick={(e) => props.onActionOpenDefectiveProductCancelConfirmModal(e, r1.id)} />
+                                            :
+                                            <FailedIcon onClick={(e) => props.onActionOpenDefectiveProductConfirmModal(e, r1.id)} />
                                         }
                                     </td>
                                     <td style={{ cursor: 'pointer' }}>
@@ -145,7 +180,7 @@ export default function TableFieldView(props) {
                                     </td>
                                     {props.viewHeader?.headerDetail.details?.map(r2 => {
                                         let isOrderHeader = (r2.matchedColumnName).startsWith('order_');
-                                        let matchedColumnName = isOrderHeader ? r2.matchedColumnName.substr(6) : r2.matchedColumnName;
+                                        let matchedColumnName = isOrderHeader ? r2.matchedColumnName.replace('order_', '') : r2.matchedColumnName;
 
                                         if(isOrderHeader) {     // 출고 데이터
                                             if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt' || matchedColumnName === 'channelOrderDate') {
@@ -162,23 +197,22 @@ export default function TableFieldView(props) {
                                                 </td>
                                             )
                                         }else {     // 반품 데이터
-                                            if (matchedColumnName === 'createdAt' || matchedColumnName === 'holdAt' || matchedColumnName === 'collectAt' || matchedColumnName === 'collectCompleteAt'
+                                            if (matchedColumnName === 'createdAt' || matchedColumnName === 'collectAt' || matchedColumnName === 'collectCompleteAt'
                                                 || matchedColumnName === 'returnCompleteAt' || matchedColumnName === 'returnRejectAt') {
                                                 return (
                                                     <td key={`col-${matchedColumnName}`}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
                                                 )
-                                            } else if (matchedColumnName === 'returnReasonDetail') {
+                                            }  else if (matchedColumnName === 'returnReasonType' || matchedColumnName === 'returnReasonDetail') {
                                                 return (
                                                     <td
                                                         key={`col-${matchedColumnName}`}
                                                         className='td-highlight'
-                                                        onClick={(e) => props.onActionOpenReturnProductImageModal(e, r1)}
+                                                        onClick={(e) => props.onActionOpenReturnReasonTypeModal(e, r1.id)}
                                                     >
                                                         {r1[matchedColumnName]}
                                                     </td>
                                                 )
                                             }
-                                            
                                             return (
                                                 <td key={`col-${matchedColumnName}`}>
                                                     {r1[matchedColumnName]}
@@ -186,6 +220,9 @@ export default function TableFieldView(props) {
                                             )
                                         }
                                     })}
+                                    <td className={`fixed-col-right2`}>
+                                        <ImageIcon onClick={(e) => props.onActionOpenReturnProductImageModal(e, r1)} />
+                                    </td>
                                     <td className='fixed-col-right'>
                                         <button
                                             type='button'

@@ -78,26 +78,20 @@ const ModalButtonBox = styled.div`
 
 const startDate = dateToYYYYMMDD(new Date());
 const endDate = dateToYYYYMMDD(new Date());
-const registrationDefaultPeriodType = 'registration';
-const collectingDefaultPeriodType = 'collecting';
-const collectedDefaultPeriodType = 'collected';
 const completedDefaultPeriodType = 'completed';
 
 const thisRouters = [
     {
         name: '반품 접수',
-        pathname: '/erp/return-management/registration',
-        // params: `?periodType=${registrationDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
+        pathname: '/erp/return-management/registration'
     },
     {
         name: '수거중',
-        pathname: '/erp/return-management/collecting',
-        // params: `?periodType=${collectingDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
+        pathname: '/erp/return-management/collecting'
     },
     {
         name: '수거완료',
-        pathname: '/erp/return-management/collected',
-        // params: `?periodType=${collectedDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
+        pathname: '/erp/return-management/collected'
     },
     {
         name: '반품완료',

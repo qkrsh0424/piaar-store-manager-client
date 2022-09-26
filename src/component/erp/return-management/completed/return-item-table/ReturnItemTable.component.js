@@ -5,6 +5,7 @@ import TableFieldView from "./TableField.view";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
 import ReturnProductImageModalComponent from "../return-product-image-modal/ReturnProductImageModal.component";
+import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
 
 function Tip() {
     return (
@@ -30,6 +31,28 @@ const ReturnItemTableComponent = (props) => {
     const [fixItemModalOpen, setFixItemModalOpen] = useState(false);
     const [returnProductImageModalOpen, setReturnProductImageModalOpen] = useState(false);
     
+    const [returnReasonModalOpen, setReturnReasonModalOpen] = useState(false);
+
+    const [defectiveProductConfirmModalOpen, setDefectiveProductConfirmModalOpen] = useState(false);
+    const [defectiveProductCancelConfirmModalOpen, setDefectiveProductCancelConfirmModalOpen] = useState(false);
+    
+    const [reflectStockConfirmModalOpen, setReflectStockConfirmModalOpen] = useState(false);
+    const [cancelStockConfirmModalOpen, setCancelStockConfirmModalOpen] = useState(false);
+
+    const [orderItemReleaseData, dispatchOrderItemReleaseData] = useReducer(orderItemReleaseDataReducer, initialOrderItemReleaseData);
+
+    useEffect(() => {
+        if(!props.orderItemReleaseData) {
+            return;
+        }
+
+        dispatchOrderItemReleaseData({
+            type: 'INIT_DATA',
+            payload: props.orderItemReleaseData
+        })
+
+    }, [props.orderItemReleaseData])
+
     useEffect(() => {
         if (!props.returnItemList || props.returnItemList?.length <= 0) {
             dispatchReturnItemList({
@@ -173,6 +196,183 @@ const ReturnItemTableComponent = (props) => {
         await props._onAction_searchReturnProductImage(selectedReturnItem.id);
     }
 
+    const onActionOpenReturnReasonTypeModal = (e, itemId) => {
+        e.stopPropagation();
+
+        let data = returnItemList.filter(r => r.id === itemId)[0];
+
+        if(!data) {
+            alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        dispatchSelectedReturnItem({
+            type: 'SET_DATA',
+            payload: data
+        })
+        setReturnReasonModalOpen(true);
+    }
+
+    const onActionConfirmReturn = () => {
+        if(!selectedReturnItem || !selectedReturnItem.returnReasonType) {
+            alert('반품 요청 사유는 필수값입니다. 다시 시도해주세요.');
+            onActionCloseReturnConfirmModal();
+            return;
+        }
+
+        props._onSubmit_changeReturnReasonForReturnItem(selectedReturnItem);
+        onActionCloseReturnConfirmModal();
+    }
+
+    const onActionCloseReturnConfirmModal = () => {
+        setReturnReasonModalOpen(false);
+    }
+
+    const onChangeSelectedReturnItem = (e) => {
+        e.preventDefault();
+
+        dispatchSelectedReturnItem({
+            type: 'CHANGE_DATA',
+            payload: {
+                name: e.target.name,
+                value: e.target.value
+            }
+        })
+    }
+
+    // 재고 반영 모달 OPEN
+    const onActionOpenReflectStockConfirmModal = async (e, itemId) => {
+        e.stopPropagation();
+
+        let data = returnItemList.filter(r => r.id === itemId)[0];
+        
+        if(data.defectiveYn === 'y') {
+            alert('불량상품으로 등록된 데이터는 재고반영할 수 없습니다.');
+            return;
+        }
+
+        dispatchSelectedReturnItem({
+            type: 'SET_DATA',
+            payload: data
+        })
+
+        let reflectStockId = data.erpOrderItem?.id;
+        await props._onAction_searchReleaseData(reflectStockId);
+        setReflectStockConfirmModalOpen(true);
+    }
+
+    // 재고 반영 모달 CLOSE
+    const onActionCloseReflectStockConfirmModal = (e) => {
+        e.preventDefault();
+
+        dispatchOrderItemReleaseData({ type : 'CLEAR' });
+        setReflectStockConfirmModalOpen(false);
+    }
+
+    // 재고 반영 서밋
+    const onSubmitReflectStock = (e, params) => {
+        e.preventDefault();
+
+        if (selectedReturnItem.erpOrderItem.unit < params.unit) {
+            alert('반품 재고반영 수량은 출고상품 수량보다 클 수 없습니다.\n반품 수량을 한번 더 확인해주세요.');
+            onActionCloseReflectStockConfirmModal(e);
+            return;
+        }
+
+        props._onAction_reflectStock(selectedReturnItem, params);
+        onActionCloseReflectStockConfirmModal(e);
+    }
+
+    // 재고 취소 모달 OPEN
+    const onActionOpenCancelStockConfirmModal = (e, itemId) => {
+        e.stopPropagation();
+
+        let data = returnItemList.filter(r => r.id === itemId)[0];
+        dispatchSelectedReturnItem({
+            type: 'SET_DATA',
+            payload: data
+        })
+
+        setCancelStockConfirmModalOpen(true);
+    }
+
+    // 재고 취소 모달 CLOSE
+    const onActionCloseCancelStockConfirmModal = () => {
+        dispatchOrderItemReleaseData({ type : 'CLEAR' });
+        setCancelStockConfirmModalOpen(false);
+    }
+
+    const onSubmitCancelStock = () => {
+        props._onAction_cancelStock(selectedReturnItem);
+        onActionCloseCancelStockConfirmModal();
+    }
+
+    // 불량상품 처리 모달 OPEN
+    const onActionOpenDefectiveProductConfirmModal = async (e, itemId) => {
+        e.stopPropagation();
+
+        let data = returnItemList.filter(r => r.id === itemId)[0];
+
+        if (data.stockReflectYn === 'y') {
+            alert('재고반영된 데이터는 불량상품으로 등록할 수 없습니다.');
+            return;
+        }
+
+        dispatchSelectedReturnItem({
+            type: 'SET_DATA',
+            payload: data
+        })
+
+        let defectiveDataId = data.erpOrderItem?.id;
+        await props._onAction_searchReleaseData(defectiveDataId);
+        setDefectiveProductConfirmModalOpen(true);
+    }
+
+    const onActionCloseDefectiveProductConfirmModal = (e) => {
+        e.preventDefault();
+
+        dispatchOrderItemReleaseData({ type : 'CLEAR' });
+        setDefectiveProductConfirmModalOpen(false);
+    }
+
+    const onSubmitDefectiveProduct = (e, params) => {
+        e.preventDefault();
+
+        props._onSubmit_reflectDefective(selectedReturnItem, params);
+        onActionCloseDefectiveProductConfirmModal(e);
+    }
+
+    // 불량상품 취소 처리
+    const onActionOpenDefectiveProductCancelConfirmModal = async (e, itemId) => {
+        e.stopPropagation();
+
+        let data = returnItemList.filter(r => r.id === itemId)[0];
+
+        dispatchSelectedReturnItem({
+            type: 'SET_DATA',
+            payload: data
+        })
+
+        let defectiveDataId = data.erpOrderItem?.id;
+        await props._onAction_searchReleaseData(defectiveDataId);
+        setDefectiveProductCancelConfirmModalOpen(true);
+    }
+
+    const onActionCloseDefectiveProductCancelConfirmModal = (e) => {
+        e.preventDefault();
+
+        dispatchOrderItemReleaseData({ type : 'CLEAR' });
+        setDefectiveProductCancelConfirmModalOpen(false);
+    }
+
+    // 불량상품 취소 처리
+    const onSubmitCancelDefectiveProduct = (e, params) => {
+        e.preventDefault();
+
+        props._onSubmit_cancelDefective(selectedReturnItem, params);
+        onActionCloseDefectiveProductCancelConfirmModal(e);
+    }
+
     return (
         <>
             <Container>
@@ -198,6 +398,11 @@ const ReturnItemTableComponent = (props) => {
                             onActionCheckReturnItem={onActionCheckReturnItem}
                             onActionOpenFixItemModal={onActionOpenFixItemModal}
                             onActionOpenReturnProductImageModal={onActionOpenReturnProductImageModal}
+                            onActionOpenReturnReasonTypeModal={onActionOpenReturnReasonTypeModal}
+                            onActionOpenReflectStockConfirmModal={onActionOpenReflectStockConfirmModal}
+                            onActionOpenCancelStockConfirmModal={onActionOpenCancelStockConfirmModal}
+                            onActionOpenDefectiveProductConfirmModal={onActionOpenDefectiveProductConfirmModal}
+                            onActionOpenDefectiveProductCancelConfirmModal={onActionOpenDefectiveProductCancelConfirmModal}
                         ></TableFieldView>
                     </>
                 }
@@ -241,6 +446,102 @@ const ReturnItemTableComponent = (props) => {
                     onActionCloseReturnProductImageModal={onActionCloseReturnProductImageModal}
                 ></ReturnProductImageModalComponent>
             </CommonModalComponent>
+
+            {/* 반품 요청 사유 변경 모달 */}
+            <ConfirmModalComponent
+                open={returnReasonModalOpen}
+                title={'반품 요청 사유 변경'}
+                message={
+                    <>
+                        <div className='info-wrapper'>
+                            <div className='info-box'>
+                                <span className='input-title'>반품 요청사유</span>
+                                <div>
+                                    <select
+                                        className='select-item'
+                                        name='returnReasonType'
+                                        value={selectedReturnItem?.returnReasonType || ''}
+                                        onChange={onChangeSelectedReturnItem}
+                                    >
+                                        <option value=''>선택</option>
+                                        {props.returnTypeList?.map(r => {
+                                            return (
+                                                <option key={`return-type-idx` + r.cid} value={r.type}>{r.type}</option>
+                                            )
+                                        })}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <span className='input-title'>반품 상세사유</span>
+                                <div>
+                                    <textarea className='text-input' name='returnReasonDetail' onChange={onChangeSelectedReturnItem} value={selectedReturnItem?.returnReasonDetail || ''} placeholder={`반품요청 상세 사유를 입력해 주세요.\n(300자 이내)`} />
+                                </div>
+                            </div>
+                        </div>
+                        <div>선택된 데이터의 반품 요청 사유를 변경하시겠습니까? </div>
+                    </>
+                }
+
+                maxWidth={'sm'}
+                onConfirm={onActionConfirmReturn}
+                onClose={onActionCloseReturnConfirmModal}
+            />
+
+            {/* 재고 반영 모달 */}
+            <ConfirmModalComponent
+                open={reflectStockConfirmModalOpen}
+                title={'재고 반영 확인 메세지'}
+                message={`선택된 데이터를 재고 반영 하시겠습니까?`}
+                memo={true}
+                defaultMemo={orderItemReleaseData?.memo}
+                defaultUnit={orderItemReleaseData?.releaseUnit}
+
+                _onSubmit={(e, params) => onSubmitReflectStock(e, params)}
+                onClose={onActionCloseReflectStockConfirmModal}
+            />
+
+            {/* 재고 취소 모달 */}
+            <ConfirmModalComponent
+                open={cancelStockConfirmModalOpen}
+                title={'재고 취소 확인 메세지'}
+                message={`선택된 데이터를 재고 취소 하시겠습니까?`}
+
+                onConfirm={onSubmitCancelStock}
+                onClose={onActionCloseCancelStockConfirmModal}
+            />
+
+            {/* 불량상품 확인 모달 */}
+            <ConfirmModalComponent
+                open={defectiveProductConfirmModalOpen}
+                title={'불량상품 확인 메세지'}
+                message={
+                    <>
+                        <div>선택된 데이터를 불량상품으로 등록하시겠습니까?</div>
+                    </>
+                }
+                memo={true}
+                defaultMemo={orderItemReleaseData?.memo}
+
+                _onSubmit={(e, params) => onSubmitDefectiveProduct(e, params)}
+                onClose={onActionCloseDefectiveProductConfirmModal}
+            ></ConfirmModalComponent>
+
+            {/* 불량상품 취소 확인 모달 */}
+            <ConfirmModalComponent
+                open={defectiveProductCancelConfirmModalOpen}
+                title={'불량상품 취소 확인 메세지'}
+                message={
+                    <>
+                        <div>선택된 데이터를 불량상품 취소하시겠습니까?</div>
+                    </>
+                }
+                memo={true}
+                defaultMemo={orderItemReleaseData?.memo}
+
+                _onSubmit={(e, params) => onSubmitCancelDefectiveProduct(e, params)}
+                onClose={onActionCloseDefectiveProductCancelConfirmModal}
+            ></ConfirmModalComponent>
         </>
     );
 }
@@ -251,6 +552,7 @@ const initialViewSize = 50;
 const initialFixTargetItem = null;
 const initialReturnItemList = [];
 const initialSelectedReturnItem = null;
+const initialOrderItemReleaseData = null;
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
@@ -289,8 +591,23 @@ const selectedReturnItemReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
             return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
         case 'CLEAR':
             return initialSelectedReturnItem;
         default: return initialSelectedReturnItem;
+    }
+}
+
+const orderItemReleaseDataReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialOrderItemReleaseData;
+        default: return initialOrderItemReleaseData;
     }
 }

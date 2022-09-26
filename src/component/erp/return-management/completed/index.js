@@ -7,7 +7,7 @@ import ReturnItemTableComponent from "./return-item-table/ReturnItemTable.compon
 import SearchOperatorComponent from "./search-operator/SearchOperator.component";
 import { useReducer, useState } from "react";
 import { erpReturnItemDataConnect } from "../../../../data_connect/erpReturnItemDataConnect";
-import { getReturnDefaultHeaderDetails, getReturnDefaultHeaderFields } from "../../../../static-data/erpReturnItemStaticData";
+import { getReturnDefaultHeaderFields } from "../../../../static-data/erpReturnItemStaticData";
 import { useEffect } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import CommonModalComponent from "../../../module/modal/CommonModalComponent";
@@ -300,7 +300,6 @@ const CompletedComponent = (props) => {
     }
 
     const __reqActionCancelDefective = async (body, params) => {
-        console.log(body);
         await erpReturnItemSocket().actionCancelDefective(body, params)
             .then(res => {
                 if (res.status === 200) {
@@ -450,6 +449,19 @@ const CompletedComponent = (props) => {
 
                 alert(res?.data.memo);
             })
+    }
+
+    const __reqChangeReturnReasonForReturnItem = async function (body) {
+        await erpReturnItemSocket().changeReturnReason(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            });
     }
 
     useEffect(() => {
@@ -681,15 +693,15 @@ const CompletedComponent = (props) => {
         onActionCloseBackdrop();
     }
 
-    const _onSubmit_reflectDefective = async (params) => {
+    const _onSubmit_reflectDefective = async (data, params) => {
         onActionOpenBackdrop();
-        await __reqActionReflectDefective(checkedReturnItemList[0], params)
+        await __reqActionReflectDefective(data, params)
         onActionCloseBackdrop();
     }
 
-    const _onSubmit_cancelDefective = async (params) => {
+    const _onSubmit_cancelDefective = async (data, params) => {
         onActionOpenBackdrop();
-        await __reqActionCancelDefective(checkedReturnItemList[0], params);
+        await __reqActionCancelDefective(data, params);
         onActionCloseBackdrop();
     }
     
@@ -700,16 +712,16 @@ const CompletedComponent = (props) => {
     }
 
     // 선택된 데이터 재고 반영
-    const _onAction_reflectStock = async (params) => {
+    const _onAction_reflectStock = async (data, params) => {
         onActionOpenBackdrop();
-        await __reqActionReflectStock(checkedReturnItemList[0], params);
+        await __reqActionReflectStock(data, params);
         onActionCloseBackdrop();
     }
 
     // 선택된 데이터 재고 취소
-    const _onAction_cancelStock = async () => {
+    const _onAction_cancelStock = async (data) => {
         onActionOpenBackdrop();
-        await __reqActionCancelStock(checkedReturnItemList[0]);
+        await __reqActionCancelStock(data);
         onActionCloseBackdrop();
     }
 
@@ -731,6 +743,12 @@ const CompletedComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    const _onSubmit_changeReturnReasonForReturnItem = async (body) => {
+        onActionOpenBackdrop()
+        await __reqChangeReturnReasonForReturnItem(body);
+        onActionCloseBackdrop()
+    }
+
     return (
         <>
             {connected &&
@@ -747,6 +765,8 @@ const CompletedComponent = (props) => {
                         checkedReturnItemList={checkedReturnItemList}
                         productOptionList={productOptionList}
                         returnProductImageList={returnProductImageList}
+                        returnTypeList={returnTypeList}
+                        orderItemReleaseData={orderItemReleaseData}
                         
                         _onAction_checkReturnItem={_onAction_checkReturnItem}
                         _onAction_checkReturnItemAll={_onAction_checkReturnItemAll}
@@ -755,6 +775,13 @@ const CompletedComponent = (props) => {
                         _onSubmit_createReturnProductImage={_onSubmit_createReturnProductImage}
                         _onAction_searchReturnProductImage={_onAction_searchReturnProductImage}
                         _onAction_deleteReturnProudctImage={_onAction_deleteReturnProudctImage}
+                        _onSubmit_changeReturnReasonForReturnItem={_onSubmit_changeReturnReasonForReturnItem}
+
+                        _onSubmit_reflectDefective={_onSubmit_reflectDefective}
+                        _onSubmit_cancelDefective={_onSubmit_cancelDefective}
+                        _onAction_searchReleaseData={_onAction_searchReleaseData}
+                        _onAction_reflectStock={_onAction_reflectStock}
+                        _onAction_cancelStock={_onAction_cancelStock}
                     ></ReturnItemTableComponent>
                     <ReturnItemTablePagenationComponent
                         returnItemPage={returnItemPage}
@@ -768,16 +795,9 @@ const CompletedComponent = (props) => {
                     <CheckedOperatorComponent
                         viewHeader={viewHeader}
                         checkedReturnItemList={checkedReturnItemList}
-                        returnTypeList={returnTypeList}
-                        orderItemReleaseData={orderItemReleaseData}
 
                         _onSubmit_changeReturnCompleteYnForReturnItemList={_onSubmit_changeReturnCompleteYnForReturnItemList}
                         _onSubmit_deleteReturnItemList={_onSubmit_deleteReturnItemList}
-                        _onSubmit_reflectDefective={_onSubmit_reflectDefective}
-                        _onSubmit_cancelDefective={_onSubmit_cancelDefective}
-                        _onAction_searchReleaseData={_onAction_searchReleaseData}
-                        _onAction_reflectStock={_onAction_reflectStock}
-                        _onAction_cancelStock={_onAction_cancelStock}
                     ></CheckedOperatorComponent>
                     <CheckedReturnItemTableComponent
                         viewHeader={viewHeader}

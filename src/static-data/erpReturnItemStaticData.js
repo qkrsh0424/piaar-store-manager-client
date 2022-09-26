@@ -146,15 +146,6 @@ const staticDefaultHeaderDetails = [
         "variableType": 'date'
     },
     {
-        "cellNumber": 16,
-        "customCellName": "!보류설정일",
-        "originCellName": "!보류설정일",
-        "matchedColumnName": "holdAt",
-        "allowedSearch": false,
-        "requiredFlag": false,
-        "variableType": 'date'
-    },
-    {
         "cellNumber": 17,
         "customCellName": "!반품거절 등록일",
         "originCellName": "!반품거절 등록일",

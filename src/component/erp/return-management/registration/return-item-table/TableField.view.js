@@ -117,7 +117,7 @@ export default function TableFieldView(props) {
                                     </td>
                                     {props.viewHeader?.headerDetail.details?.map(r2 => {
                                         let isOrderHeader = (r2.matchedColumnName).startsWith('order_');
-                                        let matchedColumnName = isOrderHeader ? r2.matchedColumnName.substr(6) : r2.matchedColumnName;
+                                        let matchedColumnName = isOrderHeader ? r2.matchedColumnName.replace('order_', '') : r2.matchedColumnName;
 
                                         if(isOrderHeader) {     // 출고 데이터
                                             if (matchedColumnName === 'createdAt' || matchedColumnName === 'salesAt' || matchedColumnName === 'releaseAt' || matchedColumnName === 'channelOrderDate') {
@@ -134,7 +134,7 @@ export default function TableFieldView(props) {
                                                 </td>
                                             )
                                         }else {     // 반품 데이터
-                                            if (matchedColumnName === 'createdAt' || matchedColumnName === 'holdAt' || matchedColumnName === 'collectAt' || matchedColumnName === 'collectCompleteAt'
+                                            if (matchedColumnName === 'createdAt' || matchedColumnName === 'collectAt' || matchedColumnName === 'collectCompleteAt'
                                                 || matchedColumnName === 'returnCompleteAt' || matchedColumnName === 'returnRejectAt') {
                                                 return (
                                                     <td key={`col-${matchedColumnName}`}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>

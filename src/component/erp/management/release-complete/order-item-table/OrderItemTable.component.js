@@ -340,8 +340,7 @@ const OrderItemTableComponent = (props) => {
         }
 
         // 반품 데이터 생성
-        // erp order item을 참고하는 항목
-        // 출고지 -> 반품입고지 / 택배사 -> 반품 택배사 / 배송방식 -> 반품 배송방식
+        // erp order item을 참고하는 항목 : 출고지 -> 반품입고지 / 택배사 -> 반품 택배사 / 배송방식 -> 반품 배송방식
         let body = {
             courier: returnRegistrationInfo.courier,
             transportType: returnRegistrationInfo.transportType,

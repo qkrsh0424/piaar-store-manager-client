@@ -59,7 +59,6 @@ const CheckedOperatorComponent = (props) => {
                 <OperatorFieldView
                     onActionOpenCollectingConfirmModal={onActionOpenCollectingConfirmModal}
                     onActionOpenDeleteConfirmModal={onActionOpenDeleteConfirmModal}
-                    // onActionOpenReturnReasonTypeModal={onActionOpenReturnReasonTypeModal}
                 ></OperatorFieldView>
             </Container>
             
