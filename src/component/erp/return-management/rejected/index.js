@@ -593,26 +593,6 @@ const RejectedComponent = (props) => {
         })
     }
 
-    // 수거완료 취소 커밋
-    const _onSubmit_changeCollectCompleteYnForReturnItemList = async (body) => {
-        onActionOpenBackdrop();
-        await __reqChangeCollectCompleteYnForReturnItemListSocket(body);
-        onActionCloseBackdrop();
-    }
-
-    const _onSubmit_changeReturnCompleteYnForReturnItemList = async (body) => {
-        onActionOpenBackdrop();
-        await __reqChangeReturnCompleteYnForReturnItemListSocket(body);
-        onActionCloseBackdrop();
-    }
-
-    // 데이터 삭제 서밋
-    const _onSubmit_deleteReturnItemList = async function (params) {
-        onActionOpenBackdrop()
-        await __reqDeleteReturnItemListSocket(params);
-        onActionCloseBackdrop()
-    }
-
     const _onSubmit_changeReturnRejectYn = async function (params) {
         onActionOpenBackdrop();
         await __reqChangeReturnRejectYnSocket(params);
