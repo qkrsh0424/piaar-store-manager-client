@@ -175,7 +175,7 @@ const SearchOperatorComponent = (props) => {
     }
 
     const onActionSetDateToday = () => {
-        let pType = periodType || 'registration';
+        let pType = periodType || 'collecting';
         let sDate = dateToYYYYMMDD(new Date());
         let eDate = dateToYYYYMMDD(new Date());
 
@@ -196,7 +196,7 @@ const SearchOperatorComponent = (props) => {
     }
 
     const onActionSetDate7Days = () => {
-        let pType = periodType || 'registration';
+        let pType = periodType || 'collecting';
         let today = new Date();
 
         let eDate = dateToYYYYMMDD(today);

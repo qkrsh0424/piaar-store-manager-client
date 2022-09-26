@@ -27,7 +27,7 @@ export default function DateSelectorFieldView(props) {
                     onChange={props.onChangePeriodType}
                 >
                     <option value="">전체</option>
-                    <option value='registration'>반품 등록일</option>
+                    <option value='registration'>반품 접수일</option>
                     <option value='collecting'>수거중 등록일</option>
                     <option value='collected'>수거 완료일</option>
                     <option value='completed'>반품 완료일</option>

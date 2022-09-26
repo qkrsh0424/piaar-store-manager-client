@@ -30,6 +30,7 @@ export default function DateSelectorFieldView(props) {
                     <option value='registration'>반품 접수일</option>
                     <option value='collecting'>수거중 등록일</option>
                     <option value='collected'>수거 완료일</option>
+                    <option value='rejected'>반품 거절일</option>
                     <option value='release'>출고 등록일</option>
                     <option value='channelOrderDate'>주문 일시</option>
                 </select>

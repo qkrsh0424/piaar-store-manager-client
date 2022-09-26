@@ -20,12 +20,8 @@ import useSocketClient from "../../../../web-hooks/socket/useSocketClient";
 import { BasicSnackbarHookComponent, useBasicSnackbarHook } from "../../../../hooks/snackbar/useBasicSnackbarHook";
 import { erpReturnItemSocket } from "../../../../data_connect/socket/erpReturnItemSocket";
 import ReturnItemTablePagenationComponent from "./return-item-table-pagenation/ReturnItemTablePagenation.component";
-import CheckedHeadComponent from "./checked-head/CheckedHead.component";
-import CheckedOperatorComponent from "./checked-operator/CheckedOperator.component";
-import CheckedReturnItemTableComponent from "./checked-return-item-table/CheckedReturnItemTable.component";
 import { returnReasonTypeDataConnect } from "../../../../data_connect/returnReasonTypeDataConnect";
 import { sortFormatUtils } from "../../../../utils/sortFormatUtils";
-import { productReleaseDataConnect } from "../../../../data_connect/productReleaseDataConnect";
 import { returnProductImageDataConnect } from "../../../../data_connect/returnProductImageDataConnect";
 import { productOptionDataConnect } from "../../../../data_connect/productOptionDataConnect";
 
@@ -35,7 +31,7 @@ const Container = styled.div`
 
 const DEFAULT_HEADER_FIELDS = getReturnDefaultHeaderFields();
 
-const CompletedComponent = (props) => {
+const RejectedComponent = (props) => {
     const location = useLocation();
     const navigate = useNavigate();
     const query = qs.parse(location.search);
@@ -72,7 +68,6 @@ const CompletedComponent = (props) => {
     const [viewHeaderList, dispatchViewHeaderList] = useReducer(viewHeaderListReducer, initialViewHeaderList);
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
     const [returnTypeList, dispatchReturnTypeList] = useReducer(returnTypeListReducer, initialReturnTypeList);
-    const [orderItemReleaseData, dispatchOrderItemReleaseData] = useReducer(orderItemReleaseDataReducer, initialOrderItemReleaseData);
     const [productOptionList, dispatchProductOptionList] = useReducer(productOptionListReducer, initialProductOptionList);
     const [returnProductImageList, dispatchReturnProductImageList] = useReducer(returnProductImageListReducer, initialReturnProductImageList);
 
@@ -105,8 +100,6 @@ const CompletedComponent = (props) => {
         let searchColumnName = query.searchColumnName || null;
         let searchQuery = query.searchQuery || null;
         let periodType = query.periodType || null;
-        let stockReflectYn = query.stockReflectYn || null;
-        let defectiveYn = query.defectiveYn || null;
         let page = query.page || null;
         let size = query.size || null;
         let sortBy = query.sortBy || null;
@@ -117,13 +110,11 @@ const CompletedComponent = (props) => {
         let params = {
             collectYn: 'y',
             collectCompleteYn: 'y',
-            returnRejectYn: 'n',
-            returnCompleteYn: 'y',
+            returnRejectYn: 'y',
+            returnCompleteYn: 'n',
             startDate: startDate,
             endDate: endDate,
             periodType: periodType,
-            stockReflectYn: stockReflectYn,
-            defectiveYn: defectiveYn,
             searchColumnName: searchColumnName,
             searchQuery: searchQuery,
             page: page,
@@ -209,7 +200,7 @@ const CompletedComponent = (props) => {
             ids: ids,
             collectYn: 'y',
             collectCompleteYn: 'y',
-            returnCompleteYn: 'y',
+            returnCompleteYn: 'n',
         }
 
         await erpReturnItemDataConnect().refreshReturnList(params)
@@ -221,6 +212,32 @@ const CompletedComponent = (props) => {
                     });
                 }
             })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqChangeReturnRejectYnSocket = async function (body) {
+        await erpReturnItemSocket().changeReturnRejectYn(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqChangeCollectCompleteYnForReturnItemListSocket = async function (body) {
+        await erpReturnItemSocket().changeCollectCompleteYnForList(body)
             .catch(err => {
                 let res = err.response;
                 if (res?.status === 500) {
@@ -259,6 +276,19 @@ const CompletedComponent = (props) => {
             })
     }
 
+    const __reqChangeReturnReasonForReturnItem = async function (body) {
+        await erpReturnItemSocket().changeReturnReason(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            });
+    }
+
     const __reqSearchReturnTypeList = async () => {
         await returnReasonTypeDataConnect().searchAll()
             .then(res => {
@@ -278,110 +308,6 @@ const CompletedComponent = (props) => {
 
                 alert(res?.data.memo);
             })
-    }
-
-    const __reqActionReflectDefective = async (body, params) => {
-        await erpReturnItemSocket().actionReflectDefective(body, params)
-            .then(res => {
-                if (res.status === 200) {
-                    alert("처리되었습니다.");
-                    return;
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data?.memo);
-            })
-    }
-
-    const __reqActionCancelDefective = async (body, params) => {
-        await erpReturnItemSocket().actionCancelDefective(body, params)
-            .then(res => {
-                if (res.status === 200) {
-                    alert("처리되었습니다.");
-                    return;
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data?.memo);
-            })
-    }
-
-    const __reqActionSearchReleaseData = async (orderItemId) => {
-        await productReleaseDataConnect().searchOneByErpOrderItemId(orderItemId)
-            .then(res => {
-                if (res.status === 200) {
-                    dispatchOrderItemReleaseData({
-                        type: 'INIT_DATA',
-                        payload: res.data.data
-                    })
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data?.memo);
-            })
-    }
-    
-    const __reqActionReflectStock = async (body, params) => {
-        await erpReturnItemSocket().actionReflectStock(body, params)
-            .then(res => {
-                if (res.status === 200) {
-                    alert("처리되었습니다.");
-                    return;
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data?.memo);
-            })
-            ;
-    }
-
-    const __reqActionCancelStock = async (body) => {
-        await erpReturnItemSocket().actionCancelStock(body)
-            .then(res => {
-                if (res.status === 200) {
-                    alert("처리되었습니다.");
-                    return;
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data?.memo);
-            })
-            ;
     }
 
     const __reqCreateReturnProductImage = async (data) => {
@@ -452,19 +378,6 @@ const CompletedComponent = (props) => {
             })
     }
 
-    const __reqChangeReturnReasonForReturnItem = async function (body) {
-        await erpReturnItemSocket().changeReturnReason(body)
-            .catch(err => {
-                let res = err.response;
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data.memo);
-            });
-    }
-
     useEffect(() => {
         __reqSearchViewHeaderList();
         __reqSearchReturnTypeList();
@@ -486,14 +399,14 @@ const CompletedComponent = (props) => {
             return;
         }
 
-        if(!defaultHeader || !defaultHeader.completedHeaderId) {
+        if(!defaultHeader || !defaultHeader.collectedHeaderId) {
             dispatchViewHeader({
                 type: 'CLEAR'
             })
             return;
         }
 
-        let data = viewHeaderList.filter(r => r.id === defaultHeader.completedHeaderId)[0];
+        let data = viewHeaderList.filter(r => r.id === defaultHeader.collectedHeaderId)[0];
         dispatchViewHeader({
             type: 'INIT_DATA',
             payload: data
@@ -602,14 +515,14 @@ const CompletedComponent = (props) => {
         if(!headerId) {
             setDefaultHeader({
                 ...defaultHeader,
-                completedHeaderId: ''
+                collectedHeaderId: ''
             })
             return;
         }
 
         let data = {
             ...defaultHeader,
-            completedHeaderId: headerId
+            collectedHeaderId: headerId
         }
         setDefaultHeader(data);
     }
@@ -680,7 +593,13 @@ const CompletedComponent = (props) => {
         })
     }
 
-    // 반품완료 취소 커밋
+    // 수거완료 취소 커밋
+    const _onSubmit_changeCollectCompleteYnForReturnItemList = async (body) => {
+        onActionOpenBackdrop();
+        await __reqChangeCollectCompleteYnForReturnItemListSocket(body);
+        onActionCloseBackdrop();
+    }
+
     const _onSubmit_changeReturnCompleteYnForReturnItemList = async (body) => {
         onActionOpenBackdrop();
         await __reqChangeReturnCompleteYnForReturnItemListSocket(body);
@@ -688,42 +607,22 @@ const CompletedComponent = (props) => {
     }
 
     // 데이터 삭제 서밋
-    const _onSubmit_deleteReturnItemList = async (params) => {
-        onActionOpenBackdrop();
+    const _onSubmit_deleteReturnItemList = async function (params) {
+        onActionOpenBackdrop()
         await __reqDeleteReturnItemListSocket(params);
+        onActionCloseBackdrop()
+    }
+
+    const _onSubmit_changeReturnRejectYn = async function (params) {
+        onActionOpenBackdrop();
+        await __reqChangeReturnRejectYnSocket(params);
         onActionCloseBackdrop();
     }
 
-    const _onSubmit_reflectDefective = async (data, params) => {
-        onActionOpenBackdrop();
-        await __reqActionReflectDefective(data, params)
-        onActionCloseBackdrop();
-    }
-
-    const _onSubmit_cancelDefective = async (data, params) => {
-        onActionOpenBackdrop();
-        await __reqActionCancelDefective(data, params);
-        onActionCloseBackdrop();
-    }
-    
-    const _onAction_searchReleaseData = async (orderItemId) => {
-        onActionOpenBackdrop();
-        await __reqActionSearchReleaseData(orderItemId);
-        onActionCloseBackdrop();
-    }
-
-    // 선택된 데이터 재고 반영
-    const _onAction_reflectStock = async (data, params) => {
-        onActionOpenBackdrop();
-        await __reqActionReflectStock(data, params);
-        onActionCloseBackdrop();
-    }
-
-    // 선택된 데이터 재고 취소
-    const _onAction_cancelStock = async (data) => {
-        onActionOpenBackdrop();
-        await __reqActionCancelStock(data);
-        onActionCloseBackdrop();
+    const _onSubmit_changeReturnReasonForReturnItem = async (body) => {
+        onActionOpenBackdrop()
+        await __reqChangeReturnReasonForReturnItem(body);
+        onActionCloseBackdrop()
     }
 
     const _onSubmit_createReturnProductImage = async (imageList) => {
@@ -744,12 +643,6 @@ const CompletedComponent = (props) => {
         onActionCloseBackdrop();
     }
 
-    const _onSubmit_changeReturnReasonForReturnItem = async (body) => {
-        onActionOpenBackdrop()
-        await __reqChangeReturnReasonForReturnItem(body);
-        onActionCloseBackdrop()
-    }
-
     return (
         <>
             {connected &&
@@ -767,8 +660,7 @@ const CompletedComponent = (props) => {
                         productOptionList={productOptionList}
                         returnProductImageList={returnProductImageList}
                         returnTypeList={returnTypeList}
-                        orderItemReleaseData={orderItemReleaseData}
-                        
+
                         _onAction_checkReturnItem={_onAction_checkReturnItem}
                         _onAction_checkReturnItemAll={_onAction_checkReturnItemAll}
                         _onAction_releaseReturnItemAll={_onAction_releaseReturnItemAll}
@@ -777,35 +669,11 @@ const CompletedComponent = (props) => {
                         _onAction_searchReturnProductImage={_onAction_searchReturnProductImage}
                         _onAction_deleteReturnProudctImage={_onAction_deleteReturnProudctImage}
                         _onSubmit_changeReturnReasonForReturnItem={_onSubmit_changeReturnReasonForReturnItem}
-
-                        _onSubmit_reflectDefective={_onSubmit_reflectDefective}
-                        _onSubmit_cancelDefective={_onSubmit_cancelDefective}
-                        _onAction_searchReleaseData={_onAction_searchReleaseData}
-                        _onAction_reflectStock={_onAction_reflectStock}
-                        _onAction_cancelStock={_onAction_cancelStock}
+                        _onSubmit_changeReturnRejectYn={_onSubmit_changeReturnRejectYn}
                     ></ReturnItemTableComponent>
                     <ReturnItemTablePagenationComponent
                         returnItemPage={returnItemPage}
                     ></ReturnItemTablePagenationComponent>
-                    <CheckedHeadComponent
-                        viewHeader={viewHeader}
-                        checkedReturnItemList={checkedReturnItemList}
-
-                        _onAction_checkedReturnItemListAll={_onAction_checkedReturnItemListAll}
-                    />
-                    <CheckedOperatorComponent
-                        viewHeader={viewHeader}
-                        checkedReturnItemList={checkedReturnItemList}
-
-                        _onSubmit_changeReturnCompleteYnForReturnItemList={_onSubmit_changeReturnCompleteYnForReturnItemList}
-                        _onSubmit_deleteReturnItemList={_onSubmit_deleteReturnItemList}
-                    ></CheckedOperatorComponent>
-                    <CheckedReturnItemTableComponent
-                        viewHeader={viewHeader}
-                        checkedReturnItemList={checkedReturnItemList}
-
-                        _onAction_checkReturnItem={_onAction_checkReturnItem}
-                    ></CheckedReturnItemTableComponent>
                 </Container>
             }
 
@@ -856,14 +724,13 @@ const CompletedComponent = (props) => {
     )
 }
 
-export default CompletedComponent;
+export default RejectedComponent;
 
 const initialViewHeader = null;
 const initialCheckedReturnItemList = [];
 const initialReturnItemPage = null;
 const initialViewHeaderList = null;
 const initialReturnTypeList = null;
-const initialOrderItemReleaseData = null;
 const initialReturnProductImageList = [];
 const initialProductOptionList = null;
 
@@ -910,16 +777,6 @@ const returnTypeListReducer = (state, action) => {
         case 'CLEAR':
             return initialReturnTypeList;
         default: return initialReturnTypeList;
-    }
-}
-
-const orderItemReleaseDataReducer = (state, action) => {
-    switch (action.type) {
-        case 'INIT_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialOrderItemReleaseData;
-        default: return initialOrderItemReleaseData;
     }
 }
 

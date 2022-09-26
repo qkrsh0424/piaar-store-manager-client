@@ -94,6 +94,10 @@ const thisRouters = [
         pathname: '/erp/return-management/collected'
     },
     {
+        name: '반품거절',
+        pathname: '/erp/return-management/rejected'
+    },
+    {
         name: '반품완료',
         pathname: '/erp/return-management/completed',
         params: `?periodType=${completedDefaultPeriodType}&startDate=${startDate}&endDate=${endDate}`
@@ -134,7 +138,6 @@ const ErpReturnManagementNavbar = (props) => {
                             </ButtonBox>
                         );
                     })}
-
                 </DesktopNavbarBox>
                 <MobileNavbarBox>
                     <ButtonBox>

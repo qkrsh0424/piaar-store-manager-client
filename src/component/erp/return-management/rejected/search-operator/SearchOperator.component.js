@@ -7,7 +7,6 @@ import DetailSearchFieldView from "./DetailSearchField.view";
 import ButtonFieldView from "./ButtonField.view";
 import { dateToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
 import { getReturnDefaultHeaderDetails } from "../../../../../static-data/erpReturnItemStaticData";
-import StatusSelectorFieldView from "./StatusSelectorField.view";
 
 const defaultHeaderDetails = getReturnDefaultHeaderDetails();
 
@@ -21,7 +20,6 @@ const SearchOperatorComponent = (props) => {
     const [endDate, dispatchEndDate] = useReducer(endDateReducer, initialEndDate);
     const [searchColumnName, dispatchSearchColumnName] = useReducer(searchColumnNameReducer, initialSearchColumnName);
     const [searchQuery, dispatchSearchQuery] = useReducer(searchQueryReducer, initialSearchQuery);
-    const [returnRejectYn, dispatchReturnRejectYn] = useReducer(returnRejectYnReducer, initialReturnRejectYn);
 
     useEffect(() => {
         let periodType = query.periodType;
@@ -47,17 +45,6 @@ const SearchOperatorComponent = (props) => {
             })
         }
     }, [query.startDate, query.endDate, query.periodType])
-
-    useEffect(() => {
-        let returnRejectYn = query.returnRejectYn;
-
-        if(returnRejectYn) {
-            dispatchReturnRejectYn({
-                type: 'SET_DATA',
-                payload: returnRejectYn
-            });
-        }
-    }, [query.returnRejectYn])
 
     useEffect(() => {
         let searchColumnName = query.searchColumnName;
@@ -157,12 +144,6 @@ const SearchOperatorComponent = (props) => {
             query.searchQuery = searchQuery;
         }
 
-        if (returnRejectYn) {
-            query.returnRejectYn = returnRejectYn;
-        } else {
-            delete query.returnRejectYn;
-        }
-
         delete query.page;
 
         navigate(qs.stringifyUrl({
@@ -188,9 +169,6 @@ const SearchOperatorComponent = (props) => {
         dispatchSearchQuery({
             type: 'CLEAR'
         })
-        dispatchReturnRejectYn({
-            type: 'CLEAR'
-        })
 
         navigate(location.pathname, {
             replace: true
@@ -198,7 +176,7 @@ const SearchOperatorComponent = (props) => {
     }
 
     const onActionSetDateToday = () => {
-        let pType = periodType || 'collected';
+        let pType = periodType || 'rejected';
         let sDate = dateToYYYYMMDD(new Date());
         let eDate = dateToYYYYMMDD(new Date());
 
@@ -219,7 +197,7 @@ const SearchOperatorComponent = (props) => {
     }
 
     const onActionSetDate7Days = () => {
-        let pType = periodType || 'collected';
+        let pType = periodType || 'rejected';
         let today = new Date();
 
         let eDate = dateToYYYYMMDD(today);
@@ -260,14 +238,6 @@ const SearchOperatorComponent = (props) => {
         })
     }
 
-    const onChangeReturnRejectYn = (e) => {
-        let value = e.target.value;
-        dispatchReturnRejectYn({
-            type: 'SET_DATA',
-            payload: value
-        })
-    }
-
     return (
         <>
             <Container>
@@ -293,10 +263,6 @@ const SearchOperatorComponent = (props) => {
                         onChangeSearchColumnNameValue={onChangeSearchColumnNameValue}
                         onChangeSearchQueryValue={onChangeSearchQueryValue}
                     ></DetailSearchFieldView>
-                    <StatusSelectorFieldView
-                        returnRejectYn={returnRejectYn}
-                        onChangeReturnRejectYn={onChangeReturnRejectYn}
-                    ></StatusSelectorFieldView>
                     <ButtonFieldView
                         onActionRouteToSearch={onActionRouteToSearch}
                         onActionClearRoute={onActionClearRoute}
@@ -313,7 +279,6 @@ const initialStartDate = null;
 const initialEndDate = null;
 const initialSearchColumnName = null;
 const initialSearchQuery = '';
-const initialReturnRejectYn = null;
 
 const periodTypeReducer = (state, action) => {
     switch (action.type) {
@@ -362,15 +327,5 @@ const searchQueryReducer = (state, action) => {
         case 'CLEAR':
             return '';
         default: return '';
-    }
-}
-
-const returnRejectYnReducer = (state, action) => {
-    switch (action.type) {
-        case 'SET_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return null;
-        default: return null;
     }
 }

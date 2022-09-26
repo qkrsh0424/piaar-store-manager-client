@@ -103,7 +103,6 @@ const CollectedComponent = (props) => {
         let searchColumnName = query.searchColumnName || null;
         let searchQuery = query.searchQuery || null;
         let periodType = query.periodType || null;
-        let returnRejectYn = query.returnRejectYn || null;
         let page = query.page || null;
         let size = query.size || null;
         let sortBy = query.sortBy || null;
@@ -114,11 +113,11 @@ const CollectedComponent = (props) => {
         let params = {
             collectYn: 'y',
             collectCompleteYn: 'y',
+            returnRejectYn: 'n',
             returnCompleteYn: 'n',
             startDate: startDate,
             endDate: endDate,
             periodType: periodType,
-            returnRejectYn: returnRejectYn,
             searchColumnName: searchColumnName,
             searchQuery: searchQuery,
             page: page,

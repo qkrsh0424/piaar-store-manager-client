@@ -69,6 +69,7 @@ import ErpReturnManagementRegistrationPage from './pages/erp/return-management/r
 import ErpReturnManagementCollectingPage from './pages/erp/return-management/collecting/ErpReturnManagementCollectingPage';
 import ErpReturnManagementCollectedPage from './pages/erp/return-management/collected/ErpReturnManagementCollectedPage';
 import ErpReturnManagementCompletedPage from './pages/erp/return-management/completed/ErpReturnManagementCompletedPage';
+import ErpReturnManagementRejectedPage from './pages/erp/return-management/rejected/ErpReturnManagementRejectedPage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -216,6 +217,7 @@ function App(props) {
                                             <Route path='/erp/return-management/registration' element={<ErpReturnManagementRegistrationPage />} />
                                             <Route path='/erp/return-management/collecting' element={<ErpReturnManagementCollectingPage />} />
                                             <Route path='/erp/return-management/collected' element={<ErpReturnManagementCollectedPage />} />
+                                            <Route path='/erp/return-management/rejected' element={<ErpReturnManagementRejectedPage />} />
                                             <Route path='/erp/return-management/completed' element={<ErpReturnManagementCompletedPage />} />
                                         </Routes>
                                     )
