@@ -265,6 +265,19 @@ const CollectingComponent = (props) => {
             })
     }
 
+    const __reqChangeReturnReasonForReturnItem = async function (body) {
+        await erpReturnItemSocket().changeReturnReason(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            });
+    }
+
     const __reqSearchReturnTypeList = async () => {
         await returnReasonTypeDataConnect().searchAll()
             .then(res => {
@@ -589,6 +602,12 @@ const CollectingComponent = (props) => {
         onActionCloseBackdrop()
     }
 
+    const _onSubmit_changeReturnReasonForReturnItem = async (body) => {
+        onActionOpenBackdrop()
+        await __reqChangeReturnReasonForReturnItem(body);
+        onActionCloseBackdrop()
+    }
+
     const _onSubmit_createReturnProductImage = async (imageList) => {
         onActionOpenBackdrop();
         await __reqCreateReturnProductImage(imageList);
@@ -623,6 +642,7 @@ const CollectingComponent = (props) => {
                         checkedReturnItemList={checkedReturnItemList}
                         productOptionList={productOptionList}
                         returnProductImageList={returnProductImageList}
+                        returnTypeList={returnTypeList}
 
                         _onAction_checkReturnItem={_onAction_checkReturnItem}
                         _onAction_checkReturnItemAll={_onAction_checkReturnItemAll}
@@ -631,6 +651,7 @@ const CollectingComponent = (props) => {
                         _onSubmit_createReturnProductImage={_onSubmit_createReturnProductImage}
                         _onAction_searchReturnProductImage={_onAction_searchReturnProductImage}
                         _onAction_deleteReturnProudctImage={_onAction_deleteReturnProudctImage}
+                        _onSubmit_changeReturnReasonForReturnItem={_onSubmit_changeReturnReasonForReturnItem}
                     ></ReturnItemTableComponent>
                     <ReturnItemTablePagenationComponent
                         returnItemPage={returnItemPage}
@@ -644,7 +665,6 @@ const CollectingComponent = (props) => {
                     <CheckedOperatorComponent
                         viewHeader={viewHeader}
                         checkedReturnItemList={checkedReturnItemList}
-                        returnTypeList={returnTypeList}
 
                         _onSubmit_changeCollectYnForReturnItemList={_onSubmit_changeCollectYnForReturnItemList}
                         _onSubmit_changeCollectCompleteYnForReturnItemList={_onSubmit_changeCollectCompleteYnForReturnItemList}

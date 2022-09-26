@@ -92,7 +92,7 @@ const CheckedOperatorComponent = (props) => {
                 title={'수거중 취소 확인 메세지'}
                 message={
                     <>
-                        <div>[ {props.checkedReturnItemList?.length || 0} ] 건의 데이터를 수거중 처리를 취소하시겠습니까?</div>
+                        <div>[ {props.checkedReturnItemList?.length || 0} ] 건의 데이터를 수거중 처리 취소하시겠습니까?</div>
                     </>
                 }
                 onConfirm={onActionConfirmCollecting}

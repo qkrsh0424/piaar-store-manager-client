@@ -32,7 +32,6 @@ const ReturnItemTableComponent = (props) => {
     const [returnProductImageModalOpen, setReturnProductImageModalOpen] = useState(false);
 
     const [returnReasonModalOpen, setReturnReasonModalOpen] = useState(false);
-    // const [returnReason, dispatchReturnReason] = useReducer(returnReasonReducer, initialReturnReason);
 
     useEffect(() => {
         if (!props.returnItemList || props.returnItemList?.length <= 0) {
@@ -208,10 +207,6 @@ const ReturnItemTableComponent = (props) => {
 
     const onActionCloseReturnConfirmModal = () => {
         setReturnReasonModalOpen(false);
-
-        // dispatchReturnReason({
-        //     type: 'CLEAR'
-        // })
     }
 
     const onChangeSelectedReturnItem = (e) => {
@@ -309,7 +304,6 @@ const ReturnItemTableComponent = (props) => {
                                         className='select-item'
                                         name='returnReasonType'
                                         value={selectedReturnItem?.returnReasonType || ''}
-                                        // value={returnReason?.type || ''}
                                         onChange={onChangeSelectedReturnItem}
                                     >
                                         <option value=''>선택</option>
@@ -346,7 +340,6 @@ const initialViewSize = 50;
 const initialFixTargetItem = null;
 const initialReturnItemList = [];
 const initialSelectedReturnItem = null;
-// const initialReturnReason = null;
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
@@ -395,18 +388,3 @@ const selectedReturnItemReducer = (state, action) => {
         default: return initialSelectedReturnItem;
     }
 }
-
-// const returnReasonReducer = (state, action) => {
-//     switch(action.type) {
-//         case 'INIT_DATA':
-//             return action.payload;
-//         case 'SET_DATA':
-//             return {
-//                 ...state,
-//                 [action.payload.name]: action.payload.value
-//             }
-//         case 'CLEAR':
-//             return initialReturnReason;
-//         default: return initialReturnReason;
-//     }
-// }
