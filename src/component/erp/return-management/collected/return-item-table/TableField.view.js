@@ -5,26 +5,56 @@ import { TableFieldWrapper } from './ReturnItemTable.styled';
 import SortButton from '../../../../module/button/SortButton'
 import ResizableTh from '../../../../module/table/ResizableTh';
 
-function ReturnIcon({ isReturned }) {
+function ReturnIcon({ isReturned, onClick }) {
     if (isReturned === 'y') {
         return (
-            <img
-                src='/assets/icon/return_color_icon.png'
-                style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                alt=""
-                loading='lazy'
-            ></img>
+            <button
+                type='button'
+                className='fix-button-el'
+                onClick={onClick}
+            >
+                <img
+                    src='/assets/icon/return_color_icon.png'
+                    style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                    alt=""
+                    loading='lazy'
+                ></img>
+            </button>
         )
     } else {
         return (
+            <button
+                type='button'
+                className='fix-button-el'
+                onClick={onClick}
+            >
+                <img
+                    src='/assets/icon/return_black_icon.png'
+                    style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                    alt=""
+                    loading='lazy'
+                ></img>
+            </button>
+        )
+    }
+}
+
+function ImageIcon({ onClick }) {
+    return (
+        <button
+            type='button'
+            className='fix-button-el'
+            onClick={onClick}
+        >
             <img
-                src='/assets/icon/return_black_icon.png'
-                style={{ width: '15px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                src='/assets/icon/photo_black_icon.png'
+                className='fix-button-icon'
+                style={{ width: '22px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)'}}
                 alt=""
                 loading='lazy'
             ></img>
-        )
-    }
+        </button>
+    );
 }
 
 function TableHead({
@@ -75,6 +105,13 @@ function TableHead({
                     )
                 })}
                 <th
+                    className="fixed-header fixed-col-right2"
+                    style={{ zIndex: 12, boxShadow: '0.5px -0.5px 0 0 #e0e0e0 inset' }}
+                    width={60}
+                >
+                    이미지
+                </th>
+                <th
                     className="fixed-header fixed-col-right"
                     style={{ zIndex: 12, boxShadow: '0.5px -0.5px 0 0 #e0e0e0 inset' }}
                     width={50}
@@ -118,7 +155,11 @@ export default function TableFieldView(props) {
                                     onClick={(e) => props.onActionCheckReturnItem(e, r1)}
                                 >
                                     <td className={`fixed-col-left`}>
-                                        <ReturnIcon isReturned={r1.returnRejectYn} />
+                                        {r1.returnRejectYn === 'y' ?
+                                            <ReturnIcon isReturned={r1.returnRejectYn} onClick={(e) => props.onActionOpenReturnRejectCancelConfirmModal(e, r1.id)} />
+                                            :
+                                            <ReturnIcon isReturned={r1.returnRejectYn} onClick={(e) => props.onActionOpenReturnRejectConfirmModal(e, r1.id)} />
+                                        }
                                     </td>
                                     <td style={{ cursor: 'pointer' }}>
                                         <input type='checkbox' checked={checked} onChange={(e) => props.onActionCheckReturnItem(e, r1)}></input>
@@ -147,18 +188,17 @@ export default function TableFieldView(props) {
                                                 return (
                                                     <td key={`col-${matchedColumnName}`}>{r1[matchedColumnName] ? dateToYYYYMMDDhhmmss(r1[matchedColumnName]) : ""}</td>
                                                 )
-                                            } else if (matchedColumnName === 'returnReasonDetail') {
+                                            } else if (matchedColumnName === 'returnReasonType' || matchedColumnName === 'returnReasonDetail') {
                                                 return (
                                                     <td
                                                         key={`col-${matchedColumnName}`}
                                                         className='td-highlight'
-                                                        onClick={(e) => props.onActionOpenReturnProductImageModal(e, r1)}
+                                                        onClick={(e) => props.onActionOpenReturnReasonTypeModal(e, r1.id)}
                                                     >
                                                         {r1[matchedColumnName]}
                                                     </td>
                                                 )
                                             }
-                                            
                                             return (
                                                 <td key={`col-${matchedColumnName}`}>
                                                     {r1[matchedColumnName]}
@@ -166,6 +206,9 @@ export default function TableFieldView(props) {
                                             )
                                         }
                                     })}
+                                    <td className={`fixed-col-right2`}>
+                                        <ImageIcon onClick={(e) => props.onActionOpenReturnProductImageModal(e, r1)} />
+                                    </td>
                                     <td className='fixed-col-right'>
                                         <button
                                             type='button'

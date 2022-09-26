@@ -5,6 +5,8 @@ import TableFieldView from "./TableField.view";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
 import ReturnProductImageModalComponent from "../return-product-image-modal/ReturnProductImageModal.component";
+import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
+import _ from "lodash";
 
 function Tip() {
     return (
@@ -29,6 +31,12 @@ const ReturnItemTableComponent = (props) => {
 
     const [fixItemModalOpen, setFixItemModalOpen] = useState(false);
     const [returnProductImageModalOpen, setReturnProductImageModalOpen] = useState(false);
+
+    const [returnReasonModalOpen, setReturnReasonModalOpen] = useState(false);
+
+    const [returnRejectConfirmModalOpen, setReturnRejectConfirmModalOpen] = useState(false);
+    const [returnRejectCancelConfirmModalOpen, setReturnRejectCancelConfirmModalOpen] = useState(false);
+
 
     useEffect(() => {
         if (!props.returnItemList || props.returnItemList?.length <= 0) {
@@ -173,6 +181,107 @@ const ReturnItemTableComponent = (props) => {
         await props._onAction_searchReturnProductImage(selectedReturnItem.id);
     }
 
+    const onActionOpenReturnReasonTypeModal = (e, itemId) => {
+        e.stopPropagation();
+
+        let data = returnItemList.filter(r => r.id === itemId)[0];
+
+        if(!data) {
+            alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        dispatchSelectedReturnItem({
+            type: 'SET_DATA',
+            payload: data
+        })
+        setReturnReasonModalOpen(true);
+    }
+
+    const onActionConfirmReturn = () => {
+        if(!selectedReturnItem || !selectedReturnItem.returnReasonType) {
+            alert('반품 요청 사유는 필수값입니다. 다시 시도해주세요.');
+            onActionCloseReturnConfirmModal();
+            return;
+        }
+
+        // 반품 데이터 생성
+        props._onSubmit_changeReturnReasonForReturnItem(selectedReturnItem);
+        onActionCloseReturnConfirmModal();
+    }
+
+    const onActionCloseReturnConfirmModal = () => {
+        setReturnReasonModalOpen(false);
+    }
+
+    const onChangeSelectedReturnItem = (e) => {
+        e.preventDefault();
+
+        dispatchSelectedReturnItem({
+            type: 'CHANGE_DATA',
+            payload: {
+                name: e.target.name,
+                value: e.target.value
+            }
+        })
+    }
+
+    // 반품거절 처리
+    const onActionOpenReturnRejectConfirmModal = (e, itemId) => {
+        e.stopPropagation();
+
+        let data = returnItemList.filter(r => r.id === itemId)[0];
+        dispatchSelectedReturnItem({
+            type: 'SET_DATA',
+            payload: data
+        })
+
+        setReturnRejectConfirmModalOpen(true);
+    }
+
+    const onActionCloseReturnRejectConfirmModal = () => {
+        setReturnRejectConfirmModalOpen(false);
+    }
+
+    const onActionConfirmReturnReject = () => {
+        let data = {
+            ...selectedReturnItem,
+            returnRejectYn: 'y',
+            returnRejectAt: new Date()
+        }
+
+        props._onSubmit_changeReturnRejectYn(data);
+        onActionCloseReturnRejectConfirmModal();
+    }
+
+    // 반품거절 취소처리
+    const onActionOpenReturnRejectCancelConfirmModal = (e, itemId) => {
+        e.stopPropagation();
+
+        let data = returnItemList.filter(r => r.id === itemId)[0];
+        dispatchSelectedReturnItem({
+            type: 'SET_DATA',
+            payload: data
+        })
+
+        setReturnRejectCancelConfirmModalOpen(true);
+    }
+
+    const onActionCloseReturnRejectCancelConfirmModal = () => {
+        setReturnRejectCancelConfirmModalOpen(false);
+    }
+
+    const onActionCancelConfirmReturnReject = () => {
+        let data = {
+            ...selectedReturnItem,
+            returnRejectYn: 'n',
+            returnRejectAt: null
+        }
+
+        props._onSubmit_changeReturnRejectYn(data);
+        onActionCloseReturnRejectCancelConfirmModal();
+    }
+
     return (
         <>
             <Container>
@@ -198,6 +307,9 @@ const ReturnItemTableComponent = (props) => {
                             onActionCheckReturnItem={onActionCheckReturnItem}
                             onActionOpenFixItemModal={onActionOpenFixItemModal}
                             onActionOpenReturnProductImageModal={onActionOpenReturnProductImageModal}
+                            onActionOpenReturnReasonTypeModal={onActionOpenReturnReasonTypeModal}
+                            onActionOpenReturnRejectConfirmModal={onActionOpenReturnRejectConfirmModal}
+                            onActionOpenReturnRejectCancelConfirmModal={onActionOpenReturnRejectCancelConfirmModal}
                         ></TableFieldView>
                     </>
                 }
@@ -241,6 +353,73 @@ const ReturnItemTableComponent = (props) => {
                     onActionCloseReturnProductImageModal={onActionCloseReturnProductImageModal}
                 ></ReturnProductImageModalComponent>
             </CommonModalComponent>
+
+            {/* 반품 요청 사유 변경 모달 */}
+            <ConfirmModalComponent
+                open={returnReasonModalOpen}
+                title={'반품 요청 사유 변경'}
+                message={
+                    <>
+                        <div className='info-wrapper'>
+                            <div className='info-box'>
+                                <span className='input-title'>반품 요청사유</span>
+                                <div>
+                                    <select
+                                        className='select-item'
+                                        name='returnReasonType'
+                                        value={selectedReturnItem?.returnReasonType || ''}
+                                        onChange={onChangeSelectedReturnItem}
+                                    >
+                                        <option value=''>선택</option>
+                                        {props.returnTypeList?.map(r => {
+                                            return (
+                                                <option key={`return-type-idx` + r.cid} value={r.type}>{r.type}</option>
+                                            )
+                                        })}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <span className='input-title'>반품 상세사유</span>
+                                <div>
+                                    <textarea className='text-input' name='returnReasonDetail' onChange={onChangeSelectedReturnItem} value={selectedReturnItem?.returnReasonDetail || ''} placeholder={`반품요청 상세 사유를 입력해 주세요.\n(300자 이내)`} />
+                                </div>
+                            </div>
+                        </div>
+                        <div>선택된 데이터의 반품 요청 사유를 변경하시겠습니까? </div>
+                    </>
+                }
+
+                maxWidth={'sm'}
+                onConfirm={onActionConfirmReturn}
+                onClose={onActionCloseReturnConfirmModal}
+            />
+
+            {/* 반품거절 확인 모달 */}
+            <ConfirmModalComponent
+                open={returnRejectConfirmModalOpen}
+                title={'반품거절 확인 메세지'}
+                message={
+                    <>
+                        <div>선택된 데이터를 반품거절하시겠습니까?</div>
+                    </>
+                }
+                onConfirm={onActionConfirmReturnReject}
+                onClose={onActionCloseReturnRejectConfirmModal}
+            ></ConfirmModalComponent>
+
+            {/* 반품거절 취소 확인 모달 */}
+            <ConfirmModalComponent
+                open={returnRejectCancelConfirmModalOpen}
+                title={'반품거절 취소 확인 메세지'}
+                message={
+                    <>
+                        <div>선택된 반품거절 데이터를 취소하시겠습니까?</div>
+                    </>
+                }
+                onConfirm={onActionCancelConfirmReturnReject}
+                onClose={onActionCloseReturnRejectCancelConfirmModal}
+            ></ConfirmModalComponent>
         </>
     );
 }
@@ -289,6 +468,11 @@ const selectedReturnItemReducer = (state, action) => {
     switch (action.type) {
         case 'SET_DATA':
             return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name]: action.payload.value
+            }
         case 'CLEAR':
             return initialSelectedReturnItem;
         default: return initialSelectedReturnItem;

@@ -4,83 +4,9 @@ import { Container } from "./CheckedOperator.styled";
 import OperatorFieldView from "./OperatorField.view";
 
 const CheckedOperatorComponent = (props) => {
-    const [returnRejectConfirmModalOpen, setReturnRejectConfirmModalOpen] = useState(false);
-    const [returnRejectCancelConfirmModalOpen, setReturnRejectCancelConfirmModalOpen] = useState(false);
     const [completedConfirmModalOpen, setCompletedConfirmModalOpen] = useState(false);
     const [collectedConfirmModalOpen, setCollectedConfirmModalOpen] = useState(false);
     const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState(false);
-
-    // 반품거절 처리
-    const onActionOpenReturnRejectConfirmModal = () => {
-        if (props.checkedReturnItemList?.length <= 0) {
-            alert('데이터를 먼저 선택해 주세요.');
-            return;
-        }
-        if (props.checkedReturnItemList?.length > 1) {
-            alert('반품거절 처리는 단건만 가능합니다.');
-            return;
-        }
-
-        let data = props.checkedReturnItemList[0];
-        if(data.returnRejectYn === 'y') {
-            alert('이미 반품거절된 데이터입니다.');
-            return;
-        }
-
-        setReturnRejectConfirmModalOpen(true);
-    }
-
-    const onActionCloseReturnRejectConfirmModal = () => {
-        setReturnRejectConfirmModalOpen(false);
-    }
-
-    const onActionConfirmReturnReject = () => {
-        let data = props.checkedReturnItemList.map(r => {
-            return {
-                ...r,
-                returnRejectYn: 'y',
-                returnRejectAt: new Date()
-            }
-        })
-        props._onSubmit_changeReturnRejectYnForReturnItemList(data);
-        onActionCloseReturnRejectConfirmModal();
-    }
-
-    // 반품거절 취소처리
-    const onActionOpenReturnRejectCancelConfirmModal = () => {
-        if (props.checkedReturnItemList?.length <= 0) {
-            alert('데이터를 먼저 선택해 주세요.');
-            return;
-        }
-        if (props.checkedReturnItemList?.length > 1) {
-            alert('반품거절 취소는 단건만 가능합니다.');
-            return;
-        }
-
-        let data = props.checkedReturnItemList[0];
-        if(data.returnRejectYn === 'n') {
-            alert('반품거절 처리된 데이터가 존재하지 않습니다.');
-            return;
-        }
-
-        setReturnRejectCancelConfirmModalOpen(true);
-    }
-
-    const onActionCloseReturnRejectCancelConfirmModal = () => {
-        setReturnRejectCancelConfirmModalOpen(false);
-    }
-
-    const onActionCancelConfirmReturnReject = () => {
-        let data = props.checkedReturnItemList.map(r => {
-            return {
-                ...r,
-                returnRejectYn: 'n',
-                returnRejectAt: null
-            }
-        })
-        props._onSubmit_changeReturnRejectYnForReturnItemList(data);
-        onActionCloseReturnRejectCancelConfirmModal();
-    }
 
     // 수거완료 취소 처리
     const onActionOpenCollectedConfirmModal = () => {
@@ -176,40 +102,11 @@ const CheckedOperatorComponent = (props) => {
         <>
             <Container>
                 <OperatorFieldView
-                    onActionOpenReturnRejectConfirmModal={onActionOpenReturnRejectConfirmModal}
-                    onActionOpenReturnRejectCancelConfirmModal={onActionOpenReturnRejectCancelConfirmModal}
                     onActionOpenCompletedConfirmModal={onActionOpenCompletedConfirmModal}
                     onActionOpenCollectedConfirmModal={onActionOpenCollectedConfirmModal}
                     onActionOpenDeleteConfirmModal={onActionOpenDeleteConfirmModal}
                 ></OperatorFieldView>
             </Container>
-
-
-            {/* 반품거절 확인 모달 */}
-            <ConfirmModalComponent
-                open={returnRejectConfirmModalOpen}
-                title={'반품거절 확인 메세지'}
-                message={
-                    <>
-                        <div>[ {props.checkedReturnItemList?.length || 0} ] 건의 데이터를 반품거절하시겠습니까?</div>
-                    </>
-                }
-                onConfirm={onActionConfirmReturnReject}
-                onClose={onActionCloseReturnRejectConfirmModal}
-            ></ConfirmModalComponent>
-
-            {/* 반품거절 취소 확인 모달 */}
-            <ConfirmModalComponent
-                open={returnRejectCancelConfirmModalOpen}
-                title={'반품거절 취소 확인 메세지'}
-                message={
-                    <>
-                        <div>[ {props.checkedReturnItemList?.length || 0} ] 건의 반품거절 데이터를 취소하시겠습니까?</div>
-                    </>
-                }
-                onConfirm={onActionCancelConfirmReturnReject}
-                onClose={onActionCloseReturnRejectCancelConfirmModal}
-            ></ConfirmModalComponent>
 
             {/* 수거완료 취소 확인 모달 */}
             <ConfirmModalComponent

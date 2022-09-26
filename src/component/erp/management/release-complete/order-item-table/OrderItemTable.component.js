@@ -296,11 +296,6 @@ const OrderItemTableComponent = (props) => {
             return;
         }
 
-        if(data.returnYn === 'y') {
-            alert('이미 반품접수된 데이터입니다.');
-            return;
-        }
-
         // erp order item값을 참고해 설정하는 값
         // 반품 택배사, 반품 배송방식, 반품 입고지
         let returnInfo = {
