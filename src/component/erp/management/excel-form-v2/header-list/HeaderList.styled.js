@@ -72,7 +72,7 @@ const ItemListWrapper = styled.div`
 
     .item-list-box{
         overflow: auto;
-        max-height: 200px;
+        max-height: 400px;
 
         &::-webkit-scrollbar{
             background: #e1e1e130;

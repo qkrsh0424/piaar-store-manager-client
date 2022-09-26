@@ -206,7 +206,7 @@ const PagenationComponent = (props) => {
                                 }
                             </div>
                             <div className='number-box'>
-                                <span>{props.pageIndex + 1 || ''}</span> / <span>{props.totalPages || ''}</span>
+                                <span>{props.totalElements !== 0 ? props.pageIndex + 1 : '0'}</span> / <span>{props.totalPages || '0'}</span>
                             </div>
                             <div className='button-box'>
                                 {(!props.isLast) &&
@@ -222,11 +222,9 @@ const PagenationComponent = (props) => {
                                 }
                             </div>
                         </div>
-                        {props.totalElements &&
-                            <div className='number-box'>
-                                TOTAL {props.totalElements}
-                            </div>
-                        }
+                        <div className='number-box'>
+                            TOTAL {props.totalElements || 0}
+                        </div>
                     </div>
                 </Wrapper>
             </Container>
