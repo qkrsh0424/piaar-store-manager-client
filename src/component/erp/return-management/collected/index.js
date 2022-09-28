@@ -381,6 +381,19 @@ const CollectedComponent = (props) => {
             })
     }
 
+    const __reqChangeReturnDeliveryCharge = async (body) => {
+        await erpReturnItemSocket().changeReturnDeliveryChargeYn(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            });
+    }
+
     useEffect(() => {
         __reqSearchViewHeaderList();
         __reqSearchReturnTypeList();
@@ -646,6 +659,12 @@ const CollectedComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    const _onAction_changeReturnDeliveryCharge = async (body) => {
+        onActionOpenBackdrop();
+        await __reqChangeReturnDeliveryCharge(body);
+        onActionCloseBackdrop();
+    }
+
     return (
         <>
             {connected &&
@@ -673,6 +692,7 @@ const CollectedComponent = (props) => {
                         _onAction_deleteReturnProudctImage={_onAction_deleteReturnProudctImage}
                         _onSubmit_changeReturnReasonForReturnItem={_onSubmit_changeReturnReasonForReturnItem}
                         _onSubmit_changeReturnRejectYn={_onSubmit_changeReturnRejectYn}
+                        _onAction_changeReturnDeliveryCharge={_onAction_changeReturnDeliveryCharge}
                     ></ReturnItemTableComponent>
                     <ReturnItemTablePagenationComponent
                         returnItemPage={returnItemPage}

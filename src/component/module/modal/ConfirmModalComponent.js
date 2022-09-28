@@ -18,7 +18,7 @@ const MessageBox = styled.div`
     font-size: 14px;
     font-weight: 600;
     text-align: center;
-
+    
     .info-text {
         color: var(--erp-main-color);
         text-align: left;
@@ -130,6 +130,22 @@ const MessageBox = styled.div`
             box-sizing: border-box;
             border-radius: 3px;
         }
+    }
+
+    .upload-box {
+        width: 250px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .button-el {
+        border: 1px solid var(--erp-main-color);
+        background-color: var(--erp-main-color);
+        color: white;
+        padding: 5px 10px;
+        font-weight: 600;
+        width: 100%;
     }
 `;
 

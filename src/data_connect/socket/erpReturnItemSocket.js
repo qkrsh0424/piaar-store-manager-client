@@ -5,7 +5,7 @@ const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 const erpReturnItemSocket = () => {
     return {
         createOne: async function (body) {
-            return await axios.post(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items`, body, {
+            return await axios.post(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/return-product-image`, body, {
                 withCredentials: true
             })
         },
@@ -64,6 +64,11 @@ const erpReturnItemSocket = () => {
         },
         actionCancelStock: async function (body) {
             return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/stock/action-cancel`, body, {
+                withCredentials: true
+            })
+        },
+        changeReturnDeliveryChargeYn: async function (body) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/delivery-charge-return-yn`, body, {
                 withCredentials: true
             })
         }

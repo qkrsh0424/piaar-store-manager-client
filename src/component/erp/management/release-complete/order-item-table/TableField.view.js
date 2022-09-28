@@ -27,28 +27,20 @@ function FailedIcon() {
 }
 
 function ReturnIcon({ isReturned, onClick }) {
-    if (isReturned === 'y') {
-        return (
-            <button
-                type='button'
-                className='fix-button-el'
-                onClick={onClick}
-            >
+    return (
+        <button
+            type='button'
+            className='fix-button-el'
+            onClick={onClick}
+        >
+            {isReturned === 'y' ?
                 <img
                     src='/assets/icon/return_color_icon.png'
                     style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
                     alt=""
                     loading='lazy'
                 ></img>
-            </button>
-        )
-    } else {
-        return (
-            <button
-                type='button'
-                className='fix-button-el'
-                onClick={onClick}
-            >
+                :
                 <img
                     src='/assets/icon/return_black_icon.png'
                     className='fix-button-icon'
@@ -56,9 +48,9 @@ function ReturnIcon({ isReturned, onClick }) {
                     alt=""
                     loading='lazy'
                 ></img>
-            </button >
-        )
-    }
+            }
+        </button>
+    )
 }
 
 function TableHead({
@@ -235,23 +227,6 @@ export default function TableFieldView(props) {
                         />
                     </tbody>
                 </table>
-                {/* <InfiniteScrollObserver
-                    elementTagType={'div'}
-                    totalSize={props.orderItemList.length}
-                    startOffset={0}
-                    endOffset={props.viewSize}
-                    fetchData={props.onActionfetchMoreOrderItems}
-                    loadingElementTag={
-                        <p style={{ textAlign: 'center', fontSize: '14px', fontWeight: '600', color: '#444' }}>
-                            로딩중...
-                        </p>
-                    }
-                    endElementTag={
-                        <p style={{ textAlign: 'center', fontSize: '14px', fontWeight: '600', color: '#444' }}>
-                            마지막 데이터 입니다.
-                        </p>
-                    }
-                /> */}
             </div>
         </TableFieldWrapper>
     );

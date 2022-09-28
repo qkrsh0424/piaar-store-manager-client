@@ -6,9 +6,11 @@ import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModa
 import { Container, TipFieldWrapper } from "./OrderItemTable.styled";
 import SelectorButtonFieldView from "./SelectorButtonField.view";
 import TableFieldView from "./TableField.view";
+import { v4 as uuidv4 } from 'uuid';
 import SelectorRadioFieldView from "./SelectorRadioField.view";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
 import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
+import ReturnProductImageModalComponent from "../return-product-image-modal/ReturnProductImageModal.component";
 
 function Tip({selectedMatchCode}) {
     return (
@@ -41,7 +43,10 @@ const OrderItemTableComponent = (props) => {
 
     const [returnConfirmModalOpen, setReturnConfirmModalOpen] = useState(false);
     const [returnRegistrationInfo, dispatchReturnRegistrationInfo] = useReducer(returnRegistrationReducer, initialReturnRegistration);
+    const [returnProductImageList, dispatchReturnProductImageList] = useReducer(returnProductImageListReducer, initialReturnProductImageList);
     
+    const [returnProductImageModalOpen, setReturnProductImageModalOpen] = useState(false);
+
     useEffect(() => {
         if (!props.orderItemList || props.orderItemList?.length <= 0) {
             dispatchOrderItemList({
@@ -304,7 +309,7 @@ const OrderItemTableComponent = (props) => {
             receiveLocation: data.optionReleaseLocation,
             erpOrderItemId: data.id
         }
-
+        
         dispatchReturnRegistrationInfo({
             type: 'INIT_DATA',
             payload: returnInfo
@@ -315,9 +320,8 @@ const OrderItemTableComponent = (props) => {
     const onActionCloseReturnConfirmModal = () => {
         setReturnConfirmModalOpen(false);
 
-        dispatchReturnRegistrationInfo({
-            type: 'CLEAR'
-        })
+        dispatchReturnRegistrationInfo({ type: 'CLEAR' })
+        dispatchReturnProductImageList({ type: 'CLEAR' })
     }
 
     const onChangeSelectReturnType = (e) => {
@@ -339,20 +343,54 @@ const OrderItemTableComponent = (props) => {
             return;
         }
 
-        // 반품 데이터 생성
-        // erp order item을 참고하는 항목 : 출고지 -> 반품입고지 / 택배사 -> 반품 택배사 / 배송방식 -> 반품 배송방식
-        let body = {
-            courier: returnRegistrationInfo.courier,
-            transportType: returnRegistrationInfo.transportType,
-            deliveryChargeReturnType: returnRegistrationInfo.deliveryChargeReturnType,
-            receiveLocation: returnRegistrationInfo.receiveLocation,
-            returnReasonType: returnRegistrationInfo.returnReasonType,
-            returnReasonDetail: returnRegistrationInfo.returnReasonDetail,
-            erpOrderItemId: returnRegistrationInfo.erpOrderItemId
-        };
+        // erp return item, 반품 상품 이미지 등록
+        let data = {
+            eroReturnItemDto: returnRegistrationInfo,
+            imageDtos: returnProductImageList
+        }
 
-        props._onSubmit_createReturnItem(body)
+        // 반품 데이터 생성
+        props._onSubmit_createReturnItem(data)
         onActionCloseReturnConfirmModal();
+    }
+
+    const onActionOpenReturnProductImageModal = async (e) => {
+        e.stopPropagation();
+        setReturnProductImageModalOpen(true);
+    }
+
+    const onActionCloseReturnProductImageModal = () => {
+        setReturnProductImageModalOpen(false);
+    }
+    
+    const onActionAddReturnProductImage = (imageInfo) => {
+        let erpOrderItem = orderItemList.filter(r => r.id === returnRegistrationInfo.erpOrderItemId)[0];
+        let optionList = props.productOptionList?.map(r => r.option);
+        let optionId = optionList?.filter(r => r.code === erpOrderItem.releaseOptionCode)[0]?.id;
+
+        let addData = imageInfo?.map(info => {
+            return {
+                id: uuidv4(),
+                imageUrl: info.imageUrl,
+                imageFileName: info.imageFileName,
+                productOptionId: optionId,
+                erpReturnItemId: returnRegistrationInfo.erpOrderItemId
+            }
+        });
+
+        dispatchReturnProductImageList({
+            type: 'INIT_DATA',
+            payload: addData
+        })
+    }
+
+    const onActionRemoveReturnProductImageFile = (imageId) => {
+        let imageFileList = returnProductImageList.filter(r => r.id !== imageId);
+
+        dispatchReturnProductImageList({
+            type: 'INIT_DATA',
+            payload: imageFileList
+        })
     }
 
     return (
@@ -476,13 +514,19 @@ const OrderItemTableComponent = (props) => {
                             </div>
                             <div className='info-box'>
                                 <span className='input-title'>반품배송비 입금방식</span>
-                                <div className='input-value'>
-                                    <input
-                                        type='text'
+                                <div>
+                                    <select
+                                        className='select-item'
                                         name='deliveryChargeReturnType'
                                         value={returnRegistrationInfo?.deliveryChargeReturnType || ''}
-                                        onChange={onChangeSelectReturnType}    
-                                    />
+                                        onChange={onChangeSelectReturnType}
+                                        required
+                                    >
+                                        <option value=''>선택</option>
+                                        <option value='환불금 차감'>환불금 차감</option>
+                                        <option value='직접송금'>직접송금</option>
+                                        <option value='상품동봉'>상품동봉</option>
+                                    </select>
                                 </div>
                             </div>
                             <div className='info-box'>
@@ -534,6 +578,22 @@ const OrderItemTableComponent = (props) => {
                                     />
                                 </div>
                             </div>
+                            
+                            <div className='info-box'>
+                                <div className='input-title'>
+                                    <span className='input-title'>반품 상품 이미지</span>
+                                </div>
+                                <div className='upload-box'>
+                                    <div>
+                                        <button
+                                            type='button'
+                                            className='button-el'
+                                            onClick={onActionOpenReturnProductImageModal}
+                                        >이미지 등록</button>
+                                    </div>
+                                    <span>({returnProductImageList?.length || 0} 개)</span>
+                                </div>
+                            </div>
                         </div>
                         <div>선택된 데이터를 반품 처리 하시겠습니까? </div>
                     </>
@@ -543,6 +603,21 @@ const OrderItemTableComponent = (props) => {
                 onConfirm={onActionConfirmReturn}
                 onClose={onActionCloseReturnConfirmModal}
             />
+
+            {/* 반품 이미지 등록 모달 */}
+            <CommonModalComponent
+                open={returnProductImageModalOpen}
+
+                onClose={onActionCloseReturnProductImageModal}
+            >
+                <ReturnProductImageModalComponent
+                    returnProductImageList={returnProductImageList}
+
+                    onActionAddReturnProductImage={onActionAddReturnProductImage}
+                    onActionCloseReturnProductImageModal={onActionCloseReturnProductImageModal}
+                    onActionRemoveReturnProductImageFile={onActionRemoveReturnProductImageFile}
+                ></ReturnProductImageModalComponent>
+            </CommonModalComponent>
         </>
     );
 }
@@ -555,6 +630,7 @@ const initialOrderItemList = [];
 const initialSearchReleaseLocationValue = null;
 const initialCheckedOrderItemList = null;
 const initialReturnRegistration = null;
+const initialReturnProductImageList = null;
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
@@ -619,5 +695,15 @@ const returnRegistrationReducer = (state, action) => {
         case 'CLEAR':
             return initialReturnRegistration;
         default: return initialReturnRegistration;
+    }
+}
+
+const returnProductImageListReducer = (state, action) => {
+    switch(action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialReturnProductImageList;
+        default: return initialReturnProductImageList;
     }
 }

@@ -465,6 +465,19 @@ const CompletedComponent = (props) => {
             });
     }
 
+    const __reqChangeReturnDeliveryCharge = async (body) => {
+        await erpReturnItemSocket().changeReturnDeliveryChargeYn(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            });
+    }
+
     useEffect(() => {
         __reqSearchViewHeaderList();
         __reqSearchReturnTypeList();
@@ -750,6 +763,12 @@ const CompletedComponent = (props) => {
         onActionCloseBackdrop()
     }
 
+    const _onAction_changeReturnDeliveryCharge = async (body) => {
+        onActionOpenBackdrop();
+        await __reqChangeReturnDeliveryCharge(body);
+        onActionCloseBackdrop();
+    }
+
     return (
         <>
             {connected &&
@@ -783,6 +802,7 @@ const CompletedComponent = (props) => {
                         _onAction_searchReleaseData={_onAction_searchReleaseData}
                         _onAction_reflectStock={_onAction_reflectStock}
                         _onAction_cancelStock={_onAction_cancelStock}
+                        _onAction_changeReturnDeliveryCharge={_onAction_changeReturnDeliveryCharge}
                     ></ReturnItemTableComponent>
                     <ReturnItemTablePagenationComponent
                         returnItemPage={returnItemPage}

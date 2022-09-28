@@ -41,7 +41,7 @@ const FixOrderItemModalComponent = (props) => {
                         <span style={{ color: 'red' }}>[*]</span> 은 필수 입력 값 입니다.
                     </TipFieldWrapper>
                     <ContentFieldWrapper>
-                        {defaultHeaderDetails?.headerDetail.details.slice(0, 12).map(r => {
+                        {defaultHeaderDetails?.headerDetail.details.slice(0, 13).map(r => {
                             let matchedColumnName = r.matchedColumnName;
 
                             if (r.variableType === 'number') {

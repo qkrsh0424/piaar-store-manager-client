@@ -11,6 +11,11 @@ const Container = styled.div`
             flex-direction: column-reverse;
         }
     }
+
+    .button-el { 
+        border: 1px solid #efefef;
+        
+    }
 `;
 
 const TableFieldWrapper = styled.div`

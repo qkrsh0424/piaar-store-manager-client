@@ -39,6 +39,15 @@ const staticDefaultHeaderDetails = [
     },
     {
         "cellNumber": 4,
+        "customCellName": "반품배송비 입금여부",
+        "originCellName": "반품배송비 입금여부",
+        "matchedColumnName": "deliveryChargeReturnYn",
+        "allowedSearch": true,
+        "requiredFlag": false,
+        "variableType": 'string'
+    },
+    {
+        "cellNumber": 5,
         "customCellName": "반품 수거지",
         "originCellName": "반품 수거지",
         "matchedColumnName": "receiveLocation",
@@ -47,7 +56,7 @@ const staticDefaultHeaderDetails = [
         "variableType": 'string'
     },
     {
-        "cellNumber": 5,
+        "cellNumber": 6,
         "customCellName": "반품요청사유",
         "originCellName": "반품요청사유",
         "matchedColumnName": "returnReasonType",
@@ -56,7 +65,7 @@ const staticDefaultHeaderDetails = [
         "variableType": 'string'
     },
     {
-        "cellNumber": 6,
+        "cellNumber": 7,
         "customCellName": "반품상세사유",
         "originCellName": "반품상세사유",
         "matchedColumnName": "returnReasonDetail",
@@ -65,7 +74,7 @@ const staticDefaultHeaderDetails = [
         "variableType": 'string'
     },
     {
-        "cellNumber": 7,
+        "cellNumber": 8,
         "customCellName": "관리메모1",
         "originCellName": "관리메모1",
         "matchedColumnName": "managementMemo1",
@@ -74,7 +83,7 @@ const staticDefaultHeaderDetails = [
         "variableType": 'string'
     },
     {
-        "cellNumber": 8,
+        "cellNumber": 9,
         "customCellName": "관리메모2",
         "originCellName": "관리메모2",
         "matchedColumnName": "managementMemo2",
@@ -83,7 +92,7 @@ const staticDefaultHeaderDetails = [
         "variableType": 'string'
     },
     {
-        "cellNumber": 9,
+        "cellNumber": 10,
         "customCellName": "관리메모3",
         "originCellName": "관리메모3",
         "matchedColumnName": "managementMemo3",
@@ -92,7 +101,7 @@ const staticDefaultHeaderDetails = [
         "variableType": 'string'
     },
     {
-        "cellNumber": 10,
+        "cellNumber": 11,
         "customCellName": "관리메모4",
         "originCellName": "관리메모4",
         "matchedColumnName": "managementMemo4",
@@ -101,7 +110,7 @@ const staticDefaultHeaderDetails = [
         "variableType": 'string'
     },
     {
-        "cellNumber": 11,
+        "cellNumber": 12,
         "customCellName": "관리메모5",
         "originCellName": "관리메모5",
         "matchedColumnName": "managementMemo5",
@@ -110,7 +119,7 @@ const staticDefaultHeaderDetails = [
         "variableType": 'string'
     },
     {
-        "cellNumber": 12,
+        "cellNumber": 13,
         "customCellName": "!반품등록일",
         "originCellName": "!반품등록일",
         "matchedColumnName": "createdAt",
@@ -119,7 +128,7 @@ const staticDefaultHeaderDetails = [
         "variableType": 'date'
     },
     {
-        "cellNumber": 13,
+        "cellNumber": 14,
         "customCellName": "!수거일",
         "originCellName": "!수거일",
         "matchedColumnName": "collectAt",
@@ -128,7 +137,7 @@ const staticDefaultHeaderDetails = [
         "variableType": 'date'
     },
     {
-        "cellNumber": 14,
+        "cellNumber": 15,
         "customCellName": "!수거완료일",
         "originCellName": "!수거완료일",
         "matchedColumnName": "collectCompleteAt",
@@ -137,7 +146,7 @@ const staticDefaultHeaderDetails = [
         "variableType": 'date'
     },
     {
-        "cellNumber": 15,
+        "cellNumber": 16,
         "customCellName": "!반품완료일",
         "originCellName": "!반품완료일",
         "matchedColumnName": "returnCompleteAt",

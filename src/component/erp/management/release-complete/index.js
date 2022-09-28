@@ -895,7 +895,7 @@ const ReleaseCompleteComponent = (props) => {
         onActionOpenBackdrop();
         // 반품 데이터 생성 후, erp order item의 returnYn을 수정
         await __reqCreateReturnItemList(body, async () => {
-            let data = orderItemPage?.content?.filter(r => r.id === body.erpOrderItemId)[0];
+            let data = orderItemPage?.content?.filter(r => r.id === body.eroReturnItemDto.erpOrderItemId)[0];
             data = {
                 ...data,
                 returnYn: 'y'

@@ -4,38 +4,21 @@ import { TableFieldWrapper } from './ReturnItemTable.styled';
 import SortButton from '../../../../module/button/SortButton'
 import ResizableTh from '../../../../module/table/ResizableTh';
 
-function ReturnIcon({ isReturned, onClick }) {
-    if (isReturned === 'y') {
-        return (
-            <button
-                type='button'
-                className='fix-button-el'
-                onClick={onClick}
-            >
-                <img
-                    src='/assets/icon/return_color_icon.png'
-                    style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                    alt=""
-                    loading='lazy'
-                ></img>
-            </button>
-        )
-    } else {
-        return (
-            <button
-                type='button'
-                className='fix-button-el'
-                onClick={onClick}
-            >
-                <img
-                    src='/assets/icon/return_black_icon.png'
-                    style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                    alt=""
-                    loading='lazy'
-                ></img>
-            </button>
-        )
-    }
+function ReturnIcon({ onClick }) {
+    return (
+        <button
+            type='button'
+            className='fix-button-el'
+            onClick={onClick}
+        >
+            <img
+                src='/assets/icon/return_color_icon.png'
+                style={{ width: '20px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                alt=""
+                loading='lazy'
+            ></img>
+        </button>
+    )
 }
 
 function ImageIcon({ onClick }) {
@@ -154,11 +137,7 @@ export default function TableFieldView(props) {
                                     onClick={(e) => props.onActionCheckReturnItem(e, r1)}
                                 >
                                     <td className={`fixed-col-left`}>
-                                        {r1.returnRejectYn === 'y' ?
-                                            <ReturnIcon isReturned={r1.returnRejectYn} onClick={(e) => props.onActionOpenReturnRejectCancelConfirmModal(e, r1.id)} />
-                                            :
-                                            <ReturnIcon isReturned={r1.returnRejectYn} onClick={(e) => props.onActionOpenReturnRejectConfirmModal(e, r1.id)} />
-                                        }
+                                        <ReturnIcon onClick={(e) => props.onActionOpenReturnRejectCancelConfirmModal(e, r1.id)} />
                                     </td>
                                     <td style={{ cursor: 'pointer' }}>
                                         <input type='checkbox' checked={checked} onChange={(e) => props.onActionCheckReturnItem(e, r1)}></input>
@@ -195,6 +174,16 @@ export default function TableFieldView(props) {
                                                         onClick={(e) => props.onActionOpenReturnReasonTypeModal(e, r1.id)}
                                                     >
                                                         {r1[matchedColumnName]}
+                                                    </td>
+                                                )
+                                            } else if (matchedColumnName === 'deliveryChargeReturnYn') {
+                                                return (
+                                                    <td
+                                                        key={`col-${matchedColumnName}`}
+                                                        className='td-highlight'
+                                                        onClick={(e) => props.onActionChangeReturnDeliveryChargeYn(e, r1.id)}
+                                                    >
+                                                        <div>{r1[matchedColumnName] === 'y' ? '입금완료' : '미입금'}</div>
                                                     </td>
                                                 )
                                             }

@@ -378,6 +378,19 @@ const RejectedComponent = (props) => {
             })
     }
 
+    const __reqChangeReturnDeliveryCharge = async (body) => {
+        await erpReturnItemSocket().changeReturnDeliveryChargeYn(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            });
+    }
+    
     useEffect(() => {
         __reqSearchViewHeaderList();
         __reqSearchReturnTypeList();
@@ -399,14 +412,14 @@ const RejectedComponent = (props) => {
             return;
         }
 
-        if(!defaultHeader || !defaultHeader.collectedHeaderId) {
+        if(!defaultHeader || !defaultHeader.rejectedHeaderId) {
             dispatchViewHeader({
                 type: 'CLEAR'
             })
             return;
         }
 
-        let data = viewHeaderList.filter(r => r.id === defaultHeader.collectedHeaderId)[0];
+        let data = viewHeaderList.filter(r => r.id === defaultHeader.rejectedHeaderId)[0];
         dispatchViewHeader({
             type: 'INIT_DATA',
             payload: data
@@ -515,14 +528,14 @@ const RejectedComponent = (props) => {
         if(!headerId) {
             setDefaultHeader({
                 ...defaultHeader,
-                collectedHeaderId: ''
+                rejectedHeaderId: ''
             })
             return;
         }
 
         let data = {
             ...defaultHeader,
-            collectedHeaderId: headerId
+            rejectedHeaderId: headerId
         }
         setDefaultHeader(data);
     }
@@ -532,12 +545,6 @@ const RejectedComponent = (props) => {
         onActionOpenBackdrop();
         await __reqUpdateReturnItemOneSocket(body);
         onActionCloseBackdrop();
-    }
-
-    const _onAction_checkedReturnItemListAll = () => {
-        dispatchCheckedReturnItemList({
-            type: 'CLEAR'
-        })
     }
 
     const _onAction_checkReturnItem = (e, returnItem) => {
@@ -623,6 +630,12 @@ const RejectedComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    const _onAction_changeReturnDeliveryCharge = async (body) => {
+        onActionOpenBackdrop();
+        await __reqChangeReturnDeliveryCharge(body);
+        onActionCloseBackdrop();
+    }
+
     return (
         <>
             {connected &&
@@ -650,6 +663,7 @@ const RejectedComponent = (props) => {
                         _onAction_deleteReturnProudctImage={_onAction_deleteReturnProudctImage}
                         _onSubmit_changeReturnReasonForReturnItem={_onSubmit_changeReturnReasonForReturnItem}
                         _onSubmit_changeReturnRejectYn={_onSubmit_changeReturnRejectYn}
+                        _onAction_changeReturnDeliveryCharge={_onAction_changeReturnDeliveryCharge}
                     ></ReturnItemTableComponent>
                     <ReturnItemTablePagenationComponent
                         returnItemPage={returnItemPage}

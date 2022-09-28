@@ -282,6 +282,34 @@ const ReturnItemTableComponent = (props) => {
         onActionCloseReturnRejectCancelConfirmModal();
     }
 
+    const onActionChangeReturnDeliveryChargeYn = (e, itemId) => {
+        e.stopPropagation();
+
+        let data = returnItemList.filter(r => r.id === itemId)[0];
+
+        if(data.deliveryChargeReturnYn === 'y') {
+            if(!window.confirm('미입금 처리하시겠습니까?')) {
+                return;
+            }
+
+            data = {
+                ...data,
+                deliveryChargeReturnYn: 'n'
+            }
+        }else {
+            if(!window.confirm('입금완료 처리하시겠습니까?')) {
+                return;
+            }
+
+            data = {
+                ...data,
+                deliveryChargeReturnYn: 'y'
+            }
+        }
+
+        props._onAction_changeReturnDeliveryCharge(data);
+    }
+
     return (
         <>
             <Container>
@@ -310,6 +338,7 @@ const ReturnItemTableComponent = (props) => {
                             onActionOpenReturnReasonTypeModal={onActionOpenReturnReasonTypeModal}
                             onActionOpenReturnRejectConfirmModal={onActionOpenReturnRejectConfirmModal}
                             onActionOpenReturnRejectCancelConfirmModal={onActionOpenReturnRejectCancelConfirmModal}
+                            onActionChangeReturnDeliveryChargeYn={onActionChangeReturnDeliveryChargeYn}
                         ></TableFieldView>
                     </>
                 }
