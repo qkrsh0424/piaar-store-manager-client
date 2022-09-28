@@ -923,6 +923,8 @@ const ReleaseCompleteComponent = (props) => {
                     selectedMatchCode={selectedMatchCode}
                     productOptionList={productOptionList}
                     returnTypeList={returnTypeList}
+                    onActionOpenBackdrop={onActionOpenBackdrop}
+                    onActionCloseBackdrop={onActionCloseBackdrop}
 
                     _onAction_checkOrderItem={_onAction_checkOrderItem}
                     _onAction_checkOrderItemAll={_onAction_checkOrderItemAll}

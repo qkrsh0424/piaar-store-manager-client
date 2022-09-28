@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import SelectorRadioFieldView from "./SelectorRadioField.view";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
 import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
-import ReturnProductImageModalComponent from "../return-product-image-modal/ReturnProductImageModal.component";
+import { useImageFileUploaderHook } from "../../../../../hooks/uploader/useImageFileUploaderHook";
 
 function Tip({selectedMatchCode}) {
     return (
@@ -44,8 +44,10 @@ const OrderItemTableComponent = (props) => {
     const [returnConfirmModalOpen, setReturnConfirmModalOpen] = useState(false);
     const [returnRegistrationInfo, dispatchReturnRegistrationInfo] = useReducer(returnRegistrationReducer, initialReturnRegistration);
     const [returnProductImageList, dispatchReturnProductImageList] = useReducer(returnProductImageListReducer, initialReturnProductImageList);
-    
-    const [returnProductImageModalOpen, setReturnProductImageModalOpen] = useState(false);
+
+    const {
+        __reqUploadBatchImageFile: __reqUploadBatchImageFile
+    } = useImageFileUploaderHook();
 
     useEffect(() => {
         if (!props.orderItemList || props.orderItemList?.length <= 0) {
@@ -354,20 +356,23 @@ const OrderItemTableComponent = (props) => {
         onActionCloseReturnConfirmModal();
     }
 
-    const onActionOpenReturnProductImageModal = async (e) => {
-        e.stopPropagation();
-        setReturnProductImageModalOpen(true);
+    const onActionClickReturnProductImageButton = () => {
+        document.getElementById("rpi_uploader").click();
     }
 
-    const onActionCloseReturnProductImageModal = () => {
-        setReturnProductImageModalOpen(false);
-    }
-    
-    const onActionAddReturnProductImage = (imageInfo) => {
+    const onActionUploadReturnProductImageFile = async (e) => {
+        e.preventDefault();
+
+        if(e.target.files.length === 0) return;
+
+        props.onActionOpenBackdrop();
+        let imageInfo = await __reqUploadBatchImageFile(e);
+        props.onActionCloseBackdrop();
+
         let erpOrderItem = orderItemList.filter(r => r.id === returnRegistrationInfo.erpOrderItemId)[0];
         let optionList = props.productOptionList?.map(r => r.option);
         let optionId = optionList?.filter(r => r.code === erpOrderItem.releaseOptionCode)[0]?.id;
-
+        
         let addData = imageInfo?.map(info => {
             return {
                 id: uuidv4(),
@@ -377,20 +382,11 @@ const OrderItemTableComponent = (props) => {
                 erpReturnItemId: returnRegistrationInfo.erpOrderItemId
             }
         });
-
+        
         dispatchReturnProductImageList({
             type: 'INIT_DATA',
             payload: addData
-        })
-    }
-
-    const onActionRemoveReturnProductImageFile = (imageId) => {
-        let imageFileList = returnProductImageList.filter(r => r.id !== imageId);
-
-        dispatchReturnProductImageList({
-            type: 'INIT_DATA',
-            payload: imageFileList
-        })
+        });
     }
 
     return (
@@ -588,8 +584,14 @@ const OrderItemTableComponent = (props) => {
                                         <button
                                             type='button'
                                             className='button-el'
-                                            onClick={onActionOpenReturnProductImageModal}
+                                            onClick={onActionClickReturnProductImageButton}
                                         >이미지 등록</button>
+                                        <input type="file" accept="image/*"
+                                            id={'rpi_uploader'}
+                                            onClick={(e) => e.target.value = ''}
+                                            onChange={onActionUploadReturnProductImageFile}
+                                            multiple
+                                        />
                                     </div>
                                     <span>({returnProductImageList?.length || 0} 개)</span>
                                 </div>
@@ -603,21 +605,6 @@ const OrderItemTableComponent = (props) => {
                 onConfirm={onActionConfirmReturn}
                 onClose={onActionCloseReturnConfirmModal}
             />
-
-            {/* 반품 이미지 등록 모달 */}
-            <CommonModalComponent
-                open={returnProductImageModalOpen}
-
-                onClose={onActionCloseReturnProductImageModal}
-            >
-                <ReturnProductImageModalComponent
-                    returnProductImageList={returnProductImageList}
-
-                    onActionAddReturnProductImage={onActionAddReturnProductImage}
-                    onActionCloseReturnProductImageModal={onActionCloseReturnProductImageModal}
-                    onActionRemoveReturnProductImageFile={onActionRemoveReturnProductImageFile}
-                ></ReturnProductImageModalComponent>
-            </CommonModalComponent>
         </>
     );
 }

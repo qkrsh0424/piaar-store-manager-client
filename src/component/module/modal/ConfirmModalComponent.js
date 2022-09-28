@@ -137,6 +137,10 @@ const MessageBox = styled.div`
         display: flex;
         align-items: center;
         gap: 10px;
+
+        input {
+            display: none;
+        }
     }
 
     .button-el {
