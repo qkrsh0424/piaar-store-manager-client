@@ -4,7 +4,8 @@ const Container = styled.div`
     overflow: auto;
     margin-bottom: 100px;
     padding: 20px;
-    max-width: 1280px;
+    /* max-width: 1280px; */
+    max-width: 1440px;
     margin-left: auto;
     margin-right: auto;
     overflow: hidden;
@@ -150,6 +151,11 @@ const TextInfoFieldWrapper = styled.div`
 
     @media screen and (max-width: 992px) {
         font-size: 12px;
+    }
+
+    .small-text {
+        font-size: 12px;
+        color: var(--erp-main-color);
     }
 `;
 

@@ -9,6 +9,9 @@ const Colgroup = ({  }) => {
             <col width={'100'}></col>
             <col width={'100'}></col>
             <col width={'100'}></col>
+            <col width={'100'}></col>
+            <col width={'100'}></col>
+            <col width={'100'}></col>
         </colgroup>
     );
 }
@@ -18,6 +21,9 @@ const TableHead = ({ }) => {
         <thead>
             <tr>
                 <th className="fixed-header" scope="col">유형</th>
+                <th className="fixed-header" scope="col">W7</th>
+                <th className="fixed-header" scope="col">W6</th>
+                <th className="fixed-header" scope="col">W5</th>
                 <th className="fixed-header" scope="col">W4</th>
                 <th className="fixed-header" scope="col">W3</th>
                 <th className="fixed-header" scope="col">W2</th>
@@ -46,7 +52,8 @@ const tableItem = [
     }
 ]
 
-const CYCLE_VIEW_WEEK = 4;
+// const CYCLE_VIEW_WEEK = 4;
+const CYCLE_VIEW_WEEK = 7;
 
 const TableBody = ({ cycleData, outOfStockIdList }) => {
     return (
@@ -66,7 +73,7 @@ const TableBody = ({ cycleData, outOfStockIdList }) => {
                                 <td key={'stock-cycle-idx' + idx}
                                     className={`${isOutOfStock ? 'td-highlight' : ''} ${isPromotionOption ? 'promotion-option' : ''}`}
                                 >
-                                    {cycleData[item.rowMatchItem + (4 - idx)]}
+                                    {cycleData[item.rowMatchItem + (CYCLE_VIEW_WEEK - idx)]}
                                 </td>
                             )
                         })}

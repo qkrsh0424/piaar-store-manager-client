@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useState } from 'react';
 import qs from 'query-string';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CommonModalComponent from '../../../module/modal/CommonModalComponent';
 import ViewHeaderSettingModalComponent from './view-header-setting-modal-v3/ViewHeaderSettingModal.component';
@@ -26,14 +26,65 @@ import { erpReleaseCompleteHeaderSocket } from '../../../../data_connect/socket/
 import CheckedHeadComponent from './checked-head/CheckedHead.component';
 import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
 import { returnReasonTypeDataConnect } from '../../../../data_connect/returnReasonTypeDataConnect';
-import { erpReturnItemDataConnect } from '../../../../data_connect/erpReturnItemDataConnect';
 import { erpReturnItemSocket } from '../../../../data_connect/socket/erpReturnItemSocket';
 
 const Container = styled.div`
     margin-bottom: 100px;
 `;
 
+const RouterFieldWrapper = styled.div`
+    display:flex;
+    justify-content: flex-end;
+    -webkit-justify-content:flex-end;
+    align-items: center;
+    overflow: auto;
+    margin-right: 15px;
+
+
+    .button-item{
+        width: 130px;
+        padding: 5px 0;
+        word-break: keep-all;
+
+        background: white;
+        border: 1px solid #00000000;
+        color: var(--erp-main-color);
+        font-weight: 600;
+        font-size: 14px;
+
+        cursor: pointer;
+
+        @media all and (max-width:992px){
+            font-size: 12px;
+        }
+    }
+`;
+
 const DEFAULT_HEADER_FIELDS = getDefaultHeaderFields();
+
+function RouterFieldView() {
+    return (
+        <RouterFieldWrapper>
+            <Link
+                to='/erp/return-management/registration'
+                // replace={true}
+            >
+                <button
+                    type='button'
+                    className={`button-item`}
+                >
+                    반품관리 바로가기
+                    <img
+                        src='/assets/icon/right_navigation_color_icon.png'
+                        style={{ width: '20px' }}
+                        alt=""
+                        loading='lazy'
+                    ></img>
+                </button>
+            </Link>
+        </RouterFieldWrapper>
+    )
+}
 
 const ReleaseCompleteComponent = (props) => {
     const location = useLocation();
@@ -939,6 +990,7 @@ const ReleaseCompleteComponent = (props) => {
                 <OrderItemTablePagenationComponent
                     orderItemPage={orderItemPage}
                 ></OrderItemTablePagenationComponent>
+                <RouterFieldView />
                 <CheckedHeadComponent
                     viewHeader={viewHeader}
                     checkedOrderItemList={checkedOrderItemList}

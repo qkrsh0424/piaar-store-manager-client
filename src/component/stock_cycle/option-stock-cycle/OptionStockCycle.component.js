@@ -27,9 +27,14 @@ function TextInfoFieldView({ element }) {
 }
 
 const CYCLE_TOTAL_WEEK = 7;
-const CYCLE_VIEW_WEEK = 4;
+// const CYCLE_VIEW_WEEK = 4;
+const CYCLE_VIEW_WEEK = 7;
 const CYCLE_AVERAGE_WEEK = 4;
 const STOCK_CYCLE_MINIMUM = 3;
+
+const SAFETY_STOCK_UNIT_VAR1 = 4;
+const SAFETY_STOCK_UNIT_VAR2 = 3;
+
 
 const OptionStockCycleComponent = (props) => {
     const [tableData, dispatchTableData] = useReducer(tableDataReducer, initialTableData);
@@ -98,11 +103,18 @@ const OptionStockCycleComponent = (props) => {
             let result = {...r};
             // 테이블에 표시할 주차 개수만큼 반복
             let totalSalesUnit = 0;
-
+            let maxSalesUnit = 0;
+            let averageSalesUnit = 0;
+            
             for(var i = 1; i <= CYCLE_VIEW_WEEK; i++) {
                 let salesSum = 0;
-                for (var j = 0; j < CYCLE_AVERAGE_WEEK; j++) {
-                    salesSum += parseInt(r['releaseForW' + (i + j)]);
+                for (var j = 0; j < CYCLE_AVERAGE_WEEK; j++) { 
+                    let releaseUnit = parseInt(r['releaseForW' + (i + j)]);
+                    salesSum += releaseUnit;
+                    
+                    if(maxSalesUnit < releaseUnit) {
+                        maxSalesUnit = releaseUnit;
+                    }
                 }
                 let salesAverage = (salesSum / CYCLE_AVERAGE_WEEK) || 1;
                 
@@ -118,9 +130,14 @@ const OptionStockCycleComponent = (props) => {
                 totalSalesUnit += result['releaseForW' + i];
             }
 
+            averageSalesUnit = totalSalesUnit / CYCLE_VIEW_WEEK;
+
+            let safetyStockUnit = parseInt((maxSalesUnit * SAFETY_STOCK_UNIT_VAR1) - (averageSalesUnit * SAFETY_STOCK_UNIT_VAR2));
+
             result = {
                 ...result,
-                totalSalesUnit
+                totalSalesUnit: totalSalesUnit || 0,
+                safetyStockUnit
             }
             return result;
         })
@@ -129,11 +146,6 @@ const OptionStockCycleComponent = (props) => {
             type: 'INIT_DATA',
             payload: data
         })
-
-        // dispatchTableViewData({
-        //     type: 'INIT_DATA',
-        //     payload: data
-        // })
 
         // W1의 재고주기로 위험군 세팅
         let outOfStockOption = data.filter(r => r.cycleForW1 <= STOCK_CYCLE_MINIMUM);
@@ -247,9 +259,12 @@ const OptionStockCycleComponent = (props) => {
                                                                             <span>안전재고 수량 : </span>
                                                                             <span>{r2.option.safetyStockUnit || 0}개</span>
                                                                         </div>
+                                                                        <div className='data-group small-text'>
+                                                                            <span>(예상 안전재고 : {r2.safetyStockUnit || 0}개)</span>
+                                                                        </div>
                                                                         <div className='data-group'>
-                                                                            <span>W1-4 판매수량 : </span>
-                                                                            <span>{r2.totalSalesUnit || 0}개</span>
+                                                                            <span>{`W1-${CYCLE_VIEW_WEEK} 판매수량 : `}</span>
+                                                                            <span>{r2.totalSalesUnit}개</span>
                                                                         </div>
                                                                     </div>
                                                                 }
