@@ -77,7 +77,7 @@ const SelectorComponent = (props) => {
             
             <div className='checkbox-wrapper'>
                 <CheckBoxField
-                    element={'미판매 상품 숨기기'}
+                    element={'(W1-8) 미판매 상품 숨기기'}
                     checked={props.hideNonReleaseOption}
                     name={'hideNonReleaseOption'}
                     onClick={onActionChangeHideNonReleaseOption}

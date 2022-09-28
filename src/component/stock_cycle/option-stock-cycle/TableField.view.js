@@ -21,6 +21,7 @@ const TableHead = ({ }) => {
         <thead>
             <tr>
                 <th className="fixed-header" scope="col">유형</th>
+                <th className="fixed-header" scope="col">W8</th>
                 <th className="fixed-header" scope="col">W7</th>
                 <th className="fixed-header" scope="col">W6</th>
                 <th className="fixed-header" scope="col">W5</th>
@@ -53,7 +54,7 @@ const tableItem = [
 ]
 
 // const CYCLE_VIEW_WEEK = 4;
-const CYCLE_VIEW_WEEK = 7;
+const CYCLE_VIEW_WEEK = 8;
 
 const TableBody = ({ cycleData, outOfStockIdList }) => {
     return (
