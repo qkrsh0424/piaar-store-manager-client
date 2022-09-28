@@ -33,6 +33,7 @@ const ReturnItemTableComponent = (props) => {
     const [returnProductImageModalOpen, setReturnProductImageModalOpen] = useState(false);
 
     const [returnReasonModalOpen, setReturnReasonModalOpen] = useState(false);
+    const [deliveryChargeReturnTypeModalOpen, setDeliveryChargeReturnTypeModalOpen] = useState(false);
 
     const [returnRejectConfirmModalOpen, setReturnRejectConfirmModalOpen] = useState(false);
     const [returnRejectCancelConfirmModalOpen, setReturnRejectCancelConfirmModalOpen] = useState(false);
@@ -310,6 +311,27 @@ const ReturnItemTableComponent = (props) => {
         props._onAction_changeReturnDeliveryCharge(data);
     }
 
+    const onActionOpenDeliveryChargeReturnTypeModalOpen = (e, itemId) => {
+        e.stopPropagation();
+
+        let data = returnItemList.filter(r => r.id === itemId)[0];
+
+        dispatchSelectedReturnItem({
+            type: 'SET_DATA',
+            payload: data
+        })
+        setDeliveryChargeReturnTypeModalOpen(true);
+    }
+
+    const onActionCloseDeliveryChargeReturnTypeModalOpen = () => {
+        setDeliveryChargeReturnTypeModalOpen(false);
+    }
+
+    const onActionConfirmDeliveryChargeReturnType = () => {
+        props._onSubmit_changeDeliveryChargeReturnTypeForReturnItem(selectedReturnItem);
+        onActionCloseDeliveryChargeReturnTypeModalOpen();
+    }
+
     return (
         <>
             <Container>
@@ -339,6 +361,7 @@ const ReturnItemTableComponent = (props) => {
                             onActionOpenReturnRejectConfirmModal={onActionOpenReturnRejectConfirmModal}
                             onActionOpenReturnRejectCancelConfirmModal={onActionOpenReturnRejectCancelConfirmModal}
                             onActionChangeReturnDeliveryChargeYn={onActionChangeReturnDeliveryChargeYn}
+                            onActionOpenDeliveryChargeReturnTypeModalOpen={onActionOpenDeliveryChargeReturnTypeModalOpen}
                         ></TableFieldView>
                     </>
                 }
@@ -449,6 +472,39 @@ const ReturnItemTableComponent = (props) => {
                 onConfirm={onActionCancelConfirmReturnReject}
                 onClose={onActionCloseReturnRejectCancelConfirmModal}
             ></ConfirmModalComponent>
+
+            {/* 반품배송비 입금방식 변경 모달 */}
+            <ConfirmModalComponent
+                open={deliveryChargeReturnTypeModalOpen}
+                title={'반품배송비 입금방식 변경'}
+                message={
+                    <>
+                        <div className='info-wrapper'>
+                            <div className='info-box'>
+                                <span className='input-title'>반품배송비 입금방식</span>
+                                <div>
+                                    <select
+                                        className='select-item'
+                                        name='deliveryChargeReturnType'
+                                        value={selectedReturnItem?.deliveryChargeReturnType || ''}
+                                        onChange={onChangeSelectedReturnItem}
+                                    >
+                                        <option value=''>선택</option>
+                                        <option value='환불금 차감'>환불금 차감</option>
+                                        <option value='직접송금'>직접송금</option>
+                                        <option value='상품동봉'>상품동봉</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div>선택된 데이터의 반품배송비 입금방식을 변경하시겠습니까?</div>
+                    </>
+                }
+
+                maxWidth={'sm'}
+                onConfirm={onActionConfirmDeliveryChargeReturnType}
+                onClose={onActionCloseDeliveryChargeReturnTypeModalOpen}
+            />
         </>
     );
 }

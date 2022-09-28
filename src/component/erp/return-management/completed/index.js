@@ -478,6 +478,19 @@ const CompletedComponent = (props) => {
             });
     }
 
+    const __reqChangeDeliveryChargeReturnType = async (body) => {
+        await erpReturnItemSocket().changeDeliveryChargeReturnType(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            });
+    }
+
     useEffect(() => {
         __reqSearchViewHeaderList();
         __reqSearchReturnTypeList();
@@ -769,6 +782,12 @@ const CompletedComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    const _onSubmit_changeDeliveryChargeReturnTypeForReturnItem = async (body) => {
+        onActionOpenBackdrop();
+        await __reqChangeDeliveryChargeReturnType(body);
+        onActionCloseBackdrop();
+    }
+
     return (
         <>
             {connected &&
@@ -803,6 +822,7 @@ const CompletedComponent = (props) => {
                         _onAction_reflectStock={_onAction_reflectStock}
                         _onAction_cancelStock={_onAction_cancelStock}
                         _onAction_changeReturnDeliveryCharge={_onAction_changeReturnDeliveryCharge}
+                        _onSubmit_changeDeliveryChargeReturnTypeForReturnItem={_onSubmit_changeDeliveryChargeReturnTypeForReturnItem}
                     ></ReturnItemTableComponent>
                     <ReturnItemTablePagenationComponent
                         returnItemPage={returnItemPage}

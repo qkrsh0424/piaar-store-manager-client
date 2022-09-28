@@ -71,6 +71,11 @@ const erpReturnItemSocket = () => {
             return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/delivery-charge-return-yn`, body, {
                 withCredentials: true
             })
+        },
+        changeDeliveryChargeReturnType: async function (body) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/delivery-charge-return-type`, body, {
+                withCredentials: true
+            })
         }
     }
 }

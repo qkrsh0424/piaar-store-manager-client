@@ -67,6 +67,30 @@ const FixOrderItemModalComponent = (props) => {
                                 );
                             }
 
+                            if(r.matchedColumnName === 'deliveryChargeReturnYn') {
+                                return (
+                                    <div
+                                        key={matchedColumnName}
+                                        className='input-box'
+                                    >
+                                        <div className='input-label'>
+                                            {r.originCellName}
+                                            {r.requiredFlag &&
+                                                <span style={{ color: 'red' }}> *</span>
+                                            }
+                                        </div>
+                                        <input
+                                            type='text'
+                                            className='input-el'
+                                            name={matchedColumnName}
+                                            value={props.fixTargetItem[matchedColumnName] === 'y' ? '입금완료' : '미입금'}
+                                            required={r.requiredFlag && true}
+                                            disabled
+                                        ></input>
+                                    </div>
+                                );
+                            }
+
                             return (
                                 <div
                                     key={matchedColumnName}

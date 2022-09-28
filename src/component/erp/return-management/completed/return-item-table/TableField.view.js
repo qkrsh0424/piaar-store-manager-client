@@ -222,6 +222,16 @@ export default function TableFieldView(props) {
                                                         <div>{r1[matchedColumnName] === 'y' ? '입금완료' : '미입금'}</div>
                                                     </td>
                                                 )
+                                            } else if (matchedColumnName === 'deliveryChargeReturnType') {
+                                                return (
+                                                    <td
+                                                        key={`col-${matchedColumnName}`}
+                                                        className='td-highlight'
+                                                        onClick={(e) => props.onActionOpenDeliveryChargeReturnTypeModalOpen(e, r1.id)}
+                                                    >
+                                                       {r1[matchedColumnName]}
+                                                    </td>
+                                                )
                                             }
                                             return (
                                                 <td key={`col-${matchedColumnName}`}>

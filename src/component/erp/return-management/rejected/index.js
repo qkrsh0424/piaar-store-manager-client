@@ -236,46 +236,6 @@ const RejectedComponent = (props) => {
             })
     }
 
-    const __reqChangeCollectCompleteYnForReturnItemListSocket = async function (body) {
-        await erpReturnItemSocket().changeCollectCompleteYnForList(body)
-            .catch(err => {
-                let res = err.response;
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data.memo);
-            })
-    }
-
-    const __reqChangeReturnCompleteYnForReturnItemListSocket = async function (body) {
-        await erpReturnItemSocket().changeReturnCompleteYnForList(body)
-            .catch(err => {
-                let res = err.response;
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data.memo);
-            })
-    }
-
-    // Delete
-    const __reqDeleteReturnItemListSocket = async function (params) {
-        await erpReturnItemSocket().deleteBatch(params)
-            .catch(err => {
-                let res = err.response;
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data.memo);
-            })
-    }
-
     const __reqChangeReturnReasonForReturnItem = async function (body) {
         await erpReturnItemSocket().changeReturnReason(body)
             .catch(err => {
@@ -380,6 +340,19 @@ const RejectedComponent = (props) => {
 
     const __reqChangeReturnDeliveryCharge = async (body) => {
         await erpReturnItemSocket().changeReturnDeliveryChargeYn(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            });
+    }
+
+    const __reqChangeDeliveryChargeReturnType = async (body) => {
+        await erpReturnItemSocket().changeDeliveryChargeReturnType(body)
             .catch(err => {
                 let res = err.response;
                 if (res?.status === 500) {
@@ -636,6 +609,12 @@ const RejectedComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    const _onSubmit_changeDeliveryChargeReturnTypeForReturnItem = async (body) => {
+        onActionOpenBackdrop();
+        await __reqChangeDeliveryChargeReturnType(body);
+        onActionCloseBackdrop();
+    }
+
     return (
         <>
             {connected &&
@@ -664,6 +643,7 @@ const RejectedComponent = (props) => {
                         _onSubmit_changeReturnReasonForReturnItem={_onSubmit_changeReturnReasonForReturnItem}
                         _onSubmit_changeReturnRejectYn={_onSubmit_changeReturnRejectYn}
                         _onAction_changeReturnDeliveryCharge={_onAction_changeReturnDeliveryCharge}
+                        _onSubmit_changeDeliveryChargeReturnTypeForReturnItem={_onSubmit_changeDeliveryChargeReturnTypeForReturnItem}
                     ></ReturnItemTableComponent>
                     <ReturnItemTablePagenationComponent
                         returnItemPage={returnItemPage}
