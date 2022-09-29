@@ -163,8 +163,8 @@ const searchInfoReducer = (state, action) => {
     switch(action.type) {
         case 'INIT_DATA':
             return { ...state,
-                storeName : 'total',
-                storeSalesUnit: 'totalSalesUnit',
+                storeName : 'erp',
+                storeSalesUnit: 'erpSalesUnit',
                 categoryName: 'total',
                 criterion: 'unit'
             }

@@ -24,7 +24,7 @@ export default function ListFieldView(props) {
     return (
         <ListFieldWrapper>
             {props.productOptionList?.map(r => {
-                if (r.option.managementName.includes(props.inputValue) || r.option.code.includes(props.inputValue) || r.product.managementName.includes(props.inputValue)) {
+                if (r.option.defaultName.includes(props.inputValue) || r.option.code.includes(props.inputValue) || r.product.defaultName.includes(props.inputValue)) {
                     return (
                         <button
                             key={r.option.id}
@@ -32,7 +32,7 @@ export default function ListFieldView(props) {
                             onClick={() => props.onActionOpenConfirmModal(r)}
                         >
                             <HighlightedText
-                                text={`[${r.option.code}]\n[${r.product.managementName}]\n[${r.option.managementName}]`}
+                                text={`[${r.option.code}]\n[${r.product.defaultName}]\n[${r.option.defaultName}]`}
                                 query={props.inputValue}
                             />
                         </button>

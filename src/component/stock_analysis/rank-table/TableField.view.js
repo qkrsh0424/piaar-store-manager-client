@@ -128,7 +128,7 @@ export default function TableFieldView(props) {
                                     </td>
                                     <td>
                                         <span>{(r.stockProperty)?.toLocaleString()}원 </span>
-                                        <span>({((r.stockProperty) / (props.totalStockInfo?.totalStockProperty || 1)).toFixed(2) * 100}%)</span>
+                                        <span>({((r.stockProperty) / (props.totalStockInfo?.totalStockProperty || 1) * 100).toFixed(2)}%)</span>
                                     </td>
                                     <td>
                                         <span>{(r.estimatedSalesPrice)?.toLocaleString()}원</span>

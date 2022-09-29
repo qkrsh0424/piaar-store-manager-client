@@ -230,10 +230,6 @@ const OptionStockCycleComponent = (props) => {
                                                     <div>: {r.product.defaultName}</div>
                                                 </div>
                                                 <div className='product-data-group'>
-                                                    <div>상품관리명 </div>
-                                                    <div>: {r.product.managementName}</div>
-                                                </div>
-                                                <div className='product-data-group'>
                                                     <div>옵션수량 </div>
                                                     <div>: 총 {r.options.length} 개</div>
                                                 </div>
@@ -264,13 +260,10 @@ const OptionStockCycleComponent = (props) => {
                                                                 element={
                                                                     <div>
                                                                         <div className='data-group'>
-                                                                            <span>{r2.option.code}</span>
+                                                                            <span>[{r2.option.code}]</span>
                                                                         </div>
                                                                         <div className='data-group'>
-                                                                            <span>{r2.option.defaultName}</span>
-                                                                        </div>
-                                                                        <div className='data-group'>
-                                                                            <span>{r2.option.managementName}</span>
+                                                                            <span>[{r2.option.defaultName}]</span>
                                                                         </div>
                                                                         <div className='data-group'>
                                                                             <span>안전재고 수량 : </span>

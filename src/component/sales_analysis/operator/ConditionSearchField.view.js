@@ -6,8 +6,8 @@ export default function ConditionSearchFieldView(props) {
             <div className="grid-box">
                 <select className="selector-style" onChange={(e) => props.onChangeSearchColumn(e)} value={props.searchInputValueState?.searchColumn}>
                     <option value="total">검색</option>
-                    <option value="salesProdManagementName">상품명</option>
-                    <option value="salesOptionManagementName">옵션명</option>
+                    <option value="salesProdDefaultName">상품명</option>
+                    <option value="salesOptionDefaultName">옵션명</option>
                     <option value="salesOptionCode">옵션코드</option>
                 </select>
 

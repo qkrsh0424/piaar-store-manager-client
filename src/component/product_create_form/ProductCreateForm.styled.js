@@ -462,7 +462,7 @@ const OptionPackageWrapper = styled.div`
         display: inline-block;
         transition: 0.15s;
 
-        :hover {
+        &:hover {
             background-color: #4c85b433;
         }
         

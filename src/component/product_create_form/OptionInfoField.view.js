@@ -138,7 +138,8 @@ export default function OptionInfoFieldView(props) {
                                                                 <option>옵션선택</option>
                                                                 {props.optionList?.map((option, index) => {
                                                                     return (
-                                                                        <option key={`cp-option-package-code-idx` + index} value={option.id}>{option.managementName} ({option.code})</option>
+                                                                        // <option key={`cp-option-package-code-idx` + index} value={option.id}>{option.managementName} ({option.code})</option>
+                                                                        <option key={`cp-option-package-code-idx` + index} value={option.id}>{option.defaultName} ({option.code})</option>
                                                                     )
                                                                 })}
                                                             </select>

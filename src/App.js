@@ -10,45 +10,17 @@ import { setUserLoadingTrue, setUserLoadingFalse, setUserInfo } from './redux/ac
 // component
 import FullPageLoading from './component/loading/FullPageLoading';
 import HomeMain from './component/home/HomeMain';
-import OrderConfirmMain from './component/order_confirm/OrderConfirmMain';
 import WaybillMain from './component/waybill/WaybillMain';
 import LoginMain from './component/login/LoginMain';
-import SalesRateNaverMain from './component/sales_rate/naver/SalesRateNaverMain';
-
-
-// component : shipment
-import SPackingListNaverMain from './component/shipment/packing-list/naver/SPackingListNaverMain';
-import SPackingListCoupangMain from './component/shipment/packing-list/coupang/SPackingListCoupangMain';
 
 // component : account book
 import AccountBookMain from './component/account_book/AccountBookMain';
 import IncomeMain from './component/account_book/IncomeMain';
 import ExpenditureMain from './component/account_book/ExpenditureMain';
 
-// component : product
-// import ProductManageMain from './component/product_manage/ProductManageMain';
-// import CreateMain from './component/product_manage/CreateMain';
-
-// component : delivery-ready
-import DeliveryReadyUploadNaverMain from './component/delivery_ready/naver/DeliveryReadyUploadNaverMain';
-import DeliveryReadyViewNaverMain from './component/delivery_ready/naver/DeliveryReadyViewNaverMain';
-import DeliveryReadyUploadCoupangMain from './component/delivery_ready/coupang/DeliveryReadyUploadCoupangMain';
-import DeliveryReadyViewCoupangMain from './component/delivery_ready/coupang/DeliveryReadyViewCoupangMain';
-
-// component : order-registration
-import OrderRegistrationNaverMain from './component/order_registration/naver/OrderRegistrationNaverMain';
-
-// product-information
-// import ProductDetailMain from './component/product_detail/ProductDetailMain';
-
-
 // data connect
 import { userDataConnect } from './data_connect/userDataConnect';
 import CommuteRecordMain from './component/commute_record/CommuteRecordMain';
-// import ExcelTranslatorMain from './component/excel_translator/ExcelTranslatorMain';
-import DeliveryReadyUploadPiaarMain from './component/delivery_ready/piaar/DeliveryReadyUploadPiaarMain';
-import DeliveryReadyViewPiaarMain from './component/delivery_ready/piaar/DeliveryReadyViewPiaarMain';
-// import SalesAnalysisMain from './component/sales_analysis/SalesAnalysisMain';
 
 // refactor
 import SalesAnalysisPage from './pages/sales_analysis/SalesAnalysisPage';
@@ -145,7 +117,7 @@ function App(props) {
                                             <Route path='/product-detail' element={<ProductDetailPage />} />
 
                                             {/* OrderManage */}
-                                            <Route path="/order-confirm" element={<OrderConfirmMain />} />
+                                            {/* <Route path="/order-confirm" element={<OrderConfirmMain />} /> */}
 
                                             <Route path="/waybill" element={<WaybillMain />} />
 
@@ -159,35 +131,35 @@ function App(props) {
                                             }
 
                                             {/* Sales Rate */}
-                                            <Route path='/sales-rate/naver' element={<SalesRateNaverMain />} />
+                                            {/* <Route path='/sales-rate/naver' element={<SalesRateNaverMain />} /> */}
 
                                             {/* refactor page 3 - /product/create -> /ex/product/create */}
                                             {/* <Route path='/ex/products/create' element={<CreateMain />} /> */}
                                             <Route path='/products/create' element={<ProductCreatePage />} />
 
                                             {/* Shipment */}
-                                            <Route path='/shipment/packing-list/naver' element={<SPackingListNaverMain />} />
+                                            {/* <Route path='/shipment/packing-list/naver' element={<SPackingListNaverMain />} />
 
-                                            <Route path='/shipment/packing-list/coupang' element={<SPackingListCoupangMain />} />
+                                            <Route path='/shipment/packing-list/coupang' element={<SPackingListCoupangMain />} /> */}
 
                                             {/* DeliveryReady - NAVER */}
-                                            <Route path='/delivery-ready/naver' element={<DeliveryReadyUploadNaverMain />} />
+                                            {/* <Route path='/delivery-ready/naver' element={<DeliveryReadyUploadNaverMain />} /> */}
 
                                             {/* DeliveryReady - COUPANG */}
-                                            <Route path='/delivery-ready/coupang' element={<DeliveryReadyUploadCoupangMain />} />
+                                            {/* <Route path='/delivery-ready/coupang' element={<DeliveryReadyUploadCoupangMain />} /> */}
 
                                             {/* DeliveryReady - PIAAR */}
-                                            <Route path='/delivery-ready/piaar' element={<DeliveryReadyUploadPiaarMain />} />
+                                            {/* <Route path='/delivery-ready/piaar' element={<DeliveryReadyUploadPiaarMain />} /> */}
 
-                                            {(userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) &&
+                                            {/* {(userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) &&
                                                 <>
                                                     <Route path='/delivery-ready/naver/view' element={<DeliveryReadyViewNaverMain />} />
                                                     <Route path='/delivery-ready/coupang/view' element={<DeliveryReadyViewCoupangMain />} />
                                                     <Route path='/delivery-ready/piaar/view' element={<DeliveryReadyViewPiaarMain />} />
                                                 </>
-                                            }
+                                            } */}
 
-                                            <Route path='/order-registration/naver' element={<OrderRegistrationNaverMain />} />
+                                            {/* <Route path='/order-registration/naver' element={<OrderRegistrationNaverMain />} /> */}
 
                                             <Route path='/commute-record' element={<CommuteRecordMain />} />
 

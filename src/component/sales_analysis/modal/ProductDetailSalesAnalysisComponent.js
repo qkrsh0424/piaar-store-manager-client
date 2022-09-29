@@ -259,10 +259,10 @@ const ProductDetailSalesAnalysisComponent = (props) => {
                                         <span>{r.optionRank} 위</span>
                                     </ItemData>
                                     <ItemData>
-                                        <span>{r.salesProdManagementName}</span>
+                                        <span>{r.salesProdDefaultName}</span>
                                     </ItemData>
                                     <ItemData>
-                                        <span>{r.salesOptionManagementName}</span>
+                                        <span>{r.salesOptionDefaultName}</span>
                                     </ItemData>
                                     <ItemData>
                                         <span>{r.salesOptionCode}</span>

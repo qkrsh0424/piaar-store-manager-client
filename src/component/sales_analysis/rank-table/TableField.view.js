@@ -35,10 +35,10 @@ export default function TableFieldView(props) {
                                         {index < 3 && <RankIcon rank={index + 1}><MilitaryTechIcon /></RankIcon>}
                                     </td>
                                     <td>
-                                        <span>{r.salesProdManagementName}</span>
+                                        <span>{r.salesProdDefaultName}</span>
                                     </td>
                                     <td>
-                                        <span>{r.salesOptionManagementName}</span>
+                                        <span>{r.salesOptionDefaultName}</span>
                                     </td>
                                     <td>
                                         <span>{r.salesOptionCode}</span>

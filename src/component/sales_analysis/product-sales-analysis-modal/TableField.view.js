@@ -31,10 +31,10 @@ export default function TableFieldView(props) {
                                         <span>{r.optionRank} 위</span>
                                     </td>
                                     <td>
-                                        <span>{r.salesProdManagementName}</span>
+                                        <span>{r.salesProdDefaultName}</span>
                                     </td>
                                     <td>
-                                        <span>{r.salesOptionManagementName}</span>
+                                        <span>{r.salesOptionDefaultName}</span>
                                     </td>
                                     <td>
                                         <span>{r.salesOptionCode}</span>

@@ -103,18 +103,18 @@ const OperatorComponent = (props) => {
         });
     }
 
-    const onChangeStoreSelector = (e) => {
-        let target = e.target.value;
-        let salesUnitName = target + 'SalesUnit';
+    // const onChangeStoreSelector = (e) => {
+    //     let target = e.target.value;
+    //     let salesUnitName = target + 'SalesUnit';
 
-        dispatchSelectedStoreInfoState({
-            type: 'SET_DATA',
-            payload: {
-                storeName: target,
-                storeSalesUnit: salesUnitName
-            }
-        });
-    }
+    //     dispatchSelectedStoreInfoState({
+    //         type: 'SET_DATA',
+    //         payload: {
+    //             storeName: target,
+    //             storeSalesUnit: salesUnitName
+    //         }
+    //     });
+    // }
 
     const onChangeCategorySelector = (e) => {
         let target = e.target.value;
@@ -170,7 +170,7 @@ const OperatorComponent = (props) => {
             <ConditionSelectorFieldView
                 productCategoryList={props.productCategoryList}
 
-                onChangeStoreSelector={(e) => onChangeStoreSelector(e)}
+                // onChangeStoreSelector={(e) => onChangeStoreSelector(e)}
                 onChangeCategorySelector={(e) => onChangeCategorySelector(e)}
                 onChangeCriterionSelector={(e) => onChangeCriterionSelector(e)}
             ></ConditionSelectorFieldView>
@@ -240,17 +240,15 @@ const selectedDateRangeReducer = (state, action) => {
 const selectedStoreInfoReducer = (state, action) => {
     switch(action.type) {
         case 'INIT_DATA':
-            return { ...state,
-                storeName : 'total',
-                storeSalesUnit: 'totalSalesUnit',
+            return { 
+                ...state,
+                storeSalesUnit: 'erpSalesUnit',
                 categoryName: 'total',
                 criterion: 'unit'
             }
         case 'SET_DATA':
             return{
                 ...state,
-                storeName: action.payload.storeName ?? state.storeName,
-                storeSalesUnit: action.payload.storeSalesUnit ?? state.storeSalesUnit,
                 categoryName: action.payload.categoryName ?? state.categoryName,
                 criterion: action.payload.criterion ?? state.criterion
             }

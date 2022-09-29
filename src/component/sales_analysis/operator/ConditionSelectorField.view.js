@@ -8,12 +8,12 @@ export default function ConditionSelectorFieldView(props) {
                 <div className="info-text">* 출고건이 아닌 주문건으로 기록됩니다.</div>
             </div>
             <div className="grid-box">
-                <select className="selector-style" onChange={(e) => props.onChangeStoreSelector(e)}>
-                    <option value='total'>스토어 전체</option>
-                    <option value='naver'>네이버</option>
-                    <option value='coupang'>쿠팡</option>
-                    <option value='erp'>피아르(ERP)</option>
-                </select>
+                {/* <select className="selector-style" onChange={(e) => props.onChangeStoreSelector(e)}> */}
+                    {/* <option value='total'>스토어 전체</option> */}
+                    {/* <option value='naver'>네이버</option>
+                    <option value='coupang'>쿠팡</option> */}
+                    {/* <option value='erp'>피아르(ERP)</option> */}
+                {/* </select> */}
 
                 <select className="selector-style" onChange={(e) => props.onChangeCategorySelector(e)}>
                     <option value='total'>카테고리 전체</option>

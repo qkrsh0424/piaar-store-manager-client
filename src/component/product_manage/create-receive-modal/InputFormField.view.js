@@ -9,9 +9,8 @@ export default function InputFormFieldView(props) {
                 <table className="table" style={{ tableLayout: 'fixed' }}>
                     <thead>
                         <tr>
-                            <th scope="col" width='200'>관리상품명</th>
+                            <th scope="col" width='200'>상품명</th>
                             <th scope="col" width='200'>옵션명</th>
-                            <th scope="col" width='200'>관리옵션명</th>
                             <th scope="col" width='100'>입고수량 <i className="icon-must" aria-label="필수항목"></i></th>
                         </tr>
                     </thead>
@@ -22,17 +21,12 @@ export default function InputFormFieldView(props) {
                                     <tr>
                                         <td>
                                             <div>
-                                                {data.product.managementName}
+                                                {data.product.defaultName}
                                             </div>
                                         </td>
                                         <td>
                                             <div>
                                                 {data.option.defaultName}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                {data.option.managementName}
                                             </div>
                                         </td>
                                         <td>

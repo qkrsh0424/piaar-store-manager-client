@@ -74,7 +74,7 @@ export default function ProductManageTableFieldView(props) {
                                     <th style={{ textAlign: 'left' }} rowSpan={product.options.length + 1}>
                                         <div>{product.product.defaultName}</div>
                                         <div>Code : {product.product.code}</div>
-                                        <div>M_Code : {product.product.manufacturingCode}</div>
+                                        {/* <div>M_Code : {product.product.manufacturingCode}</div> */}
                                     </th>
                                     <th style={{ textAlign: 'left' }} rowSpan={product.options.length + 1}>
                                         <div className="image-wrapper">
@@ -106,7 +106,7 @@ export default function ProductManageTableFieldView(props) {
                                         </th>
                                     }
                                     <th colSpan={12} style={{ background: '#7a7bda20', color: '#888' }}>
-                                        <div>{product.product.managementName}-{product.product.code}-{product.product.manufacturingCode}</div>
+                                        <div>{product.product.defaultName}-{product.product.code}-{product.product.manufacturingCode}</div>
                                     </th>
 
                                 </tr>
