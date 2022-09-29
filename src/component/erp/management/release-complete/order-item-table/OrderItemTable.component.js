@@ -11,6 +11,8 @@ import SelectorRadioFieldView from "./SelectorRadioField.view";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
 import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
 import { useImageFileUploaderHook } from "../../../../../hooks/uploader/useImageFileUploaderHook";
+import SubmitModalComponent from "../../../../module/modal/SubmitModalComponent";
+import { getDefaultDeliveryChargeReturnType } from "../../../../../static-data/erpReturnItemStaticData";
 
 function Tip({selectedMatchCode}) {
     return (
@@ -26,6 +28,8 @@ function Tip({selectedMatchCode}) {
         </TipFieldWrapper>
     );
 }
+
+const DEFAULT_DELIVERY_CHARGE_RETURN_TYPE = getDefaultDeliveryChargeReturnType();
 
 const OrderItemTableComponent = (props) => {
     const tableScrollRef = useRef();
@@ -338,16 +342,17 @@ const OrderItemTableComponent = (props) => {
         })
     }
 
-    const onActionConfirmReturn = () => {
+    const onActionConfirmReturn = (e) => {
+        e.preventDefault();
+
         if(!returnRegistrationInfo || !returnRegistrationInfo.returnReasonType) {
             alert('반품 요청 사유는 필수값입니다. 다시 시도해주세요.');
-            onActionCloseReturnConfirmModal();
             return;
         }
 
         // erp return item, 반품 상품 이미지 등록
         let data = {
-            eroReturnItemDto: returnRegistrationInfo,
+            erpReturnItemDto: returnRegistrationInfo,
             imageDtos: returnProductImageList
         }
 
@@ -479,8 +484,8 @@ const OrderItemTableComponent = (props) => {
                 ></ReleaseOptionCodeModalComponent>
             </CommonModalComponent>
 
-            {/* 반품 처리 확인 모달 */}
-            <ConfirmModalComponent
+            {/* 반품 처리 서밋 모달 */}
+            <SubmitModalComponent
                 open={returnConfirmModalOpen}
                 title={'반품 접수'}
                 message={
@@ -519,9 +524,11 @@ const OrderItemTableComponent = (props) => {
                                         required
                                     >
                                         <option value=''>선택</option>
-                                        <option value='환불금 차감'>환불금 차감</option>
-                                        <option value='직접송금'>직접송금</option>
-                                        <option value='상품동봉'>상품동봉</option>
+                                        {DEFAULT_DELIVERY_CHARGE_RETURN_TYPE.map((r, idx) => {
+                                            return(
+                                                <option key={'type-idx' + idx} value={r.typeName}>{r.typeName}</option>
+                                            )
+                                        })}
                                     </select>
                                 </div>
                             </div>
@@ -602,7 +609,7 @@ const OrderItemTableComponent = (props) => {
                 }
 
                 maxWidth={'sm'}
-                onConfirm={onActionConfirmReturn}
+                _onSubmit={onActionConfirmReturn}
                 onClose={onActionCloseReturnConfirmModal}
             />
         </>

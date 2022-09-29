@@ -1,6 +1,7 @@
 import { useReducer, useState } from "react";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
+import SubmitModalComponent from "../../../../module/modal/SubmitModalComponent";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
 import ReleaseListModalComponent from "../release-list-modal/ReleaseListModal.component";
 import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
@@ -18,6 +19,8 @@ const CheckedOperatorComponent = (props) => {
     const [reflectStockConfirmModalOpen, setReflectStockConfirmModalOpen] = useState(false);
     const [cancelStockConfirmModalOpen, setCancelStockConfirmModalOpen] = useState(false);
     const [releaseListModalOpen, setReleaseListModalOpen] = useState(false);
+
+    const [confirmModalInputValue, dispatchConfirmModalInputValue] = useReducer(confirmModalInputValueReducer, initialConfirmModalInputValue);
     
     const onActionOpenSalesConfirmModal = () => {
         if (props.checkedOrderItemList?.length <= 0) {
@@ -220,13 +223,14 @@ const CheckedOperatorComponent = (props) => {
     const onActionCloseReflectStockConfirmModal = (e) => {
         e.preventDefault();
         setReflectStockConfirmModalOpen(false);
+        dispatchConfirmModalInputValue({ type : 'CLEAR' })
     }
 
     // 재고 반영 서밋
-    const onSubmitReflectStock = (e, params) => {
+    const onSubmitReflectStock = (e) => {
         e.preventDefault();
 
-        props._onAction_reflectStock(params);
+        props._onAction_reflectStock(confirmModalInputValue);
         onActionCloseReflectStockConfirmModal(e);
     }
 
@@ -288,6 +292,16 @@ const CheckedOperatorComponent = (props) => {
 
     const onActionDownloadReleaseItemList = (data) => {
         props._onAction_downloadReleaseItemList(data);
+    }
+    
+    const onChangeConfirmModalInputValue = (e) => {
+        dispatchConfirmModalInputValue({
+            type: 'CHANGE_DATA',
+            payload: {
+                name: e.target.name,
+                value: e.target.value
+            }
+        })
     }
 
     return (
@@ -374,14 +388,21 @@ const CheckedOperatorComponent = (props) => {
                     onActionRegisterWaybill={onActionRegisterWaybill}
                 />
             </CommonModalComponent>
-            {/* 재고 반영 모달 */}
-            <ConfirmModalComponent
+             {/* 재고 반영 모달 */}
+            <SubmitModalComponent
                 open={reflectStockConfirmModalOpen}
                 title={'재고 반영 확인 메세지'}
-                message={`[ ${props.checkedOrderItemList?.length || 0} ] 건의 데이터를 재고 반영 하시겠습니까?`}
-                memo={true}
+                message={
+                    <>
+                        <div>{`[ ${props.checkedOrderItemList?.length || 0} ] 건의 데이터를 재고 반영 하시겠습니까?`}</div>
+                        <div className='memo-box'>
+                            <div className='form-title'>메모</div>
+                            <input type='text' placeholder='메모를 입력해주세요.' name='memo' onChange={onChangeConfirmModalInputValue} value={confirmModalInputValue?.memo || ''} />
+                        </div>
+                    </>
+                }
 
-                _onSubmit={(e, params) => onSubmitReflectStock(e, params)}
+                _onSubmit={onSubmitReflectStock}
                 onClose={onActionCloseReflectStockConfirmModal}
             />
             {/* 재고 취소 모달 */}
@@ -413,3 +434,19 @@ const CheckedOperatorComponent = (props) => {
     );
 }
 export default CheckedOperatorComponent;
+
+const initialConfirmModalInputValue = null;
+
+const confirmModalInputValueReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name] : action.payload.value
+            }
+        case 'CLEAR':
+            return initialConfirmModalInputValue;
+    }
+}

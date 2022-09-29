@@ -6,6 +6,8 @@ import CommonModalComponent from "../../../../module/modal/CommonModalComponent"
 import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
 import ReturnProductImageModalComponent from "../return-product-image-modal/ReturnProductImageModal.component";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
+import SubmitModalComponent from "../../../../module/modal/SubmitModalComponent";
+import { getDefaultDeliveryChargeReturnType } from "../../../../../static-data/erpReturnItemStaticData";
 
 function Tip() {
     return (
@@ -17,6 +19,8 @@ function Tip() {
         </TipFieldWrapper>
     );
 }
+
+const DEFAULT_DELIVERY_CHARGE_RETURN_TYPE = getDefaultDeliveryChargeReturnType();
 
 const ReturnItemTableComponent = (props) => {
 
@@ -40,18 +44,22 @@ const ReturnItemTableComponent = (props) => {
     const [reflectStockConfirmModalOpen, setReflectStockConfirmModalOpen] = useState(false);
     const [cancelStockConfirmModalOpen, setCancelStockConfirmModalOpen] = useState(false);
 
-    const [orderItemReleaseData, dispatchOrderItemReleaseData] = useReducer(orderItemReleaseDataReducer, initialOrderItemReleaseData);
+    const [confirmModalInputValue, dispatchConfirmModalInputValue] = useReducer(confirmModalInputValueReducer, initialConfirmModalInputValue);
 
     useEffect(() => {
         if(!props.orderItemReleaseData) {
             return;
         }
 
-        dispatchOrderItemReleaseData({
+        let data = {
+            memo: props.orderItemReleaseData.memo,
+            unit: props.orderItemReleaseData.releaseUnit
+        }
+        
+        dispatchConfirmModalInputValue({
             type: 'INIT_DATA',
-            payload: props.orderItemReleaseData
+            payload: data
         })
-
     }, [props.orderItemReleaseData])
 
     useEffect(() => {
@@ -266,21 +274,20 @@ const ReturnItemTableComponent = (props) => {
     const onActionCloseReflectStockConfirmModal = (e) => {
         e.preventDefault();
 
-        dispatchOrderItemReleaseData({ type : 'CLEAR' });
+        dispatchConfirmModalInputValue({ type: 'CLEAR' })
         setReflectStockConfirmModalOpen(false);
     }
 
     // 재고 반영 서밋
-    const onSubmitReflectStock = (e, params) => {
+    const onSubmitReflectStock = (e) => {
         e.preventDefault();
 
-        if (selectedReturnItem.erpOrderItem.unit < params.unit) {
+        if (selectedReturnItem.erpOrderItem.unit < confirmModalInputValue.unit) {
             alert('반품 재고반영 수량은 출고상품 수량보다 클 수 없습니다.\n반품 수량을 한번 더 확인해주세요.');
-            onActionCloseReflectStockConfirmModal(e);
             return;
         }
 
-        props._onAction_reflectStock(selectedReturnItem, params);
+        props._onAction_reflectStock(selectedReturnItem, confirmModalInputValue);
         onActionCloseReflectStockConfirmModal(e);
     }
 
@@ -299,7 +306,7 @@ const ReturnItemTableComponent = (props) => {
 
     // 재고 취소 모달 CLOSE
     const onActionCloseCancelStockConfirmModal = () => {
-        dispatchOrderItemReleaseData({ type : 'CLEAR' });
+        dispatchConfirmModalInputValue({ type: 'CLEAR' })
         setCancelStockConfirmModalOpen(false);
     }
 
@@ -332,14 +339,14 @@ const ReturnItemTableComponent = (props) => {
     const onActionCloseDefectiveProductConfirmModal = (e) => {
         e.preventDefault();
 
-        dispatchOrderItemReleaseData({ type : 'CLEAR' });
+        dispatchConfirmModalInputValue({ type : 'CLEAR' });
         setDefectiveProductConfirmModalOpen(false);
     }
 
-    const onSubmitDefectiveProduct = (e, params) => {
+    const onSubmitDefectiveProduct = (e) => {
         e.preventDefault();
 
-        props._onSubmit_reflectDefective(selectedReturnItem, params);
+        props._onSubmit_reflectDefective(selectedReturnItem, confirmModalInputValue);
         onActionCloseDefectiveProductConfirmModal(e);
     }
 
@@ -362,15 +369,15 @@ const ReturnItemTableComponent = (props) => {
     const onActionCloseDefectiveProductCancelConfirmModal = (e) => {
         e.preventDefault();
 
-        dispatchOrderItemReleaseData({ type : 'CLEAR' });
+        dispatchConfirmModalInputValue({ type : 'CLEAR' });
         setDefectiveProductCancelConfirmModalOpen(false);
     }
 
     // 불량상품 취소 처리
-    const onSubmitCancelDefectiveProduct = (e, params) => {
+    const onSubmitCancelDefectiveProduct = (e) => {
         e.preventDefault();
 
-        props._onSubmit_cancelDefective(selectedReturnItem, params);
+        props._onSubmit_cancelDefective(selectedReturnItem, confirmModalInputValue);
         onActionCloseDefectiveProductCancelConfirmModal(e);
     }
 
@@ -421,6 +428,16 @@ const ReturnItemTableComponent = (props) => {
     const onActionConfirmDeliveryChargeReturnType = () => {
         props._onSubmit_changeDeliveryChargeReturnTypeForReturnItem(selectedReturnItem);
         onActionCloseDeliveryChargeReturnTypeModalOpen();
+    }
+
+    const onChangeConfirmModalInputValue = (e) => {
+        dispatchConfirmModalInputValue({
+            type: 'CHANGE_DATA',
+            payload: {
+                name: e.target.name,
+                value: e.target.value
+            }
+        })
     }
 
     return (
@@ -541,15 +558,24 @@ const ReturnItemTableComponent = (props) => {
             />
 
             {/* 재고 반영 모달 */}
-            <ConfirmModalComponent
+            <SubmitModalComponent
                 open={reflectStockConfirmModalOpen}
                 title={'재고 반영 확인 메세지'}
-                message={`선택된 데이터를 재고 반영 하시겠습니까?`}
-                memo={true}
-                defaultMemo={orderItemReleaseData?.memo}
-                defaultUnit={orderItemReleaseData?.releaseUnit}
+                message={
+                    <>
+                        <div>선택된 데이터를 재고 반영 하시겠습니까?</div>
+                        <div className='memo-box'>
+                            <div className='form-title'>메모</div>
+                            <input type='text' placeholder='메모를 입력해주세요.' name='memo' onChange={onChangeConfirmModalInputValue} value={confirmModalInputValue?.memo || ''} />
+                        </div>
+                        <div className='memo-box'>
+                            <div className='form-title'>반품수량</div>
+                            <input type='number' placeholder='반품수량을 입력해주세요.' name='unit' onChange={onChangeConfirmModalInputValue} value={confirmModalInputValue?.unit || ''}></input>
+                        </div>
+                    </>
+                }
 
-                _onSubmit={(e, params) => onSubmitReflectStock(e, params)}
+                _onSubmit={onSubmitReflectStock}
                 onClose={onActionCloseReflectStockConfirmModal}
             />
 
@@ -564,36 +590,40 @@ const ReturnItemTableComponent = (props) => {
             />
 
             {/* 불량상품 확인 모달 */}
-            <ConfirmModalComponent
+            <SubmitModalComponent
                 open={defectiveProductConfirmModalOpen}
                 title={'불량상품 확인 메세지'}
                 message={
                     <>
                         <div>선택된 데이터를 불량상품으로 등록하시겠습니까?</div>
+                        <div className='memo-box'>
+                            <div className='form-title'>메모</div>
+                            <input type='text' placeholder='메모를 입력해주세요.' name='memo' onChange={onChangeConfirmModalInputValue} value={confirmModalInputValue?.memo || ''} />
+                        </div>
                     </>
                 }
-                memo={true}
-                defaultMemo={orderItemReleaseData?.memo}
 
-                _onSubmit={(e, params) => onSubmitDefectiveProduct(e, params)}
+                _onSubmit={onSubmitDefectiveProduct}
                 onClose={onActionCloseDefectiveProductConfirmModal}
-            ></ConfirmModalComponent>
+            ></SubmitModalComponent>
 
             {/* 불량상품 취소 확인 모달 */}
-            <ConfirmModalComponent
+            <SubmitModalComponent
                 open={defectiveProductCancelConfirmModalOpen}
                 title={'불량상품 취소 확인 메세지'}
                 message={
                     <>
                         <div>선택된 데이터를 불량상품 취소하시겠습니까?</div>
+                        <div className='memo-box'>
+                            <div className='form-title'>메모</div>
+                            <input type='text' placeholder='메모를 입력해주세요.' name='memo' onChange={onChangeConfirmModalInputValue} value={confirmModalInputValue?.memo || ''} />
+                        </div>
                     </>
                 }
-                memo={true}
-                defaultMemo={orderItemReleaseData?.memo}
 
-                _onSubmit={(e, params) => onSubmitCancelDefectiveProduct(e, params)}
+                _onSubmit={onSubmitCancelDefectiveProduct}
                 onClose={onActionCloseDefectiveProductCancelConfirmModal}
-            ></ConfirmModalComponent>
+            ></SubmitModalComponent>
 
             {/* 반품배송비 입금방식 변경 모달 */}
             <ConfirmModalComponent
@@ -612,9 +642,11 @@ const ReturnItemTableComponent = (props) => {
                                         onChange={onChangeSelectedReturnItem}
                                     >
                                         <option value=''>선택</option>
-                                        <option value='환불금 차감'>환불금 차감</option>
-                                        <option value='직접송금'>직접송금</option>
-                                        <option value='상품동봉'>상품동봉</option>
+                                        {DEFAULT_DELIVERY_CHARGE_RETURN_TYPE.map((r, idx) => {
+                                            return(
+                                                <option key={'type-idx' + idx} value={r.typeName}>{r.typeName}</option>
+                                            )
+                                        })}
                                     </select>
                                 </div>
                             </div>
@@ -637,7 +669,7 @@ const initialViewSize = 50;
 const initialFixTargetItem = null;
 const initialReturnItemList = [];
 const initialSelectedReturnItem = null;
-const initialOrderItemReleaseData = null;
+const initialConfirmModalInputValue = null;
 
 const viewSizeReducer = (state, action) => {
     switch (action.type) {
@@ -687,12 +719,16 @@ const selectedReturnItemReducer = (state, action) => {
     }
 }
 
-const orderItemReleaseDataReducer = (state, action) => {
+const confirmModalInputValueReducer = (state, action) => {
     switch (action.type) {
         case 'INIT_DATA':
             return action.payload;
+        case 'CHANGE_DATA':
+            return {
+                ...state,
+                [action.payload.name] : action.payload.value
+            }
         case 'CLEAR':
-            return initialOrderItemReleaseData;
-        default: return initialOrderItemReleaseData;
+            return initialConfirmModalInputValue;
     }
 }

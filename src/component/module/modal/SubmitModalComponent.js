@@ -1,5 +1,4 @@
 import { Dialog } from '@mui/material';
-import { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { useDisabledButtonHook } from '../../../hooks/button_disabled/useDisabledButtonHook';
 
@@ -152,6 +151,31 @@ const MessageBox = styled.div`
         font-weight: 600;
         width: 100%;
     }
+
+    .memo-box {
+        padding: 15px;
+        font-size: 14px;
+        display: grid;
+        width: 100%;
+        grid-template-columns: 100px auto;
+        align-items: center;
+
+        .form-title {
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        input {
+            height: 30px;
+            border: 1px solid #bdbdbd;
+            padding: 10px;
+            font-size: 14px;
+            box-sizing: border-box;
+            border-radius: 3px;
+        }
+    }
 `;
 
 const MemoBox = styled.div`
@@ -200,12 +224,19 @@ const ButtonBox = styled.div`
     }
 `;
 
-const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, onClose, title, message, memo, defaultUnit, defaultMemo, ...props }) => {
+const SubmitModalComponent = ({ open, fullWidth, maxWidth, _onSubmit, onClose, title, message, ...props }) => {
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
-    const _onConfirm = () => {
+    const _onClose = (e) => {
+        e.preventDefault();
+        onClose(e);
+    }
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+
         setButtonDisabled(true);
-        onConfirm();
+        await _onSubmit(e);
     }
 
     return (
@@ -214,7 +245,7 @@ const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, onClose, 
                 open={open || false}
                 fullWidth={fullWidth || true}
                 maxWidth={maxWidth || 'xs'}
-                onClose={(e) => onClose(e) || {}}
+                onClose={(e) => _onClose(e) || {}}
             >
                 <TitleBox>
                     {title || '확인메세지'}
@@ -222,25 +253,27 @@ const ConfirmModalComponent = ({ open, fullWidth, maxWidth, onConfirm, onClose, 
                 <MessageBox>
                     {message || '정말로 판매 전환 하시겠습니까?'}
                 </MessageBox>
-                <ButtonWrapper>
-                    <ButtonBox>
-                        <button
-                            className='button-item'
-                            style={{ color: '#d15120' }}
-                            onClick={() => onClose() || {}}
-                        >취소</button>
-                    </ButtonBox>
-                    <ButtonBox>
-                        <button
-                            className='button-item'
-                            style={{ color: '#2d7ed1' }}
-                            onClick={(e) => _onConfirm(e)}
-                            disabled={buttonDisabled}
-                        >확인</button>
-                    </ButtonBox>
-                </ButtonWrapper>
+                <form onSubmit={(e) => onSubmit(e)}>
+                    <ButtonWrapper>
+                        <ButtonBox>
+                            <button
+                                className='button-item'
+                                style={{ color: '#d15120' }}
+                                onClick={(e) => _onClose(e) || {}}
+                            >취소</button>
+                        </ButtonBox>
+                        <ButtonBox>
+                            <button
+                                type='submit'
+                                className='button-item'
+                                style={{ color: '#2d7ed1' }}
+                                disabled={buttonDisabled}
+                            >확인</button>
+                        </ButtonBox>
+                    </ButtonWrapper>
+                </form>
             </Dialog>
         </>
     );
 }
-export default ConfirmModalComponent;
+export default SubmitModalComponent;

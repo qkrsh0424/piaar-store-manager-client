@@ -165,6 +165,21 @@ const staticDefaultHeaderDetails = [
     }
 ];
 
+const staticDefaultDeliveryChargeReturnType = [
+    {
+        "index": 1,
+        "typeName": "환불금 차감"
+    },
+    {
+        "index": 2,
+        "typeName": "직접송금"
+    },
+    {
+        "index": 3,
+        "typeName": "상품동봉"
+    }
+]
+
 function getReturnDefaultHeaderDetails() {
     let orderDetails = getDefaultHeaderDetails().map(r => {
         return {
@@ -190,7 +205,14 @@ function getReturnDefaultHeaderFields() {
     return result;
 }
 
+function getDefaultDeliveryChargeReturnType() {
+    let result = [...staticDefaultDeliveryChargeReturnType];
+
+    return result;
+}
+
 export {
     getReturnDefaultHeaderDetails,
-    getReturnDefaultHeaderFields
+    getReturnDefaultHeaderFields,
+    getDefaultDeliveryChargeReturnType
 }

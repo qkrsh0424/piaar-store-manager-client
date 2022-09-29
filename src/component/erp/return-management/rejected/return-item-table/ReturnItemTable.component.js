@@ -7,6 +7,7 @@ import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModa
 import ReturnProductImageModalComponent from "../return-product-image-modal/ReturnProductImageModal.component";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
 import _ from "lodash";
+import { getDefaultDeliveryChargeReturnType } from "../../../../../static-data/erpReturnItemStaticData";
 
 function Tip() {
     return (
@@ -18,6 +19,8 @@ function Tip() {
         </TipFieldWrapper>
     );
 }
+
+const DEFAULT_DELIVERY_CHARGE_RETURN_TYPE = getDefaultDeliveryChargeReturnType();
 
 const ReturnItemTableComponent = (props) => {
 
@@ -490,9 +493,11 @@ const ReturnItemTableComponent = (props) => {
                                         onChange={onChangeSelectedReturnItem}
                                     >
                                         <option value=''>선택</option>
-                                        <option value='환불금 차감'>환불금 차감</option>
-                                        <option value='직접송금'>직접송금</option>
-                                        <option value='상품동봉'>상품동봉</option>
+                                        {DEFAULT_DELIVERY_CHARGE_RETURN_TYPE.map((r, idx) => {
+                                            return(
+                                                <option key={'type-idx' + idx} value={r.typeName}>{r.typeName}</option>
+                                            )
+                                        })}
                                     </select>
                                 </div>
                             </div>

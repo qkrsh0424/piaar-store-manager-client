@@ -280,11 +280,11 @@ const OptionStockCycleComponent = (props) => {
                                                                             <span>(예상 안전재고 : {r2.anticipateSafetyStockUnit || 0}개)</span>
                                                                         </div>
                                                                         <div className='data-group'>
-                                                                            <span>{`W1-${CYCLE_VIEW_WEEK / 2} 판매수량 : `}</span>
+                                                                            <span>W1-4 판매수량 : </span>
                                                                             <span>{r2.totalSalesUnitForW1To4}개</span>
                                                                         </div>
                                                                         <div className='data-group'>
-                                                                            <span>{`W1-${CYCLE_VIEW_WEEK} 판매수량 : `}</span>
+                                                                            <span>W5-8 판매수량 : </span>
                                                                             <span>{r2.totalSalesUnitForW5To8}개</span>
                                                                         </div>
                                                                     </div>
