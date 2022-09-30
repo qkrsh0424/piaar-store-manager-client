@@ -21,7 +21,7 @@ export default function OptionInfoTableFieldView(props) {
                             <span className="info-text">{props.selectedOption.defaultName}</span>
                         </div>
                         <div className="grid-span-2">
-                            <span>관리 옵션명 :</span>
+                            <span>옵션설명 :</span>
                             <span className="info-text">{props.selectedOption.managementName}</span>
                         </div>
                         <div className="grid-span-2">

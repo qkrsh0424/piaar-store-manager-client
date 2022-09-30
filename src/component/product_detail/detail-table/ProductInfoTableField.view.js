@@ -21,7 +21,7 @@ export default function ProductInfoTableFieldView(props) {
                             <span className="info-text">{props.selectedProduct.defaultName}</span>
                         </div>
                         <div className="grid-span-2">
-                            <span>관리 상품명 :</span>
+                            <span>상품설명 :</span>
                             <span className="info-text">{props.selectedProduct.managementName}</span>
                         </div>
                         <div className="grid-span-2">

@@ -288,7 +288,7 @@ const ProductCreateFormComponent = (props) => {
         }
 
         if (createProductData.managementName == '' || createProductData.managementName == null || createProductData.managementName == undefined) {
-            alert('상품관리명을 한번더 확인해 주세요.')
+            alert('상품설명을 한번더 확인해 주세요.')
             return false;
         }
 
@@ -301,7 +301,7 @@ const ProductCreateFormComponent = (props) => {
             }
 
             if (option.managementName == '' || option.managementName == null || option.managementName == undefined) {
-                alert('옵션관리명을 한번더 확인해 주세요.')
+                alert('옵션설명을 한번더 확인해 주세요.')
                 return false;
             }
 

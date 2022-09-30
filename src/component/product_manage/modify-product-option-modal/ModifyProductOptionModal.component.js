@@ -129,7 +129,7 @@ const ModifyProductOptionModalComponent = (props) => {
         }
 
         if (modifyOption.managementName == null || modifyOption.managementName == undefined || modifyOption.managementName == '') {
-            alert('관리상품명은 필수항목입니다.');
+            alert('상품설명은 필수항목입니다.');
             return false;
         }
 

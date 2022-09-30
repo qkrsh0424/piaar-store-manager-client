@@ -25,7 +25,7 @@ export default function OptionInfoFormFieldView(props) {
                 <div className="input-group mb-3">
                     <div className="input-group-prepend">
                         <span className="input-group-text">
-                            관리옵션명
+                            옵션설명
                             <i className="icon-must" aria-label="필수항목"></i>
                         </span>
                     </div>

@@ -674,8 +674,8 @@ const staticDefaultHeaderDetails2 = [
         ]
     },
     {
-        "originCellName": "$피아르 상품관리명",
-        "customCellName": "$피아르 상품관리명",
+        "originCellName": "$피아르 상품설명",
+        "customCellName": "$피아르 상품설명",
         "matchedColumnName": "prodManagementName",
         "allowedSearch": true,
         "requiredFlag": false,
@@ -706,8 +706,8 @@ const staticDefaultHeaderDetails2 = [
         ]
     },
     {
-        "originCellName": "$피아르 옵션관리명",
-        "customCellName": "$피아르 옵션관리명",
+        "originCellName": "$피아르 옵션설명",
+        "customCellName": "$피아르 옵션설명",
         "matchedColumnName": "optionManagementName",
         "allowedSearch": true,
         "requiredFlag": false,

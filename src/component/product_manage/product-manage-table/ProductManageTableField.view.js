@@ -32,7 +32,7 @@ export default function ProductManageTableFieldView(props) {
                         <th className='fixedHeader' scope="col" width='100'>세트상품 여부</th>
                         {/* <th className='fixedHeader' scope="col" width='150'>노스노스 고유코드</th> */}
                         <th className='fixedHeader' scope="col" width='200'>옵션명</th>
-                        <th className='fixedHeader' scope="col" width='200'>옵션관리명</th>
+                        <th className='fixedHeader' scope="col" width='200'>옵션설명</th>
                         <th className='fixedHeader' scope="col" width='100'>재고수량</th>
                         <th className='fixedHeader' scope="col" width='150'>현재상태</th>
                         {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&

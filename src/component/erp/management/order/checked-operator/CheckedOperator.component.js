@@ -17,8 +17,8 @@ function TableFieldView({salesConfirmItem, selectedMatchCode}) {
                     <thead>
                         <tr className='fixed-header'>
                             <th width='200'><span className='highlight'>{selectedMatchCode === 'optionCode' ? '피아르 옵션코드' : '출고 옵션코드'}</span></th>
-                            <th width='200'>$피아르 상품관리명</th>
-                            <th width='200'>$피아르 옵션관리명</th>
+                            <th width='200'>$피아르 상품명</th>
+                            <th width='200'>$피아르 옵션명</th>
                             <th width='150'>총 판매전환 수량</th>
                             <th width='150'>$재고수량</th>
                             <th width='150' style={{color: '#ff4949'}}>[판매 부족 수량]</th>

@@ -21,7 +21,7 @@ export default function DefaultInfoFieldView(props) {
                 <div className="input-group mb-3">
                     <div className="input-group-prepend">
                         <span className="input-group-text">
-                            관리상품명
+                            상품설명
                             <i className="icon-must" aria-label="필수항목"></i>
                         </span>
                     </div>

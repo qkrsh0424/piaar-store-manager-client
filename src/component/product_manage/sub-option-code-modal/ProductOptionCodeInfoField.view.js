@@ -12,7 +12,7 @@ const ProductOptionCodeInfoFieldView = (props) => {
                 <div>{props.optionData.defaultName}</div>
             </div>
             <div className='info-group'>
-                <div className='info-name'>옵션관리명</div>
+                <div className='info-name'>옵션설명</div>
                 <div>{props.optionData.managementName}</div>
             </div>
         </ProductOptionCodeInfoWrapper>
