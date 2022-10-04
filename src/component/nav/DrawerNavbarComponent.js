@@ -55,12 +55,11 @@ export default function DrawerNavbarComponent(props) {
                         <CustomLink to='/'>
                             PiAAR Management Sys.
                         </CustomLink>
-
                     </Typography>
-                    {userRdx.isLoading === false && 
-                    <UserInfoText>
-                        {userRdx?.userInfo.username} 님 <span><SentimentSatisfiedAltIcon /></span>
-                    </UserInfoText>
+                    {userRdx.isLoading === false &&
+                        <UserInfoText>
+                            {userRdx?.userInfo.username} 님 <span><SentimentSatisfiedAltIcon /></span>
+                        </UserInfoText>
                     }
                 </Toolbar>
             </AppBar>

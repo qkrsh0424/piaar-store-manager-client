@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 import Drawer from '@material-ui/core/Drawer';
 
 const Container = styled.div`
+
 `;
+
 const ContentContainer = styled.div`
     padding:50px 0;
 `;
@@ -105,13 +107,25 @@ const DrawerNavbarSiderComponent = (props) => {
                                         <CustomLink to='/erp/management/order-upload'>피아르 주문&출고 관리</CustomLink>
                                     </LinkContainer>
                                     <LinkContainer>
-                                        <CustomLink to='/commute-record'>출퇴근기록</CustomLink>
+                                        <CustomLink to='/erp/return-management/registration'>피아르 반품 관리</CustomLink>
+                                    </LinkContainer>
+                                    <LinkContainer>
+                                        <CustomLink to='/sales-performance'>판매 성과</CustomLink>
+                                    </LinkContainer>
+                                    <LinkContainer>
+                                        <CustomLink to='/sales-analysis'>판매 랭킹</CustomLink>
+                                    </LinkContainer>
+                                    <LinkContainer>
+                                        <CustomLink to='/stock-analysis'>재고 자산</CustomLink>
+                                    </LinkContainer>
+                                    <LinkContainer>
+                                        <CustomLink to='/stock-cycle'>재고 주기</CustomLink>
                                     </LinkContainer>
                                     <LinkContainer>
                                         <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
                                     </LinkContainer>
                                     <LinkContainer>
-                                        <CustomLink to='/sales-analysis'>판매 랭킹</CustomLink>
+                                        <CustomLink to='/commute-record'>출퇴근기록</CustomLink>
                                     </LinkContainer>
 
                                     {/* <LinkContainer>
