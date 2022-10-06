@@ -1,32 +1,51 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-    padding: 50px 0;
+    padding: 30px 10px 150px 10px;
     overflow: auto;
-    padding-bottom: 150px;
     max-width: 1280px;
     margin: 0 auto;
-    overflow: hidden;
+
+    .slide-up {
+        /* animation: dropdown-slide-up 0.3s ease-in-out; */
+        display: none;
+    }
+
+    .slide-down {
+        /* height: auto !important;
+        animation: dropdown-slide-down 0.3s ease-in-out; */
+        display: block;
+    }
+`;
+
+const PageTitleFieldWrapper = styled.div`
+    padding: 10px;
+    font-size: 1.4rem;
+    font-weight: 700;
 `;
 
 const CategorySelectorWrapper = styled.div`
     padding-top: 15px;
-    
+
     .title-wrapper {
-        border: 1px solid #888;
-        border-radius: 4px;
+        position: relative;
+        z-index: 10;
+        background-color: white;
+        border: 1px solid #dbdde2;
+        /* border-radius: 4px; */
         display: flex;
         justify-content: space-between;
         align-items: center;
+        cursor: pointer;
     }
 
     .title-box {
         font-size: 1.3rem;
         font-weight: 600;
         padding:15px;
-        
-        @media only screen and (max-width:425px){
-            padding: 15px 0;
+
+        @media only screen and (max-width:992px){
+            font-size: 1rem;
         }
     }
 
@@ -56,18 +75,24 @@ const CategorySelectorWrapper = styled.div`
         padding: 0;
 
         background: white;
-        border: 1px solid #888;
+        border: 1px solid white;
         border-radius: 3px;
 
         cursor: pointer;
     }
 
     .body-wrapper {
-        display: flex;
-        align-items: center;
+        background-color: white;
+        position: relative;
+        /* height: 0px; */
+        top: -5px;
+        border: 1px solid #dbdde2;
+        /* border-radius: 4px; */
+        overflow: hidden;
+    }
+
+    .body-wrapper .inner-wrapper {
         padding: 20px 30px;
-        border: 1px solid #888;
-        border-radius: 4px;
     }
 
     .select-item {
@@ -97,11 +122,15 @@ const ProductInfoInputWrapper = styled.div`
     padding-top: 15px;
     
     .title-wrapper {
-        border: 1px solid #888;
-        border-radius: 4px;
+        position: relative;
+        z-index: 10;
+        background-color: white;
+        border: 1px solid #dbdde2;
+        /* border-radius: 4px; */
         display: flex;
         justify-content: space-between;
         align-items: center;
+        cursor: pointer;
     }
 
     .title-box {
@@ -109,8 +138,8 @@ const ProductInfoInputWrapper = styled.div`
         font-weight: 600;
         padding:15px;
         
-        @media only screen and (max-width:425px){
-            padding: 15px 0;
+        @media only screen and (max-width:992px){
+            font-size: 1rem;
         }
     }
 
@@ -140,16 +169,24 @@ const ProductInfoInputWrapper = styled.div`
         padding: 0;
 
         background: white;
-        border: 1px solid #888;
+        border: 1px solid white;
         border-radius: 3px;
 
         cursor: pointer;
     }
 
     .body-wrapper {
+        background-color: white;
+        position: relative;
+        /* height: 0px; */
+        top: -5px;
+        border: 1px solid #dbdde2;
+        /* border-radius: 4px; */
+        overflow: hidden;
+    }
+
+    .body-wrapper .inner-wrapper {
         padding: 20px 30px;
-        border: 1px solid #888;
-        border-radius: 4px;
     }
 
     .image-wrapper {
@@ -161,19 +198,40 @@ const ProductInfoInputWrapper = styled.div`
         padding-bottom: 100%; // 1:1
     }
 
+    .image-box .image-control-box {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        bottom: 0px;
+        z-index: 10;
+        width: 100%;
+        background-color: #0909093b;
+        border-radius: 0 0 4px 4px;
+    }
+
+    .image-control-box .button-el {
+        width: 50%;
+        border: none;
+        background: none;
+        border-radius: 0;
+        transition: 0.2s;
+
+        :hover {
+            background-color: #09090985;
+        }
+    }
+
+    .image-box input {
+        display: none;
+    }
+
     .image-box img {
         position: absolute;
         object-fit: cover;
         width: 100%;
         height: 100%;
-        transition: .2s;
         border:1px solid #cccaca;
         border-radius: 5px;
-        cursor: pointer;
-
-        :hover {
-            opacity: 0.3;
-        }
     }
 
     .body-wrapper .input-group {
@@ -192,19 +250,36 @@ const ProductInfoInputWrapper = styled.div`
         width: 200px;
         padding: 10px;
         font-weight: 500;
+
+        @media screen and (max-width: 992px) {
+            font-size: 14px;
+        }
     }
 
     .body-wrapper .input-group input {
         flex: 1;
         border: 1px solid #cccaca;
-        border-radius: 4px;
+        /* border-radius: 4px; */
         padding: 0 5px;
         height: 40px;
     }
 
     .stock-reflect-btn .button-el {
         width: 200px;
-        margin-right: 5px;
+        border-radius: 0;
+        transition: 0.1s;
+        border: 1px solid #cccaca;
+
+        :hover {
+            background-color: var(--piaar-main-color);
+            color: white;
+        }
+    }
+
+    .btn-active {
+        background-color: var(--piaar-main-color);
+        font-weight: 600;
+        color: white
     }
 `;
 
@@ -212,11 +287,15 @@ const OptionInfoInputWrapper = styled.div`
     padding-top: 15px;
 
     .title-wrapper {
-        border: 1px solid #888;
-        border-radius: 4px;
+        position: relative;
+        z-index: 10;
+        background-color: white;
+        border: 1px solid #dbdde2;
+        /* border-radius: 4px; */
         display: flex;
         justify-content: space-between;
         align-items: center;
+        cursor: pointer;
     }
 
     .title-box {
@@ -224,8 +303,8 @@ const OptionInfoInputWrapper = styled.div`
         font-weight: 600;
         padding:15px;
         
-        @media only screen and (max-width:425px){
-            padding: 15px 0;
+        @media only screen and (max-width:992px){
+            font-size: 1rem;
         }
     }
 
@@ -255,21 +334,38 @@ const OptionInfoInputWrapper = styled.div`
         padding: 0;
 
         background: white;
-        border: 1px solid #888;
+        border: 1px solid white;
         border-radius: 3px;
 
         cursor: pointer;
     }
 
     .body-wrapper {
-        padding: 20px 30px;
-        border: 1px solid #888;
-        border-radius: 4px;
+        position: relative;
+        background-color: white;
+        /* height: 0px; */
+        top: -5px;
+        border: 1px solid #dbdde2;
+        /* border-radius: 4px; */
+        overflow: hidden;
     }
 
     .body-wrapper .batch-reg-box {
-        width: 70%;
+        width: 80%;
         margin: 0 auto;
+        border: 1px solid #dfdfdf;
+        /* padding: 20px 40px; */
+        border-radius: 4px;
+        overflow: auto;
+
+        @media screen and (max-width: 992px){
+            width: 100%;
+            padding: 20px;
+        }
+    }
+
+    .batch-reg-box .input-box {
+        padding: 10px 30px;
     }
 
     .body-wrapper .input-group {
@@ -284,12 +380,16 @@ const OptionInfoInputWrapper = styled.div`
         width: 200px;
         padding: 10px;
         font-weight: 500;
+
+        @media screen and (max-width: 992px) {
+            font-size: 14px;
+        }
     }
 
     .body-wrapper .input-group input {
         flex: 1;
         border: 1px solid #cccaca;
-        border-radius: 4px;
+        /* border-radius: 4px; */
         padding: 0 5px;
         height: 40px;
     }
@@ -297,7 +397,6 @@ const OptionInfoInputWrapper = styled.div`
     .batch-reg-box .input-group {
         display: flex;
         align-items: center;
-        justify-content: space-between;
         padding: 15px 0;
         font-size: 16px;
         color: #444;
@@ -308,32 +407,47 @@ const OptionInfoInputWrapper = styled.div`
         width: 150px;
         padding: 10px;
         font-weight: 500;
+
+        @media screen and (max-width: 992px) {
+            font-size: 14px;
+        }
     }
 
-    .batch-reg-box .input-group input {
+    .batch-reg-box .input-value {
         border: 1px solid #cccaca;
-        border-radius: 4px;
+        /* border-radius: 4px; */
         padding: 0 5px;
         height: 40px;
     }
 
+    .batch-reg-box .input-group .modal-open-btn {
+        height: 40px;
+        padding: 0 10px;
+        border: 1px solid #cccaca;
+    }
+
     .batch-reg-box .reg-btn {
-        margin: 5px 0;
-        padding: 3px 0;
+        padding: 7px 0;
         width: 100%;
-        border: 1px solid #efefef;
-        background-color: #efefef;
+        border: 1px solid var(--piaar-main-color);
+        background-color: var(--piaar-main-color);
+        font-weight: 600;
+        color: white;
         border-radius: 3px;
     }
 
     .body-wrapper .inner-wrapper {
-        padding-bottom: 50px;
+        padding: 20px 30px 40px 30px;
     }
 
     .inner-wrapper .sub-title-text {
         font-weight: 600;
         font-size: 1.2rem;
         padding: 15px 0;
+
+        @media screen and (max-width: 992px) {
+            font-size: 1rem;
+        }
     }
 
     .info-text {
@@ -341,6 +455,10 @@ const OptionInfoInputWrapper = styled.div`
         font-size: 14px;
         padding: 7px 0;
         color: var(--erp-main-color);
+
+        @media screen and (max-width: 992px) {
+            font-size: 12px;
+        }
     }
 
     .table-bottom-box {
@@ -348,21 +466,23 @@ const OptionInfoInputWrapper = styled.div`
     }
 
     .add-btn {
-        width: 200px;
-        padding: 5px;
-        border: 1px solid #dfdfdf;
-        background-color: #dfdfdf;
+        width: 250px;
+        padding: 7px;
+        border: 1px solid var(--piaar-main-color);
+        background-color: var(--piaar-main-color);
+        color: white;
+        font-weight: 600;
         border-radius: 3px;
     }
 
     .table-box .delete-button-el {
         position: relative;
         overflow: hidden;
-        width: 35px;
-        height: 35px;
+        width: 30px;
+        height: 30px;
         background: #ff3060;
         border: 1px solid #ff3060;
-        border-radius: 2px;
+        border-radius: 3px;
 
         cursor: pointer;
 
@@ -405,14 +525,9 @@ const TableFieldWrapper = styled.div`
         text-align: center;
         background: #fff;
         color: #000;
-        font-weight: 700;
+        font-weight: 600;
         padding: 10px 3px;
         font-size: 16px;
-
-        @media all and (max-width: 992px){
-            font-size: 10px;
-            padding: 10px 5px;
-        }
     }
 
     table tbody tr td{
@@ -430,10 +545,6 @@ const TableFieldWrapper = styled.div`
         text-overflow:ellipsis;
         white-space:nowrap;
         height: 43px;
-
-        @media all and (max-width: 992px){
-            font-size: 10px;
-        }
     }
 
     .input-value {
@@ -443,10 +554,52 @@ const TableFieldWrapper = styled.div`
     }
 `;
 
+const CreateButtonFieldWrapper = styled.div`
+    padding: 25px;
+    width: 100%;
+    height: 80px;
+    background-color: #ecedef;
+    border-top: 1px solid #d5d5d5;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+
+    .button-box {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
+        height: 100%;
+    }
+
+    .button-el {
+        width: 200px;
+        padding: 10px;
+        border: 1px solid #727b90;
+        background-color: #8991a3;
+        color: white;
+        border-radius: 3px;
+        font-weight: 700;
+        transition: 0.1s;
+
+        :hover {
+            transform: scale(1.02);
+        }
+    }
+
+    .store-btn {
+        border: 1px solid var(--piaar-main-color);
+        background-color: var(--piaar-main-color);
+    }
+`;
+
 export {
     Container,
+    PageTitleFieldWrapper,
     CategorySelectorWrapper,
     ProductInfoInputWrapper,
     OptionInfoInputWrapper,
-    TableFieldWrapper
+    TableFieldWrapper,
+    CreateButtonFieldWrapper
 }

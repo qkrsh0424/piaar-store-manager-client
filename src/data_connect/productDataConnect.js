@@ -85,6 +85,11 @@ const productDataConnect = () => {
                 withCredentials: true
             })
         },
+        createProductAndOptions: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product/options`, body, {
+                withCredentials: true
+            })
+        },
         getStockListFj: async function () {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list-fj/stock`, {
                 withCredentials: true

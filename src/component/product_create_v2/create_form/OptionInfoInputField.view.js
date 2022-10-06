@@ -5,7 +5,7 @@ import { OptionInfoInputWrapper, TableFieldWrapper } from "./CreateForm.styled";
 export default function OptionInfoInputFieldView(props) {
     return (
         <OptionInfoInputWrapper>
-            <div className='title-wrapper'>
+            <div className='title-wrapper' onClick={props.onActionSlideEffectControl}>
                 <div className="title-box">
                     <span>옵션</span>
                     <RequiredIcon />
@@ -14,20 +14,29 @@ export default function OptionInfoInputFieldView(props) {
                     <button
                         type='button'
                         className='button-el'
-                    // onClick={props.onActionDeleteHeaderConfirmModalOpen}
+                        onClick={props.onActionSlideEffectControl}
                     >
-                        <img
-                            src='/assets/icon/down_arrow_black_icon.png'
-                            style={{ width: '35px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                            alt=""
-                            loading='lazy'
-                        ></img>
+                        {props.slideDownEffect?.option ?
+                            <img
+                                src='/assets/icon/up_arrow_black_icon.png'
+                                style={{ width: '35px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                                alt=""
+                                loading='lazy'
+                            ></img>
+                            :
+                            <img
+                                src='/assets/icon/down_arrow_black_icon.png'
+                                style={{ width: '35px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                                alt=""
+                                loading='lazy'
+                            ></img>
+                        }
                         <Ripple color={'#e1e1e1'} duration={1000}></Ripple>
                     </button>
                 </div>
             </div>
 
-            <div className='body-wrapper'>
+            <div className={`body-wrapper ${props.slideDownEffect?.option ? `slide-down` : `slide-up`}`}>
                 <div className='inner-wrapper'>
                     <div className='sub-title-text'>
                         <span>일괄등록</span>
@@ -38,83 +47,92 @@ export default function OptionInfoInputFieldView(props) {
                         </span>
                     </div>
                     <div className='batch-reg-box'>
-                        <div className='input-group'>
-                            <span className='title-text'>옵션명 <RequiredIcon /></span>
-                            <input 
-                                type='text'
-                                className='input-value'
-                                value={props.batchRegOptionData.defaultName}
-                                name='defaultName'
-                                onChange={props.onChangeBatchRegOptionInputValue}
-                                required
-                            ></input>
+                        <div className='input-box'>
+                            <div className='input-group'>
+                                <span className='title-text'>옵션명</span>
+                                <input
+                                    type='text'
+                                    className='input-value'
+                                    value={props.batchRegOptionData.defaultName}
+                                    name='defaultName'
+                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                ></input>
+                                <div>
+                                    <button
+                                        type='button'
+                                        className='modal-open-btn'
+                                        onClick={props.onActionOpenOptionDefaultNameCreateModal}
+                                    >옵션명 일괄 생성</button>
+                                </div>
+                            </div>
+                            <div className='input-group'>
+                                <span className='title-text'>옵션설명</span>
+                                <input
+                                    type='text'
+                                    className='input-value'
+                                    value={props.batchRegOptionData.managementName}
+                                    name='managementName'
+                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                ></input>
+                            </div>
+                            <div className='input-group'>
+                                <span className='title-text'>판매가</span>
+                                <input
+                                    type='text'
+                                    className='input-value'
+                                    value={props.batchRegOptionData.salesPrice}
+                                    name='salesPrice'
+                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                    placeholder='숫자만 입력'
+                                ></input>
+                            </div>
+                            <div className='input-group'>
+                                <span className='title-text'>매입총합계</span>
+                                <input
+                                    type='text'
+                                    className='input-value'
+                                    value={props.batchRegOptionData.totalPurchasePrice}
+                                    name='totalPurchasePrice'
+                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                    placeholder='숫자만 입력'
+                                ></input>
+                            </div>
+                            <div className='input-group'>
+                                <span className='title-text'>상태</span>
+                                <input
+                                    type='text'
+                                    className='input-value'
+                                    value={props.batchRegOptionData.status}
+                                    name='status'
+                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                ></input>
+                            </div>
+                            <div className='input-group'>
+                                <span className='title-text'>출고지</span>
+                                <input
+                                    type='text'
+                                    className='input-value'
+                                    value={props.batchRegOptionData.releaseLocation}
+                                    name='releaseLocation'
+                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                ></input>
+                            </div>
+                            <div className='input-group'>
+                                <span className='title-text'>안전재고 수량</span>
+                                <input
+                                    type='text'
+                                    className='input-value'
+                                    value={props.batchRegOptionData.safetyStockUnit}
+                                    name='safetyStockUnit'
+                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                    placeholder='숫자만 입력'
+                                ></input>
+                            </div>
                         </div>
-                        <div className='input-group'>
-                            <span className='title-text'>옵션설명</span>
-                            <input
-                                type='text'
-                                className='input-value'
-                                value={props.batchRegOptionData.managementName}
-                                name='managementName'
-                                onChange={props.onChangeBatchRegOptionInputValue}
-                            ></input>
-                        </div>
-                        <div className='input-group'>
-                            <span className='title-text'>판매가</span>
-                            <input
-                                type='text'
-                                className='input-value'
-                                value={props.batchRegOptionData.salesPrice}
-                                name='salesPrice'
-                                onChange={props.onChangeBatchRegOptionInputValue}
-                                placeholder='숫자만 입력'
-                            ></input>
-                        </div>
-                        <div className='input-group'>
-                            <span className='title-text'>매입총합계</span>
-                            <input
-                                type='text'
-                                className='input-value'
-                                value={props.batchRegOptionData.totalPurchasePrice}
-                                name='totalPurchasePrice'
-                                onChange={props.onChangeBatchRegOptionInputValue}
-                                placeholder='숫자만 입력'
-                            ></input>
-                        </div>
-                        <div className='input-group'>
-                            <span className='title-text'>상태</span>
-                            <input
-                                type='text'
-                                className='input-value'
-                                value={props.batchRegOptionData.status}
-                                name='status'
-                                onChange={props.onChangeBatchRegOptionInputValue}
-                            ></input>
-                        </div>
-                        <div className='input-group'>
-                            <span className='title-text'>출고지</span>
-                            <input
-                                type='text'
-                                className='input-value'
-                                value={props.batchRegOptionData.releaseLocation}
-                                name='releaseLocation'
-                                onChange={props.onChangeBatchRegOptionInputValue}
-                            ></input>
-                        </div>
-                        <div className='input-group'>
-                            <span className='title-text'>안전재고 수량</span>
-                            <input
-                                type='text'
-                                className='input-value'
-                                value={props.batchRegOptionData.safetyStockUnit}
-                                name='safetyStockUnit'
-                                onChange={props.onChangeBatchRegOptionInputValue}
-                                placeholder='숫자만 입력'
-                            ></input>
-                        </div>
-        
+
                         <div>
                             <button
+                                type='submit'
                                 className='reg-btn'
                                 onClick={props.onActionAddOptionDataList}
                             >
@@ -125,7 +143,7 @@ export default function OptionInfoInputFieldView(props) {
                 </div>
                 <div className='inner-wrapper'>
                     <div className='sub-title-text'>옵션 리스트</div>
-                    <TableFieldView 
+                    <TableFieldView
                         createOptionDataList={props.createOptionDataList}
 
                         onChangeOptionInputValue={props.onChangeOptionInputValue}
@@ -133,6 +151,7 @@ export default function OptionInfoInputFieldView(props) {
                     />
                     <div className='table-bottom-box'>
                         <button 
+                            type='button'
                             className='add-btn'
                             onClick={props.onActionAddOptionData}
                         >
@@ -152,6 +171,7 @@ function TableFieldView(props) {
                 <table className='table' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                     <thead>
                         <tr>
+                            <th scope="col" width='50'>삭제</th>
                             <th scope="col" width='50'>#</th>
                             <th scope="col" width='200'>옵션명 <RequiredIcon /> </th>
                             <th scope="col" width='200'>옵션설명</th>
@@ -160,7 +180,6 @@ function TableFieldView(props) {
                             <th scope="col" width='200'>상태</th>
                             <th scope="col" width='200'>출고지</th>
                             <th scope="col" width='200'>안전재고 수량</th>
-                            <th scope="col" width='70'>삭제</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -168,10 +187,25 @@ function TableFieldView(props) {
                             return (
                                 <tr key={'create_po_idx' + idx}>
                                     <td>
+                                        <div className='button-box'>
+                                            <button
+                                                type='button'
+                                                className='delete-button-el'
+                                                onClick={(e) => props.onActionDeleteOption(e, r.id)}
+                                            >
+                                                <img
+                                                    className='delete-button-icon'
+                                                    src='/assets/icon/delete_icon.png'
+                                                    alt=""
+                                                ></img>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
                                         {idx + 1}
                                     </td>
                                     <td>
-                                        <input type='text' className='input-value' value={r.defaultName} name='defaultName' onChange={(e) => props.onChangeOptionInputValue(e, r.id)} required></input>
+                                        <input type='text' className='input-value' value={r.defaultName} name='defaultName' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                     </td>
                                     <td>
                                         <input type='text' className='input-value' value={r.managementName} name='managementName' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
@@ -190,21 +224,6 @@ function TableFieldView(props) {
                                     </td>
                                     <td>
                                         <input type='number' className='input-value' value={r.safetyStockUnit} name='safetyStockUnit' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
-                                    </td>
-                                    <td>
-                                        <div className='button-box'>
-                                            <button
-                                                type='button'
-                                                className='delete-button-el'
-                                                onClick={(e) => props.onActionDeleteOption(e, r.id)}
-                                            >
-                                                <img
-                                                    className='delete-button-icon'
-                                                    src='/assets/icon/delete_icon.png'
-                                                    alt=""
-                                                ></img>
-                                            </button>
-                                        </div>
                                     </td>
                                 </tr>
                             )

@@ -30,6 +30,9 @@ const valueUtils = {
         }else {
             return false;
         }
+    },
+    trimAndSplit: (value, splitStr) => {
+        return value?.replace(' ', '')?.split(splitStr);
     }
 }
 
