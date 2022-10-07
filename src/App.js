@@ -122,7 +122,7 @@ function App(props) {
                                             <Route path="/waybill" element={<WaybillMain />} />
 
                                             {/* Account book */}
-                                            {(userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) &&
+                                            {["ROLE_ADMIN", "ROLE_MANAGER", "ROLE_SUPERADMIN"].includes(userRdx.userInfo.roles) &&
                                                 <>
                                                     <Route path='/account-book' element={<AccountBookMain />} />
                                                     <Route path='/account-book/income' element={<IncomeMain />} />

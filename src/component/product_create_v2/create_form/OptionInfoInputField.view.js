@@ -1,6 +1,8 @@
 import Ripple from "../../module/button/Ripple";
 import RequiredIcon from "../../module/icon/RequiredIcon";
+import { v4 as uuidv4 } from 'uuid';
 import { OptionInfoInputWrapper, TableFieldWrapper } from "./CreateForm.styled";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 export default function OptionInfoInputFieldView(props) {
     return (
@@ -40,11 +42,10 @@ export default function OptionInfoInputFieldView(props) {
                 <div className='inner-wrapper'>
                     <div className='sub-title-text'>
                         <span>일괄등록</span>
-                        <span className='info-text'>
-                            일괄 등록할 옵션 데이터를 입력해주세요. ( , 로 구분)
-                            <br />
-                            옵션명 개수를 기준으로 등록됩니다.
-                        </span>
+                        <div className='info-text'>
+                            <div>일괄 등록할 옵션 데이터를 입력해주세요. ( , 로 구분)</div>
+                            <div>옵션명은 필수항목이며, 옵션명 개수를 기준으로 등록됩니다.</div>
+                        </div>
                     </div>
                     <div className='batch-reg-box'>
                         <div className='input-box'>
@@ -148,6 +149,7 @@ export default function OptionInfoInputFieldView(props) {
 
                         onChangeOptionInputValue={props.onChangeOptionInputValue}
                         onActionDeleteOption={props.onActionDeleteOption}
+                        onChangeOrderWithDragAndDrop={props.onChangeOrderWithDragAndDrop}
                     />
                     <div className='table-bottom-box'>
                         <button 
@@ -167,7 +169,7 @@ export default function OptionInfoInputFieldView(props) {
 function TableFieldView(props) {
     return (
         <TableFieldWrapper>
-            <div className='table-box'>
+            <div>
                 <table className='table' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                     <thead>
                         <tr>
@@ -182,53 +184,82 @@ function TableFieldView(props) {
                             <th scope="col" width='200'>안전재고 수량</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {props.createOptionDataList?.map((r, idx) => {
-                            return (
-                                <tr key={'create_po_idx' + idx}>
-                                    <td>
-                                        <div className='button-box'>
-                                            <button
-                                                type='button'
-                                                className='delete-button-el'
-                                                onClick={(e) => props.onActionDeleteOption(e, r.id)}
+                    <DragDropContext onDragEnd={props.onChangeOrderWithDragAndDrop}>
+                        <Droppable
+                            droppableId={uuidv4()}
+                        >
+                            {(provided, snapshot) => (
+                                <tbody
+                                    ref={provided.innerRef}
+                                    {...provided.droppableProps}
+                                >
+                                    {props.createOptionDataList?.map((r, idx) => {
+                                        return (
+                                            <Draggable
+                                                key={r.id}
+                                                draggableId={r.id}
+                                                index={idx}
                                             >
-                                                <img
-                                                    className='delete-button-icon'
-                                                    src='/assets/icon/delete_icon.png'
-                                                    alt=""
-                                                ></img>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        {idx + 1}
-                                    </td>
-                                    <td>
-                                        <input type='text' className='input-value' value={r.defaultName} name='defaultName' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
-                                    </td>
-                                    <td>
-                                        <input type='text' className='input-value' value={r.managementName} name='managementName' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
-                                    </td>
-                                    <td>
-                                        <input type='number' className='input-value' value={r.salesPrice} name='salesPrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
-                                    </td>
-                                    <td>
-                                        <input type='number' className='input-value'value={r.totalPurchasePrice} name='totalPurchasePrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
-                                    </td>
-                                    <td>
-                                        <input type='text' className='input-value' value={r.status} name='status' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
-                                    </td>
-                                    <td>
-                                        <input type='text' className='input-value' value={r.releaseLocation} name='releaseLocation' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
-                                    </td>
-                                    <td>
-                                        <input type='number' className='input-value' value={r.safetyStockUnit} name='safetyStockUnit' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
+                                                {(provided) => (
+                                                    <tr
+                                                        key={'create_po_idx' + idx}
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        style={{
+                                                            ...provided.draggableProps.style
+                                                        }}
+                                                    >
+                                                        <td>
+                                                            <div className='button-box'>
+                                                                <button
+                                                                    type='button'
+                                                                    className='delete-button-el'
+                                                                    style={{ border: '1px solid #fff', background: '#fff' }}
+                                                                    onClick={(e) => props.onActionDeleteOption(e, r.id)}
+                                                                >
+                                                                    <img
+                                                                        className='delete-button-icon'
+                                                                        src='/assets/icon/delete_default_ff3060.svg'
+                                                                        alt=""
+                                                                    ></img>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            {idx + 1}
+                                                        </td>
+                                                        <td>
+                                                            <input type='text' className='input-value' value={r.defaultName} name='defaultName' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                        </td>
+                                                        <td>
+                                                            <input type='text' className='input-value' value={r.managementName} name='managementName' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                        </td>
+                                                        <td>
+                                                            <input type='number' className='input-value' value={r.salesPrice} name='salesPrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                        </td>
+                                                        <td>
+                                                            <input type='number' className='input-value' value={r.totalPurchasePrice} name='totalPurchasePrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                        </td>
+                                                        <td>
+                                                            <input type='text' className='input-value' value={r.status} name='status' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                        </td>
+                                                        <td>
+                                                            <input type='text' className='input-value' value={r.releaseLocation} name='releaseLocation' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                        </td>
+                                                        <td>
+                                                            <input type='number' className='input-value' value={r.safetyStockUnit} name='safetyStockUnit' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </Draggable>
+                                        )
+                                    })}
+                                    {provided.placeholder}
+                                </tbody>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
                 </table>
             </div>
         </TableFieldWrapper>

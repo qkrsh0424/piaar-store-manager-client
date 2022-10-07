@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Container, PageTitleFieldWrapper } from "./CreateForm.styled";
 import OptionInfoInputFieldView from "./OptionInfoInputField.view";
 import ProductInfoInputFieldView from "./ProductInfoInputField.view";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useReducer } from "react";
 import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
 import CreateButtonFieldView from "./CreateButtonField.view";
@@ -387,10 +387,36 @@ const CreateFormComponent = (props) => {
         setOptionDefaultNameCreateModalOpen(true);
     }
 
-    const onActionCloseOptionDefaultNameCreateModal = (e) => {
-        e.stopPropagation();
-
+    const onActionCloseOptionDefaultNameCreateModal = () => {
         setOptionDefaultNameCreateModalOpen(false);
+    }
+
+    const onChangeBatchRegOptionDefaultNameInputValue = (data) => {
+        let batchRegOptionDefaultName = batchRegOptionData.defaultName ? (batchRegOptionData.defaultName + ',' + data) : data;
+        dispatchBatchRegOptionData({
+            type: 'CHANGE_DATA',
+            payload: {
+                name: 'defaultName',
+                value: batchRegOptionDefaultName
+            }
+        })
+    }
+
+    const onChangeOrderWithDragAndDrop = (result) => {
+        if(!result.destination) {
+            return;
+        }
+
+        const newOrderList = valueUtils.reorder(
+            createOptionDataList,
+            result.source.index,
+            result.destination.index
+        )
+
+        dispatchCreateOptionDataList({
+            type: 'INIT_DATA',
+            payload: newOrderList
+        })
     }
 
     return (
@@ -433,6 +459,7 @@ const CreateFormComponent = (props) => {
                         onActionAddOptionDataList={onActionAddOptionDataList}
                         onActionSlideEffectControl={(e) => onActionSlideEffectControl(e, 'option')}
                         onActionOpenOptionDefaultNameCreateModal={onActionOpenOptionDefaultNameCreateModal}
+                        onChangeOrderWithDragAndDrop={onChangeOrderWithDragAndDrop}
                     ></OptionInfoInputFieldView>
                 }
 
@@ -450,6 +477,7 @@ const CreateFormComponent = (props) => {
             >
                 <CreateOptionDefaultNameModalComponent
                     onActionCloseOptionDefaultNameCreateModal={onActionCloseOptionDefaultNameCreateModal}
+                    onChangeBatchRegOptionDefaultNameInputValue={onChangeBatchRegOptionDefaultNameInputValue}
                 ></CreateOptionDefaultNameModalComponent>
             </CommonModalComponent>
         </Container>

@@ -5,6 +5,7 @@ export default function ButtonFieldView(props) {
         <ButtonFieldWrapper>
             <div>
                 <button
+                    type='button'
                     className='button-el'
                     style={{ color: '#d15120' }}
                     onClick={props.onActionCloseOptionDefaultNameCreateModal}
@@ -14,6 +15,7 @@ export default function ButtonFieldView(props) {
             </div>
             <div>
                 <button
+                    type='submit'
                     className='button-el'
                     style={{ color: '#2d7ed1' }}
                 >

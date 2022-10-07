@@ -84,10 +84,8 @@ const CategorySelectorWrapper = styled.div`
     .body-wrapper {
         background-color: white;
         position: relative;
-        /* height: 0px; */
         top: -5px;
         border: 1px solid #dbdde2;
-        /* border-radius: 4px; */
         overflow: hidden;
     }
 
@@ -126,7 +124,6 @@ const ProductInfoInputWrapper = styled.div`
         z-index: 10;
         background-color: white;
         border: 1px solid #dbdde2;
-        /* border-radius: 4px; */
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -181,7 +178,6 @@ const ProductInfoInputWrapper = styled.div`
         /* height: 0px; */
         top: -5px;
         border: 1px solid #dbdde2;
-        /* border-radius: 4px; */
         overflow: hidden;
     }
 
@@ -259,7 +255,6 @@ const ProductInfoInputWrapper = styled.div`
     .body-wrapper .input-group input {
         flex: 1;
         border: 1px solid #cccaca;
-        /* border-radius: 4px; */
         padding: 0 5px;
         height: 40px;
     }
@@ -291,7 +286,6 @@ const OptionInfoInputWrapper = styled.div`
         z-index: 10;
         background-color: white;
         border: 1px solid #dbdde2;
-        /* border-radius: 4px; */
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -346,7 +340,6 @@ const OptionInfoInputWrapper = styled.div`
         /* height: 0px; */
         top: -5px;
         border: 1px solid #dbdde2;
-        /* border-radius: 4px; */
         overflow: hidden;
     }
 
@@ -355,7 +348,6 @@ const OptionInfoInputWrapper = styled.div`
         margin: 0 auto;
         border: 1px solid #dfdfdf;
         /* padding: 20px 40px; */
-        border-radius: 4px;
         overflow: auto;
 
         @media screen and (max-width: 992px){
@@ -389,7 +381,6 @@ const OptionInfoInputWrapper = styled.div`
     .body-wrapper .input-group input {
         flex: 1;
         border: 1px solid #cccaca;
-        /* border-radius: 4px; */
         padding: 0 5px;
         height: 40px;
     }
@@ -415,7 +406,6 @@ const OptionInfoInputWrapper = styled.div`
 
     .batch-reg-box .input-value {
         border: 1px solid #cccaca;
-        /* border-radius: 4px; */
         padding: 0 5px;
         height: 40px;
     }
@@ -427,13 +417,12 @@ const OptionInfoInputWrapper = styled.div`
     }
 
     .batch-reg-box .reg-btn {
-        padding: 7px 0;
+        padding: 6px 0;
         width: 100%;
         border: 1px solid var(--piaar-main-color);
         background-color: var(--piaar-main-color);
         font-weight: 600;
         color: white;
-        border-radius: 3px;
     }
 
     .body-wrapper .inner-wrapper {
@@ -467,7 +456,7 @@ const OptionInfoInputWrapper = styled.div`
 
     .add-btn {
         width: 250px;
-        padding: 7px;
+        padding: 6px;
         border: 1px solid var(--piaar-main-color);
         background-color: var(--piaar-main-color);
         color: white;
@@ -475,23 +464,20 @@ const OptionInfoInputWrapper = styled.div`
         border-radius: 3px;
     }
 
-    .table-box .delete-button-el {
+    .delete-button-el {
         position: relative;
         overflow: hidden;
         width: 30px;
         height: 30px;
-        background: #ff3060;
-        border: 1px solid #ff3060;
-        border-radius: 3px;
 
         cursor: pointer;
 
-        &:hover{
-            transform: scale(1.02);
+        :hover{
+            transform: scale(1.05);
         }
     }
 
-    .table-box .delete-button-el .delete-button-icon{
+    .delete-button-el .delete-button-icon{
         width:80%;
         position: absolute;
         top:50%;
@@ -508,16 +494,13 @@ const TableFieldWrapper = styled.div`
         padding: 0 10px;
     }
 
-    .table-box {
-        overflow: auto;
-    }
-
     table {
         position:relative;
         text-align: center;
         width: fit-content;
         table-layout: fixed;
         border: none;
+        overflow: auto
     }
 
     table thead tr th{
@@ -535,6 +518,7 @@ const TableFieldWrapper = styled.div`
         padding: 7px 5px;
         vertical-align: middle !important;
         border-bottom: 1px solid #e0e0e0;
+        background-color: #fff;
         text-align: center;
         font-size: 14px;
         color: #444;

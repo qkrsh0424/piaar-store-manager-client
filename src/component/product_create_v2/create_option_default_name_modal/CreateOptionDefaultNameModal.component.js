@@ -4,20 +4,31 @@ import { Container, InfoFieldWrapper } from "./CreateOptionDefaultNameModal.styl
 import HeaderFieldView from "./HeaderField.view";
 import InputFieldView from "./InputField.view";
 import { v4 as uuidv4 } from 'uuid';
+import valueUtils from "../../../utils/valueUtils";
 
 function InfoFieldView() {
     return (
         <InfoFieldWrapper>
-            <span>일괄 생성할 옵션명을 순서대로 입력해주세요.</span>
+            <div>일괄 생성할 옵션명을 입력해주세요. (, 로 구분)</div>
+            <div>최대 3개까지 등록할 수 있습니다.</div>
+            <div>옵션명을 구분하는 문자로 , (반점)는 포함할 수 없습니다.</div>
+            <br />
+            <div>TIP : [체어-소형-블랙], [체어-소형-카키], [체어-대형-블랙], [체어-대형-카키] 를 생성하고 싶다면</div>
+            <div>[구분자 : - / 옵션1 : 체어 / 옵션2 : 소형, 대형 / 옵션3 : 블랙, 카키] 를 입력</div>
         </InfoFieldWrapper>
     )
 }
 
 const CreateOptionDefaultNameModalComponent = (props) => {
     const [optionDefaultNameList, dispatchOptionDefaultNameList] = useReducer(optionDefaultNameListReducer, initialOptionDefaultNameList);
+    const [separator, dispatchSeparator] = useReducer(separatorReducer, initialSeparator);
 
     useEffect(() => {
         let data = [{
+            id: uuidv4(),
+            defaultName: ''
+        },
+        {
             id: uuidv4(),
             defaultName: ''
         }];
@@ -51,7 +62,8 @@ const CreateOptionDefaultNameModalComponent = (props) => {
     const onActionDeleteDefaultName = (id) => {
         let data = optionDefaultNameList.filter(r => r.id !== id);
 
-        if(data.length < 1) {
+        if(data.length < 2) {
+            alert('더이상 삭제할 수 없습니다.')
             return;
         }
 
@@ -61,21 +73,92 @@ const CreateOptionDefaultNameModalComponent = (props) => {
         })
     }
 
+    const onChangeSeparatorInputValue = (e) => {
+        let result = (e.target.value).replace(' ', '');
+
+        dispatchSeparator({
+            type: 'INIT_DATA',
+            payload: result
+        })
+    }
+
+    const onChangeDefaultNameInputValue = (e, id) => {
+        let data = optionDefaultNameList.map(r => {
+            if(r.id === id) {
+                return {
+                    ...r,
+                    [e.target.name]: e.target.value
+                }
+            }else {
+                return r;
+            }
+        });
+
+        dispatchOptionDefaultNameList({
+            type: 'INIT_DATA',
+            payload: data
+        })
+    }
+
+    const onSubmitBatchOptionDefaultName = (e) => {
+        e.preventDefault();
+        
+        if(separator.indexOf(',') !== -1) {
+            alert('옵션명을 구분하는 문자로 (,)는 포함할 수 없습니다.');
+            return;
+        }
+
+        let defaultNameList = combinationOptionName();
+        props.onChangeBatchRegOptionDefaultNameInputValue(defaultNameList);
+        props.onActionCloseOptionDefaultNameCreateModal();
+    }
+
+    const combinationOptionName = () => {
+        let defaultNameList = optionDefaultNameList.map(r => valueUtils.trimAndSplit(r.defaultName, ','));
+
+        // TODO :: 알고리즘 수정하기
+        let data = [];
+        if(defaultNameList[2] && defaultNameList[2].length > 0) {
+            for (var i = 0; i < defaultNameList[0].length; i++) {
+                for (var j = 0; j < defaultNameList[1].length; j++) {
+                    for(var k = 0; k < defaultNameList[2].length; k++) {
+                        let defaultName = defaultNameList[0][i] + separator + defaultNameList[1][j] + separator + defaultNameList[2][k];
+                        data.push(defaultName);
+                    }
+                }
+            }
+        }else {
+            for (var i = 0; i < defaultNameList[0].length; i++) {
+                for (var j = 0; j < defaultNameList[1].length; j++) {
+                    let defaultName = defaultNameList[0][i] + separator + defaultNameList[1][j];
+                    data.push(defaultName);
+                }
+            }
+        }
+
+        return data.join(',');
+    }
+
     return (
         <Container>
             <HeaderFieldView
                 element={'옵션명 일괄 생성'}
             ></HeaderFieldView>
             <InfoFieldView />
-            <InputFieldView
-                optionDefaultNameList={optionDefaultNameList}
+            <form onSubmit={onSubmitBatchOptionDefaultName}>
+                <InputFieldView
+                    optionDefaultNameList={optionDefaultNameList}
+                    separator={separator}
 
-                onActionAddDefaultName={onActionAddDefaultName}
-                onActionDeleteDefaultName={onActionDeleteDefaultName}
-            ></InputFieldView>
-            <ButtonFieldView
-                onActionCloseOptionDefaultNameCreateModal={props.onActionCloseOptionDefaultNameCreateModal}
-            ></ButtonFieldView>
+                    onActionAddDefaultName={onActionAddDefaultName}
+                    onActionDeleteDefaultName={onActionDeleteDefaultName}
+                    onChangeSeparatorInputValue={onChangeSeparatorInputValue}
+                    onChangeDefaultNameInputValue={onChangeDefaultNameInputValue}
+                ></InputFieldView>
+                <ButtonFieldView
+                    onActionCloseOptionDefaultNameCreateModal={props.onActionCloseOptionDefaultNameCreateModal}
+                ></ButtonFieldView>
+            </form>
         </Container>
     )
 }
@@ -83,6 +166,7 @@ const CreateOptionDefaultNameModalComponent = (props) => {
 export default CreateOptionDefaultNameModalComponent;
 
 const initialOptionDefaultNameList = null;
+const initialSeparator = null;
 
 const optionDefaultNameListReducer = (state, action) => {
     switch (action.type) {
@@ -91,5 +175,15 @@ const optionDefaultNameListReducer = (state, action) => {
         case 'CLEAR':
             return initialOptionDefaultNameList;
         default: return initialOptionDefaultNameList;
+    }
+}
+
+const separatorReducer = (state, action) => {
+    switch (action. type) {
+        case 'INIT_DATA':
+            return action.payload;
+        case 'CLEAR':
+            return initialSeparator;
+        default: return initialSeparator;
     }
 }

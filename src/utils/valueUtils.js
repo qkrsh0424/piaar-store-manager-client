@@ -31,8 +31,13 @@ const valueUtils = {
             return false;
         }
     },
+    /**
+     * 넘어온 값을 ','으로 분리해 배열을 만든다.
+     * 배열 요소의 앞뒤 공백을 제거한다.
+     */
     trimAndSplit: (value, splitStr) => {
-        return value?.replace(' ', '')?.split(splitStr);
+        let data = value?.split(splitStr);
+        return data.map(r => r.trim());
     }
 }
 
