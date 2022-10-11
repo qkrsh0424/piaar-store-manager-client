@@ -152,7 +152,7 @@ export default function OptionInfoInputFieldView(props) {
                         onChangeOrderWithDragAndDrop={props.onChangeOrderWithDragAndDrop}
                     />
                     <div className='table-bottom-box'>
-                        <button 
+                        <button
                             type='button'
                             className='add-btn'
                             onClick={props.onActionAddOptionData}
@@ -169,8 +169,8 @@ export default function OptionInfoInputFieldView(props) {
 function TableFieldView(props) {
     return (
         <TableFieldWrapper>
-            <div>
-                <table className='table' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
+            <div style={{ overflow: 'auto' }}>
+                <table className='table table-sm' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                     <thead>
                         <tr>
                             <th scope="col" width='50'>삭제</th>
@@ -185,10 +185,8 @@ function TableFieldView(props) {
                         </tr>
                     </thead>
                     <DragDropContext onDragEnd={props.onChangeOrderWithDragAndDrop}>
-                        <Droppable
-                            droppableId={uuidv4()}
-                        >
-                            {(provided, snapshot) => (
+                        <Droppable droppableId={uuidv4()}>
+                            {(provided) => (
                                 <tbody
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}

@@ -113,6 +113,7 @@ const HomeBody = () => {
                         <GroupTitle>상품 관리</GroupTitle>
                         <LinkBox>
                             <CustomLink to='/products'>상품 재고관리</CustomLink>
+                            <CustomLink to='/products/create'>상품 등록</CustomLink>
                             <CustomLink to='/product-detail'>상품 상세정보</CustomLink>
                         </LinkBox>
                     </GroupBox>

@@ -500,7 +500,6 @@ const TableFieldWrapper = styled.div`
         width: fit-content;
         table-layout: fixed;
         border: none;
-        overflow: auto
     }
 
     table thead tr th{
@@ -535,6 +534,10 @@ const TableFieldWrapper = styled.div`
         border: 1px solid #d0d0d0;
         text-align: center;
         height: 38px;
+    }
+
+    .button-box {
+        padding: 0px;
     }
 `;
 
