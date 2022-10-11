@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
+import { getDefaultHeaderDetails } from "../../../../../static-data/erp/staticData";
 import PageContentFieldView from "./PageContentField.view";
 import PageHeaderFieldView from "./PageHeaderField.view";
 import { Container } from "./SingleAddModal.styled";

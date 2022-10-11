@@ -16,7 +16,7 @@ import CheckedOperatorComponent from './checked-operator/CheckedOperator.compone
 import { erpDownloadExcelHeaderDataConnect } from '../../../../data_connect/erpDownloadExcelHeaderDataConnect';
 import OrderItemTablePagenationComponent from './order-item-table-pagenation/OrderItemTablePagenation.component';
 import { useBackdropHook, BackdropHookComponent } from '../../../../hooks/backdrop/useBackdropHook';
-import { getDefaultHeaderFields } from '../../../../static-data/staticData';
+import { getDefaultHeaderFields } from '../../../../static-data/erp/staticData';
 import { sortFormatUtils } from '../../../../utils/sortFormatUtils';
 import useSocketClient from '../../../../web-hooks/socket/useSocketClient';
 import { useBasicSnackbarHook, BasicSnackbarHookComponent } from '../../../../hooks/snackbar/useBasicSnackbarHook';

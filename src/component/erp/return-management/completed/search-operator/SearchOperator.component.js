@@ -6,7 +6,7 @@ import DateSelectorFieldView from './DateSelectorField.view';
 import DetailSearchFieldView from "./DetailSearchField.view";
 import ButtonFieldView from "./ButtonField.view";
 import { dateToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
-import { getReturnDefaultHeaderDetails } from "../../../../../static-data/erpReturnItemStaticData";
+import { getReturnDefaultHeaderDetails } from "../../../../../static-data/erp/erpReturnItemStaticData";
 
 const defaultHeaderDetails = getReturnDefaultHeaderDetails();
 
@@ -150,10 +150,16 @@ const SearchOperatorComponent = (props) => {
         } else {
             delete query.searchColumnName;
             delete query.searchQuery;
+
+            dispatchSearchColumnName({ type: 'CLEAR' })
+            dispatchSearchQuery({ type: 'CLEAR' })
         }
 
         if (searchColumnName && searchQuery) {
             query.searchQuery = searchQuery;
+        } else {
+            delete query.searchQuery;
+            dispatchSearchQuery({ type: 'CLEAR' })
         }
 
         if (stockReflectYn) {

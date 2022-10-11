@@ -7,7 +7,7 @@ import CommonModalComponent from "../../../../module/modal/CommonModalComponent"
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
 import ViewDetailSelectModal from "./ViewDetailSelectModal.view";
 import UpdateButtonFieldView from './UpdateButtonField.view';
-import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
+import { getDefaultHeaderDetails } from "../../../../../static-data/erp/staticData";
 import HeaderFieldView from "./HeaderField.view";
 import _ from 'lodash';
 

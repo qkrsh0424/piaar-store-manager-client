@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getReturnDefaultHeaderDetails } from "../../../../../static-data/erpReturnItemStaticData";
+import { getReturnDefaultHeaderDetails } from "../../../../../static-data/erp/erpReturnItemStaticData";
 import Ripple from "../../../../module/button/Ripple";
 import { Container, ContentFieldWrapper, HeaderFieldWrapper, TipFieldWrapper } from "./FixOrderItemModal.styled";
 

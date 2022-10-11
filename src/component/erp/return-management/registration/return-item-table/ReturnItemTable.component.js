@@ -6,7 +6,7 @@ import CommonModalComponent from "../../../../module/modal/CommonModalComponent"
 import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
 import ReturnProductImageModalComponent from "../return-product-image-modal/ReturnProductImageModal.component";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
-import { getDefaultDeliveryChargeReturnType } from "../../../../../static-data/erpReturnItemStaticData";
+import { getDefaultDeliveryChargeReturnType } from "../../../../../static-data/erp/erpReturnItemStaticData";
 
 function Tip() {
     return (

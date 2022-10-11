@@ -6,7 +6,7 @@ import DateSelectorFieldView from './DateSelectorField.view';
 import DetailSearchFieldView from "./DetailSearchField.view";
 import ButtonFieldView from "./ButtonField.view";
 import { dateToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
-import { getReturnDefaultHeaderDetails } from "../../../../../static-data/erpReturnItemStaticData";
+import { getReturnDefaultHeaderDetails } from "../../../../../static-data/erp/erpReturnItemStaticData";
 
 const defaultHeaderDetails = getReturnDefaultHeaderDetails();
 

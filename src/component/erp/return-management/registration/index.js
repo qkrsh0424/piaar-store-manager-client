@@ -7,7 +7,7 @@ import ReturnItemTableComponent from "./return-item-table/ReturnItemTable.compon
 import SearchOperatorComponent from "./search-operator/SearchOperator.component";
 import { useReducer, useState } from "react";
 import { erpReturnItemDataConnect } from "../../../../data_connect/erpReturnItemDataConnect";
-import { getReturnDefaultHeaderFields } from "../../../../static-data/erpReturnItemStaticData";
+import { getReturnDefaultHeaderFields } from "../../../../static-data/erp/erpReturnItemStaticData";
 import { useEffect } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import CommonModalComponent from "../../../module/modal/CommonModalComponent";

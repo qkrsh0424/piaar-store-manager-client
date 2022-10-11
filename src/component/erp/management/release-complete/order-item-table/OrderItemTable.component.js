@@ -12,7 +12,7 @@ import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.compo
 import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
 import { useImageFileUploaderHook } from "../../../../../hooks/uploader/useImageFileUploaderHook";
 import SubmitModalComponent from "../../../../module/modal/SubmitModalComponent";
-import { getDefaultDeliveryChargeReturnType } from "../../../../../static-data/erpReturnItemStaticData";
+import { getDefaultDeliveryChargeReturnType } from "../../../../../static-data/erp/erpReturnItemStaticData";
 
 function Tip({selectedMatchCode}) {
     return (
