@@ -26,10 +26,18 @@ export default function ManageTableFieldView(props) {
                             return (
                                 <React.Fragment key={idx}>
                                     <tr key={'create_po_idx' + idx} style={{ fontWeight: '600' }}>
-                                        <td rowSpan={r.options.length + 1} className='fixed-col-left' style={{ backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff' }}>
+                                        <td
+                                            rowSpan={r.options.length + 1}
+                                            className='fixed-col-left'
+                                            style={{ backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff' }}
+                                        >
                                             <div style={{color: 'var(--erp-main-color)'}}>[{r.category.name}]</div>
                                         </td>
-                                        <td rowSpan={r.options.length + 1} className='fixed-col-left2' style={{ textAlign: 'left', backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff' }} >
+                                        <td
+                                            rowSpan={r.options.length + 1}
+                                            className='fixed-col-left2'
+                                            style={{ textAlign: 'left', backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff' }}
+                                        >
                                             <div className="image-wrapper">
                                                 <div className="image-box">
                                                     {r.product.imageUrl ?
@@ -40,7 +48,11 @@ export default function ManageTableFieldView(props) {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td rowSpan={r.options.length + 1} className='fixed-col-left3' style={{ backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff' }}>
+                                        <td
+                                            rowSpan={r.options.length + 1}
+                                            className='fixed-col-left3'
+                                            style={{ backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff' }}
+                                        >
                                             <div>{r.product.defaultName}</div>
                                             <div>{r.product.code}</div>
                                             <div className='button-box'>
@@ -58,6 +70,7 @@ export default function ManageTableFieldView(props) {
                                                         type='button'
                                                         className='button-el'
                                                         onClick={() => alert('구매링크를 먼저 등록해주세요.')}
+                                                        style={{ backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff', border: 'none' }}
                                                     >
                                                         <img
                                                             src='/assets/icon/link_off_default_000000.svg'

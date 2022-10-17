@@ -54,7 +54,16 @@ function getOptionSearchHeader() {
     return result;
 }
 
+function getDefaultHeaderFields() {
+    let result = staticOptionSearchHeader.map(r => {
+        return r.matchedHeaderName;
+    })
+
+    return result;
+}
+
 export {
     getProductSearchHeader,
-    getOptionSearchHeader
+    getOptionSearchHeader,
+    getDefaultHeaderFields
 }

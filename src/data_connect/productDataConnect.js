@@ -101,6 +101,12 @@ const productDataConnect = () => {
                 withCredentials: true
             })
         },
+        searchBatchByPaging: async function (params) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/batch/stock/page`, {
+                params,
+                withCredentials: true
+            })
+        },
         getList: async function(){
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list`, {
                 withCredentials: true

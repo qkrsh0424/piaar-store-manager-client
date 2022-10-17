@@ -8,6 +8,9 @@ import { BackdropHookComponent, useBackdropHook } from "../../hooks/backdrop/use
 import OperatorComponent from "./search-operator/SearchOperator.component";
 import { productDataConnect } from "../../data_connect/productDataConnect";
 import ManageTableComponent from "./manage-table/ManageTable.component";
+import { getDefaultHeaderFields } from "../../static-data/product-manage/productManageStaticData";
+import { sortFormatUtils } from "../../utils/sortFormatUtils";
+import ManageTablePagenationComponent from "./manage-table-pagenation/ManageTablePagenation.component";
 
 const HeaderFieldWrapper = styled.div`
     margin-top: 10px;
@@ -48,6 +51,8 @@ const Container = styled.div`
     height: 100%;
     padding-bottom: 50px;
 `;
+
+const DEFAULT_HEADER_FIELDS = getDefaultHeaderFields();
 
 const ProductManageComponent = (props) => {
     const location = useLocation();
@@ -94,7 +99,42 @@ const ProductManageComponent = (props) => {
             })
     }
 
-    // TODO :: 페이징 처리, 정렬 추가해야 함
+    // // TODO :: 페이징 처리, 정렬 추가해야 함
+    // const __reqSearchProductAndOptionList = async () => {
+    //     let categorySearchQuery = query.categorySearchQuery || null;
+    //     let productSearchHeaderName = query.productSearchHeaderName || null;
+    //     let productSearchQuery = query.productSearchQuery || null;
+    //     let optionSearchHeaderName = query.optionSearchHeaderName || null;
+    //     let optionSearchQuery = query.optionSearchQuery || null;
+    //     let stockManagement = true;
+
+    //     let params = {
+    //         categorySearchQuery: categorySearchQuery,
+    //         productSearchHeaderName: productSearchHeaderName,
+    //         productSearchQuery: productSearchQuery,
+    //         optionSearchHeaderName: optionSearchHeaderName,
+    //         optionSearchQuery: optionSearchQuery,
+    //         stockManagement: stockManagement
+    //     }
+
+    //     await productDataConnect().searchBatch(params)
+    //         .then(res => {
+    //             if (res.status === 200 && res.data.message === 'success') {
+    //                 setProductFJList(res.data.data.content);
+    //             }
+    //         })
+    //         .catch(err => {
+    //             let res = err.response;
+    //             if (res?.status === 500) {
+    //                 alert('undefined error.');
+    //                 return;
+    //             }
+
+    //             alert(res?.data.memo);
+    //         })
+    // }
+
+    // NEW :: 페이징 처리, 정렬 추가
     const __reqSearchProductAndOptionList = async () => {
         let categorySearchQuery = query.categorySearchQuery || null;
         let productSearchHeaderName = query.productSearchHeaderName || null;
@@ -102,6 +142,11 @@ const ProductManageComponent = (props) => {
         let optionSearchHeaderName = query.optionSearchHeaderName || null;
         let optionSearchQuery = query.optionSearchQuery || null;
         let stockManagement = true;
+        let page = query.page || null;
+        let size = query.size || null;
+        let sortBy = query.sortBy || null;
+        let sortDirection = query.sortDirection || null;
+        let sort = sortFormatUtils().getSortWithSortElements(DEFAULT_HEADER_FIELDS, sortBy, sortDirection);
 
         let params = {
             categorySearchQuery: categorySearchQuery,
@@ -109,10 +154,13 @@ const ProductManageComponent = (props) => {
             productSearchQuery: productSearchQuery,
             optionSearchHeaderName: optionSearchHeaderName,
             optionSearchQuery: optionSearchQuery,
-            stockManagement: stockManagement
+            stockManagement: stockManagement,
+            page: page,
+            size: size,
+            sort: sort
         }
 
-        await productDataConnect().searchBatch(params)
+        await productDataConnect().searchBatchByPaging(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     setProductFJList(res.data.data);
@@ -137,9 +185,12 @@ const ProductManageComponent = (props) => {
             <OperatorComponent
                 categoryList={categoryList}
             ></OperatorComponent>
-
-            <ManageTableComponent
+            
+            <ManageTablePagenationComponent
                 productFJList={productFJList}
+            ></ManageTablePagenationComponent>
+            <ManageTableComponent
+                productFJList={productFJList?.content}
             ></ManageTableComponent>
 
             {/* Backdrop */}
