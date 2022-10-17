@@ -7,7 +7,7 @@ import { BackdropHookComponent, useBackdropHook } from "../../hooks/backdrop/use
 import CreateFormComponent from "./create_form/CreateForm.component";
 
 const Container = styled.div`
-    background-color: #edf0f5;
+    background-color: var(--piaar-background-color);
     min-height: 100vh;
     height: 100%;
     padding-bottom: 50px;
@@ -51,7 +51,7 @@ const ProductCreateComponent = (props) => {
         await productDataConnect().createProductAndOptions(body)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
-                    navigate(location.state.prevUrl);
+                    navigate(location.state.routerUrl);
                 }
             })
             .catch(err => {

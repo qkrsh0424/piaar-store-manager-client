@@ -321,7 +321,7 @@ const CreateFormComponent = (props) => {
     }
 
     const onActionCancelCreateProduct = () => {
-        navigate(location.state.prevUrl);
+        navigate(location.state.routerUrl);
     }
 
     const onSumbitCreateProductAndOption = (e) =>  {

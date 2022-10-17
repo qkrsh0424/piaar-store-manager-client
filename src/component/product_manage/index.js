@@ -9,7 +9,7 @@ import { productReleaseDataConnect } from '../../data_connect/productReleaseData
 import { subOptionCodeDataConnect } from '../../data_connect/subOptionCodeDataConnect';
 
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
-import { dateToYYYYMMDD, getEndDate, getStartDate } from '../../utils/dateFormatUtils';
+import { getEndDate, getStartDate } from '../../utils/dateFormatUtils';
 import ProductManageNavComponent from './product-manage-nav/ProductManageNav.component';
 import ProductManageTableComponent from './product-manage-table/ProductManageTable.component';
 import SelectorComponent from './selector/Selector.component';

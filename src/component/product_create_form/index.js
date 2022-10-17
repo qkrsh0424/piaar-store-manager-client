@@ -163,7 +163,7 @@ const ProductCreateComponent = () => {
         await productDataConnect().postCreate(data)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
-                    navigate(location.state.prevUrl);
+                    navigate(location.state.routerUrl);
                 }
             })
             .catch(err => {

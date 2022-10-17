@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Container = styled.div`
     height: 100%;
@@ -105,6 +105,11 @@ const CustomLink2 = styled.a`
 const HomeBody = () => {
     const userRdx = useSelector(state => state.user);
 
+    // 상품등록 후 이동할 페이지 설정
+    let routerState = {
+        routerUrl: '/products'
+    }
+
     return (
         <>
             <Container>
@@ -113,7 +118,7 @@ const HomeBody = () => {
                         <GroupTitle>상품 관리</GroupTitle>
                         <LinkBox>
                             <CustomLink to='/products'>상품 재고관리</CustomLink>
-                            <CustomLink to='/products/create'>상품 등록</CustomLink>
+                            <CustomLink to='/products/create' state={routerState}>상품 등록</CustomLink>
                             <CustomLink to='/product-detail'>상품 상세정보</CustomLink>
                         </LinkBox>
                     </GroupBox>

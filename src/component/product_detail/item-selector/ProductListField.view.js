@@ -13,7 +13,7 @@ export default function ProductListFieldView(props) {
     const navigate = useNavigate();
 
     let routerState = {
-        prevUrl: location.pathname
+        routerUrl: location.pathname
     }
 
     return (

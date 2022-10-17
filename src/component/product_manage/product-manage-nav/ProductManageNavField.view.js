@@ -8,7 +8,7 @@ const ProductManageNavFieldView = (props) => {
     let location = useLocation();
 
     let routerState = {
-        prevUrl: location.pathname
+        routerUrl: location.pathname
     }
 
     return (
