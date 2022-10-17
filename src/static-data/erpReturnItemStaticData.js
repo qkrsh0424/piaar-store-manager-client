@@ -177,6 +177,10 @@ const staticDefaultDeliveryChargeReturnType = [
     {
         "index": 3,
         "typeName": "상품동봉"
+    },
+    {
+        "index": 4,
+        "typeName": "미청구"
     }
 ]
 
