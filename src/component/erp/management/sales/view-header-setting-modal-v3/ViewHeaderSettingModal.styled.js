@@ -92,11 +92,34 @@ const SelectorFieldWrapper = styled.div`
     padding: 20px 10px;
 
     .selector-box {
-        width: 350px;
+        width: 320px;
         padding: 10px;
 
         @media screen and (max-width: 992px){
             width: 100%;
+        }
+    }
+
+    .select-item{
+        margin: 0 10px;
+        width: 300px;
+        height: 30px;
+        padding: 0 10px;
+        border: 1px solid #212529;
+        border-radius: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+
+        &:focus{
+            outline: none;
+        }
+
+        @media all and (max-width:992px) {
+            width: 100%;
+            margin: 10px 0 0 0;
         }
     }
 

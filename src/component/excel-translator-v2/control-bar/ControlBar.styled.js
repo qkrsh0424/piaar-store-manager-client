@@ -33,6 +33,29 @@ const TitleSelectorWrapper = styled.div`
         }
     }
 
+    .select-item{
+        margin: 0 10px;
+        width: 320px;
+        height: 50px;
+        padding: 10px;
+        border: 1px solid #989fb7;
+        border-radius: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+
+        &:focus{
+            outline: none;
+        }
+
+        @media all and (max-width:992px) {
+            width: 100%;
+            margin: 10px 0 0 0;
+        }
+    }
+
     .button-box {
         display: flex;
 

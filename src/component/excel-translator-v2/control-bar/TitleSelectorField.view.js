@@ -1,12 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { TitleSelectorWrapper } from "./ControlBar.styled"
 
@@ -14,7 +8,7 @@ export default function TitleSelectorFieldView(props) {
     return (
         <TitleSelectorWrapper>
             <div className="selector">
-                <Box sx={{ display: 'flex' }}>
+                {/* <Box sx={{ display: 'flex' }}>
                     <FormControl sx={{ width: '100%', height: '43px' }}>
                         <InputLabel id="storage-title-select-id" sx={{ top: '-5px' }}>엑셀 형식 선택</InputLabel>
                         <Select
@@ -38,7 +32,27 @@ export default function TitleSelectorFieldView(props) {
                             })}
                         </Select>
                     </FormControl>
-                </Box>
+                </Box> */}
+                <select
+                    className='select-item'
+                    value={props.selectedTranslatorHeader?.id || ''}
+                    onChange={props.onChangeSelectedHeaderTitle}
+                >
+                    <option value=''>엑셀형식 선택</option>
+                    {props.excelTranslatorViewData?.map((data, idx) => {
+                        return (
+                            <option
+                                key={'excel_translator_title' + idx}
+                                value={data.id}
+                            >
+                                <span>{data.uploadHeaderTitle}</span>
+                                <span>{' > '}</span>
+                                <span>{data.downloadHeaderTitle}</span>
+                                <span>{'(헤더:' + data.rowStartNumber + ')'}</span>
+                            </option>
+                        )
+                    })}
+                </select>
             </div>
             <div className="button-box">
                 <button type="button" onClick={props.onCreateTranslatorHeaderModalOpen}><AddIcon /></button>
