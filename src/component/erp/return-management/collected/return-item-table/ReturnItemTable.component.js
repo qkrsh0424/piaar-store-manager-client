@@ -219,14 +219,29 @@ const ReturnItemTableComponent = (props) => {
 
     const onChangeSelectedReturnItem = (e) => {
         e.preventDefault();
-
+        let targetName = e.target.name;
+        let targetValue = e.target.value;
+        
         dispatchSelectedReturnItem({
             type: 'CHANGE_DATA',
             payload: {
-                name: e.target.name,
-                value: e.target.value
+                name: targetName,
+                value: targetValue
             }
         })
+
+        // 입금타입에 따라 입금여부를 세팅
+        if(targetName === 'deliveryChargeReturnType') {
+            let returnYn = (targetValue === '미청구') ? 'y' : 'n';
+
+            dispatchSelectedReturnItem({
+                type: 'CHANGE_DATA',
+                payload: {
+                    name: 'deliveryChargeReturnYn',
+                    value: returnYn
+                }
+            })
+        }
     }
 
     // 반품거절 처리
@@ -330,8 +345,10 @@ const ReturnItemTableComponent = (props) => {
     }
 
     const onActionConfirmDeliveryChargeReturnType = () => {
-        props._onSubmit_changeDeliveryChargeReturnTypeForReturnItem(selectedReturnItem);
-        onActionCloseDeliveryChargeReturnTypeModalOpen();
+        if (window.confirm('입금방식 타입이 변경됨에 따라 입금여부가 변경될 수 있습니다.\n정말 변경하시겠습니까?')) {
+            props._onSubmit_changeDeliveryChargeReturnTypeForReturnItem(selectedReturnItem);
+            onActionCloseDeliveryChargeReturnTypeModalOpen();
+        }
     }
 
     return (

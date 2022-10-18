@@ -1,16 +1,11 @@
 import { SelectorFieldWrapper } from "./ViewHeaderSettingModal.styled";
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 
 export default function SelectorFieldView(props) {
     return (
         <SelectorFieldWrapper>
             <div className='flex-box'>
                 <div className="selector-box">
-                    <Box sx={{ display: 'flex' }}>
+                    {/* <Box sx={{ display: 'flex' }}>
                         <FormControl sx={{ width: '100%', height: '35px' }}>
                             <InputLabel id="title-select-id" sx={{ top: '-10px' }} name='headerTitle'>뷰 헤더 선택</InputLabel>
                             <Select
@@ -31,7 +26,21 @@ export default function SelectorFieldView(props) {
                                 })}
                             </Select>
                         </FormControl>
-                    </Box>
+                    </Box> */}
+                    <select
+                        className='select-item'
+                        value={props.viewHeader?.id || ''}
+                        onChange={props.onChangeSelectedViewHeaderTitle}
+                    >
+                        <option value=''>뷰헤더 선택</option>
+                        {props.viewHeaderList?.map((data, idx) => {
+                            return (
+                                <option key={'sales_header_title' + idx} value={data.id}>
+                                    <span>{data.headerTitle}</span>
+                                </option>
+                            )
+                        })}
+                    </select>
                 </div>
                 <div className='flex-box selector-control-box'>
                     <button

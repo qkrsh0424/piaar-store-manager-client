@@ -332,14 +332,29 @@ const OrderItemTableComponent = (props) => {
 
     const onChangeSelectReturnType = (e) => {
         e.preventDefault();
+        let targetName = e.target.name;
+        let targetValue = e.target.value;
 
         dispatchReturnRegistrationInfo({
             type: 'SET_DATA',
             payload: {
-                name: e.target.name,
-                value: e.target.value
+                name: targetName,
+                value: targetValue
             }
         })
+
+        // 입금타입에 따라 입금여부를 세팅
+        if(targetName === 'deliveryChargeReturnType') {
+            let returnYn = (targetValue === '미청구') ? 'y' : 'n';
+
+            dispatchReturnRegistrationInfo({
+                type: 'SET_DATA',
+                payload: {
+                    name: 'deliveryChargeReturnYn',
+                    value: returnYn
+                }
+            })
+        }
     }
 
     const onActionConfirmReturn = (e) => {
