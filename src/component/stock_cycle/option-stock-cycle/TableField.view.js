@@ -12,6 +12,7 @@ const Colgroup = ({  }) => {
             <col width={'100'}></col>
             <col width={'100'}></col>
             <col width={'100'}></col>
+            <col width={'100'}></col>
         </colgroup>
     );
 }
