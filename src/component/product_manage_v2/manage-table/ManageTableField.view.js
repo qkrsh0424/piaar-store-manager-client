@@ -8,6 +8,7 @@ export default function ManageTableFieldView(props) {
                 <table className='table table-sm' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                     <thead>
                         <tr>
+                            <th className='fixed-header fixed-header-left' scope="col" width='50'>선택</th>
                             <th className='fixed-header fixed-header-left' scope="col" width='100'>카테고리</th>
                             <th className='fixed-header fixed-header-left2' scope="col" width='140'>상품이미지</th>
                             <th className='fixed-header fixed-header-left3' scope="col" width='200'>상품정보</th>
@@ -26,6 +27,13 @@ export default function ManageTableFieldView(props) {
                             return (
                                 <React.Fragment key={idx}>
                                     <tr key={'create_po_idx' + idx} style={{ fontWeight: '600' }}>
+                                        <th
+                                            rowSpan={r.options.length + 1}
+                                            className='fixed-col-left' 
+                                            style={{ backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff' }}
+                                        >
+                                            <input type='radio' name='product-select'></input>
+                                        </th>
                                         <td
                                             rowSpan={r.options.length + 1}
                                             className='fixed-col-left'
