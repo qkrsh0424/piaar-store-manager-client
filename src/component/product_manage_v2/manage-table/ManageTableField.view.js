@@ -22,7 +22,7 @@ export default function ManageTableFieldView(props) {
                         </tr>
                     </thead>
                     <tbody style={{borderTop: 'none'}}>
-                        {props.productFJList?.map((r, idx) => {
+                        {props.productManagementList?.map((r, idx) => {
                             return (
                                 <React.Fragment key={idx}>
                                     <tr key={'create_po_idx' + idx} style={{ fontWeight: '600' }}>

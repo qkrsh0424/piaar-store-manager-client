@@ -5,15 +5,15 @@ import { Container } from "./ManageTablePagenation.styled";
 const ManageTablePagenationComponent = (props) => {
     return (
         <Container>
-            {props.productFJList &&
+            {props.productManagementList &&
                 <PagenationComponent
                     align={'right'}
-                    pageIndex={props.productFJList?.number}
-                    totalPages={props.productFJList?.totalPages}
-                    isFirst={props.productFJList?.first}
-                    isLast={props.productFJList?.last}
-                    totalElements={props.productFJList?.totalElements}
-                    sizeElements={[30, 50, 100, 200, 500]}
+                    pageIndex={props.productManagementList?.number}
+                    totalPages={props.productManagementList?.totalPages}
+                    isFirst={props.productManagementList?.first}
+                    isLast={props.productManagementList?.last}
+                    totalElements={props.productManagementList?.totalElements}
+                    sizeElements={[10, 30, 50, 100, 200]}
                 ></PagenationComponent>
             }
         </Container>

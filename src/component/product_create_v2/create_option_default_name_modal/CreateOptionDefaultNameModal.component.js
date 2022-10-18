@@ -11,19 +11,23 @@ function InfoFieldView() {
         <InfoFieldWrapper>
             <div>일괄 생성할 옵션명을 입력해주세요. (, 로 구분)</div>
             <div>최대 3개까지 등록할 수 있습니다.</div>
-            <div>옵션명을 구분하는 문자로 , (반점)는 포함할 수 없습니다.</div>
+            <div>옵션명을 구분하는 문자로 ','(반점)는 포함할 수 없습니다.</div>
             <br />
-            <div>TIP : [체어-소형-블랙], [체어-소형-카키], [체어-대형-블랙], [체어-대형-카키] 를 생성하고 싶다면</div>
-            <div>[구분자 : - / 옵션1 : 체어 / 옵션2 : 소형, 대형 / 옵션3 : 블랙, 카키] 를 입력</div>
+            <div>TIP : [체어-블랙], [체어-카키], [체어-블랙], [체어-카키] 를 생성하고 싶다면</div>
+            <div>[구분자 : - / 옵션1 : 체어 / 옵션2 : 블랙, 카키] 를 입력</div>
         </InfoFieldWrapper>
     )
 }
+
+const OTION_BATCH_MAX_SIZE = 3;
+const OTION_BATCH_MIN_SIZE = 2;
 
 const CreateOptionDefaultNameModalComponent = (props) => {
     const [optionDefaultNameList, dispatchOptionDefaultNameList] = useReducer(optionDefaultNameListReducer, initialOptionDefaultNameList);
     const [separator, dispatchSeparator] = useReducer(separatorReducer, initialSeparator);
 
     useEffect(() => {
+        // 기본 일괄 생성 옵션 2개 생성
         let data = [{
             id: uuidv4(),
             defaultName: ''
@@ -40,11 +44,6 @@ const CreateOptionDefaultNameModalComponent = (props) => {
     }, [])
 
     const onActionAddDefaultName = () => {
-        if(optionDefaultNameList.length > 2) {
-            alert('더이상 추가할 수 없습니다.');
-            return;
-        }
-
         let data = [
             ...optionDefaultNameList,
             {
@@ -52,6 +51,11 @@ const CreateOptionDefaultNameModalComponent = (props) => {
                 defaultName: ''
             }
         ];
+
+        if(data.length > OTION_BATCH_MAX_SIZE) {
+            alert('더이상 추가할 수 없습니다.');
+            return;
+        }
 
         dispatchOptionDefaultNameList({
             type: 'INIT_DATA',
@@ -62,7 +66,7 @@ const CreateOptionDefaultNameModalComponent = (props) => {
     const onActionDeleteDefaultName = (id) => {
         let data = optionDefaultNameList.filter(r => r.id !== id);
 
-        if(data.length < 2) {
+        if(data.length < OTION_BATCH_MIN_SIZE) {
             alert('더이상 삭제할 수 없습니다.')
             return;
         }
@@ -108,34 +112,31 @@ const CreateOptionDefaultNameModalComponent = (props) => {
             return;
         }
 
+        // 옵션명 일괄 생성
         let defaultNameList = combinationOptionName();
         props.onChangeBatchRegOptionDefaultNameInputValue(defaultNameList);
         props.onActionCloseOptionDefaultNameCreateModal();
     }
 
+    // 옵션명 일괄 생성
     const combinationOptionName = () => {
         let defaultNameList = optionDefaultNameList.map(r => valueUtils.trimAndSplit(r.defaultName, ','));
 
-        // TODO :: 알고리즘 수정하기
+        // TODO :: 구현 개선
         let data = [];
-        if(defaultNameList[2] && defaultNameList[2].length > 0) {
-            for (var i = 0; i < defaultNameList[0].length; i++) {
-                for (var j = 0; j < defaultNameList[1].length; j++) {
+        for(var i = 0; i < defaultNameList[0].length; i++) {
+            for(var j = 0; j < defaultNameList[1].length; j++) {
+                if(defaultNameList[2] && defaultNameList.length > 0) {
                     for(var k = 0; k < defaultNameList[2].length; k++) {
                         let defaultName = defaultNameList[0][i] + separator + defaultNameList[1][j] + separator + defaultNameList[2][k];
                         data.push(defaultName);
                     }
-                }
-            }
-        }else {
-            for (var i = 0; i < defaultNameList[0].length; i++) {
-                for (var j = 0; j < defaultNameList[1].length; j++) {
+                }else {
                     let defaultName = defaultNameList[0][i] + separator + defaultNameList[1][j];
                     data.push(defaultName);
                 }
             }
         }
-
         return data.join(',');
     }
 

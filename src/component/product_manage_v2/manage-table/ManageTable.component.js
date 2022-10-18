@@ -5,7 +5,7 @@ const ManageTableComponent = (props) => {
     return (
         <Container>
             <ManageTableFieldView
-                productFJList={props.productFJList}
+                productManagementList={props.productManagementList}
             ></ManageTableFieldView>
         </Container>
     )

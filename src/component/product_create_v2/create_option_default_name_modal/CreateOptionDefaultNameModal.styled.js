@@ -53,6 +53,8 @@ const InputFieldWrapper = styled.div`
 
         @media screen and (max-width: 992px) {
             font-size: 12px;
+            min-width: 30px;
+            width: auto;
         }
     }
 

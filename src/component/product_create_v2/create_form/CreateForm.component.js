@@ -132,14 +132,14 @@ const CreateFormComponent = (props) => {
 
     const onChangeOptionInputValue = (e, optionId) => {
         let optionList = createOptionDataList.map(r => {
-          if(r.id === optionId) {
-            return {
-                ...r,
-                [e.target.name]: e.target.value
-            }
-          }
-
-          return r;
+            return (r.id === optionId) ?
+                {
+                    ...r,
+                    [e.target.name]: e.target.value
+                }
+                :
+                r
+                ;
         });
 
         dispatchCreateOptionDataList({
@@ -195,7 +195,7 @@ const CreateFormComponent = (props) => {
         let option = new ProductOption(createProductData.id);
 
         for(var i = 0; i < defaultNameList.length; i++) {
-            if(defaultNameList[i] === '' || defaultNameList[i] === null || defaultNameList[i] === undefined) {
+            if(defaultNameList[i] === '' || !defaultNameList[i]) {
                 alert('일괄 등록 시 옵션명은 필수값입니다. (빈 값 허용하지 않음)');
                 return;
             }
@@ -344,7 +344,7 @@ const CreateFormComponent = (props) => {
             return false;
         }
 
-        if (createProductData.defaultName === '' || createProductData.defaultName === null || createProductData.defaultName === undefined) {
+        if (createProductData.defaultName === '' || !createProductData.defaultName) {
             alert('[상품] 상품명을 한번더 확인해 주세요.')
             return false;
         }
@@ -357,7 +357,7 @@ const CreateFormComponent = (props) => {
         for (let i = 0; i < createOptionDataList.length; i++) {
             let option = createOptionDataList[i];
 
-            if (option.defaultName == '' || option.defaultName == null || option.defaultName == undefined) {
+            if (option.defaultName == '' || !option.defaultName) {
                 alert('[옵션] 옵션명을 한번더 확인해 주세요.')
                 return false;
             }

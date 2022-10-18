@@ -44,6 +44,22 @@ const staticOptionSearchHeader = [
     }
 ]
 
+const staticProductSortHeader = [
+    {
+        "headerName": "상품명",
+        "matchedHeaderName": "defaultName"
+    },
+    {
+        "headerName": "등록일",
+        "matchedHeaderName": "createdAt"
+    },
+    {
+        "headerName": "수정일",
+        "matchedHeaderName": "updatedAt"
+    }
+
+];
+
 function getProductSearchHeader() {
     let result = [...staticProductSearchHeader];
     return result;
@@ -62,8 +78,17 @@ function getDefaultHeaderFields() {
     return result;
 }
 
+function getProductSortHeader() {
+    let result = staticProductSortHeader.map(r => {
+        return r.matchedHeaderName;
+    })
+
+    return result;
+}
+
 export {
     getProductSearchHeader,
     getOptionSearchHeader,
-    getDefaultHeaderFields
+    getDefaultHeaderFields,
+    getProductSortHeader
 }
