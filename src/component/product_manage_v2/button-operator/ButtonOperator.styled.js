@@ -5,14 +5,28 @@ const Container = styled.div`
     border: 1px solid #dbdde2;
     background-color: #fff;
     padding: 15px;
-    height: 50px;
     display: flex;
     align-items: center;
-    flex-direction: row-reverse;
+    justify-content: space-between;
+`;
+
+const ControlFieldWrapper = styled.div`
+    padding: 5px;
+    display: flex;
+    gap: 5px;
+
+    .button-el {
+        border: 1px solid #dbdde2;
+        width: 120px;
+        padding: 4px 2px;
+        background-color: #f7f7f7;   
+    }
+
 `;
 
 const SortButtonFieldWrapper = styled.div`
-
+    padding: 5px;
+    
     .select-item {
         width: 200px;
         height: 30px;
@@ -38,5 +52,6 @@ const SortButtonFieldWrapper = styled.div`
 
 export {
     Container,
-    SortButtonFieldWrapper
+    SortButtonFieldWrapper,
+    ControlFieldWrapper
 }

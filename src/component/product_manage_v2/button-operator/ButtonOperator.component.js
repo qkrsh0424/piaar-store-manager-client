@@ -1,54 +1,56 @@
 import { useReducer } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { Container } from "./ButtonOperator.styled";
 import SortButtonFieldView from "./SortButtonField.view";
-import qs from 'query-string';
+import ControlFieldView from "./ControlField.view";
+import useRouterHook from "../../../hooks/router/useRouterHook";
 
 const ButtonOperatorComponent = (props) => {
-    const location = useLocation();
-    const query = qs.parse(location.search);
-    const navigate = useNavigate();
-    
     const [sortBy, dispatchSortBy] = useReducer(sortByReducer, initialSortBy);
     const [sortDirection, dispatchSortDirection] = useReducer(sortDirectionReducer, initialSortDirection);
 
-    const onChangeSortBy = (e) => {
-        let newSortBy = e.target.value;
-        let newSortDirection = 'asc';
-        let sortByValue = newSortBy.replace('asc_', '');
+    const {
+        query,
+        navigateUrl
+    } = useRouterHook();
 
-        if(newSortBy.startsWith("desc_")) {
-            sortByValue = newSortBy.replace('desc_', '');
-            newSortDirection = 'desc';
-        }
+    const __handle = {
+        action: {
+            changeSortByAndSortDirection: (e) => {
+                let newSortBy = e.target.value;
+                let newSortDirection = 'asc';
+                let sortByValue = newSortBy.replace('asc_', '');
 
-        dispatchSortBy({
-            type: 'INIT_DATA',
-            payload: newSortBy
-        })
+                if (newSortBy.startsWith("desc_")) {
+                    sortByValue = newSortBy.replace('desc_', '');
+                    newSortDirection = 'desc';
+                }
 
-        dispatchSortDirection({
-            type: 'INIT_DATA',
-            payload: newSortDirection
-        })
+                dispatchSortBy({
+                    type: 'INIT_DATA',
+                    payload: newSortBy
+                })
 
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
-            query: {
-                ...query,
-                sortBy: sortByValue,
-                sortDirection: newSortDirection
+                dispatchSortDirection({
+                    type: 'INIT_DATA',
+                    payload: newSortDirection
+                })
+
+                query.sortBy = sortByValue;
+                query.sortDirection = newSortDirection;
+
+                navigateUrl({ replace: true })
             }
-        }))
+        }
     }
 
     return (
         <Container>
+            <ControlFieldView />
+            
             <SortButtonFieldView
                 sortBy={sortBy}
-
-                onChangeSortBy={onChangeSortBy}
-            ></SortButtonFieldView>
+                onChangeSortBy={__handle.action.changeSortByAndSortDirection}
+            />
         </Container>
     )
 }

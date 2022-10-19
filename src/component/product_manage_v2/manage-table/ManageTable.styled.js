@@ -2,24 +2,38 @@ import styled from "styled-components";
 
 const Container = styled.div`
     margin-top: 10px;
+`;
+
+const ManageTableFieldWrapper = styled.div`
     background-color: #fff;
     border: 1px solid #dbdde2;
     min-height: 80vh;
     max-height: 80vh;
     overflow: auto;
-`;
-
-const ManageTableFieldWrapper = styled.div`
 
     table thead tr {
         vertical-align: middle !important;
         text-align: center;
     }
 
+    table tbody tr {
+        :hover {
+            cursor: pointer;
+        }
+    }
+
     table tbody th, td {
         vertical-align: middle !important;
         text-align: center;
         font-size: 14px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    table tbody .tr-active {
+        transition: 0.15s;
+        background: #2C73D230 !important;
     }
 
     .fixed-header {
@@ -36,34 +50,10 @@ const ManageTableFieldWrapper = styled.div`
         z-index: 11;
     }
 
-    .fixed-header-left2 {
-        left: 100px;
-        z-index: 11;
-    }
-
-    .fixed-header-left3 {
-        left: 240px;
-        z-index: 11;
-        box-shadow: -0.5px 0 0 0 #e0e0e0 inset;
-    }
-
     .fixed-col-left {
         position: sticky;
         left: 0;
         z-index: 9;
-    }
-
-    .fixed-col-left2 {
-        position: sticky;
-        left: 100px;
-        z-index: 9;
-    }
-
-    .fixed-col-left3 {
-        position: sticky;
-        left: 240px;
-        z-index: 9;
-        box-shadow: -0.5px 0 0 0 #e0e0e0 inset;
     }
 
     .image-wrapper {
@@ -98,6 +88,30 @@ const ManageTableFieldWrapper = styled.div`
         background-color: #f7f7f7;
 
         cursor: pointer;
+    }
+
+    .control-btn {
+        margin: 4px;
+    }
+
+    .control-btn .button-el {
+        width: 80px;
+        height: 25px;
+        border-radius: 2px;
+        border: 1px solid #c8c8c8;
+        background-color: #f7f7f7;
+    }
+
+    .option-control-box {
+        display: flex;
+        gap: 5px;
+        place-content: center;
+    }
+
+    .option-control-btn .button-el {
+        border: 1px solid #c8c8c8;
+        background-color: inherit;
+        border-radius: 3px;
     }
 `;
 

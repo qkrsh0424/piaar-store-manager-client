@@ -20,7 +20,7 @@ const Container = styled.div`
 
     .select-item{
         width: 300px;
-        height: 50px;
+        height: 40px;
         padding: 5px;
         /* margin: 0 10px; */
         border: 1px solid #e1e1e1;
@@ -41,10 +41,10 @@ const Container = styled.div`
         }
     }
 
-    .input-item{
+    .input-item {
         margin: 0 10px;
         width: 300px;
-        height: 50px;
+        height: 40px;
         border: 1px solid #e1e1e1;
         padding: 0 5px;
         font-size: 14px;

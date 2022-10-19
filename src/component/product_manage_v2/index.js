@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import qs from 'query-string';
 import styled from "styled-components";
-import { productCategoryDataConnect } from "../../data_connect/productCategoryDataConnect";
 import { BackdropHookComponent, useBackdropHook } from "../../hooks/backdrop/useBackdropHook";
 import OperatorComponent from "./search-operator/SearchOperator.component";
 import { productDataConnect } from "../../data_connect/productDataConnect";
 import ManageTableComponent from "./manage-table/ManageTable.component";
-import { getDefaultHeaderFields, getProductSortHeader } from "../../static-data/product-manage/productManageStaticData";
+import { getProductSortHeader } from "../../static-data/product-manage/productManageStaticData";
 import { sortFormatUtils } from "../../utils/sortFormatUtils";
 import ManageTablePagenationComponent from "./manage-table-pagenation/ManageTablePagenation.component";
 import ButtonOperatorComponent from "./button-operator/ButtonOperator.component";
+import useRouterHook from "../../hooks/router/useRouterHook";
 
 const HeaderFieldWrapper = styled.div`
     margin-top: 10px;
@@ -56,11 +54,13 @@ const Container = styled.div`
 const PRODUCT_SORT_HEADER_FIELDS = getProductSortHeader();
 
 const ProductManageComponent = (props) => {
-    const location = useLocation();
-    const query = qs.parse(location.search);
-
-    const [categoryList, setCategoryList] = useState(null);
     const [productManagementList, setProductManagementList] = useState(null);
+    const [checkedOptionIdList, setCheckedOptionIdList] = useState([]);
+
+    const {
+        location,
+        query
+    } = useRouterHook();
 
     const {
         open: backdropOpen,
@@ -70,132 +70,120 @@ const ProductManageComponent = (props) => {
 
     useEffect(() => {
         async function fetchInit() {
-            onActionOpenBackdrop();
-            await __reqSearchProductCategory();
-            onActionCloseBackdrop();
-        }
-        fetchInit();
-    }, [])
-
-    useEffect(() => {
-        async function fetchInit() {
           onActionOpenBackdrop();
-          await __reqSearchProductAndOptionList();
+          await __handle.req.searchProductAndOptionList();
           onActionCloseBackdrop();
         }
   
         fetchInit();
       }, [location])
 
-    const __reqSearchProductCategory = async () => {
-        await productCategoryDataConnect().searchList()
-            .then(res => {
-                if(res.status === 200 && res.data && res.data.message === 'success') {
-                    setCategoryList(res.data.data);
+    const __handle = {
+        req: {
+            searchProductAndOptionList: async () => {
+                let categorySearchQuery = query.categorySearchQuery || null;
+                let productSearchHeaderName = query.productSearchHeaderName || null;
+                let productSearchQuery = query.productSearchQuery || null;
+                let optionSearchHeaderName = query.optionSearchHeaderName || null;
+                let optionSearchQuery = query.optionSearchQuery || null;
+                let stockManagement = true;
+                let page = query.page || null;
+                let size = query.size || null;
+                let sortBy = query.sortBy || null;
+                let sortDirection = query.sortDirection || null;
+                let sort = sortFormatUtils().getSortWithSortElements(PRODUCT_SORT_HEADER_FIELDS, sortBy, sortDirection);
+        
+                let params = {
+                    categorySearchQuery: categorySearchQuery,
+                    productSearchHeaderName: productSearchHeaderName,
+                    productSearchQuery: productSearchQuery,
+                    optionSearchHeaderName: optionSearchHeaderName,
+                    optionSearchQuery: optionSearchQuery,
+                    stockManagement: stockManagement,
+                    page: page,
+                    size: size,
+                    sort: sort
                 }
-            })
-            .catch(err => {
-                let res = err.response;
-                alert(res?.data?.memo);
-            })
-    }
+        
+                await productDataConnect().searchBatchByPaging(params)
+                    .then(res => {
+                        if (res.status === 200 && res.data.message === 'success') {
+                            setProductManagementList(res.data.data);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+        
+                        alert(res?.data.memo);
+                    })
+            }
+        },
+        action: {
+            checkOne: (e, optionId) => {
+                e.stopPropagation();
 
-    // // TODO :: 페이징 처리, 정렬 추가해야 함
-    // const __reqSearchProductAndOptionList = async () => {
-    //     let categorySearchQuery = query.categorySearchQuery || null;
-    //     let productSearchHeaderName = query.productSearchHeaderName || null;
-    //     let productSearchQuery = query.productSearchQuery || null;
-    //     let optionSearchHeaderName = query.optionSearchHeaderName || null;
-    //     let optionSearchQuery = query.optionSearchQuery || null;
-    //     let stockManagement = true;
+                let data = [...checkedOptionIdList];
+                let selectedId = optionId;
 
-    //     let params = {
-    //         categorySearchQuery: categorySearchQuery,
-    //         productSearchHeaderName: productSearchHeaderName,
-    //         productSearchQuery: productSearchQuery,
-    //         optionSearchHeaderName: optionSearchHeaderName,
-    //         optionSearchQuery: optionSearchQuery,
-    //         stockManagement: stockManagement
-    //     }
+                if(checkedOptionIdList.some(id => id === selectedId)) {
+                    data = data.filter(id => id !== selectedId);
+                } else {
+                    data.push(selectedId);
+                }
 
-    //     await productDataConnect().searchBatch(params)
-    //         .then(res => {
-    //             if (res.status === 200 && res.data.message === 'success') {
-    //                 setProductManagementList(res.data.data.content);
-    //             }
-    //         })
-    //         .catch(err => {
-    //             let res = err.response;
-    //             if (res?.status === 500) {
-    //                 alert('undefined error.');
-    //                 return;
-    //             }
+                setCheckedOptionIdList(data);
+            },
+            checkAll: () => {
+                if(__handle.action.isCheckedAll()) {
+                    setCheckedOptionIdList([]);
+                }else {
+                    let optionIdList = [];
+                    productManagementList?.content.forEach(r => {
+                        let idList = r.options.map(option => option.id);
+                        optionIdList = optionIdList.concat(idList);
+                    });
+                    setCheckedOptionIdList(optionIdList);
+                }
+            },
+            isCheckedOne: (optionId) => {
+                return checkedOptionIdList.some(id => id === optionId);
+            },
+            isCheckedAll: () => {
+                let optionIdList = [];
+                productManagementList?.content.forEach(r => {
+                    let idList = r.options.map(option => option.id);
+                    optionIdList = optionIdList.concat(idList);
+                });
+                optionIdList.sort();
+                checkedOptionIdList.sort();
 
-    //             alert(res?.data.memo);
-    //         })
-    // }
-
-    // NEW :: 페이징 처리, 정렬 추가
-    const __reqSearchProductAndOptionList = async () => {
-        let categorySearchQuery = query.categorySearchQuery || null;
-        let productSearchHeaderName = query.productSearchHeaderName || null;
-        let productSearchQuery = query.productSearchQuery || null;
-        let optionSearchHeaderName = query.optionSearchHeaderName || null;
-        let optionSearchQuery = query.optionSearchQuery || null;
-        let stockManagement = true;
-        let page = query.page || null;
-        let size = query.size || null;
-        let sortBy = query.sortBy || null;
-        let sortDirection = query.sortDirection || null;
-        let sort = sortFormatUtils().getSortWithSortElements(PRODUCT_SORT_HEADER_FIELDS, sortBy, sortDirection);
-
-        let params = {
-            categorySearchQuery: categorySearchQuery,
-            productSearchHeaderName: productSearchHeaderName,
-            productSearchQuery: productSearchQuery,
-            optionSearchHeaderName: optionSearchHeaderName,
-            optionSearchQuery: optionSearchQuery,
-            stockManagement: stockManagement,
-            page: page,
-            size: size,
-            sort: sort
+                if(optionIdList.length === 0) return false;
+                return JSON.stringify(optionIdList) === JSON.stringify(checkedOptionIdList);
+            },
         }
-
-        await productDataConnect().searchBatchByPaging(params)
-            .then(res => {
-                if (res.status === 200 && res.data.message === 'success') {
-                    setProductManagementList(res.data.data);
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data.memo);
-            })
     }
 
     return (
         <Container>
-            <HeaderField
-                title={'상품 재고관리'}
-            ></HeaderField>
-            <OperatorComponent
-                categoryList={categoryList}
-            ></OperatorComponent>
-            
-            <ButtonOperatorComponent
-            ></ButtonOperatorComponent>
+            <HeaderField title={'상품 재고관리'}/>
+            <OperatorComponent />
+            <ButtonOperatorComponent />
 
             <ManageTablePagenationComponent
                 productManagementList={productManagementList}
-            ></ManageTablePagenationComponent>
+            />
             <ManageTableComponent
                 productManagementList={productManagementList?.content}
-            ></ManageTableComponent>
+
+                isCheckedOne={__handle.action.isCheckedOne}
+                isCheckedAll={__handle.action.isCheckedAll}
+                onActionCheckOne={__handle.action.checkOne}
+                onActionCheckAll={__handle.action.checkAll}
+            />
 
             {/* Backdrop */}
             <BackdropHookComponent

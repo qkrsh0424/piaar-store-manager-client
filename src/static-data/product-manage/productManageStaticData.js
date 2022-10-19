@@ -35,12 +35,12 @@ const staticOptionSearchHeader = [
         "matchedHeaderName": "status"
     },
     {
-        "headerName": "메모",
-        "matchedHeaderName": "memo"
-    },
-    {
         "headerName": "출고지",
         "matchedHeaderName": "releaseLocation"
+    },
+    {
+        "headerName": "비고",
+        "matchedHeaderName": "memo"
     }
 ]
 

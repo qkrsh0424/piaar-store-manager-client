@@ -3,10 +3,16 @@ import ManageTableFieldView from "./ManageTableField.view";
 
 const ManageTableComponent = (props) => {
     return (
+        props.productManagementList &&
         <Container>
             <ManageTableFieldView
                 productManagementList={props.productManagementList}
-            ></ManageTableFieldView>
+
+                isCheckedOne={props.isCheckedOne}
+                isCheckedAll={props.isCheckedAll}
+                onActionCheckOne={props.onActionCheckOne}
+                onActionCheckAll={props.onActionCheckAll}
+            />
         </Container>
     )
 }

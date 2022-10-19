@@ -63,6 +63,7 @@ const SingleAddModalComponent = (props) => {
             alert('수취인명은 필수 항목입니다.');
             return;
         }
+        
         if (!dataValue.receiverContact1) {
             alert('전화번호1은 필수 항목입니다.');
             return;

@@ -1,4 +1,5 @@
 import React from "react";
+import ResizableTh from "../../module/table/ResizableTh";
 import { ManageTableFieldWrapper } from "./ManageTable.styled";
 
 export default function ManageTableFieldView(props) {
@@ -8,43 +9,78 @@ export default function ManageTableFieldView(props) {
                 <table className='table table-sm' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                     <thead>
                         <tr>
-                            <th className='fixed-header fixed-header-left' scope="col" width='50'>선택</th>
-                            <th className='fixed-header fixed-header-left' scope="col" width='100'>카테고리</th>
-                            <th className='fixed-header fixed-header-left2' scope="col" width='140'>상품이미지</th>
-                            <th className='fixed-header fixed-header-left3' scope="col" width='200'>상품정보</th>
-                            <th className='fixed-header' scope="col" width='200'>옵션관리코드</th>
-                            <th className='fixed-header' scope="col" width='200'>옵션명</th>
-                            <th className='fixed-header' scope="col" width='200'>옵션설명</th>
-                            <th className='fixed-header' scope="col" width='200'>재고수량</th>
-                            <th className='fixed-header' scope="col" width='200'>상태</th>
-                            <th className='fixed-header' scope="col" width='200'>가격</th>
-                            <th className='fixed-header' scope="col" width='200'>출고지</th>
-                            <th className='fixed-header' scope="col" width='200'>비고</th>
+                            <th className='fixed-header fixed-header-left' scope="col" width='100'>설정</th>
+                            <th className='fixed-header fixed-header-left' scope="col" width='100' style={{ left: '100px' }}>카테고리</th>
+                            <th className='fixed-header fixed-header-left' scope="col" width='140' style={{ left: '200px' }}>상품이미지</th>
+                            <th className='fixed-header fixed-header-left' scope="col" width='200' style={{ left: '340px', boxShadow: '-0.5px 0 0 0 #e0e0e0 inset' }}>상품정보</th>
+                            <th className='fixed-header' scope="col" width='50'>
+                                <input
+                                    type='checkbox'
+                                    style={{ cursor: 'pointer'}}
+                                    checked={props.isCheckedAll()}
+                                    onChange={(e) => props.onActionCheckAll(e)}
+                                />
+                            </th>
+                            {/* 옵션 th */}
+                            <ResizableTh className='fixed-header' scope="col" width={200}>옵션관리코드</ResizableTh>
+                            <ResizableTh className='fixed-header' scope="col" width={200}>옵션명</ResizableTh>
+                            <ResizableTh className='fixed-header' scope="col" width={200}>옵션설명</ResizableTh>
+                            <ResizableTh className='fixed-header' scope="col" width={100}>재고수량</ResizableTh>
+                            <ResizableTh className='fixed-header' scope="col" width={200}>상태</ResizableTh>
+                            <ResizableTh className='fixed-header' scope="col" width={200}>가격</ResizableTh>
+                            <ResizableTh className='fixed-header' scope="col" width={200}>출고지</ResizableTh>
+                            <ResizableTh className='fixed-header' scope="col" width={200}>비고</ResizableTh>
+                            <th className='fixed-header' scope="col" width={100}>대체코드</th>
+                            <th className='fixed-header' scope="col" width={100}>옵션패키지</th>
+                            <th className='fixed-header' scope="col" width={100}>설정</th>
                         </tr>
                     </thead>
-                    <tbody style={{borderTop: 'none'}}>
+                    <tbody style={{ borderTop: 'none' }}>
                         {props.productManagementList?.map((r, idx) => {
+                            let thBackgroundColor = (idx % 2 === 1) ? '#f7f7f7' : '#ffffff';
+                            let rowSpanSize = r.options.length + 1;
+
                             return (
                                 <React.Fragment key={idx}>
                                     <tr key={'create_po_idx' + idx} style={{ fontWeight: '600' }}>
                                         <th
-                                            rowSpan={r.options.length + 1}
+                                            rowSpan={rowSpanSize}
                                             className='fixed-col-left' 
-                                            style={{ backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff' }}
+                                            style={{ backgroundColor : thBackgroundColor }}
                                         >
-                                            <input type='radio' name='product-select'></input>
+                                            <div className='control-btn'>
+                                                <button
+                                                    className='button-el'
+                                                >
+                                                    상품수정
+                                                </button>
+                                            </div>
+                                            <div className='control-btn'>
+                                                <button
+                                                    className='button-el'
+                                                >
+                                                    상품삭제
+                                                </button>
+                                            </div>
+                                            <div className='control-btn'>
+                                                <button
+                                                    className='button-el'
+                                                >
+                                                    옵션추가
+                                                </button>
+                                            </div>
                                         </th>
                                         <td
-                                            rowSpan={r.options.length + 1}
+                                            rowSpan={rowSpanSize}
                                             className='fixed-col-left'
-                                            style={{ backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff' }}
+                                            style={{ backgroundColor : thBackgroundColor, left: '100px' }}
                                         >
                                             <div style={{color: 'var(--erp-main-color)'}}>[{r.category.name}]</div>
                                         </td>
                                         <td
-                                            rowSpan={r.options.length + 1}
-                                            className='fixed-col-left2'
-                                            style={{ textAlign: 'left', backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff' }}
+                                            rowSpan={rowSpanSize}
+                                            className='fixed-col-left'
+                                            style={{ textAlign: 'left', backgroundColor : thBackgroundColor , left: '200px' }}
                                         >
                                             <div className="image-wrapper">
                                                 <div className="image-box">
@@ -57,9 +93,9 @@ export default function ManageTableFieldView(props) {
                                             </div>
                                         </td>
                                         <td
-                                            rowSpan={r.options.length + 1}
-                                            className='fixed-col-left3'
-                                            style={{ backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff' }}
+                                            rowSpan={rowSpanSize}
+                                            className='fixed-col-left'
+                                            style={{ backgroundColor : thBackgroundColor , left: '340px', boxShadow: '-0.5px 0 0 0 #e0e0e0 inset' }}
                                         >
                                             <div>{r.product.defaultName}</div>
                                             <div>{r.product.code}</div>
@@ -92,8 +128,17 @@ export default function ManageTableFieldView(props) {
                                         </td>
                                     </tr>
                                     {r.options && r.options.map((option, idx2) => {
+                                        let checked = props.isCheckedOne(option.id);
+
                                         return (
-                                            <tr key={'option-idx' + idx2}>
+                                            <tr
+                                                key={'option-idx' + idx2}
+                                                className={`${checked && 'tr-active'}`}
+                                                onClick={(e) => props.onActionCheckOne(e, option.id)}
+                                            >
+                                                <td>
+                                                    <input type='checkbox' style={{ cursor: 'pointer'}} checked={checked} onChange={(e) => props.onActionCheckOne(e, option.id)} />
+                                                </td>
                                                 <td>
                                                     {option.code}
                                                 </td>
@@ -117,6 +162,52 @@ export default function ManageTableFieldView(props) {
                                                 </td>
                                                 <td>
                                                     {option.memo}
+                                                </td>
+                                                <td>
+                                                    <div className='control-btn'>
+                                                        <button
+                                                            className='button-el'
+                                                        >
+                                                            대체코드
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className='control-btn'>
+                                                        <button
+                                                            className='button-el'
+                                                        >
+                                                            옵션패키지
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className='option-control-box'>
+                                                        <div className='option-control-btn'>
+                                                            <button
+                                                                className='button-el'
+                                                            >
+                                                                <img
+                                                                    src='/assets/icon/edit_default_595d61.svg'
+                                                                    style={{ width: '20px' }}
+                                                                    alt=""
+                                                                    loading='lazy'
+                                                                />
+                                                            </button>
+                                                        </div>
+                                                        <div className='option-control-btn'>
+                                                            <button
+                                                                className='button-el'
+                                                            >
+                                                                <img
+                                                                    src='/assets/icon/delete_default_ff3060.svg'
+                                                                    style={{ width: '20px' }}
+                                                                    alt=""
+                                                                    loading='lazy'
+                                                                />
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         )

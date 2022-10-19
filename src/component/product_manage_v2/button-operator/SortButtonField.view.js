@@ -6,7 +6,7 @@ export default function SortButtonFieldView(props) {
             <select
                 className='select-item'
                 value={props.sortBy || ''}
-                onChange={props.onChangeSortBy}
+                onChange={(e) => props.onChangeSortBy(e)}
             >
                 <option value='asc_createdAt'>상품등록일 순</option>
                 <option value='desc_createdAt'>상품등록일 역순</option>
