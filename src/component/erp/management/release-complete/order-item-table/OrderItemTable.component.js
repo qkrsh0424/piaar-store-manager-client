@@ -360,6 +360,11 @@ const OrderItemTableComponent = (props) => {
     const onActionConfirmReturn = (e) => {
         e.preventDefault();
 
+        if(!returnRegistrationInfo || !returnRegistrationInfo.deliveryChargeReturnType) {
+            alert('반품배송비 입금방식은 필수값입니다. 다시 시도해주세요.');
+            return;
+        }
+
         if(!returnRegistrationInfo || !returnRegistrationInfo.returnReasonType) {
             alert('반품 요청 사유는 필수값입니다. 다시 시도해주세요.');
             return;
@@ -529,6 +534,7 @@ const OrderItemTableComponent = (props) => {
                                 </div>
                             </div>
                             <div className='info-box'>
+                                <span style={{ color: 'red' }}>* </span>
                                 <span className='input-title'>반품배송비 입금방식</span>
                                 <div>
                                     <select
@@ -536,7 +542,6 @@ const OrderItemTableComponent = (props) => {
                                         name='deliveryChargeReturnType'
                                         value={returnRegistrationInfo?.deliveryChargeReturnType || ''}
                                         onChange={onChangeSelectReturnType}
-                                        required
                                     >
                                         <option value=''>선택</option>
                                         {DEFAULT_DELIVERY_CHARGE_RETURN_TYPE.map((r, idx) => {
@@ -571,7 +576,6 @@ const OrderItemTableComponent = (props) => {
                                         name='returnReasonType'
                                         value={returnRegistrationInfo?.returnReasonType || ''}
                                         onChange={onChangeSelectReturnType}
-                                        required
                                     >
                                         <option value=''>선택</option>
                                         {props.returnTypeList?.map(r => {
