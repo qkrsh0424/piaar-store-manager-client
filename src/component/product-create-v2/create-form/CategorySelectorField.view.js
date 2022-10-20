@@ -1,11 +1,10 @@
-import Ripple from "../../module/button/Ripple";
 import RequiredIcon from "../../module/icon/RequiredIcon";
 import { CategorySelectorWrapper } from "./CreateForm.styled";
 
 export default function CategorySelectorFieldView(props) {
     return (
         <CategorySelectorWrapper>
-            <div className='title-wrapper' onClick={props.onActionSlideEffectControl}>
+            <div className='title-wrapper' onClick={(e) => props.onActionSlideEffectControl(e, 'category')}>
                 <div className="title-box">
                     <span>카테고리</span>
                     <RequiredIcon />
@@ -33,7 +32,6 @@ export default function CategorySelectorFieldView(props) {
                                 loading='lazy'
                             ></img>
                         }
-                        <Ripple color={'#e1e1e1'} duration={1000}></Ripple>
                     </button>
                 </div>
             </div>
@@ -43,7 +41,7 @@ export default function CategorySelectorFieldView(props) {
                         name='productCategoryCid'
                         className='select-item'
                         value={props.createProductData?.productCategoryCid || ''}
-                        onChange={props.onChangeProductInputValue}
+                        onChange={(e) => props.onChangeProductInputValue(e)}
                     >
                         <option value=''>카테고리 선택</option>
                         {props.categoryList?.map((r, idx) => {

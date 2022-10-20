@@ -11,7 +11,7 @@ export default function useSearchOperatorHook (props) {
 
     const {
         query,
-        navigateUrl,
+        navigateParams,
         navigateClearParams
     } = useRouterHook();
 
@@ -83,7 +83,7 @@ export default function useSearchOperatorHook (props) {
 
         delete query.page;
 
-        navigateUrl({ replace: true})
+        navigateParams({ replace: true})
     }
 
     const onActionClearRoute = () => {

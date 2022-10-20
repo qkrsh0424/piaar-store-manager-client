@@ -10,7 +10,7 @@ const ButtonOperatorComponent = (props) => {
 
     const {
         query,
-        navigateUrl
+        navigateParams
     } = useRouterHook();
 
     const __handle = {
@@ -38,7 +38,7 @@ const ButtonOperatorComponent = (props) => {
                 query.sortBy = sortByValue;
                 query.sortDirection = newSortDirection;
 
-                navigateUrl({ replace: true })
+                navigateParams({ replace: true })
             }
         }
     }

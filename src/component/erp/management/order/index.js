@@ -25,7 +25,7 @@ import { useBasicSnackbarHook, BasicSnackbarHookComponent } from '../../../../ho
 import { erpDownloadExcelHeaderDataConnect } from '../../../../data_connect/erpDownloadExcelHeaderDataConnect';
 import CheckedHeadComponent from './checked-head/CheckedHead.component';
 import _ from 'lodash';
-import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
+import { useLocalStorageHook } from '../../../../hooks/local-storage/useLocalStorageHook';
 
 const Container = styled.div`
     margin-bottom: 100px;

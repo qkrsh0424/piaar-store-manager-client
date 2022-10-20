@@ -100,21 +100,15 @@ const InputFieldWrapper = styled.div`
 
     .add-button-el {
         width: 100%;
-        /* background-color: #e1e1e160; */
         padding: 5px 0;
         transition: 0.1s;
         border: none;
         border-bottom: 1px solid #dfdfdf;
-        /* border-top: 1px solid #dfdfdf; */
         background-color: #fff;
         overflow: hidden;
         position: relative;
         -webkit-transition: all .2s;
         transition: all .2s;
-        
-        /* :hover { */
-            /* background-color: #e1e1e188; */
-        /* } */
     }
 `;
 

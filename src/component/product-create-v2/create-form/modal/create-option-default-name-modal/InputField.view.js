@@ -1,4 +1,4 @@
-import Ripple from "../../module/button/Ripple";
+import Ripple from "../../../../module/button/Ripple";
 import { InputFieldWrapper } from "./CreateOptionDefaultNameModal.styled";
 
 export default function InputFieldView(props) {
@@ -13,7 +13,7 @@ export default function InputFieldView(props) {
                         style={{ flex: 0 }}
                         name='separator'
                         placeholder={`옵션명 구분자 입력`}
-                        onChange={props.onChangeSeparatorInputValue}
+                        onChange={(e) => props.onChangeSeparatorInputValue(e)}
                         value={props.separator || ''}
                         required
                     />
@@ -29,7 +29,7 @@ export default function InputFieldView(props) {
                                     name='defaultName'
                                     value={r.defaultName || ''}
                                     placeholder={`옵션명${idx + 1}`}
-                                    onChange={(e) => props.onChangeDefaultNameInputValue(e, r.id)}
+                                    onChange={(e) => props.onChangeDefaultNameInputValue(e, idx)}
                                     required
                                 />
                                 <div className='button-box'>
@@ -37,7 +37,7 @@ export default function InputFieldView(props) {
                                         type='button'
                                         className='button-el'
                                         style={{ border: 'none', background: 'none' }}
-                                        onClick={() => props.onActionDeleteDefaultName(r.id)}
+                                        onClick={() => props.onActionDeleteDefaultNameRow(r.id)}
                                     >
                                         <img
                                             className='button-icon'
@@ -55,7 +55,7 @@ export default function InputFieldView(props) {
                 <button
                     type='button'
                     className='add-button-el'
-                    onClick={props.onActionAddDefaultName}
+                    onClick={() => props.onActionAddDefaultNameRow()}
                 >
                     추가
                     <Ripple color={'#e0e0e0'} duration={1000}></Ripple>

@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import Ripple from "../../module/button/Ripple";
 import RequiredIcon from "../../module/icon/RequiredIcon";
 import { ProductInfoInputWrapper } from "./CreateForm.styled";
 
@@ -12,7 +11,7 @@ export default function ProductInfoInputFieldView(props) {
 
     return (
         <ProductInfoInputWrapper>
-            <div className='title-wrapper' onClick={props.onActionSlideEffectControl}>
+            <div className='title-wrapper' onClick={(e) => props.onActionSlideEffectControl(e, 'product')}>
                 <div className="title-box">
                     <span>상품</span>
                     <RequiredIcon />
@@ -21,7 +20,7 @@ export default function ProductInfoInputFieldView(props) {
                     <button
                         type='button'
                         className='button-el'
-                        onClick={props.onActionSlideEffectControl}
+                        onClick={(e) => props.onActionSlideEffectControl(e, 'product')}
                     >
                         {props.slideDownEffect?.product ?
                             <img
@@ -38,7 +37,6 @@ export default function ProductInfoInputFieldView(props) {
                                 loading='lazy'
                             ></img>
                         }
-                        <Ripple color={'#e1e1e1'} duration={1000}></Ripple>
                     </button>
                 </div>
             </div>
@@ -63,7 +61,7 @@ export default function ProductInfoInputFieldView(props) {
                                             <button
                                                 type='button'
                                                 className='button-el'
-                                                onClick={onActionOpenImageUploader}
+                                                onClick={() => onActionOpenImageUploader()}
                                             >
                                                 <img
                                                     src='/assets/icon/replay_icon.png'
@@ -75,7 +73,7 @@ export default function ProductInfoInputFieldView(props) {
                                             <button
                                                 type='button'
                                                 className='button-el'
-                                                onClick={props.onActionRemoveImage}
+                                                onClick={() => props.onActionRemoveImage()}
                                             >
                                                 <img
                                                     src='/assets/icon/delete_icon.png'
@@ -88,7 +86,7 @@ export default function ProductInfoInputFieldView(props) {
                                     </>
                                     :
                                     <img name='imageFile' src='/images/icon/no-image.jpg' title='no-image' style={{ cursor: 'pointer'}}
-                                        onClick={onActionOpenImageUploader}
+                                        onClick={() => onActionOpenImageUploader()}
                                     />
                                 }
                             </div>
@@ -99,23 +97,23 @@ export default function ProductInfoInputFieldView(props) {
                             상품명
                             <RequiredIcon />
                         </span>
-                        <input type='text' name='defaultName' value={props.createProductData.defaultName} onChange={props.onChangeProductInputValue} />
+                        <input type='text' name='defaultName' value={props.createProductData.defaultName} onChange={(e) => props.onChangeProductInputValue(e)} />
                     </div>
                     <div className='input-group'>
                         <span className='title-text'>상품설명</span>
-                        <input type='text' name='managementName' value={props.createProductData.managementName} onChange={props.onChangeProductInputValue} />
+                        <input type='text' name='managementName' value={props.createProductData.managementName} onChange={(e) => props.onChangeProductInputValue(e)} />
                     </div>
                     <div className='input-group'>
                         <span className='title-text'>메모</span>
-                        <input type='text' name='memo' value={props.createProductData.memo} onChange={props.onChangeProductInputValue} />
+                        <input type='text' name='memo' value={props.createProductData.memo} onChange={(e) => props.onChangeProductInputValue(e)} />
                     </div>
                     <div className='input-group'>
                         <span className='title-text'>구매링크</span>
-                        <input type='text' name='purchaseUrl' value={props.createProductData.purchaseUrl} onChange={props.onChangeProductInputValue} />
+                        <input type='text' name='purchaseUrl' value={props.createProductData.purchaseUrl} onChange={(e) => props.onChangeProductInputValue(e)} />
                     </div>
                     <div className='input-group'>
                         <span className='title-text'>관리번호</span>
-                        <input type='text' name='managementNumber' value={props.createProductData.managementNumber} onChange={props.onChangeProductInputValue} />
+                        <input type='text' name='managementNumber' value={props.createProductData.managementNumber} onChange={(e) => props.onChangeProductInputValue(e)} />
                     </div>
                     <div className='input-group'>
                         <span className='title-text'>재고반영 여부 <RequiredIcon /></span>
@@ -123,14 +121,14 @@ export default function ProductInfoInputFieldView(props) {
                             <button
                                 type='button'
                                 className={`button-el ${props.createProductData.stockManagement && 'btn-active'}`}
-                                onClick={props.onActionChangeStockManagement}
+                                onClick={(e) => props.onActionChangeStockManagement(e)}
                             >
                                 반영
                             </button>
                             <button
                                 type='button'
                                 className={`button-el ${!props.createProductData.stockManagement && 'btn-active'}`}
-                                onClick={props.onActionChangeStockManagement}
+                                onClick={(e) => props.onActionChangeStockManagement(e)}
                             >
                                 미반영
                             </button>

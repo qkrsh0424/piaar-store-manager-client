@@ -4,7 +4,7 @@ import CategorySearchFieldView from "./CategorySearchField.view";
 import OptionSearchFieldView from "./OptionSearchField.view";
 import ProductSearchFieldView from "./ProductSearchField.view";
 import { Container } from "./SearchOperator.styled";
-import useProductCategoryHook from "../../../hooks/product_category/useProductCategoryHook";
+import useProductCategoryHook from "../../../hooks/product-category/useProductCategoryHook";
 import useSearchOperatorHook from "../hooks/useSearchOperatorHook";
 
 const productSearchHeader = getProductSearchHeader();

@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 const Container = styled.div`
     padding: 30px 10px 150px 10px;
-    overflow: auto;
     max-width: 1280px;
     margin: 0 auto;
 
@@ -32,7 +31,6 @@ const CategorySelectorWrapper = styled.div`
         z-index: 10;
         background-color: white;
         border: 1px solid #dbdde2;
-        /* border-radius: 4px; */
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -337,7 +335,6 @@ const OptionInfoInputWrapper = styled.div`
     .body-wrapper {
         position: relative;
         background-color: white;
-        /* height: 0px; */
         top: -5px;
         border: 1px solid #dbdde2;
         overflow: hidden;
@@ -347,7 +344,6 @@ const OptionInfoInputWrapper = styled.div`
         width: 80%;
         margin: 0 auto;
         border: 1px solid #dfdfdf;
-        /* padding: 20px 40px; */
         overflow: auto;
 
         @media screen and (max-width: 992px){

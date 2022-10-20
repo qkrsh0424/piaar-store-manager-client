@@ -1,7 +1,7 @@
 import { Dialog } from '@mui/material';
 import { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
-import { useDisabledButtonHook } from '../../../hooks/button_disabled/useDisabledButtonHook';
+import { useDisabledButtonHook } from '../../../hooks/button-disabled/useDisabledButtonHook';
 
 const Container = styled.div`
 

@@ -8,7 +8,7 @@ export default function ButtonFieldView(props) {
                     type='button'
                     className='button-el'
                     style={{ color: '#d15120' }}
-                    onClick={props.onActionCloseOptionDefaultNameCreateModal}
+                    onClick={() => props.onActionCloseOptionDefaultNameCreateModal()}
                 >
                     취소
                 </button>

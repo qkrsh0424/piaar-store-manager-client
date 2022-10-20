@@ -34,7 +34,7 @@ const staticDefaultHeaderDetails = [
         "originCellName": "반품배송비 입금방식",
         "matchedColumnName": "deliveryChargeReturnType",
         "allowedSearch": true,
-        "requiredFlag": false,
+        "requiredFlag": true,
         "variableType": 'string'
     },
     {

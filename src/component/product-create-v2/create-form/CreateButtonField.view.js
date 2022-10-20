@@ -6,7 +6,7 @@ export default function CreateButtonFieldView(props) {
             <div className='button-box'>
                 <button
                     className='button-el'
-                    onClick={props.onActionCancelCreateProduct}
+                    onClick={() => props.onActionCancelCreateProduct()}
                 >
                     취소
                 </button>

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import DrawerNavbarMain from '../../component/nav/DrawerNavbarMain';
-import ProductCreateComponent from '../../component/product_create_v2';
-// import ProductCreateComponent from '../../component/product_create_form';
+import ProductCreateComponent from '../../component/product-create-v2';
+// import ProductCreateComponent from '../../component/product_create-form';
 
 const Container = styled.div`
 

@@ -24,7 +24,7 @@ import { erpSalesHeaderSocket } from '../../../../data_connect/socket/erpSalesHe
 import { useSocketConnectLoadingHook, SocketConnectLoadingHookComponent } from '../../../../hooks/loading/useSocketConnectLoadingHook';
 import { useBasicSnackbarHook, BasicSnackbarHookComponent } from '../../../../hooks/snackbar/useBasicSnackbarHook';
 import CheckedHeadComponent from './checked-head/CheckedHead.component';
-import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
+import { useLocalStorageHook } from '../../../../hooks/local-storage/useLocalStorageHook';
 
 const Container = styled.div`
     margin-bottom: 100px;

@@ -24,7 +24,7 @@ import { useSocketConnectLoadingHook, SocketConnectLoadingHookComponent } from '
 import { erpOrderItemSocket } from '../../../../data_connect/socket/erpOrderItemSocket';
 import { erpReleaseCompleteHeaderSocket } from '../../../../data_connect/socket/erpReleaseCompleteHeaderSocket';
 import CheckedHeadComponent from './checked-head/CheckedHead.component';
-import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
+import { useLocalStorageHook } from '../../../../hooks/local-storage/useLocalStorageHook';
 import { returnReasonTypeDataConnect } from '../../../../data_connect/returnReasonTypeDataConnect';
 import { erpReturnItemSocket } from '../../../../data_connect/socket/erpReturnItemSocket';
 

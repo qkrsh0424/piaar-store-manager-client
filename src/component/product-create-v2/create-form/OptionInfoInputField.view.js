@@ -1,4 +1,3 @@
-import Ripple from "../../module/button/Ripple";
 import RequiredIcon from "../../module/icon/RequiredIcon";
 import { v4 as uuidv4 } from 'uuid';
 import { OptionInfoInputWrapper, TableFieldWrapper } from "./CreateForm.styled";
@@ -7,7 +6,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 export default function OptionInfoInputFieldView(props) {
     return (
         <OptionInfoInputWrapper>
-            <div className='title-wrapper' onClick={props.onActionSlideEffectControl}>
+            <div className='title-wrapper' onClick={(e) => props.onActionSlideEffectControl(e, 'option')}>
                 <div className="title-box">
                     <span>옵션</span>
                     <RequiredIcon />
@@ -16,7 +15,7 @@ export default function OptionInfoInputFieldView(props) {
                     <button
                         type='button'
                         className='button-el'
-                        onClick={props.onActionSlideEffectControl}
+                        onClick={(e) => props.onActionSlideEffectControl(e, 'option')}
                     >
                         {props.slideDownEffect?.option ?
                             <img
@@ -33,7 +32,6 @@ export default function OptionInfoInputFieldView(props) {
                                 loading='lazy'
                             ></img>
                         }
-                        <Ripple color={'#e1e1e1'} duration={1000}></Ripple>
                     </button>
                 </div>
             </div>
@@ -54,15 +52,15 @@ export default function OptionInfoInputFieldView(props) {
                                 <input
                                     type='text'
                                     className='input-value'
-                                    value={props.batchRegOptionData.defaultName}
+                                    value={props.productOptionBatchReg.defaultName}
                                     name='defaultName'
-                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                    onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                 ></input>
                                 <div>
                                     <button
                                         type='button'
                                         className='modal-open-btn'
-                                        onClick={props.onActionOpenOptionDefaultNameCreateModal}
+                                        onClick={(e) => props.onActionOpenOptionDefaultNameCreateModal(e)}
                                     >옵션명 일괄 생성</button>
                                 </div>
                             </div>
@@ -71,9 +69,9 @@ export default function OptionInfoInputFieldView(props) {
                                 <input
                                     type='text'
                                     className='input-value'
-                                    value={props.batchRegOptionData.managementName}
+                                    value={props.productOptionBatchReg.managementName}
                                     name='managementName'
-                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                    onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                 ></input>
                             </div>
                             <div className='input-group'>
@@ -81,9 +79,9 @@ export default function OptionInfoInputFieldView(props) {
                                 <input
                                     type='text'
                                     className='input-value'
-                                    value={props.batchRegOptionData.salesPrice}
+                                    value={props.productOptionBatchReg.salesPrice}
                                     name='salesPrice'
-                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                    onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                     placeholder='숫자만 입력'
                                 ></input>
                             </div>
@@ -92,9 +90,9 @@ export default function OptionInfoInputFieldView(props) {
                                 <input
                                     type='text'
                                     className='input-value'
-                                    value={props.batchRegOptionData.totalPurchasePrice}
+                                    value={props.productOptionBatchReg.totalPurchasePrice}
                                     name='totalPurchasePrice'
-                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                    onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                     placeholder='숫자만 입력'
                                 ></input>
                             </div>
@@ -103,9 +101,9 @@ export default function OptionInfoInputFieldView(props) {
                                 <input
                                     type='text'
                                     className='input-value'
-                                    value={props.batchRegOptionData.status}
+                                    value={props.productOptionBatchReg.status}
                                     name='status'
-                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                    onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                 ></input>
                             </div>
                             <div className='input-group'>
@@ -113,9 +111,9 @@ export default function OptionInfoInputFieldView(props) {
                                 <input
                                     type='text'
                                     className='input-value'
-                                    value={props.batchRegOptionData.releaseLocation}
+                                    value={props.productOptionBatchReg.releaseLocation}
                                     name='releaseLocation'
-                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                    onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                 ></input>
                             </div>
                             <div className='input-group'>
@@ -123,9 +121,9 @@ export default function OptionInfoInputFieldView(props) {
                                 <input
                                     type='text'
                                     className='input-value'
-                                    value={props.batchRegOptionData.safetyStockUnit}
+                                    value={props.productOptionBatchReg.safetyStockUnit}
                                     name='safetyStockUnit'
-                                    onChange={props.onChangeBatchRegOptionInputValue}
+                                    onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                     placeholder='숫자만 입력'
                                 ></input>
                             </div>
@@ -133,9 +131,9 @@ export default function OptionInfoInputFieldView(props) {
 
                         <div>
                             <button
-                                type='submit'
+                                type='button'
                                 className='reg-btn'
-                                onClick={props.onActionAddOptionDataList}
+                                onClick={(e) => props.onActionAddOptionDataListByBatchRegData(e)}
                             >
                                 옵션 리스트 적용
                             </button>
@@ -155,7 +153,7 @@ export default function OptionInfoInputFieldView(props) {
                         <button
                             type='button'
                             className='add-btn'
-                            onClick={props.onActionAddOptionData}
+                            onClick={(e) => props.onActionAddOptionData(e)}
                         >
                             추가
                         </button>
@@ -184,7 +182,7 @@ function TableFieldView(props) {
                             <th scope="col" width='200'>안전재고 수량</th>
                         </tr>
                     </thead>
-                    <DragDropContext onDragEnd={props.onChangeOrderWithDragAndDrop}>
+                    <DragDropContext onDragEnd={(res) => props.onChangeOrderWithDragAndDrop(res)}>
                         <Droppable droppableId={uuidv4()}>
                             {(provided) => (
                                 <tbody
@@ -254,7 +252,7 @@ function TableFieldView(props) {
                                         )
                                     })}
                                     {provided.placeholder}
-                                </tbody>
+                            </tbody>
                             )}
                         </Droppable>
                     </DragDropContext>
