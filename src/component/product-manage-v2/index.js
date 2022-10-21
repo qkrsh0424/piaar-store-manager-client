@@ -10,6 +10,7 @@ import { sortFormatUtils } from "../../utils/sortFormatUtils";
 import ManageTablePagenationComponent from "./manage-table-pagenation/ManageTablePagenation.component";
 import ButtonOperatorComponent from "./button-operator/ButtonOperator.component";
 import useRouterHook from "../../hooks/router/useRouterHook";
+import useProductHook from "../../hooks/product/useProductHook";
 
 const HeaderFieldWrapper = styled.div`
     margin-top: 10px;
@@ -59,7 +60,8 @@ const ProductManageComponent = (props) => {
 
     const {
         location,
-        query
+        query,
+        navigateUrl
     } = useRouterHook();
 
     const {
@@ -67,6 +69,10 @@ const ProductManageComponent = (props) => {
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
+
+    const {
+        reqDeleteOne: reqDeleteProductOne
+    } = useProductHook();
 
     useEffect(() => {
         async function fetchInit() {
@@ -164,6 +170,29 @@ const ProductManageComponent = (props) => {
                 if(optionIdList.length === 0) return false;
                 return JSON.stringify(optionIdList) === JSON.stringify(checkedOptionIdList);
             },
+            routeToModifyPageForProductAndOptions: (e, productId) => {
+                e.stopPropagation();
+
+                let data = {
+                    pathname: `/products/modify${'?productId=' + productId}`,
+                    state: {
+                        routerUrl: location.pathname + location.search
+                    }
+                }
+
+                navigateUrl(data);
+            }
+        },
+        submit: {
+            deleteProduct: async (e, productId) => {
+                e.stopPropagation();
+
+                if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
+                    let product = productManagementList?.content.filter(r => r.product.id === productId)[0].product;
+                    await reqDeleteProductOne(product.id);
+                    await __handle.req.searchProductAndOptionList();
+                }
+            }
         }
     }
 
@@ -183,6 +212,8 @@ const ProductManageComponent = (props) => {
                 isCheckedAll={__handle.action.isCheckedAll}
                 onActionCheckOne={__handle.action.checkOne}
                 onActionCheckAll={__handle.action.checkAll}
+                onSubmitDeleteProductOne={__handle.submit.deleteProduct}
+                onActionModifyProductAndOptions={__handle.action.routeToModifyPageForProductAndOptions}
             />
 
             {/* Backdrop */}

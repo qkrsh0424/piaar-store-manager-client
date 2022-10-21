@@ -90,6 +90,11 @@ const productDataConnect = () => {
                 withCredentials: true
             })
         },
+        modifyProductAndOptions: async function (body) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v1/product/options`, body, {
+                withCredentials: true
+            })
+        },
         // getStockListFj: async function () {
         //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list-fj/stock`, {
         //         withCredentials: true
@@ -104,6 +109,11 @@ const productDataConnect = () => {
         searchBatchByPaging: async function (params) {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/batch/stock/page`, {
                 params,
+                withCredentials: true
+            })
+        },
+        searchProductAndOptions: async function (productId) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/${productId}`, {
                 withCredentials: true
             })
         },
@@ -127,8 +137,14 @@ const productDataConnect = () => {
                 withCredentials: true
             })
         },
-        deleteOne: async function (productCid) {
-            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product/one/${productCid}`, {
+        // deleteOne: async function (productCid) {
+        //     return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product/one/${productCid}`, {
+        //         withCredentials: true
+        //     })
+        // },
+        // 22.10.20 FEAT
+        deleteOne: async function (productId) {
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product/${productId}`, {
                 withCredentials: true
             })
         }

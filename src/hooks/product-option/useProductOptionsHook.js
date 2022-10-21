@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { checkNumberFormat } from "../../utils/regexUtils";
+import { isNumberFormat } from "../../utils/regexUtils";
 
 // id 제거
 const option = {
@@ -17,6 +17,10 @@ const option = {
 
 export default function useProductOptionsHook (props) {
     const [options, setOptions] = useState([]);
+
+    const onActionUpdateOptions = (data) => {
+        setOptions(data);
+    }
 
     const onChangeValueOfNameById = (e, id) => {
         let name = e.target.name;
@@ -53,10 +57,6 @@ export default function useProductOptionsHook (props) {
         setOptions(updatedOptions);
     }
 
-    const onActionUpdateOptions = (data) => {
-        setOptions(data);
-    }
-
     const checkCreateFormData = () => {
         if (options.length === 0) {
             throw new Error('[옵션] 상품의 옵션을 1개 이상 등록해 주세요.');
@@ -68,16 +68,16 @@ export default function useProductOptionsHook (props) {
             if (option.defaultName == '' || !option.defaultName) {
                 throw new Error('[옵션] 옵션명을 확인해 주세요.')
             }
-
-            if(option.salesPrice && !checkNumberFormat(option.salesPrice)) {
+            
+            if(option.salesPrice && !isNumberFormat(option.salesPrice)) {
                 throw new Error('[옵션] 판매가에 숫자만 입력해 주세요.')
             }
 
-            if(option.totalPurchasePrice && !checkNumberFormat(option.totalPurchasePrice)) {
+            if(option.totalPurchasePrice && !isNumberFormat(option.totalPurchasePrice)) {
                 throw new Error('[옵션] 매입총합계에 숫자만 입력해 주세요.')
             }
 
-            if(option.safetyStockUnit && !checkNumberFormat(option.safetyStockUnit)) {
+            if(option.safetyStockUnit && !isNumberFormat(option.safetyStockUnit)) {
                 throw new Error('[옵션] 안재재고수량에 숫자만 입력해 주세요.')
             }
         }

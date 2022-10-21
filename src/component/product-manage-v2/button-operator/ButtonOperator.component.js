@@ -1,17 +1,26 @@
-import { useReducer } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "./ButtonOperator.styled";
 import SortButtonFieldView from "./SortButtonField.view";
 import ControlFieldView from "./ControlField.view";
 import useRouterHook from "../../../hooks/router/useRouterHook";
 
 const ButtonOperatorComponent = (props) => {
-    const [sortBy, dispatchSortBy] = useReducer(sortByReducer, initialSortBy);
-    const [sortDirection, dispatchSortDirection] = useReducer(sortDirectionReducer, initialSortDirection);
+    const [sortByName, setSortByName] = useState(null);
+    const [sortBy, setSortBy] = useState(null);
+    const [sortDirection, setSortDirection] = useState(null);
 
     const {
         query,
         navigateParams
     } = useRouterHook();
+
+    useEffect(() => {
+        let sortBy = query.sortBy;
+        let sortDirection = query.sortDirection;
+
+        let sortByName = sortDirection + "_" + sortBy;
+        setSortByName(sortByName);
+    }, [])
 
     const __handle = {
         action: {
@@ -25,15 +34,9 @@ const ButtonOperatorComponent = (props) => {
                     newSortDirection = 'desc';
                 }
 
-                dispatchSortBy({
-                    type: 'INIT_DATA',
-                    payload: newSortBy
-                })
-
-                dispatchSortDirection({
-                    type: 'INIT_DATA',
-                    payload: newSortDirection
-                })
+                setSortByName(newSortBy)
+                setSortBy(sortByValue);
+                setSortDirection(newSortDirection);
 
                 query.sortBy = sortByValue;
                 query.sortDirection = newSortDirection;
@@ -48,7 +51,7 @@ const ButtonOperatorComponent = (props) => {
             <ControlFieldView />
             
             <SortButtonFieldView
-                sortBy={sortBy}
+                sortByName={sortByName}
                 onChangeSortBy={__handle.action.changeSortByAndSortDirection}
             />
         </Container>
@@ -56,26 +59,3 @@ const ButtonOperatorComponent = (props) => {
 }
 
 export default ButtonOperatorComponent;
-
-const initialSortBy = null;
-const initialSortDirection = null;
-
-const sortByReducer = (state, action) => {
-    switch(action.type) {
-        case 'INIT_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialSortBy;
-        default: return initialSortBy;
-    }
-}
-
-const sortDirectionReducer = (state, action) => {
-    switch(action.type) {
-        case 'INIT_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialSortDirection;
-        default: return initialSortDirection;
-    }
-}

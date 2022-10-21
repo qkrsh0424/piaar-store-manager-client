@@ -1,9 +1,10 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { productDataConnect } from "../../data_connect/productDataConnect";
 import { BackdropHookComponent, useBackdropHook } from "../../hooks/backdrop/useBackdropHook";
 import useProductCategoryHook from "../../hooks/product-category/useProductCategoryHook";
 import useRouterHook from "../../hooks/router/useRouterHook";
-import CreateFormComponent from "./create-form/CreateForm.component";
+import ModifyFormComponent from "./modify-form/ModifyForm.component";
 
 const Container = styled.div`
     background-color: var(--piaar-background-color);
@@ -12,9 +13,12 @@ const Container = styled.div`
     padding-bottom: 50px;
 `;
 
-const ProductCreateComponent = (props) => {
+const ProductModifyComponent = (props) => {
+    const [productAndOptions, setProductAndOptions] = useState(null);
+
     const {
         location,
+        query,
         navigateUrl
     } = useRouterHook();
 
@@ -28,10 +32,21 @@ const ProductCreateComponent = (props) => {
         productCategoryList
     } = useProductCategoryHook();
 
+    useEffect(() => {
+        async function fetchInit() {
+            let productId = query.productId;
+            onActionOpenBackdrop();
+            await __handle.req.searchOneForProduct(productId)
+            onActionCloseBackdrop();
+        }
+
+        fetchInit();        
+    }, [])
+
     const __handle = {
         req: {
-            createProductAndOptions: async (body) => {
-                await productDataConnect().createProductAndOptions(body)
+            modifyProductAndOptions: async (body) => {
+                await productDataConnect().modifyProductAndOptions(body)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             let data = {
@@ -44,21 +59,30 @@ const ProductCreateComponent = (props) => {
                         let res = err.response;
                         alert(res?.data?.memo);
                     })
+            },
+            searchOneForProduct: async (id) => {
+                await productDataConnect().searchProductAndOptions(id)
+                    .then(res => {
+                        if(res.status === 200 && res.data && res.data.message === 'success'){
+                            setProductAndOptions(res.data.data);
+                        }
+                    })
             }
         },
         submit: {
-            createProductAndOptions: async (body) => {
-                await __handle.req.createProductAndOptions(body);
+            modifyProductAndOptions: async (body) => {
+                await __handle.req.modifyProductAndOptions(body);
             }
         }
     }
 
     return (
         <Container>
-            <CreateFormComponent
+            <ModifyFormComponent
                 categoryList={productCategoryList}
+                productAndOptions={productAndOptions}
 
-                _onSubmit_createProductAndOptions={__handle.submit.createProductAndOptions}
+                _onSubmit_modifyProductAndOptions={__handle.submit.modifyProductAndOptions}
                 onActionOpenBackdrop={onActionOpenBackdrop}
                 onActionCloseBackdrop={onActionCloseBackdrop}
             />
@@ -71,4 +95,4 @@ const ProductCreateComponent = (props) => {
     )
 }
 
-export default ProductCreateComponent;
+export default ProductModifyComponent;

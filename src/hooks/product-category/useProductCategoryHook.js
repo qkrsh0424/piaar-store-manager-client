@@ -22,7 +22,12 @@ export default function useProductCategoryHook(props) {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
             })
     }
 

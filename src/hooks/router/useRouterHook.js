@@ -6,8 +6,11 @@ export default function useRouterHook (props) {
     const query = qs.parse(location.search);
     const navigate = useNavigate();
 
-    const navigateUrl = (routerUrl) => {
-        navigate(routerUrl);
+    const navigateUrl = (data) => {
+        let pathname = data.pathname;
+        let state = data.state;
+
+        navigate(pathname, { state });
     }
 
     const navigateParams = (data) => {
@@ -29,6 +32,10 @@ export default function useRouterHook (props) {
         navigate(location.pathname, {
             replace
         })
+    }
+
+    const navigatePrevPage = () => {
+        navigate(-1);
     }
 
     // TODO :: navigateUrl로 사용해보기.
@@ -56,6 +63,7 @@ export default function useRouterHook (props) {
         query,
         navigateUrl,
         navigateParams,
-        navigateClearParams
+        navigateClearParams,
+        navigatePrevPage
     }
 }

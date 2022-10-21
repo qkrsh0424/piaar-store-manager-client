@@ -2,9 +2,9 @@ import CategorySelectorFieldView from "./CategorySelectorField.view";
 import { Container, PageTitleFieldWrapper } from "./CreateForm.styled";
 import OptionInfoInputFieldView from "./OptionInfoInputField.view";
 import ProductInfoInputFieldView from "./ProductInfoInputField.view";
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
-import CreateButtonFieldView from "./CreateButtonField.view";
+import CreateButtonFieldView from "./ButtonField.view";
 import valueUtils from "../../../utils/valueUtils";
 import { useState } from "react";
 import CommonModalComponent from "../../module/modal/CommonModalComponent";
@@ -22,30 +22,30 @@ function PageTitleFieldView({ title }) {
     )
 }
 
-const CreateFormComponent = (props) => {
+const ModifyFormComponent = (props) => {
     const [slideDownEffect, dispatchSlideDownEffect] = useReducer(slideDownEffectReducer, initialSlideDownEffect);
     const [optionDefaultNameCreateModalOpen, setOptionDefaultNameCreateModalOpen] = useState(false);
 
     const {
-        location,
         navigatePrevPage
     } = useRouterHook();
 
     const {
-        product: createProductData,
+        product: modifyProductData,
         onChangeValueOfName: onChangeProductInputValue,
         onChangeImageFileNameAndImageUrl,
         onActionDeleteImageFileNameAndImageUrl,
-        checkCreateFormData: checkProductCreateFormData
+        checkCreateFormData: checkProductCreateFormData,
+        onActionUpdateProduct
     } = useProductHook();
 
     const {
-        options: createOptionDataList,
+        options: modifyOptionDataList,
         onChangeValueOfNameById: onChangeOptionInputValue,
         onActionAddData: onActionAddOptionData,
         onActionDeleteById: onActionDeleteOptionById,
         onActionUpdateOptions,
-        checkCreateFormData: checkProductOptionCreateFormData
+        checkCreateFormData: checkProductOptionCreateFormData,
     } = useProductOptionsHook();
 
     const {
@@ -57,6 +57,21 @@ const CreateFormComponent = (props) => {
     const {
         __reqUploadImageFile
     } = useImageFileUploaderHook();
+
+    useEffect(() => {
+        function setProductAndOptions() {
+            let product = props.productAndOptions.product;
+            let options = props.productAndOptions.options || [];
+
+            onActionUpdateProduct(product);
+            onActionUpdateOptions([...options]);
+        }
+
+        if(!props.productAndOptions) {
+            return;
+        }
+        setProductAndOptions();
+    }, [props.productAndOptions])
 
     const __hanlde = {
         action: {
@@ -88,7 +103,7 @@ const CreateFormComponent = (props) => {
             changeStockManagement: (e) => {
                 e.preventDefault();
         
-                let stockManagement = createProductData.stockManagement;
+                let stockManagement = modifyProductData.stockManagement;
                 let target = {
                     name: 'stockManagement',
                     value: !stockManagement
@@ -110,7 +125,7 @@ const CreateFormComponent = (props) => {
         
                 let addOptionList = returnConvertedOptionsByProductOptionBatchReg();
                 if(addOptionList){
-                    let createOptionList = [...createOptionDataList, ...addOptionList];
+                    let createOptionList = [...modifyOptionDataList, ...addOptionList];
                     onActionUpdateOptions(createOptionList);
                 }
             },
@@ -126,22 +141,18 @@ const CreateFormComponent = (props) => {
                     }
                 })
             },
-            changeOptionOrderWithDragAndDrop: (result) => {
-                if(!result.destination) {
-                    return;
-                }
-        
-                const newOrderList = valueUtils.reorder(
-                    createOptionDataList,
-                    result.source.index,
-                    result.destination.index
-                )
-        
-                onActionUpdateOptions(newOrderList);
+            resetProductAndOptions: (e) => {
+                e.preventDefault();
+
+                let product = props.productAndOptions.product;
+                let options = props.productAndOptions.options || [];
+
+                onActionUpdateProduct(product);
+                onActionUpdateOptions([...options]);
             }
         },
         submit: {
-            createProductAndOptions: (e) => {
+            modifyProductAndOptions: (e) => {
                 e.preventDefault();
         
                 try {
@@ -149,10 +160,10 @@ const CreateFormComponent = (props) => {
                     checkProductOptionCreateFormData();
 
                     let body = {
-                        product: createProductData,
-                        options: createOptionDataList
+                        product: modifyProductData,
+                        options: modifyOptionDataList
                     }
-                    props._onSubmit_createProductAndOptions(body);
+                    props._onSubmit_modifyProductAndOptions(body);
                 } catch (err) {
                     alert(err.message)
                 }
@@ -162,21 +173,21 @@ const CreateFormComponent = (props) => {
 
     return (
         <Container>
-            <PageTitleFieldView title={'상품 등록'} />
+            <PageTitleFieldView title={'상품 수정'} />
 
-            <form onSubmit={__hanlde.submit.createProductAndOptions}>
+            <form onSubmit={__hanlde.submit.modifyProductAndOptions}>
                 <CategorySelectorFieldView
                     categoryList={props.categoryList}
-                    createProductData={createProductData}
+                    modifyProductData={modifyProductData}
                     slideDownEffect={slideDownEffect}
 
                     onChangeProductInputValue={onChangeProductInputValue}
                     onActionSlideEffectControl={__hanlde.action.changeSlideEffectControl}
                 />
 
-                {createProductData &&
+                {modifyProductData &&
                     <ProductInfoInputFieldView
-                        createProductData={createProductData}
+                        modifyProductData={modifyProductData}
                         slideDownEffect={slideDownEffect}
 
                         onChangeProductInputValue={onChangeProductInputValue}
@@ -187,9 +198,9 @@ const CreateFormComponent = (props) => {
                     />
                 }
 
-                {createOptionDataList && productOptionBatchReg &&
+                {modifyOptionDataList && productOptionBatchReg &&
                     <OptionInfoInputFieldView
-                        createOptionDataList={createOptionDataList}
+                        modifyOptionDataList={modifyOptionDataList}
                         productOptionBatchReg={productOptionBatchReg}
                         slideDownEffect={slideDownEffect}
 
@@ -200,12 +211,12 @@ const CreateFormComponent = (props) => {
                         onActionAddOptionDataListByBatchRegData={__hanlde.action.addOptionDataListByBatchRegData}
                         onActionSlideEffectControl={__hanlde.action.changeSlideEffectControl}
                         onActionOpenOptionDefaultNameCreateModal={__hanlde.action.openOptionDefaultNameCreateModal}
-                        onChangeOrderWithDragAndDrop={__hanlde.action.changeOptionOrderWithDragAndDrop}
                     />
                 }
 
                 <CreateButtonFieldView
                     onActionCancelCreateProduct={__hanlde.action.cancelCreateProduct}
+                    onActionResetProductAndOptions={__hanlde.action.resetProductAndOptions}
                 />
             </form>
 
@@ -225,12 +236,12 @@ const CreateFormComponent = (props) => {
     )
 }
 
-export default CreateFormComponent;
+export default ModifyFormComponent;
 
 const initialSlideDownEffect = {
-    category: false,
-    product: false,
-    option: false
+    category: true,
+    product: true,
+    option: true
 }
 
 const slideDownEffectReducer = (state, action) => {

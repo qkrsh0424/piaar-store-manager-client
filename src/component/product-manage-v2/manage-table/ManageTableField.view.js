@@ -51,6 +51,7 @@ export default function ManageTableFieldView(props) {
                                             <div className='control-btn'>
                                                 <button
                                                     className='button-el'
+                                                    onClick={(e) => props.onActionModifyProductAndOptions(e, r.product.id)}
                                                 >
                                                     상품수정
                                                 </button>
@@ -58,17 +59,18 @@ export default function ManageTableFieldView(props) {
                                             <div className='control-btn'>
                                                 <button
                                                     className='button-el'
+                                                    onClick={(e) => props.onSubmitDeleteProductOne(e, r.product.id)}
                                                 >
                                                     상품삭제
                                                 </button>
                                             </div>
-                                            <div className='control-btn'>
+                                            {/* <div className='control-btn'>
                                                 <button
                                                     className='button-el'
                                                 >
                                                     옵션추가
                                                 </button>
-                                            </div>
+                                            </div> */}
                                         </th>
                                         <td
                                             rowSpan={rowSpanSize}

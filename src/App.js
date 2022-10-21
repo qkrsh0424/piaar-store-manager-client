@@ -42,6 +42,7 @@ import ErpReturnManagementCollectingPage from './pages/erp/return-management/col
 import ErpReturnManagementCollectedPage from './pages/erp/return-management/collected/ErpReturnManagementCollectedPage';
 import ErpReturnManagementCompletedPage from './pages/erp/return-management/completed/ErpReturnManagementCompletedPage';
 import ErpReturnManagementRejectedPage from './pages/erp/return-management/rejected/ErpReturnManagementRejectedPage';
+import ProductModifyPage from './pages/product-modify/ProductModifyPage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -136,6 +137,7 @@ function App(props) {
                                             {/* refactor page 3 - /product/create -> /ex/product/create */}
                                             {/* <Route path='/ex/products/create' element={<CreateMain />} /> */}
                                             <Route path='/products/create' element={<ProductCreatePage />} />
+                                            <Route path='/products/modify' element={<ProductModifyPage />} />
 
                                             {/* Shipment */}
                                             {/* <Route path='/shipment/packing-list/naver' element={<SPackingListNaverMain />} />
