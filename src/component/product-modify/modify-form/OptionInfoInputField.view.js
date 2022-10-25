@@ -95,6 +95,16 @@ export default function OptionInfoInputFieldView(props) {
                                 ></input>
                             </div>
                             <div className='input-group'>
+                                <span className='title-text'>출고지</span>
+                                <input
+                                    type='text'
+                                    className='input-value'
+                                    value={props.productOptionBatchReg.releaseLocation}
+                                    name='releaseLocation'
+                                    onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
+                                ></input>
+                            </div>
+                            <div className='input-group'>
                                 <span className='title-text'>상태</span>
                                 <input
                                     type='text'
@@ -105,12 +115,12 @@ export default function OptionInfoInputFieldView(props) {
                                 ></input>
                             </div>
                             <div className='input-group'>
-                                <span className='title-text'>출고지</span>
+                                <span className='title-text'>메모</span>
                                 <input
                                     type='text'
                                     className='input-value'
-                                    value={props.productOptionBatchReg.releaseLocation}
-                                    name='releaseLocation'
+                                    value={props.productOptionBatchReg.memo}
+                                    name='memo'
                                     onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                 ></input>
                             </div>
@@ -175,8 +185,9 @@ function TableFieldView(props) {
                             <th scope="col" width='200'>옵션설명</th>
                             <th scope="col" width='200'>판매가</th>
                             <th scope="col" width='200'>매입총합계</th>
-                            <th scope="col" width='200'>상태</th>
                             <th scope="col" width='200'>출고지</th>
+                            <th scope="col" width='200'>상태</th>
+                            <th scope="col" width='200'>메모</th>
                             <th scope="col" width='200'>안전재고 수량</th>
                         </tr>
                     </thead>
@@ -216,10 +227,13 @@ function TableFieldView(props) {
                                         <input type='number' className='input-value' value={r.totalPurchasePrice} name='totalPurchasePrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                     </td>
                                     <td>
+                                        <input type='text' className='input-value' value={r.releaseLocation} name='releaseLocation' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                    </td>
+                                    <td>
                                         <input type='text' className='input-value' value={r.status} name='status' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                     </td>
                                     <td>
-                                        <input type='text' className='input-value' value={r.releaseLocation} name='releaseLocation' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                        <input type='text' className='input-value' value={r.memo} name='memo' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                     </td>
                                     <td>
                                         <input type='number' className='input-value' value={r.safetyStockUnit} name='safetyStockUnit' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>

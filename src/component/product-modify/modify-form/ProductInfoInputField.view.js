@@ -111,10 +111,10 @@ export default function ProductInfoInputFieldView(props) {
                         <span className='title-text'>구매링크</span>
                         <input type='text' name='purchaseUrl' value={props.modifyProductData.purchaseUrl} onChange={(e) => props.onChangeProductInputValue(e)} />
                     </div>
-                    <div className='input-group'>
+                    {/* <div className='input-group'>
                         <span className='title-text'>관리번호</span>
                         <input type='text' name='managementNumber' value={props.modifyProductData.managementNumber} onChange={(e) => props.onChangeProductInputValue(e)} />
-                    </div>
+                    </div> */}
                     <div className='input-group'>
                         <span className='title-text'>재고반영 여부 <RequiredIcon /></span>
                         <div className='stock-reflect-btn'>

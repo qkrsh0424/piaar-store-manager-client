@@ -10,6 +10,7 @@ const option = {
     totalPurchasePrice: '',
     status: '',
     releaseLocation: '',
+    memo: '',
     safetyStockUnit: '',
     productCid: null,
     productId: null

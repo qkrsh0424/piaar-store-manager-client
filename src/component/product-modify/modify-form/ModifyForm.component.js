@@ -5,7 +5,6 @@ import ProductInfoInputFieldView from "./ProductInfoInputField.view";
 import { useEffect, useReducer } from "react";
 import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
 import CreateButtonFieldView from "./ButtonField.view";
-import valueUtils from "../../../utils/valueUtils";
 import { useState } from "react";
 import CommonModalComponent from "../../module/modal/CommonModalComponent";
 import CreateOptionDefaultNameModalComponent from "./modal/create-option-default-name-modal/CreateOptionDefaultNameModal.component";
@@ -84,7 +83,9 @@ const ModifyFormComponent = (props) => {
                 setOptionDefaultNameCreateModalOpen(false);
             },
             cancelCreateProduct: () => {
-                navigatePrevPage();
+                if(window.confirm('취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?')) {
+                    navigatePrevPage();
+                }
             },
             uploadProductImageFile: async (e) => {
                 e.preventDefault();
@@ -144,11 +145,13 @@ const ModifyFormComponent = (props) => {
             resetProductAndOptions: (e) => {
                 e.preventDefault();
 
-                let product = props.productAndOptions.product;
-                let options = props.productAndOptions.options || [];
-
-                onActionUpdateProduct(product);
-                onActionUpdateOptions([...options]);
+                if(window.confirm('기존 상품 정보로 초기화하시겠습니까?\n(현재 변경된 내역은 저장되지 않습니다)')) {
+                    let product = props.productAndOptions.product;
+                    let options = props.productAndOptions.options || [];
+    
+                    onActionUpdateProduct(product);
+                    onActionUpdateOptions([...options]);
+                }
             }
         },
         submit: {

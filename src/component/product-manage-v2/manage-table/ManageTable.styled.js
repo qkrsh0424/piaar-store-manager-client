@@ -56,6 +56,19 @@ const ManageTableFieldWrapper = styled.div`
         z-index: 9;
     }
 
+    .link-img {
+        transition: 0.1s;
+
+        :hover {
+            transform: scale(1.1);
+        }
+    }
+
+    .fixed-tr-active td {
+        transition: 0.15s;
+        background: #edf4ff !important;
+    }
+
     .image-wrapper {
         width: 100%;
         height: auto;
@@ -84,8 +97,8 @@ const ManageTableFieldWrapper = styled.div`
         overflow: hidden;
         padding: 0;
 
-        border: 1px solid #f7f7f7;
-        background-color: #f7f7f7;
+        border: none;
+        background-color: inherit;
 
         cursor: pointer;
     }

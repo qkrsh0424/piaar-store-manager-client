@@ -3,11 +3,13 @@ import { Container } from "./ButtonOperator.styled";
 import SortButtonFieldView from "./SortButtonField.view";
 import ControlFieldView from "./ControlField.view";
 import useRouterHook from "../../../hooks/router/useRouterHook";
+import CreateProductReceiveModalComponent from "../modal/create-product-receive/CreateProductReceiveModal.component";
 
 const ButtonOperatorComponent = (props) => {
     const [sortByName, setSortByName] = useState(null);
-    const [sortBy, setSortBy] = useState(null);
-    const [sortDirection, setSortDirection] = useState(null);
+
+    const [createProductReceiveModalOpen, setCreateProductReceiveModalOpen] = useState(false);
+    const [createReceiveData, setCreateReceiveData] = useState(null);
 
     const {
         query,
@@ -34,26 +36,70 @@ const ButtonOperatorComponent = (props) => {
                     newSortDirection = 'desc';
                 }
 
-                setSortByName(newSortBy)
-                setSortBy(sortByValue);
-                setSortDirection(newSortDirection);
+                setSortByName(newSortBy);
 
                 query.sortBy = sortByValue;
                 query.sortDirection = newSortDirection;
 
                 navigateParams({ replace: true })
+            },
+            openCreateProductReceiveModal: () => {
+                if(props.checkedOptionIdList.length === 0) {
+                    alert('입고 등록할 상품을 먼저 선택해주세요.');
+                    return;
+                }
+
+                let receiveData = [];
+                props.productManagementList.forEach(r => {
+                    r.options.forEach(option => {
+                        if(props.checkedOptionIdList.includes(option.id)) {
+                            let data = {
+                                product: r.product,
+                                option: option,
+                                memo: '',
+                                receiveUnit: 0
+                            }
+                            receiveData.push(data);
+                        }
+                    })
+                })
+
+                setCreateReceiveData(receiveData);
+                setCreateProductReceiveModalOpen(true);
+            },
+            closeCreateProductReceiveModal: () => {
+                setCreateProductReceiveModalOpen(false);
+            }
+        },
+        submit: {
+            createProductReceive: (data) => {
+                props.onSubmitCreateProductReceive(data);
+                __handle.action.closeCreateProductReceiveModal();
             }
         }
     }
 
     return (
         <Container>
-            <ControlFieldView />
+            <ControlFieldView 
+                onActionOpenCreateProductReceiveModal={__handle.action.openCreateProductReceiveModal}
+            />
             
             <SortButtonFieldView
                 sortByName={sortByName}
                 onChangeSortBy={__handle.action.changeSortByAndSortDirection}
             />
+
+            {/* Create ProductReceive Modal */}
+            {createProductReceiveModalOpen &&
+                <CreateProductReceiveModalComponent
+                    modalOpen={createProductReceiveModalOpen}
+                    onActionCloseModal={__handle.action.closeCreateProductReceiveModal}
+                    onSubmitCreateProductReceive={__handle.submit.createProductReceive}
+
+                    createReceiveData={createReceiveData}
+                />
+            }
         </Container>
     )
 }

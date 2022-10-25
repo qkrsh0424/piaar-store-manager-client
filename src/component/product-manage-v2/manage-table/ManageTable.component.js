@@ -13,6 +13,8 @@ const ManageTableComponent = (props) => {
                 isCheckedAll={props.isCheckedAll}
                 onActionCheckOne={props.onActionCheckOne}
                 onActionCheckAll={props.onActionCheckAll}
+                isProductCheckedOne={props.isProductCheckedOne}
+                onActionProductCheckOne={props.onActionProductCheckOne}
                 onSubmitDeleteProductOne={props.onSubmitDeleteProductOne}
                 onActionModifyProductAndOptions={props.onActionModifyProductAndOptions}
             />

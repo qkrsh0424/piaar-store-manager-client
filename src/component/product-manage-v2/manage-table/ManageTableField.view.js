@@ -9,10 +9,18 @@ export default function ManageTableFieldView(props) {
                 <table className='table table-sm' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                     <thead>
                         <tr>
-                            <th className='fixed-header fixed-header-left' scope="col" width='100'>설정</th>
-                            <th className='fixed-header fixed-header-left' scope="col" width='100' style={{ left: '100px' }}>카테고리</th>
-                            <th className='fixed-header fixed-header-left' scope="col" width='140' style={{ left: '200px' }}>상품이미지</th>
-                            <th className='fixed-header fixed-header-left' scope="col" width='200' style={{ left: '340px', boxShadow: '-0.5px 0 0 0 #e0e0e0 inset' }}>상품정보</th>
+                            <th className='fixed-header fixed-header-left' scope="col" width='50'>
+                                <input
+                                    type='checkbox'
+                                    style={{ cursor: 'pointer'}}
+                                    checked={props.isCheckedAll()}
+                                    onChange={(e) => props.onActionCheckAll(e)}
+                                />
+                            </th>
+                            <th className='fixed-header fixed-header-left' scope="col" width='100' style={{ left: '50px' }}>설정</th>
+                            <th className='fixed-header fixed-header-left' scope="col" width='100' style={{ left: '150px' }}>카테고리</th>
+                            <th className='fixed-header fixed-header-left' scope="col" width='140' style={{ left: '250px' }}>상품이미지</th>
+                            <th className='fixed-header fixed-header-left' scope="col" width='200' style={{ left: '390px', boxShadow: '-0.5px 0 0 0 #e0e0e0 inset' }}>상품정보</th>
                             <th className='fixed-header' scope="col" width='50'>
                                 <input
                                     type='checkbox'
@@ -32,21 +40,39 @@ export default function ManageTableFieldView(props) {
                             <ResizableTh className='fixed-header' scope="col" width={200}>비고</ResizableTh>
                             <th className='fixed-header' scope="col" width={100}>대체코드</th>
                             <th className='fixed-header' scope="col" width={100}>옵션패키지</th>
-                            <th className='fixed-header' scope="col" width={100}>설정</th>
+                            <th className='fixed-header' scope="col" width={100}>삭제</th>
                         </tr>
                     </thead>
                     <tbody style={{ borderTop: 'none' }}>
                         {props.productManagementList?.map((r, idx) => {
                             let thBackgroundColor = (idx % 2 === 1) ? '#f7f7f7' : '#ffffff';
                             let rowSpanSize = r.options.length + 1;
+                            let checkedProduct = props.isProductCheckedOne(r.product.id);
 
                             return (
                                 <React.Fragment key={idx}>
-                                    <tr key={'create_po_idx' + idx} style={{ fontWeight: '600' }}>
-                                        <th
+                                    <tr
+                                        key={'create_po_idx' + idx}
+                                        className={`${checkedProduct && 'fixed-tr-active'}`}
+                                        style={{ fontWeight: '600' }}
+                                        onClick={(e) => props.onActionProductCheckOne(e, r.product.id)}
+                                    >
+                                        <td
+                                            rowSpan={rowSpanSize}
+                                            className='fixed-col-left'
+                                            style={{ backgroundColor : thBackgroundColor }}
+                                        >
+                                            <input
+                                                type='checkbox'
+                                                style={{ cursor: 'pointer'}}
+                                                checked={checkedProduct}
+                                                onChange={(e) => props.onActionProductCheckOne(e, r.product.id)}
+                                            />
+                                        </td>
+                                        <td
                                             rowSpan={rowSpanSize}
                                             className='fixed-col-left' 
-                                            style={{ backgroundColor : thBackgroundColor }}
+                                            style={{ backgroundColor : thBackgroundColor, left: '50px' }}
                                         >
                                             <div className='control-btn'>
                                                 <button
@@ -71,18 +97,18 @@ export default function ManageTableFieldView(props) {
                                                     옵션추가
                                                 </button>
                                             </div> */}
-                                        </th>
+                                        </td>
                                         <td
                                             rowSpan={rowSpanSize}
                                             className='fixed-col-left'
-                                            style={{ backgroundColor : thBackgroundColor, left: '100px' }}
+                                            style={{ backgroundColor : thBackgroundColor, left: '150px' }}
                                         >
                                             <div style={{color: 'var(--erp-main-color)'}}>[{r.category.name}]</div>
                                         </td>
                                         <td
                                             rowSpan={rowSpanSize}
                                             className='fixed-col-left'
-                                            style={{ textAlign: 'left', backgroundColor : thBackgroundColor , left: '200px' }}
+                                            style={{ textAlign: 'left', backgroundColor : thBackgroundColor , left: '250px' }}
                                         >
                                             <div className="image-wrapper">
                                                 <div className="image-box">
@@ -97,7 +123,7 @@ export default function ManageTableFieldView(props) {
                                         <td
                                             rowSpan={rowSpanSize}
                                             className='fixed-col-left'
-                                            style={{ backgroundColor : thBackgroundColor , left: '340px', boxShadow: '-0.5px 0 0 0 #e0e0e0 inset' }}
+                                            style={{ backgroundColor : thBackgroundColor , left: '390px', boxShadow: '-0.5px 0 0 0 #e0e0e0 inset' }}
                                         >
                                             <div>{r.product.defaultName}</div>
                                             <div>{r.product.code}</div>
@@ -106,23 +132,24 @@ export default function ManageTableFieldView(props) {
                                                     <a href={r.product.purchaseUrl} target='_blank'>
                                                         <img
                                                             src='/assets/icon/link_default_2C73D2.svg'
-                                                            style={{ width: '30px' }}
+                                                            style={{ width: '30px'}}
                                                             alt=""
                                                             loading='lazy'
+                                                            className='link-img'
                                                         ></img>
                                                     </a>
                                                     :
                                                     <button
                                                         type='button'
                                                         className='button-el'
-                                                        onClick={() => alert('구매링크를 먼저 등록해주세요.')}
-                                                        style={{ backgroundColor: idx % 2 === 1 ? '#f7f7f7' : '#ffffff', border: 'none' }}
+                                                        onClick={(e) => {e.stopPropagation(); alert('구매링크를 먼저 등록해주세요.');}}
                                                     >
                                                         <img
                                                             src='/assets/icon/link_off_default_000000.svg'
                                                             style={{ width: '30px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
                                                             alt=""
                                                             loading='lazy'
+                                                            className='link-img'
                                                         ></img>
                                                     </button>
                                                 }
@@ -185,7 +212,7 @@ export default function ManageTableFieldView(props) {
                                                 </td>
                                                 <td>
                                                     <div className='option-control-box'>
-                                                        <div className='option-control-btn'>
+                                                        {/* <div className='option-control-btn'>
                                                             <button
                                                                 className='button-el'
                                                             >
@@ -196,7 +223,7 @@ export default function ManageTableFieldView(props) {
                                                                     loading='lazy'
                                                                 />
                                                             </button>
-                                                        </div>
+                                                        </div> */}
                                                         <div className='option-control-btn'>
                                                             <button
                                                                 className='button-el'

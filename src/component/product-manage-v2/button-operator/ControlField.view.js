@@ -6,6 +6,7 @@ export default function ControlFieldView (props) {
             <div>
                 <button
                     className='button-el'
+                    onClick={() => props.onActionOpenCreateProductReceiveModal()}
                 >
                     입고등록
                 </button>

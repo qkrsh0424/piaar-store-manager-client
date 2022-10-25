@@ -11,6 +11,7 @@ import ManageTablePagenationComponent from "./manage-table-pagenation/ManageTabl
 import ButtonOperatorComponent from "./button-operator/ButtonOperator.component";
 import useRouterHook from "../../hooks/router/useRouterHook";
 import useProductHook from "../../hooks/product/useProductHook";
+import { productReceiveDataConnect } from "../../data_connect/productReceiveDataConnect";
 
 const HeaderFieldWrapper = styled.div`
     margin-top: 10px;
@@ -126,6 +127,18 @@ const ProductManageComponent = (props) => {
         
                         alert(res?.data.memo);
                     })
+            },
+            createProductReceive: async (data) => {
+                await productReceiveDataConnect().createBatch(data)
+                    .catch(err => {
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
+                    })
             }
         },
         action: {
@@ -170,6 +183,26 @@ const ProductManageComponent = (props) => {
                 if(optionIdList.length === 0) return false;
                 return JSON.stringify(optionIdList) === JSON.stringify(checkedOptionIdList);
             },
+            productCheckOne: (e, productId) => {
+                e.stopPropagation();
+
+                let productOptions = productManagementList?.content.filter(r => r.product.id === productId)[0]?.options;
+                let optionIds = productOptions.map(option => option.id);
+
+                let optionIdList = [];
+                if(optionIds.every(id => checkedOptionIdList.includes(id))) {
+                    optionIdList = checkedOptionIdList.filter(id => !optionIds.includes(id));
+                    
+                } else {
+                    optionIdList = checkedOptionIdList.concat(optionIds);
+                }
+                setCheckedOptionIdList(optionIdList);
+            },
+            isProductCheckedOne: (productId) => {
+                let productOptions = productManagementList?.content.filter(r => r.product.id === productId)[0]?.options;
+                let optionIds = productOptions.map(option => option.id);
+                return optionIds.every(id =>  checkedOptionIdList.includes(id));
+            },
             routeToModifyPageForProductAndOptions: (e, productId) => {
                 e.stopPropagation();
 
@@ -192,6 +225,10 @@ const ProductManageComponent = (props) => {
                     await reqDeleteProductOne(product.id);
                     await __handle.req.searchProductAndOptionList();
                 }
+            },
+            createProductReceive: async (data) => {
+                await __handle.req.createProductReceive(data);
+                await __handle.req.searchProductAndOptionList();
             }
         }
     }
@@ -200,7 +237,12 @@ const ProductManageComponent = (props) => {
         <Container>
             <HeaderField title={'상품 재고관리'}/>
             <OperatorComponent />
-            <ButtonOperatorComponent />
+            <ButtonOperatorComponent
+                productManagementList={productManagementList?.content}
+                checkedOptionIdList={checkedOptionIdList}
+
+                onSubmitCreateProductReceive={__handle.submit.createProductReceive}
+            />
 
             <ManageTablePagenationComponent
                 productManagementList={productManagementList}
@@ -212,6 +254,8 @@ const ProductManageComponent = (props) => {
                 isCheckedAll={__handle.action.isCheckedAll}
                 onActionCheckOne={__handle.action.checkOne}
                 onActionCheckAll={__handle.action.checkAll}
+                isProductCheckedOne={__handle.action.isProductCheckedOne}
+                onActionProductCheckOne={__handle.action.productCheckOne}
                 onSubmitDeleteProductOne={__handle.submit.deleteProduct}
                 onActionModifyProductAndOptions={__handle.action.routeToModifyPageForProductAndOptions}
             />
