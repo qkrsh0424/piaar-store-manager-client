@@ -12,6 +12,9 @@ import ButtonOperatorComponent from "./button-operator/ButtonOperator.component"
 import useRouterHook from "../../hooks/router/useRouterHook";
 import useProductHook from "../../hooks/product/useProductHook";
 import { productReceiveDataConnect } from "../../data_connect/productReceiveDataConnect";
+import { productReleaseDataConnect } from "../../data_connect/productReleaseDataConnect";
+import { getEndDate, getStartDate } from "../../utils/dateFormatUtils";
+import { productOptionDataConnect } from "../../data_connect/productOptionDataConnect";
 
 const HeaderFieldWrapper = styled.div`
     margin-top: 10px;
@@ -58,6 +61,9 @@ const PRODUCT_SORT_HEADER_FIELDS = getProductSortHeader();
 const ProductManageComponent = (props) => {
     const [productManagementList, setProductManagementList] = useState(null);
     const [checkedOptionIdList, setCheckedOptionIdList] = useState([]);
+
+    const [optionReceiveStatus, setOptionReceiveStatus] = useState(null);
+    const [optionReleaseStatus, setOptionReleaseStatus] = useState(null);
 
     const {
         location,
@@ -139,6 +145,36 @@ const ProductManageComponent = (props) => {
 
                         alert(res?.data.memo);
                     })
+            },
+            createProductRelease: async (data) => {
+                await productReleaseDataConnect().createBatch(data)
+                    .catch(err => {
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+
+                        alert(res?.data.memo);
+                    })
+            },
+            searchProductReceiveAndRelease: async (date) => {
+                let params = {
+                    startDate: date.startDate ? getStartDate(date.startDate) : null,
+                    endDate: date.endDate ? getEndDate(date.endDate) : null,
+                }
+
+                await productOptionDataConnect().searchBatchStockStatus(checkedOptionIdList, params)
+                    .then(res => {
+                        if (res.status === 200 && res.data.message === 'success') {
+                            setOptionReceiveStatus(res.data.data.productReceive);
+                            setOptionReleaseStatus(res.data.data.productRelease);
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        alert(res?.data?.memo);
+                    })
             }
         },
         action: {
@@ -214,6 +250,11 @@ const ProductManageComponent = (props) => {
                 }
 
                 navigateUrl(data);
+            },
+            searchProductReceiveAndRelease: async (date) => {
+                onActionOpenBackdrop();
+                await __handle.req.searchProductReceiveAndRelease(date);
+                onActionCloseBackdrop();
             }
         },
         submit: {
@@ -227,8 +268,16 @@ const ProductManageComponent = (props) => {
                 }
             },
             createProductReceive: async (data) => {
+                onActionOpenBackdrop();
                 await __handle.req.createProductReceive(data);
                 await __handle.req.searchProductAndOptionList();
+                onActionCloseBackdrop();
+            },
+            createProductRelease: async (data) => {
+                onActionOpenBackdrop();
+                await __handle.req.createProductRelease(data);
+                await __handle.req.searchProductAndOptionList();
+                onActionCloseBackdrop();
             }
         }
     }
@@ -241,7 +290,12 @@ const ProductManageComponent = (props) => {
                 productManagementList={productManagementList?.content}
                 checkedOptionIdList={checkedOptionIdList}
 
+                optionReceiveStatus={optionReceiveStatus}
+                optionReleaseStatus={optionReleaseStatus}
+
                 onSubmitCreateProductReceive={__handle.submit.createProductReceive}
+                onSubmitCreateProductRelease={__handle.submit.createProductRelease}
+                onActionSearchProductReceiveAndRelease={__handle.action.searchProductReceiveAndRelease}
             />
 
             <ManageTablePagenationComponent

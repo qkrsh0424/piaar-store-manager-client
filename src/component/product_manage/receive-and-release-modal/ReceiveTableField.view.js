@@ -36,6 +36,7 @@ export default function ReceiveTableFieldView(props) {
                             >
                                 <td className="col">
                                     <span>
+                                        {console.log(data.receive)}
                                         {dateToYYMMDDhhmmss(data.receive.createdAt)}
                                     </span>
                                 </td>

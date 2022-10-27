@@ -130,6 +130,14 @@ const productOptionDataConnect = () => {
                 params,
                 withCredentials: true
             })
+        },
+
+        // [221026] FEAT
+        searchBatchStockStatus: async function (optionIds, params) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product-option/batch/stock/status/${optionIds}`, {
+                params,
+                withCredentials: true
+            })
         }
     }
 }

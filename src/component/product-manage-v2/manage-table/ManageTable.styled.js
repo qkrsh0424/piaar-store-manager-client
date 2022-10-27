@@ -18,7 +18,9 @@ const ManageTableFieldWrapper = styled.div`
 
     table tbody tr {
         :hover {
+            transition: 0.15s;
             cursor: pointer;
+            background: #f8f8f8;
         }
     }
 
@@ -38,7 +40,7 @@ const ManageTableFieldWrapper = styled.div`
 
     .fixed-header {
         position: sticky;
-        top: -1px;
+        top: 0px;
         background: #f1f1f1;
         z-index: 10;
         font-size: 14px;
@@ -113,6 +115,10 @@ const ManageTableFieldWrapper = styled.div`
         border-radius: 2px;
         border: 1px solid #c8c8c8;
         background-color: #f7f7f7;
+
+        :hover {
+            background-color: #e8e8e8;
+        }
     }
 
     .option-control-box {

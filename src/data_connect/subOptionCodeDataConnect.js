@@ -23,7 +23,14 @@ const subOptionCodeDataConnect = () => {
             return await axios.put(`${API_SERVER_ADDRESS}/api/v1/sub-option-code`, data, {
                 withCredentials: true
             })
-        }
+        },
+
+        // [221027] FEAT
+        searchBatchByProductOptionId: async function(optionId) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sub-option-code/${optionId}`,{
+                withCredentials: true
+            })
+        },
     }
 }
 

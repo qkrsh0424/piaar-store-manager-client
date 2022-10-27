@@ -1,10 +1,7 @@
 import { Dialog } from '@mui/material';
 import styled from 'styled-components';
 import { useDisabledButtonHook } from '../../../hooks/button-disabled/useDisabledButtonHook';
-
-const Container = styled.div`
-
-`;
+import PropTypes from 'prop-types';
 
 const TitleBox = styled.div`
     padding: 10px 20px;
@@ -37,169 +34,11 @@ const TitleBox = styled.div`
     }
 `;
 
-const MessageBox = styled.div`
-    padding: 20px 10px 10px 10px;
+const ElementBox = styled.div`
+    padding: 20px 10px;
     font-size: 14px;
     font-weight: 600;
     text-align: center;
-    
-    .info-text {
-        color: var(--erp-main-color);
-        text-align: left;
-        padding: 0 10px;
-        font-size: 12px;
-    }
-
-    .highlight{
-        display: inline-block;
-        position:relative;
-        font-weight: 800;
-        color: #006dff;
-    }
-
-    .highlight:after{
-        content:"";
-        position: absolute;
-        bottom:0;
-        left:0;
-        width: 100%;
-        height: 10px;
-        display: inline-block;
-        background: #b9c2e160;
-    }
-
-    .info-wrapper {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding-bottom: 40px;
-    }
-
-    .info-box {
-        padding: 10px;
-        display: flex;
-        align-items: center;
-    }
-
-    .input-title {
-        text-align: left;
-        width: 140px;
-    }
-
-    .text-input {
-        margin: 0 10px;
-        width: 250px;
-        height: 100px;
-        padding: 5px;
-        border: 1px solid #e1e1e1;
-        border-radius: 3px;
-        font-size: 14px;
-        box-sizing: border-box;
-        resize: both;
-    }
-
-    .input-value input {
-        width: 250px;
-        height: 40px;
-        padding: 5px;
-        border: 1px solid #e1e1e1;
-        border-radius: 3px;
-        font-size: 14px;
-    }
-
-    .select-item{
-        margin: 0 10px;
-        width: 250px;
-        height: 45px;
-        padding: 5px;
-        border: 1px solid #e1e1e1;
-        border-radius: 0;
-        font-size: 14px;
-        -webkit-appearance: none;
-        -moz-appearance: none; 
-        appearance: none;
-        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
-
-        &:focus{
-            outline: none;
-        }
-
-        @media all and (max-width:992px) {
-            width: 100%;
-            margin: 10px 0 0 0;
-        }
-    }
-
-    .receive-memo {
-        padding: 15px;
-        font-size: 14px;
-        display: grid;
-        width: 100%;
-        grid-template-columns: 100px auto;
-        align-items: center;
-
-        .form-title {
-            padding: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        input {
-            height: 30px;
-            border: 1px solid #bdbdbd;
-            padding: 10px;
-            font-size: 14px;
-            box-sizing: border-box;
-            border-radius: 3px;
-        }
-    }
-
-    .upload-box {
-        width: 250px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        input {
-            display: none;
-        }
-    }
-
-    .button-el {
-        border: 1px solid var(--erp-main-color);
-        background-color: var(--erp-main-color);
-        color: white;
-        padding: 5px 10px;
-        font-weight: 600;
-        width: 100%;
-    }
-
-    .memo-box {
-        padding: 15px;
-        font-size: 14px;
-        display: grid;
-        width: 100%;
-        grid-template-columns: 100px auto;
-        align-items: center;
-
-        .form-title {
-            padding: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        input {
-            height: 30px;
-            border: 1px solid #bdbdbd;
-            padding: 10px;
-            font-size: 14px;
-            box-sizing: border-box;
-            border-radius: 3px;
-        }
-    }
 `;
 
 const ButtonWrapper = styled.div`
@@ -223,7 +62,20 @@ const ButtonBox = styled.div`
     }
 `;
 
-const SubmitModalComponentV2 = ({ open, fullWidth, maxWidth, _onSubmit, onClose, title, message, ...props }) => {
+
+/**
+ * 
+ * @param {Object} props
+ * @param {boolean} props.open
+ * @param {boolean} props.fullWidth
+ * @param {string} props.maxWidth
+ * @param {function} props._onSubmit
+ * @param {function} props.onClose
+ * @param {string} props.title
+ * @param {string} props.element
+ * @returns 
+ */
+const SubmitModalComponentV2 = ({ open, fullWidth, maxWidth, _onSubmit, onClose, title, element, ...props }) => {
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
     const _onClose = (e) => {
@@ -241,8 +93,8 @@ const SubmitModalComponentV2 = ({ open, fullWidth, maxWidth, _onSubmit, onClose,
     return (
         <>
             <Dialog
-                open={open || false}
-                fullWidth={fullWidth || true}
+                open={open ?? false}
+                fullWidth={fullWidth ?? true}
                 maxWidth={maxWidth || 'xs'}
                 onClose={(e) => _onClose(e) || {}}
             >
@@ -264,9 +116,9 @@ const SubmitModalComponentV2 = ({ open, fullWidth, maxWidth, _onSubmit, onClose,
                     </div>
                     
                 </TitleBox>
-                <MessageBox>
-                    {message || ''}
-                </MessageBox>
+                <ElementBox>
+                    {element || ''}
+                </ElementBox>
                 <form onSubmit={(e) => onSubmit(e)}>
                     <ButtonWrapper>
                         <ButtonBox>
@@ -289,5 +141,15 @@ const SubmitModalComponentV2 = ({ open, fullWidth, maxWidth, _onSubmit, onClose,
             </Dialog>
         </>
     );
+}
+
+SubmitModalComponentV2.prototype = {
+    open: PropTypes.bool.isRequired,
+    fullWidth: PropTypes.bool,
+    maxWidth: PropTypes.string,
+    _onSubmit: PropTypes.func,
+    onClose: PropTypes.func,
+    title: PropTypes.string,
+    element: PropTypes.string
 }
 export default SubmitModalComponentV2;

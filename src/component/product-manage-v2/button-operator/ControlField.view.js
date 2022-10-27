@@ -1,8 +1,17 @@
 import { ControlFieldWrapper } from "./ButtonOperator.styled";
 
 export default function ControlFieldView (props) {
+
     return (
         <ControlFieldWrapper>
+            <div>
+                <button
+                    className='button-el'
+                    onClick={() => props.onActionRouteProductCreatePage()}
+                >
+                    상품생성
+                </button>
+            </div>
             <div>
                 <button
                     className='button-el'
@@ -14,6 +23,7 @@ export default function ControlFieldView (props) {
             <div>
                 <button
                     className='button-el'
+                    onClick={() => props.onActionOpenCreateProductReleaseModal()}
                 >
                     출고등록
                 </button>
@@ -21,6 +31,7 @@ export default function ControlFieldView (props) {
             <div>
                 <button
                     className='button-el'
+                    onClick={() => props.onActionOpenSearchProductReceiveAndReleaseModal()}
                 >
                     입출고현황
                 </button>

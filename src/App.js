@@ -110,7 +110,6 @@ function App(props) {
 
                                             {/* refactor page 5 - /products -> /ex/products */}
                                             {/* Product Manage */}
-                                            {/* <Route path='/ex/products' element={<ProductManageMain />} /> */}
                                             <Route path='/products' element={<ProductManagePage />} />
 
                                             {/* refactor page 2 - /product-detail -> /ex/product-detail */}

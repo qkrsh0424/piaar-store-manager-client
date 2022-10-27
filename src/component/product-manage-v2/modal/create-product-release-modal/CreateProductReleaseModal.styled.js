@@ -4,7 +4,7 @@ const Container = styled.div`
 
 `;
 
-const CreateProductReceiveModalFieldWrapper = styled.div`
+const CreateProductReleaseModalFieldWrapper = styled.div`
     max-height: 50vh;
     overflow: auto;
 
@@ -51,7 +51,9 @@ const CreateProductReceiveModalFieldWrapper = styled.div`
         background-color: #f7f7f7;
         color: #444;
     }
+`;
 
+const BatchRegTooltipWrapper = styled.div`
     .tooltip-box {
         padding: 10px;
         border-radius: 3px;
@@ -73,8 +75,8 @@ const CreateProductReceiveModalFieldWrapper = styled.div`
     }
 `;
 
-
 export {
     Container,
-    CreateProductReceiveModalFieldWrapper
+    CreateProductReleaseModalFieldWrapper,
+    BatchRegTooltipWrapper
 }

@@ -86,34 +86,34 @@ const productDataConnect = () => {
         //     })
         // },
         createProductAndOptions: async function (body) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v2/product/options`, body, {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v2/products/options`, body, {
                 withCredentials: true
             })
         },
         modifyProductAndOptions: async function (body) {
-            return await axios.put(`${API_SERVER_ADDRESS}/api/v2/product/options`, body, {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v2/products/options`, body, {
                 withCredentials: true
             })
         },
-        // getStockListFj: async function () {
-        //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list-fj/stock`, {
-        //         withCredentials: true
-        //     })
-        // },
+        getStockListFj: async function () {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list-fj/stock`, {
+                withCredentials: true
+            })
+        },
         searchBatch: async function (params) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product/batch/stock`, {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/products/batch/stock`, {
                 params,
                 withCredentials: true
             })
         },
         searchBatchByPaging: async function (params) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product/batch/stock/page`, {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/products/batch/stock/page`, {
                 params,
                 withCredentials: true
             })
         },
         searchProductAndOptions: async function (productId) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product/${productId}`, {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/products/${productId}`, {
                 withCredentials: true
             })
         },

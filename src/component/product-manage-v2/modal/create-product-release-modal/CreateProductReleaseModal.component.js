@@ -1,9 +1,33 @@
 import React, { useState } from "react";
-import useProductReceiveHook from "../../../../hooks/product-receive/useProductReceiveHook";
+import useProductReleaseHook from "../../../../hooks/product-release/useProductReleaseHook";
 import SubmitModalComponentV2 from "../../../module/modal/SubmitModalComponentV2";
-import { CreateProductReceiveModalFieldWrapper } from "./CreateProductReceiveModal.styled";
+import { BatchRegTooltipWrapper, CreateProductReleaseModalFieldWrapper } from "./CreateProductReleaseModal.styled";
 
-const CreateProductReceiveModalComponent = (props) => {
+function BatchRegTooltip({ tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
+    return (
+        <BatchRegTooltipWrapper>
+            <div className='tooltip-box' style={tootipSize}>
+                <input
+                    type='text'
+                    name='batch-memo'
+                    className='input-el'
+                    style={{ width: '100%' }}
+                    onChange={(e) => onChangeInputValue(e)}
+                />
+                <div className='button-box'>
+                    <button className='button-el' onClick={() => onActionCancel()}>
+                        취소
+                    </button>
+                    <button className='button-el' onClick={(e) => onActionConfirm(e)}>
+                        확인
+                    </button>
+                </div>
+            </div>
+        </BatchRegTooltipWrapper>
+    )
+}
+
+const CreateProductReleaseModalComponent = (props) => {
     const [memoBatchRegTooltipOpen, setMemoBatchRegTooltipOpen] = useState(false);
     const [memoBatchRegInput, setMemoBatchRegInput] = useState('');
 
@@ -11,11 +35,11 @@ const CreateProductReceiveModalComponent = (props) => {
     const [unitBatchRegInput, setUnitBatchRegInput] = useState('');
 
     const {
-        productReceive: createReceiveData,
+        productRelease: createReleaseData,
         
-        onChangeValueOfNameByIdx: onChangeProductReceiveInputValue,
-        onChangeBatchValueOfName: onChangeProductReceiveBatchInputValue,
-    } = useProductReceiveHook({ productReceive: props.createReceiveData});
+        onChangeValueOfNameByIdx: onChangeProductReleaseInputValue,
+        onChangeBatchValueOfName: onChangeProductReleaseBatchInputValue,
+    } = useProductReleaseHook({ productRelease: props.createReleaseData});
 
     const __handle = {
         action: {
@@ -28,7 +52,7 @@ const CreateProductReceiveModalComponent = (props) => {
                 setMemoBatchRegInput('');
                 setMemoBatchRegTooltipOpen(false);
             },
-            changeProductReceiveMemoTooltipInput: (e) => {
+            changeProductReleaseMemoTooltipInput: (e) => {
                 setMemoBatchRegInput(e.target.value);
             },
             confirmMemoBatchReg: (e) => {
@@ -38,7 +62,7 @@ const CreateProductReceiveModalComponent = (props) => {
                     name: 'memo',
                     value: memoBatchRegInput
                 }
-                onChangeProductReceiveBatchInputValue(data);
+                onChangeProductReleaseBatchInputValue(data);
                 __handle.action.closeMemoBatchRegTooltip();
             },
             openUnitBatchRegTooltip: (e) => {
@@ -50,14 +74,14 @@ const CreateProductReceiveModalComponent = (props) => {
                 setUnitBatchRegInput('');
                 setUnitBatchRegTooltipOpen(false);
             },
-            changeProductReceiveUnitTooltipInput: (e) => {
+            changeProductReleaseUnitTooltipInput: (e) => {
                 setUnitBatchRegInput(e.target.value);
             },
             confirmUnitBatchReg: (e) => {
                 e.preventDefault();
 
                 let data = {
-                    name: 'receiveUnit',
+                    name: 'releaseUnit',
                     value: unitBatchRegInput
                 }
 
@@ -68,23 +92,23 @@ const CreateProductReceiveModalComponent = (props) => {
                         value: 0
                     }
                 }
-                onChangeProductReceiveBatchInputValue(data);
+                onChangeProductReleaseBatchInputValue(data);
                 __handle.action.closeUnitBatchRegTooltip();
             }
         },
         submit: {
-            createProductReceive: (e) => {
+            createProductRelease: (e) => {
                 e.preventDefault();
                 
-                let data = createReceiveData.filter(r => r.receiveUnit !== 0 && r.receiveUnit !== '0').map(r => {
+                let data = createReleaseData.filter(r => r.releaseUnit !== 0 && r.releaseUnit !== '0').map(r => {
                     return {
-                        receiveUnit: r.receiveUnit,
+                        releaseUnit: r.releaseUnit,
                         memo: r.memo,
                         productOptionCid: r.option.cid,
                         productOptionId: r.option.id
                     }
                 })
-                props.onSubmitCreateProductReceive(data);
+                props.onSubmitCreateProductRelease(data);
             }
         }
     }
@@ -92,10 +116,10 @@ const CreateProductReceiveModalComponent = (props) => {
     return (
         <SubmitModalComponentV2
             open={props.modalOpen}
-            title={'입고 등록'}
-            message={
+            title={'출고 등록'}
+            element={
                 <>
-                    <CreateProductReceiveModalFieldWrapper>
+                    <CreateProductReleaseModalFieldWrapper>
                         <table className='table table-sm' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                             <thead>
                                 <tr>
@@ -113,29 +137,14 @@ const CreateProductReceiveModalComponent = (props) => {
                                                 >
                                                     일괄 적용
                                                 </button>
-                                                {memoBatchRegTooltipOpen &&
-                                                    <div className='tooltip-box'>
-                                                        <input
-                                                            type='text'
-                                                            name='batch-memo'
-                                                            className='input-el'
-                                                            style={{width: '100%'}} 
-                                                            onChange={(e) => __handle.action.changeProductReceiveMemoTooltipInput(e)}
-                                                        />
-                                                        <div className='button-box'>
-                                                            <button
-                                                                className='button-el'
-                                                                onClick={() => __handle.action.closeMemoBatchRegTooltip()}
-                                                            >
-                                                                취소
-                                                            </button>
-                                                            <button className='button-el'
-                                                                onClick={(e) => __handle.action.confirmMemoBatchReg(e)}
-                                                            >
-                                                                확인
-                                                            </button>
-                                                        </div>
-                                                    </div>
+
+                                                {memoBatchRegTooltipOpen && 
+                                                    <BatchRegTooltip 
+                                                        tootipSize={{ width: '80%' }}
+                                                        onChangeInputValue={__handle.action.changeProductReleaseMemoTooltipInput}
+                                                        onActionCancel={__handle.action.closeMemoBatchRegTooltip}
+                                                        onActionConfirm={__handle.action.confirmMemoBatchReg}
+                                                    />
                                                 }
                                             </div>
                                         </div>
@@ -152,28 +161,12 @@ const CreateProductReceiveModalComponent = (props) => {
                                                     일괄 적용
                                                 </button>
                                                 {unitBatchRegTooltipOpen &&
-                                                    <div className='tooltip-box' style={{width: '80%'}}>
-                                                        <input
-                                                            type='number'
-                                                            name='batch-unit'
-                                                            className='input-el'
-                                                            style={{width: '100%'}} 
-                                                            onChange={(e) => __handle.action.changeProductReceiveUnitTooltipInput(e)}
-                                                        />
-                                                        <div className='button-box'>
-                                                            <button
-                                                                className='button-el'
-                                                                onClick={() => __handle.action.closeUnitBatchRegTooltip()}
-                                                            >
-                                                                취소
-                                                            </button>
-                                                            <button className='button-el'
-                                                                onClick={(e) => __handle.action.confirmUnitBatchReg(e)}
-                                                            >
-                                                                확인
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                                                    <BatchRegTooltip
+                                                        tootipSize={{ width: '80%' }}
+                                                        onChangeInputValue={__handle.action.changeProductReleaseUnitTooltipInput}
+                                                        onActionCancel={__handle.action.closeUnitBatchRegTooltip}
+                                                        onActionConfirm={__handle.action.confirmUnitBatchReg}
+                                                    />
                                                 }
                                             </div>
                                         </div>
@@ -181,32 +174,32 @@ const CreateProductReceiveModalComponent = (props) => {
                                 </tr>
                             </thead>
                             <tbody style={{ borderTop: 'none' }}>
-                                {createReceiveData?.map((r, idx) => {
+                                {createReleaseData?.map((r, idx) => {
                                     return (
-                                        <tr key={'receive-idx' + idx}>
+                                        <tr key={'release-idx' + idx}>
                                             <td>{idx+1}.</td>
                                             <td>{r.product.defaultName}</td>
                                             <td>{r.option.defaultName}</td>
                                             <td>
-                                                <input className='input-el' type='text' name='memo' value={r.memo} onChange={(e) => onChangeProductReceiveInputValue(e, idx)} />
+                                                <input className='input-el' type='text' name='memo' value={r.memo} onChange={(e) => onChangeProductReleaseInputValue(e, idx)} />
                                             </td>
                                             <td>
-                                                <input className='input-el' type='number' name='receiveUnit' value={r.receiveUnit} onChange={(e) => onChangeProductReceiveInputValue(e, idx)} />
+                                                <input className='input-el' type='number' name='releaseUnit' value={r.releaseUnit} onChange={(e) => onChangeProductReleaseInputValue(e, idx)} />
                                             </td>
                                         </tr>
                                     )
                                 })}
                             </tbody>
                         </table>
-                    </CreateProductReceiveModalFieldWrapper>
+                    </CreateProductReleaseModalFieldWrapper>
                 </>
             }
             maxWidth={'md'}
 
-            _onSubmit={__handle.submit.createProductReceive}
+            _onSubmit={__handle.submit.createProductRelease}
             onClose={props.onActionCloseModal}
         />
     )
 }
 
-export default CreateProductReceiveModalComponent;
+export default CreateProductReleaseModalComponent;

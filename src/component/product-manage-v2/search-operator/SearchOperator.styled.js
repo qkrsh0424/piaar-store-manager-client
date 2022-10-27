@@ -35,6 +35,10 @@ const Container = styled.div`
             outline: none;
         }
 
+        :hover {
+            cursor: pointer;
+        }
+
         @media all and (max-width:992px) {
             margin: 10px 0 0 0;
             width: 100%;
