@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CustomDateRangePicker from "../../../module/date-picker/CustomDateRangePicker";
-import CommonModalComponent from "../../../module/modal/CommonModalComponent";
 import CommonModalComponentV2 from "../../../module/modal/CommonModalComponentV2";
+import useProductReceiveAndReleaseHook from "../../hooks/useProductReceiveAndReleaseHook";
 import DateRangeSelectorFieldView from "./DateRangeSelectorField.view";
 import ReceiveStatusTableFieldView from "./ReceiveStatusTableField.view";
 import ReleaseStatusTableFieldView from "./ReleaseStatusTableField.view";
 
 const SearchProductReceiveAndReleaseModalComponent = (props) => {
+    const modifyMemoRef = useRef();
+
     const [dateRangePickerModalOpen, setDateRangePickerModalOpen] = useState(false);
     const [dateRangeInfo, setDateRangeInfo] = useState({
         startDate: new Date(),
@@ -18,6 +20,19 @@ const SearchProductReceiveAndReleaseModalComponent = (props) => {
         endDate: new Date(),
         key: 'selection'
     })
+
+    const {
+        optionReceiveStatus,
+        optionReleaseStatus,
+        modifyingId,
+
+        reqSearchProductReceiveAndRelease,
+        onChangeReceiveValueOfName,
+        onChangeReleaseValueOfName,
+        onActionSetModifyingId,
+        onSubmitModifyReceiveMemo,
+        onSubmitModifyReleaseMemo
+    } = useProductReceiveAndReleaseHook({ optionIds: props.checkedOptionIdList, selectedDateRange});
 
     const __handle = {
         action: {
@@ -47,14 +62,18 @@ const SearchProductReceiveAndReleaseModalComponent = (props) => {
                     endDate
                 })
 
-                props.onActionSearchProductReceiveAndRelease({startDate, endDate});
+                reqSearchProductReceiveAndRelease();
                 __handle.action.closeDateRangePickerModal();
             },
             onCloseModal: () => {
                 setDateRangeInfo(null);
                 setSelectedDateRange(null);
                 props.onActionCloseModal();
-            }
+            },
+            setModifyingId: (id) => {
+                onActionSetModifyingId(id);
+                setTimeout(() => modifyMemoRef.current.focus(), 10);
+            },
         }
     }
 
@@ -71,10 +90,22 @@ const SearchProductReceiveAndReleaseModalComponent = (props) => {
                             onActionOpenDateRangePickerModal={__handle.action.openDateRangePickerModal}
                         />
                         <ReceiveStatusTableFieldView
-                            optionReceiveStatus={props.optionReceiveStatus}
+                            optionReceiveStatus={optionReceiveStatus}
+                            modifyingId={modifyingId}
+                            modifyMemoRef={modifyMemoRef}
+
+                            onChangeInputValue={onChangeReceiveValueOfName}
+                            onActionSetModifyingId={__handle.action.setModifyingId}
+                            onSubmitModifyMemo={onSubmitModifyReceiveMemo}
                         />
                         <ReleaseStatusTableFieldView
-                            optionReleaseStatus={props.optionReleaseStatus}
+                            optionReleaseStatus={optionReleaseStatus}
+                            modifyingId={modifyingId}
+                            modifyMemoRef={modifyMemoRef}
+
+                            onChangeInputValue={onChangeReleaseValueOfName}
+                            onActionSetModifyingId={__handle.action.setModifyingId}
+                            onSubmitModifyMemo={onSubmitModifyReleaseMemo}
                         />
                     </div>
                 }
@@ -87,10 +118,10 @@ const SearchProductReceiveAndReleaseModalComponent = (props) => {
                 open={dateRangePickerModalOpen}
                 element={
                     <CustomDateRangePicker
-                    selectedDateRange={selectedDateRange}
-                    onChange={__handle.action.changeSelectedDate}
-                    onConfirm={__handle.action.confirmSelectedDate}
-                />
+                        selectedDateRange={selectedDateRange}
+                        onChange={__handle.action.changeSelectedDate}
+                        onConfirm={__handle.action.confirmSelectedDate}
+                    />
                 }
                 maxWidth={'xs'}
                 fullWidth={false}

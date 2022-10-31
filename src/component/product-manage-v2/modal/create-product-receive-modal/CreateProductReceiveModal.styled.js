@@ -35,6 +35,7 @@ const CreateProductReceiveModalFieldWrapper = styled.div`
     .input-el {
         padding: 5px;
         width: 90%;
+        border: 1px solid #c8c8c8;
     }
 
     .button-header {
@@ -72,6 +73,10 @@ const BatchRegTooltipWrapper = styled.div`
         align-items: center;
         justify-content: flex-end;
         gap: 2px;
+    }
+
+    .input-el {
+        border: 1px solid #c8c8c8;
     }
 `;
 

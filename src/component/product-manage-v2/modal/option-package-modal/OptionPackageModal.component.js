@@ -63,7 +63,7 @@ function ButtonFieldView({ onActionReset, onSubmit }) {
 
 const OptionPackageModalComponent = (props) => {
     const [inputValue, setInputValue] = useState('');
-    
+
     const {
         productOptions,
 
@@ -94,11 +94,7 @@ const OptionPackageModalComponent = (props) => {
             changeInputValue: (e) => {
                 setInputValue(e.target.value);
             },
-            deleteOptionPackage: (id) => {
-                if(!window.confirm('정말 삭제하시겠습니까?')) {
-                    return;
-                }
-                    
+            deleteOptionPackage: (id) => {    
                 onActionDeleteOptionPackageData(id);
             }
         },

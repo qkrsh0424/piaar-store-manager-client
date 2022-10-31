@@ -1,5 +1,29 @@
 import RequiredIcon from "../../module/icon/RequiredIcon";
-import { OptionInfoInputWrapper, TableFieldWrapper } from "./ModifyForm.styled";
+import { BatchRegTooltipWrapper, OptionInfoInputWrapper, TableFieldWrapper } from "./ModifyForm.styled";
+
+function BatchRegTooltip({ name, inputType, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
+    return (
+        <BatchRegTooltipWrapper>
+            <div className='tooltip-box' style={tootipSize}>
+                <input
+                    type={inputType}
+                    name={name}
+                    className='input-el'
+                    style={{ width: '100%' }}
+                    onChange={(e) => onChangeInputValue(e)}
+                />
+                <div className='button-box'>
+                    <button type='button' className='button-el' name={name} onClick={(e) => onActionCancel(e)}>
+                        취소
+                    </button>
+                    <button type='button' className='button-el' name={name} onClick={(e) => onActionConfirm(e)}>
+                        확인
+                    </button>
+                </div>
+            </div>
+        </BatchRegTooltipWrapper>
+    )
+}
 
 export default function OptionInfoInputFieldView(props) {
     return (
@@ -156,6 +180,12 @@ export default function OptionInfoInputFieldView(props) {
                         onChangeOptionInputValue={props.onChangeOptionInputValue}
                         onActionDeleteOption={props.onActionDeleteOption}
                         onChangeOrderWithDragAndDrop={props.onChangeOrderWithDragAndDrop}
+                        batchRegTooltipOpen={props.batchRegTooltipOpen}
+                        batchRegInput={props.batchRegInput}
+                        onActionOpenBatchRegToolTip={props.onActionOpenBatchRegToolTip}
+                        onChangeBatchRegInput={props.onChangeBatchRegInput}
+                        onActionConfirmBatchRegInput={props.onActionConfirmBatchRegInput}
+                        onActionCloseBatchRegTooltip={props.onActionCloseBatchRegTooltip}
                     />
                     <div className='table-bottom-box'>
                         <button
@@ -179,16 +209,168 @@ function TableFieldView(props) {
                 <table className='table table-sm' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                     <thead>
                         <tr>
-                            <th scope="col" width='50'>삭제</th>
-                            <th scope="col" width='50'>#</th>
-                            <th scope="col" width='200'>옵션명 <RequiredIcon /> </th>
-                            <th scope="col" width='200'>옵션설명</th>
-                            <th scope="col" width='200'>판매가</th>
-                            <th scope="col" width='200'>매입총합계</th>
-                            <th scope="col" width='200'>출고지</th>
-                            <th scope="col" width='200'>상태</th>
-                            <th scope="col" width='200'>메모</th>
-                            <th scope="col" width='200'>안전재고 수량</th>
+                            <th scope="col" width='50'>
+                                <div>삭제</div>
+                            </th>
+                            <th scope="col" width='50'>
+                                <div>#</div>
+                            </th>
+                            <th scope="col" width='200'>
+                                <div>옵션명 <RequiredIcon /></div>
+                            </th>
+                            <th scope="col" width='200'>
+                                <div>옵션설명</div>
+                            </th>
+                            <th scope="col" width='200'>
+                                <div className='button-header'>
+                                    <div>판매가</div>
+                                    <div>
+                                        <button
+                                            type='button'
+                                            className='button-el'
+                                            name='salesPrice'
+                                            onClick={(e) => props.onActionOpenBatchRegToolTip(e)}
+                                        >
+                                            일괄 적용
+                                        </button>
+                                        {props.batchRegTooltipOpen?.salesPrice &&
+                                            <BatchRegTooltip
+                                                inputType={'number'}
+                                                tootipSize={{ width: '220px' }}
+                                                onChangeInputValue={props.onChangeBatchRegInput}
+                                                name={'salesPrice'}
+                                                onActionConfirm={props.onActionConfirmBatchRegInput}
+                                                onActionCancel={props.onActionCloseBatchRegTooltip}
+                                            />
+                                        }
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col" width='200'>
+                                <div className='button-header'>
+                                    <div>매입총합계</div>
+                                    <div>
+                                        <button
+                                            type='button'
+                                            className='button-el'
+                                            name='totalPurchasePrice'
+                                            onClick={(e) => props.onActionOpenBatchRegToolTip(e)}
+                                        >
+                                            일괄 적용
+                                        </button>
+                                        {props.batchRegTooltipOpen?.totalPurchasePrice &&
+                                            <BatchRegTooltip
+                                                inputType={'number'}
+                                                tootipSize={{ width: '220px' }}
+                                                onChangeInputValue={props.onChangeBatchRegInput}
+                                                name={'totalPurchasePrice'}
+                                                onActionConfirm={props.onActionConfirmBatchRegInput}
+                                                onActionCancel={props.onActionCloseBatchRegTooltip}
+                                            />
+                                        }
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col" width='200'>
+                                <div className='button-header'>
+                                    <div>출고지</div>
+                                    <div>
+                                        <button
+                                            type='button'
+                                            className='button-el'
+                                            name='releaseLocation'
+                                            onClick={(e) => props.onActionOpenBatchRegToolTip(e)}
+                                        >
+                                            일괄 적용
+                                        </button>
+                                        {props.batchRegTooltipOpen?.releaseLocation &&
+                                            <BatchRegTooltip
+                                                inputType={'text'}
+                                                tootipSize={{ width: '220px' }}
+                                                onChangeInputValue={props.onChangeBatchRegInput}
+                                                name={'releaseLocation'}
+                                                onActionConfirm={props.onActionConfirmBatchRegInput}
+                                                onActionCancel={props.onActionCloseBatchRegTooltip}
+                                            />
+                                        }
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col" width='200'>
+                                <div className='button-header'>
+                                    <div>상태</div>
+                                    <div>
+                                        <button
+                                            type='button'
+                                            className='button-el'
+                                            name='status'
+                                            onClick={(e) => props.onActionOpenBatchRegToolTip(e)}
+                                        >
+                                            일괄 적용
+                                        </button>
+                                        {props.batchRegTooltipOpen?.status &&
+                                            <BatchRegTooltip
+                                                inputType={'text'}
+                                                tootipSize={{ width: '220px' }}
+                                                onChangeInputValue={props.onChangeBatchRegInput}
+                                                name={'status'}
+                                                onActionConfirm={props.onActionConfirmBatchRegInput}
+                                                onActionCancel={props.onActionCloseBatchRegTooltip}
+                                            />
+                                        }
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col" width='200'>
+                                <div className='button-header'>
+                                    <div>메모</div>
+                                    <div>
+                                        <button
+                                            type='button'
+                                            className='button-el'
+                                            name='memo'
+                                            onClick={(e) => props.onActionOpenBatchRegToolTip(e)}
+                                        >
+                                            일괄 적용
+                                        </button>
+                                        {props.batchRegTooltipOpen?.memo &&
+                                            <BatchRegTooltip
+                                                inputType={'text'}
+                                                tootipSize={{ width: '220px' }}
+                                                onChangeInputValue={props.onChangeBatchRegInput}
+                                                name={'memo'}
+                                                onActionConfirm={props.onActionConfirmBatchRegInput}
+                                                onActionCancel={props.onActionCloseBatchRegTooltip}
+                                            />
+                                        }
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col" width='200'>
+                                <div className='button-header'>
+                                    <div>안전재고 수량</div>
+                                    <div>
+                                        <button
+                                            type='button'
+                                            className='button-el'
+                                            name='safetyStockUnit'
+                                            onClick={(e) => props.onActionOpenBatchRegToolTip(e)}
+                                        >
+                                            일괄 적용
+                                        </button>
+                                        {props.batchRegTooltipOpen?.safetyStockUnit &&
+                                            <BatchRegTooltip
+                                                inputType={'number'}
+                                                tootipSize={{ width: '220px' }}
+                                                onChangeInputValue={props.onChangeBatchRegInput}
+                                                name={'safetyStockUnit'}
+                                                onActionConfirm={props.onActionConfirmBatchRegInput}
+                                                onActionCancel={props.onActionCloseBatchRegTooltip}
+                                            />
+                                        }
+                                    </div>
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

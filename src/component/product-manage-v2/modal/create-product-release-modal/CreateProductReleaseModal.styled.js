@@ -35,6 +35,7 @@ const CreateProductReleaseModalFieldWrapper = styled.div`
     .input-el {
         padding: 5px;
         width: 90%;
+        border: 1px solid #c8c8c8;
     }
 
     .button-header {

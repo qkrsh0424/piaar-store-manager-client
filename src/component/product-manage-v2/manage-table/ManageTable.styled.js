@@ -31,6 +31,10 @@ const ManageTableFieldWrapper = styled.div`
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+
+        @media screen and (max-width: 992px) {
+            font-size: 12px;
+        }
     }
 
     table tbody .tr-active {
@@ -45,6 +49,10 @@ const ManageTableFieldWrapper = styled.div`
         z-index: 10;
         font-size: 14px;
         height: 35px;
+
+        @media screen and (max-width: 992px) {
+            font-size: 12px;
+        }
     }
 
     .fixed-header-left {

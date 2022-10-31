@@ -68,6 +68,34 @@ const StockStatusFieldWrapper = styled.div`
             font-size: 12px;
         }
     }
+
+    .memo-box {
+        display: flex;
+        place-content: center;
+    }
+
+    .input-el {
+        width: 90%;
+        border: 1px solid #c8c8c8;
+        padding: 0 5px;
+    }
+
+    .button-el {
+        width: 25px;
+        height: 25px;
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+
+        border: none;
+        background-color: inherit;
+        border-radius: 50%;
+
+        :hover {
+            transition: 0.15s;
+            transform: scale(1.1);
+        }
+    }
 `;
 
 export {

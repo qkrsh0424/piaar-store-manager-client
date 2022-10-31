@@ -12,6 +12,7 @@ import useRouterHook from "../../../hooks/router/useRouterHook";
 import useProductHook from "../../../hooks/product/useProductHook";
 import useProductOptionsHook from "../../../hooks/product-option/useProductOptionsHook";
 import useProductOptionBatchRegHook from "../hooks/useProductOptionBatchRegHook";
+import useBatchRegTooltipHook from "../hooks/useBatchRegTooltipHook";
 
 function PageTitleFieldView({ title }) {
     return (
@@ -56,6 +57,14 @@ const ModifyFormComponent = (props) => {
     const {
         __reqUploadImageFile
     } = useImageFileUploaderHook();
+
+    const {
+        batchRegTooltipOpen,
+        batchRegInput,
+        onActionOpenBatchRegToolTip,
+        onActionCloseBatchRegTooltip,
+        onChangeBatchRegInput
+    } = useBatchRegTooltipHook();
 
     useEffect(() => {
         function setProductAndOptions() {
@@ -152,6 +161,21 @@ const ModifyFormComponent = (props) => {
                     onActionUpdateProduct(product);
                     onActionUpdateOptions([...options]);
                 }
+            },
+            confirmBatchRegInput: (e) => {
+                e.preventDefault();
+
+                let name = e.target.name;
+
+                let data = modifyOptionDataList.map(r => {
+                    return {
+                        ...r,
+                        [name]: batchRegInput[name]
+                    }
+                })
+
+                onActionUpdateOptions(data);
+                onActionCloseBatchRegTooltip(e);
             }
         },
         submit: {
@@ -206,6 +230,8 @@ const ModifyFormComponent = (props) => {
                         modifyOptionDataList={modifyOptionDataList}
                         productOptionBatchReg={productOptionBatchReg}
                         slideDownEffect={slideDownEffect}
+                        batchRegTooltipOpen={batchRegTooltipOpen}
+                        batchRegInput={batchRegInput}
 
                         onChangeOptionInputValue={onChangeOptionInputValue}
                         onActionAddOptionData={onActionAddOptionData}
@@ -214,6 +240,10 @@ const ModifyFormComponent = (props) => {
                         onActionAddOptionDataListByBatchRegData={__hanlde.action.addOptionDataListByBatchRegData}
                         onActionSlideEffectControl={__hanlde.action.changeSlideEffectControl}
                         onActionOpenOptionDefaultNameCreateModal={__hanlde.action.openOptionDefaultNameCreateModal}
+                        onActionOpenBatchRegToolTip={onActionOpenBatchRegToolTip}
+                        onChangeBatchRegInput={onChangeBatchRegInput}
+                        onActionConfirmBatchRegInput={__hanlde.action.confirmBatchRegInput}
+                        onActionCloseBatchRegTooltip={onActionCloseBatchRegTooltip}
                     />
                 }
 

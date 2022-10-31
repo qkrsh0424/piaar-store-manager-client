@@ -157,24 +157,6 @@ const ProductManageComponent = (props) => {
 
                         alert(res?.data.memo);
                     })
-            },
-            searchProductReceiveAndRelease: async (date) => {
-                let params = {
-                    startDate: date.startDate ? getStartDate(date.startDate) : null,
-                    endDate: date.endDate ? getEndDate(date.endDate) : null,
-                }
-
-                await productOptionDataConnect().searchBatchStockStatus(checkedOptionIdList, params)
-                    .then(res => {
-                        if (res.status === 200 && res.data.message === 'success') {
-                            setOptionReceiveStatus(res.data.data.productReceive);
-                            setOptionReleaseStatus(res.data.data.productRelease);
-                        }
-                    })
-                    .catch(err => {
-                        let res = err.response;
-                        alert(res?.data?.memo);
-                    })
             }
         },
         action: {
@@ -295,7 +277,6 @@ const ProductManageComponent = (props) => {
 
                 onSubmitCreateProductReceive={__handle.submit.createProductReceive}
                 onSubmitCreateProductRelease={__handle.submit.createProductRelease}
-                onActionSearchProductReceiveAndRelease={__handle.action.searchProductReceiveAndRelease}
             />
 
             <ManageTablePagenationComponent

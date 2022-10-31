@@ -8,7 +8,7 @@ function HighlightedText({ text, query }) {
             <>
                 {parts.map((part, index) =>
                     part.toLowerCase() === query.toLowerCase() ? (
-                        <mark key={index}>{part}</mark>
+                        <mark key={index} style={{ backgroundColor: '#7a7bda36', borderRadius: '15px' }}>{part}</mark>
                     ) : (
                         part
                     ),
@@ -32,7 +32,7 @@ export default function ListFieldView (props) {
                             onClick={() => props.onActionAddPackageOption(r)}
                         >
                             <HighlightedText
-                                text={`[${r.option.code}]\n[${r.product.defaultName}]\n[${r.option.defaultName}]`}
+                                text={`[${r.option.code}]\t[${r.product.defaultName}]\t[${r.option.defaultName}]`}
                                 query={props.inputValue}
                             />
                         </button>

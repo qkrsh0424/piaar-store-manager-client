@@ -1,5 +1,4 @@
 import { BackdropHookComponent } from "../../../../hooks/backdrop/useBackdropHook";
-import useSubOptionCodesHook from "../../../../hooks/sub-option-code/useSubOptionCodesHook";
 import useSubOptionCodesHookV2 from "../../../../hooks/sub-option-code/useSubOptionCodesHookV2";
 import CommonModalComponentV2 from "../../../module/modal/CommonModalComponentV2";
 import { ButtonFieldWrapper, InfoFieldWrapper } from "./SubOptionCodeModal.styled";
@@ -54,7 +53,7 @@ const SubOptionCodeModalComponent = (props) => {
         onChangeValueOfNameByIds: onChangeSubOptionInputValue,
         checkSaveForm: checkSubOptionSaveForm,
         onActionAddModifyingId: onActionAddSubOptionCodeModifyingId
-    } = useSubOptionCodesHookV2({ option: props.option});
+    } = useSubOptionCodesHookV2({ option: props.option });
 
     const __handle = {
         action : {

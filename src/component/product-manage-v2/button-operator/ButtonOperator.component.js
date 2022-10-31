@@ -112,9 +112,9 @@ const ButtonOperatorComponent = (props) => {
                     return;
                 }
 
-                let startDate = new Date();
-                let endDate = new Date();
-                props.onActionSearchProductReceiveAndRelease({startDate, endDate});
+                // let startDate = new Date();
+                // let endDate = new Date();
+                // props.onActionSearchProductReceiveAndRelease({startDate, endDate});
                 
                 setSearchProductReceiveAndReleaseModalOpen(true);
             },
@@ -187,8 +187,8 @@ const ButtonOperatorComponent = (props) => {
             {searchProductReceiveAndReleaseModalOpen && 
                 <SearchProductReceiveAndReleaseModalComponent
                     modalOpen={searchProductReceiveAndReleaseModalOpen}
+                    checkedOptionIdList={props.checkedOptionIdList}
                     onActionCloseModal={__handle.action.closeSearchProductReceiveAndReleaseModal}
-                    onActionSearchProductReceiveAndRelease={props.onActionSearchProductReceiveAndRelease}
 
                     optionReceiveStatus={props.optionReceiveStatus}
                     optionReleaseStatus={props.optionReleaseStatus}

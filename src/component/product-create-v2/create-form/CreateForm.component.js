@@ -13,6 +13,7 @@ import useRouterHook from "../../../hooks/router/useRouterHook";
 import useProductHook from "../../../hooks/product/useProductHook";
 import useProductOptionsHook from "../../../hooks/product-option/useProductOptionsHook";
 import useProductOptionBatchRegHook from "../hooks/useProductOptionBatchRegHook";
+import useBatchRegTooltipHook from "../hooks/useBatchRegTooltipHook";
 
 function PageTitleFieldView({ title }) {
     return (
@@ -58,6 +59,14 @@ const CreateFormComponent = (props) => {
         __reqUploadImageFile
     } = useImageFileUploaderHook();
 
+    const {
+        batchRegTooltipOpen,
+        batchRegInput,
+        onActionOpenBatchRegToolTip,
+        onActionCloseBatchRegTooltip,
+        onChangeBatchRegInput
+    } = useBatchRegTooltipHook();
+
     const __hanlde = {
         action: {
             openOptionDefaultNameCreateModal: (e) => {
@@ -69,7 +78,9 @@ const CreateFormComponent = (props) => {
                 setOptionDefaultNameCreateModalOpen(false);
             },
             cancelCreateProduct: () => {
-                navigatePrevPage();
+                if(window.confirm('취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?')) {
+                    navigatePrevPage();
+                }
             },
             uploadProductImageFile: async (e) => {
                 e.preventDefault();
@@ -138,6 +149,21 @@ const CreateFormComponent = (props) => {
                 )
         
                 onActionUpdateOptions(newOrderList);
+            },
+            confirmBatchRegInput: (e) => {
+                e.preventDefault();
+
+                let name = e.target.name;
+
+                let data = createOptionDataList.map(r => {
+                    return {
+                        ...r,
+                        [name]: batchRegInput[name]
+                    }
+                })
+
+                onActionUpdateOptions(data);
+                onActionCloseBatchRegTooltip(e);
             }
         },
         submit: {
@@ -192,6 +218,8 @@ const CreateFormComponent = (props) => {
                         createOptionDataList={createOptionDataList}
                         productOptionBatchReg={productOptionBatchReg}
                         slideDownEffect={slideDownEffect}
+                        batchRegTooltipOpen={batchRegTooltipOpen}
+                        batchRegInput={batchRegInput}
 
                         onChangeOptionInputValue={onChangeOptionInputValue}
                         onActionAddOptionData={onActionAddOptionData}
@@ -201,6 +229,10 @@ const CreateFormComponent = (props) => {
                         onActionSlideEffectControl={__hanlde.action.changeSlideEffectControl}
                         onActionOpenOptionDefaultNameCreateModal={__hanlde.action.openOptionDefaultNameCreateModal}
                         onChangeOrderWithDragAndDrop={__hanlde.action.changeOptionOrderWithDragAndDrop}
+                        onActionOpenBatchRegToolTip={onActionOpenBatchRegToolTip}
+                        onChangeBatchRegInput={onChangeBatchRegInput}
+                        onActionConfirmBatchRegInput={__hanlde.action.confirmBatchRegInput}
+                        onActionCloseBatchRegTooltip={onActionCloseBatchRegTooltip}
                     />
                 }
 

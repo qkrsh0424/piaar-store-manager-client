@@ -42,11 +42,15 @@ const ControlFieldWrapper = styled.div`
 const SortButtonFieldWrapper = styled.div`
     padding: 5px;
     
+    @media screen and (max-width: 992px) {
+        width: 100%;
+    }
+    
     .select-item {
         width: 200px;
         height: 30px;
         padding: 0 5px;
-        border: 1px solid #888;
+        border: 1px solid #c8c8c8;
         border-radius: 0;
         font-size: 14px;
         -webkit-appearance: none;
@@ -61,6 +65,7 @@ const SortButtonFieldWrapper = styled.div`
         @media all and (max-width: 992px) {
             margin: 10px 0 0 0;
             font-size: 12px;
+            width: 100%;
         }        
     }
 `;

@@ -508,6 +508,23 @@ const TableFieldWrapper = styled.div`
         font-size: 16px;
     }
 
+    table thead tr .button-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    table thead tr th .button-el {
+        width: 70px;
+        border-radius: 2px;
+        border: 1px solid #c8c8c8;
+        background-color: #f7f7f7;
+        color: #444;
+        font-size: 14px;
+        height: 30px;
+    }
+
     table tbody tr td{
         position:relative;
         padding: 7px 5px;
@@ -599,6 +616,31 @@ const CreateButtonFieldWrapper = styled.div`
     }
 `;
 
+const BatchRegTooltipWrapper = styled.div`
+    .tooltip-box {
+        padding: 10px;
+        border-radius: 3px;
+        width: 230px;
+        background-color: #fff;
+        border: 1px solid #d8d8d8;
+        position: absolute;
+        box-shadow: 0px 0px 6px 2px #d8d8d8;
+        z-index: 12;
+    }
+
+    .tooltip-box .button-box {
+        padding-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 2px;
+    }
+
+    .input-el {
+        border: 1px solid #c8c8c8;
+    }
+`;
+
 export {
     Container,
     PageTitleFieldWrapper,
@@ -606,5 +648,6 @@ export {
     ProductInfoInputWrapper,
     OptionInfoInputWrapper,
     TableFieldWrapper,
-    CreateButtonFieldWrapper
+    CreateButtonFieldWrapper,
+    BatchRegTooltipWrapper
 }

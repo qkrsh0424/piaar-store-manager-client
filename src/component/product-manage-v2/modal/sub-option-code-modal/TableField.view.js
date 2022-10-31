@@ -15,7 +15,6 @@ export default function TableFieldView(props) {
                 </thead>
                 <tbody style={{ borderTop: 'none' }}>
                     {props.subOptionCodes?.map((data, idx) => {
-                        // let isModifying = props.modifyingSubOptionCodeIds?.includes(data.id);
                         let isModifying = (props.modifyingSubOptionCodeId === data.id);
                         
                         return (
@@ -71,7 +70,6 @@ export default function TableFieldView(props) {
                                             ></img>
                                         </button>
                                         :
-
                                         <button
                                             type='button'
                                             className='button-el'
