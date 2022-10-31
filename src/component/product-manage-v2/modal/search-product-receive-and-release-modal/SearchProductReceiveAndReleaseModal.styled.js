@@ -4,55 +4,6 @@ const Container = styled.div`
 
 `;
 
-const SearchProductReceiveAndReleaseModalFieldWrapper = styled.div`
-    max-height: 50vh;
-    overflow: auto;
-
-    table thead tr {
-        vertical-align: middle !important;
-        text-align: center;
-    }
-
-    table tbody th, td {
-        vertical-align: middle !important;
-        text-align: center;
-        font-size: 14px;
-        font-weight: 500;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .fixed-header {
-        position: sticky;
-        top: -1px;
-        background: #f1f1f1;
-        z-index: 10;
-        font-size: 14px;
-        /* height: 30px; */
-    }
-
-    .input-el {
-        padding: 5px;
-        width: 90%;
-    }
-
-    .button-header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
-
-    .button-el {
-        width: 80px;
-        border-radius: 2px;
-        border: 1px solid #c8c8c8;
-        background-color: #f7f7f7;
-        color: #444;
-    }
-`;
-
 const DateRangeSelectorFieldWrapper = styled.div`
     padding-bottom: 20px;
 
@@ -64,9 +15,15 @@ const DateRangeSelectorFieldWrapper = styled.div`
         color: white;
         font-size: 16px;
         font-weight: 500;
+
+        @media screen and (max-width: 992px) {
+            font-size: 14px;
+        }
+
+        @media screen and (max-width: 768px) {
+            width: 100%;
+        }
     }
-
-
 `;
 
 const StockStatusFieldWrapper = styled.div`
@@ -75,6 +32,10 @@ const StockStatusFieldWrapper = styled.div`
     margin-bottom: 30px;
     border: 1px solid #c8c8c8;
     overflow: auto;
+
+    table {
+        min-width: 1000px;
+    }
 
     table thead tr {
         vertical-align: middle !important;
@@ -89,6 +50,10 @@ const StockStatusFieldWrapper = styled.div`
         text-overflow: ellipsis;
         white-space: nowrap;
         font-weight: 400;
+
+        @media screen and (max-width: 992px) {
+            font-size: 12px;
+        }
     }
 
     .fixed-header {
@@ -98,12 +63,15 @@ const StockStatusFieldWrapper = styled.div`
         z-index: 10;
         font-size: 14px;
         height: 35px;
+
+        @media screen and (max-width: 992px) {
+            font-size: 12px;
+        }
     }
 `;
 
 export {
     Container,
-    SearchProductReceiveAndReleaseModalFieldWrapper,
     DateRangeSelectorFieldWrapper,
     StockStatusFieldWrapper
 }

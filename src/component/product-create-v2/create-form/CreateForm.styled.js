@@ -548,12 +548,22 @@ const CreateButtonFieldWrapper = styled.div`
     left: 0;
     z-index: 20;
 
+    @media screen and (max-width: 992px) {
+        height: auto;
+        padding: 10px;
+    }
+
     .button-box {
         display: flex;
         justify-content: flex-end;
         align-items: center;
         gap: 10px;
         height: 100%;
+
+        @media screen and (max-width: 992px) {
+            flex-direction: column;
+            width: 100%;   
+        }
     }
 
     .button-el {
@@ -564,10 +574,18 @@ const CreateButtonFieldWrapper = styled.div`
         color: white;
         border-radius: 3px;
         font-weight: 700;
-        transition: 0.1s;
+        transition: 0.3s;
 
         :hover {
+            transition: 0.1s;
             transform: scale(1.02);
+        }
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 3px;
         }
     }
 

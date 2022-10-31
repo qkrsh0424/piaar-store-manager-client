@@ -50,12 +50,23 @@ const ManageTableFieldWrapper = styled.div`
     .fixed-header-left {
         left: 0;
         z-index: 11;
+
+        @media screen and (max-width: 992px) {
+            left: 0 !important;
+            z-index: 1;
+        }
     }
 
     .fixed-col-left {
         position: sticky;
         left: 0;
         z-index: 9;
+
+        @media screen and (max-width: 992px) {
+            left: 0 !important;
+            z-index: 0;
+            position: relative;
+        }
     }
 
     .link-img {

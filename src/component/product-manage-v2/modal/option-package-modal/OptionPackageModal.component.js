@@ -1,6 +1,11 @@
+import { useEffect, useState } from "react";
+import { BackdropHookComponent } from "../../../../hooks/backdrop/useBackdropHook";
 import useOptionPackagesHook from "../../../../hooks/option-package/useOptionPackagesHook";
+import useProductOptionsSearchHook from "../../../../hooks/product-option/useProductOptionsSearchHook";
 import CommonModalComponentV2 from "../../../module/modal/CommonModalComponentV2";
-import { ButtonFieldWrapper, InfoFieldWrapper } from "./OptionPackageModal.styled";
+import ListFieldView from "./ListField.view";
+import { ButtonFieldWrapper, InfoFieldWrapper, InputFieldWrapper } from "./OptionPackageModal.styled";
+import TableFieldView from "./TableField.view";
 
 function InfoFieldView({ option }) {
     return (
@@ -21,65 +26,142 @@ function InfoFieldView({ option }) {
     )
 }
 
-function ButtonFieldView({ onClick }) {
+function InputFieldView({ inputValue, onChange }) {
+    return (
+        <InputFieldWrapper>
+            <input
+                type='text'
+                className='input-el'
+                placeholder='옵션코드, 상품명, 옵션명을 입력해주세요.'
+                value={inputValue || ''}
+                onChange={(e) => onChange(e)}
+            ></input>
+        </InputFieldWrapper>
+    )
+}
+
+
+function ButtonFieldView({ onActionReset, onSubmit }) {
     return (
         <ButtonFieldWrapper>
             <button
                 className='button-el'
-                onClick={(e) => onClick(e)}
+                onClick={() => onActionReset()}
             >
-                <img
-                    src='/assets/icon/add_default_444444.svg'
-                    style={{ width: '25px'}}
-                    alt=""
-                    loading='lazy'
-                />
+                초기화
+            </button>
+            <button
+                className='button-el'
+                style={{ backgroundColor: 'var(--piaar-main-color)', color: '#fff' }}
+                onClick={() => onSubmit()}
+            >
+                저장
             </button>
         </ButtonFieldWrapper>
     )
 }
 
 const OptionPackageModalComponent = (props) => {
+    const [inputValue, setInputValue] = useState('');
     
     const {
+        productOptions,
 
-    } = useOptionPackagesHook();
+        reqSearchAllM2OJ
+    } = useProductOptionsSearchHook();
+
+    const {
+        optionPackages,
+
+        onActionAddData: onActionAddPackageOption,
+        onChangeValueOfName,
+        onSumbitCreateData: onSubmitCreateOptionPackages,
+        onActionDeleteData: onActionDeleteOptionPackageData,
+        onActionResetData: onActionResetOriginOptionPackages,
+        checkSaveForm: checkOptionPackagesSaveForm
+    } = useOptionPackagesHook({ option: props.option });
+
+    useEffect(() => {
+        async function fetchInit() {
+            await reqSearchAllM2OJ();
+        }
+
+        fetchInit();
+    }, [])
 
     const __handle = {
         action : {
-    
+            changeInputValue: (e) => {
+                setInputValue(e.target.value);
+            },
+            deleteOptionPackage: (id) => {
+                if(!window.confirm('정말 삭제하시겠습니까?')) {
+                    return;
+                }
+                    
+                onActionDeleteOptionPackageData(id);
+            }
+        },
+        submit: {
+            createOptionPackages: () => {
+                try {
+                    checkOptionPackagesSaveForm();
+
+                    onSubmitCreateOptionPackages(props.option.id);
+                    props.onActionCloseModal();
+                } catch (err) {
+                    alert(err.message);
+                }
+            }
         }
     }
 
     return (
-        <CommonModalComponentV2
-            open={true}
-            title={'옵션패키지 설정'}
-            element={
-                <div style={{ padding: '20px 10px' }}>
-                    <InfoFieldView
-                        option={props.option}
-                    />
-                    {/* {subOptionCodes &&
-                        <TableFieldView
-                            subOptionCodes={subOptionCodes}
-                            modifyingSubOptionCodeIdx={modifyingSubOptionCodeIdx}
+        <>
+            {(optionPackages && productOptions) ?
+                <CommonModalComponentV2
+                    open={true}
+                    title={'옵션패키지 설정'}
+                    element={
+                        <div style={{ padding: '20px 10px' }}>
+                            <InfoFieldView
+                                option={props.option}
+                            />
+                            <InputFieldView
+                                inputValue={inputValue}
 
-                            onChangeSubOptionInputValue={onChangeSubOptionInputValue}
-                            onActionDeleteSubOptionData={__handle.action.deleteSubOptionCode}
-                            onSubmitCreateOrModifySubOption={__handle.submit.createOrModifySubOption}
-                            onActionModifySubOption={__handle.action.modifySubOption}
-                        />
-                    } */}
-                    {/* <ButtonFieldView
-                        onClick={__handle.action.addSubOptionCode}
-                    /> */}
-                </div>
+                                onChange={__handle.action.changeInputValue}
+                            ></InputFieldView>
+                            <ListFieldView
+                                productOptions={productOptions}
+                                inputValue={inputValue}
+
+                                onActionAddPackageOption={onActionAddPackageOption}
+                            ></ListFieldView>
+                            {optionPackages &&
+                                <TableFieldView
+                                    optionPackages={optionPackages}
+
+                                    onChangeValueOfName={onChangeValueOfName}
+                                    onActionDeleteOptionPackageData={__handle.action.deleteOptionPackage}
+                                />
+                            }
+                            <ButtonFieldView
+                                onActionReset={onActionResetOriginOptionPackages}
+                                onSubmit={__handle.submit.createOptionPackages}
+                            />
+                        </div>
+                    }
+                    maxWidth={'sm'}
+
+                    onClose={() => props.onActionCloseModal()}
+                />
+                :
+                <BackdropHookComponent
+                    open={true}
+                />
             }
-            maxWidth={'sm'}
-
-            onClose={() => props.onActionCloseModal()}
-        />
+        </>
     )
 }
 

@@ -138,7 +138,13 @@ const productOptionDataConnect = () => {
                 params,
                 withCredentials: true
             })
-        }
+        },
+        // searchList -> searchAllM2OJ
+        searchAllM2OJ: async function () {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product-option/all-m2oj`, {
+                withCredentials: true
+            })
+        },
     }
 }
 

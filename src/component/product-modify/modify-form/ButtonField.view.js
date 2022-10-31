@@ -1,9 +1,9 @@
-import { CreateButtonFieldWrapper } from "./CreateForm.styled";
+import { CreateButtonFieldWrapper } from "./ModifyForm.styled";
 
 export default function CreateButtonFieldView(props) {
     return (
         <CreateButtonFieldWrapper>
-            <div>
+            <div className='button-box'>
                 <button
                     type='button'
                     className='button-el'

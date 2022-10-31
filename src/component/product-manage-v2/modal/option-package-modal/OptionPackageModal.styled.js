@@ -22,11 +22,79 @@ const InfoFieldWrapper = styled.div`
     }
 `;
 
+const InputFieldWrapper = styled.div`
+    margin-top: 20px;
+
+    .input-el{
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #e1e1e1;
+        padding: 10px 5px;
+
+        &:focus{
+            outline: none;
+        }
+    }
+`;
+
+const ListFieldWrapper = styled.div`
+    margin-top: 10px;
+    margin-bottom: 10px;
+    min-height: 35vh;
+    max-height: 35vh;
+    overflow: auto;
+    /* padding: 0 20px; */
+    white-space: pre-line;
+
+    .flex-box { 
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .control-button-item{
+        width: 100%;
+        padding: 10px 0;
+        font-size: 14px;
+        font-weight: 500;
+        background: white;
+        border: 1px solid #00000000;
+        cursor: pointer;
+
+        &:hover{
+            background:#e1e1e160;
+        }
+
+        &:disabled{
+            cursor: not-allowed;
+        }
+    }
+
+    .highlight{
+        font-weight : bold; 
+        color:#FF0000;
+    }
+
+    .button-item{
+        padding: 7px 20px;
+        text-align: left;
+        width: 100%;
+        background: white;
+        border: none;
+        border-bottom: 1px solid #e8e8e8;
+        cursor: pointer;
+
+        &:hover{
+            background: #e1e1e160;
+        }
+
+        &:active {
+            background: #efefef;
+        }
+    }
+`;
+
 const TableFieldWrapper = styled.div`
     margin: 20px 0;
-    min-height: 40vh;
-    max-height: 40vh;
-    overflow: auto;
 
     table thead tr {
         vertical-align: middle !important;
@@ -75,28 +143,34 @@ const TableFieldWrapper = styled.div`
 `;
 
 const ButtonFieldWrapper = styled.div`
-    text-align: center;
     padding: 3px;
-    
-    :hover {
-        cursor: pointer;
-    }
-    
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+
     .button-el {
-        width: 100%;
+        width: 140px;
         position: relative;
         overflow: hidden;
-        padding: 0;
+        padding: 7px;
 
         border: 1px solid #c8c8c8;
-        background-color: #e8e8e8;
+        background-color: #f7f7f7;
         border-radius: 2px;
+        font-size: 14px;
+        font-weight: 600;
+
+        :hover {
+            cursor: pointer;
+        }
     }
 `;
 
 export {
     Container,
     InfoFieldWrapper,
+    InputFieldWrapper,
+    ListFieldWrapper,
     TableFieldWrapper,
     ButtonFieldWrapper
 }

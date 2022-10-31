@@ -8,13 +8,13 @@ export default function ReleaseStatusTableFieldView(props) {
             <table className="table table-sm" stlye={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                 <thead>
                     <tr>
-                        <th className='fixed-header' scope="col" width='100'>출고일시</th>
-                        <th className='fixed-header' scope="col" width='100'>상품명</th>
-                        <th className='fixed-header' scope="col" width='100'>옵션명</th>
-                        <th className='fixed-header' scope="col" width='100'>옵션코드</th>
-                        <th className='fixed-header' scope="col" width='50' style={{ color: '#292be4' }}>출고량</th>
-                        <th className='fixed-header' scope="col" width='100'>출고메모</th>
-                        <th className='fixed-header' scope="col" width='100'>출고지</th>
+                        <th className='fixed-header' scope="col" width='150'>출고일시</th>
+                        <th className='fixed-header' scope="col" width='150'>상품명</th>
+                        <th className='fixed-header' scope="col" width='150'>옵션명</th>
+                        <th className='fixed-header' scope="col" width='150'>옵션코드</th>
+                        <th className='fixed-header' scope="col" width='100' style={{ color: '#292be4' }}>출고량</th>
+                        <th className='fixed-header' scope="col" width='150'>출고메모</th>
+                        <th className='fixed-header' scope="col" width='150'>출고지</th>
                     </tr>
                 </thead>
 

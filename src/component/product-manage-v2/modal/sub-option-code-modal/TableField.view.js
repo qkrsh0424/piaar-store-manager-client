@@ -15,7 +15,8 @@ export default function TableFieldView(props) {
                 </thead>
                 <tbody style={{ borderTop: 'none' }}>
                     {props.subOptionCodes?.map((data, idx) => {
-                        let isModifying = props.modifyingSubOptionCodeIdx.includes(idx);
+                        // let isModifying = props.modifyingSubOptionCodeIds?.includes(data.id);
+                        let isModifying = (props.modifyingSubOptionCodeId === data.id);
                         
                         return (
                             <tr
@@ -32,7 +33,7 @@ export default function TableFieldView(props) {
                                                 className='input-el'
                                                 name='subOptionCode'
                                                 value={data.subOptionCode}
-                                                onChange={(e) => props.onChangeSubOptionInputValue(e, idx)}
+                                                onChange={(e) => props.onChangeSubOptionInputValue(e, data.id)}
                                             />
                                         </div>
                                         :
@@ -47,7 +48,7 @@ export default function TableFieldView(props) {
                                                 className='input-el'
                                                 name='memo'
                                                 value={data.memo}
-                                                onChange={(e) => props.onChangeSubOptionInputValue(e, idx)}
+                                                onChange={(e) => props.onChangeSubOptionInputValue(e, data.id)}
                                             />
                                         </div>
                                         :
@@ -59,10 +60,10 @@ export default function TableFieldView(props) {
                                         <button
                                             type='button'
                                             className='button-el'
-                                            onClick={() => props.onSubmitCreateOrModifySubOption(idx)}
+                                            onClick={() => props.onSubmitCreateOrModifySubOption(data.id)}
                                         >
                                             <img
-                                                src='/assets/icon/edit_default_2c73d2.svg'
+                                                src='/assets/icon/done_outline_2c73d2.svg'
                                                 style={{ width: '25px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
                                                 alt=""
                                                 loading='lazy'
@@ -74,11 +75,11 @@ export default function TableFieldView(props) {
                                         <button
                                             type='button'
                                             className='button-el'
-                                            onClick={() => props.onActionModifySubOption(idx)}
+                                            onClick={() => props.onActionModifySubOption(data.id)}
                                         >
                                             <img
                                                 src='/assets/icon/edit_default_888888.svg'
-                                                style={{ width: '23px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                                                style={{ width: '25px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
                                                 alt=""
                                                 loading='lazy'
                                                 className='link-img'
@@ -90,7 +91,7 @@ export default function TableFieldView(props) {
                                     <button
                                         type='button'
                                         className='button-el'
-                                        onClick={() => props.onActionDeleteSubOptionData(idx)}
+                                        onClick={() => props.onActionDeleteSubOptionData(data.id)}
                                     >
                                         <img
                                             src='/assets/icon/delete_default_ff3060.svg'

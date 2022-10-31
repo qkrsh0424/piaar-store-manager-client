@@ -1,5 +1,5 @@
 import CategorySelectorFieldView from "./CategorySelectorField.view";
-import { Container, PageTitleFieldWrapper } from "./CreateForm.styled";
+import { Container, PageTitleFieldWrapper } from "./ModifyForm.styled";
 import OptionInfoInputFieldView from "./OptionInfoInputField.view";
 import ProductInfoInputFieldView from "./ProductInfoInputField.view";
 import { useEffect, useReducer } from "react";

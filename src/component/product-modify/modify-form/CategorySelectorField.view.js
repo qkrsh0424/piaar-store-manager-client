@@ -1,5 +1,5 @@
 import RequiredIcon from "../../module/icon/RequiredIcon";
-import { CategorySelectorWrapper } from "./CreateForm.styled";
+import { CategorySelectorWrapper } from "./ModifyForm.styled";
 
 export default function CategorySelectorFieldView(props) {
     return (

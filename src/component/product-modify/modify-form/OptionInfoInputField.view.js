@@ -1,5 +1,5 @@
 import RequiredIcon from "../../module/icon/RequiredIcon";
-import { OptionInfoInputWrapper, TableFieldWrapper } from "./CreateForm.styled";
+import { OptionInfoInputWrapper, TableFieldWrapper } from "./ModifyForm.styled";
 
 export default function OptionInfoInputFieldView(props) {
     return (

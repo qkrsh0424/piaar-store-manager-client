@@ -5,10 +5,10 @@ import { ManageTableFieldWrapper } from "./ManageTable.styled";
 export default function ManageTableFieldView(props) {
     return (
         <ManageTableFieldWrapper>
-            <table className='table table-sm' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
+            <table className='table table-sm' style={{ tableLayout: 'fixed', backgroundColor: 'white'}}>
                 <thead>
                     <tr>
-                        <th className='fixed-header fixed-header-left' scope="col" width='50'>
+                        <th className='fixed-header fixed-header-left' scope="col" width={50}>
                             <input
                                 type='checkbox'
                                 style={{ cursor: 'pointer' }}
@@ -16,11 +16,12 @@ export default function ManageTableFieldView(props) {
                                 onChange={(e) => props.onActionCheckAll(e)}
                             />
                         </th>
-                        <th className='fixed-header fixed-header-left' scope="col" width='100' style={{ left: '50px' }}>설정</th>
-                        <th className='fixed-header fixed-header-left' scope="col" width='100' style={{ left: '150px' }}>카테고리</th>
-                        <th className='fixed-header fixed-header-left' scope="col" width='140' style={{ left: '250px' }}>상품이미지</th>
-                        <th className='fixed-header fixed-header-left' scope="col" width='200' style={{ left: '390px', boxShadow: '-0.5px 0 0 0 #e0e0e0 inset' }}>상품정보</th>
-                        <th className='fixed-header' scope="col" width='50'>
+                        <th className='fixed-header fixed-header-left' scope="col" width={100} style={{ left: '50px' }}>설정</th>
+                        <th className='fixed-header fixed-header-left' scope="col" width={100} style={{ left: '150px' }}>카테고리</th>
+                        <th className='fixed-header fixed-header-left' scope="col" width={140} style={{ left: '250px' }}>상품이미지</th>
+                        <th className='fixed-header fixed-header-left' scope="col" width={200} style={{ left: '390px', boxShadow: '-0.5px 0 0 0 #e0e0e0 inset' }}>상품정보</th>
+                        
+                        <th className='fixed-header' scope="col" width={50}>
                             <input
                                 type='checkbox'
                                 style={{ cursor: 'pointer' }}

@@ -8,18 +8,33 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @media screen and (max-width: 992px) {
+        flex-direction: column;
+        align-items: flex-end;
+    }
 `;
 
 const ControlFieldWrapper = styled.div`
+    width: 100%;
     padding: 5px;
     display: flex;
     gap: 5px;
+    
+    @media screen and (max-width: 992px) {
+        flex-direction: column;
+    }
 
     .button-el {
         border: 1px solid #dbdde2;
         width: 120px;
         padding: 4px 2px;
         background-color: #f7f7f7;   
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+            font-size: 12px;
+        }
     }
 
 `;
@@ -43,9 +58,9 @@ const SortButtonFieldWrapper = styled.div`
             outline: none;
         }
 
-        @media all and (max-width:992px) {
+        @media all and (max-width: 992px) {
             margin: 10px 0 0 0;
-            width: 100%;
+            font-size: 12px;
         }        
     }
 `;

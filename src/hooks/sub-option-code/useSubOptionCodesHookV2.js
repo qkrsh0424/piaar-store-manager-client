@@ -3,11 +3,11 @@ import { useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { subOptionCodeDataConnect } from "../../data_connect/subOptionCodeDataConnect";
 
-export default function useSubOptionCodesHook(props) {
+export default function useSubOptionCodesHookV2(props) {
     const [subOptionCodes, setSubOptionCodes] = useState([]);
     const [originSubOptionCodes, setOriginSubOptionCodes] = useState(null);
 
-    const [modifyingIds, setModifyingIds] = useState([]);
+    const [modifyingId, setModifyingId] = useState(null);
 
     useEffect(() => {
         async function fetchInit() {
@@ -61,8 +61,8 @@ export default function useSubOptionCodesHook(props) {
         await subOptionCodeDataConnect().postOne(data)
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {
-                    let ids = modifyingIds.filter(modifyingId => modifyingId !== data.id);
-                    setModifyingIds(ids);
+                    // 정상적으로 생성된다면 modifyingId를 초기화
+                    setModifyingId(null);
                 }
             })
             .catch(err =>{
@@ -80,8 +80,8 @@ export default function useSubOptionCodesHook(props) {
         await subOptionCodeDataConnect().putOne(data)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
-                    let ids = modifyingIds.filter(modifyingId => modifyingId !== data.id);
-                    setModifyingIds(ids);
+                    // 정상적으로 생성된다면 modifyingId를 초기화
+                    setModifyingId(null);
                 }
             })
             .catch(err => {
@@ -96,6 +96,11 @@ export default function useSubOptionCodesHook(props) {
     }
 
     const onActionAddData = () => {
+        if(modifyingId) {
+            alert('수정중인 데이터를 먼저 완료해주세요.');
+            return;
+        }
+
         let data = {
             id: uuidv4(),
             subOptionCode: '',
@@ -105,9 +110,8 @@ export default function useSubOptionCodesHook(props) {
         }
 
         let updatedSubOptionCodes = subOptionCodes.concat(data);
-        let updatedModifyingIds = modifyingIds.concat(data.id);
         setSubOptionCodes(updatedSubOptionCodes);
-        setModifyingIds(updatedModifyingIds);
+        setModifyingId(data.id);
     }
 
     // 기존에 생성된 데이터라면 삭제 api 요청, 그렇지 않다면 client에서 처리
@@ -119,8 +123,9 @@ export default function useSubOptionCodesHook(props) {
             setSubOptionCodes(result);
         }
 
-        let updatedIds = modifyingIds.filter(modifyId => modifyId !== id);
-        setModifyingIds(updatedIds);
+        if(id === modifyingId) {
+            setModifyingId(null);
+        }
     }
 
     const onActionCreateOrModify = async (id) => {
@@ -170,13 +175,17 @@ export default function useSubOptionCodesHook(props) {
     }
 
     const onActionAddModifyingId = (id) => {
-        let updatedIds = modifyingIds.concat(id);
-        setModifyingIds(updatedIds);
+        if(modifyingId) {
+            alert('수정중인 데이터를 먼저 완료해주세요.');
+            return;
+        }
+
+        setModifyingId(id);
     }
 
     return {
         subOptionCodes,
-        modifyingIds,
+        modifyingId,
 
         onActionAddData,
         onActionDeleteData,

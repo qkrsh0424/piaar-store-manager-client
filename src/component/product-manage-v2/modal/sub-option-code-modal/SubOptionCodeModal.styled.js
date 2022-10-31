@@ -88,9 +88,16 @@ const ButtonFieldWrapper = styled.div`
         overflow: hidden;
         padding: 0;
 
-        border: 1px solid #c8c8c8;
-        background-color: #e8e8e8;
+        /* border: 1px solid #c8c8c8;
+        background-color: #e8e8e8; */
+        border: 1px solid var(--piaar-main-color);
+        background-color: var(--piaar-main-color);
         border-radius: 2px;
+
+        :active {
+            transition: 0.15s;
+            opacity: 0.8;
+        }
     }
 `;
 

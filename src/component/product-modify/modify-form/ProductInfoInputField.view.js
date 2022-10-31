@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import RequiredIcon from "../../module/icon/RequiredIcon";
-import { ProductInfoInputWrapper } from "./CreateForm.styled";
+import { ProductInfoInputWrapper } from "./ModifyForm.styled";
 
 export default function ProductInfoInputFieldView(props) {
     const productImageUploaderRef = useRef();
