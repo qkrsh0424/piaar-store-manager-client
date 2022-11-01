@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { dateToYYMMDDhhmmss } from "../../../../utils/dateFormatUtils";
 import { StockStatusFieldWrapper } from "./SearchProductReceiveAndReleaseModal.styled";
 
@@ -47,12 +47,12 @@ export default function ReceiveStatusTableFieldView(props) {
                                         {isModifying ?
                                             <div>
                                                 <input
-                                                    ref={props.modifyMemoRef}
                                                     type='text'
                                                     className='input-el'
                                                     name='memo'
                                                     value={r.productReceive.memo || ''}
                                                     onChange={(e) => props.onChangeInputValue(e, r.productReceive.id)}
+                                                    autoFocus
                                                 />
                                             </div>
                                             :

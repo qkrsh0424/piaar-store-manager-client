@@ -33,6 +33,7 @@ export default function TableFieldView(props) {
                                                 name='subOptionCode'
                                                 value={data.subOptionCode}
                                                 onChange={(e) => props.onChangeSubOptionInputValue(e, data.id)}
+                                                autoFocus
                                             />
                                         </div>
                                         :

@@ -144,7 +144,7 @@ const productDataConnect = () => {
         // },
         // 22.10.20 FEAT
         deleteOne: async function (productId) {
-            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product/${productId}`, {
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v2/products/${productId}`, {
                 withCredentials: true
             })
         }

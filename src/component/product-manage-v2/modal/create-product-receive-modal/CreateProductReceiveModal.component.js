@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
 import useProductReceiveHook from "../../../../hooks/product-receive/useProductReceiveHook";
 import SubmitModalComponentV2 from "../../../module/modal/SubmitModalComponentV2";
 import { BatchRegTooltipWrapper, CreateProductReceiveModalFieldWrapper } from "./CreateProductReceiveModal.styled";
@@ -13,6 +14,7 @@ function BatchRegTooltip({ tootipSize, onChangeInputValue, onActionCancel, onAct
                     className='input-el'
                     style={{ width: '100%' }}
                     onChange={(e) => onChangeInputValue(e)}
+                    autoFocus
                 />
                 <div className='button-box'>
                     <button className='button-el' onClick={() => onActionCancel()}>
@@ -47,6 +49,7 @@ const CreateProductReceiveModalComponent = (props) => {
                 e.preventDefault();
             
                 setMemoBatchRegTooltipOpen(true);
+                setUnitBatchRegTooltipOpen(false);
             },
             closeMemoBatchRegTooltip: () => {
                 setMemoBatchRegInput('');
@@ -69,6 +72,7 @@ const CreateProductReceiveModalComponent = (props) => {
                 e.preventDefault();
             
                 setUnitBatchRegTooltipOpen(true);
+                setMemoBatchRegTooltipOpen(false);
             },
             closeUnitBatchRegTooltip: () => {
                 setUnitBatchRegInput('');
@@ -108,6 +112,7 @@ const CreateProductReceiveModalComponent = (props) => {
                         productOptionId: r.option.id
                     }
                 })
+
                 props.onSubmitCreateProductReceive(data);
             }
         }

@@ -63,7 +63,7 @@ class ProductOption {
 const ProductManageTableComponent = (props) => {
     const [modifyProductModalOpen, setModifyProductModalOpen] = useState(false);
     const [modifyProductData, setModifyProductData] = useState(null);
-    
+
     const [createProductOptionModalOpen, setCreateProductOptionModalOpen] = useState(false);
     const [createProductOptionData, setCreateProductOptionData] = useState(null);
 
@@ -77,7 +77,7 @@ const ProductManageTableComponent = (props) => {
     const [selectedProductOptionData, setSelectedProductOptionData] = useState(null);
 
     useEffect(() => {
-        if(!props.stockStatusList) {
+        if (!props.stockStatusList) {
             return;
         }
 
@@ -133,7 +133,7 @@ const ProductManageTableComponent = (props) => {
         setCreateProductOptionData(option);
         setCreateProductOptionModalOpen(true);
     }
-    
+
     const onActionCloseCreateProductOptionModal = () => {
         setCreateProductOptionData(null);
         setCreateProductOptionModalOpen(false);
@@ -150,14 +150,14 @@ const ProductManageTableComponent = (props) => {
         await props._onAction_searchOptionPackage(option.id);
         setModifyProductOptionModalOpen(true);
     }
-    
+
     const onActionCloseModifyProductOptionModal = () => {
         setModifyProductOptionData(null);
         setModifyProductOptionModalOpen(false);
     }
 
     const onActionModifyProduct = async (modifyProductData) => {
-        if(!props.submitCheck.isSubmit) {
+        if (!props.submitCheck.isSubmit) {
             await props._onSubmit_modifyProduct(modifyProductData);
         }
         onActionCloseModifyProductModal();
@@ -171,14 +171,14 @@ const ProductManageTableComponent = (props) => {
     }
 
     const onActionCreateProductOption = async (createOptionData) => {
-        if(!props.submitCheck.isSubmit) {
+        if (!props.submitCheck.isSubmit) {
             await props._onSubmit_createProductOption(createOptionData);
         }
         onActionCloseCreateProductOptionModal();
     }
 
     const onActionModifyProductOption = async (modifyOptionData) => {
-        if(!props.submitCheck.isSubmit) {
+        if (!props.submitCheck.isSubmit) {
             await props._onSubmit_modifyProductOption(modifyOptionData);
         }
         onActionCloseModifyProductOptionModal();
@@ -259,7 +259,7 @@ const ProductManageTableComponent = (props) => {
                 open={modifyProductModalOpen}
                 maxWidth={'md'}
                 fullWidth={true}
-    
+
                 onClose={onActionCloseModifyProductModal}
             >
                 <ModifyProductModalComponent

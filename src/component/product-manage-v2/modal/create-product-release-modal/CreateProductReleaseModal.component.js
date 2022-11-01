@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useRef } from "react";
 import useProductReleaseHook from "../../../../hooks/product-release/useProductReleaseHook";
 import SubmitModalComponentV2 from "../../../module/modal/SubmitModalComponentV2";
 import { BatchRegTooltipWrapper, CreateProductReleaseModalFieldWrapper } from "./CreateProductReleaseModal.styled";
@@ -13,6 +14,7 @@ function BatchRegTooltip({ tootipSize, onChangeInputValue, onActionCancel, onAct
                     className='input-el'
                     style={{ width: '100%' }}
                     onChange={(e) => onChangeInputValue(e)}
+                    autoFocus
                 />
                 <div className='button-box'>
                     <button className='button-el' onClick={() => onActionCancel()}>
@@ -47,6 +49,7 @@ const CreateProductReleaseModalComponent = (props) => {
                 e.preventDefault();
             
                 setMemoBatchRegTooltipOpen(true);
+                setUnitBatchRegTooltipOpen(false);
             },
             closeMemoBatchRegTooltip: () => {
                 setMemoBatchRegInput('');
@@ -69,6 +72,7 @@ const CreateProductReleaseModalComponent = (props) => {
                 e.preventDefault();
             
                 setUnitBatchRegTooltipOpen(true);
+                setMemoBatchRegTooltipOpen(false);
             },
             closeUnitBatchRegTooltip: () => {
                 setUnitBatchRegInput('');

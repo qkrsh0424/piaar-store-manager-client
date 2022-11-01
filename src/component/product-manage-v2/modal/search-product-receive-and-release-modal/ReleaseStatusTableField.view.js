@@ -51,12 +51,12 @@ export default function ReleaseStatusTableFieldView(props) {
                                         {isModifying ?
                                             <div>
                                                 <input
-                                                    ref={props.modifyMemoRef}
                                                     type='text'
                                                     className='input-el'
                                                     name='memo'
                                                     value={r.productRelease.memo || ''}
                                                     onChange={(e) => props.onChangeInputValue(e, r.productRelease.id)}
+                                                    autoFocus
                                                 />
                                             </div>
                                             :

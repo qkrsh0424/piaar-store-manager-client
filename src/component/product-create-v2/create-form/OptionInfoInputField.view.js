@@ -13,6 +13,7 @@ function BatchRegTooltip({ name, inputType, tootipSize, onChangeInputValue, onAc
                     className='input-el'
                     style={{ width: '100%' }}
                     onChange={(e) => onChangeInputValue(e)}
+                    autoFocus
                 />
                 <div className='button-box'>
                     <button type='button' className='button-el' name={name} onClick={(e) => onActionCancel(e)}>
@@ -39,6 +40,7 @@ export default function OptionInfoInputFieldView(props) {
                     <button
                         type='button'
                         className='button-el'
+                        name='option'
                         onClick={(e) => props.onActionSlideEffectControl(e, 'option')}
                     >
                         {props.slideDownEffect?.option ?
@@ -60,8 +62,8 @@ export default function OptionInfoInputFieldView(props) {
                 </div>
             </div>
 
-            <div className={`body-wrapper ${props.slideDownEffect?.option ? `slide-down` : `slide-up`}`}>
-                <div className='inner-wrapper'>
+            {props.slideDownEffect?.option &&
+                <div className='body-wrapper'>
                     <div className='sub-title-text'>
                         <span>일괄등록</span>
                         <div className='info-text'>
@@ -71,11 +73,11 @@ export default function OptionInfoInputFieldView(props) {
                     </div>
                     <div className='batch-reg-box'>
                         <div className='input-box'>
-                            <div className='input-group'>
+                            <div className='input-group-box'>
                                 <span className='title-text'>옵션명</span>
                                 <input
                                     type='text'
-                                    className='input-value'
+                                    style={{ borderRadius: '5px 0 0 5px' }}
                                     value={props.productOptionBatchReg.defaultName}
                                     name='defaultName'
                                     onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
@@ -88,73 +90,66 @@ export default function OptionInfoInputFieldView(props) {
                                     >옵션명 일괄 생성</button>
                                 </div>
                             </div>
-                            <div className='input-group'>
+                            <div className='input-group-box'>
                                 <span className='title-text'>옵션설명</span>
                                 <input
                                     type='text'
-                                    className='input-value'
                                     value={props.productOptionBatchReg.managementName}
                                     name='managementName'
                                     onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                 ></input>
                             </div>
-                            <div className='input-group'>
+                            <div className='input-group-box'>
                                 <span className='title-text'>판매가</span>
                                 <input
                                     type='text'
-                                    className='input-value'
                                     value={props.productOptionBatchReg.salesPrice}
                                     name='salesPrice'
                                     onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                     placeholder='숫자만 입력'
                                 ></input>
                             </div>
-                            <div className='input-group'>
+                            <div className='input-group-box'>
                                 <span className='title-text'>매입총합계</span>
                                 <input
                                     type='text'
-                                    className='input-value'
                                     value={props.productOptionBatchReg.totalPurchasePrice}
                                     name='totalPurchasePrice'
                                     onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                     placeholder='숫자만 입력'
                                 ></input>
                             </div>
-                            <div className='input-group'>
+                            <div className='input-group-box'>
                                 <span className='title-text'>출고지</span>
                                 <input
                                     type='text'
-                                    className='input-value'
                                     value={props.productOptionBatchReg.releaseLocation}
                                     name='releaseLocation'
                                     onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                 ></input>
                             </div>
-                            <div className='input-group'>
+                            <div className='input-group-box'>
                                 <span className='title-text'>상태</span>
                                 <input
                                     type='text'
-                                    className='input-value'
                                     value={props.productOptionBatchReg.status}
                                     name='status'
                                     onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                 ></input>
                             </div>
-                            <div className='input-group'>
+                            <div className='input-group-box'>
                                 <span className='title-text'>메모</span>
                                 <input
                                     type='text'
-                                    className='input-value'
                                     value={props.productOptionBatchReg.memo}
                                     name='memo'
                                     onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
                                 ></input>
                             </div>
-                            <div className='input-group'>
+                            <div className='input-group-box'>
                                 <span className='title-text'>안전재고 수량</span>
                                 <input
                                     type='text'
-                                    className='input-value'
                                     value={props.productOptionBatchReg.safetyStockUnit}
                                     name='safetyStockUnit'
                                     onChange={(e) => props.onChangeBatchRegOptionInputValue(e)}
@@ -162,7 +157,6 @@ export default function OptionInfoInputFieldView(props) {
                                 ></input>
                             </div>
                         </div>
-
                         <div>
                             <button
                                 type='button'
@@ -173,33 +167,34 @@ export default function OptionInfoInputFieldView(props) {
                             </button>
                         </div>
                     </div>
-                </div>
-                <div className='inner-wrapper'>
-                    <div className='sub-title-text'>옵션 리스트</div>
-                    <TableFieldView
-                        createOptionDataList={props.createOptionDataList}
+                    
+                    <div className='create-option-box'>
+                        <div className='sub-title-text'>옵션 리스트</div>
+                        <TableFieldView
+                            createOptionDataList={props.createOptionDataList}
 
-                        onChangeOptionInputValue={props.onChangeOptionInputValue}
-                        onActionDeleteOption={props.onActionDeleteOption}
-                        onChangeOrderWithDragAndDrop={props.onChangeOrderWithDragAndDrop}
-                        batchRegTooltipOpen={props.batchRegTooltipOpen}
-                        batchRegInput={props.batchRegInput}
-                        onActionOpenBatchRegToolTip={props.onActionOpenBatchRegToolTip}
-                        onChangeBatchRegInput={props.onChangeBatchRegInput}
-                        onActionConfirmBatchRegInput={props.onActionConfirmBatchRegInput}
-                        onActionCloseBatchRegTooltip={props.onActionCloseBatchRegTooltip}
-                    />
-                    <div className='table-bottom-box'>
-                        <button
-                            type='button'
-                            className='add-btn'
-                            onClick={(e) => props.onActionAddOptionData(e)}
-                        >
-                            추가
-                        </button>
+                            onChangeOptionInputValue={props.onChangeOptionInputValue}
+                            onActionDeleteOption={props.onActionDeleteOption}
+                            onChangeOrderWithDragAndDrop={props.onChangeOrderWithDragAndDrop}
+                            batchRegTooltipOpen={props.batchRegTooltipOpen}
+                            batchRegInput={props.batchRegInput}
+                            onActionOpenBatchRegToolTip={props.onActionOpenBatchRegToolTip}
+                            onChangeBatchRegInput={props.onChangeBatchRegInput}
+                            onActionConfirmBatchRegInput={props.onActionConfirmBatchRegInput}
+                            onActionCloseBatchRegTooltip={props.onActionCloseBatchRegTooltip}
+                        />
+                        <div className='table-bottom-box'>
+                            <button
+                                type='button'
+                                className='add-btn'
+                                onClick={(e) => props.onActionAddOptionData(e)}
+                            >
+                                추가
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </OptionInfoInputWrapper>
     )
 }
@@ -419,28 +414,28 @@ function TableFieldView(props) {
                                                             {idx + 1}
                                                         </td>
                                                         <td>
-                                                            <input type='text' className='input-value' value={r.defaultName} name='defaultName' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                            <input type='text' value={r.defaultName} name='defaultName' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                                         </td>
                                                         <td>
-                                                            <input type='text' className='input-value' value={r.managementName} name='managementName' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                            <input type='text' value={r.managementName} name='managementName' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                                         </td>
                                                         <td>
-                                                            <input type='number' className='input-value' value={r.salesPrice} name='salesPrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                            <input type='number' value={r.salesPrice} name='salesPrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                                         </td>
                                                         <td>
-                                                            <input type='number' className='input-value' value={r.totalPurchasePrice} name='totalPurchasePrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                            <input type='number' value={r.totalPurchasePrice} name='totalPurchasePrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                                         </td>
                                                         <td>
-                                                            <input type='text' className='input-value' value={r.releaseLocation} name='releaseLocation' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                            <input type='text' value={r.releaseLocation} name='releaseLocation' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                                         </td>
                                                         <td>
-                                                            <input type='text' className='input-value' value={r.status} name='status' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                            <input type='text' value={r.status} name='status' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                                         </td>
                                                         <td>
-                                                            <input type='text' className='input-value' value={r.memo} name='memo' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                            <input type='text' value={r.memo} name='memo' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                                         </td>
                                                         <td>
-                                                            <input type='number' className='input-value' value={r.safetyStockUnit} name='safetyStockUnit' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                            <input type='number' value={r.safetyStockUnit} name='safetyStockUnit' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                                         </td>
                                                     </tr>
                                                 )}

@@ -1,4 +1,5 @@
 import { BackdropHookComponent } from "../../../../hooks/backdrop/useBackdropHook";
+import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
 import useSubOptionCodesHookV2 from "../../../../hooks/sub-option-code/useSubOptionCodesHookV2";
 import CommonModalComponentV2 from "../../../module/modal/CommonModalComponentV2";
 import { ButtonFieldWrapper, InfoFieldWrapper } from "./SubOptionCodeModal.styled";
@@ -23,12 +24,13 @@ function InfoFieldView({ option }) {
     )
 }
 
-function ButtonFieldView({ onClick }) {
+function ButtonFieldView({ onClick, buttonDisabled }) {
     return (
         <ButtonFieldWrapper>
             <button
                 className='button-el'
                 onClick={(e) => onClick(e)}
+                disabled={buttonDisabled}
             >
                 <img
                     src='/assets/icon/add_default_ffffff.svg'
@@ -55,6 +57,8 @@ const SubOptionCodeModalComponent = (props) => {
         onActionAddModifyingId: onActionAddSubOptionCodeModifyingId
     } = useSubOptionCodesHookV2({ option: props.option });
 
+    const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
+
     const __handle = {
         action : {
             deleteSubOptionCode: (id) => {
@@ -72,6 +76,7 @@ const SubOptionCodeModalComponent = (props) => {
                 try{
                     checkSubOptionSaveForm(data);
 
+                    setButtonDisabled(true);
                     onActionCreateOrModifySubOption(id);
                 } catch (err) {
                     alert(err.message);
@@ -103,6 +108,8 @@ const SubOptionCodeModalComponent = (props) => {
                                 />
                             }
                             <ButtonFieldView
+                                buttonDisabled={buttonDisabled}
+
                                 onClick={onActionAddSubOptionData}
                             />
                         </div>

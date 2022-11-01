@@ -83,8 +83,6 @@ const ProductModifyComponent = (props) => {
                 productAndOptions={productAndOptions}
 
                 _onSubmit_modifyProductAndOptions={__handle.submit.modifyProductAndOptions}
-                onActionOpenBackdrop={onActionOpenBackdrop}
-                onActionCloseBackdrop={onActionCloseBackdrop}
             />
 
             {/* Backdrop */}

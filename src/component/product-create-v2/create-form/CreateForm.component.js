@@ -14,6 +14,8 @@ import useProductHook from "../../../hooks/product/useProductHook";
 import useProductOptionsHook from "../../../hooks/product-option/useProductOptionsHook";
 import useProductOptionBatchRegHook from "../hooks/useProductOptionBatchRegHook";
 import useBatchRegTooltipHook from "../hooks/useBatchRegTooltipHook";
+import { useDisabledButtonHook } from "../../../hooks/button-disabled/useDisabledButtonHook";
+import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
 
 function PageTitleFieldView({ title }) {
     return (
@@ -28,7 +30,6 @@ const CreateFormComponent = (props) => {
     const [optionDefaultNameCreateModalOpen, setOptionDefaultNameCreateModalOpen] = useState(false);
 
     const {
-        location,
         navigatePrevPage
     } = useRouterHook();
 
@@ -56,16 +57,24 @@ const CreateFormComponent = (props) => {
     } = useProductOptionBatchRegHook();
 
     const {
-        __reqUploadImageFile
-    } = useImageFileUploaderHook();
-
-    const {
         batchRegTooltipOpen,
         batchRegInput,
         onActionOpenBatchRegToolTip,
         onActionCloseBatchRegTooltip,
         onChangeBatchRegInput
     } = useBatchRegTooltipHook();
+
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
+
+    const {
+        __reqUploadImageFile
+    } = useImageFileUploaderHook();
+
+    const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
     const __hanlde = {
         action: {
@@ -87,9 +96,9 @@ const CreateFormComponent = (props) => {
         
                 if(e.target.files.length == 0) return;
         
-                props.onActionOpenBackdrop();
+                onActionOpenBackdrop();
                 let imageInfo = await __reqUploadImageFile(e);
-                props.onActionCloseBackdrop();
+                onActionCloseBackdrop();
         
                 onChangeImageFileNameAndImageUrl(imageInfo);
             },
@@ -178,6 +187,7 @@ const CreateFormComponent = (props) => {
                         product: createProductData,
                         options: createOptionDataList
                     }
+                    setButtonDisabled(true);
                     props._onSubmit_createProductAndOptions(body);
                 } catch (err) {
                     alert(err.message)
@@ -237,6 +247,7 @@ const CreateFormComponent = (props) => {
                 }
 
                 <CreateButtonFieldView
+                    buttonDisabled={buttonDisabled}
                     onActionCancelCreateProduct={__hanlde.action.cancelCreateProduct}
                 />
             </form>
@@ -253,6 +264,11 @@ const CreateFormComponent = (props) => {
                     onChangeBatchRegOptionDefaultNameInputValue={__hanlde.action.changeProductOptionBatchRegValue}
                 />
             </CommonModalComponent>
+
+            {/* Backdrop */}
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
         </Container>
     )
 }

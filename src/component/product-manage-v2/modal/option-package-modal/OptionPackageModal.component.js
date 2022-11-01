@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { BackdropHookComponent } from "../../../../hooks/backdrop/useBackdropHook";
+import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
 import useOptionPackagesHook from "../../../../hooks/option-package/useOptionPackagesHook";
 import useProductOptionsSearchHook from "../../../../hooks/product-option/useProductOptionsSearchHook";
 import CommonModalComponentV2 from "../../../module/modal/CommonModalComponentV2";
@@ -41,7 +42,7 @@ function InputFieldView({ inputValue, onChange }) {
 }
 
 
-function ButtonFieldView({ onActionReset, onSubmit }) {
+function ButtonFieldView({ buttonDisabled, onActionReset, onSubmit }) {
     return (
         <ButtonFieldWrapper>
             <button
@@ -54,6 +55,7 @@ function ButtonFieldView({ onActionReset, onSubmit }) {
                 className='button-el'
                 style={{ backgroundColor: 'var(--piaar-main-color)', color: '#fff' }}
                 onClick={() => onSubmit()}
+                disabled={buttonDisabled}
             >
                 저장
             </button>
@@ -81,6 +83,8 @@ const OptionPackageModalComponent = (props) => {
         checkSaveForm: checkOptionPackagesSaveForm
     } = useOptionPackagesHook({ option: props.option });
 
+    const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
+
     useEffect(() => {
         async function fetchInit() {
             await reqSearchAllM2OJ();
@@ -103,6 +107,7 @@ const OptionPackageModalComponent = (props) => {
                 try {
                     checkOptionPackagesSaveForm();
 
+                    setButtonDisabled(true);
                     onSubmitCreateOptionPackages(props.option.id);
                     props.onActionCloseModal();
                 } catch (err) {
@@ -143,6 +148,8 @@ const OptionPackageModalComponent = (props) => {
                                 />
                             }
                             <ButtonFieldView
+                                buttonDisabled={buttonDisabled}
+
                                 onActionReset={onActionResetOriginOptionPackages}
                                 onSubmit={__handle.submit.createOptionPackages}
                             />

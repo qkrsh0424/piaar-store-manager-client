@@ -62,7 +62,7 @@ const ProductCreateComponent = (props) => {
                 onActionOpenBackdrop={onActionOpenBackdrop}
                 onActionCloseBackdrop={onActionCloseBackdrop}
             />
-
+            
             {/* Backdrop */}
             <BackdropHookComponent
                 open={backdropOpen}

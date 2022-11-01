@@ -20,6 +20,20 @@ code {
     width:30%;
 }
 
+input {
+    padding: 0 10px;
+    height: 48px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid var(--defaultBorderColor);
+}
+
+input:focus {
+    border: 1px solid var(--piaar-main-color);
+    box-shadow: var(--defaultBoxShadow);
+}
+
 @media only screen and (max-width:992px){
     .MySideDrawer .MuiPaper-root{
         width:70%;

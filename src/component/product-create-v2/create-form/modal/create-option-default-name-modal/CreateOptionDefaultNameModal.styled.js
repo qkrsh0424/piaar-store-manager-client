@@ -33,21 +33,29 @@ const InputFieldWrapper = styled.div`
     padding: 0 20px;
     min-height: 50vh;
 
-    .input-group {
+    .input-group-box {
         display: flex;
         align-items: center;
         gap: 5px;
         padding: 15px 0;
         font-size: 16px;
         border-bottom: 1px solid #dfdfdf;
+        
+        :last-child {
+            border-bottom: none;
+        }
     }
 
     .input-box {
         display: flex;
         flex: 1;
     }
+
+    .input-box .input-el {
+        flex: 1;
+    }
     
-    .input-group .input-title {
+    .input-group-box .input-title {
         width: 70px;
         text-align: center;
 
@@ -55,17 +63,6 @@ const InputFieldWrapper = styled.div`
             font-size: 12px;
             min-width: 30px;
             width: auto;
-        }
-    }
-
-    .input-group .input-value {
-        border: 1px solid #cccaca;
-        padding: 0 5px;
-        height: 40px;
-        flex:1;
-
-        @media screen and (max-width: 992px) {
-            font-size: 12px;
         }
     }
 
@@ -80,8 +77,8 @@ const InputFieldWrapper = styled.div`
     .button-el {
         position: relative;
         overflow: hidden;
-        width: 38px;
-        height: 38px;
+        width: 40px;
+        height: 48px;
         cursor: pointer;
         transition: 0.2s;
 
@@ -102,13 +99,18 @@ const InputFieldWrapper = styled.div`
         width: 100%;
         padding: 5px 0;
         transition: 0.1s;
-        border: none;
-        border-bottom: 1px solid #dfdfdf;
-        background-color: #fff;
+        border: 1px solid var(--defaultBorderColor);
+        background-color: var(--defaultButtonColor);
+        border-left: none;
+        border-right: none;
         overflow: hidden;
         position: relative;
         -webkit-transition: all .2s;
         transition: all .2s;
+
+        :hover {
+            box-shadow: var(--defaultBoxShadow);
+        }
     }
 `;
 

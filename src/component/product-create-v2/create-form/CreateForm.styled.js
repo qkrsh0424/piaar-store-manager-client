@@ -4,17 +4,6 @@ const Container = styled.div`
     padding: 30px 10px 150px 10px;
     max-width: 1280px;
     margin: 0 auto;
-
-    .slide-up {
-        /* animation: dropdown-slide-up 0.3s ease-in-out; */
-        display: none;
-    }
-
-    .slide-down {
-        /* height: auto !important;
-        animation: dropdown-slide-down 0.3s ease-in-out; */
-        display: block;
-    }
 `;
 
 const PageTitleFieldWrapper = styled.div`
@@ -24,13 +13,11 @@ const PageTitleFieldWrapper = styled.div`
 `;
 
 const CategorySelectorWrapper = styled.div`
-    padding-top: 15px;
+    margin-top: 15px;
+    background-color: white;
+    border-radius: 10px;
 
     .title-wrapper {
-        position: relative;
-        z-index: 10;
-        background-color: white;
-        border: 1px solid #dbdde2;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -47,20 +34,6 @@ const CategorySelectorWrapper = styled.div`
         }
     }
 
-    .icon-dot, .icon-must {
-        display: inline-block;
-        background-color: #ff545c;
-        border-radius: 50%;
-        vertical-align: middle;
-    }
-
-    .icon-must {
-        position: relative;
-        margin-left: 5px;
-        width: 6px;
-        height: 6px;
-    }
-
     .button-box {
         padding: 10px;
     }
@@ -74,29 +47,27 @@ const CategorySelectorWrapper = styled.div`
 
         background: white;
         border: 1px solid white;
-        border-radius: 3px;
-
+        border-radius: 50%;
+        transition: 0.1s;
+        
         cursor: pointer;
+        
+        :hover {
+            background-color: var(--defaultHoverColor);
+        }
     }
 
     .body-wrapper {
-        background-color: white;
-        position: relative;
-        top: -5px;
-        border: 1px solid #dbdde2;
-        overflow: hidden;
-    }
-
-    .body-wrapper .inner-wrapper {
         padding: 20px 30px;
+        border-top: 1px solid var(--defaultBorderColor)
     }
 
     .select-item {
-        width: 300px;
+        width: 350px;
         height: 50px;
         padding: 10px;
         border: 1px solid #d0d0d0;
-        border-radius: 0;
+        border-radius: 10px;
         font-size: 16px;
         -webkit-appearance: none;
         -moz-appearance: none; 
@@ -115,13 +86,11 @@ const CategorySelectorWrapper = styled.div`
 `;
 
 const ProductInfoInputWrapper = styled.div`
-    padding-top: 15px;
-    
+    margin-top: 15px;
+    background-color: white;
+    border-radius: 10px;
+
     .title-wrapper {
-        position: relative;
-        z-index: 10;
-        background-color: white;
-        border: 1px solid #dbdde2;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -138,20 +107,6 @@ const ProductInfoInputWrapper = styled.div`
         }
     }
 
-    .icon-dot, .icon-must {
-        display: inline-block;
-        background-color: #ff545c;
-        border-radius: 50%;
-        vertical-align: middle;
-    }
-
-    .icon-must {
-        position: relative;
-        margin-left: 5px;
-        width: 6px;
-        height: 6px;
-    }
-
     .button-box {
         padding: 10px;
     }
@@ -165,22 +120,19 @@ const ProductInfoInputWrapper = styled.div`
 
         background: white;
         border: 1px solid white;
-        border-radius: 3px;
+        border-radius: 50%;
+        transition: 0.1s;
 
         cursor: pointer;
+        
+        :hover {
+            background-color: var(--defaultHoverColor);
+        }
     }
 
     .body-wrapper {
-        background-color: white;
-        position: relative;
-        /* height: 0px; */
-        top: -5px;
-        border: 1px solid #dbdde2;
-        overflow: hidden;
-    }
-
-    .body-wrapper .inner-wrapper {
         padding: 20px 30px;
+        border-top: 1px solid var(--defaultBorderColor)
     }
 
     .image-wrapper {
@@ -196,24 +148,26 @@ const ProductInfoInputWrapper = styled.div`
         display: flex;
         align-items: center;
         position: absolute;
-        bottom: 0px;
         z-index: 10;
-        width: 100%;
+        width: 198px;
+        right: 1px;
+        bottom: 1px;
         background-color: #0909093b;
         border-radius: 0 0 4px 4px;
+        padding: -1px;
     }
 
     .image-control-box .button-el {
         width: 50%;
         border: none;
         background: none;
-        border-radius: 0;
         transition: 0.2s;
 
         :hover {
             background-color: #09090985;
         }
     }
+
 
     .image-box input {
         display: none;
@@ -228,19 +182,23 @@ const ProductInfoInputWrapper = styled.div`
         border-radius: 5px;
     }
 
-    .body-wrapper .input-group {
+    .body-wrapper .input-group-box {
         display: flex;
         align-items: center;
         padding: 15px 0;
         font-size: 16px;
         border-bottom: 1px solid #dfdfdf;
+
+        &:last-child{
+            border-bottom: none;
+        }
     }
 
     .body-wrapper .image-group {
         justify-content: flex-start;
     }
 
-    .body-wrapper .input-group .title-text {
+    .body-wrapper .input-group-box .title-text {
         width: 200px;
         padding: 10px;
         font-weight: 500;
@@ -250,18 +208,22 @@ const ProductInfoInputWrapper = styled.div`
         }
     }
 
-    .body-wrapper .input-group input {
+    .body-wrapper .input-group-box input {
         flex: 1;
-        border: 1px solid #cccaca;
-        padding: 0 5px;
-        height: 40px;
+    }
+
+    .stock-reflect-btn {
+        display: flex;
+        gap: 5px;
     }
 
     .stock-reflect-btn .button-el {
         width: 200px;
+        height: 48px;
         border-radius: 0;
         transition: 0.1s;
         border: 1px solid #cccaca;
+        border-radius: 5px;
 
         :hover {
             background-color: var(--piaar-main-color);
@@ -277,13 +239,11 @@ const ProductInfoInputWrapper = styled.div`
 `;
 
 const OptionInfoInputWrapper = styled.div`
-    padding-top: 15px;
+    margin-top: 15px;
+    background-color: white;
+    border-radius: 10px;
 
     .title-wrapper {
-        position: relative;
-        z-index: 10;
-        background-color: white;
-        border: 1px solid #dbdde2;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -300,20 +260,6 @@ const OptionInfoInputWrapper = styled.div`
         }
     }
 
-    .icon-dot, .icon-must {
-        display: inline-block;
-        background-color: #ff545c;
-        border-radius: 50%;
-        vertical-align: middle;
-    }
-
-    .icon-must {
-        position: relative;
-        margin-left: 5px;
-        width: 6px;
-        height: 6px;
-    }
-
     .button-box {
         padding: 10px;
     }
@@ -327,17 +273,19 @@ const OptionInfoInputWrapper = styled.div`
 
         background: white;
         border: 1px solid white;
-        border-radius: 3px;
+        border-radius: 50%;
+        transition: 0.1s;
 
         cursor: pointer;
+
+        :hover {
+            background-color: var(--defaultHoverColor);
+        }
     }
 
     .body-wrapper {
-        position: relative;
-        background-color: white;
-        top: -5px;
-        border: 1px solid #dbdde2;
-        overflow: hidden;
+        padding: 20px 30px;
+        border-top: 1px solid var(--defaultBorderColor)
     }
 
     .body-wrapper .batch-reg-box {
@@ -345,6 +293,7 @@ const OptionInfoInputWrapper = styled.div`
         margin: 0 auto;
         border: 1px solid #dfdfdf;
         overflow: auto;
+        border-radius: 5px;
 
         @media screen and (max-width: 992px){
             width: 100%;
@@ -356,15 +305,18 @@ const OptionInfoInputWrapper = styled.div`
         padding: 10px 30px;
     }
 
-    .body-wrapper .input-group {
+    .body-wrapper .input-group-box {
         display: flex;
         align-items: center;
-        padding: 15px 0;
         font-size: 16px;
         border-bottom: 1px solid #dfdfdf;
+
+        &:last-child{
+            border-bottom: none;
+        }
     }
 
-    .body-wrapper .input-group .title-text {
+    .body-wrapper .input-group-box .title-text {
         width: 200px;
         padding: 10px;
         font-weight: 500;
@@ -374,14 +326,11 @@ const OptionInfoInputWrapper = styled.div`
         }
     }
 
-    .body-wrapper .input-group input {
+    .body-wrapper .input-group-box input {
         flex: 1;
-        border: 1px solid #cccaca;
-        padding: 0 5px;
-        height: 40px;
     }
 
-    .batch-reg-box .input-group {
+    .batch-reg-box .input-group-box {
         display: flex;
         align-items: center;
         padding: 15px 0;
@@ -390,7 +339,7 @@ const OptionInfoInputWrapper = styled.div`
         border-bottom: 1px solid #dfdfdf;
     }
 
-    .batch-reg-box .input-group .title-text {
+    .batch-reg-box .input-group-box .title-text {
         width: 150px;
         padding: 10px;
         font-weight: 500;
@@ -400,39 +349,38 @@ const OptionInfoInputWrapper = styled.div`
         }
     }
 
-    .batch-reg-box .input-value {
-        border: 1px solid #cccaca;
-        padding: 0 5px;
-        height: 40px;
-    }
-
-    .batch-reg-box .input-group .modal-open-btn {
-        height: 40px;
+    .batch-reg-box .input-group-box .modal-open-btn {
+        height: 48px;
         padding: 0 10px;
         border: 1px solid #cccaca;
+        border-left: none;
+        border-radius: 0 5px 5px 0;
     }
 
     .batch-reg-box .reg-btn {
         padding: 6px 0;
         width: 100%;
+        height: 48px;
         border: 1px solid var(--piaar-main-color);
         background-color: var(--piaar-main-color);
         font-weight: 600;
         color: white;
+        border-radius: 0 0 5px 5px;
     }
 
-    .body-wrapper .inner-wrapper {
-        padding: 20px 30px 40px 30px;
-    }
-
-    .inner-wrapper .sub-title-text {
+    .sub-title-text {
         font-weight: 600;
         font-size: 1.2rem;
-        padding: 15px 0;
+        padding: 0 30px;
 
         @media screen and (max-width: 992px) {
             font-size: 1rem;
         }
+    }
+
+    .create-option-box {
+        margin-top: 20px;
+        padding: 30px;
     }
 
     .info-text {
@@ -452,6 +400,7 @@ const OptionInfoInputWrapper = styled.div`
 
     .add-btn {
         width: 250px;
+        height: 48px;
         padding: 6px;
         border: 1px solid var(--piaar-main-color);
         background-color: var(--piaar-main-color);
@@ -463,8 +412,8 @@ const OptionInfoInputWrapper = styled.div`
     .delete-button-el {
         position: relative;
         overflow: hidden;
-        width: 30px;
-        height: 30px;
+        width: 38px;
+        height: 38px;
 
         cursor: pointer;
 
@@ -478,12 +427,13 @@ const OptionInfoInputWrapper = styled.div`
         position: absolute;
         top:50%;
         left:50%;
+        border-radius: 50%;
         transform: translate(-50%, -50%);
     }
 `;
 
 const TableFieldWrapper = styled.div`
-    padding: 0 30px;
+    padding: 20px 30px;
     overflow: hidden;
 
     @media all and (max-width: 992px){
@@ -518,8 +468,8 @@ const TableFieldWrapper = styled.div`
     table thead tr th .button-el {
         width: 70px;
         border-radius: 2px;
-        border: 1px solid #c8c8c8;
-        background-color: #f7f7f7;
+        border: 1px solid var(--defaultBorderColor);
+        background-color: var(--defaultButtonColor);
         color: #444;
         font-size: 14px;
         height: 30px;
@@ -541,12 +491,6 @@ const TableFieldWrapper = styled.div`
         text-overflow:ellipsis;
         white-space:nowrap;
         height: 43px;
-    }
-
-    .input-value {
-        border: 1px solid #d0d0d0;
-        text-align: center;
-        height: 38px;
     }
 
     .button-box {
@@ -633,7 +577,8 @@ const BatchRegTooltipWrapper = styled.div`
     }
 
     .input-el {
-        border: 1px solid #c8c8c8;
+        height: 38px;
+        border-radius: 5px;
     }
 `;
 

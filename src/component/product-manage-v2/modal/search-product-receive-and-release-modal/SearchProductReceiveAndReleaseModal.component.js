@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import CustomDateRangePicker from "../../../module/date-picker/CustomDateRangePicker";
 import CommonModalComponentV2 from "../../../module/modal/CommonModalComponentV2";
 import useProductReceiveAndReleaseHook from "../../hooks/useProductReceiveAndReleaseHook";
@@ -7,8 +7,6 @@ import ReceiveStatusTableFieldView from "./ReceiveStatusTableField.view";
 import ReleaseStatusTableFieldView from "./ReleaseStatusTableField.view";
 
 const SearchProductReceiveAndReleaseModalComponent = (props) => {
-    const modifyMemoRef = useRef();
-
     const [dateRangePickerModalOpen, setDateRangePickerModalOpen] = useState(false);
     const [dateRangeInfo, setDateRangeInfo] = useState({
         startDate: new Date(),
@@ -72,7 +70,6 @@ const SearchProductReceiveAndReleaseModalComponent = (props) => {
             },
             setModifyingId: (id) => {
                 onActionSetModifyingId(id);
-                setTimeout(() => modifyMemoRef.current.focus(), 10);
             },
         }
     }
@@ -92,7 +89,6 @@ const SearchProductReceiveAndReleaseModalComponent = (props) => {
                         <ReceiveStatusTableFieldView
                             optionReceiveStatus={optionReceiveStatus}
                             modifyingId={modifyingId}
-                            modifyMemoRef={modifyMemoRef}
 
                             onChangeInputValue={onChangeReceiveValueOfName}
                             onActionSetModifyingId={__handle.action.setModifyingId}
@@ -101,7 +97,6 @@ const SearchProductReceiveAndReleaseModalComponent = (props) => {
                         <ReleaseStatusTableFieldView
                             optionReleaseStatus={optionReleaseStatus}
                             modifyingId={modifyingId}
-                            modifyMemoRef={modifyMemoRef}
 
                             onChangeInputValue={onChangeReleaseValueOfName}
                             onActionSetModifyingId={__handle.action.setModifyingId}

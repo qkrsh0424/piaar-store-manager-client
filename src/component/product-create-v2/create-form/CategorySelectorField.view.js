@@ -11,11 +11,10 @@ export default function CategorySelectorFieldView(props) {
                 </div>
                 <div className='button-box'>
                     <button
-                        id='category'
                         type='button'
                         className='button-el'
                         name='category'
-                        onClick={props.onActionSlideEffectControl}
+                        onClick={(e) => props.onActionSlideEffectControl(e, 'category')}
                     >
                         {props.slideDownEffect?.category ?
                             <img
@@ -35,8 +34,8 @@ export default function CategorySelectorFieldView(props) {
                     </button>
                 </div>
             </div>
-            <div className={`body-wrapper ${props.slideDownEffect?.category ? `slide-down` : `slide-up`}`}>
-                <div className='inner-wrapper'>
+            {props.slideDownEffect?.category &&
+                <div className='body-wrapper'>
                     <select
                         name='productCategoryCid'
                         className='select-item'
@@ -51,7 +50,7 @@ export default function CategorySelectorFieldView(props) {
                         })}
                     </select>
                 </div>
-            </div>
+            }
         </CategorySelectorWrapper>
     )
 }

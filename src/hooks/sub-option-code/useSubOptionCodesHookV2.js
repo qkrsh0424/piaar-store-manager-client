@@ -82,6 +82,7 @@ export default function useSubOptionCodesHookV2(props) {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
                     // 정상적으로 생성된다면 modifyingId를 초기화
                     setModifyingId(null);
+                    reqSearchBatchSubOptionCodes(props.option.id);
                 }
             })
             .catch(err => {
@@ -138,7 +139,7 @@ export default function useSubOptionCodesHookV2(props) {
         } else {
             // create
             await reqCreateSubOptionCode(data);
-            await reqSearchBatchSubOptionCodes(props.option.id);
+            // await reqSearchBatchSubOptionCodes(props.option.id);
         }
     }
 

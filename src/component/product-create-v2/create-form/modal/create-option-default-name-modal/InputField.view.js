@@ -5,11 +5,11 @@ export default function InputFieldView(props) {
     return (
         <InputFieldWrapper>
             <div className='body-wrapper'>
-                <div className='input-group'>
+                <div className='input-group-box'>
                     <div className='input-title'>구분자</div>
                     <input
                         type='text'
-                        className='input-value'
+                        className='input-text'
                         style={{ flex: 0 }}
                         name='separator'
                         placeholder={`옵션명 구분자 입력`}
@@ -20,12 +20,12 @@ export default function InputFieldView(props) {
                 </div>
                 {props.optionDefaultNameList?.map((r, idx) => {
                     return (
-                        <div key={r.id} className='input-group'>
+                        <div key={r.id} className='input-group-box'>
                             <div className='input-title'>{idx + 1}. </div>
                             <div className='input-box'>
                                 <input
                                     type='text'
-                                    className='input-value'
+                                    className='input-el'
                                     name='defaultName'
                                     value={r.defaultName || ''}
                                     placeholder={`옵션명${idx + 1}`}
@@ -37,7 +37,7 @@ export default function InputFieldView(props) {
                                         type='button'
                                         className='button-el'
                                         style={{ border: 'none', background: 'none' }}
-                                        onClick={() => props.onActionDeleteDefaultNameRow(r.id)}
+                                        onClick={() => props.onActionDeleteDefaultNameRow(idx)}
                                     >
                                         <img
                                             className='button-icon'

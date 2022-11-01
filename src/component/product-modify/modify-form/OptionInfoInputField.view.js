@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import RequiredIcon from "../../module/icon/RequiredIcon";
 import { BatchRegTooltipWrapper, OptionInfoInputWrapper, TableFieldWrapper } from "./ModifyForm.styled";
 
@@ -11,6 +12,7 @@ function BatchRegTooltip({ name, inputType, tootipSize, onChangeInputValue, onAc
                     className='input-el'
                     style={{ width: '100%' }}
                     onChange={(e) => onChangeInputValue(e)}
+                    autoFocus
                 />
                 <div className='button-box'>
                     <button type='button' className='button-el' name={name} onClick={(e) => onActionCancel(e)}>

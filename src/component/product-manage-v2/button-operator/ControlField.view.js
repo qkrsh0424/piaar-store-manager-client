@@ -1,7 +1,6 @@
 import { ControlFieldWrapper } from "./ButtonOperator.styled";
 
 export default function ControlFieldView (props) {
-
     return (
         <ControlFieldWrapper>
             <div>
@@ -9,7 +8,7 @@ export default function ControlFieldView (props) {
                     className='button-el'
                     onClick={() => props.onActionRouteProductCreatePage()}
                 >
-                    상품생성
+                    상품등록
                 </button>
             </div>
             <div>
