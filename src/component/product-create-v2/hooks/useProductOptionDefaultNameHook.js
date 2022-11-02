@@ -3,7 +3,7 @@ import { useState } from "react"
 const OPTION_BATCH_MAX_SIZE = 3;
 const OPTION_BATCH_MIN_SIZE = 2;
 
-export default function useProductOptionDefaultNameHook(props) {
+export default function useProductOptionDefaultNameHook() {
     const [defaultNameList, setDefaultNameList] = useState([
         {
             defaultName: ''

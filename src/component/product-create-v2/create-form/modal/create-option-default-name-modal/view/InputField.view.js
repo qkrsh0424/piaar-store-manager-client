@@ -1,28 +1,29 @@
-import Ripple from "../../../../module/button/Ripple";
-import { InputFieldWrapper } from "./CreateOptionDefaultNameModal.styled";
+import { InputFieldWrapper } from "../CreateOptionDefaultNameModal.styled";
+import Ripple from "../../../../../module/button/Ripple"
 
 export default function InputFieldView(props) {
     return (
         <InputFieldWrapper>
-            <div className='body-wrapper'>
+            <div>
                 <div className='input-group-box'>
                     <div className='input-title'>구분자</div>
-                    <input
-                        type='text'
-                        className='input-text'
-                        style={{ flex: 0 }}
-                        name='separator'
-                        placeholder={`옵션명 구분자 입력`}
-                        onChange={(e) => props.onChangeSeparatorInputValue(e)}
-                        value={props.separator || ''}
-                        required
-                    />
+                    <div className='input-value'>
+                        <input
+                            type='text'
+                            name='separator'
+                            placeholder={`옵션명 구분자 입력`}
+                            onChange={(e) => props.onChangeSeparatorInputValue(e)}
+                            value={props.separator || ''}
+                            required
+                        />
+                    </div>
                 </div>
+
                 {props.optionDefaultNameList?.map((r, idx) => {
                     return (
                         <div key={r.id} className='input-group-box'>
                             <div className='input-title'>{idx + 1}. </div>
-                            <div className='input-box'>
+                            <div className='input-value'>
                                 <input
                                     type='text'
                                     className='input-el'
@@ -32,7 +33,7 @@ export default function InputFieldView(props) {
                                     onChange={(e) => props.onChangeDefaultNameInputValue(e, idx)}
                                     required
                                 />
-                                <div className='button-box'>
+                                <div>
                                     <button
                                         type='button'
                                         className='button-el'
@@ -43,7 +44,7 @@ export default function InputFieldView(props) {
                                             className='button-icon'
                                             src='/assets/icon/delete_default_ff3060.svg'
                                             alt=""
-                                        ></img>
+                                        />
                                     </button>
                                 </div>
                             </div>

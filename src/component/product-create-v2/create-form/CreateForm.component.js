@@ -7,20 +7,19 @@ import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUp
 import CreateButtonFieldView from "./CreateButtonField.view";
 import valueUtils from "../../../utils/valueUtils";
 import { useState } from "react";
-import CommonModalComponent from "../../module/modal/CommonModalComponent";
 import CreateOptionDefaultNameModalComponent from "./modal/create-option-default-name-modal/CreateOptionDefaultNameModal.component";
 import useRouterHook from "../../../hooks/router/useRouterHook";
-import useProductHook from "../../../hooks/product/useProductHook";
-import useProductOptionsHook from "../../../hooks/product-option/useProductOptionsHook";
 import useProductOptionBatchRegHook from "../hooks/useProductOptionBatchRegHook";
 import useBatchRegTooltipHook from "../hooks/useBatchRegTooltipHook";
 import { useDisabledButtonHook } from "../../../hooks/button-disabled/useDisabledButtonHook";
 import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
+import useProductHook from "../hooks/useProductHook";
+import useProductOptionsHook from "../hooks/useProductOptionsHook";
 
 function PageTitleFieldView({ title }) {
     return (
         <PageTitleFieldWrapper>
-            <div>{title}</div>
+            <div className='page-title'>{title}</div>
         </PageTitleFieldWrapper>
     )
 }
@@ -38,7 +37,8 @@ const CreateFormComponent = (props) => {
         onChangeValueOfName: onChangeProductInputValue,
         onChangeImageFileNameAndImageUrl,
         onActionDeleteImageFileNameAndImageUrl,
-        checkCreateFormData: checkProductCreateFormData
+        checkCreateFormData: checkProductCreateFormData,
+        onChangeStockManagement: onChangeProductStockManagement,
     } = useProductHook();
 
     const {
@@ -102,26 +102,12 @@ const CreateFormComponent = (props) => {
         
                 onChangeImageFileNameAndImageUrl(imageInfo);
             },
-            removeProductImage: () => {
-                onActionDeleteImageFileNameAndImageUrl();
-            },
-            changeStockManagement: (e) => {
-                e.preventDefault();
-        
-                let stockManagement = createProductData.stockManagement;
-                let target = {
-                    name: 'stockManagement',
-                    value: !stockManagement
-                }
-                onChangeProductInputValue({target});
-            },
             changeProductOptionBatchRegValue: (data) => {
                 let batchRegOptionDefaultName = productOptionBatchReg.defaultName ? (productOptionBatchReg.defaultName + ',' + data) : data;
                 let target = {
                     name: 'defaultName',
                     value: batchRegOptionDefaultName
                 }
-        
                 onChangeProductOptionBatchRegInputValue({ target });
             },
             // 옵션 리스트 적용
@@ -218,8 +204,8 @@ const CreateFormComponent = (props) => {
                         onChangeProductInputValue={onChangeProductInputValue}
                         onActionSlideEffectControl={__hanlde.action.changeSlideEffectControl}
                         onActionUploadProductImageFile={__hanlde.action.uploadProductImageFile}
-                        onActionRemoveImage={__hanlde.action.removeProductImage}
-                        onActionChangeStockManagement={__hanlde.action.changeStockManagement}
+                        onActionRemoveImage={onActionDeleteImageFileNameAndImageUrl}
+                        onChangeProductStockManagement={onChangeProductStockManagement}
                     />
                 }
 
@@ -252,18 +238,15 @@ const CreateFormComponent = (props) => {
                 />
             </form>
 
-            <CommonModalComponent
-                open={optionDefaultNameCreateModalOpen}
-                maxWidth={'sm'}
-                fullWidth={true}
-
-                onClose={__hanlde.action.closeOptionDefaultNameCreateModal}
-            >
+            {/* 옵션명 생성 모달 */}
+            {optionDefaultNameCreateModalOpen &&
                 <CreateOptionDefaultNameModalComponent
+                    modalOpen={optionDefaultNameCreateModalOpen}
+
                     onActionCloseOptionDefaultNameCreateModal={__hanlde.action.closeOptionDefaultNameCreateModal}
                     onChangeBatchRegOptionDefaultNameInputValue={__hanlde.action.changeProductOptionBatchRegValue}
                 />
-            </CommonModalComponent>
+            }
 
             {/* Backdrop */}
             <BackdropHookComponent

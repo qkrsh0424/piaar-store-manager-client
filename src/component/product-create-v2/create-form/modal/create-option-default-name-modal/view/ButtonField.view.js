@@ -1,4 +1,4 @@
-import { ButtonFieldWrapper } from "./CreateOptionDefaultNameModal.styled";
+import { ButtonFieldWrapper } from "../CreateOptionDefaultNameModal.styled";
 
 export default function ButtonFieldView(props) {
     return (

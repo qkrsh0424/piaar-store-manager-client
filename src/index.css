@@ -5,6 +5,8 @@ body {
         "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    /* min-width: 1200px; */
 }
 
 body a, Link {
@@ -34,11 +36,40 @@ input:focus {
     box-shadow: var(--defaultBoxShadow);
 }
 
+.icon-dot, .icon-must {
+    display: inline-block;
+    background-color: #ff545c;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.icon-must {
+    position: relative;
+    margin-left: 5px;
+    width: 6px;
+    height: 6px;
+}
+
+.flex-item {
+    display: flex;
+    gap: 5;
+}
+
+.flex-gap-5 {
+}
+
+.page-title {
+    padding: 10px;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
 @media only screen and (max-width:992px){
     .MySideDrawer .MuiPaper-root{
         width:70%;
-    }   
+    }
 }
+
 @keyframes fadein {
     from {
         opacity: 0;

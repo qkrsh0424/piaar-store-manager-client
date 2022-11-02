@@ -11,7 +11,6 @@ export default function CreateButtonFieldView(props) {
                 >
                     취소
                 </button>
-                {console.log(props.buttonDisabled)}
                 <button
                     type='submit'
                     className='button-el store-btn'

@@ -1,10 +1,9 @@
 import { useState } from "react";
-import ButtonFieldView from "./ButtonField.view";
-import { Container, InfoFieldWrapper } from "./CreateOptionDefaultNameModal.styled";
-import HeaderFieldView from "./HeaderField.view";
-import InputFieldView from "./InputField.view";
+import { InfoFieldWrapper } from "./CreateOptionDefaultNameModal.styled";
 import valueUtils from "../../../../../utils/valueUtils";
 import useProductOptionDefaultNameHook from "../../../hooks/useProductOptionDefaultNameHook";
+import SubmitModalComponentV2 from "../../../../module/modal/SubmitModalComponentV2";
+import InputFieldView from "./view/InputField.view";
 
 function InfoFieldView() {
     return (
@@ -75,22 +74,28 @@ const CreateOptionDefaultNameModalComponent = (props) => {
     }
 
     return (
-        <Container>
-            <HeaderFieldView element={'옵션명 일괄 생성'} />
-            <InfoFieldView />
-            <form onSubmit={__handle.submit.batchOptionDefaultName}>
-                <InputFieldView
-                    optionDefaultNameList={optionDefaultNameList}
-                    separator={separator}
+        <SubmitModalComponentV2
+            open={props.modalOpen}
+            title={'옵션명 일괄 생성'}
+            element={
+                <>
+                    <InfoFieldView />
+                    <InputFieldView
+                        optionDefaultNameList={optionDefaultNameList}
+                        separator={separator}
 
-                    onActionAddDefaultNameRow={onActionAddDefaultNameRow}
-                    onActionDeleteDefaultNameRow={onActionDeleteDefaultNameRow}
-                    onChangeSeparatorInputValue={__handle.action.changeSeparatorInputValue}
-                    onChangeDefaultNameInputValue={onChangeOptionDefaultNameInputValue}
-                />
-                <ButtonFieldView onActionCloseOptionDefaultNameCreateModal={props.onActionCloseOptionDefaultNameCreateModal} />
-            </form>
-        </Container>
+                        onActionAddDefaultNameRow={onActionAddDefaultNameRow}
+                        onActionDeleteDefaultNameRow={onActionDeleteDefaultNameRow}
+                        onChangeSeparatorInputValue={__handle.action.changeSeparatorInputValue}
+                        onChangeDefaultNameInputValue={onChangeOptionDefaultNameInputValue}
+                    />
+                </>
+            }
+            maxWidth={'sm'}
+
+            _onSubmit={__handle.submit.batchOptionDefaultName}
+            onClose={props.onActionCloseOptionDefaultNameCreateModal}
+        />
     )
 }
 

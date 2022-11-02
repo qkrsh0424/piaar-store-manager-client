@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const Container = styled.div`
+    min-width: 400px;
 `;
 
 const HeaderFieldWrapper = styled.div`
@@ -24,14 +25,17 @@ const HeaderFieldWrapper = styled.div`
 
 const InfoFieldWrapper = styled.div`
     padding: 10px 20px;
+    text-align: left;
     font-size: 12px;
     font-weight: 600;
     color: var(--erp-main-color);
 `;
 
 const InputFieldWrapper = styled.div`
-    padding: 0 20px;
-    min-height: 50vh;
+    margin: 10px 20px;
+    border: 1px solid var(--defaultBorderColor);
+    box-shadow: var(--defaultBoxShadow);
+    border-radius: 5px;
 
     .input-group-box {
         display: flex;
@@ -40,30 +44,24 @@ const InputFieldWrapper = styled.div`
         padding: 15px 0;
         font-size: 16px;
         border-bottom: 1px solid #dfdfdf;
-        
-        :last-child {
-            border-bottom: none;
-        }
     }
 
-    .input-box {
-        display: flex;
-        flex: 1;
-    }
-
-    .input-box .input-el {
-        flex: 1;
-    }
-    
-    .input-group-box .input-title {
+    .input-title {
         width: 70px;
         text-align: center;
 
         @media screen and (max-width: 992px) {
             font-size: 12px;
-            min-width: 30px;
-            width: auto;
         }
+    }
+
+    .input-value {
+        display: flex;
+        flex: 1;
+    }
+
+    .input-value .input-el {
+        flex: 1;
     }
 
     .input-title-box {
@@ -77,18 +75,19 @@ const InputFieldWrapper = styled.div`
     .button-el {
         position: relative;
         overflow: hidden;
-        width: 40px;
+        width: 48px;
         height: 48px;
         cursor: pointer;
         transition: 0.2s;
+        border-radius: 50%;
 
         :hover {
             transform: scale(1.1);
         }
     }
 
-    .button-el .button-icon{
-        width:70%;
+    .button-el .button-icon {
+        width:60%;
         position: absolute;
         top:50%;
         left:50%;
@@ -99,18 +98,13 @@ const InputFieldWrapper = styled.div`
         width: 100%;
         padding: 5px 0;
         transition: 0.1s;
-        border: 1px solid var(--defaultBorderColor);
         background-color: var(--defaultButtonColor);
-        border-left: none;
-        border-right: none;
+        border: none;
+        border-radius: 0 0 5px 5px;
         overflow: hidden;
         position: relative;
         -webkit-transition: all .2s;
         transition: all .2s;
-
-        :hover {
-            box-shadow: var(--defaultBoxShadow);
-        }
     }
 `;
 

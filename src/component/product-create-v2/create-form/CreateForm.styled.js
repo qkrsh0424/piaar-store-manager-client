@@ -2,29 +2,29 @@ import styled from "styled-components";
 
 const Container = styled.div`
     padding: 30px 10px 150px 10px;
+    
     max-width: 1280px;
     margin: 0 auto;
 `;
 
 const PageTitleFieldWrapper = styled.div`
-    padding: 10px;
-    font-size: 1.4rem;
-    font-weight: 700;
+  
 `;
 
 const CategorySelectorWrapper = styled.div`
     margin-top: 15px;
     background-color: white;
     border-radius: 10px;
+    box-shadow: var(--defaultBoxShadow);
 
-    .title-wrapper {
+    .title-line {
         display: flex;
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
     }
 
-    .title-box {
+    .title-label {
         font-size: 1.3rem;
         font-weight: 600;
         padding:15px;
@@ -34,7 +34,7 @@ const CategorySelectorWrapper = styled.div`
         }
     }
 
-    .button-box {
+    .arrow-btn-box {
         padding: 10px;
     }
 
@@ -57,7 +57,7 @@ const CategorySelectorWrapper = styled.div`
         }
     }
 
-    .body-wrapper {
+    .inner-content {
         padding: 20px 30px;
         border-top: 1px solid var(--defaultBorderColor)
     }
@@ -89,15 +89,16 @@ const ProductInfoInputWrapper = styled.div`
     margin-top: 15px;
     background-color: white;
     border-radius: 10px;
+    box-shadow: var(--defaultBoxShadow);
 
-    .title-wrapper {
+    .title-line {
         display: flex;
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
     }
 
-    .title-box {
+    .title-label {
         font-size: 1.3rem;
         font-weight: 600;
         padding:15px;
@@ -107,11 +108,11 @@ const ProductInfoInputWrapper = styled.div`
         }
     }
 
-    .button-box {
+    .arrow-btn-box {
         padding: 10px;
     }
 
-    .button-el {
+    .arrow-btn-box .button-el {
         width: 40px;
         height: 40px;
         position: relative;
@@ -130,7 +131,7 @@ const ProductInfoInputWrapper = styled.div`
         }
     }
 
-    .body-wrapper {
+    .inner-content {
         padding: 20px 30px;
         border-top: 1px solid var(--defaultBorderColor)
     }
@@ -149,12 +150,10 @@ const ProductInfoInputWrapper = styled.div`
         align-items: center;
         position: absolute;
         z-index: 10;
-        width: 198px;
-        right: 1px;
+        width: 200px;
         bottom: 1px;
         background-color: #0909093b;
         border-radius: 0 0 4px 4px;
-        padding: -1px;
     }
 
     .image-control-box .button-el {
@@ -167,7 +166,6 @@ const ProductInfoInputWrapper = styled.div`
             background-color: #09090985;
         }
     }
-
 
     .image-box input {
         display: none;
@@ -182,7 +180,7 @@ const ProductInfoInputWrapper = styled.div`
         border-radius: 5px;
     }
 
-    .body-wrapper .input-group-box {
+    .inner-content .input-group-box {
         display: flex;
         align-items: center;
         padding: 15px 0;
@@ -192,13 +190,14 @@ const ProductInfoInputWrapper = styled.div`
         &:last-child{
             border-bottom: none;
         }
-    }
 
-    .body-wrapper .image-group {
-        justify-content: flex-start;
+        @media screen and (max-width: 992px) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
-
-    .body-wrapper .input-group-box .title-text {
+    
+    .control-label {
         width: 200px;
         padding: 10px;
         font-weight: 500;
@@ -208,31 +207,40 @@ const ProductInfoInputWrapper = styled.div`
         }
     }
 
-    .body-wrapper .input-group-box input {
+    .input-group-box input {
         flex: 1;
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+            flex: none;
+        }
     }
 
-    .stock-reflect-btn {
-        display: flex;
+    .toggle-btn-box {
         gap: 5px;
     }
 
-    .stock-reflect-btn .button-el {
+    .toggle-btn-box .button-el {
         width: 200px;
         height: 48px;
         border-radius: 0;
         transition: 0.1s;
         border: 1px solid #cccaca;
         border-radius: 5px;
+        background-color: white;
 
         :hover {
             background-color: var(--piaar-main-color);
             color: white;
         }
+
+        @media screen and (max-width: 992px) {
+            width: 100px;
+        }
     }
 
     .btn-active {
-        background-color: var(--piaar-main-color);
+        background-color: var(--piaar-main-color) !important;
         font-weight: 600;
         color: white
     }
@@ -242,15 +250,16 @@ const OptionInfoInputWrapper = styled.div`
     margin-top: 15px;
     background-color: white;
     border-radius: 10px;
+    box-shadow: var(--defaultBoxShadow);
 
-    .title-wrapper {
+    .title-line {
         display: flex;
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
     }
 
-    .title-box {
+    .title-label {
         font-size: 1.3rem;
         font-weight: 600;
         padding:15px;
@@ -260,11 +269,11 @@ const OptionInfoInputWrapper = styled.div`
         }
     }
 
-    .button-box {
+    .arrow-btn-box {
         padding: 10px;
     }
 
-    .button-el {
+    .arrow-btn-box .button-el {
         width: 40px;
         height: 40px;
         position: relative;
@@ -283,12 +292,22 @@ const OptionInfoInputWrapper = styled.div`
         }
     }
 
-    .body-wrapper {
+    .inner-content {
         padding: 20px 30px;
         border-top: 1px solid var(--defaultBorderColor)
     }
 
-    .body-wrapper .batch-reg-box {
+    .inner-title-label {
+        font-weight: 600;
+        font-size: 1.2rem;
+        padding: 0 30px;
+
+        @media screen and (max-width: 992px) {
+            font-size: 1rem;
+        }
+    }
+
+    .batch-reg-box {
         width: 80%;
         margin: 0 auto;
         border: 1px solid #dfdfdf;
@@ -297,39 +316,9 @@ const OptionInfoInputWrapper = styled.div`
 
         @media screen and (max-width: 992px){
             width: 100%;
-            padding: 20px;
         }
     }
-
-    .batch-reg-box .input-box {
-        padding: 10px 30px;
-    }
-
-    .body-wrapper .input-group-box {
-        display: flex;
-        align-items: center;
-        font-size: 16px;
-        border-bottom: 1px solid #dfdfdf;
-
-        &:last-child{
-            border-bottom: none;
-        }
-    }
-
-    .body-wrapper .input-group-box .title-text {
-        width: 200px;
-        padding: 10px;
-        font-weight: 500;
-
-        @media screen and (max-width: 992px) {
-            font-size: 14px;
-        }
-    }
-
-    .body-wrapper .input-group-box input {
-        flex: 1;
-    }
-
+    
     .batch-reg-box .input-group-box {
         display: flex;
         align-items: center;
@@ -337,9 +326,18 @@ const OptionInfoInputWrapper = styled.div`
         font-size: 16px;
         color: #444;
         border-bottom: 1px solid #dfdfdf;
+
+        :last-child {
+            border-bottom: none;
+        }
+
+        @media screen and (max-width: 992px) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
 
-    .batch-reg-box .input-group-box .title-text {
+    .batch-reg-box .input-group-box .control-label {
         width: 150px;
         padding: 10px;
         font-weight: 500;
@@ -351,6 +349,7 @@ const OptionInfoInputWrapper = styled.div`
 
     .batch-reg-box .input-group-box .modal-open-btn {
         height: 48px;
+        width: 40px;
         padding: 0 10px;
         border: 1px solid #cccaca;
         border-left: none;
@@ -368,17 +367,26 @@ const OptionInfoInputWrapper = styled.div`
         border-radius: 0 0 5px 5px;
     }
 
-    .sub-title-text {
-        font-weight: 600;
-        font-size: 1.2rem;
-        padding: 0 30px;
+    .control-label .button-el {
+        width: 120px;
+        border-radius: 2px;
+        border: 1px solid var(--defaultBorderColor);
+        background-color: var(--defaultButtonColor);
+        color: #444;
+        height: 30px;
+        font-size: 14px;
+    }
+
+    .input-group-box input {
+        flex: 1;
 
         @media screen and (max-width: 992px) {
-            font-size: 1rem;
+            width: 100%;
+            flex: none;
         }
     }
 
-    .create-option-box {
+    .option-list {
         margin-top: 20px;
         padding: 30px;
     }
@@ -407,6 +415,10 @@ const OptionInfoInputWrapper = styled.div`
         color: white;
         font-weight: 600;
         border-radius: 3px;
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+        }
     }
 
     .delete-button-el {
@@ -422,7 +434,7 @@ const OptionInfoInputWrapper = styled.div`
         }
     }
 
-    .delete-button-el .delete-button-icon{
+    .delete-button-el .delete-button-icon {
         width:80%;
         position: absolute;
         top:50%;
@@ -437,7 +449,7 @@ const TableFieldWrapper = styled.div`
     overflow: hidden;
 
     @media all and (max-width: 992px){
-        padding: 0 10px;
+        padding: 20px 0;
     }
 
     table {
@@ -448,7 +460,7 @@ const TableFieldWrapper = styled.div`
         border: none;
     }
 
-    table thead tr th{
+    table thead tr th {
         vertical-align: middle !important;
         text-align: center;
         background: #fff;
@@ -493,7 +505,7 @@ const TableFieldWrapper = styled.div`
         height: 43px;
     }
 
-    .button-box {
+    .arrow-btn-box {
         padding: 0px;
     }
 `;
@@ -536,6 +548,7 @@ const CreateButtonFieldWrapper = styled.div`
         border-radius: 3px;
         font-weight: 700;
         transition: 0.3s;
+        height: 48px;
 
         :hover {
             transition: 0.1s;
@@ -568,7 +581,7 @@ const BatchRegTooltipWrapper = styled.div`
         z-index: 12;
     }
 
-    .tooltip-box .button-box {
+    .tooltip-box .arrow-btn-box {
         padding-top: 10px;
         display: flex;
         align-items: center;
@@ -579,6 +592,16 @@ const BatchRegTooltipWrapper = styled.div`
     .input-el {
         height: 38px;
         border-radius: 5px;
+    }
+
+    .tooltip-box .button-el {
+        width: 70px;
+        border-radius: 2px;
+        border: 1px solid var(--defaultBorderColor);
+        background-color: var(--defaultButtonColor);
+        color: #444;
+        font-size: 14px;
+        height: 30px;
     }
 `;
 

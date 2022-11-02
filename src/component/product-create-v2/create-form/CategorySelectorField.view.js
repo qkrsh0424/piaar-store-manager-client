@@ -4,38 +4,29 @@ import { CategorySelectorWrapper } from "./CreateForm.styled";
 export default function CategorySelectorFieldView(props) {
     return (
         <CategorySelectorWrapper>
-            <div className='title-wrapper' onClick={(e) => props.onActionSlideEffectControl(e, 'category')}>
-                <div className="title-box">
+            <div className='title-line' onClick={(e) => props.onActionSlideEffectControl(e, 'category')}>
+                <div className="title-label">
                     <span>카테고리</span>
                     <RequiredIcon />
                 </div>
-                <div className='button-box'>
+                <div className='arrow-btn-box'>
                     <button
                         type='button'
                         className='button-el'
                         name='category'
                         onClick={(e) => props.onActionSlideEffectControl(e, 'category')}
                     >
-                        {props.slideDownEffect?.category ?
-                            <img
-                                src='/assets/icon/up_arrow_black_icon.png'
-                                style={{ width: '35px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                                alt=""
-                                loading='lazy'
-                            ></img>
-                            :
-                            <img
-                                src='/assets/icon/down_arrow_black_icon.png'
-                                style={{ width: '35px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                                alt=""
-                                loading='lazy'
-                            ></img>
-                        }
+                        <img
+                            src={`/assets/icon/${props.slideDownEffect?.category ? 'up_arrow_black_icon.png' : 'down_arrow_black_icon.png'}`}
+                            style={{ width: '35px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                            alt=""
+                            loading='lazy'
+                        ></img>
                     </button>
                 </div>
             </div>
             {props.slideDownEffect?.category &&
-                <div className='body-wrapper'>
+                <div className='inner-content'>
                     <select
                         name='productCategoryCid'
                         className='select-item'

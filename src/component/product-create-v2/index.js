@@ -10,7 +10,7 @@ const Container = styled.div`
     min-height: 100vh;
     height: 100%;
     padding-bottom: 50px;
-`;
+`
 
 const ProductCreateComponent = (props) => {
     const {
