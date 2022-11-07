@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Ripple from '../button/Ripple';
 import qs from 'query-string';
 import { useState } from 'react';
+import { queryByTestId } from '@testing-library/react';
 
 const Container = styled.div`
 
@@ -136,17 +137,16 @@ const Wrapper = styled.div`
     }
 `;
 
-const BatchRegTooltipWrapper = styled.div`
+const PageInputTooltipWrapper = styled.div`
     position: absolute;
-    /* left: 10px; */
 
     .tooltip-box {
         padding: 10px;
         border-radius: 3px;
-        width: 230px;
+        width: 160px;
         background-color: #fff;
         border: 1px solid #d8d8d8;
-        /* position: absolute; */
+        position: absolute;
         box-shadow: 0px 0px 6px 2px #d8d8d8;
         z-index: 12;
     }
@@ -157,22 +157,36 @@ const BatchRegTooltipWrapper = styled.div`
         align-items: center;
         justify-content: flex-end;
         gap: 2px;
+        width: 100%;
     }
 
     .input-el {
         border: 1px solid #c8c8c8;
     }
+
+    .button-box .button-el {
+        min-width: 70px;
+        border-radius: 2px;
+        border: 1px solid var(--defaultBorderColor);
+        background-color: var(--defaultButtonColor);
+        color: #444;
+        font-size: 14px;
+        height: 30px;
+    }
 `;
 
-function BatchRegTooltip({ inputType, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
+function PageInputTooltip({ pageInputFieldValue, inputType, currentPage, totalElementSize, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
     return (
-        <BatchRegTooltipWrapper>
+        <PageInputTooltipWrapper>
             <div className='tooltip-box' style={tootipSize}>
                 <input
                     type={inputType}
                     className='input-el'
                     style={{ width: '100%' }}
                     onChange={(e) => onChangeInputValue(e)}
+                    min={1}
+                    max={totalElementSize}
+                    value={pageInputFieldValue || currentPage}
                     autoFocus
                 />
                 <div className='button-box'>
@@ -184,7 +198,7 @@ function BatchRegTooltip({ inputType, tootipSize, onChangeInputValue, onActionCa
                     </button>
                 </div>
             </div>
-        </BatchRegTooltipWrapper>
+        </PageInputTooltipWrapper>
     )
 }
 
@@ -254,6 +268,26 @@ const PagenationComponentV2 = (props) => {
         setPageInputFieldValue(e.target.value)
     }
 
+    const onActionCloseTooltip = () => {
+        setPageInputFieldValue(null);
+        setPageInputFieldOpen(false);
+    }
+
+    const onActionConfirmTooltip = () => {
+        navigate(qs.stringifyUrl({
+            url: location.pathname,
+            query: {
+                ...query,
+                page: pageInputFieldValue
+            }
+        }), {
+            replace: true
+        })
+
+        setPageInputFieldValue(null);
+        setPageInputFieldOpen(false);
+    }
+
     return (
         <>
             <Container>
@@ -281,12 +315,15 @@ const PagenationComponentV2 = (props) => {
                                     onClick={() => onActionOpenPageInput()}
                                 >입력</button>
                                 {pageInputFieldOpen &&
-                                    <BatchRegTooltip
+                                    <PageInputTooltip
                                         inputType={'number'}
-                                        tootipSize={{ width: '220px' }}
+                                        tootipSize={{ width: '160px' }}
+                                        pageInputFieldValue={pageInputFieldValue}
+                                        currentPage={props.pageIndex+1}
+                                        totalElementSize={props.totalPages}
                                         onChangeInputValue={onChangePageInputValue}
-                                        onActionConfirm={props.onActionConfirmBatchRegInput}
-                                        onActionCancel={props.onActionCloseBatchRegTooltip}
+                                        onActionConfirm={onActionConfirmTooltip}
+                                        onActionCancel={onActionCloseTooltip}
                                     />
                                 }
                             </div>
