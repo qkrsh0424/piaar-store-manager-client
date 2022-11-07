@@ -104,7 +104,7 @@ export default function TableFieldView(props) {
                         {props.stockAnalysisViewList?.map((r, index) => {
                             return (
                                 <tr key={'stock-analysis-item' + index}
-                                    className={valueUtils.isRecentlyReleased(r.lastReleasedAt) ? 'bad-stock' : ''} // 최근 1달 동안의 출고 여부 확인
+                                    className={valueUtils.isRecentlyReleased(r.lastReleasedAt) ? '' : 'bad-stock'} // 최근 7일 동안의 출고 여부 확인
                                     onClick={() => props.onActionOpenProductStockAnalysisModal(r.product.id)}
                                 >
                                     <td>

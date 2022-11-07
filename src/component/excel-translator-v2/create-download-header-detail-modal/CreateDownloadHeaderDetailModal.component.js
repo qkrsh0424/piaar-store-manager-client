@@ -394,7 +394,7 @@ const CreateDownloadHeaderDetailModalComponent = (props) => {
                                 }}
                             >
                                 <div>[{r.uploadHeaderTitle}</div>
-                                <img src='/assets/icon/right_arrow_black_icon.svg' alt="right_arrow_black" width={24} />
+                                <img src='/assets/icon/right_arrow_default_000000.svg' alt="right_arrow_black" width={24} />
                                 <div>
                                     {r.downloadHeaderTitle}] 의
                                 </div>

@@ -1,3 +1,5 @@
+import { getStartDate } from "./dateFormatUtils";
+
 const valueUtils = {
     /**
      * 넘어온 값이 빈값인지 체크.
@@ -21,11 +23,21 @@ const valueUtils = {
 
         return result;
     },
+    // 최근 7일 내의 날짜인지 아닌지
     isRecentlyReleased: (value) => {
+        let comparedDate = new Date(value);
         let date = new Date();
-        date.setMonth(date.getMonth()-1);
+        // date.setMonth(date.getMonth()-1);
+        date.setDate(date.getDate() - 7);
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
 
-        if(value <= date) {
+        if(!comparedDate) {
+            return false;
+        }
+
+        if(date <= comparedDate) {
             return true;
         }else {
             return false;
