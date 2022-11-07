@@ -1,4 +1,4 @@
-import { HeaderFieldWrapper } from "./CreateOptionDefaultNameModal.styled";
+import { HeaderFieldWrapper } from "../CreateOptionDefaultNameModal.styled";
 
 export default function HeaderFieldView(props) {
     return (

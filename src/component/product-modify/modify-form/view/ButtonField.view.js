@@ -1,4 +1,4 @@
-import { CreateButtonFieldWrapper } from "./ModifyForm.styled";
+import { CreateButtonFieldWrapper } from "../ModifyForm.styled";
 
 export default function CreateButtonFieldView(props) {
     return (

@@ -1,9 +1,17 @@
 import { useState } from "react";
 import OptionPackageModalComponent from "../modal/option-package-modal/OptionPackageModal.component";
 import SubOptionCodeModalComponent from "../modal/sub-option-code-modal/SubOptionCodeModal.component";
-import { Container } from "./ManageTable.styled";
+import { Container, SelectedInfoFieldWrapper } from "./ManageTable.styled";
 import ManageTableFieldView from "./ManageTableField.view";
 
+function SelectedInfoFieldView({ size }) {
+    return (
+        <SelectedInfoFieldWrapper>
+            <span>선택된 데이터 : </span>
+            <span>{size || 0}개</span>
+        </SelectedInfoFieldWrapper>
+    )
+}
 const ManageTableComponent = (props) => {
     const [subOptionCodeModalOpen, setSubOptionCodeModalOpen] = useState(false);
     const [optionPackageModalOpen, setOptionPackageModalOpen] = useState(false);
@@ -15,8 +23,14 @@ const ManageTableComponent = (props) => {
                 e.stopPropagation();
 
                 // 대체코드 조회
-                let option = props.productManagementList.map(r => r.options.filter(option => option.id === optionId)[0])[0];
-                setOption(option);
+                props.productManagementList.forEach(r => {
+                    let option = r.options?.filter(option => option.id === optionId)[0];
+                    
+                    if(option){
+                        setOption(option);
+                    }
+                });
+                
                 setSubOptionCodeModalOpen(true);
             },
             closeSubOptionCodeModal: () => {
@@ -26,8 +40,13 @@ const ManageTableComponent = (props) => {
             openOptionPackageModal: (e, optionId) => {
                 e.stopPropagation();
 
-                let option = props.productManagementList.map(r => r.options.filter(option => option.id === optionId)[0])[0];
-                setOption(option);
+                props.productManagementList.forEach(r => {
+                    let option = r.options?.filter(option => option.id === optionId)[0];
+
+                    if(option) {
+                        setOption(option);
+                    }
+                })
                 setOptionPackageModalOpen(true);
             },
             closeOptionPackageModal: () => {
@@ -40,6 +59,8 @@ const ManageTableComponent = (props) => {
     return (
         props.productManagementList &&
         <Container>
+            <SelectedInfoFieldView size={props.checkedOptionIdList?.length} />
+            
             <ManageTableFieldView
                 productManagementList={props.productManagementList}
 

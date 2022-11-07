@@ -37,22 +37,21 @@ const InputFieldWrapper = styled.div`
     box-shadow: var(--defaultBoxShadow);
     border-radius: 5px;
 
+    .input-wrapper {
+        overflow: auto;
+    }
+
     .input-group-box {
         display: flex;
         align-items: center;
         gap: 5px;
         padding: 15px 0;
         font-size: 16px;
-        border-bottom: 1px solid #dfdfdf;
     }
 
     .input-title {
-        width: 70px;
-        text-align: center;
-
-        @media screen and (max-width: 992px) {
-            font-size: 12px;
-        }
+        min-width: 70px;
+        white-space: nowrap;
     }
 
     .input-value {
@@ -62,14 +61,6 @@ const InputFieldWrapper = styled.div`
 
     .input-value .input-el {
         flex: 1;
-    }
-
-    .input-title-box {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        width: 140px;
     }
 
     .button-el {

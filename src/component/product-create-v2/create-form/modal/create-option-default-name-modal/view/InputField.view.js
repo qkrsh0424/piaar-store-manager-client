@@ -4,7 +4,7 @@ import Ripple from "../../../../../module/button/Ripple"
 export default function InputFieldView(props) {
     return (
         <InputFieldWrapper>
-            <div>
+            <div className='input-wrapper'>
                 <div className='input-group-box'>
                     <div className='input-title'>구분자</div>
                     <div className='input-value'>
@@ -21,7 +21,7 @@ export default function InputFieldView(props) {
 
                 {props.optionDefaultNameList?.map((r, idx) => {
                     return (
-                        <div key={r.id} className='input-group-box'>
+                        <div key={'option-default-name-idx' + idx} className='input-group-box'>
                             <div className='input-title'>{idx + 1}. </div>
                             <div className='input-value'>
                                 <input

@@ -116,10 +116,10 @@ const SubmitModalComponentV2 = ({ open, fullWidth, maxWidth, _onSubmit, onClose,
                     </div>
                     
                 </TitleBox>
-                <ElementBox>
-                    {element || ''}
-                </ElementBox>
                 <form onSubmit={(e) => onSubmit(e)}>
+                    <ElementBox>
+                        {element || ''}
+                    </ElementBox>
                     <ButtonWrapper>
                         <ButtonBox>
                             <button

@@ -24,74 +24,60 @@ const HeaderFieldWrapper = styled.div`
 
 const InfoFieldWrapper = styled.div`
     padding: 10px 20px;
+    text-align: left;
     font-size: 12px;
     font-weight: 600;
     color: var(--erp-main-color);
 `;
 
 const InputFieldWrapper = styled.div`
-    padding: 0 20px;
-    min-height: 50vh;
+    margin: 10px 20px;
+    border: 1px solid var(--defaultBorderColor);
+    box-shadow: var(--defaultBoxShadow);
+    border-radius: 5px;
 
-    .input-group {
+    .input-wrapper {
+        overflow: auto;
+    }
+
+    .input-group-box {
         display: flex;
         align-items: center;
         gap: 5px;
         padding: 15px 0;
         font-size: 16px;
-        border-bottom: 1px solid #dfdfdf;
     }
 
-    .input-box {
+    .input-title {
+        min-width: 70px;
+        white-space: nowrap;
+    }
+
+    .input-value {
         display: flex;
         flex: 1;
     }
-    
-    .input-group .input-title {
-        width: 70px;
-        text-align: center;
 
-        @media screen and (max-width: 992px) {
-            font-size: 12px;
-            min-width: 30px;
-            width: auto;
-        }
-    }
-
-    .input-group .input-value {
-        border: 1px solid #cccaca;
-        padding: 0 5px;
-        height: 40px;
-        flex:1;
-
-        @media screen and (max-width: 992px) {
-            font-size: 12px;
-        }
-    }
-
-    .input-title-box {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        width: 140px;
+    .input-value .input-el {
+        flex: 1;
     }
 
     .button-el {
         position: relative;
         overflow: hidden;
-        width: 38px;
-        height: 38px;
+        width: 48px;
+        height: 48px;
         cursor: pointer;
         transition: 0.2s;
+        border-radius: 50%;
 
         :hover {
             transform: scale(1.1);
         }
     }
 
-    .button-el .button-icon{
-        width:70%;
+    .button-el .button-icon {
+        width:60%;
         position: absolute;
         top:50%;
         left:50%;
@@ -103,8 +89,7 @@ const InputFieldWrapper = styled.div`
         padding: 5px 0;
         transition: 0.1s;
         border: none;
-        border-bottom: 1px solid #dfdfdf;
-        background-color: #fff;
+        border-radius: 0 0 5px 5px;
         overflow: hidden;
         position: relative;
         -webkit-transition: all .2s;

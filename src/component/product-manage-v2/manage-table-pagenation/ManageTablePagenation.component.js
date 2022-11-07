@@ -13,7 +13,7 @@ const ManageTablePagenationComponent = (props) => {
                     isFirst={props.productManagementList?.first}
                     isLast={props.productManagementList?.last}
                     totalElements={props.productManagementList?.totalElements}
-                    sizeElements={[10, 30, 50, 100, 200]}
+                    sizeElements={[10, 30, 50, 100]}
                 ></PagenationComponentV2>
             }
         </Container>

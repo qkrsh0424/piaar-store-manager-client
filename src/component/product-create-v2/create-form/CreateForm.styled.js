@@ -145,28 +145,6 @@ const ProductInfoInputWrapper = styled.div`
         padding-bottom: 100%; // 1:1
     }
 
-    .image-box .image-control-box {
-        display: flex;
-        align-items: center;
-        position: absolute;
-        z-index: 10;
-        width: 200px;
-        bottom: 1px;
-        background-color: #0909093b;
-        border-radius: 0 0 4px 4px;
-    }
-
-    .image-control-box .button-el {
-        width: 50%;
-        border: none;
-        background: none;
-        transition: 0.2s;
-
-        :hover {
-            background-color: #09090985;
-        }
-    }
-
     .image-box input {
         display: none;
     }
@@ -243,6 +221,33 @@ const ProductInfoInputWrapper = styled.div`
         background-color: var(--piaar-main-color) !important;
         font-weight: 600;
         color: white
+    }
+`;
+
+const ImageControlFieldWrapper = styled.div`
+
+    .image-control-box {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        z-index: 10;
+        height: 40px;
+        width: 200px;
+        bottom: 0px;
+        background-color: #0909093b;
+        border-radius: 0 0 4px 4px;
+    }
+
+    .image-control-box .button-el {
+        width: 50%;
+        height: 100%;
+        border: none;
+        background: none;
+        transition: 0.2s;
+
+        :hover {
+            background-color: #09090985;
+        }
     }
 `;
 
@@ -457,7 +462,6 @@ const TableFieldWrapper = styled.div`
         text-align: center;
         width: fit-content;
         table-layout: fixed;
-        border: none;
     }
 
     table thead tr th {
@@ -610,6 +614,7 @@ export {
     PageTitleFieldWrapper,
     CategorySelectorWrapper,
     ProductInfoInputWrapper,
+    ImageControlFieldWrapper,
     OptionInfoInputWrapper,
     TableFieldWrapper,
     CreateButtonFieldWrapper,

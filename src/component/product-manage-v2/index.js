@@ -282,8 +282,10 @@ const ProductManageComponent = (props) => {
             <ManageTablePagenationComponent
                 productManagementList={productManagementList}
             />
+
             <ManageTableComponent
                 productManagementList={productManagementList?.content}
+                checkedOptionIdList={checkedOptionIdList}
 
                 isCheckedOne={__handle.action.isCheckedOne}
                 isCheckedAll={__handle.action.isCheckedAll}

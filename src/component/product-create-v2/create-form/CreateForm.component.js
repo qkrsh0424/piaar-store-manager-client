@@ -1,10 +1,9 @@
-import CategorySelectorFieldView from "./CategorySelectorField.view";
+import CategorySelectorFieldView from "./view/CategorySelectorField.view";
 import { Container, PageTitleFieldWrapper } from "./CreateForm.styled";
-import OptionInfoInputFieldView from "./OptionInfoInputField.view";
-import ProductInfoInputFieldView from "./ProductInfoInputField.view";
+import OptionInfoInputFieldView from "./view/OptionInfoInputField.view";
 import { useReducer } from "react";
 import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
-import CreateButtonFieldView from "./CreateButtonField.view";
+import CreateButtonFieldView from "./view/CreateButtonField.view";
 import valueUtils from "../../../utils/valueUtils";
 import { useState } from "react";
 import CreateOptionDefaultNameModalComponent from "./modal/create-option-default-name-modal/CreateOptionDefaultNameModal.component";
@@ -15,6 +14,7 @@ import { useDisabledButtonHook } from "../../../hooks/button-disabled/useDisable
 import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
 import useProductHook from "../hooks/useProductHook";
 import useProductOptionsHook from "../hooks/useProductOptionsHook";
+import ProductInfoInputFieldView from "./view/ProductInfoInputField.view";
 
 function PageTitleFieldView({ title }) {
     return (

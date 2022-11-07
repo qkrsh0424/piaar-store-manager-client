@@ -1,25 +1,24 @@
-import CategorySelectorFieldView from "./CategorySelectorField.view";
+import CategorySelectorFieldView from "./view/CategorySelectorField.view";
 import { Container, PageTitleFieldWrapper } from "./ModifyForm.styled";
-import OptionInfoInputFieldView from "./OptionInfoInputField.view";
-import ProductInfoInputFieldView from "./ProductInfoInputField.view";
+import OptionInfoInputFieldView from "./view/OptionInfoInputField.view";
+import ProductInfoInputFieldView from "./view/ProductInfoInputField.view";
 import { useEffect, useReducer } from "react";
 import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
-import CreateButtonFieldView from "./ButtonField.view";
+import CreateButtonFieldView from "./view/ButtonField.view";
 import { useState } from "react";
-import CommonModalComponent from "../../module/modal/CommonModalComponent";
 import CreateOptionDefaultNameModalComponent from "./modal/create-option-default-name-modal/CreateOptionDefaultNameModal.component";
 import useRouterHook from "../../../hooks/router/useRouterHook";
-import useProductHook from "../../../hooks/product/useProductHook";
 import useProductOptionsHook from "../../../hooks/product-option/useProductOptionsHook";
 import useProductOptionBatchRegHook from "../hooks/useProductOptionBatchRegHook";
 import useBatchRegTooltipHook from "../hooks/useBatchRegTooltipHook";
 import { useDisabledButtonHook } from "../../../hooks/button-disabled/useDisabledButtonHook";
 import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
+import useProductHook from "../hooks/useProductHook";
 
 function PageTitleFieldView({ title }) {
     return (
         <PageTitleFieldWrapper>
-            <div>{title}</div>
+            <div className='page-title'>{title}</div>
         </PageTitleFieldWrapper>
     )
 }
@@ -38,7 +37,8 @@ const ModifyFormComponent = (props) => {
         onChangeImageFileNameAndImageUrl,
         onActionDeleteImageFileNameAndImageUrl,
         checkCreateFormData: checkProductCreateFormData,
-        onActionUpdateProduct
+        onActionUpdateProduct,
+        onChangeStockManagement: onChangeProductStockManagement
     } = useProductHook();
 
     const {
@@ -57,16 +57,16 @@ const ModifyFormComponent = (props) => {
     } = useProductOptionBatchRegHook();
 
     const {
-        __reqUploadImageFile
-    } = useImageFileUploaderHook();
-
-    const {
         batchRegTooltipOpen,
         batchRegInput,
         onActionOpenBatchRegToolTip,
         onActionCloseBatchRegTooltip,
         onChangeBatchRegInput
     } = useBatchRegTooltipHook();
+
+    const {
+        __reqUploadImageFile
+    } = useImageFileUploaderHook();
 
     const {
         open: backdropOpen,
@@ -116,9 +116,6 @@ const ModifyFormComponent = (props) => {
                 onActionCloseBackdrop();
         
                 onChangeImageFileNameAndImageUrl(imageInfo);
-            },
-            removeProductImage: () => {
-                onActionDeleteImageFileNameAndImageUrl();
             },
             changeStockManagement: (e) => {
                 e.preventDefault();
@@ -191,6 +188,11 @@ const ModifyFormComponent = (props) => {
         submit: {
             modifyProductAndOptions: (e) => {
                 e.preventDefault();
+                e.stopPropagation();
+
+                if(!window.confirm('데이터 수정을 완료하시겠습니까?')) {
+                    return;
+                }
         
                 try {
                     checkProductCreateFormData();
@@ -232,8 +234,8 @@ const ModifyFormComponent = (props) => {
                         onChangeProductInputValue={onChangeProductInputValue}
                         onActionSlideEffectControl={__hanlde.action.changeSlideEffectControl}
                         onActionUploadProductImageFile={__hanlde.action.uploadProductImageFile}
-                        onActionRemoveImage={__hanlde.action.removeProductImage}
-                        onActionChangeStockManagement={__hanlde.action.changeStockManagement}
+                        onActionRemoveImage={onActionDeleteImageFileNameAndImageUrl}
+                        onChangeProductStockManagement={onChangeProductStockManagement}
                     />
                 }
 
@@ -267,18 +269,15 @@ const ModifyFormComponent = (props) => {
                 />
             </form>
 
-            <CommonModalComponent
-                open={optionDefaultNameCreateModalOpen}
-                maxWidth={'sm'}
-                fullWidth={true}
-
-                onClose={__hanlde.action.closeOptionDefaultNameCreateModal}
-            >
+            {/* 옵션명 생성 모달 */}
+            {optionDefaultNameCreateModalOpen && 
                 <CreateOptionDefaultNameModalComponent
+                    modalOpen={optionDefaultNameCreateModalOpen}
+
                     onActionCloseOptionDefaultNameCreateModal={__hanlde.action.closeOptionDefaultNameCreateModal}
                     onChangeBatchRegOptionDefaultNameInputValue={__hanlde.action.changeProductOptionBatchRegValue}
                 />
-            </CommonModalComponent>
+            }
 
             {/* Backdrop */}
             <BackdropHookComponent

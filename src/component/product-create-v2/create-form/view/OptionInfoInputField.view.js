@@ -1,6 +1,6 @@
-import RequiredIcon from "../../module/icon/RequiredIcon";
+import RequiredIcon from "../../../module/icon/RequiredIcon";
 import { v4 as uuidv4 } from 'uuid';
-import { BatchRegTooltipWrapper, OptionInfoInputWrapper, TableFieldWrapper } from "./CreateForm.styled";
+import { BatchRegTooltipWrapper, OptionInfoInputWrapper, TableFieldWrapper } from "../CreateForm.styled";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 function BatchRegTooltip({ name, inputType, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
@@ -44,7 +44,7 @@ export default function OptionInfoInputFieldView(props) {
                         onClick={(e) => props.onActionSlideEffectControl(e, 'option')}
                     >
                         <img
-                            src={`/assets/icon/${props.slideDownEffect?.product ? 'up_arrow_black_icon.png' : 'down_arrow_black_icon.png'}`}
+                            src={`/assets/icon/${props.slideDownEffect?.option ? 'up_arrow_black_icon.png' : 'down_arrow_black_icon.png'}`}
                             style={{ width: '35px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
                             alt=""
                             loading='lazy'
@@ -71,7 +71,7 @@ export default function OptionInfoInputFieldView(props) {
                                         type='button'
                                         className='button-el'
                                         onClick={(e) => props.onActionOpenOptionDefaultNameCreateModal(e)}
-                                    >옵션명 일괄생성</button>
+                                    >일괄생성</button>
                                 </span>
                                 <input
                                     type='text'
@@ -366,6 +366,7 @@ function TableFieldView(props) {
                                 <tbody
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
+                                    style={{ borderTop: 'none' }}
                                 >
                                     {props.createOptionDataList?.map((r, idx) => {
                                         return (

@@ -59,8 +59,8 @@ const CreateOptionDefaultNameModalComponent = (props) => {
         submit: {
             batchOptionDefaultName: (e) => {
                 e.preventDefault();
-                
-                if(separator.indexOf(',') !== -1) {
+
+                if(separator?.indexOf(',') !== -1) {
                     alert('옵션명을 구분하는 문자로 (,)는 포함할 수 없습니다.');
                     return;
                 }

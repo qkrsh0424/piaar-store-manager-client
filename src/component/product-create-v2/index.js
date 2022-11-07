@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { productDataConnect } from "../../data_connect/productDataConnect";
-import { BackdropHookComponent, useBackdropHook } from "../../hooks/backdrop/useBackdropHook";
 import useProductCategoryHook from "../../hooks/product-category/useProductCategoryHook";
 import useRouterHook from "../../hooks/router/useRouterHook";
 import CreateFormComponent from "./create-form/CreateForm.component";
@@ -17,12 +16,6 @@ const ProductCreateComponent = (props) => {
         location,
         navigateUrl
     } = useRouterHook();
-
-    const {
-        open: backdropOpen,
-        onActionOpen: onActionOpenBackdrop,
-        onActionClose: onActionCloseBackdrop
-    } = useBackdropHook();
 
     const {
         productCategoryList
@@ -59,13 +52,6 @@ const ProductCreateComponent = (props) => {
                 categoryList={productCategoryList}
 
                 _onSubmit_createProductAndOptions={__handle.submit.createProductAndOptions}
-                onActionOpenBackdrop={onActionOpenBackdrop}
-                onActionCloseBackdrop={onActionCloseBackdrop}
-            />
-            
-            {/* Backdrop */}
-            <BackdropHookComponent
-                open={backdropOpen}
             />
         </Container>
     )
