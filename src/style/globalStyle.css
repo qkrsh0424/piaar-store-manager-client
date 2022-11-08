@@ -2,4 +2,18 @@
     /* 피아르 erp 메인 색상 */
     --erp-main-color: #2C73D2;
     --piaar-main-color: rgb(122, 123, 218);
+    --piaar-background-color: #edf0f5;
+    --defaultBorderColor: #c8c8c8;
+    --defaultHoverColor: #f1f1f1;
+    --defaultButtonColor: #f7f7f7;
+    --defaultButtonHoverColor: #e7e7e7;
+    
+    --mainColor: #344b98;
+    --mainColorHover: #344b98f0;
+    --mainColorSelected1: #344b9820;
+    --defaultBackground: #f9fbfc;
+    --defaultBoxShadow: 1px 1px 10px 0 rgb(72 75 108 / 8%);
+    --defaultRedColor:#e56767;
+    --defaultGreenColor:#5fcf80;
+    --defaultModalCloseColor:#959eae;
 }

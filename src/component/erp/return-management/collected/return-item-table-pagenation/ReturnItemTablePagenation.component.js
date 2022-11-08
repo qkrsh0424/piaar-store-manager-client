@@ -1,4 +1,4 @@
-import PagenationComponent from "../../../../module/pagenation/PagenationComponent";
+import PagenationComponent from "../../../../module/pagenation/PagenationComponentV2";
 import { Container } from "./ReturnItemTablePagenation.styled";
 
 const ReturnItemTablePagenationComponent = (props) => {
