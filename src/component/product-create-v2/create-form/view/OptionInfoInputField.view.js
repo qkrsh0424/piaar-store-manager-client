@@ -411,10 +411,10 @@ function TableFieldView(props) {
                                                             <input type='text' value={r.managementName} name='managementName' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                                         </td>
                                                         <td>
-                                                            <input type='number' value={r.salesPrice} name='salesPrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                            <input type='number' value={r.salesPrice} name='salesPrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)} min={0}></input>
                                                         </td>
                                                         <td>
-                                                            <input type='number' value={r.totalPurchasePrice} name='totalPurchasePrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                            <input type='number' value={r.totalPurchasePrice} name='totalPurchasePrice' onChange={(e) => props.onChangeOptionInputValue(e, r.id)} min={0}></input>
                                                         </td>
                                                         <td>
                                                             <input type='text' value={r.releaseLocation} name='releaseLocation' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
@@ -426,7 +426,7 @@ function TableFieldView(props) {
                                                             <input type='text' value={r.memo} name='memo' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
                                                         </td>
                                                         <td>
-                                                            <input type='number' value={r.safetyStockUnit} name='safetyStockUnit' onChange={(e) => props.onChangeOptionInputValue(e, r.id)}></input>
+                                                            <input type='number' value={r.safetyStockUnit} name='safetyStockUnit' onChange={(e) => props.onChangeOptionInputValue(e, r.id)} min={0}></input>
                                                         </td>
                                                     </tr>
                                                 )}

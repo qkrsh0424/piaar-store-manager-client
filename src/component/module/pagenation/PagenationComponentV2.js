@@ -36,6 +36,11 @@ const Wrapper = styled.div`
         }
     }
 
+    .number-box .input-el {
+        width: 30px;
+        height: fit-content;
+    }
+
     .page-box {
         display: flex;
         align-items: center;
@@ -132,7 +137,7 @@ const Wrapper = styled.div`
         border: 1px solid #c8c8c8;
         background-color: #f7f7f7;
         color: #444;
-        font-size: 14px;
+        font-size: 11px;
         height: 30px;
     }
 `;
@@ -162,42 +167,45 @@ const PageInputTooltipWrapper = styled.div`
 
     .input-el {
         border: 1px solid #c8c8c8;
+        height: 30px;
     }
 
     .button-box .button-el {
-        min-width: 70px;
+        width: 50%;
         border-radius: 2px;
         border: 1px solid var(--defaultBorderColor);
         background-color: var(--defaultButtonColor);
         color: #444;
-        font-size: 14px;
-        height: 30px;
+        font-size: 11px;
+        height: 25px;
     }
 `;
 
-function PageInputTooltip({ pageInputFieldValue, inputType, currentPage, totalElementSize, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
+function PageInputTooltip({ pageInputFieldValue, inputType, totalElementSize, tootipSize, onChangeInputValue, onActionCancel, onActionSubmit }) {
     return (
         <PageInputTooltipWrapper>
-            <div className='tooltip-box' style={tootipSize}>
-                <input
-                    type={inputType}
-                    className='input-el'
-                    style={{ width: '100%' }}
-                    onChange={(e) => onChangeInputValue(e)}
-                    min={1}
-                    max={totalElementSize}
-                    value={pageInputFieldValue || currentPage}
-                    autoFocus
-                />
-                <div className='button-box'>
-                    <button type='button' className='button-el' onClick={(e) => onActionCancel(e)}>
-                        취소
-                    </button>
-                    <button type='button' className='button-el' onClick={(e) => onActionConfirm(e)}>
-                        확인
-                    </button>
+            <form onSubmit={(e) => onActionSubmit(e)}>
+                <div className='tooltip-box' style={tootipSize}>
+                    <input
+                        type={inputType}
+                        className='input-el'
+                        style={{ width: '100%' }}
+                        onChange={(e) => onChangeInputValue(e)}
+                        min={totalElementSize === 0 ? 0 : 1}
+                        max={totalElementSize}
+                        value={pageInputFieldValue}
+                        autoFocus
+                    />
+                    <div className='button-box'>
+                        <button type='button' className='button-el' onClick={(e) => onActionCancel(e)}>
+                            취소
+                        </button>
+                        <button type='submit' className='button-el'>
+                            확인
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </PageInputTooltipWrapper>
     )
 }
@@ -208,7 +216,7 @@ const PagenationComponentV2 = (props) => {
     const query = qs.parse(location.search);
 
     const [pageInputFieldOpen, setPageInputFieldOpen] = useState(false);
-    const [pageInputFieldValue, setPageInputFieldValue] = useState('');
+    const [pageInputFieldValue, setPageInputFieldValue] = useState(null);
 
     const onActionPrev = () => {
         if (props.isFirst) {
@@ -273,7 +281,9 @@ const PagenationComponentV2 = (props) => {
         setPageInputFieldOpen(false);
     }
 
-    const onActionConfirmTooltip = () => {
+    const onActionSubmitTooltip = (e) => {
+        e.preventDefault();
+        
         navigate(qs.stringifyUrl({
             url: location.pathname,
             query: {
@@ -313,16 +323,15 @@ const PagenationComponentV2 = (props) => {
                                 <button
                                     className='button-el'
                                     onClick={() => onActionOpenPageInput()}
-                                >입력</button>
+                                >페이지 이동</button>
                                 {pageInputFieldOpen &&
                                     <PageInputTooltip
                                         inputType={'number'}
-                                        tootipSize={{ width: '160px' }}
+                                        tootipSize={{ width: '100px' }}
                                         pageInputFieldValue={pageInputFieldValue}
-                                        currentPage={props.pageIndex+1}
                                         totalElementSize={props.totalPages}
                                         onChangeInputValue={onChangePageInputValue}
-                                        onActionConfirm={onActionConfirmTooltip}
+                                        onActionSubmit={onActionSubmitTooltip}
                                         onActionCancel={onActionCloseTooltip}
                                     />
                                 }
@@ -343,7 +352,9 @@ const PagenationComponentV2 = (props) => {
                                 }
                             </div>
                             <div className='number-box'>
-                                <span>{props.totalElements !== 0 ? props.pageIndex + 1 : '0'}</span> / <span>{props.totalPages || '0'}</span>
+                                <span>{props.totalElements !== 0 ? props.pageIndex + 1 : '0'}</span>
+                                <span> / </span>
+                                <span>{props.totalPages || '0'}</span>
                             </div>
                             <div className='button-box'>
                                 {(!props.isLast) &&
