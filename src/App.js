@@ -6,7 +6,7 @@ import { unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserLoadingTrue, setUserLoadingFalse, setUserInfo } from './redux/actions/user';
+import { setUserLoadingFalse, setUserInfo } from './redux/actions/user';
 // component
 import FullPageLoading from './component/loading/FullPageLoading';
 import HomeMain from './component/home/HomeMain';
@@ -43,7 +43,8 @@ import ErpReturnManagementCollectedPage from './pages/erp/return-management/coll
 import ErpReturnManagementCompletedPage from './pages/erp/return-management/completed/ErpReturnManagementCompletedPage';
 import ErpReturnManagementRejectedPage from './pages/erp/return-management/rejected/ErpReturnManagementRejectedPage';
 import ProductModifyPage from './pages/product-modify/ProductModifyPage';
-import OptionsModifyPage from './pages/options-modify/OptionsModifyPage';
+import ProductOptionsModifyPage from './pages/product-options-modify/OptionsModifyPage';
+import ProductCategoryCreatePage from './pages/product-category-create/ProductCategoryCreatePage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -137,8 +138,9 @@ function App(props) {
                                             {/* refactor page 3 - /product/create -> /ex/product/create */}
                                             {/* <Route path='/ex/products/create' element={<CreateMain />} /> */}
                                             <Route path='/products/create' element={<ProductCreatePage />} />
+                                            <Route path='/product-category/create' element={<ProductCategoryCreatePage />} />
                                             <Route path='/products/modify' element={<ProductModifyPage />} />
-                                            <Route path='/product-options/modify' element={<OptionsModifyPage />} />
+                                            <Route path='/product-options/modify' element={<ProductOptionsModifyPage />} />
 
                                             {/* Shipment */}
                                             {/* <Route path='/shipment/packing-list/naver' element={<SPackingListNaverMain />} />

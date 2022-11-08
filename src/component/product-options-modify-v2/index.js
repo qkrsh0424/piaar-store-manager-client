@@ -13,7 +13,7 @@ const Container = styled.div`
     padding-bottom: 50px;
 `;
 
-const OptionsModifyComponent = (props) => {
+const ProductOptionsModifyComponent = (props) => {
     const [options, setOptions] = useState(null);
     const [selectedProductId, setSelectedProductId] = useState(null);
 
@@ -96,4 +96,4 @@ const OptionsModifyComponent = (props) => {
     )
 }
 
-export default OptionsModifyComponent;
+export default ProductOptionsModifyComponent;

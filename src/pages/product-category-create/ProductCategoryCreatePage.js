@@ -1,20 +1,20 @@
 import styled from 'styled-components';
 import DrawerNavbarMain from '../../component/nav/DrawerNavbarMain';
-import OptionsModifyComponent from '../../component/options-modify-v2';
+import ProductCategoryCreateComponent from '../../component/product-category-create';
 
 const Container = styled.div`
 
 `;
 
-const OptionsModifyPage = (props) => {
+const ProductCategoryCreatePage = (props) => {
     return(
         <>
             <Container>
                 <DrawerNavbarMain></DrawerNavbarMain>
-                <OptionsModifyComponent></OptionsModifyComponent>
+                <ProductCategoryCreateComponent></ProductCategoryCreateComponent>
             </Container>
         </>
     )
 }
 
-export default OptionsModifyPage;
+export default ProductCategoryCreatePage;
