@@ -11,7 +11,7 @@ export default function ManageTableFieldView(props) {
                         <th className='fixed-header fixed-header-left' scope="col" width={50}>
                             <input
                                 type='checkbox'
-                                style={{ cursor: 'pointer' }}
+                                style={{ cursor: 'pointer', height: 'fit-content' }}
                                 checked={props.isCheckedAll()}
                                 onChange={(e) => props.onActionCheckAll(e)}
                             />
@@ -24,7 +24,7 @@ export default function ManageTableFieldView(props) {
                         <th className='fixed-header' scope="col" width={50}>
                             <input
                                 type='checkbox'
-                                style={{ cursor: 'pointer' }}
+                                style={{ cursor: 'pointer', height: 'fit-content' }}
                                 checked={props.isCheckedAll()}
                                 onChange={(e) => props.onActionCheckAll(e)}
                             />
@@ -63,7 +63,7 @@ export default function ManageTableFieldView(props) {
                                     >
                                         <input
                                             type='checkbox'
-                                            style={{ cursor: 'pointer' }}
+                                            style={{ cursor: 'pointer', height: 'fit-content' }}
                                             checked={checkedProduct}
                                             onChange={(e) => props.onActionProductCheckOne(e, r.product.id)}
                                         />
@@ -76,9 +76,17 @@ export default function ManageTableFieldView(props) {
                                         <div className='control-btn'>
                                             <button
                                                 className='button-el'
-                                                onClick={(e) => props.onActionModifyProductAndOptions(e, r.product.id)}
+                                                onClick={(e) => props.onActionModifyProduct(e, r.product.id)}
                                             >
                                                 상품수정
+                                            </button>
+                                        </div>
+                                        <div className='control-btn'>
+                                            <button
+                                                className='button-el'
+                                                onClick={(e) => props.onActionModifyOptions(e, r.product.id)}
+                                            >
+                                                옵션수정
                                             </button>
                                         </div>
                                         <div className='control-btn'>
@@ -165,7 +173,7 @@ export default function ManageTableFieldView(props) {
                                             onClick={(e) => props.onActionCheckOne(e, option.id)}
                                         >
                                             <td>
-                                                <input type='checkbox' style={{ cursor: 'pointer' }} checked={checked} onChange={(e) => props.onActionCheckOne(e, option.id)} />
+                                                <input type='checkbox' style={{ cursor: 'pointer', height: 'fit-content' }} checked={checked} onChange={(e) => props.onActionCheckOne(e, option.id)} />
                                             </td>
                                             <td>
                                                 {option.code}

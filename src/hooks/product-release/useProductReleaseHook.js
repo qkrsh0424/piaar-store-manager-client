@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import { isNumberFormat } from "../../utils/regexUtils";
 
 export default function useProductReleaseHook (props) {
     const [productRelease, setProductRelease] = useState(null);
@@ -48,10 +49,27 @@ export default function useProductReleaseHook (props) {
         setProductRelease(updatedProductRelease);
     }
 
+    const checkCreateFormData = () => {
+        for(let i = 0; i < productRelease; i++) {
+            let data = productRelease[i];
+
+            if(data.releaseUnit < 1) {
+                throw new Error('[수량]은 0보다 큰 수를 입력해주세요.')
+            }
+            
+            if(data.releaseUnit && !isNumberFormat(data.releaseUnit)) {
+                throw new Error('[수량]은 숫자만 입력해 주세요.')
+            }
+
+            console.log("hi")
+        }
+    }
+
     return {
         productRelease,
 
         onChangeValueOfNameByIdx,
-        onChangeBatchValueOfName
+        onChangeBatchValueOfName,
+        checkCreateFormData
     }
 }

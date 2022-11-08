@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { isNumberFormat } from "../../utils/regexUtils";
+import { isNumberFormat } from "../../../utils/regexUtils";
 
 export default function useProductReceiveHook (props) {
     const [productReceive, setProductReceive] = useState(null);

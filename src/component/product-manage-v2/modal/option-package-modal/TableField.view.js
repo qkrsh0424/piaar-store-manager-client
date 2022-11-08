@@ -9,7 +9,7 @@ export default function TableFieldView (props) {
                         <th scope='col' width='50'>번호</th>
                         <th scope='col' width='150'>구성옵션코드</th>
                         <th scope='col' width='150'>구성옵션명</th>
-                        <th scope='col' width='50'>수량</th>
+                        <th scope='col' width='100'>수량</th>
                         <th scope='col' width='50'>삭제</th>
                     </tr>
                 </thead>
@@ -29,7 +29,7 @@ export default function TableFieldView (props) {
                                     {data.originOptionDefaultName}
                                 </td>
                                 <td>
-                                    <input type='number' className='input-el' name='packageUnit' onChange={(e) => props.onChangeValueOfName(e, data.id)} value={data.packageUnit} />
+                                    <input type='number' className='input-el' name='packageUnit' onChange={(e) => props.onChangeValueOfName(e, data.id)} value={data.packageUnit} min={1}/>
                                 </td>
                                 <td>
                                     <button

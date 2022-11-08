@@ -40,6 +40,7 @@ const TableFieldWrapper = styled.div`
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        height: 60px;
     }
 
     .fixed-header {
@@ -69,7 +70,7 @@ const TableFieldWrapper = styled.div`
 
     .input-el {
         width: 90%;
-        padding: 2px 5px;
+        text-align: center;
         border: 1px solid #aaaaaa;
     }
 `;

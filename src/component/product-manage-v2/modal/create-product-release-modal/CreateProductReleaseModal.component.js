@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { useRef } from "react";
-import useProductReleaseHook from "../../../../hooks/product-release/useProductReleaseHook";
+import useProductReleaseHook from "../../hooks/useProductReleaseHook";
 import SubmitModalComponentV2 from "../../../module/modal/SubmitModalComponentV2";
 import { BatchRegTooltipWrapper, CreateProductReleaseModalFieldWrapper } from "./CreateProductReleaseModal.styled";
 
-function BatchRegTooltip({ tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
+function BatchRegTooltip({ inputType, name, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
     return (
         <BatchRegTooltipWrapper>
             <div className='tooltip-box' style={tootipSize}>
                 <input
-                    type='text'
-                    name='batch-memo'
+                    type={inputType}
+                    name={name}
                     className='input-el'
                     style={{ width: '100%' }}
                     onChange={(e) => onChangeInputValue(e)}
@@ -41,6 +40,7 @@ const CreateProductReleaseModalComponent = (props) => {
         
         onChangeValueOfNameByIdx: onChangeProductReleaseInputValue,
         onChangeBatchValueOfName: onChangeProductReleaseBatchInputValue,
+        checkCreateFormData: checkProductReleaseCreateFormData
     } = useProductReleaseHook({ productRelease: props.createReleaseData});
 
     const __handle = {
@@ -103,16 +103,22 @@ const CreateProductReleaseModalComponent = (props) => {
         submit: {
             createProductRelease: (e) => {
                 e.preventDefault();
-                
-                let data = createReleaseData.filter(r => r.releaseUnit !== 0 && r.releaseUnit !== '0').map(r => {
-                    return {
-                        releaseUnit: r.releaseUnit,
-                        memo: r.memo,
-                        productOptionCid: r.option.cid,
-                        productOptionId: r.option.id
-                    }
-                })
-                props.onSubmitCreateProductRelease(data);
+
+                try {
+                    checkProductReleaseCreateFormData();
+
+                    let data = createReleaseData.filter(r => r.releaseUnit !== 0 && r.releaseUnit !== '0').map(r => {
+                        return {
+                            releaseUnit: r.releaseUnit,
+                            memo: r.memo,
+                            productOptionCid: r.option.cid,
+                            productOptionId: r.option.id
+                        }
+                    })
+                    props.onSubmitCreateProductRelease(data);
+                } catch (err) {
+                    alert(err.message);
+                }
             }
         }
     }
@@ -144,7 +150,10 @@ const CreateProductReleaseModalComponent = (props) => {
 
                                                 {memoBatchRegTooltipOpen && 
                                                     <BatchRegTooltip 
+                                                        inputType={'text'}
                                                         tootipSize={{ width: '80%' }}
+                                                        name='memo'
+
                                                         onChangeInputValue={__handle.action.changeProductReleaseMemoTooltipInput}
                                                         onActionCancel={__handle.action.closeMemoBatchRegTooltip}
                                                         onActionConfirm={__handle.action.confirmMemoBatchReg}
@@ -166,7 +175,10 @@ const CreateProductReleaseModalComponent = (props) => {
                                                 </button>
                                                 {unitBatchRegTooltipOpen &&
                                                     <BatchRegTooltip
-                                                        tootipSize={{ width: '80%' }}
+                                                        inputType={'number'}
+                                                        tootipSize={{ width: '150px' }}
+                                                        name='releaseUnit'
+
                                                         onChangeInputValue={__handle.action.changeProductReleaseUnitTooltipInput}
                                                         onActionCancel={__handle.action.closeUnitBatchRegTooltip}
                                                         onActionConfirm={__handle.action.confirmUnitBatchReg}

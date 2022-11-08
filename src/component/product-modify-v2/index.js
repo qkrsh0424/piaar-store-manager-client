@@ -14,9 +14,8 @@ const Container = styled.div`
 `;
 
 const ProductModifyComponent = (props) => {
-    const [productAndOptions, setProductAndOptions] = useState(null);
+    // const [productAndOptions, setProductAndOptions] = useState(null);
     const [product, setProduct] = useState(null);
-    const [options, setOptions] = useState(null);
 
     const {
         location,
@@ -47,8 +46,8 @@ const ProductModifyComponent = (props) => {
 
     const __handle = {
         req: {
-            modifyProductAndOptions: async (body) => {
-                await productDataConnect().modifyProductAndOptions(body)
+            modifyProduct: async (body) => {
+                await productDataConnect().modifyProduct(body)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             let data = {
@@ -63,17 +62,18 @@ const ProductModifyComponent = (props) => {
                     })
             },
             searchOneForProduct: async (id) => {
-                await productDataConnect().searchProductAndOptions(id)
+                await productDataConnect().searchOne(id)
                     .then(res => {
                         if(res.status === 200 && res.data && res.data.message === 'success'){
-                            setProductAndOptions(res.data.data);
+                            console.log(res.data.data);
+                            setProduct(res.data.data);
                         }
                     })
             }
         },
         submit: {
-            modifyProductAndOptions: async (body) => {
-                await __handle.req.modifyProductAndOptions(body);
+            modifyProduct: async (body) => {
+                await __handle.req.modifyProduct(body);
             }
         }
     }
@@ -82,9 +82,9 @@ const ProductModifyComponent = (props) => {
         <Container>
             <ModifyFormComponent
                 categoryList={productCategoryList}
-                productAndOptions={productAndOptions}
+                product={product}
 
-                _onSubmit_modifyProductAndOptions={__handle.submit.modifyProductAndOptions}
+                _onSubmit_modifyProduct={__handle.submit.modifyProduct}
             />
 
             {/* Backdrop */}

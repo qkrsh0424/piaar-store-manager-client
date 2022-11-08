@@ -57,7 +57,6 @@ export default function useOptionPackagesHook(props) {
             packageUnit: 0,
             originOptionCode: data.option.code,
             originOptionId: data.option.id,
-            // originOptionCid: data.option.cid,
             originOptionDefaultName: data.option.defaultName,
             parentOptionId: props.option.id
         }
@@ -109,23 +108,16 @@ export default function useOptionPackagesHook(props) {
 
     const checkSaveForm = () => {
         optionPackages.forEach(r => {
-            // if(r.originOptionCode === '' || !r.originOptionCode) {
-            //     throw new Error('선택된 구성옵션 중 올바르지 않은 데이터가 존재합니다.');
-            // }
 
             if(r.originOptionId === '' || !r.originOptionId) {
                 throw new Error('선택된 구성옵션 중 올바르지 않은 데이터가 존재합니다.');
             }
 
-            // if(r.originOptionDefaultName === '' || !r.originOptionDefaultName) {
-            //     throw new Error('선택된 구성옵션 중 올바르지 않은 데이터가 존재합니다.');
-            // }
-
             if(r.parentOptionId === '' || !r.parentOptionId) {
                 throw new Error('선택된 구성옵션 중 올바르지 않은 데이터가 존재합니다.');
             }
 
-            if(r.packageUnit === '' || !r.packageUnit || r.packageUnit < 0) {
+            if(r.packageUnit === '' || !r.packageUnit || r.packageUnit < 1) {
                 throw new Error('구성 옵션의 수량은 0보다 큰 값이어야 합니다.');
             }
         })

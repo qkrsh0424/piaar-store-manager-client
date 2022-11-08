@@ -134,17 +134,27 @@ const productOptionDataConnect = () => {
 
         // [221026] FEAT
         searchBatchStockStatus: async function (optionIds, params) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v2/product-option/batch/stock/status`, optionIds, {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v2/product-options/batch/stock/status`, optionIds, {
                 params,
                 withCredentials: true
             })
         },
         // searchList -> searchAllM2OJ
         searchAllM2OJ: async function () {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product-option/all-m2oj`, {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product-options/all-m2oj`, {
                 withCredentials: true
             })
         },
+        searchBatchByProductId: async function (productId) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product-options/batch/${productId}`, {
+                withCredentials: true
+            })
+        },
+        updateBatch: async function (productId, body) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v2/product-options/batch/${productId}`, body, {
+                withCredentials: true
+            })
+        }
     }
 }
 

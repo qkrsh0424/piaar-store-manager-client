@@ -10,11 +10,9 @@ import { sortFormatUtils } from "../../utils/sortFormatUtils";
 import ManageTablePagenationComponent from "./manage-table-pagenation/ManageTablePagenation.component";
 import ButtonOperatorComponent from "./button-operator/ButtonOperator.component";
 import useRouterHook from "../../hooks/router/useRouterHook";
-import useProductHook from "../../hooks/product/useProductHook";
 import { productReceiveDataConnect } from "../../data_connect/productReceiveDataConnect";
 import { productReleaseDataConnect } from "../../data_connect/productReleaseDataConnect";
-import { getEndDate, getStartDate } from "../../utils/dateFormatUtils";
-import { productOptionDataConnect } from "../../data_connect/productOptionDataConnect";
+import useProductHook from "./hooks/useProductHook";
 
 const HeaderFieldWrapper = styled.div`
     margin-top: 10px;
@@ -221,11 +219,23 @@ const ProductManageComponent = (props) => {
                 let optionIds = productOptions.map(option => option.id);
                 return optionIds.every(id =>  checkedOptionIdList.includes(id));
             },
-            routeToModifyPageForProductAndOptions: (e, productId) => {
+            routeToModifyPageForProduct: (e, productId) => {
                 e.stopPropagation();
 
                 let data = {
                     pathname: `/products/modify${'?productId=' + productId}`,
+                    state: {
+                        routerUrl: location.pathname + location.search
+                    }
+                }
+
+                navigateUrl(data);
+            },
+            routeToModifyPageForOptions: (e, productId) => {
+                e.stopPropagation();
+
+                let data = {
+                    pathname: `/product-options/modify${'?productId=' + productId}`,
                     state: {
                         routerUrl: location.pathname + location.search
                     }
@@ -294,7 +304,8 @@ const ProductManageComponent = (props) => {
                 isProductCheckedOne={__handle.action.isProductCheckedOne}
                 onActionProductCheckOne={__handle.action.productCheckOne}
                 onSubmitDeleteProductOne={__handle.submit.deleteProduct}
-                onActionModifyProductAndOptions={__handle.action.routeToModifyPageForProductAndOptions}
+                onActionModifyProduct={__handle.action.routeToModifyPageForProduct}
+                onActionModifyOptions={__handle.action.routeToModifyPageForOptions}
             />
 
             {/* Backdrop */}

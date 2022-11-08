@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { productDataConnect } from "../../data_connect/productDataConnect";
+import { productOptionDataConnect } from "../../data_connect/productOptionDataConnect";
 import { BackdropHookComponent, useBackdropHook } from "../../hooks/backdrop/useBackdropHook";
 import useProductCategoryHook from "../../hooks/product-category/useProductCategoryHook";
 import useRouterHook from "../../hooks/router/useRouterHook";
@@ -13,10 +13,9 @@ const Container = styled.div`
     padding-bottom: 50px;
 `;
 
-const ProductModifyComponent = (props) => {
-    const [productAndOptions, setProductAndOptions] = useState(null);
-    const [product, setProduct] = useState(null);
+const OptionsModifyComponent = (props) => {
     const [options, setOptions] = useState(null);
+    const [selectedProductId, setSelectedProductId] = useState(null);
 
     const {
         location,
@@ -37,8 +36,10 @@ const ProductModifyComponent = (props) => {
     useEffect(() => {
         async function fetchInit() {
             let productId = query.productId;
+            setSelectedProductId(productId);
+
             onActionOpenBackdrop();
-            await __handle.req.searchOneForProduct(productId)
+            await __handle.req.searchBatchByProductId(productId)
             onActionCloseBackdrop();
         }
 
@@ -47,8 +48,8 @@ const ProductModifyComponent = (props) => {
 
     const __handle = {
         req: {
-            modifyProductAndOptions: async (body) => {
-                await productDataConnect().modifyProductAndOptions(body)
+            modifyOptions: async (body) => {
+                await productOptionDataConnect().updateBatch(selectedProductId, body)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             let data = {
@@ -62,18 +63,18 @@ const ProductModifyComponent = (props) => {
                         alert(res?.data?.memo);
                     })
             },
-            searchOneForProduct: async (id) => {
-                await productDataConnect().searchProductAndOptions(id)
+            searchBatchByProductId: async (id) => {
+                await productOptionDataConnect().searchBatchByProductId(id)
                     .then(res => {
                         if(res.status === 200 && res.data && res.data.message === 'success'){
-                            setProductAndOptions(res.data.data);
+                            setOptions(res.data.data);
                         }
                     })
             }
         },
         submit: {
-            modifyProductAndOptions: async (body) => {
-                await __handle.req.modifyProductAndOptions(body);
+            modifyOptions: async (body) => {
+                await __handle.req.modifyOptions(body);
             }
         }
     }
@@ -82,9 +83,9 @@ const ProductModifyComponent = (props) => {
         <Container>
             <ModifyFormComponent
                 categoryList={productCategoryList}
-                productAndOptions={productAndOptions}
+                options={options}
 
-                _onSubmit_modifyProductAndOptions={__handle.submit.modifyProductAndOptions}
+                _onSubmit_modifyOptions={__handle.submit.modifyOptions}
             />
 
             {/* Backdrop */}
@@ -95,4 +96,4 @@ const ProductModifyComponent = (props) => {
     )
 }
 
-export default ProductModifyComponent;
+export default OptionsModifyComponent;

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { BackdropHookComponent } from "../../../../hooks/backdrop/useBackdropHook";
-import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
 import useOptionPackagesHook from "../../../../hooks/option-package/useOptionPackagesHook";
 import useProductOptionsSearchHook from "../../../../hooks/product-option/useProductOptionsSearchHook";
-import CommonModalComponentV2 from "../../../module/modal/CommonModalComponentV2";
+import SubmitModalComponentV2 from "../../../module/modal/SubmitModalComponentV2";
 import ListFieldView from "./ListField.view";
 import { ButtonFieldWrapper, InfoFieldWrapper, InputFieldWrapper } from "./OptionPackageModal.styled";
 import TableFieldView from "./TableField.view";
@@ -42,22 +41,15 @@ function InputFieldView({ inputValue, onChange }) {
 }
 
 
-function ButtonFieldView({ buttonDisabled, onActionReset, onSubmit }) {
+function ButtonFieldView({ onActionReset }) {
     return (
         <ButtonFieldWrapper>
             <button
+                type='button'
                 className='button-el'
-                onClick={() => onActionReset()}
+                onClick={(e) => onActionReset(e)}
             >
                 초기화
-            </button>
-            <button
-                className='button-el'
-                style={{ backgroundColor: 'var(--piaar-main-color)', color: '#fff' }}
-                onClick={() => onSubmit()}
-                disabled={buttonDisabled}
-            >
-                저장
             </button>
         </ButtonFieldWrapper>
     )
@@ -83,8 +75,6 @@ const OptionPackageModalComponent = (props) => {
         checkSaveForm: checkOptionPackagesSaveForm
     } = useOptionPackagesHook({ option: props.option });
 
-    const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
-
     useEffect(() => {
         async function fetchInit() {
             await reqSearchAllM2OJ();
@@ -107,7 +97,6 @@ const OptionPackageModalComponent = (props) => {
                 try {
                     checkOptionPackagesSaveForm();
 
-                    setButtonDisabled(true);
                     onSubmitCreateOptionPackages(props.option.id);
                     props.onActionCloseModal();
                 } catch (err) {
@@ -120,7 +109,7 @@ const OptionPackageModalComponent = (props) => {
     return (
         <>
             {(optionPackages && productOptions) ?
-                <CommonModalComponentV2
+                <SubmitModalComponentV2
                     open={true}
                     title={'옵션패키지 설정'}
                     element={
@@ -140,24 +129,24 @@ const OptionPackageModalComponent = (props) => {
                                 onActionAddPackageOption={onActionAddPackageOption}
                             ></ListFieldView>
                             {optionPackages &&
-                                <TableFieldView
-                                    optionPackages={optionPackages}
+                                <>
+                                    <ButtonFieldView
+                                        onActionReset={onActionResetOriginOptionPackages}
+                                    />
+                                    <TableFieldView
+                                        optionPackages={optionPackages}
 
-                                    onChangeValueOfName={onChangeValueOfName}
-                                    onActionDeleteOptionPackageData={__handle.action.deleteOptionPackage}
-                                />
+                                        onChangeValueOfName={onChangeValueOfName}
+                                        onActionDeleteOptionPackageData={__handle.action.deleteOptionPackage}
+                                    />
+                                </>
                             }
-                            <ButtonFieldView
-                                buttonDisabled={buttonDisabled}
-
-                                onActionReset={onActionResetOriginOptionPackages}
-                                onSubmit={__handle.submit.createOptionPackages}
-                            />
                         </div>
                     }
                     maxWidth={'sm'}
 
-                    onClose={() => props.onActionCloseModal()}
+                    _onSubmit={__handle.submit.createOptionPackages}
+                    onClose={props.onActionCloseModal}
                 />
                 :
                 <BackdropHookComponent

@@ -5,6 +5,7 @@ const Container = styled.div`
 `;
 
 const CreateProductReleaseModalFieldWrapper = styled.div`
+    min-height: 20vh;
     max-height: 50vh;
     overflow: auto;
 

@@ -71,7 +71,8 @@ const ManageTableComponent = (props) => {
                 isProductCheckedOne={props.isProductCheckedOne}
                 onActionProductCheckOne={props.onActionProductCheckOne}
                 onSubmitDeleteProductOne={props.onSubmitDeleteProductOne}
-                onActionModifyProductAndOptions={props.onActionModifyProductAndOptions}
+                onActionModifyProduct={props.onActionModifyProduct}
+                onActionModifyOptions={props.onActionModifyOptions}
                 
                 onActionOpenSubOptionCodeModal={__handle.action.openSubOptionCodeModal}
                 onActionOpenOptionPackageModal={__handle.action.openOptionPackageModal}

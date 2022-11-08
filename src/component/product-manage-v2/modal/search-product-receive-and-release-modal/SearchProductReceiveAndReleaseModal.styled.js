@@ -50,6 +50,7 @@ const StockStatusFieldWrapper = styled.div`
         text-overflow: ellipsis;
         white-space: nowrap;
         font-weight: 400;
+        height: 60px;
 
         @media screen and (max-width: 992px) {
             font-size: 12px;
@@ -75,9 +76,11 @@ const StockStatusFieldWrapper = styled.div`
     }
 
     .input-el {
+        /* width: 90%; */
+        /* border: 1px solid #c8c8c8; */
+        /* padding: 0 5px; */
+        text-align: center;
         width: 90%;
-        border: 1px solid #c8c8c8;
-        padding: 0 5px;
     }
 
     .button-el {

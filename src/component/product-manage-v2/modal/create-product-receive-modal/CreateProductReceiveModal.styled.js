@@ -5,6 +5,7 @@ const Container = styled.div`
 `;
 
 const CreateProductReceiveModalFieldWrapper = styled.div`
+    min-height: 20vh;
     max-height: 50vh;
     overflow: auto;
 

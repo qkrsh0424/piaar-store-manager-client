@@ -125,7 +125,7 @@ const ManageTableFieldWrapper = styled.div`
         padding: 0;
 
         border: none;
-        background-color: inherit;
+        background-color: var(--defaultButtonColor);
 
         cursor: pointer;
     }
@@ -142,7 +142,7 @@ const ManageTableFieldWrapper = styled.div`
         background-color: #f7f7f7;
 
         :hover {
-            background-color: #e8e8e8;
+            background-color: var(--defaultButtonHoverColor);
         }
     }
 
@@ -154,8 +154,12 @@ const ManageTableFieldWrapper = styled.div`
 
     .option-control-btn .button-el {
         border: 1px solid #c8c8c8;
-        background-color: inherit;
+        background-color: var(--defaultButtonColor);
         border-radius: 3px;
+
+        :hover {
+            background-color: var(--defaultButtonHoverColor);
+        }
     }
 `;
 

@@ -23,17 +23,10 @@ const InfoFieldWrapper = styled.div`
 `;
 
 const InputFieldWrapper = styled.div`
-    margin-top: 20px;
+    margin-top: 30px;
 
     .input-el{
         width: 100%;
-        box-sizing: border-box;
-        border: 1px solid #e1e1e1;
-        padding: 10px 5px;
-
-        &:focus{
-            outline: none;
-        }
     }
 `;
 
@@ -94,7 +87,7 @@ const ListFieldWrapper = styled.div`
 `;
 
 const TableFieldWrapper = styled.div`
-    margin: 20px 0;
+    margin: 10px 0;
 
     table thead tr {
         vertical-align: middle !important;
@@ -137,12 +130,12 @@ const TableFieldWrapper = styled.div`
 
     .input-el {
         width: 90%;
-        padding: 2px 5px;
-        border: 1px solid #aaaaaa;
+        text-align: center;
     }
 `;
 
 const ButtonFieldWrapper = styled.div`
+    margin-top: 30px;
     padding: 3px;
     display: flex;
     gap: 6px;

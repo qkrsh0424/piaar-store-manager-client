@@ -1,17 +1,15 @@
 import React, { useState } from "react";
-import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
-import useProductReceiveHook from "../../../../hooks/product-receive/useProductReceiveHook";
+import useProductReceiveHook from "../../hooks/useProductReceiveHook";
 import SubmitModalComponentV2 from "../../../module/modal/SubmitModalComponentV2";
 import { BatchRegTooltipWrapper, CreateProductReceiveModalFieldWrapper } from "./CreateProductReceiveModal.styled";
 
-function BatchRegTooltip({ tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
+function BatchRegTooltip({ inputType, name, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
     return (
         <BatchRegTooltipWrapper>
             <div className='tooltip-box' style={tootipSize}>
                 <input
-                    type='text'
-                    name='batch-memo'
-                    className='input-el'
+                    type={inputType}
+                    name={name}
                     style={{ width: '100%' }}
                     onChange={(e) => onChangeInputValue(e)}
                     autoFocus
@@ -41,6 +39,7 @@ const CreateProductReceiveModalComponent = (props) => {
         
         onChangeValueOfNameByIdx: onChangeProductReceiveInputValue,
         onChangeBatchValueOfName: onChangeProductReceiveBatchInputValue,
+        checkCreateFormData: checkProductReceiveCreateFormData,
     } = useProductReceiveHook({ productReceive: props.createReceiveData});
 
     const __handle = {
@@ -103,17 +102,23 @@ const CreateProductReceiveModalComponent = (props) => {
         submit: {
             createProductReceive: (e) => {
                 e.preventDefault();
-                
-                let data = createReceiveData.filter(r => r.receiveUnit !== 0 && r.receiveUnit !== '0').map(r => {
-                    return {
-                        receiveUnit: r.receiveUnit,
-                        memo: r.memo,
-                        productOptionCid: r.option.cid,
-                        productOptionId: r.option.id
-                    }
-                })
 
-                props.onSubmitCreateProductReceive(data);
+                try {
+                    checkProductReceiveCreateFormData();
+                
+                    let data = createReceiveData.filter(r => r.receiveUnit !== 0 && r.receiveUnit !== '0').map(r => {
+                        return {
+                            receiveUnit: r.receiveUnit,
+                            memo: r.memo,
+                            productOptionCid: r.option.cid,
+                            productOptionId: r.option.id
+                        }
+                    })
+
+                    props.onSubmitCreateProductReceive(data);
+                } catch (err) {
+                    alert(err.message);
+                }
             }
         }
     }
@@ -144,7 +149,10 @@ const CreateProductReceiveModalComponent = (props) => {
                                                 </button>
                                                 {memoBatchRegTooltipOpen && 
                                                     <BatchRegTooltip
+                                                        inputType={'text'}
                                                         tootipSize={{ width: '80%' }}
+                                                        name='memo'
+
                                                         onChangeInputValue={__handle.action.changeProductReceiveMemoTooltipInput}
                                                         onActionCancel={__handle.action.closeMemoBatchRegTooltip}
                                                         onActionConfirm={__handle.action.confirmMemoBatchReg}
@@ -166,7 +174,10 @@ const CreateProductReceiveModalComponent = (props) => {
                                                 </button>
                                                 {unitBatchRegTooltipOpen &&
                                                     <BatchRegTooltip
-                                                        tootipSize={{ width: '80%' }}
+                                                        inputType={'number'}
+                                                        tootipSize={{ width: '150px' }}
+                                                        name='receiveUnit'
+
                                                         onChangeInputValue={__handle.action.changeProductReceiveUnitTooltipInput}
                                                         onActionCancel={__handle.action.closeUnitBatchRegTooltip}
                                                         onActionConfirm={__handle.action.confirmUnitBatchReg}

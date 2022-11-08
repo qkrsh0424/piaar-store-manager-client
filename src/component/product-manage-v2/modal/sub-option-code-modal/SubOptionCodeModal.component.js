@@ -1,6 +1,6 @@
 import { BackdropHookComponent } from "../../../../hooks/backdrop/useBackdropHook";
 import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
-import useSubOptionCodesHookV2 from "../../../../hooks/sub-option-code/useSubOptionCodesHookV2";
+import useSubOptionCodesHook from "../../../../hooks/sub-option-code/useSubOptionCodesHook";
 import CommonModalComponentV2 from "../../../module/modal/CommonModalComponentV2";
 import { ButtonFieldWrapper, InfoFieldWrapper } from "./SubOptionCodeModal.styled";
 import TableFieldView from "./TableField.view";
@@ -55,7 +55,7 @@ const SubOptionCodeModalComponent = (props) => {
         onChangeValueOfNameByIds: onChangeSubOptionInputValue,
         checkSaveForm: checkSubOptionSaveForm,
         onActionAddModifyingId: onActionAddSubOptionCodeModifyingId
-    } = useSubOptionCodesHookV2({ option: props.option });
+    } = useSubOptionCodesHook({ option: props.option });
 
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 

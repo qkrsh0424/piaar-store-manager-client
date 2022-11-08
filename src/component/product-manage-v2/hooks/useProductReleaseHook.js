@@ -1,27 +1,27 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { isNumberFormat } from "../../utils/regexUtils";
+import { isNumberFormat } from "../../../utils/regexUtils";
 
-export default function useProductReceiveHook (props) {
-    const [productReceive, setProductReceive] = useState(null);
+export default function useProductReleaseHook (props) {
+    const [productRelease, setProductRelease] = useState(null);
 
     useEffect(() => {
-        if(productReceive) {
+        if(productRelease) {
             return;
         }
 
-        onActionInitData(props.productReceive);
-    }, [props.productReceive]);
+        onActionInitData(props.productRelease);
+    }, [props.productRelease]);
 
     const onActionInitData = (initData) => {
-        setProductReceive(initData);
+        setProductRelease(initData);
     }
 
     const onChangeValueOfNameByIdx = (e, idx) => {
         let name = e.target.name;
         let value = e.target.value;
 
-        let updatedProductReceive = productReceive.map((r, index) => {
+        let updatedProductRelease = productRelease.map((r, index) => {
             return (index === idx) ? 
                 {
                     ...r,
@@ -32,40 +32,39 @@ export default function useProductReceiveHook (props) {
                 ;
         })
 
-        setProductReceive(updatedProductReceive);
+        setProductRelease(updatedProductRelease);
     }
 
     const onChangeBatchValueOfName = (data) => {
         let name = data.name;
         let value = data.value;
 
-        let updatedProductReceive = productReceive.map(r => {
+        let updatedProductRelease = productRelease.map(r => {
             return {
                 ...r,
                 [name]: value
             }
         })
 
-        setProductReceive(updatedProductReceive);
+        setProductRelease(updatedProductRelease);
     }
 
     const checkCreateFormData = () => {
-        for(let i = 0; i < productReceive.length; i++) {
-            let data = productReceive[i];
+        for(let i = 0; i < productRelease.length; i++) {
+            let data = productRelease[i];
 
-            if(data.receiveUnit < 1) {
+            if(data.releaseUnit < 1) {
                 throw new Error('[수량]은 0보다 큰 수를 입력해주세요.')
             }
-
-            if(data.receiveUnit && !isNumberFormat(data.receiveUnit)) {
+            
+            if(data.releaseUnit && !isNumberFormat(data.releaseUnit)) {
                 throw new Error('[수량]은 숫자만 입력해 주세요.')
             }
-
         }
     }
 
     return {
-        productReceive,
+        productRelease,
 
         onChangeValueOfNameByIdx,
         onChangeBatchValueOfName,

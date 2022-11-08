@@ -3,29 +3,27 @@ import styled from 'styled-components';
 import Ripple from '../button/Ripple';
 import qs from 'query-string';
 import { useState } from 'react';
-import { queryByTestId } from '@testing-library/react';
 
 const Container = styled.div`
-
 `;
 
 const Wrapper = styled.div`
     .flex-box{
         display: flex;
         justify-content: ${props => {
-        if (!props.align) {
-            return 'flex-start'
-        }
-        switch (props.align) {
-            case 'left': return 'flex-start';
-            case 'center': return 'center';
-            case 'right': return 'flex-end';
-            default: return 'flex-start'
-        }
-    }};
+            if (!props.align) {
+                return 'flex-start'
+            }
+            switch (props.align) {
+                case 'left': return 'flex-start';
+                case 'center': return 'center';
+                case 'right': return 'flex-end';
+                default: return 'flex-start'
+            }
+        }};
         align-items: center;
+        flex-wrap: wrap;
     }
-
     .number-box{
         margin:0 3px;
         font-size: 14px;
@@ -35,12 +33,10 @@ const Wrapper = styled.div`
             font-size: 12px;
         }
     }
-
     .number-box .input-el {
         width: 30px;
         height: fit-content;
     }
-
     .page-box {
         display: flex;
         align-items: center;
@@ -48,12 +44,10 @@ const Wrapper = styled.div`
         /* justify-content: center; */
         justify-content: space-around;
     }
-
     .button-box{
         margin:0 3px;
         width: 30px;
     }
-
     .circle-button-el{
         position: relative;
         overflow: hidden;
@@ -62,19 +56,15 @@ const Wrapper = styled.div`
         border-radius: 50%;
         border: 1px solid #00000000;
         background: inherit;
-
         cursor: pointer;
-
         &:hover{
             background: #e0e0e040;
         }
-
         @media all and (max-width:992px){
             width: 28px; 
             height: 28px;
         }
     }
-
     .button-icon-el{
         position: absolute;
         top: 50%;
@@ -82,25 +72,20 @@ const Wrapper = styled.div`
         transform: translate(-50%,-50%);
         width: 24px;
         height: 24px;
-
         @media all and (max-width:992px){
             width: 20px; 
             height: 20px;
         }
     }
-
     .button-disabled{
         cursor:default;
-
         &:hover{
             background: none;
         }
     }
-
     .select-box{
         margin:0 3px;
     }
-
     .select-el{
         /* width: 70px;
         height: 23px; */
@@ -116,21 +101,17 @@ const Wrapper = styled.div`
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-
         cursor: pointer;
-
         &:focus{
             outline: none;
         }
     }
-
     .button-header {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
     }
-
     .button-header .button-el {
         width: 70px;
         border-radius: 2px;
@@ -144,7 +125,6 @@ const Wrapper = styled.div`
 
 const PageInputTooltipWrapper = styled.div`
     position: absolute;
-
     .tooltip-box {
         padding: 10px;
         border-radius: 3px;
@@ -155,7 +135,6 @@ const PageInputTooltipWrapper = styled.div`
         box-shadow: 0px 0px 6px 2px #d8d8d8;
         z-index: 12;
     }
-
     .tooltip-box .button-box {
         padding-top: 10px;
         display: flex;
@@ -164,12 +143,10 @@ const PageInputTooltipWrapper = styled.div`
         gap: 2px;
         width: 100%;
     }
-
     .input-el {
         border: 1px solid #c8c8c8;
         height: 30px;
     }
-
     .button-box .button-el {
         width: 50%;
         border-radius: 2px;
@@ -283,16 +260,18 @@ const PagenationComponentV2 = (props) => {
 
     const onActionSubmitTooltip = (e) => {
         e.preventDefault();
-        
-        navigate(qs.stringifyUrl({
-            url: location.pathname,
-            query: {
-                ...query,
-                page: pageInputFieldValue
-            }
-        }), {
-            replace: true
-        })
+
+        if(pageInputFieldValue) {
+            navigate(qs.stringifyUrl({
+                url: location.pathname,
+                query: {
+                    ...query,
+                    page: pageInputFieldValue
+                }
+            }), {
+                replace: true
+            })
+        };
 
         setPageInputFieldValue(null);
         setPageInputFieldOpen(false);
