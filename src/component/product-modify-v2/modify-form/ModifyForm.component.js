@@ -1,6 +1,6 @@
 import { Container, PageTitleFieldWrapper } from "./ModifyForm.styled";
 import ProductInfoInputFieldView from "./view/ProductInfoInputField.view";
-import { useEffect, useReducer } from "react";
+import { useEffect } from "react";
 import { useImageFileUploaderHook } from "../../../hooks/uploader/useImageFileUploaderHook";
 import CreateButtonFieldView from "./view/ButtonField.view";
 import useRouterHook from "../../../hooks/router/useRouterHook";
@@ -57,7 +57,7 @@ const ModifyFormComponent = (props) => {
         setProduct();
     }, [props.product])
 
-    const __hanlde = {
+    const __handle = {
         action: {
             cancelCreateProduct: () => {
                 if(window.confirm('취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?')) {
@@ -119,14 +119,14 @@ const ModifyFormComponent = (props) => {
         <Container>
             <PageTitleFieldView title={'상품 수정'} />
 
-            <form onSubmit={__hanlde.submit.modifyProduct}>
+            <form onSubmit={__handle.submit.modifyProduct}>
                 {modifyProductData &&
                     <ProductInfoInputFieldView
                         categoryList={props.categoryList}
                         modifyProductData={modifyProductData}
 
                         onChangeProductInputValue={onChangeProductInputValue}
-                        onActionUploadProductImageFile={__hanlde.action.uploadProductImageFile}
+                        onActionUploadProductImageFile={__handle.action.uploadProductImageFile}
                         onActionRemoveImage={onActionDeleteImageFileNameAndImageUrl}
                         onChangeProductStockManagement={onChangeProductStockManagement}
                     />
@@ -135,8 +135,8 @@ const ModifyFormComponent = (props) => {
                 <CreateButtonFieldView
                     buttonDisabled={buttonDisabled}
 
-                    onActionCancelCreateProduct={__hanlde.action.cancelCreateProduct}
-                    onActionResetProduct={__hanlde.action.resetProduct}
+                    onActionCancelCreateProduct={__handle.action.cancelCreateProduct}
+                    onActionResetProduct={__handle.action.resetProduct}
                 />
             </form>
 

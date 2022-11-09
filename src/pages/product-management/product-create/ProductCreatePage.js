@@ -1,0 +1,22 @@
+import styled from 'styled-components';
+import DrawerNavbarMain from '../../../component/nav/DrawerNavbarMain';
+import ProductManagementNavbar from '../../../component/product-management/navbar/ProductManagementNavbar';
+import ProductCreateComponent from '../../../component/product-management/product-create-v2';
+// import ProductCreateComponent from '../../component/product_create-form';
+
+const Container = styled.div`
+`;
+
+const ProductCreatePage = (props) => {
+    return(
+        <>
+            <Container>
+                <DrawerNavbarMain />
+                <ProductManagementNavbar />
+                <ProductCreateComponent />
+            </Container>
+        </>
+    )
+}
+
+export default ProductCreatePage;

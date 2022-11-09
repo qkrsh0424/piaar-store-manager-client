@@ -1,5 +1,5 @@
-import RequiredIcon from "../../../module/icon/RequiredIcon";
-import { CategorySelectorWrapper } from "../ModifyForm.styled";
+import RequiredIcon from "../../../../module/icon/RequiredIcon";
+import { CategorySelectorWrapper } from "../CreateForm.styled";
 
 export default function CategorySelectorFieldView(props) {
     return (
@@ -30,7 +30,7 @@ export default function CategorySelectorFieldView(props) {
                     <select
                         name='productCategoryCid'
                         className='select-item'
-                        value={props.modifyProductData?.productCategoryCid || ''}
+                        value={props.createProductData?.productCategoryCid || ''}
                         onChange={(e) => props.onChangeProductInputValue(e)}
                     >
                         <option value=''>카테고리 선택</option>

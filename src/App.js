@@ -25,14 +25,14 @@ import CommuteRecordMain from './component/commute_record/CommuteRecordMain';
 // refactor
 import SalesAnalysisPage from './pages/sales_analysis/SalesAnalysisPage';
 import ProductDetailPage from './pages/product_detail/ProductDetailPage';
-import ProductCreatePage from './pages/product_create/ProductCreatePage';
+// import ProductCreatePage from './pages/product_create/ProductCreatePage';
 import ExcelTranslatorPage from './pages/excel_translator/ExcelTranslatorPage';
 import ErpManagementOrderUploadPage from './pages/erp/management/order-upload/ErpManagementOrderUploadPage';
 import ErpManagementOrderPage from './pages/erp/management/order/ErpManagementOrderPage';
 import ErpManagementSalesPage from './pages/erp/management/sales/ErpManagementSalesPage';
 import ErpManagementReleaseCompletePage from './pages/erp/management/release-complete/ErpManagementReleaseCompletePage';
 import ErpManagementExcelFormPage from './pages/erp/management/excel/ErpManagementExcelFormPage';
-import ProductManagePage from './pages/product_manage/ProductManagePage';
+// import ProductManagePage from './pages/product_manage/ProductManagePage';
 import StockAnalysisPage from './pages/stock_analysis/SalesAnalysisPage';
 import ErpManagementDashboardPage from './pages/erp/management/dashboard/ErpManagementDashboardPage';
 import SalesPerformancePage from './pages/sales_performance/SalesPerformancePage';
@@ -42,9 +42,15 @@ import ErpReturnManagementCollectingPage from './pages/erp/return-management/col
 import ErpReturnManagementCollectedPage from './pages/erp/return-management/collected/ErpReturnManagementCollectedPage';
 import ErpReturnManagementCompletedPage from './pages/erp/return-management/completed/ErpReturnManagementCompletedPage';
 import ErpReturnManagementRejectedPage from './pages/erp/return-management/rejected/ErpReturnManagementRejectedPage';
-import ProductModifyPage from './pages/product-modify/ProductModifyPage';
-import ProductOptionsModifyPage from './pages/product-options-modify/OptionsModifyPage';
-import ProductCategoryCreatePage from './pages/product-category-create/ProductCategoryCreatePage';
+// import ProductModifyPage from './pages/product-modify/ProductModifyPage';
+// import ProductOptionsModifyPage from './pages/product-options-modify/OptionsModifyPage';
+// import ProductCategoryCreatePage from './pages/product-category-create/ProductCategoryCreatePage';
+import ProductCreatePage from './pages/product-management/product-create/ProductCreatePage';
+import ProductCategoryCreatePage from './pages/product-management/product-category-create/ProductCategoryCreatePage';
+import ProductManagePage from './pages/product-management/product-manage/ProductManagePage';
+import ProductModifyPage from './pages/product-management/product-modify/ProductModifyPage';
+import ProductOptionsModifyPage from './pages/product-management/product-options-modify/OptionsModifyPage';
+import ProductCategoryModifyPage from './pages/product-management/product-category-modify/ProductCategoryModifyPage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -141,6 +147,7 @@ function App(props) {
                                             <Route path='/product-category/create' element={<ProductCategoryCreatePage />} />
                                             <Route path='/products/modify' element={<ProductModifyPage />} />
                                             <Route path='/product-options/modify' element={<ProductOptionsModifyPage />} />
+                                            <Route path='/product-category/modify' element={<ProductCategoryModifyPage />} />
 
                                             {/* Shipment */}
                                             {/* <Route path='/shipment/packing-list/naver' element={<SPackingListNaverMain />} />

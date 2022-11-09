@@ -47,7 +47,7 @@ export default function ProductInfoInputFieldView(props) {
 
     return (
         <ProductInfoInputWrapper>
-            <div className='title-line' onClick={(e) => props.onActionSlideEffectControl(e, 'product')}>
+            <div className='title-line'>
                 <div className="title-label">
                     <span>상품</span>
                     <RequiredIcon />

@@ -91,7 +91,7 @@ const ModifyFormComponent = (props) => {
         setProductAndOptions();
     }, [props.productAndOptions])
 
-    const __hanlde = {
+    const __handle = {
         action: {
             openOptionDefaultNameCreateModal: (e) => {
                 e.stopPropagation();
@@ -216,14 +216,14 @@ const ModifyFormComponent = (props) => {
         <Container>
             <PageTitleFieldView title={'상품 수정'} />
 
-            <form onSubmit={__hanlde.submit.modifyProductAndOptions}>
+            <form onSubmit={__handle.submit.modifyProductAndOptions}>
                 <CategorySelectorFieldView
                     categoryList={props.categoryList}
                     modifyProductData={modifyProductData}
                     slideDownEffect={slideDownEffect}
 
                     onChangeProductInputValue={onChangeProductInputValue}
-                    onActionSlideEffectControl={__hanlde.action.changeSlideEffectControl}
+                    onActionSlideEffectControl={__handle.action.changeSlideEffectControl}
                 />
 
                 {modifyProductData &&
@@ -232,8 +232,8 @@ const ModifyFormComponent = (props) => {
                         slideDownEffect={slideDownEffect}
 
                         onChangeProductInputValue={onChangeProductInputValue}
-                        onActionSlideEffectControl={__hanlde.action.changeSlideEffectControl}
-                        onActionUploadProductImageFile={__hanlde.action.uploadProductImageFile}
+                        onActionSlideEffectControl={__handle.action.changeSlideEffectControl}
+                        onActionUploadProductImageFile={__handle.action.uploadProductImageFile}
                         onActionRemoveImage={onActionDeleteImageFileNameAndImageUrl}
                         onChangeProductStockManagement={onChangeProductStockManagement}
                     />
@@ -251,12 +251,12 @@ const ModifyFormComponent = (props) => {
                         onActionAddOptionData={onActionAddOptionData}
                         onActionDeleteOption={onActionDeleteOptionById}
                         onChangeBatchRegOptionInputValue={onChangeProductOptionBatchRegInputValue}
-                        onActionAddOptionDataListByBatchRegData={__hanlde.action.addOptionDataListByBatchRegData}
-                        onActionSlideEffectControl={__hanlde.action.changeSlideEffectControl}
-                        onActionOpenOptionDefaultNameCreateModal={__hanlde.action.openOptionDefaultNameCreateModal}
+                        onActionAddOptionDataListByBatchRegData={__handle.action.addOptionDataListByBatchRegData}
+                        onActionSlideEffectControl={__handle.action.changeSlideEffectControl}
+                        onActionOpenOptionDefaultNameCreateModal={__handle.action.openOptionDefaultNameCreateModal}
                         onActionOpenBatchRegToolTip={onActionOpenBatchRegToolTip}
                         onChangeBatchRegInput={onChangeBatchRegInput}
-                        onActionConfirmBatchRegInput={__hanlde.action.confirmBatchRegInput}
+                        onActionConfirmBatchRegInput={__handle.action.confirmBatchRegInput}
                         onActionCloseBatchRegTooltip={onActionCloseBatchRegTooltip}
                     />
                 }
@@ -264,8 +264,8 @@ const ModifyFormComponent = (props) => {
                 <CreateButtonFieldView
                     buttonDisabled={buttonDisabled}
 
-                    onActionCancelCreateProduct={__hanlde.action.cancelCreateProduct}
-                    onActionResetProductAndOptions={__hanlde.action.resetProductAndOptions}
+                    onActionCancelCreateProduct={__handle.action.cancelCreateProduct}
+                    onActionResetProductAndOptions={__handle.action.resetProductAndOptions}
                 />
             </form>
 
@@ -274,8 +274,8 @@ const ModifyFormComponent = (props) => {
                 <CreateOptionDefaultNameModalComponent
                     modalOpen={optionDefaultNameCreateModalOpen}
 
-                    onActionCloseOptionDefaultNameCreateModal={__hanlde.action.closeOptionDefaultNameCreateModal}
-                    onChangeBatchRegOptionDefaultNameInputValue={__hanlde.action.changeProductOptionBatchRegValue}
+                    onActionCloseOptionDefaultNameCreateModal={__handle.action.closeOptionDefaultNameCreateModal}
+                    onChangeBatchRegOptionDefaultNameInputValue={__handle.action.changeProductOptionBatchRegValue}
                 />
             }
 

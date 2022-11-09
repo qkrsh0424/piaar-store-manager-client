@@ -30,7 +30,7 @@ function BatchRegTooltip({ name, inputType, tootipSize, onChangeInputValue, onAc
 export default function OptionInfoInputFieldView(props) {
     return (
         <OptionInfoInputWrapper>
-            <div className='title-line' onClick={(e) => props.onActionSlideEffectControl(e, 'option')}>
+            <div className='title-line'>
                 <div className="title-label">
                     <span>옵션</span>
                     <RequiredIcon />

@@ -14,8 +14,15 @@ import { productReceiveDataConnect } from "../../data_connect/productReceiveData
 import { productReleaseDataConnect } from "../../data_connect/productReleaseDataConnect";
 import useProductHook from "./hooks/useProductHook";
 
+const Container = styled.div`
+    background-color: var(--piaar-background-color);
+    min-height: 100vh;
+    height: 100%;
+    padding: 30px 30px 150px 230px;
+    margin: 0 auto;
+`;
+
 const HeaderFieldWrapper = styled.div`
-    margin-top: 10px;
     width: 100%;
 
     .common-box{
@@ -45,14 +52,6 @@ function HeaderField({title}) {
         </HeaderFieldWrapper>
     )
 }
-
-const Container = styled.div`
-    padding: 10px 30px;
-    background-color: var(--piaar-background-color);
-    min-height: 100vh;
-    height: 100%;
-    padding-bottom: 50px;
-`;
 
 const PRODUCT_SORT_HEADER_FIELDS = getProductSortHeader();
 
@@ -291,11 +290,11 @@ const ProductManageComponent = (props) => {
 
             <ManageTablePagenationComponent
                 productManagementList={productManagementList}
+                checkedOptionIdList={checkedOptionIdList}
             />
 
             <ManageTableComponent
                 productManagementList={productManagementList?.content}
-                checkedOptionIdList={checkedOptionIdList}
 
                 isCheckedOne={__handle.action.isCheckedOne}
                 isCheckedAll={__handle.action.isCheckedAll}

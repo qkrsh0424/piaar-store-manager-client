@@ -19,7 +19,6 @@ const ProductInfoInputWrapper = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: center;
-        cursor: pointer;
     }
 
     .title-label {
@@ -65,7 +64,7 @@ const ProductInfoInputWrapper = styled.div`
         height: 50px;
         padding: 10px;
         border: 1px solid #d0d0d0;
-        border-radius: 10px;
+        border-radius: 5px;
         font-size: 16px;
         -webkit-appearance: none;
         -moz-appearance: none; 

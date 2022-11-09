@@ -4,12 +4,6 @@ const Container = styled.div`
     margin-top: 10px;
 `;
 
-const SelectedInfoFieldWrapper = styled.div`
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--erp-main-color);
-`;
-
 const ManageTableFieldWrapper = styled.div`
     background-color: #fff;
     border: 1px solid #dbdde2;
@@ -165,6 +159,5 @@ const ManageTableFieldWrapper = styled.div`
 
 export {
     Container,
-    SelectedInfoFieldWrapper,
     ManageTableFieldWrapper
 }

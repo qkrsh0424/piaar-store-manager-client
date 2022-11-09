@@ -1,10 +1,20 @@
 import PagenationComponentV2 from "../../module/pagenation/PagenationComponentV2";
-import { Container } from "./ManageTablePagenation.styled";
+import { Container, SelectedInfoFieldWrapper } from "./ManageTablePagenation.styled";
 
+function SelectedInfoFieldView({ size }) {
+    return (
+        <SelectedInfoFieldWrapper>
+            <span>선택 </span>
+            <span>(총 {size || 0}개)</span>
+        </SelectedInfoFieldWrapper>
+    )
+}
 
 const ManageTablePagenationComponent = (props) => {
     return (
         <Container>
+            <SelectedInfoFieldView size={props.checkedOptionIdList?.length} />
+
             {props.productManagementList &&
                 <PagenationComponentV2
                     align={'right'}

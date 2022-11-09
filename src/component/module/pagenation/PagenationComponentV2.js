@@ -94,7 +94,7 @@ const Wrapper = styled.div`
         text-align: center;
         padding: 5px;
         border: 1px solid #e1e1e1;
-        border-radius: 0;
+        border-radius: 5px;
         font-size: 11px;
         -webkit-appearance: none;
         -moz-appearance: none;
@@ -114,7 +114,7 @@ const Wrapper = styled.div`
     }
     .button-header .button-el {
         width: 70px;
-        border-radius: 2px;
+        border-radius: 5px;
         border: 1px solid #c8c8c8;
         background-color: #f7f7f7;
         color: #444;

@@ -1,6 +1,6 @@
 import { Container, PageTitleFieldWrapper } from "./ModifyForm.styled";
 import OptionInfoInputFieldView from "./view/OptionInfoInputField.view";
-import { useEffect, useReducer } from "react";
+import { useEffect } from "react";
 import CreateButtonFieldView from "./view/ButtonField.view";
 import { useState } from "react";
 import CreateOptionDefaultNameModalComponent from "./modal/create-option-default-name-modal/CreateOptionDefaultNameModal.component";
@@ -9,7 +9,6 @@ import useProductOptionsHook from "../../../hooks/product-option/useProductOptio
 import useProductOptionBatchRegHook from "../hooks/useProductOptionBatchRegHook";
 import useBatchRegTooltipHook from "../hooks/useBatchRegTooltipHook";
 import { useDisabledButtonHook } from "../../../hooks/button-disabled/useDisabledButtonHook";
-import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
 
 function PageTitleFieldView({ title }) {
     return (
@@ -64,7 +63,7 @@ const ModifyFormComponent = (props) => {
         setOptions();
     }, [props.options])
 
-    const __hanlde = {
+    const __handle = {
         action: {
             openOptionDefaultNameCreateModal: (e) => {
                 e.stopPropagation();
@@ -148,7 +147,7 @@ const ModifyFormComponent = (props) => {
         <Container>
             <PageTitleFieldView title={'옵션 일괄 수정'} />
 
-            <form onSubmit={__hanlde.submit.modifyOptions}>
+            <form onSubmit={__handle.submit.modifyOptions}>
                 {modifyOptionDataList && productOptionBatchReg &&
                     <OptionInfoInputFieldView
                         modifyOptionDataList={modifyOptionDataList}
@@ -160,11 +159,11 @@ const ModifyFormComponent = (props) => {
                         onActionAddOptionData={onActionAddOptionData}
                         onActionDeleteOption={onActionDeleteOptionById}
                         onChangeBatchRegOptionInputValue={onChangeProductOptionBatchRegInputValue}
-                        onActionAddOptionDataListByBatchRegData={__hanlde.action.addOptionDataListByBatchRegData}
-                        onActionOpenOptionDefaultNameCreateModal={__hanlde.action.openOptionDefaultNameCreateModal}
+                        onActionAddOptionDataListByBatchRegData={__handle.action.addOptionDataListByBatchRegData}
+                        onActionOpenOptionDefaultNameCreateModal={__handle.action.openOptionDefaultNameCreateModal}
                         onActionOpenBatchRegToolTip={onActionOpenBatchRegToolTip}
                         onChangeBatchRegInput={onChangeBatchRegInput}
-                        onActionConfirmBatchRegInput={__hanlde.action.confirmBatchRegInput}
+                        onActionConfirmBatchRegInput={__handle.action.confirmBatchRegInput}
                         onActionCloseBatchRegTooltip={onActionCloseBatchRegTooltip}
                     />
                 }
@@ -172,8 +171,8 @@ const ModifyFormComponent = (props) => {
                 <CreateButtonFieldView
                     buttonDisabled={buttonDisabled}
 
-                    onActionCancelCreateProduct={__hanlde.action.cancelCreateProduct}
-                    onActionResetOptions={__hanlde.action.resetOptions}
+                    onActionCancelCreateProduct={__handle.action.cancelCreateProduct}
+                    onActionResetOptions={__handle.action.resetOptions}
                 />
             </form>
 
@@ -182,8 +181,8 @@ const ModifyFormComponent = (props) => {
                 <CreateOptionDefaultNameModalComponent
                     modalOpen={optionDefaultNameCreateModalOpen}
 
-                    onActionCloseOptionDefaultNameCreateModal={__hanlde.action.closeOptionDefaultNameCreateModal}
-                    onChangeBatchRegOptionDefaultNameInputValue={__hanlde.action.changeProductOptionBatchRegValue}
+                    onActionCloseOptionDefaultNameCreateModal={__handle.action.closeOptionDefaultNameCreateModal}
+                    onChangeBatchRegOptionDefaultNameInputValue={__handle.action.changeProductOptionBatchRegValue}
                 />
             }
         </Container>
