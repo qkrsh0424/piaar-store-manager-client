@@ -97,13 +97,6 @@ export default function ManageTableFieldView(props) {
                                                 상품삭제
                                             </button>
                                         </div>
-                                        {/* <div className='control-btn'>
-                                                <button
-                                                    className='button-el'
-                                                >
-                                                    옵션추가
-                                                </button>
-                                            </div> */}
                                     </td>
                                     <td
                                         rowSpan={rowSpanSize}
@@ -115,7 +108,7 @@ export default function ManageTableFieldView(props) {
                                     <td
                                         rowSpan={rowSpanSize}
                                         className='fixed-col-left'
-                                        style={{ textAlign: 'left', backgroundColor: tdBackgroundColor, left: '250px' }}
+                                        style={{ backgroundColor: tdBackgroundColor, left: '250px', padding: '10px 15px' }}
                                     >
                                         <div className="image-wrapper">
                                             <div className="image-box">
@@ -125,6 +118,14 @@ export default function ManageTableFieldView(props) {
                                                     <img src='/images/icon/no-image.jpg' title='no-image' />
                                                 }
                                             </div>
+                                        </div>
+                                        <div className='control-btn'>
+                                            <button
+                                                className='button-el'
+                                                onClick={(e) => props.onActionProductDetailPageModal(e, r.product.id)}
+                                            >
+                                                상세페이지
+                                            </button>
                                         </div>
                                     </td>
                                     <td
@@ -221,18 +222,6 @@ export default function ManageTableFieldView(props) {
                                             </td>
                                             <td>
                                                 <div className='option-control-box'>
-                                                    {/* <div className='option-control-btn'>
-                                                            <button
-                                                                className='button-el'
-                                                            >
-                                                                <img
-                                                                    src='/assets/icon/edit_default_595d61.svg'
-                                                                    style={{ width: '20px' }}
-                                                                    alt=""
-                                                                    loading='lazy'
-                                                                />
-                                                            </button>
-                                                        </div> */}
                                                     <div className='option-control-btn'>
                                                         <button
                                                             className='button-el'

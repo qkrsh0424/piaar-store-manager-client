@@ -46,7 +46,7 @@ export default function CreateFormComponent(props) {
 
     return (
         <Container>
-            <PageTitleFieldView title={'카테고리 등록'} />
+            <PageTitleFieldView title={'카테고리 생성'} />
             <form onSubmit={__handle.submit.createProductCategory}>
                 {createCategoryData &&
                     <CategoryInfoInputFieldView

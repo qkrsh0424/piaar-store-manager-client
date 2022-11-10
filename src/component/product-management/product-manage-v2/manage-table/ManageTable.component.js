@@ -1,5 +1,6 @@
 import { useState } from "react";
 import OptionPackageModalComponent from "../modal/option-package-modal/OptionPackageModal.component";
+import ProductDetailPageModalComponent from "../modal/product-detail-page-modal/ProductDetailPageModal.component";
 import SubOptionCodeModalComponent from "../modal/sub-option-code-modal/SubOptionCodeModal.component";
 import { Container } from "./ManageTable.styled";
 import ManageTableFieldView from "./ManageTableField.view";
@@ -7,7 +8,9 @@ import ManageTableFieldView from "./ManageTableField.view";
 const ManageTableComponent = (props) => {
     const [subOptionCodeModalOpen, setSubOptionCodeModalOpen] = useState(false);
     const [optionPackageModalOpen, setOptionPackageModalOpen] = useState(false);
+    const [productDetailPageModalOpen, setProductDetailPageModalOpen] = useState(false);
     const [option, setOption] = useState(null);
+    const [product,setProduct] = useState(null);
 
     const __handle = {
         action: {
@@ -44,6 +47,18 @@ const ManageTableComponent = (props) => {
             closeOptionPackageModal: () => {
                 setOption(null);
                 setOptionPackageModalOpen(false);
+            },
+            openProductDetailPageModal: (e, productId) => {
+                e.stopPropagation();
+
+                let data = props.productManagementList.filter(r => r.product.id === productId)[0]?.product;
+                setProduct(data);
+
+                setProductDetailPageModalOpen(true);
+            },
+            closeProductDetailPageModal: () => {
+                setProduct(null);
+                setProductDetailPageModalOpen(false);
             }
         }
     }
@@ -66,6 +81,7 @@ const ManageTableComponent = (props) => {
 
                 onActionOpenSubOptionCodeModal={__handle.action.openSubOptionCodeModal}
                 onActionOpenOptionPackageModal={__handle.action.openOptionPackageModal}
+                onActionProductDetailPageModal={__handle.action.openProductDetailPageModal}
             />
             {subOptionCodeModalOpen && option &&
                 <SubOptionCodeModalComponent
@@ -79,6 +95,13 @@ const ManageTableComponent = (props) => {
                 <OptionPackageModalComponent
                     option={option}
                     onActionCloseModal={__handle.action.closeOptionPackageModal}
+                />
+            }
+
+            {productDetailPageModalOpen && product &&
+                <ProductDetailPageModalComponent
+                    product={product}
+                    onActionCloseModal={__handle.action.closeProductDetailPageModal}
                 />
             }
         </Container>

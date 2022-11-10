@@ -1,4 +1,5 @@
 import { imageFileUploaderDataConnect } from "../../data_connect/imageFileUploaderDataConnect";
+import { dateToYYMMDDhhmmss } from "../../utils/dateFormatUtils";
 
 const useImageFileUploaderHook = () => {
     /**
@@ -56,9 +57,34 @@ const useImageFileUploaderHook = () => {
             })
     }
 
+    const __reqDownloadImageFile = async (url, fileName) => {
+        fetch(url, { method: 'GET' })
+                .then(res => {
+                    return res.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+
+                    let date = dateToYYMMDDhhmmss(new Date());
+
+                    link.download = '[' + date + ']' + fileName + '.png';
+                    document.body.appendChild(link);
+                    link.click();
+
+                    setTimeout((_) => {
+                        window.URL.revokeObjectURL(url) // 해당 url 사용 제한
+                    }, 60000);
+                    
+                    link.remove();
+                })
+    }
+
     return {
-        __reqUploadImageFile: __reqUploadImageFile,
-        __reqUploadBatchImageFile: __reqUploadBatchImageFile
+        __reqUploadImageFile,
+        __reqUploadBatchImageFile,
+        __reqDownloadImageFile
     }
 }
 

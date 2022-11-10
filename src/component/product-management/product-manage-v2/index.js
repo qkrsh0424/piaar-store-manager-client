@@ -252,7 +252,7 @@ const ProductManageComponent = (props) => {
 
     return (
         <Container>
-            <PageTitleFieldView title={'상품 재고관리'}/>
+            <PageTitleFieldView title={'상품 조회 / 수정'}/>
 
             <OperatorComponent />
             <ButtonOperatorComponent

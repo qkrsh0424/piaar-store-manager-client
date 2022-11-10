@@ -226,7 +226,7 @@ const ItemSelectorComponent = (props) => {
             return;
         }
 
-        if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
+        if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 삭제하시겠습니까?')) {
             await props._onSubmit_deleteProduct(query.productCid);
         }
     }
@@ -238,7 +238,7 @@ const ItemSelectorComponent = (props) => {
         }
         
 
-        if (window.confirm('옵션을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
+        if (window.confirm('옵션을 삭제하면 하위 데이터들도 모두 삭제됩니다. 삭제하시겠습니까?')) {
             await props._onSubmit_deleteProductOption(query.optionCid);
         }
     }

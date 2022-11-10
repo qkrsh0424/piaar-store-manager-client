@@ -90,7 +90,7 @@ const SubOptionCodeModalComponent = (props) => {
     const onActionDeleteSubOptionCode = async (e, subOptionCodeId) => {
         e.preventDefault();
 
-        if (window.confirm('정말로 삭제하시겠습니까?')) {
+        if (window.confirm('삭제하시겠습니까?')) {
             await props.onActionDeleteSubOptionCode(subOptionCodeId);
             await __reqSearchSubOptionCode();
             return;

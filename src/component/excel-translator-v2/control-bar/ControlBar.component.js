@@ -137,7 +137,7 @@ const ControlBarComponent = (props) => {
                     return;
                 }
 
-                if (window.confirm('정말 삭제하시겠습니까?')) {
+                if (window.confirm('삭제하시겠습니까?')) {
                     await props.onSubmitDeleteExcelTranslatorHeader(selectedTranslatorHeader.id);
                 }
             }

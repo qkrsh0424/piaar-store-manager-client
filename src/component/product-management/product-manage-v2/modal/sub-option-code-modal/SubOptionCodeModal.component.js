@@ -62,7 +62,7 @@ const SubOptionCodeModalComponent = (props) => {
     const __handle = {
         action : {
             deleteSubOptionCode: (id) => {
-                if(!window.confirm('정말 삭제하시겠습니까?')) {
+                if(!window.confirm('삭제하시겠습니까?')) {
                     return;
                 }
                 

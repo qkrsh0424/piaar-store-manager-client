@@ -94,7 +94,7 @@ const CreateFormComponent = (props) => {
             uploadProductImageFile: async (e) => {
                 e.preventDefault();
         
-                if(e.target.files.length == 0) return;
+                if(e.target.files.length === 0) return;
         
                 onActionOpenBackdrop();
                 let imageInfo = await __reqUploadImageFile(e);
@@ -184,7 +184,7 @@ const CreateFormComponent = (props) => {
 
     return (
         <Container>
-            <PageTitleFieldView title={'상품 등록'} />
+            <PageTitleFieldView title={'상품 생성'} />
 
             <form onSubmit={__handle.submit.createProductAndOptions}>
                 <CategorySelectorFieldView

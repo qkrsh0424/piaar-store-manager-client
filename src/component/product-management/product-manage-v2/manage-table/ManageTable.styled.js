@@ -94,7 +94,7 @@ const ManageTableFieldWrapper = styled.div`
     .image-wrapper {
         width: 100%;
         height: auto;
-        padding: 10px 15px;
+        /* padding: 10px 15px; */
     }
 
     .image-box {
@@ -107,6 +107,7 @@ const ManageTableFieldWrapper = styled.div`
         object-fit: cover;
         width: 100%;
         height: 100%;
+        left: 0;
         transition: .5s;
         border: 1px solid #f1f1f1;
         border-radius: 8px;
