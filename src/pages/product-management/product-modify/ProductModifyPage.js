@@ -5,7 +5,10 @@ import ProductModifyComponent from '../../../component/product-management/produc
 // import ProductModifyComponent from '../../component/product-modify-v2';
 
 const Container = styled.div`
-
+    position: relative;
+    height: 100%;
+    min-height: 100vh;
+    background-color: var(--piaar-background-color);
 `;
 
 const ProductModifyPage = (props) => {
