@@ -9,7 +9,6 @@ const Container = styled.div`
     width: 200px;
     max-width: 200px;
     margin-top: 64px;
-    /* background-color: #3f4b5c; */
     background-color: #455265;
     color: #fff;
     box-shadow: var(--defaultBoxShadow);
@@ -40,9 +39,7 @@ const Container = styled.div`
     }
 
     .link-box .button-active{
-        /* color: var(--piaar-main-color) !important; */
         color: #c6c6f7 !important;
-        /* color: #fff !important; */
         font-weight: 600 !important;
     }
 `;

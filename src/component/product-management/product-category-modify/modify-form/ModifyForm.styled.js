@@ -90,6 +90,29 @@ const CategoryInfoInputFieldWrapper = styled.div`
             flex: none;
         }
     }
+
+    .button-box {
+        margin: 0 5px;
+    }
+
+    .button-el {
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+        padding: 0;
+
+        border-radius: 50%;
+        border: none;
+        background-color: #fff;
+
+        :hover {
+            transform: scale(1.05);
+        }
+
+        & ~ & {
+            background-color: red;
+        }
+    }
 `;
 
 const CreateButtonFieldWrapper = styled.div`

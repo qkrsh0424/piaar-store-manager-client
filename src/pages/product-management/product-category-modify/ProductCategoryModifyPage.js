@@ -5,6 +5,9 @@ import ProductCategoryModifyComponent from '../../../component/product-managemen
 
 const Container = styled.div`
     position: relative;
+    height: 100%;
+    min-height: 100vh;
+    background-color: var(--piaar-background-color);
 `;
 
 const ProductCategoryModifyPage = (props) => {

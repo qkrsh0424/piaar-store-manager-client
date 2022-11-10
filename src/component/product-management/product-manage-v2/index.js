@@ -15,8 +15,6 @@ import { productReleaseDataConnect } from "../../../data_connect/productReleaseD
 import useProductHook from "./hooks/useProductHook";
 
 const Container = styled.div`
-    background-color: var(--piaar-background-color);
-    min-height: 100vh;
     height: 100%;
     padding: 30px 30px 150px 230px;
     margin: 0 auto;

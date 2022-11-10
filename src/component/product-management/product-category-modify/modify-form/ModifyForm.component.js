@@ -16,7 +16,8 @@ export default function ModifyFormComponent(props) {
         onChangeValueOfName: onChangeCategoryInputValue,
         checkSaveFormData: checkProductSaveFormData,
         onSubmitModifyData: onSubmitModifyCategoryData,
-        onChangeSelectedCategory
+        onChangeSelectedCategory,
+        onSubmitDeleteData: onSubmitDeleteProductCategory
     } = useProductCategoryHook();
 
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
@@ -56,6 +57,7 @@ export default function ModifyFormComponent(props) {
                         modifyCategoryData={modifyCategoryData}
                         onChangeCategoryInputValue={onChangeCategoryInputValue}
                         onChangeSelectedCategory={onChangeSelectedCategory}
+                        onSubmitDeleteProductCategory={onSubmitDeleteProductCategory}
                     />
                 }
 
@@ -89,19 +91,35 @@ function CategoryInfoInputFieldView(props) {
             <div className='inner-content'>
                 <div className='input-group-box'>
                     <span className='control-label'>선택</span>
-                    <select
-                        className='select-item'
-                        value={props.selectedCategory?.id || ''}
-                        name='name'
-                        onChange={(e) => props.onChangeSelectedCategory(e)}
-                    >
-                        <option value=''>변경 카테고리 선택</option>
-                        {props.savedCategories?.map((r, idx) => {
-                            return (
-                                <option key={'product_category_idx' + idx} value={r.id}>{r.name}</option>
-                            )
-                        })}
-                    </select>
+                    <div className='flex-item place-items-center'>
+                        <select
+                            className='select-item'
+                            value={props.selectedCategory?.id || ''}
+                            name='name'
+                            onChange={(e) => props.onChangeSelectedCategory(e)}
+                        >
+                            <option value=''>카테고리 선택</option>
+                            {props.savedCategories?.map((r, idx) => {
+                                return (
+                                    <option key={'product_category_idx' + idx} value={r.id}>{r.name}</option>
+                                )
+                            })}
+                        </select>
+                        <div className='button-box'>
+                            <button
+                                type='button'
+                                className='button-el'
+                                onClick={(e) => props.onSubmitDeleteProductCategory(e)}
+                            >
+                                <img
+                                    src='/assets/icon/delete_default_ff3060.svg'
+                                    style={{ width: '30px' }}
+                                    alt=""
+                                    loading='lazy'
+                                />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className='inner-content'>

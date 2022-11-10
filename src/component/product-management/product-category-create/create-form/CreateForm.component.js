@@ -95,7 +95,7 @@ function CategoryInfoInputFieldView(props) {
                         value=''
                         readOnly
                     >
-                        <option value=''>저장된 카테고리 목록</option>
+                        <option value=''>카테고리 보기</option>
                         {props.savedCategories?.map((r, idx) => {
                             return (
                                 <option key={'product_category_idx' + idx} value={r.id}>{r.name}</option>

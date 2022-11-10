@@ -27,10 +27,10 @@ export default function useProductCategoryHook () {
                     alert('undefined error.');
                     return;
                 }
-
                 alert(res?.data.memo);
             })
     }
+
     const reqModifyProductCategoryData = async () => {
         await productCategoryDataConnect().changeOne(category)
             .then(res => {
@@ -44,7 +44,23 @@ export default function useProductCategoryHook () {
                     alert('undefined error.');
                     return;
                 }
+                alert(res?.data.memo);
+            })
+    }
 
+    const reqDeleteOne = async () => {
+        await productCategoryDataConnect().deleteOne(selectedCategory.id)
+            .then(res => {
+                if (res.status === 200 && res.data && res.data.message === 'success') {
+                    alert('완료되었습니다.');
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
                 alert(res?.data.memo);
             })
     }
@@ -95,6 +111,25 @@ export default function useProductCategoryHook () {
         }
     }
 
+    const onSubmitDeleteData = async (e) => {
+        e.preventDefault();
+        
+        if(!selectedCategory){
+            alert('카테고리를 선택해주세요.');
+            return;
+        }
+
+        if(!window.confirm('선택된 카테고리를 제거하시곘습니까?')) {
+            return;
+        }
+
+        await reqDeleteOne();
+
+        setCategory(null);
+        setSelectedCategory(null);
+        await reqSearchAllProductCategory();
+    }
+
     return {
         savedCategories,
         category,
@@ -103,6 +138,7 @@ export default function useProductCategoryHook () {
         onChangeValueOfName,
         checkSaveFormData,
         onSubmitModifyData,
-        onChangeSelectedCategory
+        onChangeSelectedCategory,
+        onSubmitDeleteData
     }
 }

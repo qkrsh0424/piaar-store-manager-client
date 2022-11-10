@@ -5,8 +5,7 @@ import useRouterHook from "../../../hooks/router/useRouterHook";
 import CreateFormComponent from "./create-form/CreateForm.component";
 
 const Container = styled.div`
-    background-color: var(--piaar-background-color);
-    min-height: 100vh;
+    /* background-color: var(--piaar-background-color); */
     height: 100%;
     padding: 30px 30px 150px 230px;
     margin: 0 auto;

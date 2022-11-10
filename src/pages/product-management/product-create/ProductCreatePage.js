@@ -5,6 +5,10 @@ import ProductCreateComponent from '../../../component/product-management/produc
 // import ProductCreateComponent from '../../component/product_create-form';
 
 const Container = styled.div`
+    position: relative;
+    height: 100%;
+    min-height: 100vh;
+    background-color: var(--piaar-background-color);
 `;
 
 const ProductCreatePage = (props) => {

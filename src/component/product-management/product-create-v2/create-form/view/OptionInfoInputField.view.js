@@ -159,7 +159,12 @@ export default function OptionInfoInputFieldView(props) {
                     </div>
                     
                     <div className='option-list'>
-                        <div className='inner-title-label'>옵션 리스트</div>
+                        <div className='inner-title-label'>
+                            <span>옵션 리스트</span>
+                            <div className='info-text'>
+                                <div>행을 클릭해 순서를 변경할 수 있습니다.</div>
+                            </div>
+                        </div>
                         <TableFieldView
                             createOptionDataList={props.createOptionDataList}
 

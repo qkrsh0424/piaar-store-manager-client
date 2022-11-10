@@ -19,6 +19,11 @@ const productCategoryDataConnect = () => {
             return await axios.patch(`${API_SERVER_ADDRESS}/api/v1/product-category`, body, {
                 withCredentials:true
             })
+        },
+        deleteOne: async function (categoryId) {
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product-category/${categoryId}`, {
+                withCredentials:true
+            })
         }
     }
 }

@@ -4,7 +4,6 @@ import DrawerNavbarMain from '../../component/nav/DrawerNavbarMain';
 import ProductManageComponent from '../../component/product-manage-v2';
 
 const Container = styled.div`
-
 `;
 
 const ProductManagePage = (props) => {
