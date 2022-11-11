@@ -58,6 +58,24 @@ export default function useProductDetailPagesHook() {
             })
     }
 
+    const reqChangeOne = async () => {
+        await productDetailPageDataConnect().changeOne(selectedDetailPage)
+            .then(res => {
+                if (res.status == 200 && res.data && res.data.message == 'success') {
+                    alert('완료되었습니다.');
+                    setSelectedDetailPage(null);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+                alert(res?.data.memo);
+            })
+    }
+
     const onChangeSelectedData = (e) => {
         e.preventDefault();
         let detailId = e.target.value;
@@ -138,6 +156,7 @@ export default function useProductDetailPagesHook() {
         reqCreateOne,
         checkSaveForm,
         onActionRemoveData,
-        reqDeleteOne
+        reqDeleteOne,
+        reqChangeOne
     }
 }

@@ -19,7 +19,7 @@ const productDetailPageDataConnect = () => {
                 withCredentials: true
             })
         },
-        updateOne: async function (body) {
+        changeOne: async function (body) {
             return await axios.put(`${API_SERVER_ADDRESS}/api/v1/product-detail-pages`, body, {
                 withCredentials: true
             })

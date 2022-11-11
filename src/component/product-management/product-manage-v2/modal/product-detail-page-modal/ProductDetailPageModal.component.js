@@ -24,7 +24,8 @@ const ProductDetailPageModalComponent = (props) => {
         reqCreateOne: reqCreateDetailPage,
         checkSaveForm: checkDetailPageSaveForm,
         reqDeleteOne: reqDeleteDetailPage,
-        onActionRemoveData: onActionRemoveDetailPage
+        reqChangeOne: reqChangeDetailPage,
+        onActionRemoveData: onActionRemoveDetailPage,
     } = useProductDetailPagesHook();
 
     const {
@@ -96,7 +97,12 @@ const ProductDetailPageModalComponent = (props) => {
                     checkDetailPageSaveForm();
 
                     onActionOpenBackdrop();
-                    await reqCreateDetailPage();
+                    // 기존 존재하는 데이터라면 수정, 아니라면 생성
+                    if(detailPages.some(r => r.id === selectedDetailPage.id)) {
+                        await reqChangeDetailPage();
+                    }else {
+                        await reqCreateDetailPage();
+                    }
                     await reqSearchBatchByProductId(props.product.id);
                     onActionCloseBackdrop();
                 } catch (err) {
@@ -128,7 +134,7 @@ const ProductDetailPageModalComponent = (props) => {
                 open={true}
                 title={'상세페이지 설정'}
                 element={
-                    <div style={{ padding: '20px 10px' }}>
+                    <div style={{ padding: '10px' }}>
                         <SelectorFieldView
                             detailPages={detailPages}
                             product={props.product}

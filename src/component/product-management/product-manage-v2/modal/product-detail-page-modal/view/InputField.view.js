@@ -3,6 +3,7 @@ import { InputFieldWrapper } from "../ProductDetailPageModal.styled";
 export default function InputFieldView (props) {
     return (
         <InputFieldWrapper>
+            <div className='input-label'>제목 : </div>
             <input
                 type='text' 
                 name='title'

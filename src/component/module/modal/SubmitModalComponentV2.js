@@ -114,7 +114,7 @@ const SubmitModalComponentV2 = ({ open, fullWidth, maxWidth, _onSubmit, onClose,
                             ></img>
                         </button>
                     </div>
-                    
+
                 </TitleBox>
                 <form onSubmit={(e) => onSubmit(e)}>
                     <ElementBox>

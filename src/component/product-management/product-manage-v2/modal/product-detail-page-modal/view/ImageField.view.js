@@ -10,41 +10,49 @@ export default function ImageFieldView (props) {
 
     return (
         <ImageFieldWrapper>
-            <div className='image-wrapper'>
-                <div className='image-box'>
-                    <input
-                        type='file'
-                        accept='image/*'
-                        ref={imageUploaderRef}
-                        onClick={(e) => e.target.value = ''}
-                        onChange={(e) => props.onActionUploadDetailPageImage(e)}
+            <div className='image-box'>
+                <input
+                    type='file'
+                    accept='image/*'
+                    ref={imageUploaderRef}
+                    onClick={(e) => e.target.value = ''}
+                    onChange={(e) => props.onActionUploadDetailPageImage(e)}
+                />
+            </div>
+
+            {props.selectedDetailPage.imageUrl ?
+                <>
+                    <div className='image-wrapper'>
+                        <div style={{ overflow: 'auto' }}>
+                            <img name='imageFile' type="file" src={props.selectedDetailPage.imageUrl} title={props.selectedDetailPage.imageFileName} />
+                        </div>
+                    </div>
+                    <ImageControlField
+                        imageUrl={props.selectedDetailPage.imageUrl}
+                        imageFileName={props.selectedDetailPage.imageFileName}
+                        onActionOpen={onActionOpenImageUploader}
+                        onActionRemove={props.onActionRemoveImageOfSelectedDetailPage}
+                    />
+                </>
+                :
+                <div className='image-wrapper'>
+                    <img name='imageFile' src='/images/icon/no-image.jpg' title='no-image' style={{ cursor: 'pointer' }}
+                        onClick={() => onActionOpenImageUploader()}
                     />
                 </div>
-                {props.selectedDetailPage.imageUrl ?
-                <ImageControlField
-                    imageUrl={props.selectedDetailPage.imageUrl}
-                    imageFileName={props.selectedDetailPage.imageFileName}
-                    onActionOpen={onActionOpenImageUploader}
-                    onActionRemove={props.onActionRemoveImageOfSelectedDetailPage}
-                />
-                :
-                <img name='imageFile' src='/images/icon/no-image.jpg' title='no-image' style={{ cursor: 'pointer' }}
-                    onClick={() => onActionOpenImageUploader()}
-                />
             }
-            </div>
         </ImageFieldWrapper>
     )
 }
 
-function ImageControlField({ imageUrl, imageFileName, onActionOpen, onActionRemove }) {
+function ImageControlField({ onActionOpen, onActionRemove }) {
     return (
         <ImageControlFieldWrapper>
             <div className='image-control-box'>
                 <button
                     type='button'
                     className='button-el'
-                    style={{ borderRadius: '4px 0 0 0' }}
+                    style={{ borderRadius: '0 0 0 4px' }}
                     onClick={() => onActionOpen()}
                 >
                     <img
@@ -57,7 +65,7 @@ function ImageControlField({ imageUrl, imageFileName, onActionOpen, onActionRemo
                 <button
                     type='button'
                     className='button-el'
-                    style={{ borderRadius: '0 4px 0 0' }}
+                    style={{ borderRadius: '0 0 4px 0' }}
                     onClick={() => onActionRemove()}
                 >
                     <img
@@ -67,9 +75,6 @@ function ImageControlField({ imageUrl, imageFileName, onActionOpen, onActionRemo
                         loading='lazy'
                     ></img>
                 </button>
-            </div>
-            <div className='image-box'>
-                <img name='imageFile' type="file" src={imageUrl} title={imageFileName} />
             </div>
         </ImageControlFieldWrapper>
     )

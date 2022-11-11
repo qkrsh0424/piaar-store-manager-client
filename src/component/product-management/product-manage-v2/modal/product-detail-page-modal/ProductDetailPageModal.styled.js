@@ -26,11 +26,6 @@ const SelectorFieldWrapper = styled.div`
         :hover {
             cursor: pointer;
         }
-
-        @media all and (max-width:992px) {
-            margin: 10px 0 0 0;
-            width: 100%;
-        }
     }
 
     .control-btn-box {
@@ -52,17 +47,29 @@ const SelectorFieldWrapper = styled.div`
             cursor: not-allowed;
         }
     }
+
+    @media screen and (max-width: 992px) {
+        flex-wrap: wrap;
+    }
 `;
 
 const InputFieldWrapper = styled.div`
     display: flex;
+    place-items: center;
     padding: 30px 0;
+    overflow: auto;
+
+    .input-label {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 10px;
+    }
 
     .input-el {
         border: none;
         border-bottom: 1px solid var(--defaultBorderColor);
         border-radius: 0;
-        width: 320px;
+        width: 300px;
         font-weight: 600;
         box-shadow: none;
         font-size: 16px;
@@ -70,11 +77,7 @@ const InputFieldWrapper = styled.div`
 `;
 
 const ImageFieldWrapper = styled.div`
-    margin: 0 auto;
-    min-height: 50vh;
-    max-height: 50vh;
-    width: 430px;
-    overflow: auto;
+    width: 100%;
 
     input {
         display: none;
@@ -88,10 +91,9 @@ const ImageFieldWrapper = styled.div`
 
     .image-wrapper {
         width: 100%;
-        /* position: absolute;
-        top:50%;
-        left:50%;
-        transform: translate(-50%, -50%); */
+        min-height: 50vh;
+        max-height: 50vh;
+        overflow: auto;
     }
 
     .image-box {
@@ -121,18 +123,16 @@ const ImageFieldWrapper = styled.div`
 `;
 
 const ImageControlFieldWrapper = styled.div`
-    position: relative;
 
     .image-control-box {
         display: flex;
         align-items: center;
-        position: absolute;
+        position: relative;
         z-index: 10;
         height: 40px;
-        width: 430px;
-        top: 0;
-        background-color: #0909093b;
-        border-radius: 4px 4px 0 0;
+        bottom: 4px;
+        background-color: #8991a3;
+        border-radius: 0 0 4px 4px;
     }
 
     .image-control-box .button-el {
@@ -145,10 +145,6 @@ const ImageControlFieldWrapper = styled.div`
         :hover {
             background-color: #09090985;
         }
-    }
-
-    .image-box {
-        position: absolute;
     }
 `;
 

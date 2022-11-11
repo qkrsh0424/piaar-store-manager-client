@@ -42,16 +42,6 @@ export default function SelectorFieldView (props) {
                 </button>
                 <button
                     className='button-el'
-                >
-                    <img
-                        src='/assets/icon/star_outline_444444.svg'
-                        style={{ width: '40px', position: 'absolute', top: '50%', transform: 'translate(-50%,-50%)', border: 'none', padding: '7px' }}
-                        alt=""
-                        loading='lazy'
-                    ></img>
-                </button>
-                <button
-                    className='button-el'
                     onClick={(e) => props.onActionDownloadDetailPage(e)}
                     disabled={!props.selectedDetailPage}
                 >

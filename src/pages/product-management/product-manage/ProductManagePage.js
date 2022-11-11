@@ -11,7 +11,7 @@ const Container = styled.div`
 `;
 
 const ProductManagePage = (props) => {
-    return(
+    return (
         <>
             <Container>
                 <DrawerNavbarMain />
