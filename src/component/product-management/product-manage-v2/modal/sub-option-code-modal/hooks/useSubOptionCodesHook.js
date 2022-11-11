@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { subOptionCodeDataConnect } from "../../data_connect/subOptionCodeDataConnect";
+import { subOptionCodeDataConnect } from "../../../../../../data_connect/subOptionCodeDataConnect";
 
 export default function useSubOptionCodesHook(props) {
     const [subOptionCodes, setSubOptionCodes] = useState([]);
     const [originSubOptionCodes, setOriginSubOptionCodes] = useState(null);
-
+    
     const [modifyingId, setModifyingId] = useState(null);
+
 
     const reqSearchBatchSubOptionCodes = async (optionId) => {
         await subOptionCodeDataConnect().searchBatchByProductOptionId(optionId)
@@ -185,6 +185,7 @@ export default function useSubOptionCodesHook(props) {
         onActionCreateOrModify,
         onChangeValueOfNameByIds,
         checkSaveForm,
-        onActionAddModifyingId
+        onActionAddModifyingId,
+        reqSearchBatchSubOptionCodes
     }
 }

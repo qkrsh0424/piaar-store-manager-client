@@ -19,9 +19,7 @@ const ButtonOperatorComponent = (props) => {
     const [searchProductReceiveAndReleaseModalOpen, setSearchProductReceiveAndReleaseModalOpen] = useState(false);
 
     const {
-        location,
         query,
-        navigateUrl,
         navigateParams
     } = useRouterHook();
 
@@ -112,23 +110,10 @@ const ButtonOperatorComponent = (props) => {
                     return;
                 }
 
-                // let startDate = new Date();
-                // let endDate = new Date();
-                // props.onActionSearchProductReceiveAndRelease({startDate, endDate});
-                
                 setSearchProductReceiveAndReleaseModalOpen(true);
             },
             closeSearchProductReceiveAndReleaseModal: () => {
                 setSearchProductReceiveAndReleaseModalOpen(false);
-            },
-            routeProductCreatePage: () => {
-                let data = {
-                    pathname: '/products/create',
-                    state: {
-                        routerUrl: location.pathname + location.search
-                    }
-                }
-                navigateUrl(data);
             }
         },
         submit: {
@@ -149,8 +134,7 @@ const ButtonOperatorComponent = (props) => {
 
     return (
         <Container>
-            <ControlFieldView 
-                onActionRouteProductCreatePage={__handle.action.routeProductCreatePage}
+            <ControlFieldView
                 onActionOpenCreateProductReceiveModal={__handle.action.openCreateProductReceiveModal}
                 onActionOpenCreateProductReleaseModal={__handle.action.openCreateProductReleaseModal}
                 onActionOpenSearchProductReceiveAndReleaseModal={__handle.action.openSearchProductReceiveAndReleaseModal}

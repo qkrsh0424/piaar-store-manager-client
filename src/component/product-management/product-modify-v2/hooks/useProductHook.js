@@ -1,36 +1,30 @@
 import { useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
 import { productDataConnect } from "../../../../data_connect/productDataConnect";
 
 export default function useProductHook (props) {
-    const [product, setProduct] = useState({
-        id: uuidv4(),
-        imageUrl: '',
-        imageFileName: '',
-        defaultName: '',
-        managementName: '',
-        memo: '',
-        purchaseUrl: '',
-        managementNumber: '',
-        stockManagement: false,
-        productCategoryCid: null
-    });
+    const [originProduct, setOriginProduct] = useState(null);
+    const [product, setProduct] = useState(null);
 
-    const reqDeleteOne = async (id) => {
-        await productDataConnect().deleteOne(id)
+    const reqSearchOneForProduct = async (productId) => {
+        await productDataConnect().searchOne(productId)
             .then(res => {
-                if (res.status === 200) {
-                    alert('정상적으로 삭제되었습니다.');
+                if (res.status === 200 && res.data && res.data.message === 'success') {
+                    setProduct(res.data.data);
+                    setOriginProduct(res.data.data);
+                }
+            })
+    }
+
+    const reqModifyOne = async () => {
+        await productDataConnect().modifyProduct(product)
+            .then(res => {
+                if (res.status === 200 && res.data && res.data.message === 'success') {
+                    alert('완료되었습니다.');
                 }
             })
             .catch(err => {
                 let res = err.response;
-                if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
-                }
-
-                alert(res?.data.memo);
+                alert(res?.data?.memo);
             })
     }
 
@@ -73,8 +67,8 @@ export default function useProductHook (props) {
         }
     }
 
-    const onActionUpdateProduct = (data) => {
-        setProduct({...data});
+    const onActionResetOriginData = () => {
+        setProduct({...originProduct})
     }
 
     const onChangeStockManagement = (e) => {
@@ -93,8 +87,9 @@ export default function useProductHook (props) {
         onChangeImageFileNameAndImageUrl,
         onActionDeleteImageFileNameAndImageUrl,
         checkCreateFormData,
-        reqDeleteOne,
-        onActionUpdateProduct,
-        onChangeStockManagement
+        reqModifyOne,
+        onActionResetOriginData,
+        onChangeStockManagement,
+        reqSearchOneForProduct
     }
 }

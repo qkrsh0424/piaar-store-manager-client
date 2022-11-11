@@ -5,10 +5,11 @@ import CreateButtonFieldView from "./view/ButtonField.view";
 import { useState } from "react";
 import CreateOptionDefaultNameModalComponent from "./modal/create-option-default-name-modal/CreateOptionDefaultNameModal.component";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
-import useProductOptionsHook from "../../../../hooks/product-option/useProductOptionsHook";
 import useProductOptionBatchRegHook from "../hooks/useProductOptionBatchRegHook";
 import useBatchRegTooltipHook from "../hooks/useBatchRegTooltipHook";
 import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
+import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
+import useProductOptionsHook from "../hooks/useProductOptionsHook";
 
 function PageTitleFieldView({ title }) {
     return (
@@ -20,8 +21,10 @@ function PageTitleFieldView({ title }) {
 
 const ModifyFormComponent = (props) => {
     const [optionDefaultNameCreateModalOpen, setOptionDefaultNameCreateModalOpen] = useState(false);
+    const [selectedProductId, setSelectedProductId] = useState(null);
 
     const {
+        query,
         navigatePrevPage
     } = useRouterHook();
 
@@ -32,6 +35,9 @@ const ModifyFormComponent = (props) => {
         onActionDeleteById: onActionDeleteOptionById,
         onActionUpdateOptions,
         checkCreateFormData: checkProductOptionCreateFormData,
+        reqSearchBatchByProductId,
+        reqModifyBatch: reqModifyOptions,
+        onActionResetOriginData: onActionResetOriginOptionsData
     } = useProductOptionsHook();
 
     const {
@@ -48,20 +54,26 @@ const ModifyFormComponent = (props) => {
         onChangeBatchRegInput
     } = useBatchRegTooltipHook();
 
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
+
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
     useEffect(() => {
-        function setOptions() {
-            let options = props.options || [];
+        async function fetchInit() {
+            let productId = query.productId;
+            setSelectedProductId(productId);
 
-            onActionUpdateOptions([...options]);
+            onActionOpenBackdrop();
+            await reqSearchBatchByProductId(productId)
+            onActionCloseBackdrop();
         }
 
-        if(!props.options) {
-            return;
-        }
-        setOptions();
-    }, [props.options])
+        fetchInit();
+    }, [])
 
     const __handle = {
         action: {
@@ -101,9 +113,7 @@ const ModifyFormComponent = (props) => {
                 e.preventDefault();
 
                 if(window.confirm('기존 상품 정보로 초기화하시겠습니까?\n(현재 변경된 내역은 저장되지 않습니다)')) {
-                    let options = props.options || [];
-    
-                    onActionUpdateOptions([...options]);
+                    onActionResetOriginOptionsData();
                 }
             },
             confirmBatchRegInput: (e) => {
@@ -123,7 +133,7 @@ const ModifyFormComponent = (props) => {
             }
         },
         submit: {
-            modifyOptions: (e) => {
+            modifyOptions: async (e) => {
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -135,7 +145,9 @@ const ModifyFormComponent = (props) => {
                     checkProductOptionCreateFormData();
 
                     setButtonDisabled(true);
-                    props._onSubmit_modifyOptions(modifyOptionDataList);
+                    onActionOpenBackdrop();
+                    await reqModifyOptions(selectedProductId);
+                    onActionCloseBackdrop();
                 } catch (err) {
                     alert(err.message)
                 }
@@ -144,40 +156,42 @@ const ModifyFormComponent = (props) => {
     }
 
     return (
-        <Container>
-            <PageTitleFieldView title={'옵션 일괄 수정'} />
+        <>
+            <Container>
+                <PageTitleFieldView title={'옵션 일괄 수정'} />
 
-            <form onSubmit={__handle.submit.modifyOptions}>
-                {modifyOptionDataList && productOptionBatchReg &&
-                    <OptionInfoInputFieldView
-                        modifyOptionDataList={modifyOptionDataList}
-                        productOptionBatchReg={productOptionBatchReg}
-                        batchRegTooltipOpen={batchRegTooltipOpen}
-                        batchRegInput={batchRegInput}
+                <form onSubmit={__handle.submit.modifyOptions}>
+                    {modifyOptionDataList && productOptionBatchReg &&
+                        <OptionInfoInputFieldView
+                            modifyOptionDataList={modifyOptionDataList}
+                            productOptionBatchReg={productOptionBatchReg}
+                            batchRegTooltipOpen={batchRegTooltipOpen}
+                            batchRegInput={batchRegInput}
 
-                        onChangeOptionInputValue={onChangeOptionInputValue}
-                        onActionAddOptionData={onActionAddOptionData}
-                        onActionDeleteOption={onActionDeleteOptionById}
-                        onChangeBatchRegOptionInputValue={onChangeProductOptionBatchRegInputValue}
-                        onActionAddOptionDataListByBatchRegData={__handle.action.addOptionDataListByBatchRegData}
-                        onActionOpenOptionDefaultNameCreateModal={__handle.action.openOptionDefaultNameCreateModal}
-                        onActionOpenBatchRegToolTip={onActionOpenBatchRegToolTip}
-                        onChangeBatchRegInput={onChangeBatchRegInput}
-                        onActionConfirmBatchRegInput={__handle.action.confirmBatchRegInput}
-                        onActionCloseBatchRegTooltip={onActionCloseBatchRegTooltip}
+                            onChangeOptionInputValue={onChangeOptionInputValue}
+                            onActionAddOptionData={onActionAddOptionData}
+                            onActionDeleteOption={onActionDeleteOptionById}
+                            onChangeBatchRegOptionInputValue={onChangeProductOptionBatchRegInputValue}
+                            onActionAddOptionDataListByBatchRegData={__handle.action.addOptionDataListByBatchRegData}
+                            onActionOpenOptionDefaultNameCreateModal={__handle.action.openOptionDefaultNameCreateModal}
+                            onActionOpenBatchRegToolTip={onActionOpenBatchRegToolTip}
+                            onChangeBatchRegInput={onChangeBatchRegInput}
+                            onActionConfirmBatchRegInput={__handle.action.confirmBatchRegInput}
+                            onActionCloseBatchRegTooltip={onActionCloseBatchRegTooltip}
+                        />
+                    }
+
+                    <CreateButtonFieldView
+                        buttonDisabled={buttonDisabled}
+
+                        onActionCancelCreateProduct={__handle.action.cancelCreateProduct}
+                        onActionResetOptions={__handle.action.resetOptions}
                     />
-                }
-
-                <CreateButtonFieldView
-                    buttonDisabled={buttonDisabled}
-
-                    onActionCancelCreateProduct={__handle.action.cancelCreateProduct}
-                    onActionResetOptions={__handle.action.resetOptions}
-                />
-            </form>
+                </form>
+            </Container>
 
             {/* 옵션명 생성 모달 */}
-            {optionDefaultNameCreateModalOpen && 
+            {optionDefaultNameCreateModalOpen &&
                 <CreateOptionDefaultNameModalComponent
                     modalOpen={optionDefaultNameCreateModalOpen}
 
@@ -185,7 +199,12 @@ const ModifyFormComponent = (props) => {
                     onChangeBatchRegOptionDefaultNameInputValue={__handle.action.changeProductOptionBatchRegValue}
                 />
             }
-        </Container>
+
+            {/* Backdrop */}
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
+        </>
     )
 }
 

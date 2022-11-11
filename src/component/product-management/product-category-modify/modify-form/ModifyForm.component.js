@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import RequiredIcon from "../../../module/icon/RequiredIcon";
@@ -13,6 +15,7 @@ export default function ModifyFormComponent(props) {
         selectedCategory,
         savedCategories,
         category: modifyCategoryData,
+        reqSearchAllProductCategory,
         onChangeValueOfName: onChangeCategoryInputValue,
         checkSaveFormData: checkProductSaveFormData,
         onSubmitModifyData: onSubmitModifyCategoryData,
@@ -20,7 +23,23 @@ export default function ModifyFormComponent(props) {
         onSubmitDeleteData: onSubmitDeleteProductCategory
     } = useProductCategoryHook();
 
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
+
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
+
+    useEffect(() => {
+        async function fetchInit() {
+            onActionOpenBackdrop();
+            await reqSearchAllProductCategory();
+            onActionCloseBackdrop();
+        }
+
+        fetchInit();
+    }, [])
 
     const __handle = {
         action: {
@@ -31,14 +50,16 @@ export default function ModifyFormComponent(props) {
             }
         },
         submit: {
-            modifyProductCategory: (e) => {
+            modifyProductCategory: async (e) => {
                 e.preventDefault();
 
                 try{
                     checkProductSaveFormData();
-
+                    
                     setButtonDisabled(true);
-                    onSubmitModifyCategoryData();
+                    onActionOpenBackdrop();
+                    await onSubmitModifyCategoryData();
+                    onActionCloseBackdrop();
                 } catch (err) {
                     alert(err.message);
                 }
@@ -47,26 +68,33 @@ export default function ModifyFormComponent(props) {
     }
 
     return (
-        <Container>
-            <PageTitleFieldView title={'카테고리 수정'} />
-            <form onSubmit={__handle.submit.modifyProductCategory}>
-                {savedCategories &&
-                    <CategoryInfoInputFieldView
-                        selectedCategory={selectedCategory}
-                        savedCategories={savedCategories}
-                        modifyCategoryData={modifyCategoryData}
-                        onChangeCategoryInputValue={onChangeCategoryInputValue}
-                        onChangeSelectedCategory={onChangeSelectedCategory}
-                        onSubmitDeleteProductCategory={onSubmitDeleteProductCategory}
-                    />
-                }
+        <>
+            <Container>
+                <PageTitleFieldView title={'카테고리 수정'} />
+                <form onSubmit={__handle.submit.modifyProductCategory}>
+                    {savedCategories &&
+                        <CategoryInfoInputFieldView
+                            selectedCategory={selectedCategory}
+                            savedCategories={savedCategories}
+                            modifyCategoryData={modifyCategoryData}
+                            onChangeCategoryInputValue={onChangeCategoryInputValue}
+                            onChangeSelectedCategory={onChangeSelectedCategory}
+                            onSubmitDeleteProductCategory={onSubmitDeleteProductCategory}
+                        />
+                    }
 
-                <CreateButtonFieldView
-                    buttonDisabled={buttonDisabled}
-                    onActionCancelModifyProduct={__handle.action.cancelModifyCategory}
-                />
-            </form>
-        </Container>
+                    <CreateButtonFieldView
+                        buttonDisabled={buttonDisabled}
+                        onActionCancelModifyProduct={__handle.action.cancelModifyCategory}
+                    />
+                </form>
+            </Container>
+
+            {/* Backdrop */}
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
+        </>
     )
 }
 
@@ -149,7 +177,7 @@ function CreateButtonFieldView(props) {
                 <button
                     type='button'
                     className='button-el'
-                    onClick={() => props.onActionCancelCreateProduct()}
+                    onClick={() => props.onActionCancelModifyProduct()}
                 >
                     취소
                 </button>

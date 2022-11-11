@@ -1,18 +1,15 @@
-import { indexOf } from "lodash";
-import { useEffect, useState } from "react";
+import { useCallback } from "react";
+import { useState } from "react";
 import { productCategoryDataConnect } from "../../../../data_connect/productCategoryDataConnect";
 
 export default function useProductCategoryHook () {
     const [savedCategories, setSavedCategories] = useState(null);
     const [category, setCategory] = useState({ name: '' });
-    
-    useEffect(() => {
-        async function fetchInit() {
-            await reqSearchAllProductCategory();
-        }
 
-        fetchInit();
-    }, [])
+    const onActionResetData = useCallback(() => {
+        setSavedCategories(null);
+        setCategory({ name: ''});
+    })
 
     const reqSearchAllProductCategory = async () => {
         await productCategoryDataConnect().searchList()
@@ -36,6 +33,7 @@ export default function useProductCategoryHook () {
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {
                     alert('저장되었습니다.');
+                    onActionResetData();
                 }
             })
             .catch(err => {
@@ -76,8 +74,6 @@ export default function useProductCategoryHook () {
 
     const onSubmitCreateData = async () => {
         await reqCreateProductCategoryData();
-        
-        setCategory({ name: '' });
         await reqSearchAllProductCategory();
     }
 
@@ -85,8 +81,10 @@ export default function useProductCategoryHook () {
         savedCategories,
         category,
 
+        onActionResetData,
         onChangeValueOfName,
         checkCreateFormData,
-        onSubmitCreateData
+        onSubmitCreateData,
+        reqSearchAllProductCategory
     }
 }

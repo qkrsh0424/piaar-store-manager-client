@@ -231,8 +231,10 @@ const ProductManageComponent = (props) => {
 
                 if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
                     let product = productManagementList?.content.filter(r => r.product.id === productId)[0].product;
+                    onActionOpenBackdrop();
                     await reqDeleteProductOne(product.id);
                     await __handle.req.searchProductAndOptionList();
+                    onActionCloseBackdrop();
                 }
             },
             createProductReceive: async (data) => {
@@ -251,45 +253,47 @@ const ProductManageComponent = (props) => {
     }
 
     return (
-        <Container>
-            <PageTitleFieldView title={'상품 조회 / 수정'}/>
+        <>
+            <Container>
+                <PageTitleFieldView title={'상품 조회 / 수정'} />
 
-            <OperatorComponent />
-            <ButtonOperatorComponent
-                productManagementList={productManagementList?.content}
-                checkedOptionIdList={checkedOptionIdList}
+                <OperatorComponent />
+                <ButtonOperatorComponent
+                    productManagementList={productManagementList?.content}
+                    checkedOptionIdList={checkedOptionIdList}
 
-                optionReceiveStatus={optionReceiveStatus}
-                optionReleaseStatus={optionReleaseStatus}
+                    optionReceiveStatus={optionReceiveStatus}
+                    optionReleaseStatus={optionReleaseStatus}
 
-                onSubmitCreateProductReceive={__handle.submit.createProductReceive}
-                onSubmitCreateProductRelease={__handle.submit.createProductRelease}
-            />
+                    onSubmitCreateProductReceive={__handle.submit.createProductReceive}
+                    onSubmitCreateProductRelease={__handle.submit.createProductRelease}
+                />
 
-            <ManageTablePagenationComponent
-                productManagementList={productManagementList}
-                checkedOptionIdList={checkedOptionIdList}
-            />
+                <ManageTablePagenationComponent
+                    productManagementList={productManagementList}
+                    checkedOptionIdList={checkedOptionIdList}
+                />
 
-            <ManageTableComponent
-                productManagementList={productManagementList?.content}
+                <ManageTableComponent
+                    productManagementList={productManagementList?.content}
 
-                isCheckedOne={__handle.action.isCheckedOne}
-                isCheckedAll={__handle.action.isCheckedAll}
-                onActionCheckOne={__handle.action.checkOne}
-                onActionCheckAll={__handle.action.checkAll}
-                isProductCheckedOne={__handle.action.isProductCheckedOne}
-                onActionProductCheckOne={__handle.action.productCheckOne}
-                onSubmitDeleteProductOne={__handle.submit.deleteProduct}
-                onActionModifyProduct={__handle.action.routeToModifyPageForProduct}
-                onActionModifyOptions={__handle.action.routeToModifyPageForOptions}
-            />
+                    isCheckedOne={__handle.action.isCheckedOne}
+                    isCheckedAll={__handle.action.isCheckedAll}
+                    onActionCheckOne={__handle.action.checkOne}
+                    onActionCheckAll={__handle.action.checkAll}
+                    isProductCheckedOne={__handle.action.isProductCheckedOne}
+                    onActionProductCheckOne={__handle.action.productCheckOne}
+                    onSubmitDeleteProductOne={__handle.submit.deleteProduct}
+                    onActionModifyProduct={__handle.action.routeToModifyPageForProduct}
+                    onActionModifyOptions={__handle.action.routeToModifyPageForOptions}
+                />
+            </Container>
 
             {/* Backdrop */}
             <BackdropHookComponent
                 open={backdropOpen}
             />
-        </Container>
+        </>
     )
 }
 

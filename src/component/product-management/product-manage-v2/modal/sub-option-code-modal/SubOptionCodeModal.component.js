@@ -1,9 +1,11 @@
-import { BackdropHookComponent } from "../../../../../hooks/backdrop/useBackdropHook";
+import { useEffect } from "react";
+import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
 import { useDisabledButtonHook } from "../../../../../hooks/button-disabled/useDisabledButtonHook";
-import useSubOptionCodesHook from "../../../../../hooks/sub-option-code/useSubOptionCodesHook";
 import CommonModalComponentV2 from "../../../../module/modal/CommonModalComponentV2";
+import useSubOptionCodesHookV2 from "./hooks/useSubOptionCodesHookV2";
 import { ButtonFieldWrapper, InfoFieldWrapper } from "./SubOptionCodeModal.styled";
 import TableFieldView from "./TableField.view";
+import { v4 as uuidv4 } from 'uuid';
 
 function InfoFieldView({ option }) {
     return (
@@ -44,50 +46,112 @@ function ButtonFieldView({ onClick, buttonDisabled }) {
 }
 
 const SubOptionCodeModalComponent = (props) => {
-
     const {
         subOptionCodes,
-        modifyingId: modifyingSubOptionCodeId,
+        modifyingSubOption,
 
-        onActionAddData: onActionAddSubOptionData,
-        onActionDeleteData: onActionDeleteSubOptionData,
-        onActionCreateOrModify: onActionCreateOrModifySubOption,
-        onChangeValueOfNameByIds: onChangeSubOptionInputValue,
+        reqSearchBatchSubOptionCodes,
+        onChangeSelectedModifyingData: onChangeSelectedModifyingSubOption,
+        reqModifyOne: reqModifySubOption,
+        reqCreateOne: reqCreateSubOption,
         checkSaveForm: checkSubOptionSaveForm,
-        onActionAddModifyingId: onActionAddSubOptionCodeModifyingId
-    } = useSubOptionCodesHook({ option: props.option });
+        onChangeValueOfName: onChangeSubOptionInputValue,
+        onActionDeleteModifyingData: onActionDeleteModifyinSubOption,
+        reqDeleteOne: reqDeleteSubOption,
+        onActionAddData: onActionAddSubOption
+    } = useSubOptionCodesHookV2();
+    
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
 
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
+    useEffect(() => {
+        async function fetchInit() {
+            onActionOpenBackdrop();
+            await reqSearchBatchSubOptionCodes(props.option.id);
+            onActionCloseBackdrop();
+        }
+        
+        if(!props.option?.id) {
+            return;
+        }
+
+        fetchInit();
+    }, [props.option])
+
     const __handle = {
-        action : {
-            deleteSubOptionCode: (id) => {
-                if(!window.confirm('삭제하시겠습니까?')) {
-                    return;
+        action: {
+            addSubOptionData: () => {
+                let data = {
+                    id: uuidv4(),
+                    subOptionCode: '',
+                    memo: '',
+                    productOptionId: props.option.id,
+                    productOptionCode: props.option.code
                 }
-                
-                onActionDeleteSubOptionData(id);
-            },
+
+                onActionAddSubOption(data);
+            }
         },
         submit: {
-            createOrModifySubOption: (id) => {
-                let data = subOptionCodes.filter(r => r.id === id)[0];
-                
+            createSubOption: async () => {
                 try{
-                    checkSubOptionSaveForm(data);
+                    checkSubOptionSaveForm();
 
                     setButtonDisabled(true);
-                    onActionCreateOrModifySubOption(id);
+
+                    onActionOpenBackdrop();
+                    await reqCreateSubOption();
+                    await reqSearchBatchSubOptionCodes(props.option.id);
+                    onActionCloseBackdrop();
                 } catch (err) {
                     alert(err.message);
                 }
+            },
+            modifySubOption: async () => {
+                try{
+                    checkSubOptionSaveForm();
+
+                    setButtonDisabled(true);
+
+                    let savedSubOption = subOptionCodes.filter(r => r.id === modifyingSubOption.id)[0];
+
+                    if(JSON.stringify(savedSubOption) !== JSON.stringify(modifyingSubOption)) {
+                        onActionOpenBackdrop();
+                        await reqModifySubOption();
+                        await reqSearchBatchSubOptionCodes(props.option.id);
+                        onActionCloseBackdrop();
+                    }
+                    onActionDeleteModifyinSubOption();
+                } catch (err) {
+                    alert(err.message);
+                }
+            },
+            deleteSubOption: async (subOptionId) => {
+                if(modifyingSubOption) {
+                    alert('수정중인 데이터를 먼저 완료해주세요.');
+                    return; 
+                }
+
+                if (!window.confirm('삭제하시겠습니까?')) {
+                    return;
+                }
+
+                onActionOpenBackdrop();
+                await reqDeleteSubOption(subOptionId);
+                await reqSearchBatchSubOptionCodes(props.option.id);
+                onActionCloseBackdrop();
             }
         }
     }
 
     return (
         <>
-            {subOptionCodes ?
+            {subOptionCodes &&
                 <CommonModalComponentV2
                     open={true}
                     title={'대체코드 설정'}
@@ -99,18 +163,20 @@ const SubOptionCodeModalComponent = (props) => {
                             {subOptionCodes &&
                                 <TableFieldView
                                     subOptionCodes={subOptionCodes}
-                                    modifyingSubOptionCodeId={modifyingSubOptionCodeId}
+                                    modifyingSubOption={modifyingSubOption}
 
                                     onChangeSubOptionInputValue={onChangeSubOptionInputValue}
-                                    onActionDeleteSubOptionData={__handle.action.deleteSubOptionCode}
-                                    onSubmitCreateOrModifySubOption={__handle.submit.createOrModifySubOption}
-                                    onActionModifySubOption={onActionAddSubOptionCodeModifyingId}
+                                    onActionDeleteSubOptionData={__handle.submit.deleteSubOption}
+                                    onActionDeleteModifyingSubOptionData={onActionDeleteModifyinSubOption}
+                                    onSubmitCreateSubOptionData={__handle.submit.createSubOption}
+                                    onSubmitModifySubOptionData={__handle.submit.modifySubOption}
+                                    onChangeSelectedModifyingSubOption={onChangeSelectedModifyingSubOption}
                                 />
                             }
                             <ButtonFieldView
                                 buttonDisabled={buttonDisabled}
 
-                                onClick={onActionAddSubOptionData}
+                                onClick={__handle.action.addSubOptionData}
                             />
                         </div>
                     }
@@ -118,11 +184,12 @@ const SubOptionCodeModalComponent = (props) => {
 
                     onClose={() => props.onActionCloseModal()}
                 />
-                :
-                <BackdropHookComponent
-                    open={true}
-                />
             }
+
+            {/* Backdrop */}
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
         </>
     )
 }

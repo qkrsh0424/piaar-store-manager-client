@@ -1,7 +1,7 @@
 import CategorySelectorFieldView from "./view/CategorySelectorField.view";
 import { Container, PageTitleFieldWrapper } from "./CreateForm.styled";
 import OptionInfoInputFieldView from "./view/OptionInfoInputField.view";
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { useImageFileUploaderHook } from "../../../../hooks/uploader/useImageFileUploaderHook";
 import CreateButtonFieldView from "./view/CreateButtonField.view";
 import valueUtils from "../../../../utils/valueUtils";
@@ -15,6 +15,8 @@ import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdr
 import useProductHook from "../hooks/useProductHook";
 import useProductOptionsHook from "../hooks/useProductOptionsHook";
 import ProductInfoInputFieldView from "./view/ProductInfoInputField.view";
+import useProductCategoryHook from "../hooks/useProductCategoryHook";
+import { productDataConnect } from "../../../../data_connect/productDataConnect";
 
 function PageTitleFieldView({ title }) {
     return (
@@ -33,12 +35,19 @@ const CreateFormComponent = (props) => {
     } = useRouterHook();
 
     const {
+        productCategoryList,
+
+        reqSearchAllProductCategory
+    } = useProductCategoryHook();
+
+    const {
         product: createProductData,
         onChangeValueOfName: onChangeProductInputValue,
         onChangeImageFileNameAndImageUrl,
         onActionDeleteImageFileNameAndImageUrl,
         checkCreateFormData: checkProductCreateFormData,
         onChangeStockManagement: onChangeProductStockManagement,
+        onActionResetData: onActionResetProductData
     } = useProductHook();
 
     const {
@@ -47,7 +56,8 @@ const CreateFormComponent = (props) => {
         onActionAddData: onActionAddOptionData,
         onActionDeleteById: onActionDeleteOptionById,
         onActionUpdateOptions,
-        checkCreateFormData: checkProductOptionCreateFormData
+        checkCreateFormData: checkProductOptionCreateFormData,
+        onActionResetData: onActionResetProductOptionData
     } = useProductOptionsHook();
 
     const {
@@ -76,7 +86,40 @@ const CreateFormComponent = (props) => {
 
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
+    useEffect(() => {
+        async function fetchInit() {
+            onActionOpenBackdrop();
+            await reqSearchAllProductCategory();
+            onActionCloseBackdrop();
+        }
+
+        fetchInit();
+    }, [])
+
     const __handle = {
+        req: {
+            createProductAndOptions: async (body) => {
+                await productDataConnect().createProductAndOptions(body)
+                    .then(res => {
+                        if (res.status === 200 && res.data && res.data.message === 'success') {
+                            alert('완료되었습니다.');
+                            onActionResetProductData();
+                            onActionResetProductOptionData();
+                            dispatchSlideDownEffect({
+                                type: 'CLEAR'
+                            })
+                        }
+                    })
+                    .catch(err => {
+                        let res = err.response;
+                        if (res?.status === 500) {
+                            alert('undefined error.');
+                            return;
+                        }
+                        alert(res?.data.memo);
+                    })
+            }
+        },
         action: {
             openOptionDefaultNameCreateModal: (e) => {
                 e.stopPropagation();
@@ -142,7 +185,6 @@ const CreateFormComponent = (props) => {
                     result.source.index,
                     result.destination.index
                 )
-        
                 onActionUpdateOptions(newOrderList);
             },
             confirmBatchRegInput: (e) => {
@@ -162,7 +204,7 @@ const CreateFormComponent = (props) => {
             }
         },
         submit: {
-            createProductAndOptions: (e) => {
+            createProductAndOptions: async (e) => {
                 e.preventDefault();
         
                 try {
@@ -174,7 +216,10 @@ const CreateFormComponent = (props) => {
                         options: createOptionDataList
                     }
                     setButtonDisabled(true);
-                    props._onSubmit_createProductAndOptions(body);
+
+                    onActionOpenBackdrop();
+                    await __handle.req.createProductAndOptions(body);
+                    onActionCloseBackdrop();
                 } catch (err) {
                     alert(err.message)
                 }
@@ -188,7 +233,7 @@ const CreateFormComponent = (props) => {
 
             <form onSubmit={__handle.submit.createProductAndOptions}>
                 <CategorySelectorFieldView
-                    categoryList={props.categoryList}
+                    categoryList={productCategoryList}
                     createProductData={createProductData}
                     slideDownEffect={slideDownEffect}
 

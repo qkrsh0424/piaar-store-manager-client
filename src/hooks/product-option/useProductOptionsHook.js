@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { productOptionDataConnect } from "../../data_connect/productOptionDataConnect";
 import { isNumberFormat } from "../../utils/regexUtils";
 
 // id 제거
@@ -16,8 +17,28 @@ const option = {
     productId: null,
 }
 
-export default function useProductOptionsHook (props) {
+export default function useProductOptionsHook () {
     const [options, setOptions] = useState([]);
+
+    const reqSearchBatchByProductId = async (id) => {
+        await productOptionDataConnect().searchBatchByProductId(id)
+            .then(res => {
+                if(res.status === 200 && res.data && res.data.message === 'success'){
+                    setOptions(res.data.data);
+                }
+            })
+    }
+
+    const reqModifyBatch = async (productId) => {
+        await productOptionDataConnect().updateBatch(productId, options)
+            .then(res => {
+                alert('완료되었습니다.');
+            })
+            .catch(err => {
+                let res = err.response;
+                alert(res?.data?.memo);
+            })
+    }
 
     const onActionUpdateOptions = (data) => {
         setOptions(data);
@@ -91,6 +112,8 @@ export default function useProductOptionsHook (props) {
         onActionDeleteById,
         onChangeValueOfNameById,
         onActionUpdateOptions,
-        checkCreateFormData
+        checkCreateFormData,
+        reqSearchBatchByProductId,
+        reqModifyBatch
     }
 }

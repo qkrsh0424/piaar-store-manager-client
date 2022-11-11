@@ -7,6 +7,7 @@ import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import useProductHook from "../hooks/useProductHook";
+import useProductCategoryHook from "../hooks/useProductCategoryHook";
 
 function PageTitleFieldView({ title }) {
     return (
@@ -19,8 +20,14 @@ function PageTitleFieldView({ title }) {
 const ModifyFormComponent = (props) => {
     
     const {
+        query,
         navigatePrevPage
     } = useRouterHook();
+
+    const {
+        productCategoryList,
+        reqSearchAllProductCategory
+    } = useProductCategoryHook();
 
     const {
         product: modifyProductData,
@@ -28,8 +35,10 @@ const ModifyFormComponent = (props) => {
         onChangeImageFileNameAndImageUrl,
         onActionDeleteImageFileNameAndImageUrl,
         checkCreateFormData: checkProductCreateFormData,
-        onActionUpdateProduct,
-        onChangeStockManagement: onChangeProductStockManagement
+        onActionResetOriginData: onActionResetOriginProductData,
+        onChangeStockManagement: onChangeProductStockManagement,
+        reqSearchOneForProduct,
+        reqModifyOne
     } = useProductHook();
 
     const {
@@ -45,17 +54,16 @@ const ModifyFormComponent = (props) => {
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
     useEffect(() => {
-        function setProduct() {
-            let product = {...props.product};
-
-            onActionUpdateProduct(product);
+        async function fetchInit() {
+            let productId = query.productId;
+            onActionOpenBackdrop();
+            await reqSearchAllProductCategory();
+            await reqSearchOneForProduct(productId)
+            onActionCloseBackdrop();
         }
 
-        if(!props.product) {
-            return;
-        }
-        setProduct();
-    }, [props.product])
+        fetchInit();        
+    }, [])
 
     const __handle = {
         action: {
@@ -89,13 +97,12 @@ const ModifyFormComponent = (props) => {
                 e.preventDefault();
 
                 if(window.confirm('기존 상품 정보로 초기화하시겠습니까?\n(현재 변경된 내역은 저장되지 않습니다)')) {
-                    let data = {...props.product};
-                    onActionUpdateProduct(data);
+                    onActionResetOriginProductData();
                 }
             }
         },
         submit: {
-            modifyProduct: (e) => {
+            modifyProduct: async (e) => {
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -107,7 +114,9 @@ const ModifyFormComponent = (props) => {
                     checkProductCreateFormData();
 
                     setButtonDisabled(true);
-                    props._onSubmit_modifyProduct(modifyProductData);
+                    onActionOpenBackdrop();
+                    await reqModifyOne();
+                    onActionCloseBackdrop();
                 } catch (err) {
                     alert(err.message)
                 }
@@ -122,7 +131,7 @@ const ModifyFormComponent = (props) => {
             <form onSubmit={__handle.submit.modifyProduct}>
                 {modifyProductData &&
                     <ProductInfoInputFieldView
-                        categoryList={props.categoryList}
+                        categoryList={productCategoryList}
                         modifyProductData={modifyProductData}
 
                         onChangeProductInputValue={onChangeProductInputValue}

@@ -15,76 +15,37 @@ export default function TableFieldView(props) {
                 </thead>
                 <tbody style={{ borderTop: 'none' }}>
                     {props.subOptionCodes?.map((data, idx) => {
-                        let isModifying = (props.modifyingSubOptionCodeId === data.id);
-                        
+                        if (props.modifyingSubOption?.id === data.id)
+                            return (
+                                <ModifyingSubOptionInput
+                                    itemIdx={idx}
+                                    data={props.modifyingSubOption}
+                                    onChangeInputValue={props.onChangeSubOptionInputValue}
+                                    onSubmitCreateOrModifyData={props.onSubmitModifySubOptionData}
+                                    onActionDeleteData={props.onActionDeleteSubOptionData}
+                                />
+                            )
                         return (
                             <tr
                                 key={'sub-option-code-idx' + idx}
                             >
+                                <td>{idx + 1}.</td>
+                                <td className='sub-option-code'>{data.subOptionCode}</td>
+                                <td>{data.memo}</td>
                                 <td>
-                                    {idx+1}.
-                                </td>
-                                <td className='sub-option-code'>
-                                    {isModifying ? 
-                                        <div>
-                                            <input
-                                                type='text'
-                                                className='input-el'
-                                                name='subOptionCode'
-                                                value={data.subOptionCode}
-                                                onChange={(e) => props.onChangeSubOptionInputValue(e, data.id)}
-                                                autoFocus
-                                            />
-                                        </div>
-                                        :
-                                        <div>{data.subOptionCode}</div>
-                                    }
-                                </td>
-                                <td>
-                                    {isModifying ? 
-                                        <div>
-                                            <input
-                                                type='text'
-                                                className='input-el'
-                                                name='memo'
-                                                value={data.memo}
-                                                onChange={(e) => props.onChangeSubOptionInputValue(e, data.id)}
-                                            />
-                                        </div>
-                                        :
-                                        <div>{data.memo}</div>
-                                    }
-                                </td>
-                                <td>
-                                    {isModifying ?
-                                        <button
-                                            type='button'
-                                            className='button-el'
-                                            onClick={() => props.onSubmitCreateOrModifySubOption(data.id)}
-                                        >
-                                            <img
-                                                src='/assets/icon/done_outline_2c73d2.svg'
-                                                style={{ width: '25px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                                                alt=""
-                                                loading='lazy'
-                                                className='link-img'
-                                            ></img>
-                                        </button>
-                                        :
-                                        <button
-                                            type='button'
-                                            className='button-el'
-                                            onClick={() => props.onActionModifySubOption(data.id)}
-                                        >
-                                            <img
-                                                src='/assets/icon/edit_default_888888.svg'
-                                                style={{ width: '25px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                                                alt=""
-                                                loading='lazy'
-                                                className='link-img'
-                                            ></img>
-                                        </button>
-                                    }
+                                    <button
+                                        type='button'
+                                        className='button-el'
+                                        onClick={() => props.onChangeSelectedModifyingSubOption(data.id)}
+                                    >
+                                        <img
+                                            src='/assets/icon/edit_default_888888.svg'
+                                            style={{ width: '25px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                                            alt=""
+                                            loading='lazy'
+                                            className='link-img'
+                                        ></img>
+                                    </button>
                                 </td>
                                 <td>
                                     <button
@@ -104,6 +65,15 @@ export default function TableFieldView(props) {
                             </tr>
                         )
                     })}
+                    {!props.subOptionCodes.some(r => r.id === props.modifyingSubOption?.id) && props.modifyingSubOption &&
+                        <ModifyingSubOptionInput 
+                            itemIdx={props.subOptionCodes.length}
+                            data={props.modifyingSubOption}
+                            onChangeInputValue={props.onChangeSubOptionInputValue}
+                            onSubmitCreateOrModifyData={props.onSubmitCreateSubOptionData}
+                            onActionDeleteData={props.onActionDeleteModifyingSubOptionData}
+                        />
+                    }
                     {props.subOptionCodes.length === 0 &&
                         <tr>
                             <td colSpan={5}>대체코드가 존재하지 않습니다.</td>
@@ -112,5 +82,66 @@ export default function TableFieldView(props) {
                 </tbody>
             </table>
         </TableFieldWrapper>
+    )
+}
+
+function ModifyingSubOptionInput({ itemIdx, data, onChangeInputValue, onSubmitCreateOrModifyData, onActionDeleteData }) {
+    return (
+        <tr>
+            <td>{itemIdx + 1}. </td>
+            <td className='sub-option-code'>
+                <div>
+                    <input
+                        type='text'
+                        className='input-el'
+                        name='subOptionCode'
+                        value={data.subOptionCode}
+                        onChange={(e) => onChangeInputValue(e)}
+                        autoFocus
+                    />
+                </div>
+            </td>
+            <td>
+                <div>
+                    <input
+                        type='text'
+                        className='input-el'
+                        name='memo'
+                        value={data.memo}
+                        onChange={(e) => onChangeInputValue(e)}
+                    />
+                </div>
+            </td>
+            <td>
+                <button
+                    type='button'
+                    className='button-el'
+                    onClick={() => onSubmitCreateOrModifyData()}
+                >
+                    <img
+                        src='/assets/icon/done_outline_2c73d2.svg'
+                        style={{ width: '25px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                        alt=""
+                        loading='lazy'
+                        className='link-img'
+                    ></img>
+                </button>
+            </td>
+            <td>
+                <button
+                    type='button'
+                    className='button-el'
+                    onClick={() => onActionDeleteData(data.id)}
+                >
+                    <img
+                        src='/assets/icon/delete_default_ff3060.svg'
+                        style={{ width: '25px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                        alt=""
+                        loading='lazy'
+                        className='link-img'
+                    ></img>
+                </button>
+            </td>
+        </tr>
     )
 }

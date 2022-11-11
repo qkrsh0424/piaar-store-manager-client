@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import RequiredIcon from "../../../module/icon/RequiredIcon";
@@ -13,12 +15,29 @@ export default function CreateFormComponent(props) {
     const {
         savedCategories,
         category: createCategoryData,
+        reqSearchAllProductCategory,
         onChangeValueOfName: onChangeCategoryInputValue,
         checkCreateFormData: checkProductCreateFormData,
         onSubmitCreateData: onSubmitCreateCategoryData
     } = useProductCategoryHook();
 
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
+
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
+
+    useEffect(() => {
+        async function fetchInit() {
+            onActionOpenBackdrop();
+            await reqSearchAllProductCategory();
+            onActionCloseBackdrop();
+        }
+
+        fetchInit();
+    }, [])
 
     const __handle = {
         action: {
@@ -29,14 +48,16 @@ export default function CreateFormComponent(props) {
             }
         },
         submit: {
-            createProductCategory: (e) => {
+            createProductCategory: async (e) => {
                 e.preventDefault();
 
                 try{
                     checkProductCreateFormData();
 
                     setButtonDisabled(true);
-                    onSubmitCreateCategoryData();
+                    onActionOpenBackdrop();
+                    await onSubmitCreateCategoryData();
+                    onActionCloseBackdrop();
                 } catch (err) {
                     alert(err.message);
                 }
@@ -45,23 +66,30 @@ export default function CreateFormComponent(props) {
     }
 
     return (
-        <Container>
-            <PageTitleFieldView title={'카테고리 생성'} />
-            <form onSubmit={__handle.submit.createProductCategory}>
-                {createCategoryData &&
-                    <CategoryInfoInputFieldView
-                        savedCategories={savedCategories}
-                        createCategoryData={createCategoryData}
-                        onChangeCategoryInputValue={onChangeCategoryInputValue}
-                    />
-                }
+        <>
+            <Container>
+                <PageTitleFieldView title={'카테고리 생성'} />
+                <form onSubmit={__handle.submit.createProductCategory}>
+                    {createCategoryData &&
+                        <CategoryInfoInputFieldView
+                            savedCategories={savedCategories}
+                            createCategoryData={createCategoryData}
+                            onChangeCategoryInputValue={onChangeCategoryInputValue}
+                        />
+                    }
 
-                <CreateButtonFieldView
-                    buttonDisabled={buttonDisabled}
-                    onActionCancelCreateProduct={__handle.action.cancelCreateCategory}
-                />
-            </form>
-        </Container>
+                    <CreateButtonFieldView
+                        buttonDisabled={buttonDisabled}
+                        onActionCancelCreateProduct={__handle.action.cancelCreateCategory}
+                    />
+                </form>
+            </Container>
+
+            {/* Backdrop */}
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
+        </>
     )
 }
 

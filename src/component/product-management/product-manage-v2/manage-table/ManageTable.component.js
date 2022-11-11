@@ -64,25 +64,29 @@ const ManageTableComponent = (props) => {
     }
 
     return (
-        props.productManagementList &&
-        <Container>
-            <ManageTableFieldView
-                productManagementList={props.productManagementList}
+        <>
+            <Container>
+                {props.productManagementList &&
+                    <ManageTableFieldView
+                        productManagementList={props.productManagementList}
 
-                isCheckedOne={props.isCheckedOne}
-                isCheckedAll={props.isCheckedAll}
-                onActionCheckOne={props.onActionCheckOne}
-                onActionCheckAll={props.onActionCheckAll}
-                isProductCheckedOne={props.isProductCheckedOne}
-                onActionProductCheckOne={props.onActionProductCheckOne}
-                onSubmitDeleteProductOne={props.onSubmitDeleteProductOne}
-                onActionModifyProduct={props.onActionModifyProduct}
-                onActionModifyOptions={props.onActionModifyOptions}
+                        isCheckedOne={props.isCheckedOne}
+                        isCheckedAll={props.isCheckedAll}
+                        onActionCheckOne={props.onActionCheckOne}
+                        onActionCheckAll={props.onActionCheckAll}
+                        isProductCheckedOne={props.isProductCheckedOne}
+                        onActionProductCheckOne={props.onActionProductCheckOne}
+                        onSubmitDeleteProductOne={props.onSubmitDeleteProductOne}
+                        onActionModifyProduct={props.onActionModifyProduct}
+                        onActionModifyOptions={props.onActionModifyOptions}
 
-                onActionOpenSubOptionCodeModal={__handle.action.openSubOptionCodeModal}
-                onActionOpenOptionPackageModal={__handle.action.openOptionPackageModal}
-                onActionProductDetailPageModal={__handle.action.openProductDetailPageModal}
-            />
+                        onActionOpenSubOptionCodeModal={__handle.action.openSubOptionCodeModal}
+                        onActionOpenOptionPackageModal={__handle.action.openOptionPackageModal}
+                        onActionProductDetailPageModal={__handle.action.openProductDetailPageModal}
+                    />
+                }
+            </Container>
+            
             {subOptionCodeModalOpen && option &&
                 <SubOptionCodeModalComponent
                     option={option}
@@ -104,7 +108,7 @@ const ManageTableComponent = (props) => {
                     onActionCloseModal={__handle.action.closeProductDetailPageModal}
                 />
             }
-        </Container>
+        </>
     )
 }
 

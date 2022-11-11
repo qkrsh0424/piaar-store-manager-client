@@ -1,6 +1,7 @@
+import { useCallback } from "react";
 import { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { productDataConnect } from '../../../../data_connect/productDataConnect';
+import { productDataConnect } from "../../../../data_connect/productDataConnect";
 
 export default function useProductHook (props) {
     const [product, setProduct] = useState({
@@ -16,6 +17,21 @@ export default function useProductHook (props) {
         productCategoryCid: null
     });
 
+    const onActionResetData = useCallback(() =>
+        setProduct({
+            id: uuidv4(),
+            imageUrl: '',
+            imageFileName: '',
+            defaultName: '',
+            managementName: '',
+            memo: '',
+            purchaseUrl: '',
+            managementNumber: '',
+            stockManagement: false,
+            productCategoryCid: null
+        })
+    );
+
     const reqDeleteOne = async (id) => {
         await productDataConnect().deleteOne(id)
             .then(res => {
@@ -29,7 +45,6 @@ export default function useProductHook (props) {
                     alert('undefined error.');
                     return;
                 }
-
                 alert(res?.data.memo);
             })
     }
@@ -95,6 +110,7 @@ export default function useProductHook (props) {
         checkCreateFormData,
         reqDeleteOne,
         onActionUpdateProduct,
-        onChangeStockManagement
+        onChangeStockManagement,
+        onActionResetData
     }
 }
