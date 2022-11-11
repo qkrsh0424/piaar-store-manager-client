@@ -58,6 +58,7 @@ const InputFieldWrapper = styled.div`
     place-items: center;
     padding: 30px 0;
     overflow: auto;
+    flex-wrap: wrap;
 
     .input-label {
         font-size: 16px;
@@ -91,7 +92,7 @@ const ImageFieldWrapper = styled.div`
 
     .image-wrapper {
         width: 100%;
-        min-height: 50vh;
+        /* min-height: 50vh; */
         max-height: 50vh;
         overflow: auto;
     }
