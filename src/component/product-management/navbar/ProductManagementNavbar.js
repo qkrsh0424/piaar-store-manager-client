@@ -1,22 +1,9 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import useRouterHook from "../../../hooks/router/useRouterHook";
 
 const Container = styled.div`
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 200px;
-    max-width: 200px;
-    margin-top: 64px;
-    background-color: #455265;
-    color: #fff;
-    box-shadow: var(--defaultBoxShadow);
-    padding-bottom: 100px;
-    overflow: pre;
-    z-index: 2;
-    padding: 20px;
-
     .group-box {
         margin-bottom: 40px;
     }
@@ -44,16 +31,74 @@ const Container = styled.div`
     }
 `;
 
-// const thisRouters = [
-//     {
-//         name: '카테고리 생성',
-//         pathname: '/product-category/create'
-//     },
-//     {
-//         name: '상품 생성',
-//         pathname: '/products/create'
-//     }
-// ]
+const DesktopNavbarBox = styled.div`
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 200px;
+    max-width: 200px;
+    margin-top: 64px;
+    background-color: #455265;
+    color: #fff;
+    box-shadow: var(--defaultBoxShadow);
+    padding-bottom: 100px;
+    overflow: pre;
+    z-index: 2;
+    padding: 20px;
+
+    @media all and (max-width:992px){
+        display: none;
+    }
+`;
+
+const MobileNavbarBox = styled.div`
+    display: none;
+
+    @media screen and (max-width: 992px) {
+        display: block;
+    }
+    
+    .selector-control-button {
+        width: 25px;
+        height: 64px;
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        transition: 0.15s;
+
+        border-radius: 0 5px 5px 0;
+
+        border: 1px solid #455265;
+        background-color: #455265;
+    }
+
+    .navbar-item {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 200px;
+        max-width: 200px;
+        margin-top: 64px;
+        background-color: #455265;
+        color: #fff;
+        box-shadow: var(--defaultBoxShadow);
+        padding-bottom: 100px;
+        overflow: pre;
+        z-index: 2;
+        padding: 20px;
+        left: -200px;
+
+        &.navbar-item-open {
+            left: 0;
+        }
+    }
+
+    .selector-button-box {
+        position: absolute;
+        left: 199px;
+        top: 0px;
+    }
+`;
 
 const thisRouters = [
     {
@@ -82,78 +127,131 @@ const thisRouters = [
             }
         ]
     },
-    {
-        title: '입출고 관리',
-        page: [
-            {
-                name: '입고 등록',
-                pathname: '/products/receive'
-            },
-            {
-                name: '출고 등록',
-                pathname: '/products/release'
-            },
-            {
-                name: '입출고 현황',
-                pathname: '/products/stock-status'
-            }
-        ]
-    }
+    // {
+    //     title: '입출고 관리',
+    //     page: [
+    //         {
+    //             name: '입고 등록',
+    //             pathname: '/products/receive'
+    //         },
+    //         {
+    //             name: '출고 등록',
+    //             pathname: '/products/release'
+    //         },
+    //         {
+    //             name: '입출고 현황',
+    //             pathname: '/products/stock-status'
+    //         }
+    //     ]
+    // }
 ]
 
 const ProductManagementNavbar = () => {
+    const [mobileSelectorOpen, setMobileSelectorOpen] = useState(false);
 
     const {
         location
     } = useRouterHook();
 
+    const onActionOpenMobileSelector = () => {
+        setMobileSelectorOpen(true);
+    }
+    
+    const onActionCloseMobileSelector = () => {
+        setMobileSelectorOpen(false);
+    }
+
     return (
         <Container>
-            {/* <div className='nav-title'>상품 등록 관리</div>
-            {thisRouters.map(r => {
-                return (
-                    <div key={r.name} className='link-box'>
-                        <Link
-                            to={r.pathname}
-                            replace={true}
-                        >
+            {/* Desktop Navbar */}
+            <DesktopNavbarBox>
+                {thisRouters.map(r => {
+                    return (
+                        <div className='group-box' key={'navbar-' + r.title}>
+                            <div className='nav-title'>{r.title}</div>
+                            {r.page?.map(navPage => {
+                                return (
+                                    <div key={navPage.name} className='link-box'>
+                                        <Link
+                                            to={navPage.pathname}
+                                            replace={true}
+                                        >
+                                            <button
+                                                type='button'
+                                                className={`button-el ${location.pathname === navPage.pathname ? 'button-active' : ''}`}
+                                            >
+                                                {navPage.name}
+                                            </button>
+                                        </Link>
+
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    )
+                })}
+            </DesktopNavbarBox>
+
+            {/* Mobile Navbar */}
+            <MobileNavbarBox>
+                <div className={`navbar-item ${mobileSelectorOpen && 'navbar-item-open'}`}>
+                    {mobileSelectorOpen ?
+                        <div className='selector-button-box'>
                             <button
                                 type='button'
-                                className={`button-el ${location.pathname === r.pathname ? 'button-active' : ''}`}
+                                className='selector-control-button'
+                                onClick={() => onActionCloseMobileSelector()}
                             >
-                                {r.name}
+                                <img
+                                    className='button-icon'
+                                    src='/assets/icon/left_arrow_default_ffffff.svg'
+                                    style={{ width: '25px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                                />
                             </button>
-                        </Link>
-                        
-                    </div>
-                )
-            })} */}
+                        </div>
+                        :
+                        <div className='selector-button-box'>
+                            <button
+                                type='button'
+                                className='selector-control-button'
+                                onClick={() => onActionOpenMobileSelector()}
+                            >
+                                <img
+                                    className='button-icon'
+                                    src='/assets/icon/right_arrow_default_ffffff.svg'
+                                    style={{ width: '25px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                                />
+                            </button>
+                        </div>
+                    }
+                    {thisRouters.map(r => {
+                        return (
+                            <div className='group-box' key={'navbar-' + r.title}>
+                                <div className='nav-title'>{r.title}</div>
+                                {r.page?.map(navPage => {
+                                    return (
+                                        <div key={navPage.name} className='link-box'>
+                                            <Link
+                                                to={navPage.pathname}
+                                                replace={true}
+                                            >
+                                                <button
+                                                    type='button'
+                                                    className={`button-el ${location.pathname === navPage.pathname ? 'button-active' : ''}`}
+                                                >
+                                                    {navPage.name}
+                                                </button>
+                                            </Link>
 
-            {thisRouters.map(r => {
-                return (
-                    <div className='group-box' key={'navbar-' + r.title}>
-                        <div className='nav-title'>{r.title}</div>
-                        {r.page?.map(navPage => {
-                            return (
-                                <div key={navPage.name} className='link-box'>
-                                    <Link
-                                        to={navPage.pathname}
-                                        replace={true}
-                                    >
-                                        <button
-                                            type='button'
-                                            className={`button-el ${location.pathname === navPage.pathname ? 'button-active' : ''}`}
-                                        >
-                                            {navPage.name}
-                                        </button>
-                                    </Link>
-
-                                </div>
-                            )
-                        })}
-                    </div>
-                )
-            })}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        )
+                    })
+                    }
+                </div>
+            </MobileNavbarBox>
         </Container>
     )
 }

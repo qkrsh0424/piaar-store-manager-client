@@ -78,6 +78,8 @@ const useImageFileUploaderHook = () => {
                     }, 60000);
                     
                     link.remove();
+                }).catch(err => {
+                    alert('다운로드 오류. 재시도 해주세요.');
                 })
     }
 

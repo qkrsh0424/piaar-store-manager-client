@@ -80,29 +80,33 @@ const SearchProductReceiveAndReleaseModalComponent = (props) => {
                 open={props.modalOpen}
                 title={'입출고 현황'}
                 element={
-                    <div style={{ padding: '20px 10px'}}>
+                    <>
                         <DateRangeSelectorFieldView
                             dateRangeInfo={dateRangeInfo}
 
                             onActionOpenDateRangePickerModal={__handle.action.openDateRangePickerModal}
                         />
-                        <ReceiveStatusTableFieldView
-                            optionReceiveStatus={optionReceiveStatus}
-                            modifyingId={modifyingId}
+                        <div className='data-wrapper' style={{ padding: '0', marginTop: '20px' }}>
+                            <ReceiveStatusTableFieldView
+                                optionReceiveStatus={optionReceiveStatus}
+                                modifyingId={modifyingId}
 
-                            onChangeInputValue={onChangeReceiveValueOfName}
-                            onActionSetModifyingId={__handle.action.setModifyingId}
-                            onSubmitModifyMemo={onSubmitModifyReceiveMemo}
-                        />
-                        <ReleaseStatusTableFieldView
-                            optionReleaseStatus={optionReleaseStatus}
-                            modifyingId={modifyingId}
+                                onChangeInputValue={onChangeReceiveValueOfName}
+                                onActionSetModifyingId={__handle.action.setModifyingId}
+                                onSubmitModifyMemo={onSubmitModifyReceiveMemo}
+                            />
+                        </div>
+                        <div className='data-wrapper' style={{ padding: '0', marginTop: '20px' }}>
+                            <ReleaseStatusTableFieldView
+                                optionReleaseStatus={optionReleaseStatus}
+                                modifyingId={modifyingId}
 
-                            onChangeInputValue={onChangeReleaseValueOfName}
-                            onActionSetModifyingId={__handle.action.setModifyingId}
-                            onSubmitModifyMemo={onSubmitModifyReleaseMemo}
-                        />
-                    </div>
+                                onChangeInputValue={onChangeReleaseValueOfName}
+                                onActionSetModifyingId={__handle.action.setModifyingId}
+                                onSubmitModifyMemo={onSubmitModifyReleaseMemo}
+                            />
+                        </div>
+                    </>
                 }
                 maxWidth={'lg'}
 

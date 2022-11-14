@@ -54,6 +54,10 @@ const ElementBox = styled.div`
 
         @media screen and (max-width: 992px) {
             flex-direction: column;
+
+            .data-wrapper {
+                width: 90%;
+            }
         }
     }
 

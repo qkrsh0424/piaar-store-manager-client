@@ -87,14 +87,6 @@ const DrawerNavbarSiderComponent = (props) => {
                             <LinkContainer>
                                 <CustomLink to='/'>메인페이지</CustomLink>
                             </LinkContainer>
-                            {
-                                userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
-                                    <LinkContainer>
-                                        <CustomLink to='/account-book'>부기관리</CustomLink>
-                                    </LinkContainer>
-                                    :
-                                    <></>
-                            }
                             <LinkContainer>
                                 <CustomLink to='/products'>상품 재고관리</CustomLink>
                             </LinkContainer>
@@ -104,7 +96,7 @@ const DrawerNavbarSiderComponent = (props) => {
                             {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&
                                 <>
                                     <LinkContainer>
-                                        <CustomLink to='/erp/management/order-upload'>피아르 주문&출고 관리</CustomLink>
+                                        <CustomLink to='/erp/management/order-upload'>피아르 주문 & 출고 관리</CustomLink>
                                     </LinkContainer>
                                     <LinkContainer>
                                         <CustomLink to='/erp/return-management/registration'>피아르 반품 관리</CustomLink>
@@ -156,6 +148,14 @@ const DrawerNavbarSiderComponent = (props) => {
                                         <CustomLink to='/waybill'>오늘보낼것</CustomLink>
                                     </LinkContainer> */}
                                 </>
+                            }
+                            {
+                                userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
+                                    <LinkContainer>
+                                        <CustomLink to='/account-book'>부기관리</CustomLink>
+                                    </LinkContainer>
+                                    :
+                                    <></>
                             }
                             <LinkContainer>
                                 <form onSubmit={(e) => props.__handleEventControl().logoutSubmit(e)}>

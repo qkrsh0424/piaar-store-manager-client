@@ -5,7 +5,9 @@ const Container = styled.div`
 `;
 
 const DateRangeSelectorFieldWrapper = styled.div`
-    padding-bottom: 20px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
 
     .button-el {
         width: 280px;
@@ -29,8 +31,6 @@ const DateRangeSelectorFieldWrapper = styled.div`
 const StockStatusFieldWrapper = styled.div`
     min-height: 30vh;
     max-height: 30vh;
-    margin-bottom: 30px;
-    border: 1px solid #c8c8c8;
     overflow: auto;
 
     table {

@@ -12,12 +12,12 @@ const InfoFieldWrapper = styled.div`
 
         @media screen and (max-width:992px){
             font-size: 14px;
-            display: block;
         }
     }
 
     .info-name {
         width: 100px;
+        text-align: left;
         color: #737373;
     }
 `;
