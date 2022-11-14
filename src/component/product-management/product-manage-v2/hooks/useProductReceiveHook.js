@@ -22,16 +22,15 @@ export default function useProductReceiveHook (props) {
         let value = e.target.value;
 
         let updatedProductReceive = productReceive.map((r, index) => {
-            return (index === idx) ? 
-                {
+            if (index === idx) {
+                return {
                     ...r,
                     [name]: value
                 }
-                :
-                r
-                ;
+            } else {
+                return r
+            }
         })
-
         setProductReceive(updatedProductReceive);
     }
 

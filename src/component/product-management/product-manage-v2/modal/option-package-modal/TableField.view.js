@@ -29,7 +29,7 @@ export default function TableFieldView (props) {
                                     {data.originOptionDefaultName}
                                 </td>
                                 <td>
-                                    <input type='number' className='input-el' name='packageUnit' onChange={(e) => props.onChangeValueOfName(e, data.id)} value={data.packageUnit} min={1}/>
+                                    <input type='number' className='input-el' name='packageUnit' onChange={(e) => props.onChangeOptionPackageValueOfName(e, data.id)} value={data.packageUnit} min={1}/>
                                 </td>
                                 <td>
                                     <button

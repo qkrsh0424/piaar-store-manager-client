@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { BackdropHookComponent } from "../../../../../hooks/backdrop/useBackdropHook";
-import useOptionPackagesHook from "../../../../../hooks/option-package/useOptionPackagesHook";
-import useProductOptionsSearchHook from "../../../../../hooks/product-option/useProductOptionsSearchHook";
+import { v4 as uuidv4 } from 'uuid';
+import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
+import useOptionPackagesHook from "./hooks/useOptionPackagesHook";
+import useProductOptionsSearchHook from "./hooks/useProductOptionsSearchHook";
 import SubmitModalComponentV2 from "../../../../module/modal/SubmitModalComponentV2";
 import ListFieldView from "./ListField.view";
 import { ButtonFieldWrapper, InfoFieldWrapper, InputFieldWrapper } from "./OptionPackageModal.styled";
@@ -67,17 +68,27 @@ const OptionPackageModalComponent = (props) => {
     const {
         optionPackages,
 
+        reqSearchOptionPackages,
         onActionAddData: onActionAddPackageOption,
-        onChangeValueOfName,
+        onChangeValueOfName: onChangeOptionPackageValueOfName,
         onSumbitCreateData: onSubmitCreateOptionPackages,
         onActionDeleteData: onActionDeleteOptionPackageData,
         onActionResetData: onActionResetOriginOptionPackages,
         checkSaveForm: checkOptionPackagesSaveForm
-    } = useOptionPackagesHook({ option: props.option });
+    } = useOptionPackagesHook();
+
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
 
     useEffect(() => {
         async function fetchInit() {
+            onActionOpenBackdrop();
             await reqSearchAllM2OJ();
+            await reqSearchOptionPackages(props.option.id);
+            onActionCloseBackdrop();
         }
 
         fetchInit();
@@ -88,17 +99,31 @@ const OptionPackageModalComponent = (props) => {
             changeInputValue: (e) => {
                 setInputValue(e.target.value);
             },
-            deleteOptionPackage: (id) => {    
+            deleteOptionPackage: (id) => {
                 onActionDeleteOptionPackageData(id);
+            },
+            addSubOption: (data) => {
+                let addData = {
+                    id: uuidv4(),
+                    packageUnit: 0,
+                    originOptionCode: data.option.code,
+                    originOptionId: data.option.id,
+                    originOptionDefaultName: data.option.defaultName,
+                    parentOptionId: props.option.id
+                }
+
+                onActionAddPackageOption(addData);
             }
         },
         submit: {
-            createOptionPackages: () => {
+            createOptionPackages: async () => {
                 try {
                     checkOptionPackagesSaveForm();
 
-                    onSubmitCreateOptionPackages(props.option.id);
-                    props.onActionCloseModal();
+                    onActionOpenBackdrop();
+                    await onSubmitCreateOptionPackages(props.option.id);
+                    await reqSearchOptionPackages(props.option.id);
+                    onActionCloseBackdrop();
                 } catch (err) {
                     alert(err.message);
                 }
@@ -108,7 +133,7 @@ const OptionPackageModalComponent = (props) => {
 
     return (
         <>
-            {(optionPackages && productOptions) ?
+            {(optionPackages && productOptions) &&
                 <SubmitModalComponentV2
                     open={true}
                     title={'옵션패키지 설정'}
@@ -127,7 +152,7 @@ const OptionPackageModalComponent = (props) => {
                                     productOptions={productOptions}
                                     inputValue={inputValue}
 
-                                    onActionAddPackageOption={onActionAddPackageOption}
+                                    onActionAddPackageOption={__handle.action.addSubOption}
                                 ></ListFieldView>
                             </div>
                             <div className='data-wrapper' style={{ height: '400px' }}>
@@ -139,7 +164,7 @@ const OptionPackageModalComponent = (props) => {
                                         <TableFieldView
                                             optionPackages={optionPackages}
 
-                                            onChangeValueOfName={onChangeValueOfName}
+                                            onChangeOptionPackageValueOfName={onChangeOptionPackageValueOfName}
                                             onActionDeleteOptionPackageData={__handle.action.deleteOptionPackage}
                                         />
                                     </>
@@ -152,11 +177,11 @@ const OptionPackageModalComponent = (props) => {
                     _onSubmit={__handle.submit.createOptionPackages}
                     onClose={props.onActionCloseModal}
                 />
-                :
-                <BackdropHookComponent
-                    open={true}
-                />
             }
+
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
         </>
     )
 }
