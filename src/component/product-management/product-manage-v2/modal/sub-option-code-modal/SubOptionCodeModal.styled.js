@@ -24,8 +24,8 @@ const InfoFieldWrapper = styled.div`
 
 const TableFieldWrapper = styled.div`
     margin: 20px 0;
-    min-height: 40vh;
-    max-height: 40vh;
+    min-height: 30vh;
+    max-height: 30vh;
     overflow: auto;
 
     table thead tr {

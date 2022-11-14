@@ -114,7 +114,7 @@ const OptionPackageModalComponent = (props) => {
                     title={'옵션패키지 설정'}
                     element={
                         <div className='data-wrapper-group'>
-                            <div className='data-wrapper'>
+                            <div className='data-wrapper' style={{ height: '400px' }}>
                                 <InfoFieldView
                                     option={props.option}
                                 />
@@ -130,7 +130,7 @@ const OptionPackageModalComponent = (props) => {
                                     onActionAddPackageOption={onActionAddPackageOption}
                                 ></ListFieldView>
                             </div>
-                            <div className='data-wrapper'>
+                            <div className='data-wrapper' style={{ height: '400px' }}>
                                 {optionPackages &&
                                     <>
                                         <ButtonFieldView

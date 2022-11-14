@@ -26,7 +26,7 @@ const CreateProductReceiveModalFieldWrapper = styled.div`
 
     .fixed-header {
         position: sticky;
-        top: -1px;
+        top: 0;
         background: #f1f1f1;
         z-index: 10;
         font-size: 14px;

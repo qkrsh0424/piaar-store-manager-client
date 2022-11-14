@@ -78,7 +78,7 @@ const CreateOptionDefaultNameModalComponent = (props) => {
             open={props.modalOpen}
             title={'옵션명 일괄 생성'}
             element={
-                <div className='data-wrapper' style={{ height: 'auto' }}>
+                <div className='data-wrapper'>
                     <InfoFieldView />
                     <InputFieldView
                         optionDefaultNameList={optionDefaultNameList}

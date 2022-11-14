@@ -23,7 +23,7 @@ const InfoFieldWrapper = styled.div`
 `;
 
 const InputFieldWrapper = styled.div`
-    margin-top: 30px;
+    margin-top: 20px;
 
     .input-el{
         width: 100%;

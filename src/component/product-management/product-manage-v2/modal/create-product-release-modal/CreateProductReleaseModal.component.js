@@ -128,7 +128,7 @@ const CreateProductReleaseModalComponent = (props) => {
             open={props.modalOpen}
             title={'출고 등록'}
             element={
-                <>
+                <div className='data-wrapper' style={{ padding: '0' }}>
                     <CreateProductReleaseModalFieldWrapper>
                         <table className='table table-sm' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                             <thead>
@@ -208,7 +208,7 @@ const CreateProductReleaseModalComponent = (props) => {
                             </tbody>
                         </table>
                     </CreateProductReleaseModalFieldWrapper>
-                </>
+                </div>
             }
             maxWidth={'md'}
 

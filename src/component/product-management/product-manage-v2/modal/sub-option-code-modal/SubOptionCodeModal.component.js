@@ -156,7 +156,7 @@ const SubOptionCodeModalComponent = (props) => {
                     open={true}
                     title={'대체코드 설정'}
                     element={
-                        <div style={{ padding: '10px' }}>
+                        <div className='data-wrapper'>
                             <InfoFieldView
                                 option={props.option}
                             />
@@ -180,7 +180,7 @@ const SubOptionCodeModalComponent = (props) => {
                             />
                         </div>
                     }
-                    maxWidth={'sm'}
+                    maxWidth={'md'}
 
                     onClose={() => props.onActionCloseModal()}
                 />

@@ -134,7 +134,7 @@ const ProductDetailPageModalComponent = (props) => {
                 open={true}
                 title={'상세페이지 설정'}
                 element={
-                    <div className='data-wrapper' style={{ height: 'auto' }}>
+                    <div className='data-wrapper'>
                         <SelectorFieldView
                             detailPages={detailPages}
                             product={props.product}

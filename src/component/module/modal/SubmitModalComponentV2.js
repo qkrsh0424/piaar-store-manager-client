@@ -5,9 +5,6 @@ import PropTypes from 'prop-types';
 
 const TitleBox = styled.div`
     padding: 10px 20px;
-    /* display: flex; */
-    /* justify-content: space-between; */
-    /* align-items: center; */
 
     .modal-title {
         font-size: 1.3rem;
@@ -41,7 +38,7 @@ const TitleBox = styled.div`
 `;
 
 const ElementBox = styled.div`
-    margin: 10px;
+    margin-top: 10px;
     font-size: 14px;
     font-weight: 600;
     text-align: center;
@@ -59,25 +56,23 @@ const ElementBox = styled.div`
     }
 
     .data-wrapper {
-        margin: 20px;
+        margin: 0 20px;
         padding: 10px;
         flex: 1 1 0%;
         border-radius: 10px;
         overflow: hidden scroll;
         box-shadow: var(--defaultBoxShadow);
         background-color: white;
-        height: 400px;
     }
 `;
 
 const ButtonWrapper = styled.div`
+    margin-top: 20px;
     display: grid;
     grid-template-columns: 1fr 2fr;
 `;
 
 const ButtonBox = styled.div`
-    /* grid-column: repeat(2, 30% 70%); */
-
     .button-item{
         width: 100%;
         padding: 10px 0;
