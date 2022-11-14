@@ -31,6 +31,10 @@ input {
     border: 1px solid var(--defaultBorderColor);
 }
 
+input[type=checkbox] {
+    height: auto;
+}
+
 input:focus {
     border: 1px solid var(--piaar-main-color);
     box-shadow: var(--defaultBoxShadow);

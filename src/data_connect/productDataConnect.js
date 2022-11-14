@@ -119,11 +119,11 @@ const productDataConnect = () => {
                 withCredentials: true
             })
         },
-        // getList: async function(){
-        //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list`, {
-        //         withCredentials: true
-        //     })
-        // },
+        getList: async function(){
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list`, {
+                withCredentials: true
+            })
+        },
         // getListFj: async function () {
         //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product/list-fj`, {
         //         withCredentials: true

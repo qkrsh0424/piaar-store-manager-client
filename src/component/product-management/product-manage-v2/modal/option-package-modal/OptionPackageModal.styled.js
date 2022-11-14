@@ -12,12 +12,12 @@ const InfoFieldWrapper = styled.div`
 
         @media screen and (max-width:992px){
             font-size: 14px;
-            display: block;
         }
     }
 
     .info-name {
         width: 100px;
+        text-align: left;
         color: #737373;
     }
 `;
@@ -33,10 +33,8 @@ const InputFieldWrapper = styled.div`
 const ListFieldWrapper = styled.div`
     margin-top: 10px;
     margin-bottom: 10px;
-    min-height: 30vh;
-    max-height: 30vh;
+    height: 200px;
     overflow: auto;
-    /* padding: 0 20px; */
     white-space: pre-line;
 
     .flex-box { 
@@ -88,6 +86,9 @@ const ListFieldWrapper = styled.div`
 
 const TableFieldWrapper = styled.div`
     margin: 10px 0;
+    width: 100%;
+    height: 300px;
+    overflow: auto;
 
     table thead tr {
         vertical-align: middle !important;
@@ -135,7 +136,6 @@ const TableFieldWrapper = styled.div`
 `;
 
 const ButtonFieldWrapper = styled.div`
-    margin-top: 30px;
     padding: 3px;
     display: flex;
     gap: 6px;

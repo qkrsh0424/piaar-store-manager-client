@@ -156,7 +156,7 @@ const SubOptionCodeModalComponent = (props) => {
                     open={true}
                     title={'대체코드 설정'}
                     element={
-                        <div style={{ padding: '20px 10px' }}>
+                        <div style={{ padding: '10px' }}>
                             <InfoFieldView
                                 option={props.option}
                             />

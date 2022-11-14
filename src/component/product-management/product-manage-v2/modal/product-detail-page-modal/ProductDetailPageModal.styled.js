@@ -5,7 +5,7 @@ const SelectorFieldWrapper = styled.div`
     display: flex;
     align-content: center;
     gap: 5px;
-    margin: 10px 0;
+    margin: 10px;
 
     .select-item{
         width: 270px;
@@ -56,7 +56,7 @@ const SelectorFieldWrapper = styled.div`
 const InputFieldWrapper = styled.div`
     display: flex;
     place-items: center;
-    padding: 30px 0;
+    padding: 10px;
     overflow: auto;
     flex-wrap: wrap;
 
@@ -78,6 +78,7 @@ const InputFieldWrapper = styled.div`
 `;
 
 const ImageFieldWrapper = styled.div`
+    padding: 10px;
     width: 100%;
 
     input {

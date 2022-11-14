@@ -5,13 +5,20 @@ import PropTypes from 'prop-types';
 
 const TitleBox = styled.div`
     padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    /* display: flex; */
+    /* justify-content: space-between; */
+    /* align-items: center; */
 
     .modal-title {
         font-size: 1.3rem;
-        font-weight: 600;
+        font-weight: 400;
+        border-bottom: 1px solid #000;
+        padding-bottom: 20px;
+    }
+
+    .header-close-button-box {
+        display: flex;
+        justify-content: flex-end;
     }
 
     .button-el {
@@ -24,7 +31,6 @@ const TitleBox = styled.div`
         border: none;
         background-color: inherit;
         border-radius: 50%;
-
         cursor: pointer;
 
         :hover {
@@ -35,29 +41,55 @@ const TitleBox = styled.div`
 `;
 
 const ElementBox = styled.div`
-    padding: 20px 10px;
+    margin: 10px;
     font-size: 14px;
     font-weight: 600;
     text-align: center;
+    max-height: 70vh;
+    overflow: auto;
+
+    .data-wrapper-group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        @media screen and (max-width: 992px) {
+            flex-direction: column;
+        }
+    }
+
+    .data-wrapper {
+        margin: 20px;
+        padding: 10px;
+        flex: 1 1 0%;
+        border-radius: 10px;
+        overflow: hidden scroll;
+        box-shadow: var(--defaultBoxShadow);
+        background-color: white;
+        height: 400px;
+    }
 `;
 
 const ButtonWrapper = styled.div`
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 2fr;
 `;
 
 const ButtonBox = styled.div`
+    /* grid-column: repeat(2, 30% 70%); */
+
     .button-item{
         width: 100%;
         padding: 10px 0;
         font-size: 14px;
         font-weight: 500;
-        background: white;
+        background: rgb(137, 145, 163);
         border: 1px solid #00000000;
         cursor: pointer;
+        color: white;
 
-        &:hover{
-            background:#e1e1e160;
+        &.submit-btn {
+            background-color: var(--piaar-main-color);
         }
     }
 `;
@@ -98,46 +130,47 @@ const SubmitModalComponentV2 = ({ open, fullWidth, maxWidth, _onSubmit, onClose,
                 maxWidth={maxWidth || 'xs'}
                 onClose={(e) => _onClose(e) || {}}
             >
-                <TitleBox>
-                    <div className='modal-title'>{title || ''}</div>
-                    <div>
-                        <button
-                            type='button'
-                            className='button-el'
-                            onClick={(e) => _onClose(e) || {}}
-                        >
-                            <img
-                                src='/assets/icon/close_default_000000.svg'
-                                style={{ width: '30px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                                alt=""
-                                loading='lazy'
-                            ></img>
-                        </button>
-                    </div>
-
-                </TitleBox>
-                <form onSubmit={(e) => onSubmit(e)}>
-                    <ElementBox>
-                        {element || ''}
-                    </ElementBox>
-                    <ButtonWrapper>
-                        <ButtonBox>
+                <div style={{ backgroundColor: 'var(--piaar-background-color)' }}>
+                    <TitleBox>
+                        <div className='header-close-button-box'>
                             <button
-                                className='button-item'
-                                style={{ color: '#d15120' }}
+                                type='button'
+                                className='button-el'
                                 onClick={(e) => _onClose(e) || {}}
-                            >취소</button>
-                        </ButtonBox>
-                        <ButtonBox>
-                            <button
-                                type='submit'
-                                className='button-item'
-                                style={{ color: '#2d7ed1' }}
-                                disabled={buttonDisabled}
-                            >확인</button>
-                        </ButtonBox>
-                    </ButtonWrapper>
-                </form>
+                            >
+                                <img
+                                    src='/assets/icon/close_default_000000.svg'
+                                    style={{ width: '30px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                                    alt=""
+                                    loading='lazy'
+                                ></img>
+                            </button>
+                        </div>
+                        <div className='modal-title'>{title || ''}</div>
+                    </TitleBox>
+                    <form onSubmit={(e) => onSubmit(e)}>
+                        <ElementBox>
+                            {element || ''}
+                        </ElementBox>
+                        <ButtonWrapper>
+                            <ButtonBox>
+                                <button
+                                    className='button-item'
+                                    // style={{ color: '#d15120' }}
+                                    onClick={(e) => _onClose(e) || {}}
+                                >취소</button>
+                            </ButtonBox>
+                            <ButtonBox>
+                                <button
+                                    type='submit'
+                                    className='button-item submit-btn'
+                                    // style={{ color: '#2d7ed1' }}
+                                    disabled={buttonDisabled}
+                                >확인</button>
+                            </ButtonBox>
+                        </ButtonWrapper>
+                    </form>
+                </div>
             </Dialog>
         </>
     );

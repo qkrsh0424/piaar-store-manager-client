@@ -113,37 +113,41 @@ const OptionPackageModalComponent = (props) => {
                     open={true}
                     title={'옵션패키지 설정'}
                     element={
-                        <div style={{ padding: '20px 10px' }}>
-                            <InfoFieldView
-                                option={props.option}
-                            />
-                            <InputFieldView
-                                inputValue={inputValue}
+                        <div className='data-wrapper-group'>
+                            <div className='data-wrapper'>
+                                <InfoFieldView
+                                    option={props.option}
+                                />
+                                <InputFieldView
+                                    inputValue={inputValue}
 
-                                onChange={__handle.action.changeInputValue}
-                            ></InputFieldView>
-                            <ListFieldView
-                                productOptions={productOptions}
-                                inputValue={inputValue}
+                                    onChange={__handle.action.changeInputValue}
+                                ></InputFieldView>
+                                <ListFieldView
+                                    productOptions={productOptions}
+                                    inputValue={inputValue}
 
-                                onActionAddPackageOption={onActionAddPackageOption}
-                            ></ListFieldView>
-                            {optionPackages &&
-                                <>
-                                    <ButtonFieldView
-                                        onActionReset={onActionResetOriginOptionPackages}
-                                    />
-                                    <TableFieldView
-                                        optionPackages={optionPackages}
+                                    onActionAddPackageOption={onActionAddPackageOption}
+                                ></ListFieldView>
+                            </div>
+                            <div className='data-wrapper'>
+                                {optionPackages &&
+                                    <>
+                                        <ButtonFieldView
+                                            onActionReset={onActionResetOriginOptionPackages}
+                                        />
+                                        <TableFieldView
+                                            optionPackages={optionPackages}
 
-                                        onChangeValueOfName={onChangeValueOfName}
-                                        onActionDeleteOptionPackageData={__handle.action.deleteOptionPackage}
-                                    />
-                                </>
-                            }
+                                            onChangeValueOfName={onChangeValueOfName}
+                                            onActionDeleteOptionPackageData={__handle.action.deleteOptionPackage}
+                                        />
+                                    </>
+                                }
+                            </div>
                         </div>
                     }
-                    maxWidth={'sm'}
+                    maxWidth={'lg'}
 
                     _onSubmit={__handle.submit.createOptionPackages}
                     onClose={props.onActionCloseModal}

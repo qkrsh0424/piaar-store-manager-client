@@ -174,7 +174,7 @@ export default function ManageTableFieldView(props) {
                                             onClick={(e) => props.onActionCheckOne(e, option.id)}
                                         >
                                             <td>
-                                                <input type='checkbox' style={{ cursor: 'pointer', height: 'fit-content' }} checked={checked} onChange={(e) => props.onActionCheckOne(e, option.id)} />
+                                                <input type='checkbox' style={{ cursor: 'pointer' }} checked={checked} onChange={(e) => props.onActionCheckOne(e, option.id)} />
                                             </td>
                                             <td>
                                                 {option.code}

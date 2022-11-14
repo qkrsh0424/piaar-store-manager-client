@@ -33,7 +33,6 @@ const InfoFieldWrapper = styled.div`
 const InputFieldWrapper = styled.div`
     margin: 10px 20px;
     border: 1px solid var(--defaultBorderColor);
-    box-shadow: var(--defaultBoxShadow);
     border-radius: 5px;
 
     .input-wrapper {

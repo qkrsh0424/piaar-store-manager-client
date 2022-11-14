@@ -81,6 +81,23 @@ const thisRouters = [
                 pathname: '/products'
             }
         ]
+    },
+    {
+        title: '입출고 관리',
+        page: [
+            {
+                name: '입고 등록',
+                pathname: '/products/receive'
+            },
+            {
+                name: '출고 등록',
+                pathname: '/products/release'
+            },
+            {
+                name: '입출고 현황',
+                pathname: '/products/stock-status'
+            }
+        ]
     }
 ]
 

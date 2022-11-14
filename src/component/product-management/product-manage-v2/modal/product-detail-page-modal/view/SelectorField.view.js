@@ -32,6 +32,7 @@ export default function SelectorFieldView (props) {
                 <button
                     className='button-el'
                     onClick={(e) => props.onSubmitDeleteDetailPage(e)}
+                    disabled={!props.selectedDetailPage}
                 >
                     <img
                         src='/assets/icon/delete_default_ff3060.svg'

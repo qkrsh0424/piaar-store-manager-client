@@ -78,7 +78,7 @@ const CreateOptionDefaultNameModalComponent = (props) => {
             open={props.modalOpen}
             title={'옵션명 일괄 생성'}
             element={
-                <>
+                <div className='data-wrapper' style={{ height: 'auto' }}>
                     <InfoFieldView />
                     <InputFieldView
                         optionDefaultNameList={optionDefaultNameList}
@@ -89,7 +89,7 @@ const CreateOptionDefaultNameModalComponent = (props) => {
                         onChangeSeparatorInputValue={__handle.action.changeSeparatorInputValue}
                         onChangeDefaultNameInputValue={onChangeOptionDefaultNameInputValue}
                     />
-                </>
+                </div>
             }
             maxWidth={'sm'}
 

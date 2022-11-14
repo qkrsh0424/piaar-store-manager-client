@@ -51,6 +51,7 @@ export default function ProductListFieldView(props) {
                             className={parseInt(props.productCid) === r.cid ? `data-active` : '' || `data-hover`}
                             onClick={() => props.onChangeProductCidValue(r.cid)}
                         >
+                            {console.log(r)}
                             <div className="image-box">
                                 {r.imageUrl ?
                                     <img src={r.imageUrl} title={r.imageFileName} />
