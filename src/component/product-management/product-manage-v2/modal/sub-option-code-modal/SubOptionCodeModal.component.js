@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
 import { useDisabledButtonHook } from "../../../../../hooks/button-disabled/useDisabledButtonHook";
 import CommonModalComponentV2 from "../../../../module/modal/CommonModalComponentV2";
-import useSubOptionCodesHookV2 from "./hooks/useSubOptionCodesHookV2";
+import useSubOptionCodesHook from "./hooks/useSubOptionCodesHook";
 import { ButtonFieldWrapper, InfoFieldWrapper } from "./SubOptionCodeModal.styled";
 import TableFieldView from "./TableField.view";
 import { v4 as uuidv4 } from 'uuid';
@@ -59,7 +59,7 @@ const SubOptionCodeModalComponent = (props) => {
         onActionDeleteModifyingData: onActionDeleteModifyinSubOption,
         reqDeleteOne: reqDeleteSubOption,
         onActionAddData: onActionAddSubOption
-    } = useSubOptionCodesHookV2();
+    } = useSubOptionCodesHook();
     
     const {
         open: backdropOpen,
@@ -90,8 +90,7 @@ const SubOptionCodeModalComponent = (props) => {
                     id: uuidv4(),
                     subOptionCode: '',
                     memo: '',
-                    productOptionId: props.option.id,
-                    productOptionCode: props.option.code
+                    productOptionId: props.option.id
                 }
 
                 onActionAddSubOption(data);

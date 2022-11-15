@@ -1,19 +1,20 @@
-import { useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import { useCallback, useState } from "react";
 import { subOptionCodeDataConnect } from "../../../../../../data_connect/subOptionCodeDataConnect";
 
-export default function useSubOptionCodesHook(props) {
+export default function useSubOptionCodesHook() {
     const [subOptionCodes, setSubOptionCodes] = useState([]);
-    const [originSubOptionCodes, setOriginSubOptionCodes] = useState(null);
-    
-    const [modifyingId, setModifyingId] = useState(null);
 
+    const [modifyingSubOption, setModifyingSubOption] = useState(null);
+
+    const onActionResetData = useCallback(() => {
+        setSubOptionCodes([]);
+        setModifyingSubOption(null);
+    })
 
     const reqSearchBatchSubOptionCodes = async (optionId) => {
         await subOptionCodeDataConnect().searchBatchByProductOptionId(optionId)
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {
-                    setOriginSubOptionCodes(res.data.data);
                     setSubOptionCodes(res.data.data);
                 }
             })
@@ -28,16 +29,8 @@ export default function useSubOptionCodesHook(props) {
             })
     }
 
-    const reqDeleteSubOptionCode = async (id) => {
+    const reqDeleteOne = async (id) => {
         await subOptionCodeDataConnect().deleteOne(id)
-            .then(res => {
-                if(res.status === 200 && res.data && res.data.message === 'success') {
-                    let originData = originSubOptionCodes.filter(r => r.id !== id);
-                    let data = subOptionCodes.filter(r => r.id !== id);
-                    setOriginSubOptionCodes(originData);
-                    setSubOptionCodes(data);
-                }
-            })
             .catch(err => {
                 let res = err.response;
                 if (res?.status === 500) {
@@ -49,12 +42,11 @@ export default function useSubOptionCodesHook(props) {
             })
     }
 
-    const reqCreateSubOptionCode = async (data) => {
-        await subOptionCodeDataConnect().postOne(data)
+    const reqCreateOne = async () => {
+        await subOptionCodeDataConnect().postOne(modifyingSubOption)
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {
-                    // 정상적으로 생성된다면 modifyingId를 초기화
-                    setModifyingId(null);
+                    onActionResetData();
                 }
             })
             .catch(err =>{
@@ -68,13 +60,11 @@ export default function useSubOptionCodesHook(props) {
             })
     }
 
-    const reqModifySubOptionCode = async (data) => {
-        await subOptionCodeDataConnect().putOne(data)
+    const reqModifyOne = async () => {
+        await subOptionCodeDataConnect().putOne(modifyingSubOption)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
-                    // 정상적으로 생성된다면 modifyingId를 초기화
-                    setModifyingId(null);
-                    reqSearchBatchSubOptionCodes(props.option.id);
+                    onActionResetData();
                 }
             })
             .catch(err => {
@@ -88,104 +78,65 @@ export default function useSubOptionCodesHook(props) {
             })
     }
 
-    const onActionAddData = () => {
-        if(modifyingId) {
+    const onActionAddData = (data) => {
+        if(modifyingSubOption) {
             alert('수정중인 데이터를 먼저 완료해주세요.');
             return;
         }
 
-        let data = {
-            id: uuidv4(),
-            subOptionCode: '',
-            memo: '',
-            productOptionId: props.option.id,
-            productOptionCode: props.option.code
-        }
-
-        let updatedSubOptionCodes = subOptionCodes.concat(data);
-        setSubOptionCodes(updatedSubOptionCodes);
-        setModifyingId(data.id);
+        setModifyingSubOption(data);
     }
 
-    // 기존에 생성된 데이터라면 삭제 api 요청, 그렇지 않다면 client에서 처리
-    const onActionDeleteData = async (id) => {
-        if(originSubOptionCodes.some(r => r.id === id)) {
-            await reqDeleteSubOptionCode(id);
-        }else {
-            let result = subOptionCodes.filter(r => r.id !== id);
-            setSubOptionCodes(result);
-        }
-
-        if(id === modifyingId) {
-            setModifyingId(null);
-        }
-    }
-
-    const onActionCreateOrModify = async (id) => {
-        let data = subOptionCodes.filter(r => r.id === id)[0];
-
-        // 기존에 존재하는 데이터면 수정 요청, 새로 생성한 데이터면 생성 요청
-        if(originSubOptionCodes.some(r => r.id === id)) {
-            // modify
-            await reqModifySubOptionCode(data);
-        } else {
-            // create
-            await reqCreateSubOptionCode(data);
-            // await reqSearchBatchSubOptionCodes(props.option.id);
-        }
-    }
-
-    const checkSaveForm = (data) => {
-        if (data.subOptionCode === '' || !data.subOptionCode) {
+    const checkSaveForm = () => {
+        if (modifyingSubOption.subOptionCode === '' || !modifyingSubOption.subOptionCode) {
             throw new Error('대체코드는 공백으로 생성할 수 없습니다.')
         }
 
-        if (data.productOptionId === '' || !data.productOptionId) {
+        if (modifyingSubOption.productOptionId === '' || !modifyingSubOption.productOptionId) {
             throw new Error('상품옵션정보가 올바르지 않습니다.')
         }
 
-        if (data.productOptionCode === '' || !data.productOptionCode) {
-            throw new Error('상품옵션정보가 올바르지 않습니다.')
-        }
+        // if (modifyingSubOption.productOptionCode === '' || !modifyingSubOption.productOptionCode) {
+        //     throw new Error('상품옵션정보가 올바르지 않습니다.')
+        // }
     }
 
-    const onChangeValueOfNameByIds = (e, id) => {
+    const onChangeValueOfName = (e) => {
         let name = e.target.name;
         let value = e.target.value;
 
-        let updatedSubOptionCodes = subOptionCodes.map(r => {
-            if(r.id === id) {
-                return {
-                    ...r,
-                    [name]: value
-                }
-            }else {
-                return r;
-            }
-        })
-
-        setSubOptionCodes(updatedSubOptionCodes);
+        setModifyingSubOption({
+            ...modifyingSubOption,
+            [name]: value
+        });
     }
 
-    const onActionAddModifyingId = (id) => {
-        if(modifyingId) {
+    const onChangeSelectedModifyingData = (subOptionId) => {
+        if(modifyingSubOption) {
             alert('수정중인 데이터를 먼저 완료해주세요.');
             return;
         }
 
-        setModifyingId(id);
+        let data = subOptionCodes.filter(r => r.id === subOptionId)[0];
+        setModifyingSubOption(data);
+    }
+
+    const onActionDeleteModifyingData = () => {
+        setModifyingSubOption(null);
     }
 
     return {
         subOptionCodes,
-        modifyingId,
+        modifyingSubOption,
 
-        onActionAddData,
-        onActionDeleteData,
-        onActionCreateOrModify,
-        onChangeValueOfNameByIds,
+        reqModifyOne,
+        reqCreateOne,
+        reqDeleteOne,
+        onActionDeleteModifyingData,
         checkSaveForm,
-        onActionAddModifyingId,
-        reqSearchBatchSubOptionCodes
+        onChangeSelectedModifyingData,
+        reqSearchBatchSubOptionCodes,
+        onChangeValueOfName,
+        onActionAddData
     }
 }
