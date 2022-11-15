@@ -10,9 +10,8 @@ import { sortFormatUtils } from "../../../utils/sortFormatUtils";
 import ManageTablePagenationComponent from "./manage-table-pagenation/ManageTablePagenation.component";
 import ButtonOperatorComponent from "./button-operator/ButtonOperator.component";
 import useRouterHook from "../../../hooks/router/useRouterHook";
-import { productReceiveDataConnect } from "../../../data_connect/productReceiveDataConnect";
-import { productReleaseDataConnect } from "../../../data_connect/productReleaseDataConnect";
 import useProductHook from "./hooks/useProductHook";
+import { useDisabledButtonHook } from "../../../hooks/button-disabled/useDisabledButtonHook";
 
 const Container = styled.div`
     height: 100%;
@@ -41,9 +40,6 @@ const ProductManageComponent = (props) => {
     const [productManagementList, setProductManagementList] = useState(null);
     const [checkedOptionIdList, setCheckedOptionIdList] = useState([]);
 
-    const [optionReceiveStatus, setOptionReceiveStatus] = useState(null);
-    const [optionReleaseStatus, setOptionReleaseStatus] = useState(null);
-
     const {
         location,
         query,
@@ -59,6 +55,8 @@ const ProductManageComponent = (props) => {
     const {
         reqDeleteOne: reqDeleteProductOne
     } = useProductHook();
+
+    const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook();
 
     useEffect(() => {
         async function fetchInit() {
@@ -110,30 +108,6 @@ const ProductManageComponent = (props) => {
                             return;
                         }
         
-                        alert(res?.data.memo);
-                    })
-            },
-            createProductReceive: async (data) => {
-                await productReceiveDataConnect().createBatch(data)
-                    .catch(err => {
-                        let res = err.response;
-                        if (res?.status === 500) {
-                            alert('undefined error.');
-                            return;
-                        }
-
-                        alert(res?.data.memo);
-                    })
-            },
-            createProductRelease: async (data) => {
-                await productReleaseDataConnect().createBatch(data)
-                    .catch(err => {
-                        let res = err.response;
-                        if (res?.status === 500) {
-                            alert('undefined error.');
-                            return;
-                        }
-
                         alert(res?.data.memo);
                     })
             }
@@ -236,23 +210,13 @@ const ProductManageComponent = (props) => {
 
                 if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
                     let product = productManagementList?.content.filter(r => r.product.id === productId)[0].product;
+                    
+                    setButtonDisabled(true);
                     onActionOpenBackdrop();
                     await reqDeleteProductOne(product.id);
                     await __handle.req.searchProductAndOptionList();
                     onActionCloseBackdrop();
                 }
-            },
-            createProductReceive: async (data) => {
-                onActionOpenBackdrop();
-                await __handle.req.createProductReceive(data);
-                await __handle.req.searchProductAndOptionList();
-                onActionCloseBackdrop();
-            },
-            createProductRelease: async (data) => {
-                onActionOpenBackdrop();
-                await __handle.req.createProductRelease(data);
-                await __handle.req.searchProductAndOptionList();
-                onActionCloseBackdrop();
             }
         }
     }
@@ -266,12 +230,6 @@ const ProductManageComponent = (props) => {
                 <ButtonOperatorComponent
                     productManagementList={productManagementList?.content}
                     checkedOptionIdList={checkedOptionIdList}
-
-                    optionReceiveStatus={optionReceiveStatus}
-                    optionReleaseStatus={optionReleaseStatus}
-
-                    onSubmitCreateProductReceive={__handle.submit.createProductReceive}
-                    onSubmitCreateProductRelease={__handle.submit.createProductRelease}
                 />
 
                 <ManageTablePagenationComponent
@@ -280,6 +238,7 @@ const ProductManageComponent = (props) => {
                 />
 
                 <ManageTableComponent
+                    buttonDisabled={buttonDisabled}
                     productManagementList={productManagementList?.content}
 
                     isCheckedOne={__handle.action.isCheckedOne}

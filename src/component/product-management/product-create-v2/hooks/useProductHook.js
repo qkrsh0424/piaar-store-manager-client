@@ -13,7 +13,7 @@ export default function useProductHook (props) {
         memo: '',
         purchaseUrl: '',
         managementNumber: '',
-        stockManagement: false,
+        stockManagement: true,
         productCategoryCid: null
     });
 
@@ -27,7 +27,7 @@ export default function useProductHook (props) {
             memo: '',
             purchaseUrl: '',
             managementNumber: '',
-            stockManagement: false,
+            stockManagement: true,
             productCategoryCid: null
         })
     );

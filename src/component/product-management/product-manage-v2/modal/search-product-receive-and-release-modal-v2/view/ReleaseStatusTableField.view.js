@@ -1,6 +1,6 @@
 import React from "react";
-import { dateToYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
-import { StockStatusFieldWrapper } from "./SearchProductReceiveAndReleaseModal.styled";
+import { dateToYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
+import { StockStatusFieldWrapper } from "../SearchProductReceiveAndReleaseModal.styled";
 
 export default function ReleaseStatusTableFieldView(props) {
     return (
@@ -24,7 +24,7 @@ export default function ReleaseStatusTableFieldView(props) {
                     {props.optionReleaseStatus?.length === 0 && <tr><td colSpan={8}>출고 내역이 없습니다.</td></tr>}
                     {props.optionReleaseStatus?.map((r, idx) => {
                         let tdBackgroundColor = (idx % 2 === 1) ? '#f7f7f7' : '#ffffff';
-                        let isModifying = (props.modifyingId && props.modifyingId === r.productRelease.id);
+                        let isModifying = (props.modifyingData?.id === r.productRelease.id);
 
                         return (
                             <React.Fragment key={idx}>
@@ -54,8 +54,8 @@ export default function ReleaseStatusTableFieldView(props) {
                                                     type='text'
                                                     className='input-el'
                                                     name='memo'
-                                                    value={r.productRelease.memo || ''}
-                                                    onChange={(e) => props.onChangeInputValue(e, r.productRelease.id)}
+                                                    value={props.modifyingData.memo || ''}
+                                                    onChange={(e) => props.onChangeInputValue(e)}
                                                     autoFocus
                                                 />
                                             </div>
@@ -71,7 +71,8 @@ export default function ReleaseStatusTableFieldView(props) {
                                                 <button
                                                     type='button'
                                                     className='button-el'
-                                                    onClick={() => props.onSubmitModifyMemo(r.productRelease.id)}
+                                                    onClick={() => props.onSubmitModifyMemo()}
+                                                    disabled={props.buttonDisabled}
                                                 >
                                                     <img
                                                         src='/assets/icon/done_outline_2c73d2.svg'
@@ -87,7 +88,7 @@ export default function ReleaseStatusTableFieldView(props) {
                                                 <button
                                                     type='button'
                                                     className='button-el'
-                                                    onClick={() => props.onActionSetModifyingId(r.productRelease.id)}
+                                                    onClick={() => props.onActionSetModifyingData(r.productRelease.id)}
                                                 >
                                                     <img
                                                         src='/assets/icon/edit_default_888888.svg'

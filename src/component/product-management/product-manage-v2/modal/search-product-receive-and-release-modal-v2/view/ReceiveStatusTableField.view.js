@@ -1,6 +1,6 @@
 import React from "react";
-import { dateToYYMMDDhhmmss } from "../../../../../utils/dateFormatUtils";
-import { StockStatusFieldWrapper } from "./SearchProductReceiveAndReleaseModal.styled";
+import { dateToYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
+import { StockStatusFieldWrapper } from "../SearchProductReceiveAndReleaseModal.styled";
 
 export default function ReceiveStatusTableFieldView(props) {
 
@@ -20,10 +20,10 @@ export default function ReceiveStatusTableFieldView(props) {
                 </thead>
 
                 <tbody style={{ borderTop: 'none'}}>
-                    {props.optionReceiveStatus?.length === 0 && <tr><td colSpan={6}>입고 내역이 없습니다.</td></tr>}
+                    {props.optionReceiveStatus?.length === 0 && <tr><td colSpan={7}>입고 내역이 없습니다.</td></tr>}
                     {props.optionReceiveStatus?.map((r, idx) => {
                         let tdBackgroundColor = (idx % 2 === 1) ? '#f7f7f7' : '#ffffff';
-                        let isModifying = (props.modifyingId && props.modifyingId === r.productReceive.id);
+                        let isModifying = (props.modifyingData?.id === r.productReceive.id);
 
                         return (
                             <React.Fragment key={idx}>
@@ -50,8 +50,8 @@ export default function ReceiveStatusTableFieldView(props) {
                                                     type='text'
                                                     className='input-el'
                                                     name='memo'
-                                                    value={r.productReceive.memo || ''}
-                                                    onChange={(e) => props.onChangeInputValue(e, r.productReceive.id)}
+                                                    value={props.modifyingData.memo || ''}
+                                                    onChange={(e) => props.onChangeInputValue(e)}
                                                     autoFocus
                                                 />
                                             </div>
@@ -67,7 +67,8 @@ export default function ReceiveStatusTableFieldView(props) {
                                                 <button
                                                     type='button'
                                                     className='button-el'
-                                                    onClick={() => props.onSubmitModifyMemo(r.productReceive.id)}
+                                                    onClick={() => props.onSubmitModifyMemo()}
+                                                    disabled={props.buttonDisabled}
                                                 >
                                                     <img
                                                         src='/assets/icon/done_outline_2c73d2.svg'
@@ -83,7 +84,7 @@ export default function ReceiveStatusTableFieldView(props) {
                                                 <button
                                                     type='button'
                                                     className='button-el'
-                                                    onClick={() => props.onActionSetModifyingId(r.productReceive.id)}
+                                                    onClick={() => props.onActionSetModifyingData(r.productReceive.id)}
                                                 >
                                                     <img
                                                         src='/assets/icon/edit_default_888888.svg'

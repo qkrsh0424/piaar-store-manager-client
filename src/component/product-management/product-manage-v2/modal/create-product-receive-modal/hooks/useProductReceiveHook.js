@@ -1,22 +1,27 @@
-import { useEffect } from "react";
 import { useState } from "react";
-import { isNumberFormat } from "../../../../utils/regexUtils";
+import { productReceiveDataConnect } from "../../../../../../data_connect/productReceiveDataConnect";
+import { isNumberFormat } from "../../../../../../utils/regexUtils";
 
-export default function useProductReceiveHook (props) {
+export default function useProductReceiveHook () {
     const [productReceive, setProductReceive] = useState(null);
+    
+    const reqCreateProductReceive = async (data) => {
+        await productReceiveDataConnect().createBatch(data)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
 
-    useEffect(() => {
-        if(productReceive) {
-            return;
-        }
-
-        onActionInitData(props.productReceive);
-    }, [props.productReceive]);
-
-    const onActionInitData = (initData) => {
-        setProductReceive(initData);
+                alert(res?.data.memo);
+            })
     }
 
+    const onActionInitReceiveData = (data) => {
+        setProductReceive(data);
+    }
+    
     const onChangeValueOfNameByIdx = (e, idx) => {
         let name = e.target.name;
         let value = e.target.value;
@@ -66,8 +71,10 @@ export default function useProductReceiveHook (props) {
     return {
         productReceive,
 
+        reqCreateProductReceive,
         onChangeValueOfNameByIdx,
         onChangeBatchValueOfName,
-        checkCreateFormData
+        checkCreateFormData,
+        onActionInitReceiveData
     }
 }

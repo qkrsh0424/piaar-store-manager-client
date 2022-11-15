@@ -28,7 +28,7 @@ export default function useProductCategoryHook () {
                 alert(res?.data.memo);
             })
     }
-    const reqCreateProductCategoryData = async () => {
+    const reqCreateOne = async () => {
         await productCategoryDataConnect().createOne(category)
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {
@@ -72,11 +72,6 @@ export default function useProductCategoryHook () {
         })
     }
 
-    const onSubmitCreateData = async () => {
-        await reqCreateProductCategoryData();
-        await reqSearchAllProductCategory();
-    }
-
     return {
         savedCategories,
         category,
@@ -84,7 +79,7 @@ export default function useProductCategoryHook () {
         onActionResetData,
         onChangeValueOfName,
         checkCreateFormData,
-        onSubmitCreateData,
+        reqCreateOne,
         reqSearchAllProductCategory
     }
 }

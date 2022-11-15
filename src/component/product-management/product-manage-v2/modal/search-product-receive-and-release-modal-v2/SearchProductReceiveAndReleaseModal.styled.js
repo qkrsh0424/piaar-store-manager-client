@@ -7,11 +7,22 @@ const Container = styled.div`
 const DateRangeSelectorFieldWrapper = styled.div`
     padding: 0 20px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-weight: 400;
+
+    .date-selector-box{
+        width: 300px;
+        
+        @media screen and (max-width: 992px) {
+            width: 100%;
+        }
+    }
 
     .button-el {
-        width: 280px;
-        border-radius: 2px;
+        width: 148px;
+        height: 34px;
+        border-radius: 5px;
         border: 1px solid var(--piaar-main-color);
         background-color: var(--piaar-main-color);
         color: white;

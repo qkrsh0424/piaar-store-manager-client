@@ -215,8 +215,8 @@ const CreateFormComponent = (props) => {
                         product: createProductData,
                         options: createOptionDataList
                     }
-                    setButtonDisabled(true);
 
+                    setButtonDisabled(true);
                     onActionOpenBackdrop();
                     await __handle.req.createProductAndOptions(body);
                     onActionCloseBackdrop();

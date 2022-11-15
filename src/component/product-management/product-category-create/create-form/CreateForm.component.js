@@ -6,7 +6,7 @@ import RequiredIcon from "../../../module/icon/RequiredIcon";
 import useProductCategoryHook from "../hooks/useProductCategoryHook";
 import { CategoryInfoInputFieldWrapper, Container, CreateButtonFieldWrapper, PageTitleFieldWrapper } from "./CreateForm.styled"
 
-export default function CreateFormComponent(props) {
+export default function CreateFormComponent() {
 
     const {
         navigatePrevPage
@@ -15,10 +15,11 @@ export default function CreateFormComponent(props) {
     const {
         savedCategories,
         category: createCategoryData,
+
         reqSearchAllProductCategory,
         onChangeValueOfName: onChangeCategoryInputValue,
         checkCreateFormData: checkProductCreateFormData,
-        onSubmitCreateData: onSubmitCreateCategoryData
+        reqCreateOne: reqCreateProductCategoryData
     } = useProductCategoryHook();
 
     const {
@@ -56,7 +57,8 @@ export default function CreateFormComponent(props) {
 
                     setButtonDisabled(true);
                     onActionOpenBackdrop();
-                    await onSubmitCreateCategoryData();
+                    await reqCreateProductCategoryData();
+                    await reqSearchAllProductCategory();
                     onActionCloseBackdrop();
                 } catch (err) {
                     alert(err.message);

@@ -459,6 +459,7 @@ const TableFieldWrapper = styled.div`
         text-align: center;
         width: fit-content;
         table-layout: fixed;
+        min-height: 150px;
     }
 
     table thead tr th {

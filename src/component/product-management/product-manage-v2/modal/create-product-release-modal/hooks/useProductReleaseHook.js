@@ -1,20 +1,25 @@
-import { useEffect } from "react";
 import { useState } from "react";
-import { isNumberFormat } from "../../utils/regexUtils";
+import { productReleaseDataConnect } from "../../../../../../data_connect/productReleaseDataConnect";
+import { isNumberFormat } from "../../../../../../utils/regexUtils";
 
-export default function useProductReleaseHook (props) {
+export default function useProductReleaseHook () {
     const [productRelease, setProductRelease] = useState(null);
 
-    useEffect(() => {
-        if(productRelease) {
-            return;
-        }
+    const reqCreateProductRelease = async (data) => {
+        await productReleaseDataConnect().createBatch(data)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
 
-        onActionInitData(props.productRelease);
-    }, [props.productRelease]);
+                alert(res?.data.memo);
+            })
+    }
 
-    const onActionInitData = (initData) => {
-        setProductRelease(initData);
+    const onActionInitReleaseData = (data) => {
+        setProductRelease(data);
     }
 
     const onChangeValueOfNameByIdx = (e, idx) => {
@@ -22,14 +27,15 @@ export default function useProductReleaseHook (props) {
         let value = e.target.value;
 
         let updatedProductRelease = productRelease.map((r, index) => {
-            return (index === idx) ? 
-                {
+            if (index === idx) {
+                return {
                     ...r,
                     [name]: value
                 }
-                :
-                r
-                ;
+            }
+            else {
+                return r;
+            }
         })
 
         setProductRelease(updatedProductRelease);
@@ -50,7 +56,7 @@ export default function useProductReleaseHook (props) {
     }
 
     const checkCreateFormData = () => {
-        for(let i = 0; i < productRelease; i++) {
+        for(let i = 0; i < productRelease.length; i++) {
             let data = productRelease[i];
 
             if(data.releaseUnit < 1) {
@@ -60,8 +66,6 @@ export default function useProductReleaseHook (props) {
             if(data.releaseUnit && !isNumberFormat(data.releaseUnit)) {
                 throw new Error('[수량]은 숫자만 입력해 주세요.')
             }
-
-            console.log("hi")
         }
     }
 
@@ -70,6 +74,8 @@ export default function useProductReleaseHook (props) {
 
         onChangeValueOfNameByIdx,
         onChangeBatchValueOfName,
-        checkCreateFormData
+        checkCreateFormData,
+        reqCreateProductRelease,
+        onActionInitReleaseData
     }
 }

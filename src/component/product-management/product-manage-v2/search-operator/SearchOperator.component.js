@@ -4,15 +4,19 @@ import CategorySearchFieldView from "./CategorySearchField.view";
 import OptionSearchFieldView from "./OptionSearchField.view";
 import ProductSearchFieldView from "./ProductSearchField.view";
 import { Container } from "./SearchOperator.styled";
-import useProductCategoryHook from "../../../../hooks/product-category/useProductCategoryHook";
 import useSearchOperatorHook from "../hooks/useSearchOperatorHook";
+import useProductCategoryHook from "../hooks/useProductCategoryHook";
+import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
+import { useEffect } from "react";
 
 const productSearchHeader = getProductSearchHeader();
 const optionSearchHeader = getOptionSearchHeader();
 
 const OperatorComponent = (props) => {
     const {
-        productCategoryList : categoryList
+        productCategoryList : categoryList,
+
+        reqSearchAllProductCategory
     } = useProductCategoryHook();
 
     const {
@@ -30,6 +34,22 @@ const OperatorComponent = (props) => {
         onSubmitRouteToSearch,
         onActionClearRoute
     } = useSearchOperatorHook();
+
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
+
+    useEffect(() => {
+        async function fetchInit() {
+            onActionOpenBackdrop();
+            await reqSearchAllProductCategory();
+            onActionCloseBackdrop();
+        }
+
+        fetchInit();
+    }, [])
 
     return (
         <Container>
@@ -64,6 +84,10 @@ const OperatorComponent = (props) => {
 
                 ></ButtonFieldView>
             </form>
+
+            <BackdropHookComponent 
+                open={backdropOpen}
+            />
         </Container>
     )
 }

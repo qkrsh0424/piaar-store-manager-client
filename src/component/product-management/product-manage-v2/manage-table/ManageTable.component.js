@@ -68,6 +68,7 @@ const ManageTableComponent = (props) => {
             <Container>
                 {props.productManagementList &&
                     <ManageTableFieldView
+                        buttonDisabled={props.buttonDisabled}
                         productManagementList={props.productManagementList}
 
                         isCheckedOne={props.isCheckedOne}

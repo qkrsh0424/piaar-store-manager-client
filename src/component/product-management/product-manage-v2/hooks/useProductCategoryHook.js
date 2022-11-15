@@ -1,17 +1,8 @@
-import { useEffect } from "react";
 import { useState } from "react"
-import { productCategoryDataConnect } from "../../data_connect/productCategoryDataConnect";
+import { productCategoryDataConnect } from "../../../../data_connect/productCategoryDataConnect";
 
 export default function useProductCategoryHook(props) {
     const [productCategoryList, setProductCategoryList] = useState(null);
-
-    useEffect(() => {
-        async function fetchInit() {
-            await reqSearchAllProductCategory();
-        }
-
-        fetchInit();
-    }, [])
 
     const reqSearchAllProductCategory = async () => {
         await productCategoryDataConnect().searchList()
@@ -32,6 +23,8 @@ export default function useProductCategoryHook(props) {
     }
 
     return {
-        productCategoryList
+        productCategoryList,
+
+        reqSearchAllProductCategory
     }
 }

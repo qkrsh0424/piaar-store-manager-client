@@ -30,7 +30,7 @@ export default function useProductCategoryHook () {
             })
     }
 
-    const reqModifyProductCategoryData = async () => {
+    const reqModifyOne = async () => {
         await productCategoryDataConnect().changeOne(category)
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {
@@ -91,11 +91,6 @@ export default function useProductCategoryHook () {
         })
     }
 
-    const onSubmitModifyData = async () => {
-        await reqModifyProductCategoryData();
-        await reqSearchAllProductCategory();
-    }
-
     const onChangeSelectedCategory = (e) => {
         let selectedCategoryId = e.target.value;
         let data = savedCategories.filter(r => r.id === selectedCategoryId)[0];
@@ -110,22 +105,6 @@ export default function useProductCategoryHook () {
         }
     }
 
-    const onSubmitDeleteData = async (e) => {
-        e.preventDefault();
-        
-        if(!selectedCategory){
-            alert('카테고리를 선택해주세요.');
-            return;
-        }
-
-        if(!window.confirm('선택된 카테고리를 제거하시곘습니까?')) {
-            return;
-        }
-
-        await reqDeleteOne();
-        await reqSearchAllProductCategory();
-    }
-
     return {
         savedCategories,
         category,
@@ -133,9 +112,9 @@ export default function useProductCategoryHook () {
 
         onChangeValueOfName,
         checkSaveFormData,
-        onSubmitModifyData,
         onChangeSelectedCategory,
-        onSubmitDeleteData,
+        reqModifyOne,
+        reqDeleteOne,
         reqSearchAllProductCategory
     }
 }

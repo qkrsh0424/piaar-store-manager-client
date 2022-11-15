@@ -93,6 +93,7 @@ export default function ManageTableFieldView(props) {
                                             <button
                                                 className='button-el'
                                                 onClick={(e) => props.onSubmitDeleteProductOne(e, r.product.id)}
+                                                disabled={props.buttonDisabled}
                                             >
                                                 상품삭제
                                             </button>

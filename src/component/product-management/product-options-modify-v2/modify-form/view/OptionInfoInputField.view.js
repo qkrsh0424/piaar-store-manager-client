@@ -3,6 +3,13 @@ import RequiredIcon from "../../../../module/icon/RequiredIcon";
 import { BatchRegTooltipWrapper, OptionInfoInputWrapper, TableFieldWrapper } from "../ModifyForm.styled";
 
 function BatchRegTooltip({ name, inputType, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
+    
+    const confirmInput = (e) => {
+        if(e.key === 'Enter') {
+            onActionConfirm(e);
+        }
+    }
+
     return (
         <BatchRegTooltipWrapper>
             <div className='tooltip-box' style={tootipSize}>
@@ -11,6 +18,7 @@ function BatchRegTooltip({ name, inputType, tootipSize, onChangeInputValue, onAc
                     name={name}
                     className='input-el'
                     style={{ width: '100%' }}
+                    onKeyDown={(e) => confirmInput(e)}
                     onChange={(e) => onChangeInputValue(e)}
                     autoFocus
                 />

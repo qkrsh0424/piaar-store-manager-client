@@ -27,6 +27,17 @@ const productReceiveDataConnect = () => {
                 withCredentials: true
             })
         },
+        searchBatchByOptionIds: async function (optionIds, params) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v2/product-receive/batch/status`, optionIds, {
+                params,
+                withCredentials: true
+            })
+        },
+        updateOne: async function (data) {
+            return await axios.patch(`${API_SERVER_ADDRESS}/api/v2/product-receive`, data, {
+                withCredentials: true
+            })
+        },
     }
 }
 

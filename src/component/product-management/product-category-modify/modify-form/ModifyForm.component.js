@@ -18,9 +18,9 @@ export default function ModifyFormComponent(props) {
         reqSearchAllProductCategory,
         onChangeValueOfName: onChangeCategoryInputValue,
         checkSaveFormData: checkProductSaveFormData,
-        onSubmitModifyData: onSubmitModifyCategoryData,
+        reqModifyOne: reqModifyProductCategoryData,
         onChangeSelectedCategory,
-        onSubmitDeleteData: onSubmitDeleteProductCategory
+        reqDeleteOne: reqDeleteProductCategoryData
     } = useProductCategoryHook();
 
     const {
@@ -58,11 +58,30 @@ export default function ModifyFormComponent(props) {
                     
                     setButtonDisabled(true);
                     onActionOpenBackdrop();
-                    await onSubmitModifyCategoryData();
+                    await reqModifyProductCategoryData();
+                    await reqSearchAllProductCategory();
                     onActionCloseBackdrop();
                 } catch (err) {
                     alert(err.message);
                 }
+            },
+            deleteProductCategory: async (e) => {
+                e.preventDefault();
+
+                if (!selectedCategory) {
+                    alert('카테고리를 선택해주세요.');
+                    return;
+                }
+
+                if (!window.confirm('선택된 카테고리를 제거하시곘습니까?\n카테고리를 제거하면 하위 상품과 옵션들도 함께 제거됩니다.')) {
+                    return;
+                }
+
+                setButtonDisabled(true);
+                onActionOpenBackdrop();
+                await reqDeleteProductCategoryData();
+                await reqSearchAllProductCategory();
+                onActionCloseBackdrop();
             }
         }
     }
@@ -74,12 +93,13 @@ export default function ModifyFormComponent(props) {
                 <form onSubmit={__handle.submit.modifyProductCategory}>
                     {savedCategories &&
                         <CategoryInfoInputFieldView
+                            buttonDisabled={buttonDisabled}
                             selectedCategory={selectedCategory}
                             savedCategories={savedCategories}
                             modifyCategoryData={modifyCategoryData}
                             onChangeCategoryInputValue={onChangeCategoryInputValue}
                             onChangeSelectedCategory={onChangeSelectedCategory}
-                            onSubmitDeleteProductCategory={onSubmitDeleteProductCategory}
+                            onSubmitDeleteProductCategory={__handle.submit.deleteProductCategory}
                         />
                     }
 
@@ -138,6 +158,7 @@ function CategoryInfoInputFieldView(props) {
                                 type='button'
                                 className='button-el'
                                 onClick={(e) => props.onSubmitDeleteProductCategory(e)}
+                                disabled={props.buttonDisabled}
                             >
                                 <img
                                     src='/assets/icon/delete_default_ff3060.svg'

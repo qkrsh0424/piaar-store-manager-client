@@ -5,7 +5,8 @@ import ControlFieldView from "./ControlField.view";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import CreateProductReceiveModalComponent from "../modal/create-product-receive-modal/CreateProductReceiveModal.component";
 import CreateProductReleaseModalComponent from "../modal/create-product-release-modal/CreateProductReleaseModal.component";
-import SearchProductReceiveAndReleaseModalComponent from "../modal/search-product-receive-and-release-modal/SearchProductReceiveAndReleaseModal.component";
+// import SearchProductReceiveAndReleaseModalComponent from "../modal/search-product-receive-and-release-modal/SearchProductReceiveAndReleaseModal.component";
+import SearchProductReceiveAndReleaseModalComponent from "../modal/search-product-receive-and-release-modal-v2/SearchProductReceiveAndReleaseModal.component";
 
 const ButtonOperatorComponent = (props) => {
     const [sortByName, setSortByName] = useState(null);
@@ -115,20 +116,6 @@ const ButtonOperatorComponent = (props) => {
             closeSearchProductReceiveAndReleaseModal: () => {
                 setSearchProductReceiveAndReleaseModalOpen(false);
             }
-        },
-        submit: {
-            createProductReceive: (data) => {
-                if(window.confirm('입고등록을 진행하시겠습니까?')) {
-                    props.onSubmitCreateProductReceive(data);
-                    __handle.action.closeCreateProductReceiveModal();
-                }
-            },
-            createProductRelease: (data) => {
-                if (window.confirm('출고등록을 진행하시겠습니까?')) {
-                    props.onSubmitCreateProductRelease(data);
-                    __handle.action.closeCreateProductReleaseModal();
-                }
-            }
         }
     }
 
@@ -149,10 +136,9 @@ const ButtonOperatorComponent = (props) => {
             {createProductReceiveModalOpen &&
                 <CreateProductReceiveModalComponent
                     modalOpen={createProductReceiveModalOpen}
-                    onActionCloseModal={__handle.action.closeCreateProductReceiveModal}
-                    onSubmitCreateProductReceive={__handle.submit.createProductReceive}
-
                     createReceiveData={createReceiveData}
+                    
+                    onActionCloseModal={__handle.action.closeCreateProductReceiveModal}
                 />
             }
 
@@ -160,10 +146,9 @@ const ButtonOperatorComponent = (props) => {
             {createProductReleaseModalOpen && 
                 <CreateProductReleaseModalComponent 
                     modalOpen={createProductReleaseModalOpen}
-                    onActionCloseModal={__handle.action.closeCreateProductReleaseModal}
-                    onSubmitCreateProductRelease={__handle.submit.createProductRelease}
-
                     createReleaseData={createReleaseData}
+                    
+                    onActionCloseModal={__handle.action.closeCreateProductReleaseModal}
                 />
             }
 

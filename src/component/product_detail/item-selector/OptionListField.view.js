@@ -12,21 +12,21 @@ export default function OptionListFieldView(props) {
         <DataListWrapper>
             {userRdx.userInfo && !(userRdx.userInfo?.roles.includes("ROLE_LOGISTICS")) &&
                 <div className="control-box">
-                    <button className="add-btn"
+                    {/* <button className="add-btn"
                         onClick={() => props.onActionOpenCreateProductOptionModal()}
                     >
                         <AddIcon />
-                    </button>
+                    </button> */}
                     <button className="modify-btn"
                         onClick={() => props.onActionOpenModifyProductOptionModal()}
                     >
                         <EditIcon />
                     </button>
-                    <button className="delete-btn"
+                    {/* <button className="delete-btn"
                         onClick={() => props.onActionDeleteProductOption()}
                     >
                         <DeleteIcon />
-                    </button>
+                    </button> */}
                 </div>
             }
             <div className="item-list">
