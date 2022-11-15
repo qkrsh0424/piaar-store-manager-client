@@ -98,6 +98,11 @@ const MobileNavbarBox = styled.div`
         left: 199px;
         top: 0px;
     }
+
+    .slide-right {
+        animation-name: slide-right;
+        animation-duration: 0.5s;
+    }
 `;
 
 const thisRouters = [
@@ -194,7 +199,7 @@ const ProductManagementNavbar = () => {
 
             {/* Mobile Navbar */}
             <MobileNavbarBox>
-                <div className={`navbar-item ${mobileSelectorOpen && 'navbar-item-open'}`}>
+                <div className={`navbar-item ${mobileSelectorOpen && 'navbar-item-open slide-right'}`}>
                     {mobileSelectorOpen ?
                         <div className='selector-button-box'>
                             <button
