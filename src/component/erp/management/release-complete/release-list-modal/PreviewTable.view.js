@@ -1,5 +1,5 @@
 import React from 'react';
-import { staticReleaseListHeaderDetails } from '../../../../../static-data/staticData';
+import { staticReleaseListHeaderDetails } from '../../../../../static-data/erp/staticData';
 import { PreviewTableWrapper, TableBox } from './ReleaseListModal.styled';
 
 const Colgroup = ({  }) => {

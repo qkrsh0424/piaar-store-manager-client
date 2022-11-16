@@ -1,7 +1,7 @@
 import { Container } from "./ExcelTranslatorSearchModal.styled";
 import HeaderFieldView from "./HeaderField.view";
 import TableFieldView from "./TableField.view";
-import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
+import { getDefaultHeaderDetails } from "../../../../../static-data/erp/staticData";
 import { useReducer } from "react";
 import { useEffect } from "react";
 

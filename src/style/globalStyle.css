@@ -1,7 +1,7 @@
 :root {
     /* 피아르 erp 메인 색상 */
     --erp-main-color: #2C73D2;
-    --piaar-main-color: rgb(122, 123, 218);
+    --piaar-main-color: #7a7bda;
     --piaar-background-color: #edf0f5;
     --defaultBorderColor: #c8c8c8;
     --defaultHoverColor: #f1f1f1;
@@ -16,4 +16,44 @@
     --defaultRedColor:#e56767;
     --defaultGreenColor:#5fcf80;
     --defaultModalCloseColor:#959eae;
+}
+
+@keyframes slide-right {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+@-moz-keyframes slide-right {
+    /* Firefox */
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+@-webkit-keyframes slide-right {
+    /* Safari and Chrome */
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+@-o-keyframes slide-right {
+    /* Opera */
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(10);
+    }
 }

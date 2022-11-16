@@ -63,7 +63,7 @@ class ProductOption {
 const ProductManageTableComponent = (props) => {
     const [modifyProductModalOpen, setModifyProductModalOpen] = useState(false);
     const [modifyProductData, setModifyProductData] = useState(null);
-    
+
     const [createProductOptionModalOpen, setCreateProductOptionModalOpen] = useState(false);
     const [createProductOptionData, setCreateProductOptionData] = useState(null);
 
@@ -77,7 +77,7 @@ const ProductManageTableComponent = (props) => {
     const [selectedProductOptionData, setSelectedProductOptionData] = useState(null);
 
     useEffect(() => {
-        if(!props.stockStatusList) {
+        if (!props.stockStatusList) {
             return;
         }
 
@@ -133,7 +133,7 @@ const ProductManageTableComponent = (props) => {
         setCreateProductOptionData(option);
         setCreateProductOptionModalOpen(true);
     }
-    
+
     const onActionCloseCreateProductOptionModal = () => {
         setCreateProductOptionData(null);
         setCreateProductOptionModalOpen(false);
@@ -150,35 +150,35 @@ const ProductManageTableComponent = (props) => {
         await props._onAction_searchOptionPackage(option.id);
         setModifyProductOptionModalOpen(true);
     }
-    
+
     const onActionCloseModifyProductOptionModal = () => {
         setModifyProductOptionData(null);
         setModifyProductOptionModalOpen(false);
     }
 
     const onActionModifyProduct = async (modifyProductData) => {
-        if(!props.submitCheck.isSubmit) {
+        if (!props.submitCheck.isSubmit) {
             await props._onSubmit_modifyProduct(modifyProductData);
         }
         onActionCloseModifyProductModal();
     }
 
     const onActionDeleteProduct = async (productId) => {
-        if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
+        if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 삭제하시겠습니까?')) {
             let product = props.productViewList.filter(product => product.product.id === productId)[0].product;
             await props._onSubmit_deleteProduct(product.cid);
         }
     }
 
     const onActionCreateProductOption = async (createOptionData) => {
-        if(!props.submitCheck.isSubmit) {
+        if (!props.submitCheck.isSubmit) {
             await props._onSubmit_createProductOption(createOptionData);
         }
         onActionCloseCreateProductOptionModal();
     }
 
     const onActionModifyProductOption = async (modifyOptionData) => {
-        if(!props.submitCheck.isSubmit) {
+        if (!props.submitCheck.isSubmit) {
             await props._onSubmit_modifyProductOption(modifyOptionData);
         }
         onActionCloseModifyProductOptionModal();
@@ -187,7 +187,7 @@ const ProductManageTableComponent = (props) => {
     const onActionDeleteProductOption = async (e, productId, productOptionId) => {
         e.stopPropagation();
 
-        if (window.confirm('옵션을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
+        if (window.confirm('옵션을 삭제하면 하위 데이터들도 모두 삭제됩니다. 삭제하시겠습니까?')) {
             let product = props.productViewList.filter(r => r.product.id === productId)[0];
             let option = product.options.filter(r => r.id === productOptionId)[0];
             let optionCid = option.cid;
@@ -259,7 +259,7 @@ const ProductManageTableComponent = (props) => {
                 open={modifyProductModalOpen}
                 maxWidth={'md'}
                 fullWidth={true}
-    
+
                 onClose={onActionCloseModifyProductModal}
             >
                 <ModifyProductModalComponent

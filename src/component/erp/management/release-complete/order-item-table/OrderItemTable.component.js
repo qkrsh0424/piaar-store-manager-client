@@ -12,7 +12,7 @@ import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.compo
 import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
 import { useImageFileUploaderHook } from "../../../../../hooks/uploader/useImageFileUploaderHook";
 import SubmitModalComponent from "../../../../module/modal/SubmitModalComponent";
-import { getDefaultDeliveryChargeReturnType } from "../../../../../static-data/erpReturnItemStaticData";
+import { getDefaultDeliveryChargeReturnType } from "../../../../../static-data/erp/erpReturnItemStaticData";
 
 function Tip({selectedMatchCode}) {
     return (
@@ -535,7 +535,7 @@ const OrderItemTableComponent = (props) => {
                             </div>
                             <div className='info-box'>
                                 <span style={{ color: 'red' }}>* </span>
-                                <span className='input-title'>반품배송비 입금방식</span>
+                                    <span className='input-title'>반품배송비 입금방식</span>
                                 <div>
                                     <select
                                         className='select-item'

@@ -4,7 +4,7 @@ import InfoTextFieldView from "./InfoTextField.view";
 import TableOperatorFieldView from "./TableOperatorField.view";
 import DefaultTableFieldView from './DefaultTableField.view'
 import { Container } from "./ViewHeaderSettingModal.styled";
-import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
+import { getDefaultHeaderDetails } from "../../../../../static-data/erp/staticData";
 import { useEffect, useReducer } from "react";
 import CreateTableFieldView from "./CreateTableField.view";
 

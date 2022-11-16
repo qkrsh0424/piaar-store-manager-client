@@ -7,7 +7,7 @@ import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModa
 import ReturnProductImageModalComponent from "../return-product-image-modal/ReturnProductImageModal.component";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
 import SubmitModalComponent from "../../../../module/modal/SubmitModalComponent";
-import { getDefaultDeliveryChargeReturnType } from "../../../../../static-data/erpReturnItemStaticData";
+import { getDefaultDeliveryChargeReturnType } from "../../../../../static-data/erp/erpReturnItemStaticData";
 
 function Tip() {
     return (

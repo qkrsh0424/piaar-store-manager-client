@@ -42,6 +42,16 @@ const valueUtils = {
         }else {
             return false;
         }
+    },
+    /**
+     * 넘어온 값(value)을 구분자(splitStr)로 분리해 배열을 만든다.
+     * 배열 요소의 앞뒤 공백을 제거한다.
+     * 
+     * 상품등록 > 옵션명 일괄 생성, 옵션 리스트 적용 버튼 클릭시 동작.
+     */
+    trimAndSplit: (value, splitStr) => {
+        let data = value?.split(splitStr);
+        return data.map(r => r.trim());
     }
 }
 

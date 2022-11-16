@@ -32,8 +32,10 @@ const StockCycleComponent = (props) => {
 
     useEffect(() => {
         async function fetchInit() {
+            onActionOpenBackdrop();
             await __reqSearchCategoryList();
             await __reqSearchProductListFj();
+            onActionCloseBackdrop();
         }
         
         onActionOpenBackdrop();
@@ -42,7 +44,7 @@ const StockCycleComponent = (props) => {
     }, [])
 
     const __reqSearchCategoryList = async () => {
-        await productCategoryDataConnect().searchList()
+        await productCategoryDataConnect().searchAll()
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message == 'success') {
                     setCategoryList(res.data.data);
@@ -60,7 +62,7 @@ const StockCycleComponent = (props) => {
     }
 
     const __reqSearchProductListFj = async () => {
-        await productDataConnect().getListFj()
+        await productDataConnect().searchBatch()
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message == 'success') {
                     setProductList(res.data.data);

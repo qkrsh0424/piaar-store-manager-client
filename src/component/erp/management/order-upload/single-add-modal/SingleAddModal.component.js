@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
+import { getDefaultHeaderDetails } from "../../../../../static-data/erp/staticData";
 import PageContentFieldView from "./PageContentField.view";
 import PageHeaderFieldView from "./PageHeaderField.view";
 import { Container } from "./SingleAddModal.styled";
@@ -63,6 +63,7 @@ const SingleAddModalComponent = (props) => {
             alert('수취인명은 필수 항목입니다.');
             return;
         }
+        
         if (!dataValue.receiverContact1) {
             alert('전화번호1은 필수 항목입니다.');
             return;

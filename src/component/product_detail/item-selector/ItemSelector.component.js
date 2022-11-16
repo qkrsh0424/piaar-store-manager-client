@@ -11,6 +11,7 @@ import CommonModalComponent from '../../module/modal/CommonModalComponent';
 import ModifyProductModalComponent from '../modify-product-modal/ModifyProductModal.component';
 import CreateProductOptionModalComponent from '../create-product-option-modal/CreateProductOptionModal.component';
 import ModifyProductOptionModalComponent from '../modify-product-option-modal/ModifyProductOptionModal.component';
+import useRouterHook from '../../../hooks/router/useRouterHook';
 
 class ProductOption {
     constructor(productId, optionDefaultName = '', optionManagementName = '') {
@@ -61,8 +62,8 @@ class ProductOption {
 }
 
 const ItemSelectorComponent = (props) => {
-    const location = useLocation();
-    const query = qs.parse(location.search);
+    // const location = useLocation();
+    // const query = qs.parse(location.search);
     const navigate = useNavigate();
 
     const [productCid, dispatchProductCid] = useReducer(productCidReducer, initialProductCid);
@@ -76,6 +77,12 @@ const ItemSelectorComponent = (props) => {
 
     const [modifyProductOptionModalOpen, setModifyProductOptionModalOpen] = useState(false);
     const [modifyProductOptionData, setModifyProductOptionData] = useState(null);
+
+    const {
+        location,
+        query,
+        navigateUrl
+    } = useRouterHook();
 
     // 카테고리 변경된 경우
     useEffect(() => {
@@ -163,15 +170,35 @@ const ItemSelectorComponent = (props) => {
         });
     }
 
+    // const onActionOpenModifyProductModal = () => {
+    //     if (!query.productCid) {
+    //         alert('상품을 먼저 선택해주세요.');
+    //         return;
+    //     }
+
+    //     let data = props.productViewList.filter(r => r.cid === parseInt(query.productCid))[0];
+    //     setModifyProductData(data);
+    //     setModifyProductModalOpen(true);
+    // }
     const onActionOpenModifyProductModal = () => {
         if (!query.productCid) {
             alert('상품을 먼저 선택해주세요.');
             return;
         }
 
-        let data = props.productViewList.filter(r => r.cid === parseInt(query.productCid))[0];
-        setModifyProductData(data);
-        setModifyProductModalOpen(true);
+        let product = props.productViewList.filter(r => r.cid === parseInt(query.productCid))[0];
+        
+        let pathData = {
+            pathname: `/products/modify${'?productId=' + product.id}`,
+            state: {
+                routerUrl: location.pathname + location.search
+            }
+        }
+
+        navigateUrl(pathData);
+
+        // setModifyProductData(data);
+        // setModifyProductModalOpen(true);
     }
 
     const onActionCloseModifyProductModal = () => {
@@ -202,17 +229,34 @@ const ItemSelectorComponent = (props) => {
         setCreateProductOptionModalOpen(false);
     }
 
+    // const onActionOpenModifyProductOptionModal = async () => {
+    //     if (!query.optionCid) {
+    //         alert('옵션을 먼저 선택해주세요.');
+    //         return;
+    //     }
+
+    //     let selectedOption = props.optionViewList.filter(r => r.cid === parseInt(query.optionCid))[0];
+    //     setModifyProductOptionData(selectedOption);
+
+    //     await props._onAction_searchOptionPackage(selectedOption.id);
+    //     setModifyProductOptionModalOpen(true);
+    // }
+
     const onActionOpenModifyProductOptionModal = async () => {
         if (!query.optionCid) {
             alert('옵션을 먼저 선택해주세요.');
             return;
         }
 
-        let selectedOption = props.optionViewList.filter(r => r.cid === parseInt(query.optionCid))[0];
-        setModifyProductOptionData(selectedOption);
+        let product = props.productViewList.filter(r => r.cid === parseInt(query.productCid))[0];
+        let pathData = {
+            pathname: `/product-options/modify${'?productId=' + product.id}`,
+            state: {
+                routerUrl: location.pathname + location.search
+            }
+        }
 
-        await props._onAction_searchOptionPackage(selectedOption.id);
-        setModifyProductOptionModalOpen(true);
+        navigateUrl(pathData);
     }
     
     const onActionCloseModifyProductOptionModal = () => {
@@ -226,22 +270,22 @@ const ItemSelectorComponent = (props) => {
             return;
         }
 
-        if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
+        if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 삭제하시겠습니까?')) {
             await props._onSubmit_deleteProduct(query.productCid);
         }
     }
 
-    const onActionDeleteProductOption = async () => {
-        if(!query.optionCid) {
-            alert('옵션을 먼저 선택해주세요.');
-            return;
-        }
+    // const onActionDeleteProductOption = async () => {
+    //     if(!query.optionCid) {
+    //         alert('옵션을 먼저 선택해주세요.');
+    //         return;
+    //     }
         
 
-        if (window.confirm('옵션을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
-            await props._onSubmit_deleteProductOption(query.optionCid);
-        }
-    }
+    //     if (window.confirm('옵션을 삭제하면 하위 데이터들도 모두 삭제됩니다. 삭제하시겠습니까?')) {
+    //         await props._onSubmit_deleteProductOption(query.optionCid);
+    //     }
+    // }
 
     const onActionModifyProduct = async (modifyProductData) => {
         if(!props.submitCheck.isSubmit) {
@@ -282,8 +326,8 @@ const ItemSelectorComponent = (props) => {
                 optionViewList={props.optionViewList}
 
                 onChangeOptionCidValue={(value) => onChangeOptionCidValue(value)}
-                onActionDeleteProductOption={() => onActionDeleteProductOption()}
-                onActionOpenCreateProductOptionModal={() => onActionOpenCreateProductOptionModal()}
+                // onActionDeleteProductOption={() => onActionDeleteProductOption()}
+                // onActionOpenCreateProductOptionModal={() => onActionOpenCreateProductOptionModal()}
                 onActionOpenModifyProductOptionModal={() => onActionOpenModifyProductOptionModal()}
             ></OptionListFieldView>
 

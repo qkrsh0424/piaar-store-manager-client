@@ -11,7 +11,7 @@ import valueUtils from "../../../../../utils/valueUtils";
 import SelectorFieldView from "./SelectorField.view";
 import { v4 as uuidv4 } from 'uuid';
 import ViewHeaderInputFieldView from "./ViewHeaderInputField.view";
-import { getReturnDefaultHeaderDetails } from "../../../../../static-data/erpReturnItemStaticData";
+import { getReturnDefaultHeaderDetails } from "../../../../../static-data/erp/erpReturnItemStaticData";
 import ReturnDefaultTableFieldView from "./ReturnDefaultTableField.view";
 
 const defaultHeaderDetails = getReturnDefaultHeaderDetails().headerDetail.details;

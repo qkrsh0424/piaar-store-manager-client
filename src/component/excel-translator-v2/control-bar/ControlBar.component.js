@@ -7,7 +7,7 @@ import CommonModalComponent from '../../module/modal/CommonModalComponent';
 import CreateTranslatorHeaderModal from '../create-translator-header-modal/CreateTranslatorHeaderModal.component';
 import ModifyTranslatorHeaderModal from '../modify-translator-header-modal/ModifyTranslatorHeaderModal.component';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useLocalStorageHook } from '../../../hooks/local_storage/useLocalStorageHook';
+import { useLocalStorageHook } from '../../../hooks/local-storage/useLocalStorageHook';
 import ExcelTranslatorFormControlModalComponent from '../excel-translator-form-control-modal/ExcelTranslatorFormControlModal.component';
 
 const ControlBarComponent = (props) => {
@@ -137,7 +137,7 @@ const ControlBarComponent = (props) => {
                     return;
                 }
 
-                if (window.confirm('정말 삭제하시겠습니까?')) {
+                if (window.confirm('삭제하시겠습니까?')) {
                     await props.onSubmitDeleteExcelTranslatorHeader(selectedTranslatorHeader.id);
                 }
             }

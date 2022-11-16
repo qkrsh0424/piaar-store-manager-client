@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 
-import { getSelectedHeaderFields } from "../../../static-data/staticData";
+import { getSelectedHeaderFields } from "../../../static-data/erp/staticData";
 import ButtonFieldView from "./ButtonField.view";
 import DetailSearchFieldView from "./DetailSearchField.view";
 import { Container, InfoTextFieldWrapper } from "./SelectedGraphItemModal.styled";

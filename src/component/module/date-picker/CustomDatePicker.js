@@ -6,6 +6,7 @@ import { forwardRef, useEffect, useRef, useState } from 'react';
 import { getMonth, getYear } from 'date-fns';
 
 const Container = styled.div`
+
     .react-datepicker__header {
         background:white;
         padding: 15px;
@@ -21,7 +22,6 @@ const Container = styled.div`
     .react-datepicker__triangle{
         display: none;
     }
-
 `;
 
 const ButtonBox = styled.div`
@@ -30,6 +30,7 @@ const ButtonBox = styled.div`
         padding: 5px 0;
         background: white;
         border: 1px solid #e1e1e1;
+        /* border-radius: 5px; */
         cursor: pointer;
     }
 

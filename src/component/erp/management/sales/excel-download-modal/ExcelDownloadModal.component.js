@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from "react";
-import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
+import { getDefaultHeaderDetails } from "../../../../../static-data/erp/staticData";
 import { dateToYYYYMMDDhhmmFile } from "../../../../../utils/dateFormatUtils";
 import { checkFileNameFormat } from "../../../../../utils/regexUtils";
 import CombineOperators from "./CombineOperators.view";

@@ -1,5 +1,5 @@
 import { useReducer, useState } from "react";
-import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
+import { getDefaultHeaderDetails } from "../../../../../static-data/erp/staticData";
 import { dateToYYYYMMDDhhmmssWithInvalid } from "../../../../../utils/dateFormatUtils";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";

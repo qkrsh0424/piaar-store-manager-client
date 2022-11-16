@@ -96,16 +96,16 @@ const productOptionDataConnect = () => {
                 withCredentials: true
             })
         },
-        searchStockStatus: async function(optionCid) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/${optionCid}`, {
-                withCredentials: true
-            })
-        },
-        searchAllStockStatus: async function() {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/list`, {
-                withCredentials: true
-            })
-        },
+        // searchStockStatus: async function(optionCid) {
+        //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/${optionCid}`, {
+        //         withCredentials: true
+        //     })
+        // },
+        // searchAllStockStatus: async function() {
+        //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/list`, {
+        //         withCredentials: true
+        //     })
+        // },
         searchListStockStatus: async function(startDate, endDate) {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status`, {
                 params: {
@@ -128,6 +128,30 @@ const productOptionDataConnect = () => {
         searchStockCycle: async function (params) {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock-cycle`, {
                 params,
+                withCredentials: true
+            })
+        },
+
+        // [221026] FEAT
+        searchBatchStockStatus: async function (optionIds, params) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v2/product-options/batch/stock/status`, optionIds, {
+                params,
+                withCredentials: true
+            })
+        },
+        // searchList -> searchAllM2OJ
+        searchAllM2OJ: async function () {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product-options/all-m2oj`, {
+                withCredentials: true
+            })
+        },
+        searchBatchByProductId: async function (productId) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product-options/batch/${productId}`, {
+                withCredentials: true
+            })
+        },
+        updateBatch: async function (productId, body) {
+            return await axios.put(`${API_SERVER_ADDRESS}/api/v2/product-options/batch/${productId}`, body, {
                 withCredentials: true
             })
         }

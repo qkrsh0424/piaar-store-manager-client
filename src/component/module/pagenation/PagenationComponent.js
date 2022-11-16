@@ -37,12 +37,14 @@ const Wrapper = styled.div`
     .page-box {
         display: flex;
         align-items: center;
-        width: 120px;
-        justify-content: center;
+        width: 150px;
+        /* justify-content: center; */
+        justify-content: space-around;
     }
 
     .button-box{
         margin:0 3px;
+        width: 30px;
     }
 
     .circle-button-el{
@@ -52,7 +54,7 @@ const Wrapper = styled.div`
         height: 34px;
         border-radius: 50%;
         border: 1px solid #00000000;
-        background: white;
+        background: inherit;
 
         cursor: pointer;
 

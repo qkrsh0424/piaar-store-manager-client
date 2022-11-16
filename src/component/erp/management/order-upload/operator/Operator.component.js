@@ -7,7 +7,7 @@ import ControlButtonFieldView from "./ControlButtonField.view";
 import { Container, TipFieldWrapper, Wrapper } from "./Operator.styled";
 import { useLocation, useNavigate } from 'react-router-dom';
 import ExcelTranslatorFormControlModalComponent from "../excel-translator-form-control-modal/ExcelTranslatorFormControlModal.component";
-import { useLocalStorageHook } from "../../../../../hooks/local_storage/useLocalStorageHook";
+import { useLocalStorageHook } from "../../../../../hooks/local-storage/useLocalStorageHook";
 
 function Layout({ children }) {
     return (

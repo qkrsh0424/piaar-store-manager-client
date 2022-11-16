@@ -4,10 +4,9 @@ import qs from 'query-string';
 import { useEffect, useReducer } from "react";
 import DateSelectorFieldView from './DateSelectorField.view';
 import DetailSearchFieldView from "./DetailSearchField.view";
-import { getDefaultHeaderDetails } from "../../../../../static-data/staticData";
+import { getDefaultHeaderDetails } from "../../../../../static-data/erp/staticData";
 import ButtonFieldView from "./ButtonField.view";
 import { dateToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
-import moment from "moment";
 
 const defaultHeaderDetails = getDefaultHeaderDetails();
 
@@ -139,10 +138,16 @@ const SearchOperatorComponent = (props) => {
         } else {
             delete query.searchColumnName;
             delete query.searchQuery;
+
+            dispatchSearchColumnName({ type: 'CLEAR' })
+            dispatchSearchQuery({ type: 'CLEAR' })
         }
 
         if (searchColumnName && searchQuery) {
             query.searchQuery = searchQuery;
+        } else {
+            delete query.searchQuery;
+            dispatchSearchQuery({ type: 'CLEAR' })
         }
 
         delete query.page;

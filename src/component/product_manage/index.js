@@ -9,7 +9,7 @@ import { productReleaseDataConnect } from '../../data_connect/productReleaseData
 import { subOptionCodeDataConnect } from '../../data_connect/subOptionCodeDataConnect';
 
 import { useBackdropHook, BackdropHookComponent } from '../../hooks/backdrop/useBackdropHook';
-import { dateToYYYYMMDD, getEndDate, getStartDate } from '../../utils/dateFormatUtils';
+import { getEndDate, getStartDate } from '../../utils/dateFormatUtils';
 import ProductManageNavComponent from './product-manage-nav/ProductManageNav.component';
 import ProductManageTableComponent from './product-manage-table/ProductManageTable.component';
 import SelectorComponent from './selector/Selector.component';
@@ -136,7 +136,7 @@ const ProductManageComponent = () => {
     }
 
     const __reqSearchCategoryList = async () => {
-        await productCategoryDataConnect().searchList()
+        await productCategoryDataConnect().searchAll()
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     setCategoryList(res.data.data);
@@ -232,16 +232,16 @@ const ProductManageComponent = () => {
     }
 
     const __reqSearchStockStatus = async (optionCid) => {
-        await productOptionDataConnect().searchStockStatus(optionCid)
-            .then(res => {
-                if (res.status == 200 && res.data && res.data.message == 'success') {
-                    setStockStatusList(res.data.data);
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-                alert(res?.data?.memo);
-            })
+        // await productOptionDataConnect().searchStockStatus(optionCid)
+        //     .then(res => {
+        //         if (res.status == 200 && res.data && res.data.message == 'success') {
+        //             setStockStatusList(res.data.data);
+        //         }
+        //     })
+        //     .catch(err => {
+        //         let res = err.response;
+        //         alert(res?.data?.memo);
+        //     })
     }
 
     const __reqModifyReceiveMemo = async (data) => {

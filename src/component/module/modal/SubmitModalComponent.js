@@ -1,6 +1,6 @@
 import { Dialog } from '@mui/material';
 import styled from 'styled-components';
-import { useDisabledButtonHook } from '../../../hooks/button_disabled/useDisabledButtonHook';
+import { useDisabledButtonHook } from '../../../hooks/button-disabled/useDisabledButtonHook';
 
 const Container = styled.div`
 
@@ -175,31 +175,6 @@ const MessageBox = styled.div`
             box-sizing: border-box;
             border-radius: 3px;
         }
-    }
-`;
-
-const MemoBox = styled.div`
-    padding: 15px;
-    font-size: 14px;
-    display: grid;
-    width: 100%;
-    grid-template-columns: 100px auto;
-    align-items: center;
-
-    .form-title {
-        padding: 10px;
-        font-size: 14px;
-        font-weight: 600;
-        text-align: center;
-    }
-
-    input {
-        height: 30px;
-        border: 1px solid #bdbdbd;
-        padding: 10px;
-        font-size: 14px;
-        box-sizing: border-box;
-        border-radius: 3px;
     }
 `;
 

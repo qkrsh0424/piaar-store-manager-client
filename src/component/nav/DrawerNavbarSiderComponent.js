@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 import Drawer from '@material-ui/core/Drawer';
 
 const Container = styled.div`
+
 `;
+
 const ContentContainer = styled.div`
     padding:50px 0;
 `;
@@ -85,14 +87,6 @@ const DrawerNavbarSiderComponent = (props) => {
                             <LinkContainer>
                                 <CustomLink to='/'>메인페이지</CustomLink>
                             </LinkContainer>
-                            {
-                                userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
-                                    <LinkContainer>
-                                        <CustomLink to='/account-book'>부기관리</CustomLink>
-                                    </LinkContainer>
-                                    :
-                                    <></>
-                            }
                             <LinkContainer>
                                 <CustomLink to='/products'>상품 재고관리</CustomLink>
                             </LinkContainer>
@@ -102,16 +96,28 @@ const DrawerNavbarSiderComponent = (props) => {
                             {userRdx.userInfo && !userRdx.userInfo.roles.includes("ROLE_LOGISTICS") &&
                                 <>
                                     <LinkContainer>
-                                        <CustomLink to='/erp/management/order-upload'>피아르 주문&출고 관리</CustomLink>
+                                        <CustomLink to='/erp/management/order-upload'>피아르 주문 & 출고 관리</CustomLink>
                                     </LinkContainer>
                                     <LinkContainer>
-                                        <CustomLink to='/commute-record'>출퇴근기록</CustomLink>
+                                        <CustomLink to='/erp/return-management/registration'>피아르 반품 관리</CustomLink>
+                                    </LinkContainer>
+                                    <LinkContainer>
+                                        <CustomLink to='/sales-performance'>판매 성과</CustomLink>
+                                    </LinkContainer>
+                                    <LinkContainer>
+                                        <CustomLink to='/sales-analysis'>판매 랭킹</CustomLink>
+                                    </LinkContainer>
+                                    <LinkContainer>
+                                        <CustomLink to='/stock-analysis'>재고 자산</CustomLink>
+                                    </LinkContainer>
+                                    <LinkContainer>
+                                        <CustomLink to='/stock-cycle'>재고 주기</CustomLink>
                                     </LinkContainer>
                                     <LinkContainer>
                                         <CustomLink to='/excel-translator'>엑셀 변환기</CustomLink>
                                     </LinkContainer>
                                     <LinkContainer>
-                                        <CustomLink to='/sales-analysis'>판매 랭킹</CustomLink>
+                                        <CustomLink to='/commute-record'>출퇴근기록</CustomLink>
                                     </LinkContainer>
 
                                     {/* <LinkContainer>
@@ -142,6 +148,14 @@ const DrawerNavbarSiderComponent = (props) => {
                                         <CustomLink to='/waybill'>오늘보낼것</CustomLink>
                                     </LinkContainer> */}
                                 </>
+                            }
+                            {
+                                userRdx.userInfo && (userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) ?
+                                    <LinkContainer>
+                                        <CustomLink to='/account-book'>부기관리</CustomLink>
+                                    </LinkContainer>
+                                    :
+                                    <></>
                             }
                             <LinkContainer>
                                 <form onSubmit={(e) => props.__handleEventControl().logoutSubmit(e)}>

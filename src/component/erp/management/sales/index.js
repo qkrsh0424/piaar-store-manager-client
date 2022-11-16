@@ -16,7 +16,7 @@ import CheckedOperatorComponent from './checked-operator/CheckedOperator.compone
 import { erpDownloadExcelHeaderDataConnect } from '../../../../data_connect/erpDownloadExcelHeaderDataConnect';
 import { BackdropHookComponent, useBackdropHook } from '../../../../hooks/backdrop/useBackdropHook';
 import OrderItemTablePagenationComponent from './order-item-table-pagenation/OrderItemTablePagenation.component';
-import { getDefaultHeaderFields } from '../../../../static-data/staticData';
+import { getDefaultHeaderFields } from '../../../../static-data/erp/staticData';
 import { sortFormatUtils } from '../../../../utils/sortFormatUtils';
 import useSocketClient from '../../../../web-hooks/socket/useSocketClient';
 import { erpOrderItemSocket } from '../../../../data_connect/socket/erpOrderItemSocket';
@@ -24,7 +24,7 @@ import { erpSalesHeaderSocket } from '../../../../data_connect/socket/erpSalesHe
 import { useSocketConnectLoadingHook, SocketConnectLoadingHookComponent } from '../../../../hooks/loading/useSocketConnectLoadingHook';
 import { useBasicSnackbarHook, BasicSnackbarHookComponent } from '../../../../hooks/snackbar/useBasicSnackbarHook';
 import CheckedHeadComponent from './checked-head/CheckedHead.component';
-import { useLocalStorageHook } from '../../../../hooks/local_storage/useLocalStorageHook';
+import { useLocalStorageHook } from '../../../../hooks/local-storage/useLocalStorageHook';
 
 const Container = styled.div`
     margin-bottom: 100px;
