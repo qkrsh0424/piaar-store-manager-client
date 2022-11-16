@@ -1,3 +1,4 @@
+import { imageFileDownloadDataConnect } from "../../data_connect/imageFileDownloadDataConnect";
 import { imageFileUploaderDataConnect } from "../../data_connect/imageFileUploaderDataConnect";
 import { dateToYYMMDDhhmmss } from "../../utils/dateFormatUtils";
 
@@ -57,30 +58,52 @@ const useImageFileUploaderHook = () => {
             })
     }
 
-    const __reqDownloadImageFile = async (url, fileName) => {
-        fetch(url, { method: 'GET' })
-                .then(res => {
-                    return res.blob();
-                })
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
+    // const __reqDownloadImageFile = async (url, fileName) => {
+    //     fetch(url, { method: 'GET' })
+    //             .then(res => {
+    //                 return res.blob();
+    //             })
+    //             .then(blob => {
+    //                 const url = window.URL.createObjectURL(blob);
+    //                 const link = document.createElement('a');
+    //                 link.href = url;
 
-                    let date = dateToYYMMDDhhmmss(new Date());
+    //                 let date = dateToYYMMDDhhmmss(new Date());
 
-                    link.download = '[' + date + ']' + fileName + '.png';
-                    document.body.appendChild(link);
-                    link.click();
+    //                 link.download = '[' + date + ']' + fileName + '.png';
+    //                 document.body.appendChild(link);
+    //                 link.click();
 
-                    setTimeout((_) => {
-                        window.URL.revokeObjectURL(url) // 해당 url 사용 제한
-                    }, 60000);
+    //                 setTimeout((_) => {
+    //                     window.URL.revokeObjectURL(url) // 해당 url 사용 제한
+    //                 }, 60000);
                     
-                    link.remove();
-                }).catch(err => {
-                    alert('다운로드 오류. 재시도 해주세요.');
-                })
+    //                 link.remove();
+    //             }).catch(err => {
+    //                 alert('다운로드 오류. 재시도 해주세요.');
+    //             })
+    // }
+
+    const __reqDownloadImageFile = async (body) => {
+        return await imageFileDownloadDataConnect().downloadByCloud(body)
+            .then(res => {
+                const url = window.URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
+                const link = document.createElement('a');
+                link.href = url;
+
+                let date = dateToYYMMDDhhmmss(new Date());
+
+                link.setAttribute('download', '[' + date + ']' + body.title + '.png');
+                document.body.appendChild(link);
+                link.click();
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res.status === 500) {
+                    alert('undefined error');
+                }
+                alert(res.data.memo);
+            })
     }
 
     return {

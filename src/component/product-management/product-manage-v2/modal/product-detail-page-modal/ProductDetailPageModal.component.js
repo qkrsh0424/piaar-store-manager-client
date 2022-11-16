@@ -65,7 +65,12 @@ const ProductDetailPageModalComponent = (props) => {
                 }
 
                 onActionOpenBackdrop();
-                await __reqDownloadImageFile(selectedDetailPage.imageUrl, selectedDetailPage.title);
+
+                let body = {
+                    fileName: selectedDetailPage.imageFileName,
+                    title: selectedDetailPage.title
+                }
+                await __reqDownloadImageFile(body);
                 onActionCloseBackdrop();
             }
         },
