@@ -115,8 +115,10 @@ const ModifyFormComponent = (props) => {
 
                     setButtonDisabled(true);
                     onActionOpenBackdrop();
-                    await reqModifyOne();
+                    await reqModifyOne();                    
                     onActionCloseBackdrop();
+                    
+                    navigatePrevPage();
                 } catch (err) {
                     alert(err.message)
                 }

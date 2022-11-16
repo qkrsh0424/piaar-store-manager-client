@@ -135,10 +135,26 @@ const ManageTableFieldWrapper = styled.div`
         height: 25px;
         border-radius: 5px;
         border: 1px solid #c8c8c8;
-        background-color: #f7f7f7;
+        background-color: var(--defaultButtonColor);
 
         :hover {
             background-color: var(--defaultButtonHoverColor);
+        }
+    }
+
+    .control-btn .text-button {
+        color: #888;
+        font-weight: 600;
+        background-color: inherit;
+        border: none;
+        
+        &.text-highlight {
+            color: var(--erp-main-color);
+            text-decoration: underline;
+        }
+
+        :disabled {
+            cursor: not-allowed;
         }
     }
 

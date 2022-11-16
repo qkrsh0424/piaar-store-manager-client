@@ -6,7 +6,7 @@ export default function CreateFormFieldView(props) {
             <form onSubmit={(e) => props.onActionCreateDetail(e)}>
                 <div>
                     <div className="input-group mb-3">
-                        <div className="input-group-prepend">
+                        <div className="input-group-box">
                             <span className="input-group-text">
                                 사이즈_가로(cm)
                                 <i className="icon-must" aria-label="필수항목"></i>
@@ -23,7 +23,7 @@ export default function CreateFormFieldView(props) {
 
                     </div>
                     <div className="input-group mb-3">
-                        <div className="input-group-prepend">
+                        <div className="input-group-box">
                             <span className="input-group-text">
                                 사이즈_세로(cm)
                                 <i className="icon-must" aria-label="필수항목"></i>
@@ -40,7 +40,7 @@ export default function CreateFormFieldView(props) {
 
                     </div>
                     <div className="input-group mb-3">
-                        <div className="input-group-prepend">
+                        <div className="input-group-box">
                             <span className="input-group-text">
                                 사이즈_높이(cm)
                                 <i className="icon-must" aria-label="필수항목"></i>
@@ -57,7 +57,7 @@ export default function CreateFormFieldView(props) {
 
                     </div>
                     <div className="input-group mb-3">
-                        <div className="input-group-prepend">
+                        <div className="input-group-box">
                             <span className="input-group-text">
                                 내품수량
                                 <i className="icon-must" aria-label="필수항목"></i>
@@ -74,7 +74,7 @@ export default function CreateFormFieldView(props) {
 
                     </div>
                     <div className="input-group mb-3">
-                        <div className="input-group-prepend">
+                        <div className="input-group-box">
                             <span className="input-group-text">
                                 무게(kg)
                                 <i className="icon-must" aria-label="필수항목"></i>

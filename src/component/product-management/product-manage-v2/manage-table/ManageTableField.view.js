@@ -122,10 +122,11 @@ export default function ManageTableFieldView(props) {
                                         </div>
                                         <div className='control-btn'>
                                             <button
-                                                className='button-el'
-                                                onClick={(e) => props.onActionProductDetailPageModal(e, r.product.id)}
+                                                className={`text-button ${r.product.purchaseUrl && 'text-highlight'}`}
+                                                onClick={(e) => props.onActionRoutePurchaseUrl(e, r.product.id)}
+                                                disabled={!r.product.purchaseUrl}
                                             >
-                                                상세페이지
+                                                구매 링크
                                             </button>
                                         </div>
                                     </td>
@@ -136,32 +137,13 @@ export default function ManageTableFieldView(props) {
                                     >
                                         <div>{r.product.defaultName}</div>
                                         <div>{r.product.code}</div>
-                                        <div className='button-box'>
-                                            {r.product.purchaseUrl ?
-                                                <a href={r.product.purchaseUrl} target='_blank'>
-                                                    <img
-                                                        src='/assets/icon/link_default_2C73D2.svg'
-                                                        style={{ width: '30px' }}
-                                                        alt=""
-                                                        loading='lazy'
-                                                        className='link-img'
-                                                    ></img>
-                                                </a>
-                                                :
-                                                <button
-                                                    type='button'
-                                                    className='button-el'
-                                                    onClick={(e) => { e.stopPropagation(); alert('구매링크를 먼저 등록해주세요.'); }}
-                                                >
-                                                    <img
-                                                        src='/assets/icon/link_off_default_000000.svg'
-                                                        style={{ width: '30px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
-                                                        alt=""
-                                                        loading='lazy'
-                                                        className='link-img'
-                                                    ></img>
-                                                </button>
-                                            }
+                                        <div className='control-btn'>
+                                            <button
+                                                className='button-el moda-open-button'
+                                                onClick={(e) => props.onActionProductDetailPageModal(e, r.product.id)}
+                                            >
+                                                상세페이지
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>

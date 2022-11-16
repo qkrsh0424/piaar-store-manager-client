@@ -5,7 +5,7 @@ import { StockStatusFieldWrapper } from "../SearchProductReceiveAndReleaseModal.
 export default function ReleaseStatusTableFieldView(props) {
     return (
         <StockStatusFieldWrapper>
-            <table className="table table-sm" stlye={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
+            <table className="table table-sm" style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                 <thead>
                     <tr>
                         <th className='fixed-header' scope="col" width='150'>출고일시</th>

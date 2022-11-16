@@ -31,6 +31,8 @@ const CreateFormComponent = (props) => {
     const [optionDefaultNameCreateModalOpen, setOptionDefaultNameCreateModalOpen] = useState(false);
 
     const {
+        location,
+        navigateUrl,
         navigatePrevPage
     } = useRouterHook();
 
@@ -206,6 +208,13 @@ const CreateFormComponent = (props) => {
         submit: {
             createProductAndOptions: async (e) => {
                 e.preventDefault();
+
+                let data = {
+                    pathname: `/products`,
+                    state: {
+                        routerUrl: location.pathname + location.search
+                    }
+                }
         
                 try {
                     checkProductCreateFormData();
@@ -220,6 +229,8 @@ const CreateFormComponent = (props) => {
                     onActionOpenBackdrop();
                     await __handle.req.createProductAndOptions(body);
                     onActionCloseBackdrop();
+
+                    navigateUrl(data);
                 } catch (err) {
                     alert(err.message)
                 }

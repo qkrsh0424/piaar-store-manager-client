@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useRouterHook from "../../../../hooks/router/useRouterHook";
 import OptionPackageModalComponent from "../modal/option-package-modal/OptionPackageModal.component";
 import ProductDetailPageModalComponent from "../modal/product-detail-page-modal/ProductDetailPageModal.component";
 import SubOptionCodeModalComponent from "../modal/sub-option-code-modal/SubOptionCodeModal.component";
@@ -59,6 +60,17 @@ const ManageTableComponent = (props) => {
             closeProductDetailPageModal: () => {
                 setProduct(null);
                 setProductDetailPageModalOpen(false);
+            },
+            routePurchaseUrl: (e, productId) => {
+                e.stopPropagation();
+
+                let data = props.productManagementList.filter(r => r.product.id === productId)[0]?.product;
+                
+                if(data.purchaseUrl == '' || !data.purchaseUrl) {
+                    alert('구매링크를 먼저 등록해주세요.');
+                    return;
+                }
+                window.open(data.purchaseUrl, '_blank');
             }
         }
     }
@@ -80,7 +92,8 @@ const ManageTableComponent = (props) => {
                         onSubmitDeleteProductOne={props.onSubmitDeleteProductOne}
                         onActionModifyProduct={props.onActionModifyProduct}
                         onActionModifyOptions={props.onActionModifyOptions}
-
+                        
+                        onActionRoutePurchaseUrl={__handle.action.routePurchaseUrl}
                         onActionOpenSubOptionCodeModal={__handle.action.openSubOptionCodeModal}
                         onActionOpenOptionPackageModal={__handle.action.openOptionPackageModal}
                         onActionProductDetailPageModal={__handle.action.openProductDetailPageModal}

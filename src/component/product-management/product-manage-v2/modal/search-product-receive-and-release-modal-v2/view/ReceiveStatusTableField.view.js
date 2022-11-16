@@ -6,7 +6,7 @@ export default function ReceiveStatusTableFieldView(props) {
 
     return (
         <StockStatusFieldWrapper>
-            <table className="table table-sm" stlye={{ tableLayout: 'fixed', backgroundColor: 'white', width: '100%' }}>
+            <table className="table table-sm" style={{ tableLayout: 'fixed', backgroundColor: 'white', width: '100%' }}>
                 <thead>
                     <tr>
                         <th className='fixed-header' scope="col" width='150'>입고일시</th>

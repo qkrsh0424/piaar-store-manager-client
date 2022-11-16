@@ -8,7 +8,8 @@ import { CategoryInfoInputFieldWrapper, Container, CreateButtonFieldWrapper, Pag
 
 export default function ModifyFormComponent(props) {
     const {
-        navigatePrevPage
+        location,
+        navigateUrl
     } = useRouterHook();
 
     const {
@@ -44,8 +45,20 @@ export default function ModifyFormComponent(props) {
     const __handle = {
         action: {
             cancelModifyCategory: () => {
+                let data = {
+                    pathname: `/products`,
+                    state: {
+                        routerUrl: location.pathname + location.search
+                    }
+                }
+                
+                if(!selectedCategory) {
+                    navigateUrl(data);
+                    return;
+                }
+
                 if(window.confirm('취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?')) {
-                    navigatePrevPage();
+                    navigateUrl(data);
                 }
             }
         },

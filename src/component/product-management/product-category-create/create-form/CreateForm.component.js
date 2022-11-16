@@ -43,6 +43,11 @@ export default function CreateFormComponent() {
     const __handle = {
         action: {
             cancelCreateCategory: () => {
+                if(!(createCategoryData && createCategoryData.name)) {
+                    navigatePrevPage();
+                    return;
+                }
+
                 if(window.confirm('취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?')) {
                     navigatePrevPage();
                 }

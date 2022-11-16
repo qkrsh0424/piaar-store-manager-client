@@ -148,6 +148,8 @@ const ModifyFormComponent = (props) => {
                     onActionOpenBackdrop();
                     await reqModifyOptions(selectedProductId);
                     onActionCloseBackdrop();
+
+                    navigatePrevPage();
                 } catch (err) {
                     alert(err.message)
                 }

@@ -61,6 +61,11 @@ const CreateFormWrapper = styled.div`
         font-weight:700;
         padding: 1% 3%;
     }
+    
+    .input-group-text {
+        height: 48px;
+        border-radius: 5px 0 0 5px;
+    }
 `;
 
 export {
