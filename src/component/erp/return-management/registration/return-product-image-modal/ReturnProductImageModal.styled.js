@@ -107,15 +107,16 @@ const InfoTextFieldWrapper = styled.div`
 `;
 
 const ImageFieldWrapper = styled.div`
-    margin-top: 20px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-
+    gap: 20px;
+    padding-bottom: 50px;
+    
     .image-wrapper {
         width: 400px;
+        overflow: auto;
     }
 
     .image-box {
@@ -128,7 +129,7 @@ const ImageFieldWrapper = styled.div`
         position: absolute;
         object-fit: cover;
         width: 100%;
-        height: 100%;
+        /* height: 100%; */
         transition: .2s;
         border:1px solid #cccaca;
         border-radius: 5px;
