@@ -62,7 +62,7 @@ const ModifyFormComponent = (props) => {
             onActionCloseBackdrop();
         }
 
-        fetchInit();        
+        fetchInit();
     }, [])
 
     const __handle = {

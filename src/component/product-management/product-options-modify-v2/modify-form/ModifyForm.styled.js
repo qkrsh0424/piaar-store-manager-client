@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const Container = styled.div`
+    overflow: auto;
 `;
 
 const PageTitleFieldWrapper = styled.div`
@@ -11,6 +12,7 @@ const OptionInfoInputWrapper = styled.div`
     background-color: white;
     border-radius: 10px;
     box-shadow: var(--defaultBoxShadow);
+    overflow: auto;
 
     .title-line {
         display: flex;

@@ -96,16 +96,16 @@ const productOptionDataConnect = () => {
                 withCredentials: true
             })
         },
-        searchStockStatus: async function(optionCid) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/${optionCid}`, {
-                withCredentials: true
-            })
-        },
-        searchAllStockStatus: async function() {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/list`, {
-                withCredentials: true
-            })
-        },
+        // searchStockStatus: async function(optionCid) {
+        //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/${optionCid}`, {
+        //         withCredentials: true
+        //     })
+        // },
+        // searchAllStockStatus: async function() {
+        //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/list`, {
+        //         withCredentials: true
+        //     })
+        // },
         searchListStockStatus: async function(startDate, endDate) {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status`, {
                 params: {

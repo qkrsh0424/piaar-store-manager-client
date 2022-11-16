@@ -5,12 +5,14 @@ const Container = styled.div`
 `;
 
 const ManageTableFieldWrapper = styled.div`
-    background-color: #fff;
-    border: 1px solid #dbdde2;
-    min-height: 80vh;
-    max-height: 80vh;
-    overflow: auto;
-    border-radius: 10px;
+    .table-box {
+        background-color: #fff;
+        border: 1px solid #dbdde2;
+        min-height: 80vh;
+        max-height: 80vh;
+        overflow: auto;
+        border-radius: 10px;
+    }
 
     table thead tr {
         vertical-align: middle !important;

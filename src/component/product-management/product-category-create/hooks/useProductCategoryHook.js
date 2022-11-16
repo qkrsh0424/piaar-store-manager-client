@@ -12,7 +12,7 @@ export default function useProductCategoryHook () {
     })
 
     const reqSearchAllProductCategory = async () => {
-        await productCategoryDataConnect().searchList()
+        await productCategoryDataConnect().searchAll()
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {
                     setSavedCategories(res.data.data);
@@ -58,13 +58,15 @@ export default function useProductCategoryHook () {
     }
 
     const checkCreateFormData = () => {
-        if(category.name === '' || !category.name) {
+        let categoryName = category.name?.trim();
+
+        if(categoryName === '' || !categoryName) {
             throw new Error('[카테고리] 카테고리명을 확인해 주세요.')
         }
 
         savedCategories.forEach(r => {
             let savedName = r.name.trim();
-            let inputName = category.name.trim();
+            let inputName = categoryName;
 
             if(savedName === inputName) {
                 throw new Error('이미 존재하는 카테고리입니다.');

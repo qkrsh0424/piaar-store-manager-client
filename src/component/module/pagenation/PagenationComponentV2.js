@@ -211,7 +211,6 @@ const PagenationComponentV2 = (props) => {
         }), {
             replace: true
         })
-
     }
 
     const onActionNext = () => {

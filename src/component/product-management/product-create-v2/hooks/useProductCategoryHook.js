@@ -5,7 +5,7 @@ export default function useProductCategoryHook(props) {
     const [productCategoryList, setProductCategoryList] = useState(null);
 
     const reqSearchAllProductCategory = async () => {
-        await productCategoryDataConnect().searchList()
+        await productCategoryDataConnect().searchAll()
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {
                     setProductCategoryList(res.data.data);

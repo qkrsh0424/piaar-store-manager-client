@@ -73,6 +73,8 @@ const ModifyFormComponent = (props) => {
         }
 
         fetchInit();
+
+        window.scrollTo({ top: '0', behavior: 'smooth'});
     }, [])
 
     const __handle = {
@@ -160,7 +162,7 @@ const ModifyFormComponent = (props) => {
     return (
         <>
             <Container>
-                <PageTitleFieldView title={'옵션 일괄 수정'} />
+                <PageTitleFieldView title={'옵션 일괄 수정'}/>
 
                 <form onSubmit={__handle.submit.modifyOptions}>
                     {modifyOptionDataList && productOptionBatchReg &&
