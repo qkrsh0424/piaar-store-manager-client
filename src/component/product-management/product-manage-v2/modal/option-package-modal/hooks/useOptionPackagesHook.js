@@ -94,11 +94,11 @@ export default function useOptionPackagesHook() {
             if(r.parentOptionId === '' || !r.parentOptionId) {
                 throw new Error('선택된 구성옵션 중 올바르지 않은 데이터가 존재합니다.');
             }
+            if(r.packageUnit && !isNumberFormat(r.packageUnit)) {
+                throw new Error('[수량]은 숫자만 입력해 주세요.');
+            }
             if(r.packageUnit === '' || !r.packageUnit || r.packageUnit < 0) {
                 throw new Error('구성 옵션의 수량은 0보다 큰 값이어야 합니다.');
-            }
-            if(r.packageUnit && !isNumberFormat(r.pacakgeUnit)) {
-                throw new Error('[수량]은 숫자만 입력해 주세요.');
             }
         })
     }
