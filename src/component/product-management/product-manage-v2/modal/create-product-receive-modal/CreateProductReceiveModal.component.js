@@ -147,6 +147,7 @@ const CreateProductReceiveModalComponent = (props) => {
 
                     onActionOpenBackdrop();
                     await reqCreateProductReceive(data);
+                    await props.reqSearchProductAndOptionList();
                     onActionCloseBackdrop();
 
                     props.onActionCloseModal();

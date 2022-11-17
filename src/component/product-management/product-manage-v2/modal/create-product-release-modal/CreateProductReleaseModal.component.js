@@ -146,6 +146,7 @@ const CreateProductReleaseModalComponent = (props) => {
 
                     onActionOpenBackdrop();
                     await reqCreateProductRelease(data);
+                    await props.reqSearchProductAndOptionList();
                     onActionCloseBackdrop();
 
                     props.onActionCloseModal();

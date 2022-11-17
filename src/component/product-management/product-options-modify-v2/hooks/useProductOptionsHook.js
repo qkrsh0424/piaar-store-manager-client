@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { productOptionDataConnect } from "../../../../data_connect/productOptionDataConnect";
+import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { isNumberFormat } from "../../../../utils/regexUtils";
 
 // id 제거
@@ -21,6 +22,10 @@ export default function useProductOptionsHook () {
     const [originOptions, setOriginOptions] = useState([]);
     const [options, setOptions] = useState([]);
 
+    const {
+        navigatePrevPage
+    } = useRouterHook();
+
     const reqSearchBatchByProductId = async (id) => {
         await productOptionDataConnect().searchBatchByProductId(id)
             .then(res => {
@@ -36,6 +41,7 @@ export default function useProductOptionsHook () {
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success'){
                     alert('완료되었습니다.');
+                    navigatePrevPage();
                 }
             })
             .catch(err => {

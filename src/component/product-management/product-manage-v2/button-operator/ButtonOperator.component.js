@@ -5,7 +5,6 @@ import ControlFieldView from "./ControlField.view";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import CreateProductReceiveModalComponent from "../modal/create-product-receive-modal/CreateProductReceiveModal.component";
 import CreateProductReleaseModalComponent from "../modal/create-product-release-modal/CreateProductReleaseModal.component";
-// import SearchProductReceiveAndReleaseModalComponent from "../modal/search-product-receive-and-release-modal/SearchProductReceiveAndReleaseModal.component";
 import SearchProductReceiveAndReleaseModalComponent from "../modal/search-product-receive-and-release-modal-v2/SearchProductReceiveAndReleaseModal.component";
 
 const ButtonOperatorComponent = (props) => {
@@ -139,6 +138,7 @@ const ButtonOperatorComponent = (props) => {
                     createReceiveData={createReceiveData}
                     
                     onActionCloseModal={__handle.action.closeCreateProductReceiveModal}
+                    reqSearchProductAndOptionList={props.reqSearchProductAndOptionList}
                 />
             }
 
@@ -149,6 +149,7 @@ const ButtonOperatorComponent = (props) => {
                     createReleaseData={createReleaseData}
                     
                     onActionCloseModal={__handle.action.closeCreateProductReleaseModal}
+                    reqSearchProductAndOptionList={props.reqSearchProductAndOptionList}
                 />
             }
 

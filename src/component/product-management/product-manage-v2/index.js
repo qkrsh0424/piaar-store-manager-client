@@ -230,6 +230,7 @@ const ProductManageComponent = (props) => {
                 <ButtonOperatorComponent
                     productManagementList={productManagementList?.content}
                     checkedOptionIdList={checkedOptionIdList}
+                    reqSearchProductAndOptionList={__handle.req.searchProductAndOptionList}
                 />
 
                 <ManageTablePagenationComponent

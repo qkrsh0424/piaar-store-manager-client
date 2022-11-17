@@ -74,7 +74,7 @@ const ModifyFormComponent = (props) => {
 
         fetchInit();
 
-        window.scrollTo({ top: '0', behavior: 'smooth'});
+        window.scrollTo({top: document.body.scrollHeight});
     }, [])
 
     const __handle = {
@@ -150,8 +150,6 @@ const ModifyFormComponent = (props) => {
                     onActionOpenBackdrop();
                     await reqModifyOptions(selectedProductId);
                     onActionCloseBackdrop();
-
-                    navigatePrevPage();
                 } catch (err) {
                     alert(err.message)
                 }

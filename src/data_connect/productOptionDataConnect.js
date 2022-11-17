@@ -132,13 +132,6 @@ const productOptionDataConnect = () => {
             })
         },
 
-        // [221026] FEAT
-        searchBatchStockStatus: async function (optionIds, params) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v2/product-options/batch/stock/status`, optionIds, {
-                params,
-                withCredentials: true
-            })
-        },
         // searchList -> searchAllM2OJ
         searchAllM2OJ: async function () {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product-options/all-m2oj`, {
