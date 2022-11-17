@@ -1,5 +1,6 @@
 import React from "react";
 import { dateToYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
+import ResizableTh from "../../../../../module/table/ResizableTh";
 import { StockStatusFieldWrapper } from "../SearchProductReceiveAndReleaseModal.styled";
 
 export default function ReceiveStatusTableFieldView(props) {
@@ -9,13 +10,13 @@ export default function ReceiveStatusTableFieldView(props) {
             <table className="table table-sm" style={{ tableLayout: 'fixed', backgroundColor: 'white', width: '100%' }}>
                 <thead>
                     <tr>
-                        <th className='fixed-header' scope="col" width='150'>입고일시</th>
-                        <th className='fixed-header' scope="col" width='150'>상품명</th>
-                        <th className='fixed-header' scope="col" width='150'>옵션명</th>
-                        <th className='fixed-header' scope="col" width='150'>옵션코드</th>
-                        <th className='fixed-header' scope="col" width='100' style={{ color: '#292be4' }}>입고량</th>
-                        <th className='fixed-header' scope="col" width='150'>입고메모</th>
-                        <th className='fixed-header' scope="col" width='50'>수정</th>
+                        <ResizableTh className='fixed-header' scope="col" width={150}>입고일시</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={150}>상품명</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={150}>옵션명</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={150}>옵션코드</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={50} style={{ color: '#292be4' }}>입고량</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={150}>입고메모</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={50}>수정</ResizableTh>
                     </tr>
                 </thead>
 

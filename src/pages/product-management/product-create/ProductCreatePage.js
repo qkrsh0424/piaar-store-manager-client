@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import DrawerNavbarMain from '../../../component/nav/DrawerNavbarMain';
 import ProductManagementNavbar from '../../../component/product-management/navbar/ProductManagementNavbar';
 import ProductCreateComponent from '../../../component/product-management/product-create-v2';
-// import ProductCreateComponent from '../../component/product_create-form';
 
 const Container = styled.div`
     position: relative;
@@ -12,12 +12,29 @@ const Container = styled.div`
 `;
 
 const ProductCreatePage = (props) => {
+    const [navbarOpen, setNavbarOpen] = useState(true);
+
+    const onActionOpenNavbar = () => {
+        setNavbarOpen(true);
+    }
+    
+    const onActionCloseNavbar = () => {
+        setNavbarOpen(false);
+    }
+
     return(
         <>
             <Container>
                 <DrawerNavbarMain />
-                <ProductManagementNavbar />
-                <ProductCreateComponent />
+                <ProductManagementNavbar
+                    navbarOpen={navbarOpen}
+
+                    onActionOpenNavbar={onActionOpenNavbar}
+                    onActionCloseNavbar={onActionCloseNavbar}
+                />
+                <ProductCreateComponent 
+                    navbarOpen={navbarOpen}
+                />
             </Container>
         </>
     )

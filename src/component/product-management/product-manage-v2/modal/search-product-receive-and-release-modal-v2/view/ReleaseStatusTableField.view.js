@@ -1,5 +1,6 @@
 import React from "react";
 import { dateToYYMMDDhhmmss } from "../../../../../../utils/dateFormatUtils";
+import ResizableTh from "../../../../../module/table/ResizableTh";
 import { StockStatusFieldWrapper } from "../SearchProductReceiveAndReleaseModal.styled";
 
 export default function ReleaseStatusTableFieldView(props) {
@@ -8,14 +9,14 @@ export default function ReleaseStatusTableFieldView(props) {
             <table className="table table-sm" style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                 <thead>
                     <tr>
-                        <th className='fixed-header' scope="col" width='150'>출고일시</th>
-                        <th className='fixed-header' scope="col" width='150'>상품명</th>
-                        <th className='fixed-header' scope="col" width='150'>옵션명</th>
-                        <th className='fixed-header' scope="col" width='150'>옵션코드</th>
-                        <th className='fixed-header' scope="col" width='150'>출고지</th>
-                        <th className='fixed-header' scope="col" width='100' style={{ color: '#292be4' }}>출고량</th>
-                        <th className='fixed-header' scope="col" width='150'>출고메모</th>
-                        <th className='fixed-header' scope="col" width='50'>수정</th>
+                        <ResizableTh className='fixed-header' scope="col" width='150'>출고일시</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width='150'>상품명</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width='150'>옵션명</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width='150'>옵션코드</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width='150'>출고지</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width='100' style={{ color: '#292be4' }}>출고량</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width='150'>출고메모</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width='50'>수정</ResizableTh>
 
                     </tr>
                 </thead>

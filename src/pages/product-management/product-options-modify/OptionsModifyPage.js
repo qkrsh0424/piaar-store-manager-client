@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import DrawerNavbarMain from '../../../component/nav/DrawerNavbarMain';
 import ProductManagementNavbar from '../../../component/product-management/navbar/ProductManagementNavbar';
@@ -10,13 +11,30 @@ const Container = styled.div`
     background-color: var(--piaar-background-color);
 `;
 
-const ProductOptionsModifyPage = (props) => {
+const ProductOptionsModifyPage = () => {
+    const [navbarOpen, setNavbarOpen] = useState(true);
+
+    const onActionOpenNavbar = () => {
+        setNavbarOpen(true);
+    }
+    
+    const onActionCloseNavbar = () => {
+        setNavbarOpen(false);
+    }
+
     return(
         <>
             <Container>
                 <DrawerNavbarMain />
-                <ProductManagementNavbar />
-                <ProductOptionsModifyComponent />
+                <ProductManagementNavbar
+                    navbarOpen={navbarOpen}
+
+                    onActionOpenNavbar={onActionOpenNavbar}
+                    onActionCloseNavbar={onActionCloseNavbar}
+                />
+                <ProductOptionsModifyComponent
+                    navbarOpen={navbarOpen}
+                />
             </Container>
         </>
     )

@@ -3,18 +3,16 @@ import CreateFormComponent from "./create-form/CreateForm.component";
 
 const Container = styled.div`
     height: 100%;
-    padding: 30px 30px 150px 230px;
+    padding: 60px 30px 150px 230px;
     margin: 0 auto;
+    transition: all 0.5s;
 
-    @media screen and (max-width: 992px) {
-        padding-left: 30px;
-        padding-top: 60px;
-    }
+    padding-left: ${props=> !props.navbarOpen && '30px'};
 `
 
 const ProductCreateComponent = (props) => {
     return (
-        <Container>
+        <Container navbarOpen={props.navbarOpen}>
             <CreateFormComponent />
         </Container>
     )

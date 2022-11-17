@@ -84,6 +84,14 @@ const ListFieldWrapper = styled.div`
     }
 `;
 
+const TextFieldWrapper = styled.div`
+    .info-text {
+        color: var(--piaar-main-color);
+        font-size: 16px;
+        font-weight: 700;
+    }
+`;
+
 const TableFieldWrapper = styled.div`
     margin: 10px 0;
     width: 100%;
@@ -164,6 +172,7 @@ export {
     InfoFieldWrapper,
     InputFieldWrapper,
     ListFieldWrapper,
+    TextFieldWrapper,
     TableFieldWrapper,
     ButtonFieldWrapper
 }

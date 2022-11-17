@@ -4,7 +4,7 @@ import { DateRangeSelectorFieldWrapper } from "../SearchProductReceiveAndRelease
 export default function DateRangeSelectorFieldView(props) {
     return (
         <DateRangeSelectorFieldWrapper>
-            <div className='flex-item place-items-center' style={{ gap: '10px' }}>
+            <div className='date-selector-group'>
                 <div className='date-selector-box'>
                     <CustomDatePicker
                         valueSize={14}
@@ -25,7 +25,7 @@ export default function DateRangeSelectorFieldView(props) {
                 </div>
             </div>
 
-            <div>
+            <div className='button-box'>
                 <button
                     type='button'
                     className='button-el'

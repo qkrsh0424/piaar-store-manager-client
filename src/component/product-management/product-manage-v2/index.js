@@ -15,13 +15,11 @@ import { useDisabledButtonHook } from "../../../hooks/button-disabled/useDisable
 
 const Container = styled.div`
     height: 100%;
-    padding: 30px 30px 150px 230px;
+    padding: 60px 30px 150px 230px;
     margin: 0 auto;
+    transition: all 0.5s;
 
-    @media screen and (max-width: 992px) {
-        padding-left: 30px;
-        padding-top: 60px;
-    }
+    padding-left: ${props=> !props.navbarOpen && '30px'};
 `;
 
 const PageTitleFieldWrapper = styled.div``;
@@ -223,7 +221,7 @@ const ProductManageComponent = (props) => {
 
     return (
         <>
-            <Container>
+            <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'상품 조회 / 수정'} />
 
                 <OperatorComponent />

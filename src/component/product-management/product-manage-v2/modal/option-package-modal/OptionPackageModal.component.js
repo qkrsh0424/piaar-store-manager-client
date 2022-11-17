@@ -5,7 +5,7 @@ import useOptionPackagesHook from "./hooks/useOptionPackagesHook";
 import useProductOptionsSearchHook from "./hooks/useProductOptionsSearchHook";
 import SubmitModalComponentV2 from "../../../../module/modal/SubmitModalComponentV2";
 import ListFieldView from "./ListField.view";
-import { ButtonFieldWrapper, InfoFieldWrapper, InputFieldWrapper } from "./OptionPackageModal.styled";
+import { ButtonFieldWrapper, InfoFieldWrapper, InputFieldWrapper, TextFieldWrapper } from "./OptionPackageModal.styled";
 import TableFieldView from "./TableField.view";
 
 function InfoFieldView({ option }) {
@@ -41,6 +41,14 @@ function InputFieldView({ inputValue, onChange }) {
     )
 }
 
+function TextFieldView({ elements }) {
+    return (
+        <TextFieldWrapper>
+            {elements}
+        </TextFieldWrapper>
+    )
+}
+
 
 function ButtonFieldView({ onActionReset }) {
     return (
@@ -67,6 +75,7 @@ const OptionPackageModalComponent = (props) => {
 
     const {
         optionPackages,
+        totalPackageUnit,
 
         reqSearchOptionPackages,
         onActionAddData: onActionAddPackageOption,
@@ -140,6 +149,7 @@ const OptionPackageModalComponent = (props) => {
                     element={
                         <div className='data-wrapper-group'>
                             <div className='data-wrapper' style={{ height: '400px' }}>
+                                {console.log(props.option)}
                                 <InfoFieldView
                                     option={props.option}
                                 />
@@ -158,9 +168,19 @@ const OptionPackageModalComponent = (props) => {
                             <div className='data-wrapper' style={{ height: '400px' }}>
                                 {optionPackages &&
                                     <>
-                                        <ButtonFieldView
-                                            onActionReset={onActionResetOriginOptionPackages}
-                                        />
+                                        <div className='flex-item place-items-center' style={{ justifyContent: "space-between" }}>
+                                            <TextFieldView 
+                                                elements={
+                                                    <div>
+                                                        총 <span className='info-text'>{totalPackageUnit}</span>개
+                                                    </div>
+                                                }
+                                            />
+                                            <ButtonFieldView
+                                                onActionReset={onActionResetOriginOptionPackages}
+                                            />
+                                        </div>
+                                        {console.log(optionPackages)}
                                         <TableFieldView
                                             optionPackages={optionPackages}
 

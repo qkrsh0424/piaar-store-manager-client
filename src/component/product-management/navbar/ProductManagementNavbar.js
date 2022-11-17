@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useRef } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -33,32 +31,7 @@ const Container = styled.div`
     }
 `;
 
-const DesktopNavbarBox = styled.div`
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 200px;
-    max-width: 200px;
-    margin-top: 64px;
-    background-color: #455265;
-    color: #fff;
-    box-shadow: var(--defaultBoxShadow);
-    padding-bottom: 100px;
-    overflow: pre;
-    z-index: 2;
-    padding: 20px;
-
-    @media all and (max-width:992px){
-        display: none;
-    }
-`;
-
-const MobileNavbarBox = styled.div`
-    display: none;
-
-    @media screen and (max-width: 992px) {
-        display: block;
-    }
+const NavbarBox = styled.div`
     
     .selector-control-button {
         width: 25px;
@@ -153,61 +126,21 @@ const thisRouters = [
     // }
 ]
 
-const ProductManagementNavbar = () => {
-    const [mobileSelectorOpen, setMobileSelectorOpen] = useState(false);
-
+const ProductManagementNavbar = (props) => {
     const {
         location
     } = useRouterHook();
 
-    const onActionOpenMobileSelector = () => {
-        setMobileSelectorOpen(true);
-    }
-    
-    const onActionCloseMobileSelector = () => {
-        setMobileSelectorOpen(false);
-    }
-
     return (
         <Container>
-            {/* Desktop Navbar */}
-            <DesktopNavbarBox>
-                {thisRouters.map(r => {
-                    return (
-                        <div className='group-box' key={'navbar-' + r.title}>
-                            <div className='nav-title'>{r.title}</div>
-                            {r.page?.map(navPage => {
-                                return (
-                                    <div key={navPage.name} className='link-box'>
-                                        <Link
-                                            to={navPage.pathname}
-                                            replace={true}
-                                        >
-                                            <button
-                                                type='button'
-                                                className={`button-el ${location.pathname === navPage.pathname ? 'button-active' : ''}`}
-                                            >
-                                                {navPage.name}
-                                            </button>
-                                        </Link>
-
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    )
-                })}
-            </DesktopNavbarBox>
-
-            {/* Mobile Navbar */}
-            <MobileNavbarBox>
-                <div className={`navbar-item ${mobileSelectorOpen && 'navbar-item-open slide-right'}`}>
-                    {mobileSelectorOpen ?
+            <NavbarBox>
+                <div className={`navbar-item ${props.navbarOpen && 'navbar-item-open slide-right'}`}>
+                    {props.navbarOpen ?
                         <div className='selector-button-box'>
                             <button
                                 type='button'
                                 className='selector-control-button'
-                                onClick={() => onActionCloseMobileSelector()}
+                                onClick={() => props.onActionCloseNavbar()}
                             >
                                 <img
                                     className='button-icon'
@@ -221,7 +154,7 @@ const ProductManagementNavbar = () => {
                             <button
                                 type='button'
                                 className='selector-control-button'
-                                onClick={() => onActionOpenMobileSelector()}
+                                onClick={() => props.onActionOpenNavbar()}
                             >
                                 <img
                                     className='button-icon'
@@ -258,7 +191,7 @@ const ProductManagementNavbar = () => {
                     })
                     }
                 </div>
-            </MobileNavbarBox>
+            </NavbarBox>
         </Container>
     )
 }

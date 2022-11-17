@@ -10,10 +10,28 @@ const DateRangeSelectorFieldWrapper = styled.div`
     justify-content: space-between;
     align-items: flex-end;
     font-weight: 400;
+    gap: 10px;
+
+    @media screen and (max-width: 992px) {
+        flex-direction: column;
+    }
+
+    .date-selector-group {
+        width: 100%;
+        display: flex;
+        place-items: center;
+        gap: 10px;
+    }
 
     .date-selector-box{
         width: 300px;
-        
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+        }
+    }
+
+    .button-box {
         @media screen and (max-width: 992px) {
             width: 100%;
         }
@@ -31,9 +49,6 @@ const DateRangeSelectorFieldWrapper = styled.div`
 
         @media screen and (max-width: 992px) {
             font-size: 14px;
-        }
-
-        @media screen and (max-width: 768px) {
             width: 100%;
         }
     }

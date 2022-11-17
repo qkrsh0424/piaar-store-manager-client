@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useState } from "react";
 import { optionPackageDataConnect } from "../../../../../../data_connect/optionPackageDataConnect";
 import { isNumberFormat } from "../../../../../../utils/regexUtils";
@@ -5,6 +6,15 @@ import { isNumberFormat } from "../../../../../../utils/regexUtils";
 export default function useOptionPackagesHook() {
     const [originOptionPackages, setOriginOptionPackages] = useState([]);
     const [optionPackages, setOptionPackages] = useState([]);
+    const [totalPackageUnit, setTotalPackageUnit] = useState(0);
+
+    useEffect(() => {
+        if(!optionPackages) {
+            return;
+        }
+
+        onActionSumTotalUnit();
+    }, [optionPackages])
 
     const reqSearchOptionPackages = async (optionId) => {
         await optionPackageDataConnect().searchBatchByParentOptionId(optionId)
@@ -102,9 +112,15 @@ export default function useOptionPackagesHook() {
             }
         })
     }
+    
+    const onActionSumTotalUnit = () => {
+        let totalUnit = optionPackages.reduce((sum, r) => parseInt(sum) + parseInt(r.packageUnit), 0) || 0;
+        setTotalPackageUnit(totalUnit);
+    }
 
     return {
         optionPackages,
+        totalPackageUnit,
 
         reqSearchOptionPackages,
         onActionAddData,
@@ -114,5 +130,4 @@ export default function useOptionPackagesHook() {
         onActionResetData,
         checkSaveForm
     }
-
 } 

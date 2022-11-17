@@ -172,6 +172,7 @@ const CreateProductReceiveModalComponent = (props) => {
                                         <th className='fixed-header' scope='col' width='50'>번호</th>
                                         <th className='fixed-header' scope='col' width='150'>상품명</th>
                                         <th className='fixed-header' scope='col' width='150'>옵션명</th>
+                                        <th className='fixed-header' scope='col' width='50'>재고</th>
                                         <th className='fixed-header' scope='col' width='250'>
                                             <div className='button-header'>
                                                 <div>메모</div>
@@ -231,6 +232,7 @@ const CreateProductReceiveModalComponent = (props) => {
                                                 <td>{idx + 1}.</td>
                                                 <td>{r.product.defaultName}</td>
                                                 <td>{r.option.defaultName}</td>
+                                                <td>{r.option.stockSumUnit}개</td>
                                                 <td>
                                                     <input className='input-el' type='text' name='memo' value={r.memo} onChange={(e) => onChangeProductReceiveInputValue(e, idx)} />
                                                 </td>
