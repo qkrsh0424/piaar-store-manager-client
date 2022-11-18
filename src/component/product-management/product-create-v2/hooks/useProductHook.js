@@ -93,12 +93,23 @@ export default function useProductHook (props) {
     }
 
     const onChangeStockManagement = (e) => {
-        let target = {
-            name: e.target.name,
-            value: !product.stockManagement
-        }
+        let name = e.target.name;
+        let value = true;
+        
+        setProduct({
+            ...product,
+            [name]: value
+        })
+    }
 
-        onChangeValueOfName({ target })
+    const onChangeCancelStockManagement = (e) => {
+        let name = e.target.name;
+        let value = false;
+        
+        setProduct({
+            ...product,
+            [name]: value
+        })
     }
 
     return {
@@ -111,6 +122,7 @@ export default function useProductHook (props) {
         reqDeleteOne,
         onActionUpdateProduct,
         onChangeStockManagement,
-        onActionResetData
+        onActionResetData,
+        onChangeCancelStockManagement
     }
 }

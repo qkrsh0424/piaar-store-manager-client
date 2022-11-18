@@ -49,7 +49,7 @@ const CreateFormComponent = (props) => {
         onActionDeleteImageFileNameAndImageUrl,
         checkCreateFormData: checkProductCreateFormData,
         onChangeStockManagement: onChangeProductStockManagement,
-        onActionResetData: onActionResetProductData
+        onChangeCancelStockManagement: onChangeCancelProductStockManagement
     } = useProductHook();
 
     const {
@@ -59,7 +59,6 @@ const CreateFormComponent = (props) => {
         onActionDeleteById: onActionDeleteOptionById,
         onActionUpdateOptions,
         checkCreateFormData: checkProductOptionCreateFormData,
-        onActionResetData: onActionResetProductOptionData
     } = useProductOptionsHook();
 
     const {
@@ -256,6 +255,7 @@ const CreateFormComponent = (props) => {
                         onActionUploadProductImageFile={__handle.action.uploadProductImageFile}
                         onActionRemoveImage={onActionDeleteImageFileNameAndImageUrl}
                         onChangeProductStockManagement={onChangeProductStockManagement}
+                        onChangeCancelProductStockManagement={onChangeCancelProductStockManagement}
                     />
                 }
 

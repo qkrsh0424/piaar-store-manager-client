@@ -98,7 +98,7 @@ export default function ProductInfoInputFieldView(props) {
                                     type='button'
                                     name='stockManagement'
                                     className={`button-el ${!props.createProductData.stockManagement && 'btn-active'}`}
-                                    onClick={(e) => props.onChangeProductStockManagement(e)}
+                                    onClick={(e) => props.onChangeCancelProductStockManagement(e)}
                                 >
                                     미반영
                                 </button>

@@ -61,7 +61,6 @@ const NavbarBox = styled.div`
         z-index: 11;
         padding: 20px;
         
-        
         &.navbar-item-open {
             /* left: -200px; */
             left: 0;
