@@ -3,6 +3,7 @@ import useProductReleaseHook from "./hooks/useProductReleaseHook";
 import SubmitModalComponentV2 from "../../../../module/modal/SubmitModalComponentV2";
 import { BatchRegTooltipWrapper, CreateProductReleaseModalFieldWrapper } from "./CreateProductReleaseModal.styled";
 import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
+import ResizableTh from "../../../../module/table/ResizableTh";
 
 function BatchRegTooltip({ inputType, name, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
     const confirmInput = (e) => {
@@ -13,7 +14,7 @@ function BatchRegTooltip({ inputType, name, tootipSize, onChangeInputValue, onAc
 
     return (
         <BatchRegTooltipWrapper>
-            <div className='tooltip-box' style={tootipSize}>
+            <div className='tooltip-box' style={{ width: tootipSize}}>
                 <input
                     type={inputType}
                     name={name}
@@ -165,14 +166,14 @@ const CreateProductReleaseModalComponent = (props) => {
                 element={
                     <div className='data-wrapper' style={{ padding: '0' }}>
                         <CreateProductReleaseModalFieldWrapper>
-                            <table className='table table-sm' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
+                            <table className='table table-sm' style={{ tableLayout: 'fixed', backgroundColor: 'white'}}>
                                 <thead>
                                     <tr>
-                                        <th className='fixed-header' scope='col' width='50'>번호</th>
-                                        <th className='fixed-header' scope='col' width='150'>상품명</th>
-                                        <th className='fixed-header' scope='col' width='150'>옵션명</th>
-                                        <th className='fixed-header' scope='col' width='50'>재고</th>
-                                        <th className='fixed-header' scope='col' width='250'>
+                                        <th className='fixed-header' scope='col' width={50}>번호</th>
+                                        <ResizableTh className='fixed-header' scope='col' width={150}>상품명</ResizableTh>
+                                        <ResizableTh className='fixed-header' scope='col' width={150}>옵션명</ResizableTh>
+                                        <ResizableTh className='fixed-header' scope='col' width={50}>재고</ResizableTh>
+                                        <th className='fixed-header' scope='col' width={250}>
                                             <div className='button-header'>
                                                 <div>메모</div>
                                                 <div>
@@ -183,11 +184,10 @@ const CreateProductReleaseModalComponent = (props) => {
                                                     >
                                                         일괄 적용
                                                     </button>
-
                                                     {memoBatchRegTooltipOpen &&
                                                         <BatchRegTooltip
                                                             inputType={'text'}
-                                                            tootipSize={{ width: '80%' }}
+                                                            tootipSize={250}
                                                             name='memo'
 
                                                             onChangeInputValue={__handle.action.changeProductReleaseMemoTooltipInput}
@@ -198,7 +198,7 @@ const CreateProductReleaseModalComponent = (props) => {
                                                 </div>
                                             </div>
                                         </th>
-                                        <th className='fixed-header' scope='col' width='150'>
+                                        <th className='fixed-header' scope='col' width={150}>
                                             <div className='button-header'>
                                                 <div>수량</div>
                                                 <div>
@@ -212,7 +212,7 @@ const CreateProductReleaseModalComponent = (props) => {
                                                     {unitBatchRegTooltipOpen &&
                                                         <BatchRegTooltip
                                                             inputType={'number'}
-                                                            tootipSize={{ width: '150px' }}
+                                                            tootipSize={150}
                                                             name='releaseUnit'
 
                                                             onChangeInputValue={__handle.action.changeProductReleaseUnitTooltipInput}
@@ -232,7 +232,13 @@ const CreateProductReleaseModalComponent = (props) => {
                                                 <td>{idx + 1}.</td>
                                                 <td>{r.product.defaultName}</td>
                                                 <td>{r.option.defaultName}</td>
-                                                <td>{r.option.stockSumUnit}개</td>
+                                                <td>
+                                                    {r.option.packageYn === "y" ?
+                                                        <span style={{ color: 'var(--erp-main-color)'}}>세트상품</span>
+                                                        :
+                                                        <span>{r.option.stockSumUnit}개</span>
+                                                    }
+                                                </td>
                                                 <td>
                                                     <input className='input-el' type='text' name='memo' value={r.memo} onChange={(e) => onChangeProductReleaseInputValue(e, idx)} />
                                                 </td>

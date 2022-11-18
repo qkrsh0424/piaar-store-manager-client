@@ -7,6 +7,11 @@ export default function useProductReceiveHook () {
     
     const reqCreateProductReceive = async (data) => {
         await productReceiveDataConnect().createBatch(data)
+            .then(res => {
+                if(res.status === 200) {
+                    alert(res.data.memo);
+                }
+            })
             .catch(err => {
                 let res = err.response;
                 if (res?.status === 500) {

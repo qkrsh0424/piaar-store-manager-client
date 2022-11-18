@@ -184,7 +184,13 @@ export default function ManageTableFieldView(props) {
                                                     {option.managementName}
                                                 </td>
                                                 <td>
-                                                    {option.stockSumUnit}
+                                                    {option.packageYn === 'y' ?
+                                                        <span style={{ color: 'var(--erp-main-color)' }}>
+                                                            세트상품
+                                                        </span>
+                                                        :
+                                                        <span>{option.stockSumUnit}</span>
+                                                    }
                                                 </td>
                                                 <td>
                                                     {option.status}

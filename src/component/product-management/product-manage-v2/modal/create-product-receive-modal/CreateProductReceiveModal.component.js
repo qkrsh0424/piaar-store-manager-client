@@ -3,7 +3,7 @@ import useProductReceiveHook from "./hooks/useProductReceiveHook";
 import SubmitModalComponentV2 from "../../../../module/modal/SubmitModalComponentV2";
 import { BatchRegTooltipWrapper, CreateProductReceiveModalFieldWrapper } from "./CreateProductReceiveModal.styled";
 import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
-import { useDisabledButtonHook } from "../../../../../hooks/button-disabled/useDisabledButtonHook";
+import ResizableTh from "../../../../module/table/ResizableTh";
 
 function BatchRegTooltip({ inputType, name, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
     
@@ -169,11 +169,11 @@ const CreateProductReceiveModalComponent = (props) => {
                             <table className='table table-sm' style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                                 <thead>
                                     <tr>
-                                        <th className='fixed-header' scope='col' width='50'>번호</th>
-                                        <th className='fixed-header' scope='col' width='150'>상품명</th>
-                                        <th className='fixed-header' scope='col' width='150'>옵션명</th>
-                                        <th className='fixed-header' scope='col' width='50'>재고</th>
-                                        <th className='fixed-header' scope='col' width='250'>
+                                        <th className='fixed-header' scope='col' width={50}>번호</th>
+                                        <ResizableTh className='fixed-header' scope='col' width={150}>상품명</ResizableTh>
+                                        <ResizableTh className='fixed-header' scope='col' width={150}>옵션명</ResizableTh>
+                                        <ResizableTh className='fixed-header' scope='col' width={50}>재고</ResizableTh>
+                                        <th className='fixed-header' scope='col' width={250}>
                                             <div className='button-header'>
                                                 <div>메모</div>
                                                 <div>
@@ -187,7 +187,7 @@ const CreateProductReceiveModalComponent = (props) => {
                                                     {memoBatchRegTooltipOpen &&
                                                         <BatchRegTooltip
                                                             inputType={'text'}
-                                                            tootipSize={{ width: '80%' }}
+                                                            tootipSize={{ width: '250px' }}
                                                             name='memo'
 
                                                             onChangeInputValue={__handle.action.changeProductReceiveMemoTooltipInput}
@@ -198,7 +198,7 @@ const CreateProductReceiveModalComponent = (props) => {
                                                 </div>
                                             </div>
                                         </th>
-                                        <th className='fixed-header' scope='col' width='150'>
+                                        <th className='fixed-header' scope='col' width={150}>
                                             <div className='button-header'>
                                                 <div>수량</div>
                                                 <div>
@@ -232,7 +232,13 @@ const CreateProductReceiveModalComponent = (props) => {
                                                 <td>{idx + 1}.</td>
                                                 <td>{r.product.defaultName}</td>
                                                 <td>{r.option.defaultName}</td>
-                                                <td>{r.option.stockSumUnit}개</td>
+                                                <td>
+                                                    {r.option.packageYn === "y" ?
+                                                        <span style={{ color: 'var(--erp-main-color)'}}>세트상품</span>
+                                                        :
+                                                        <span>{r.option.stockSumUnit}개</span>
+                                                    }
+                                                </td>
                                                 <td>
                                                     <input className='input-el' type='text' name='memo' value={r.memo} onChange={(e) => onChangeProductReceiveInputValue(e, idx)} />
                                                 </td>

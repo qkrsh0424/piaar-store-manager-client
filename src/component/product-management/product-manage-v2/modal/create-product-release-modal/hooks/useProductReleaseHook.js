@@ -7,6 +7,11 @@ export default function useProductReleaseHook () {
 
     const reqCreateProductRelease = async (data) => {
         await productReleaseDataConnect().createBatch(data)
+            .then(res => {
+                if(res.status === 200) {
+                    alert(res.data.memo);
+                }
+            })
             .catch(err => {
                 let res = err.response;
                 if (res?.status === 500) {

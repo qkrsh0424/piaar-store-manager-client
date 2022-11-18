@@ -28,9 +28,7 @@ const CreateProductReleaseModalFieldWrapper = styled.div`
         position: sticky;
         top: 0;
         background: #f1f1f1;
-        z-index: 10;
-        font-size: 14px;
-        /* height: 30px; */
+        z-index:10;
     }
 
     .input-el {

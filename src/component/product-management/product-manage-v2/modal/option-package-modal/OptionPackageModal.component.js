@@ -131,8 +131,10 @@ const OptionPackageModalComponent = (props) => {
 
                     onActionOpenBackdrop();
                     await onSubmitCreateOptionPackages(props.option.id);
-                    await reqSearchOptionPackages(props.option.id);
+                    await props.reqSearchProductAndOptionList();
                     onActionCloseBackdrop();
+
+                    props.onActionCloseModal();
                 } catch (err) {
                     alert(err.message);
                 }
@@ -180,7 +182,6 @@ const OptionPackageModalComponent = (props) => {
                                                 onActionReset={onActionResetOriginOptionPackages}
                                             />
                                         </div>
-                                        {console.log(optionPackages)}
                                         <TableFieldView
                                             optionPackages={optionPackages}
 

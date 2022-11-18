@@ -112,6 +112,7 @@ const ManageTableComponent = (props) => {
                 <OptionPackageModalComponent
                     option={option}
                     onActionCloseModal={__handle.action.closeOptionPackageModal}
+                    reqSearchProductAndOptionList={props.reqSearchProductAndOptionList}
                 />
             }
 

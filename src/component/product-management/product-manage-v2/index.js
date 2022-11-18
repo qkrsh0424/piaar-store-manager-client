@@ -253,6 +253,7 @@ const ProductManageComponent = (props) => {
                     onSubmitDeleteProductOne={__handle.submit.deleteProduct}
                     onActionModifyProduct={__handle.action.routeToModifyPageForProduct}
                     onActionModifyOptions={__handle.action.routeToModifyPageForOptions}
+                    reqSearchProductAndOptionList={__handle.req.searchProductAndOptionList}
                 />
             </Container>
 

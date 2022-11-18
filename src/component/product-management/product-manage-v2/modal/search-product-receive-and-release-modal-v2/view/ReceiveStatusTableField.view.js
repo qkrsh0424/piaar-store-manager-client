@@ -7,15 +7,15 @@ export default function ReceiveStatusTableFieldView(props) {
 
     return (
         <StockStatusFieldWrapper>
-            <table className="table table-sm" style={{ tableLayout: 'fixed', backgroundColor: 'white', width: '100%' }}>
+            <table className="table table-sm" style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                 <thead>
                     <tr>
-                        <ResizableTh className='fixed-header' scope="col" width={150}>입고일시</ResizableTh>
-                        <ResizableTh className='fixed-header' scope="col" width={150}>상품명</ResizableTh>
-                        <ResizableTh className='fixed-header' scope="col" width={150}>옵션명</ResizableTh>
-                        <ResizableTh className='fixed-header' scope="col" width={150}>옵션코드</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={100}>입고일시</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={200}>상품명</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={200}>옵션명</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={200}>옵션코드</ResizableTh>
                         <ResizableTh className='fixed-header' scope="col" width={50} style={{ color: '#292be4' }}>입고량</ResizableTh>
-                        <ResizableTh className='fixed-header' scope="col" width={150}>입고메모</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={200}>입고메모</ResizableTh>
                         <ResizableTh className='fixed-header' scope="col" width={50}>수정</ResizableTh>
                     </tr>
                 </thead>

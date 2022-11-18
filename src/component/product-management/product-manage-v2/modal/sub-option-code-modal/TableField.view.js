@@ -1,3 +1,4 @@
+import ResizableTh from "../../../../module/table/ResizableTh";
 import { TableFieldWrapper } from "./SubOptionCodeModal.styled";
 
 export default function TableFieldView(props) {
@@ -5,12 +6,12 @@ export default function TableFieldView(props) {
         <TableFieldWrapper>
             <table className='table table-sm' style={{ tableLayout: 'fixed' }}>
                 <thead>
-                    <tr className='fixed-header'>
-                        <th scope='col' width='50'>번호</th>
-                        <th scope='col' width='150'>대체코드</th>
-                        <th scope='col' width='250'>메모</th>
-                        <th scope='col' width='50'>수정</th>
-                        <th scope='col' width='50'>삭제</th>
+                    <tr>
+                        <ResizableTh className='fixed-header' scope='col' width={50}>번호</ResizableTh>
+                        <ResizableTh className='fixed-header' scope='col' width={150}>대체코드</ResizableTh>
+                        <ResizableTh className='fixed-header' scope='col' width={250}>메모</ResizableTh>
+                        <ResizableTh className='fixed-header' scope='col' width={50}>수정</ResizableTh>
+                        <ResizableTh className='fixed-header' scope='col' width={50}>삭제</ResizableTh>
                     </tr>
                 </thead>
                 <tbody style={{ borderTop: 'none' }}>

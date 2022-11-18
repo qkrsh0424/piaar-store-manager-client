@@ -32,7 +32,7 @@ export default function TableFieldView(props) {
                         {props.prodDetailRankList?.map((r, index) => {
                             return (
                                 <tr key={'prod-stock-analysis' + index}
-                                    className={valueUtils.isRecentlyReleased(r.lastReleasedAt) ? '' : 'bad-stock'} // 최근 7일 동안의 출고 여부 확인
+                                    className={valueUtils.isRecentlyReleased(r.lastReleasedAt) ? '' : 'bad-stock'}  // 최근 7일 동안의 출고 여부 확인
                                 >
                                     <td>
                                         <span>{r.optionRank} 위</span>
