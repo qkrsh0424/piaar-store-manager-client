@@ -8,6 +8,10 @@ const Container = styled.div`
     transition: all 0.5s;
 
     padding-left: ${props=> !props.navbarOpen && '30px'};
+
+    @media screen and (max-width: 768px) {
+        padding-left: 30px !important;
+    }
 `;
 
 const ProductOptionsModifyComponent = (props) => {

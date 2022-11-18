@@ -18,6 +18,8 @@
     --defaultModalCloseColor:#959eae;
 }
 
+
+/* Slide Right */
 @keyframes slide-right {
     from {
         transform: translateX(-100%);
@@ -54,6 +56,47 @@
     }
 
     to {
-        transform: translateX(10);
+        transform: translateX(0);
+    }
+}
+
+/* Slide Left */
+@keyframes slide-left {
+    from {
+        transform: translateX(0%);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+@-moz-keyframes slide-left {
+    /* Firefox */
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+@-webkit-keyframes slide-left {
+    /* Safari and Chrome */
+    from {
+        transform: translateX(0%);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+@-o-keyframes slide-left {
+    /* Opera */
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
     }
 }

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import useRouterHook from "../../../hooks/router/useRouterHook";
@@ -59,12 +58,18 @@ const NavbarBox = styled.div`
         box-shadow: var(--defaultBoxShadow);
         padding-bottom: 100px;
         overflow: pre;
-        z-index: 2;
+        z-index: 11;
         padding: 20px;
-        left: -200px;
-
+        
+        
         &.navbar-item-open {
+            /* left: -200px; */
             left: 0;
+        }
+        
+        &.navbar-item-close {
+            transition-delay: 0.5s;
+            left: -200px;
         }
     }
 
@@ -76,6 +81,11 @@ const NavbarBox = styled.div`
 
     .slide-right {
         animation-name: slide-right;
+        animation-duration: 0.5s;
+    }
+
+    .slide-left {
+        animation-name: slide-left;
         animation-duration: 0.5s;
     }
 `;
@@ -134,7 +144,7 @@ const ProductManagementNavbar = (props) => {
     return (
         <Container>
             <NavbarBox>
-                <div className={`navbar-item ${props.navbarOpen && 'navbar-item-open slide-right'}`}>
+                <div className={`navbar-item ${props.navbarOpen ? 'navbar-item-open slide-right' : 'navbar-item-close slide-left'}`}>
                     {props.navbarOpen ?
                         <div className='selector-button-box'>
                             <button
