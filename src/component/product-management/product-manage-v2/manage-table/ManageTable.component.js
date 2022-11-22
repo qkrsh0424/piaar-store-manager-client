@@ -4,6 +4,7 @@ import ProductDetailPageModalComponent from "../modal/product-detail-page-modal/
 import SubOptionCodeModalComponent from "../modal/sub-option-code-modal/SubOptionCodeModal.component";
 import { Container } from "./ManageTable.styled";
 import ManageTableFieldView from "./ManageTableField.view";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
 
 const ManageTableComponent = (props) => {
     const [subOptionCodeModalOpen, setSubOptionCodeModalOpen] = useState(false);
@@ -11,6 +12,14 @@ const ManageTableComponent = (props) => {
     const [productDetailPageModalOpen, setProductDetailPageModalOpen] = useState(false);
     const [option, setOption] = useState(null);
     const [product,setProduct] = useState(null);
+
+    const {
+        open: snackbarOpen,
+        message: snackbarMessage,
+        severity: snackbarSeverity,
+        onActionOpen: onActionOpenSnackbar,
+        onActionClose: onActionCloseSnackbar,
+    } = useBasicSnackbarHookV2();
 
     const __handle = {
         action: {
@@ -70,6 +79,19 @@ const ManageTableComponent = (props) => {
                     return;
                 }
                 window.open(data.purchaseUrl, '_blank');
+            },
+            copyOptionCode: (e, optionCode) => {
+                e.stopPropagation();
+
+                let snackBarSetting = {
+                    message: '복사되었습니다.',
+                    severity: 'info'
+                }
+                onActionOpenSnackbar(snackBarSetting);
+                navigator.clipboard.writeText(optionCode);
+            },
+            openSnackbar: (snackbarSetting) => {
+                onActionOpenSnackbar(snackbarSetting);
             }
         }
     }
@@ -91,11 +113,13 @@ const ManageTableComponent = (props) => {
                         onSubmitDeleteProductOne={props.onSubmitDeleteProductOne}
                         onActionModifyProduct={props.onActionModifyProduct}
                         onActionModifyOptions={props.onActionModifyOptions}
+                        onSubmitDeleteProductOptionOne={props.onSubmitDeleteProductOptionOne}
                         
                         onActionRoutePurchaseUrl={__handle.action.routePurchaseUrl}
                         onActionOpenSubOptionCodeModal={__handle.action.openSubOptionCodeModal}
                         onActionOpenOptionPackageModal={__handle.action.openOptionPackageModal}
                         onActionProductDetailPageModal={__handle.action.openProductDetailPageModal}
+                        onActionCopyOptionCode={__handle.action.copyOptionCode}
                     />
                 }
             </Container>
@@ -104,6 +128,7 @@ const ManageTableComponent = (props) => {
                 <SubOptionCodeModalComponent
                     option={option}
                     onActionCloseModal={__handle.action.closeSubOptionCodeModal}
+                    onActionOpenSnackbar={__handle.action.openSnackbar}
                 />
             }
 
@@ -113,6 +138,7 @@ const ManageTableComponent = (props) => {
                     option={option}
                     onActionCloseModal={__handle.action.closeOptionPackageModal}
                     reqSearchProductAndOptionList={props.reqSearchProductAndOptionList}
+                    onActionOpenSnackbar={__handle.action.openSnackbar}
                 />
             }
 
@@ -121,6 +147,19 @@ const ManageTableComponent = (props) => {
                     product={product}
                     onActionCloseModal={__handle.action.closeProductDetailPageModal}
                 />
+            }
+
+            {/* Snackbar */}
+            {snackbarOpen &&
+                <BasicSnackbarHookComponentV2
+                    open={snackbarOpen}
+                    message={snackbarMessage}
+                    onClose={onActionCloseSnackbar}
+                    severity={snackbarSeverity}
+                    vertical={'top'}
+                    horizontal={'right'}
+                    duration={4000}
+                ></BasicSnackbarHookComponentV2>
             }
         </>
     )

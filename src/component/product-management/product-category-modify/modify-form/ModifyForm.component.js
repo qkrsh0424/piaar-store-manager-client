@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
 import RequiredIcon from "../../../module/icon/RequiredIcon";
 import useProductCategoryHook from "../hooks/useProductCategoryHook";
 import { CategoryInfoInputFieldWrapper, Container, CreateButtonFieldWrapper, PageTitleFieldWrapper } from "./ModifyForm.styled";
@@ -30,6 +31,14 @@ export default function ModifyFormComponent(props) {
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
 
+    const {
+        open: snackbarOpen,
+        message: snackbarMessage,
+        severity: snackbarSeverity,
+        onActionOpen: onActionOpenSnackbar,
+        onActionClose: onActionCloseSnackbar,
+    } = useBasicSnackbarHookV2();
+
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
     useEffect(() => {
@@ -46,10 +55,7 @@ export default function ModifyFormComponent(props) {
         action: {
             cancelModifyCategory: () => {
                 let data = {
-                    pathname: `/products`,
-                    state: {
-                        routerUrl: location.pathname + location.search
-                    }
+                    pathname: `/products`
                 }
                 
                 if(!selectedCategory) {
@@ -71,7 +77,13 @@ export default function ModifyFormComponent(props) {
                     
                     setButtonDisabled(true);
                     onActionOpenBackdrop();
-                    await reqModifyProductCategoryData();
+                    await reqModifyProductCategoryData(async () => {
+                        let snackbarSetting = {
+                            message: '완료되었습니다.',
+                            severity: 'info'
+                        }
+                        onActionOpenSnackbar(snackbarSetting);
+                    });
                     await reqSearchAllProductCategory();
                     onActionCloseBackdrop();
                 } catch (err) {
@@ -86,13 +98,19 @@ export default function ModifyFormComponent(props) {
                     return;
                 }
 
-                if (!window.confirm('선택된 카테고리를 제거하시곘습니까?\n카테고리를 제거하면 하위 상품과 옵션들도 함께 제거됩니다.')) {
+                if (!window.confirm('선택된 카테고리를 제거하시곘습니까?\n카테고리를 제거하면 하위 상품들도 함께 제거됩니다.')) {
                     return;
                 }
 
                 setButtonDisabled(true);
                 onActionOpenBackdrop();
-                await reqDeleteProductCategoryData();
+                await reqDeleteProductCategoryData(() => {
+                    let snackbarSetting = {
+                        message: '완료되었습니다.',
+                        severity: 'info'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
+                });
                 await reqSearchAllProductCategory();
                 onActionCloseBackdrop();
             }
@@ -127,6 +145,19 @@ export default function ModifyFormComponent(props) {
             <BackdropHookComponent
                 open={backdropOpen}
             />
+
+            {/* Snackbar */}
+            {snackbarOpen &&
+                <BasicSnackbarHookComponentV2
+                    open={snackbarOpen}
+                    message={snackbarMessage}
+                    onClose={onActionCloseSnackbar}
+                    severity={snackbarSeverity}
+                    vertical={'top'}
+                    horizontal={'right'}
+                    duration={4000}
+                ></BasicSnackbarHookComponentV2>
+            }
         </>
     )
 }

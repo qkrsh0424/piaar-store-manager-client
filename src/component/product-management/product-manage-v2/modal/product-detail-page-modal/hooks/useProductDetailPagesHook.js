@@ -22,11 +22,11 @@ export default function useProductDetailPagesHook() {
             })
     }
 
-    const reqCreateOne = async () => {
+    const reqCreateOne = async (snackbarOpen) => {
         await productDetailPageDataConnect().createOne(selectedDetailPage)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
-                    alert('완료되었습니다.');
+                    snackbarOpen();
                     setSelectedDetailPage(null);
                 }
             })
@@ -40,11 +40,11 @@ export default function useProductDetailPagesHook() {
             })
     }
 
-    const reqDeleteOne = async () => {
+    const reqDeleteOne = async (snackbarOpen) => {
         await productDetailPageDataConnect().deleteOne(selectedDetailPage.id)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
-                    alert('완료되었습니다.');
+                    snackbarOpen();
                     setSelectedDetailPage(null);
                 }
             })
@@ -58,11 +58,11 @@ export default function useProductDetailPagesHook() {
             })
     }
 
-    const reqChangeOne = async () => {
+    const reqChangeOne = async (snackbarOpen) => {
         await productDetailPageDataConnect().changeOne(selectedDetailPage)
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
-                    alert('완료되었습니다.');
+                    snackbarOpen();
                     setSelectedDetailPage(null);
                 }
             })

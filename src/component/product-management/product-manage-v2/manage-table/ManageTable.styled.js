@@ -164,14 +164,20 @@ const ManageTableFieldWrapper = styled.div`
         display: flex;
         gap: 5px;
         place-content: center;
+        place-items: center;
     }
 
     .option-control-btn .button-el {
-        border: 1px solid #c8c8c8;
-        background-color: var(--defaultButtonColor);
-        border-radius: 3px;
+        border: 1px solid inherit;
+        background-color: inherit;
+        border-radius: 50%;
+        transition: 0.1s;
 
         :hover {
+            transform: scale(1.1);
+        }
+        
+        :active {
             background-color: var(--defaultButtonHoverColor);
         }
     }

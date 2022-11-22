@@ -1,9 +1,9 @@
-import { productDataConnect } from "../../../../data_connect/productDataConnect";
+import { productOptionDataConnect } from "../../../../data_connect/productOptionDataConnect";
 
-export default function useProductHook (props) {
+export default function useProductOptionHook (props) {
 
     const reqDeleteOne = async (id, snackbarOpen) => {
-        await productDataConnect().deleteOne(id)
+        await productOptionDataConnect().deleteOne(id)
             .then(res => {
                 if (res.status === 200) {
                     snackbarOpen();

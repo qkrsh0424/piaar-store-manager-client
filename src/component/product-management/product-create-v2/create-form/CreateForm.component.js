@@ -17,6 +17,7 @@ import useProductOptionsHook from "../hooks/useProductOptionsHook";
 import ProductInfoInputFieldView from "./view/ProductInfoInputField.view";
 import useProductCategoryHook from "../hooks/useProductCategoryHook";
 import { productDataConnect } from "../../../../data_connect/productDataConnect";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
 
 function PageTitleFieldView({ title }) {
     return (
@@ -82,6 +83,14 @@ const CreateFormComponent = (props) => {
     } = useBackdropHook();
 
     const {
+        open: snackbarOpen,
+        message: snackbarMessage,
+        severity: snackbarSeverity,
+        onActionOpen: onActionOpenSnackbar,
+        onActionClose: onActionCloseSnackbar,
+    } = useBasicSnackbarHookV2();
+
+    const {
         __reqUploadImageFile
     } = useImageFileUploaderHook();
 
@@ -103,12 +112,10 @@ const CreateFormComponent = (props) => {
                 await productDataConnect().createProductAndOptions(body)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
-                            alert('완료되었습니다.');
-
                             let data = {
                                 pathname: `/products`,
                                 state: {
-                                    routerUrl: location.pathname + location.search
+                                    requestStatus: 'success'
                                 }
                             }
                             navigateUrl(data);
@@ -225,7 +232,11 @@ const CreateFormComponent = (props) => {
                     await __handle.req.createProductAndOptions(body);
                     onActionCloseBackdrop();
                 } catch (err) {
-                    alert(err.message)
+                    let snackbarSetting = {
+                        message: err?.message,
+                        severity: 'error'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
                 }
             }
         }
@@ -302,6 +313,19 @@ const CreateFormComponent = (props) => {
             <BackdropHookComponent
                 open={backdropOpen}
             />
+
+            {/* Snackbar */}
+            {snackbarOpen &&
+                <BasicSnackbarHookComponentV2
+                    open={snackbarOpen}
+                    message={snackbarMessage}
+                    onClose={onActionCloseSnackbar}
+                    severity={snackbarSeverity}
+                    vertical={'top'}
+                    horizontal={'right'}
+                    duration={4000}
+                ></BasicSnackbarHookComponentV2>
+            }
         </Container>
     )
 }

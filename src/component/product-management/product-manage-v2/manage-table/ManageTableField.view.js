@@ -62,8 +62,8 @@ export default function ManageTableFieldView(props) {
                         {props.productManagementList?.map((r, idx) => {
                             let tdBackgroundColor = (idx % 2 === 1) ? '#f7f7f7' : '#ffffff';
                             let rowSpanSize = r.options.length + 1;
-                            let checkedProduct = props.isProductCheckedOne(r.product.id);
 
+                            let checkedProduct = props.isProductCheckedOne(r.product.id);
                             return (
                                 <React.Fragment key={idx}>
                                     <tr
@@ -161,6 +161,11 @@ export default function ManageTableFieldView(props) {
                                                 </button>
                                             </div>
                                         </td>
+                                        {r.options.length === 0 &&
+                                            <td colSpan={12} style={{ backgroundColor: '#f7f7f7' }}>
+                                                옵션이 존재하지 않습니다 :(
+                                            </td>
+                                        }
                                     </tr>
                                     {r.options && r.options.map((option, idx2) => {
                                         let checked = props.isCheckedOne(option.id);
@@ -175,7 +180,22 @@ export default function ManageTableFieldView(props) {
                                                     <input type='checkbox' style={{ cursor: 'pointer' }} checked={checked} onChange={(e) => props.onActionCheckOne(e, option.id)} />
                                                 </td>
                                                 <td>
-                                                    {option.code}
+                                                    <div className='option-control-box'>
+                                                        <div>{option.code}</div>
+                                                        <div className='option-control-btn'>
+                                                            <button
+                                                                className='button-el'
+                                                                onClick={(e) => props.onActionCopyOptionCode(e, option.code)}
+                                                            >
+                                                                <img
+                                                                    src='/assets/icon/copy_default_000000.svg'
+                                                                    style={{ width: '20px' }}
+                                                                    alt=""
+                                                                    loading='lazy'
+                                                                />
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     {option.defaultName}
@@ -229,6 +249,7 @@ export default function ManageTableFieldView(props) {
                                                         <div className='option-control-btn'>
                                                             <button
                                                                 className='button-el'
+                                                                onClick={(e) => props.onSubmitDeleteProductOptionOne(e, option.id)}
                                                             >
                                                                 <img
                                                                     src='/assets/icon/delete_default_ff3060.svg'

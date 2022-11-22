@@ -146,13 +146,23 @@ const CreateProductReleaseModalComponent = (props) => {
                     })
 
                     onActionOpenBackdrop();
-                    await reqCreateProductRelease(data);
+                    await reqCreateProductRelease(data, (memo) => {
+                        let snackbarSetting = {
+                            message: memo,
+                            severity: 'info'
+                        }
+                        props.onActionOpenSnackbar(snackbarSetting);
+                    });
                     await props.reqSearchProductAndOptionList();
                     onActionCloseBackdrop();
 
                     props.onActionCloseModal();
                 } catch (err) {
-                    alert(err.message);
+                    let snackbarSetting = {
+                        message: err?.message,
+                        severity: 'error'
+                    }
+                    props.onActionOpenSnackbar(snackbarSetting);
                 }
             }
         }
@@ -172,7 +182,7 @@ const CreateProductReleaseModalComponent = (props) => {
                                         <th className='fixed-header' scope='col' width={50}>번호</th>
                                         <ResizableTh className='fixed-header' scope='col' width={150}>상품명</ResizableTh>
                                         <ResizableTh className='fixed-header' scope='col' width={150}>옵션명</ResizableTh>
-                                        <ResizableTh className='fixed-header' scope='col' width={50}>재고</ResizableTh>
+                                        <ResizableTh className='fixed-header' scope='col' width={100}>재고</ResizableTh>
                                         <th className='fixed-header' scope='col' width={250}>
                                             <div className='button-header'>
                                                 <div>메모</div>

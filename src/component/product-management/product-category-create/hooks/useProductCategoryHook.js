@@ -28,11 +28,11 @@ export default function useProductCategoryHook () {
                 alert(res?.data.memo);
             })
     }
-    const reqCreateOne = async () => {
+    const reqCreateOne = async (snackbarOpen) => {
         await productCategoryDataConnect().createOne(category)
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {
-                    alert('저장되었습니다.');
+                    snackbarOpen();
                     onActionResetData();
                 }
             })

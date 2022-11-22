@@ -7,11 +7,11 @@ export default function TableFieldView (props) {
             <table className='table table-sm' style={{ tableLayout: 'fixed' }}>
                 <thead>
                     <tr>
-                        <ResizableTh className='fixed-header' scope='col' width={50}>번호</ResizableTh>
-                        <ResizableTh className='fixed-header' scope='col' width={150}>구성옵션코드</ResizableTh>
-                        <ResizableTh className='fixed-header' scope='col' width={150}>구성옵션명</ResizableTh>
-                        <ResizableTh className='fixed-header' scope='col' width={100}>수량</ResizableTh>
                         <ResizableTh className='fixed-header' scope='col' width={50}>삭제</ResizableTh>
+                        <ResizableTh className='fixed-header' scope='col' width={150}>구성상품명</ResizableTh>
+                        <ResizableTh className='fixed-header' scope='col' width={150}>구성옵션명</ResizableTh>
+                        <ResizableTh className='fixed-header' scope='col' width={150}>구성옵션코드</ResizableTh>
+                        <ResizableTh className='fixed-header' scope='col' width={100}>수량</ResizableTh>
                     </tr>
                 </thead>
                 <tbody style={{ borderTop: 'none' }}>
@@ -20,18 +20,6 @@ export default function TableFieldView (props) {
                             <tr
                                 key={'sub-option-code-idx' + idx}
                             >
-                                <td>
-                                    {idx + 1}.
-                                </td>
-                                <td>
-                                    {data.originOptionCode}
-                                </td>
-                                <td>
-                                    {data.originOptionDefaultName}
-                                </td>
-                                <td>
-                                    <input type='number' className='input-el' name='packageUnit' onChange={(e) => props.onChangeOptionPackageValueOfName(e, data.id)} value={data.packageUnit} min={1}/>
-                                </td>
                                 <td>
                                     <button
                                         type='button'
@@ -46,6 +34,18 @@ export default function TableFieldView (props) {
                                             className='link-img'
                                         ></img>
                                     </button>
+                                </td>
+                                <td>
+                                    {data.originProductDefaultName}
+                                </td>
+                                <td>
+                                    {data.originOptionDefaultName}
+                                </td>
+                                <td>
+                                    {data.originOptionCode}
+                                </td>
+                                <td>
+                                    <input type='number' className='input-el' name='packageUnit' onChange={(e) => props.onChangeOptionPackageValueOfName(e, data.id)} value={data.packageUnit} min={1}/>
                                 </td>
                             </tr>
                         )

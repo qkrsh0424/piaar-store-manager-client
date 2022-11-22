@@ -127,7 +127,11 @@ const SubOptionCodeModalComponent = (props) => {
                     }
                     onActionDeleteModifyinSubOption();
                 } catch (err) {
-                    alert(err.message);
+                    let snackbarSetting = {
+                        message: err?.message,
+                        severity: 'error'
+                    }
+                    props.onActionOpenSnackbar(snackbarSetting);
                 }
             },
             deleteSubOption: async (subOptionId) => {

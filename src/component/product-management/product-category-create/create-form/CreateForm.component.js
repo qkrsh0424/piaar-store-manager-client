@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
 import RequiredIcon from "../../../module/icon/RequiredIcon";
 import useProductCategoryHook from "../hooks/useProductCategoryHook";
 import { CategoryInfoInputFieldWrapper, Container, CreateButtonFieldWrapper, PageTitleFieldWrapper } from "./CreateForm.styled"
@@ -27,6 +28,14 @@ export default function CreateFormComponent() {
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
+
+    const {
+        open: snackbarOpen,
+        message: snackbarMessage,
+        severity: snackbarSeverity,
+        onActionOpen: onActionOpenSnackbar,
+        onActionClose: onActionCloseSnackbar,
+    } = useBasicSnackbarHookV2();
 
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
@@ -62,11 +71,22 @@ export default function CreateFormComponent() {
 
                     setButtonDisabled(true);
                     onActionOpenBackdrop();
-                    await reqCreateProductCategoryData();
+                    await reqCreateProductCategoryData(() => {
+                        let snackbarSetting = {
+                            message: '완료되었습니다.',
+                            severity: 'info'
+                        }
+
+                        onActionOpenSnackbar(snackbarSetting);
+                    });
                     await reqSearchAllProductCategory();
                     onActionCloseBackdrop();
                 } catch (err) {
-                    alert(err.message);
+                    let snackbarSetting = {
+                        message: err?.message,
+                        severity: 'error'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
                 }
             }
         }
@@ -96,6 +116,19 @@ export default function CreateFormComponent() {
             <BackdropHookComponent
                 open={backdropOpen}
             />
+
+            {/* Snackbar */}
+            {snackbarOpen &&
+                <BasicSnackbarHookComponentV2
+                    open={snackbarOpen}
+                    message={snackbarMessage}
+                    onClose={onActionCloseSnackbar}
+                    severity={snackbarSeverity}
+                    vertical={'top'}
+                    horizontal={'right'}
+                    duration={4000}
+                ></BasicSnackbarHookComponentV2>
+            }
         </>
     )
 }

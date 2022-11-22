@@ -2,8 +2,8 @@ import { useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 
 export default function useSearchOperatorHook (props) {
-    const [productSearchHeaderName, setProductSearchHeaderName] = useState(null);
-    const [optionSearchHeaderName, setOptionSearchHeaderName] = useState(null);
+    const [productSearchHeaderName, setProductSearchHeaderName] = useState('defaultName');
+    const [optionSearchHeaderName, setOptionSearchHeaderName] = useState('defaultName');
     
     const [categorySearchQuery, setCategorySearchQuery] = useState(null);
     const [productSearchQuery, setProductSearchQuery] = useState(null);

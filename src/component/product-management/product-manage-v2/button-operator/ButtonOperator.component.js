@@ -6,6 +6,7 @@ import useRouterHook from "../../../../hooks/router/useRouterHook";
 import CreateProductReceiveModalComponent from "../modal/create-product-receive-modal/CreateProductReceiveModal.component";
 import CreateProductReleaseModalComponent from "../modal/create-product-release-modal/CreateProductReleaseModal.component";
 import SearchProductReceiveAndReleaseModalComponent from "../modal/search-product-receive-and-release-modal-v2/SearchProductReceiveAndReleaseModal.component";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
 
 const ButtonOperatorComponent = (props) => {
     const [sortByName, setSortByName] = useState(null);
@@ -22,6 +23,14 @@ const ButtonOperatorComponent = (props) => {
         query,
         navigateParams
     } = useRouterHook();
+
+    const {
+        open: snackbarOpen,
+        message: snackbarMessage,
+        severity: snackbarSeverity,
+        onActionOpen: onActionOpenSnackbar,
+        onActionClose: onActionCloseSnackbar,
+    } = useBasicSnackbarHookV2();
 
     useEffect(() => {
         let sortBy = query.sortBy;
@@ -114,6 +123,9 @@ const ButtonOperatorComponent = (props) => {
             },
             closeSearchProductReceiveAndReleaseModal: () => {
                 setSearchProductReceiveAndReleaseModalOpen(false);
+            },
+            openSnackbar: (snackbarSetting) => {
+                onActionOpenSnackbar(snackbarSetting);
             }
         }
     }
@@ -139,6 +151,7 @@ const ButtonOperatorComponent = (props) => {
                     
                     onActionCloseModal={__handle.action.closeCreateProductReceiveModal}
                     reqSearchProductAndOptionList={props.reqSearchProductAndOptionList}
+                    onActionOpenSnackbar={__handle.action.openSnackbar}
                 />
             }
 
@@ -150,6 +163,7 @@ const ButtonOperatorComponent = (props) => {
                     
                     onActionCloseModal={__handle.action.closeCreateProductReleaseModal}
                     reqSearchProductAndOptionList={props.reqSearchProductAndOptionList}
+                    onActionOpenSnackbar={__handle.action.openSnackbar}
                 />
             }
 
@@ -163,6 +177,19 @@ const ButtonOperatorComponent = (props) => {
                     optionReceiveStatus={props.optionReceiveStatus}
                     optionReleaseStatus={props.optionReleaseStatus}
                 />
+            }
+
+            {/* Snackbar */}
+            {snackbarOpen &&
+                <BasicSnackbarHookComponentV2
+                    open={snackbarOpen}
+                    message={snackbarMessage}
+                    onClose={onActionCloseSnackbar}
+                    severity={snackbarSeverity}
+                    vertical={'top'}
+                    horizontal={'right'}
+                    duration={4000}
+                ></BasicSnackbarHookComponentV2>
             }
         </Container>
     )

@@ -8,6 +8,7 @@ import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisa
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import useProductHook from "../hooks/useProductHook";
 import useProductCategoryHook from "../hooks/useProductCategoryHook";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
 
 function PageTitleFieldView({ title }) {
     return (
@@ -21,6 +22,7 @@ const ModifyFormComponent = (props) => {
     
     const {
         query,
+        navigateUrl,
         navigatePrevPage
     } = useRouterHook();
 
@@ -50,6 +52,14 @@ const ModifyFormComponent = (props) => {
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
+
+    const {
+        open: snackbarOpen,
+        message: snackbarMessage,
+        severity: snackbarSeverity,
+        onActionOpen: onActionOpenSnackbar,
+        onActionClose: onActionCloseSnackbar,
+    } = useBasicSnackbarHookV2();
 
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
@@ -98,6 +108,12 @@ const ModifyFormComponent = (props) => {
 
                 if(window.confirm('기존 상품 정보로 초기화하시겠습니까?\n(현재 변경된 내역은 저장되지 않습니다)')) {
                     onActionResetOriginProductData();
+
+                    let snackbarSetting = {
+                        message: '초기화되었습니다.',
+                        severity: 'info'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
                 }
             }
         },
@@ -115,12 +131,23 @@ const ModifyFormComponent = (props) => {
 
                     setButtonDisabled(true);
                     onActionOpenBackdrop();
-                    await reqModifyOne();                    
+                    await reqModifyOne(() => {
+                        let data = {
+                            pathname: `/products`,
+                            state: {
+                                requestStatus: 'success'
+                            }
+                        }
+                        navigateUrl(data);
+                    });
                     onActionCloseBackdrop();
-                    
-                    navigatePrevPage();
                 } catch (err) {
-                    alert(err.message)
+                    let snackbarSetting = {
+                        message: err?.message,
+                        severity: 'error'
+                    }
+
+                    onActionOpenSnackbar(snackbarSetting);
                 }
             }
         }
@@ -155,6 +182,19 @@ const ModifyFormComponent = (props) => {
             <BackdropHookComponent
                 open={backdropOpen}
             />
+
+            {/* Snackbar */}
+            {snackbarOpen &&
+                <BasicSnackbarHookComponentV2
+                    open={snackbarOpen}
+                    message={snackbarMessage}
+                    onClose={onActionCloseSnackbar}
+                    severity={snackbarSeverity}
+                    vertical={'top'}
+                    horizontal={'right'}
+                    duration={4000}
+                ></BasicSnackbarHookComponentV2>
+            }
         </Container>
     )
 }

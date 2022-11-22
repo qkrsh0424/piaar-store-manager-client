@@ -12,6 +12,8 @@ import ButtonOperatorComponent from "./button-operator/ButtonOperator.component"
 import useRouterHook from "../../../hooks/router/useRouterHook";
 import useProductHook from "./hooks/useProductHook";
 import { useDisabledButtonHook } from "../../../hooks/button-disabled/useDisabledButtonHook";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../hooks/snackbar/useBasicSnackbarHookV2";
+import useProductOptionHook from "./hooks/useProductOptionHook";
 
 const Container = styled.div`
     height: 100%;
@@ -55,8 +57,20 @@ const ProductManageComponent = (props) => {
     } = useBackdropHook();
 
     const {
+        open: snackbarOpen,
+        message: snackbarMessage,
+        severity: snackbarSeverity,
+        onActionOpen: onActionOpenSnackbar,
+        onActionClose: onActionCloseSnackbar,
+    } = useBasicSnackbarHookV2();
+
+    const {
         reqDeleteOne: reqDeleteProductOne
     } = useProductHook();
+
+    const {
+        reqDeleteOne: reqDeleteProductOptionOne
+    } = useProductOptionHook();
 
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook();
 
@@ -68,6 +82,16 @@ const ProductManageComponent = (props) => {
         }
   
         fetchInit();
+
+        let requestStatus = location.state?.requestStatus
+
+        if(requestStatus === 'success') {
+            let snackbarSetting = {
+                message: '완료되었습니다.',
+                severity: 'info'
+            }
+            onActionOpenSnackbar(snackbarSetting);
+        }
       }, [location])
 
     const __handle = {
@@ -165,7 +189,6 @@ const ProductManageComponent = (props) => {
                 let optionIdList = [];
                 if(optionIds.every(id => checkedOptionIdList.includes(id))) {
                     optionIdList = checkedOptionIdList.filter(id => !optionIds.includes(id));
-                    
                 } else {
                     optionIdList = checkedOptionIdList.concat(optionIds);
                 }
@@ -173,6 +196,10 @@ const ProductManageComponent = (props) => {
             },
             isProductCheckedOne: (productId) => {
                 let productOptions = productManagementList?.content.filter(r => r.product.id === productId)[0]?.options;
+                if(productOptions.length === 0) {
+                    return false;
+                }
+                
                 let optionIds = productOptions.map(option => option.id);
                 return optionIds.every(id =>  checkedOptionIdList.includes(id));
             },
@@ -210,12 +237,33 @@ const ProductManageComponent = (props) => {
             deleteProduct: async (e, productId) => {
                 e.stopPropagation();
 
-                if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말로 삭제하시겠습니까?')) {
-                    let product = productManagementList?.content.filter(r => r.product.id === productId)[0].product;
-                    
+                if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말 삭제하시겠습니까?')) {
                     setButtonDisabled(true);
                     onActionOpenBackdrop();
-                    await reqDeleteProductOne(product.id);
+                    await reqDeleteProductOne(productId, () => {
+                        let snackbarSetting = {
+                            message: '완료되었습니다.',
+                            severity: 'info'
+                        }
+                        onActionOpenSnackbar(snackbarSetting);
+                    });
+                    await __handle.req.searchProductAndOptionList();
+                    onActionCloseBackdrop();
+                }
+            },
+            deleteProductOption: async (e, optionId) => {
+                e.stopPropagation();
+
+                if(window.confirm('삭제하시겠습니까?')) {
+                    setButtonDisabled(true);
+                    onActionOpenBackdrop();
+                    await reqDeleteProductOptionOne(optionId, () => {
+                        let snackbarSetting = {
+                            message: '완료되었습니다.',
+                            severity: 'info'
+                        }
+                        onActionOpenSnackbar(snackbarSetting);
+                    });
                     await __handle.req.searchProductAndOptionList();
                     onActionCloseBackdrop();
                 }
@@ -254,6 +302,7 @@ const ProductManageComponent = (props) => {
                     onActionModifyProduct={__handle.action.routeToModifyPageForProduct}
                     onActionModifyOptions={__handle.action.routeToModifyPageForOptions}
                     reqSearchProductAndOptionList={__handle.req.searchProductAndOptionList}
+                    onSubmitDeleteProductOptionOne={__handle.submit.deleteProductOption}
                 />
             </Container>
 
@@ -261,6 +310,19 @@ const ProductManageComponent = (props) => {
             <BackdropHookComponent
                 open={backdropOpen}
             />
+
+            {/* Snackbar */}
+            {snackbarOpen &&
+                <BasicSnackbarHookComponentV2
+                    open={snackbarOpen}
+                    message={snackbarMessage}
+                    onClose={onActionCloseSnackbar}
+                    severity={snackbarSeverity}
+                    vertical={'top'}
+                    horizontal={'right'}
+                    duration={4000}
+                ></BasicSnackbarHookComponentV2>
+            }
         </>
     )
 }

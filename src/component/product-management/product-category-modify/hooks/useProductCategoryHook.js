@@ -30,11 +30,11 @@ export default function useProductCategoryHook () {
             })
     }
 
-    const reqModifyOne = async () => {
+    const reqModifyOne = async (snackbarOpen) => {
         await productCategoryDataConnect().changeOne(category)
             .then(res => {
                 if(res.status === 200 && res.data && res.data.message === 'success') {
-                    alert('저장되었습니다.');
+                    snackbarOpen();
                     onActionResetData();
                 }
             })
@@ -48,11 +48,11 @@ export default function useProductCategoryHook () {
             })
     }
 
-    const reqDeleteOne = async () => {
+    const reqDeleteOne = async (snackbarOpen) => {
         await productCategoryDataConnect().deleteOne(selectedCategory.id)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
-                    alert('완료되었습니다.');
+                    snackbarOpen();
                     onActionResetData();
                 }
             })

@@ -36,12 +36,11 @@ export default function useProductOptionsHook () {
             })
     }
 
-    const reqModifyBatch = async (productId) => {
+    const reqModifyBatch = async (productId, navbarOpen) => {
         await productOptionDataConnect().updateBatch(productId, options)
             .then(res => {
-                if(res.status === 200 && res.data && res.data.message === 'success'){
-                    alert('완료되었습니다.');
-                    navigatePrevPage();
+                if (res.status === 200 && res.data && res.data.message === 'success') {
+                    navbarOpen();
                 }
             })
             .catch(err => {

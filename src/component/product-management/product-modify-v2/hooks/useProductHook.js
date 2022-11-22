@@ -15,11 +15,11 @@ export default function useProductHook (props) {
             })
     }
 
-    const reqModifyOne = async () => {
+    const reqModifyOne = async (snackbarOpen) => {
         await productDataConnect().modifyProduct(product)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
-                    alert('완료되었습니다.');
+                    snackbarOpen();
                 }
             })
             .catch(err => {

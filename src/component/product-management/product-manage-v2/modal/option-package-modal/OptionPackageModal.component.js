@@ -118,6 +118,7 @@ const OptionPackageModalComponent = (props) => {
                     originOptionCode: data.option.code,
                     originOptionId: data.option.id,
                     originOptionDefaultName: data.option.defaultName,
+                    originProductDefaultName: data.product.defaultName,
                     parentOptionId: props.option.id
                 }
 
@@ -130,13 +131,23 @@ const OptionPackageModalComponent = (props) => {
                     checkOptionPackagesSaveForm();
 
                     onActionOpenBackdrop();
-                    await onSubmitCreateOptionPackages(props.option.id);
+                    await onSubmitCreateOptionPackages(props.option.id, () => {
+                        let snackbarSetting = {
+                            message: '완료되었습니다.',
+                            severity: 'info'
+                        }
+                        props.onActionOpenSnackbar(snackbarSetting);
+                    });
                     await props.reqSearchProductAndOptionList();
                     onActionCloseBackdrop();
 
                     props.onActionCloseModal();
                 } catch (err) {
-                    alert(err.message);
+                    let snackbarSetting = {
+                        message: err?.message,
+                        severity: 'error'
+                    }
+                    props.onActionOpenSnackbar(snackbarSetting);
                 }
             }
         }
@@ -151,7 +162,6 @@ const OptionPackageModalComponent = (props) => {
                     element={
                         <div className='data-wrapper-group'>
                             <div className='data-wrapper' style={{ height: '400px' }}>
-                                {console.log(props.option)}
                                 <InfoFieldView
                                     option={props.option}
                                 />
@@ -167,7 +177,7 @@ const OptionPackageModalComponent = (props) => {
                                     onActionAddPackageOption={__handle.action.addSubOption}
                                 ></ListFieldView>
                             </div>
-                            <div className='data-wrapper' style={{ height: '400px' }}>
+                            <div className='data-wrapper' style={{ height: '400px', flexBasis: '30%' }}>
                                 {optionPackages &&
                                     <>
                                         <div className='flex-item place-items-center' style={{ justifyContent: "space-between" }}>

@@ -91,11 +91,11 @@ const productOptionDataConnect = () => {
                 withCredentials: true
             })
         },
-        deleteOne: async function(optionCid){
-            return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product-option/one/${optionCid}`,{
-                withCredentials: true
-            })
-        },
+        // deleteOne: async function(optionCid){
+        //     return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/product-option/one/${optionCid}`,{
+        //         withCredentials: true
+        //     })
+        // },
         // searchStockStatus: async function(optionCid) {
         //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/stock/status/${optionCid}`, {
         //         withCredentials: true
@@ -147,7 +147,12 @@ const productOptionDataConnect = () => {
             return await axios.put(`${API_SERVER_ADDRESS}/api/v2/product-options/batch/${productId}`, body, {
                 withCredentials: true
             })
-        }
+        },
+        deleteOne: async function(optionId){
+            return await axios.delete(`${API_SERVER_ADDRESS}/api/v2/product-options/${optionId}`,{
+                withCredentials: true
+            })
+        },
     }
 }
 

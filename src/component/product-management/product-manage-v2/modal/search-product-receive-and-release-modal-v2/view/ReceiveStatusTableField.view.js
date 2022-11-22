@@ -10,7 +10,7 @@ export default function ReceiveStatusTableFieldView(props) {
             <table className="table table-sm" style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                 <thead>
                     <tr>
-                        <ResizableTh className='fixed-header' scope="col" width={100}>입고일시</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={150}>입고일시</ResizableTh>
                         <ResizableTh className='fixed-header' scope="col" width={200}>상품명</ResizableTh>
                         <ResizableTh className='fixed-header' scope="col" width={200}>옵션명</ResizableTh>
                         <ResizableTh className='fixed-header' scope="col" width={200}>옵션코드</ResizableTh>

@@ -5,11 +5,12 @@ import { isNumberFormat } from "../../../../../../utils/regexUtils";
 export default function useProductReceiveHook () {
     const [productReceive, setProductReceive] = useState(null);
     
-    const reqCreateProductReceive = async (data) => {
+    const reqCreateProductReceive = async (data, navbarOpen) => {
         await productReceiveDataConnect().createBatch(data)
             .then(res => {
                 if(res.status === 200) {
-                    alert(res.data.memo);
+                    // alert(res.data.memo);
+                    navbarOpen(res.data.memo);
                 }
             })
             .catch(err => {

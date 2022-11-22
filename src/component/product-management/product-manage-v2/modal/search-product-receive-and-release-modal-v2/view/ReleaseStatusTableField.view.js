@@ -9,7 +9,7 @@ export default function ReleaseStatusTableFieldView(props) {
             <table className="table table-sm" style={{ tableLayout: 'fixed', backgroundColor: 'white' }}>
                 <thead>
                     <tr>
-                        <ResizableTh className='fixed-header' scope="col" width={100}>출고일시</ResizableTh>
+                        <ResizableTh className='fixed-header' scope="col" width={150}>출고일시</ResizableTh>
                         <ResizableTh className='fixed-header' scope="col" width={200}>상품명</ResizableTh>
                         <ResizableTh className='fixed-header' scope="col" width={200}>옵션명</ResizableTh>
                         <ResizableTh className='fixed-header' scope="col" width={200}>옵션코드</ResizableTh>

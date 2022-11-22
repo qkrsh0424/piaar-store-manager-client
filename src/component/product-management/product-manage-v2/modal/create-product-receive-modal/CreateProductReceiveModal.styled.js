@@ -64,7 +64,7 @@ const BatchRegTooltipWrapper = styled.div`
         border: 1px solid #d8d8d8;
         position: absolute;
         box-shadow: 0px 0px 6px 2px #d8d8d8;
-        z-index: 12;
+        z-index: 14;
         left: 10px;
     }
 

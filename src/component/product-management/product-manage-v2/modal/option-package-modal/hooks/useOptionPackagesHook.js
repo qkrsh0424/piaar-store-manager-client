@@ -35,11 +35,11 @@ export default function useOptionPackagesHook() {
             })
     }
 
-    const reqDeleteAndCreateOptionPackages = async (parentOptionId) => {
+    const reqDeleteAndCreateOptionPackages = async (parentOptionId, navbarOpen) => {
         await optionPackageDataConnect().deleteAndCreateBatch(parentOptionId, optionPackages)
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message === 'success') {
-                    alert('완료되었습니다.');
+                    navbarOpen()
                 }
             })
             .catch(err => {
@@ -88,12 +88,12 @@ export default function useOptionPackagesHook() {
         setOptionPackages([...originOptionPackages]);
     }
 
-    const onSumbitCreateData = async (parentOptionId) => {
+    const onSumbitCreateData = async (parentOptionId, navbarOpen) => {
         if(JSON.stringify(originOptionPackages) === JSON.stringify(optionPackages)) {
             return;
         }
         
-        await reqDeleteAndCreateOptionPackages(parentOptionId);
+        await reqDeleteAndCreateOptionPackages(parentOptionId, navbarOpen);
     }
 
     const checkSaveForm = () => {

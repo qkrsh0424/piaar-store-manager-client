@@ -4,6 +4,7 @@ import SubmitModalComponentV2 from "../../../../module/modal/SubmitModalComponen
 import { BatchRegTooltipWrapper, CreateProductReceiveModalFieldWrapper } from "./CreateProductReceiveModal.styled";
 import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
 import ResizableTh from "../../../../module/table/ResizableTh";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../../hooks/snackbar/useBasicSnackbarHookV2";
 
 function BatchRegTooltip({ inputType, name, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
     
@@ -146,13 +147,23 @@ const CreateProductReceiveModalComponent = (props) => {
                     })
 
                     onActionOpenBackdrop();
-                    await reqCreateProductReceive(data);
+                    await reqCreateProductReceive(data, (memo) => {
+                        let snackbarSetting = {
+                            message: memo,
+                            severity: 'info'
+                        }
+                        props.onActionOpenSnackbar(snackbarSetting);
+                    });
                     await props.reqSearchProductAndOptionList();
                     onActionCloseBackdrop();
 
                     props.onActionCloseModal();
                 } catch (err) {
-                    alert(err?.message);
+                    let snackbarSetting = {
+                        message: err?.message,
+                        severity: 'error'
+                    }
+                    props.onActionOpenSnackbar(snackbarSetting);
                 }
             }
         }
@@ -172,7 +183,7 @@ const CreateProductReceiveModalComponent = (props) => {
                                         <th className='fixed-header' scope='col' width={50}>번호</th>
                                         <ResizableTh className='fixed-header' scope='col' width={150}>상품명</ResizableTh>
                                         <ResizableTh className='fixed-header' scope='col' width={150}>옵션명</ResizableTh>
-                                        <ResizableTh className='fixed-header' scope='col' width={50}>재고</ResizableTh>
+                                        <ResizableTh className='fixed-header' scope='col' width={100}>재고</ResizableTh>
                                         <th className='fixed-header' scope='col' width={250}>
                                             <div className='button-header'>
                                                 <div>메모</div>
@@ -187,7 +198,7 @@ const CreateProductReceiveModalComponent = (props) => {
                                                     {memoBatchRegTooltipOpen &&
                                                         <BatchRegTooltip
                                                             inputType={'text'}
-                                                            tootipSize={{ width: '250px' }}
+                                                            tootipSize={{ width: '90%' }}
                                                             name='memo'
 
                                                             onChangeInputValue={__handle.action.changeProductReceiveMemoTooltipInput}
@@ -212,7 +223,7 @@ const CreateProductReceiveModalComponent = (props) => {
                                                     {unitBatchRegTooltipOpen &&
                                                         <BatchRegTooltip
                                                             inputType={'number'}
-                                                            tootipSize={{ width: '150px' }}
+                                                            tootipSize={{ width: '90%' }}
                                                             name='receiveUnit'
 
                                                             onChangeInputValue={__handle.action.changeProductReceiveUnitTooltipInput}

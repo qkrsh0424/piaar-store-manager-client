@@ -6,29 +6,34 @@ import Snackbar from '@mui/material/Snackbar';
 const Container = styled.div`
     ${props => {
         let severity = props.severity;
-        let color = '#323232';
+        let bgColor = '#323232';
+        let color = '#fff'
 
         switch (severity) {
             case 'success':
-                color = '#4caf50';
+                bgColor = '#4caf50';
                 break;
             case 'error':
-                color = '#f44336';
+                bgColor = '#ff545c';
                 break;
             case 'warning':
-                color = '#ff9800';
+                bgColor = '#ff9800';
                 break;
             case 'info':
-                color = '#2196f3';
+                bgColor = '#455265';
                 break;
             default:
-                color = '#323232';
+                bgColor = '#323232';
                 break;
         }
 
         return css`
             & .MuiSnackbarContent-root{
-                background-color: ${color}
+                background-color:${bgColor}
+            }
+
+            & .css-1eqdgzv-MuiPaper-root-MuiSnackbarContent-root {
+                color: ${color}
             }
         `;
     }}
@@ -47,7 +52,7 @@ const Container = styled.div`
  * @param {number} props.duration - [1000, 2000 ...] ms
  * @returns 
  */
-const BasicSnackbar = ({
+const BasicSnackbarV2 = ({
     open,
     message,
     onClose,
@@ -79,4 +84,4 @@ const BasicSnackbar = ({
 
 }
 
-export default BasicSnackbar;
+export default BasicSnackbarV2;

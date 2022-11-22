@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../../hooks/snackbar/useBasicSnackbarHookV2";
 import { useImageFileUploaderHook } from "../../../../../hooks/uploader/useImageFileUploaderHook";
 import SubmitModalComponentV2 from "../../../../module/modal/SubmitModalComponentV2";
 import useProductDetailPagesHook from "./hooks/useProductDetailPagesHook";
@@ -38,6 +39,14 @@ const ProductDetailPageModalComponent = (props) => {
         __reqUploadImageFile,
         __reqDownloadImageFile
     } = useImageFileUploaderHook();
+
+    const {
+        open: snackbarOpen,
+        message: snackbarMessage,
+        severity: snackbarSeverity,
+        onActionOpen: onActionOpenSnackbar,
+        onActionClose: onActionCloseSnackbar,
+    } = useBasicSnackbarHookV2();
 
     useEffect(() => {
         async function fetchInit() {
@@ -104,14 +113,30 @@ const ProductDetailPageModalComponent = (props) => {
                     onActionOpenBackdrop();
                     // 기존 존재하는 데이터라면 수정, 아니라면 생성
                     if(detailPages.some(r => r.id === selectedDetailPage.id)) {
-                        await reqChangeDetailPage();
+                        await reqChangeDetailPage(() => {
+                            let snackbarSetting = {
+                                message: '완료되었습니다.',
+                                severity: 'info'
+                            }
+                            onActionOpenSnackbar(snackbarSetting);
+                        });
                     }else {
-                        await reqCreateDetailPage();
+                        await reqCreateDetailPage(() => {
+                            let snackbarSetting = {
+                                message: '완료되었습니다.',
+                                severity: 'info'
+                            }
+                            onActionOpenSnackbar(snackbarSetting);
+                        });
                     }
                     await reqSearchBatchByProductId(props.product.id);
                     onActionCloseBackdrop();
                 } catch (err) {
-                    alert(err.message);
+                    let snackbarSetting = {
+                        message: err?.message,
+                        severity: 'error'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
                 }
             },
             deleteDetailPage: async (e) => {
@@ -123,7 +148,13 @@ const ProductDetailPageModalComponent = (props) => {
                         return;
                     }
                     onActionOpenBackdrop();
-                    await reqDeleteDetailPage();
+                    await reqDeleteDetailPage(() => {
+                        let snackbarSetting = {
+                            message: '완료되었습니다.',
+                            severity: 'info'
+                        }
+                        onActionOpenSnackbar(snackbarSetting);
+                    });
                     await reqSearchBatchByProductId(props.product.id);
                     onActionCloseBackdrop();
                 } else {
@@ -178,6 +209,19 @@ const ProductDetailPageModalComponent = (props) => {
             <BackdropHookComponent
                 open={backdropOpen}
             />
+
+            {/* Snackbar */}
+            {snackbarOpen &&
+                <BasicSnackbarHookComponentV2
+                    open={snackbarOpen}
+                    message={snackbarMessage}
+                    onClose={onActionCloseSnackbar}
+                    severity={snackbarSeverity}
+                    vertical={'top'}
+                    horizontal={'right'}
+                    duration={4000}
+                ></BasicSnackbarHookComponentV2>
+            }
         </>
     )
 }
