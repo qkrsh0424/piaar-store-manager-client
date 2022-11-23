@@ -3,13 +3,13 @@ import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdr
 import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
+import { ConfirmSnackbarHookComponent, useConfirmSnackbarHook } from "../../../../hooks/snackbar/useConfirmSnackbarHook";
 import RequiredIcon from "../../../module/icon/RequiredIcon";
 import useProductCategoryHook from "../hooks/useProductCategoryHook";
 import { CategoryInfoInputFieldWrapper, Container, CreateButtonFieldWrapper, PageTitleFieldWrapper } from "./ModifyForm.styled";
 
 export default function ModifyFormComponent(props) {
     const {
-        location,
         navigateUrl
     } = useRouterHook();
 
@@ -39,6 +39,14 @@ export default function ModifyFormComponent(props) {
         onActionClose: onActionCloseSnackbar,
     } = useBasicSnackbarHookV2();
 
+    const {
+        open: confirmSnackbarOpen,
+        message: confirmSnackbarMessage,
+        confirmAction: snackbarConfirmAction,
+        onActionOpen: onActionOpenConfirmSnackbar,
+        onActionClose: onActionCloseConfirmSnackbar,
+    } = useConfirmSnackbarHook();
+
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
     useEffect(() => {
@@ -54,24 +62,39 @@ export default function ModifyFormComponent(props) {
     const __handle = {
         action: {
             cancelModifyCategory: () => {
-                let data = {
-                    pathname: `/products`
-                }
-                
                 if(!selectedCategory) {
-                    navigateUrl(data);
+                    navigateUrl({ pathname: '/products' });
                     return;
                 }
 
-                if(window.confirm('취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?')) {
-                    navigateUrl(data);
+                onActionOpenConfirmSnackbar(
+                    '취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?',
+                    () => () => navigateUrl({ pathname: '/products' })
+                );
+            },
+            deleteProductCategory: (e) => {
+                e.preventDefault();
+
+                if (!selectedCategory) {
+                    let snackbarSetting = {
+                        message: '카테고리를 선택해주세요.',
+                        severity: 'info'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
+                    return;
                 }
+
+                onActionOpenConfirmSnackbar(
+                    '카테고리를 제거하면 하위 상품들도 함께 제거됩니다.',
+                    () => () => __handle.submit.deleteProductCategory()
+                );
             }
         },
         submit: {
             modifyProductCategory: async (e) => {
                 e.preventDefault();
-
+                
+                await reqSearchAllProductCategory();
                 try{
                     checkProductSaveFormData();
                     
@@ -84,34 +107,34 @@ export default function ModifyFormComponent(props) {
                         }
                         onActionOpenSnackbar(snackbarSetting);
                     });
-                    await reqSearchAllProductCategory();
-                    onActionCloseBackdrop();
                 } catch (err) {
-                    alert(err.message);
-                }
-            },
-            deleteProductCategory: async (e) => {
-                e.preventDefault();
-
-                if (!selectedCategory) {
-                    alert('카테고리를 선택해주세요.');
-                    return;
-                }
-
-                if (!window.confirm('선택된 카테고리를 제거하시곘습니까?\n카테고리를 제거하면 하위 상품들도 함께 제거됩니다.')) {
-                    return;
-                }
-
-                setButtonDisabled(true);
-                onActionOpenBackdrop();
-                await reqDeleteProductCategoryData(() => {
                     let snackbarSetting = {
-                        message: '완료되었습니다.',
-                        severity: 'info'
+                        message: err?.message,
+                        severity: 'error'
                     }
                     onActionOpenSnackbar(snackbarSetting);
-                });
-                await reqSearchAllProductCategory();
+                }
+                onActionCloseBackdrop();
+            },
+            deleteProductCategory: async () => {
+                setButtonDisabled(true);
+                onActionOpenBackdrop();
+                try{
+                    await reqDeleteProductCategoryData(() => {
+                        let snackbarSetting = {
+                            message: '완료되었습니다.',
+                            severity: 'info'
+                        }
+                        onActionOpenSnackbar(snackbarSetting);
+                    });
+                    await reqSearchAllProductCategory();
+                }catch (err) {
+                    let snackbarSetting = {
+                        message: err?.message,
+                        severity: 'error'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
+                }
                 onActionCloseBackdrop();
             }
         }
@@ -130,7 +153,7 @@ export default function ModifyFormComponent(props) {
                             modifyCategoryData={modifyCategoryData}
                             onChangeCategoryInputValue={onChangeCategoryInputValue}
                             onChangeSelectedCategory={onChangeSelectedCategory}
-                            onSubmitDeleteProductCategory={__handle.submit.deleteProductCategory}
+                            onSubmitDeleteProductCategory={__handle.action.deleteProductCategory}
                         />
                     }
 
@@ -157,6 +180,18 @@ export default function ModifyFormComponent(props) {
                     horizontal={'right'}
                     duration={4000}
                 ></BasicSnackbarHookComponentV2>
+            }
+
+            {/* Snackbar */}
+            {confirmSnackbarOpen &&
+                <ConfirmSnackbarHookComponent
+                    open={confirmSnackbarOpen}
+                    message={confirmSnackbarMessage}
+                    onClose={onActionCloseConfirmSnackbar}
+                    vertical={'top'}
+                    horizontal={'center'}
+                    onConfirm={snackbarConfirmAction}
+                ></ConfirmSnackbarHookComponent>
             }
         </>
     )

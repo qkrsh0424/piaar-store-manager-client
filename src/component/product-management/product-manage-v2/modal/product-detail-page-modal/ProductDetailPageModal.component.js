@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../../hooks/snackbar/useBasicSnackbarHookV2";
+import { ConfirmSnackbarHookComponent, useConfirmSnackbarHook } from "../../../../../hooks/snackbar/useConfirmSnackbarHook";
 import { useImageFileUploaderHook } from "../../../../../hooks/uploader/useImageFileUploaderHook";
 import SubmitModalComponentV2 from "../../../../module/modal/SubmitModalComponentV2";
 import useProductDetailPagesHook from "./hooks/useProductDetailPagesHook";
@@ -48,6 +49,14 @@ const ProductDetailPageModalComponent = (props) => {
         onActionClose: onActionCloseSnackbar,
     } = useBasicSnackbarHookV2();
 
+    const {
+        open: confirmSnackbarOpen,
+        message: confirmSnackbarMessage,
+        confirmAction: snackbarConfirmAction,
+        onActionOpen: onActionOpenConfirmSnackbar,
+        onActionClose: onActionCloseConfirmSnackbar,
+    } = useConfirmSnackbarHook();
+
     useEffect(() => {
         async function fetchInit() {
             onActionOpenBackdrop();
@@ -69,17 +78,28 @@ const ProductDetailPageModalComponent = (props) => {
                 e.preventDefault();
                 
                 if(!(selectedDetailPage && selectedDetailPage.imageUrl)) {
-                    alert('이미지를 다운로드할 수 없습니다.');
+                    let snackbarSetting = {
+                        message: '이미지를 다운로드할 수 없습니다.',
+                        severity: 'error'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
                     return;
                 }
 
                 onActionOpenBackdrop();
-
-                let body = {
-                    fileName: selectedDetailPage.imageFileName,
-                    title: selectedDetailPage.title
+                try{
+                    let body = {
+                        fileName: selectedDetailPage.imageFileName,
+                        title: selectedDetailPage.title
+                    }
+                    await __reqDownloadImageFile(body);
+                } catch (err) {
+                    let snackbarSetting = {
+                        message: err?.message,
+                        severity: 'error'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
                 }
-                await __reqDownloadImageFile(body);
                 onActionCloseBackdrop();
             }
         },
@@ -90,7 +110,11 @@ const ProductDetailPageModalComponent = (props) => {
                 if(e.target.files.length === 0) return;
 
                 if(e.target.files[0].size >= DETAIL_PAGE_MAX_SIZE) {
-                    alert('[파일 사이즈 초과] 12KB 미만의 이미지를 업로드해주세요.')
+                    let snackbarSetting = {
+                        message: '[파일 사이즈 초과] 12KB 미만의 이미지를 업로드해주세요.',
+                        severity: 'error'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
                 }
 
                 onActionOpenBackdrop();
@@ -107,10 +131,10 @@ const ProductDetailPageModalComponent = (props) => {
         },
         submit: {
             createOrModifyDetailPage: async () => {
+                onActionOpenBackdrop();
                 try {
                     checkDetailPageSaveForm();
 
-                    onActionOpenBackdrop();
                     // 기존 존재하는 데이터라면 수정, 아니라면 생성
                     if(detailPages.some(r => r.id === selectedDetailPage.id)) {
                         await reqChangeDetailPage(() => {
@@ -130,7 +154,6 @@ const ProductDetailPageModalComponent = (props) => {
                         });
                     }
                     await reqSearchBatchByProductId(props.product.id);
-                    onActionCloseBackdrop();
                 } catch (err) {
                     let snackbarSetting = {
                         message: err?.message,
@@ -138,25 +161,36 @@ const ProductDetailPageModalComponent = (props) => {
                     }
                     onActionOpenSnackbar(snackbarSetting);
                 }
+                onActionCloseBackdrop();
             },
             deleteDetailPage: async (e) => {
                 e.preventDefault();
                 
                 // 기존에 존재하는 데이터 제거
                 if (detailPages.some(r => r.id === selectedDetailPage.id)) {
-                    if (!window.confirm('삭제하시겠습니까?')) {
-                        return;
-                    }
-                    onActionOpenBackdrop();
-                    await reqDeleteDetailPage(() => {
-                        let snackbarSetting = {
-                            message: '완료되었습니다.',
-                            severity: 'info'
+                    onActionOpenConfirmSnackbar(
+                        '삭제하시겠습니까?',
+                        () => async () => {
+                            onActionOpenBackdrop();
+                            try{
+                                await reqDeleteDetailPage(() => {
+                                    let snackbarSetting = {
+                                        message: '완료되었습니다.',
+                                        severity: 'info'
+                                    }
+                                    onActionOpenSnackbar(snackbarSetting);
+                                });
+                                await reqSearchBatchByProductId(props.product.id);
+                            } catch (err) {
+                                let snackbarSetting = {
+                                    message: err?.message,
+                                    severity: 'error'
+                                }
+                                onActionOpenSnackbar(snackbarSetting);
+                            }
+                            onActionCloseBackdrop();
                         }
-                        onActionOpenSnackbar(snackbarSetting);
-                    });
-                    await reqSearchBatchByProductId(props.product.id);
-                    onActionCloseBackdrop();
+                    )
                 } else {
                     onActionRemoveDetailPage();
                 }
@@ -221,6 +255,18 @@ const ProductDetailPageModalComponent = (props) => {
                     horizontal={'right'}
                     duration={4000}
                 ></BasicSnackbarHookComponentV2>
+            }
+
+            {/* Snackbar */}
+            {confirmSnackbarOpen &&
+                <ConfirmSnackbarHookComponent
+                    open={confirmSnackbarOpen}
+                    message={confirmSnackbarMessage}
+                    onClose={onActionCloseConfirmSnackbar}
+                    vertical={'top'}
+                    horizontal={'center'}
+                    onConfirm={snackbarConfirmAction}
+                ></ConfirmSnackbarHookComponent>
             }
         </>
     )

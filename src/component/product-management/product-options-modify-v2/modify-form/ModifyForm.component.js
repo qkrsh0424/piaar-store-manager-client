@@ -11,6 +11,7 @@ import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisa
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import useProductOptionsHook from "../hooks/useProductOptionsHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
+import { ConfirmSnackbarHookComponent, useConfirmSnackbarHook } from "../../../../hooks/snackbar/useConfirmSnackbarHook";
 
 function PageTitleFieldView({ title }) {
     return (
@@ -34,6 +35,7 @@ const ModifyFormComponent = (props) => {
         options: modifyOptionDataList,
         onChangeValueOfNameById: onChangeOptionInputValue,
         onActionAddData: onActionAddOptionData,
+        onActionCopyData: onActionCopyOptionData,
         onActionDeleteById: onActionDeleteOptionById,
         onActionUpdateOptions,
         checkCreateFormData: checkProductOptionCreateFormData,
@@ -70,6 +72,14 @@ const ModifyFormComponent = (props) => {
         onActionClose: onActionCloseSnackbar,
     } = useBasicSnackbarHookV2();
 
+    const {
+        open: confirmSnackbarOpen,
+        message: confirmSnackbarMessage,
+        confirmAction: snackbarConfirmAction,
+        onActionOpen: onActionOpenConfirmSnackbar,
+        onActionClose: onActionCloseConfirmSnackbar,
+    } = useConfirmSnackbarHook();
+
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
     useEffect(() => {
@@ -78,12 +88,19 @@ const ModifyFormComponent = (props) => {
             setSelectedProductId(productId);
 
             onActionOpenBackdrop();
-            await reqSearchBatchByProductId(productId)
+            try{
+                await reqSearchBatchByProductId(productId)
+            } catch (err) {
+                let snackbarSetting = {
+                    message: err?.message,
+                    severity: 'error'
+                }
+                onActionOpenSnackbar(snackbarSetting);
+            }
             onActionCloseBackdrop();
         }
 
         fetchInit();
-
         window.scrollTo({top: document.body.scrollHeight});
     }, [])
 
@@ -98,9 +115,10 @@ const ModifyFormComponent = (props) => {
                 setOptionDefaultNameCreateModalOpen(false);
             },
             cancelCreateProduct: () => {
-                if(window.confirm('취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?')) {
-                    navigatePrevPage();
-                }
+                onActionOpenConfirmSnackbar(
+                    '취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?',
+                    () => () => navigatePrevPage()
+                )
             },
             changeProductOptionBatchRegValue: (data) => {
                 let batchRegOptionDefaultName = productOptionBatchReg.defaultName ? (productOptionBatchReg.defaultName + ',' + data) : data;
@@ -124,15 +142,18 @@ const ModifyFormComponent = (props) => {
             resetOptions: (e) => {
                 e.preventDefault();
 
-                if(window.confirm('기존 상품 정보로 초기화하시겠습니까?\n(현재 변경된 내역은 저장되지 않습니다)')) {
-                    onActionResetOriginOptionsData();
+                onActionOpenConfirmSnackbar(
+                    '기존 상품 정보로 초기화하시겠습니까?\n(현재 변경된 내역은 저장되지 않습니다)',
+                    () => () => {
+                        onActionResetOriginOptionsData();
 
-                    let snackbarSetting = {
-                        message: '초기화되었습니다.',
-                        severity: 'info'
+                        let snackbarSetting = {
+                            message: '초기화되었습니다.',
+                            severity: 'info'
+                        }
+                        onActionOpenSnackbar(snackbarSetting);
                     }
-                    onActionOpenSnackbar(snackbarSetting);
-                }
+                )
             },
             confirmBatchRegInput: (e) => {
                 e.preventDefault();
@@ -148,6 +169,19 @@ const ModifyFormComponent = (props) => {
 
                 onActionUpdateOptions(data);
                 onActionCloseBatchRegTooltip(e);
+            },
+            copyOptionData: (e, optionId) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                let copyData = modifyOptionDataList.filter(r => r.id === optionId)[0];
+                onActionCopyOptionData(copyData)
+            
+                let snackbarSetting = {
+                    message: '복사되었습니다.',
+                    severity: 'info'
+                }
+                onActionOpenSnackbar(snackbarSetting)
             }
         },
         submit: {
@@ -155,33 +189,31 @@ const ModifyFormComponent = (props) => {
                 e.preventDefault();
                 e.stopPropagation();
 
-                if(!window.confirm('데이터 수정을 완료하시겠습니까?')) {
-                    return;
-                }
+                onActionOpenConfirmSnackbar(
+                    '데이터 수정을 완료하시겠습니까?',
+                    () => async () => {
+                        onActionOpenBackdrop();
+                        try {
+                            checkProductOptionCreateFormData();
         
-                try {
-                    checkProductOptionCreateFormData();
-
-                    setButtonDisabled(true);
-                    onActionOpenBackdrop();
-                    await reqModifyOptions(selectedProductId, () => {
-                        let data = {
-                            pathname: `/products`,
-                            state: {
-                                requestStatus: 'success'
+                            setButtonDisabled(true);
+                            await reqModifyOptions(selectedProductId, () => {
+                                let data = {
+                                    pathname: `/products`,
+                                }
+                                navigateUrl(data);
+                            });
+                        } catch (err) {
+                            let snackbarSetting = {
+                                message: err?.message,
+                                severity: 'error'
                             }
+                            
+                            onActionOpenSnackbar(snackbarSetting);
                         }
-                        navigateUrl(data);
-                    });
-                    onActionCloseBackdrop();
-                } catch (err) {
-                    let snackbarSetting = {
-                        message: err?.message,
-                        severity: 'error'
+                        onActionCloseBackdrop();
                     }
-
-                    onActionOpenSnackbar(snackbarSetting);
-                }
+                )
             }
         }
     }
@@ -201,6 +233,7 @@ const ModifyFormComponent = (props) => {
 
                             onChangeOptionInputValue={onChangeOptionInputValue}
                             onActionAddOptionData={onActionAddOptionData}
+                            onActionCopyOptionData={__handle.action.copyOptionData}
                             onActionDeleteOption={onActionDeleteOptionById}
                             onChangeBatchRegOptionInputValue={onChangeProductOptionBatchRegInputValue}
                             onActionAddOptionDataListByBatchRegData={__handle.action.addOptionDataListByBatchRegData}
@@ -246,7 +279,19 @@ const ModifyFormComponent = (props) => {
                     vertical={'top'}
                     horizontal={'right'}
                     duration={4000}
-                ></BasicSnackbarHookComponentV2>
+                />
+            }
+
+            {/* Snackbar */}
+            {confirmSnackbarOpen &&
+                <ConfirmSnackbarHookComponent
+                    open={confirmSnackbarOpen}
+                    message={confirmSnackbarMessage}
+                    onClose={onActionCloseConfirmSnackbar}
+                    vertical={'top'}
+                    horizontal={'center'}
+                    onConfirm={snackbarConfirmAction}
+                />
             }
         </>
     )

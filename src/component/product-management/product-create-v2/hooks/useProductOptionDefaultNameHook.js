@@ -1,7 +1,6 @@
 import { useState } from "react"
 
 const OPTION_BATCH_MAX_SIZE = 3;
-const OPTION_BATCH_MIN_SIZE = 2;
 
 export default function useProductOptionDefaultNameHook() {
     const [defaultNameList, setDefaultNameList] = useState([
@@ -42,11 +41,6 @@ export default function useProductOptionDefaultNameHook() {
 
     const onActionDeleteRow = (idx) => {
         let data = defaultNameList.filter((r, index) => index !== idx);
-
-        if(data.length < OPTION_BATCH_MIN_SIZE) {
-            alert('더이상 삭제할 수 없습니다.')
-            return;
-        }
         
         setDefaultNameList(data);
     }

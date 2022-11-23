@@ -56,9 +56,18 @@ export default function useProductOptionsHook (props) {
         setOptions([...options, newData])
     }
 
+    const onActionCopyData = (data) => {
+        let copyData = {
+            ...data,
+            cid: null,
+            id: uuidv4()
+        }
+        setOptions([...options, copyData])
+    }
+
     const onActionDeleteById = (e, optionId) => {
         e.stopPropagation();
-
+        
         let updatedOptions = options.filter(r => r.id !== optionId);
         setOptions(updatedOptions);
     }
@@ -93,6 +102,7 @@ export default function useProductOptionsHook (props) {
         options,
 
         onActionAddData,
+        onActionCopyData,
         onActionDeleteById,
         onChangeValueOfNameById,
         onActionUpdateOptions,

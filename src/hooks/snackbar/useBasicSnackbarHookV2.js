@@ -1,5 +1,4 @@
-import { useState } from "react";
-import BasicSnackbar from "../../component/module/snackbar/BasicSnackbar";
+import React, { useState } from "react";
 import BasicSnackbarV2 from "../../component/module/snackbar/BasicSnackbarV2";
 
 /**
@@ -14,7 +13,6 @@ import BasicSnackbarV2 from "../../component/module/snackbar/BasicSnackbarV2";
  * @param {number} props.duration - [1000, 2000 ...] ms
  * @returns 
  */
-
 function BasicSnackbarHookComponentV2({
     open,
     message,
@@ -43,16 +41,16 @@ const useBasicSnackbarHookV2 = () => {
     const [severity, setSeverity] = useState('');
 
     const onActionOpen = (data) => {
+        setOpen(true);
         setMessage(data.message || '');
         setSeverity(data.severity || '');
-        setOpen(true);
     }
 
     const onActionClose = () => {
         setOpen(false);
         setMessage('');
     }
-
+    
     return {
         open,
         message,

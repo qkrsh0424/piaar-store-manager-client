@@ -18,6 +18,7 @@ import ProductInfoInputFieldView from "./view/ProductInfoInputField.view";
 import useProductCategoryHook from "../hooks/useProductCategoryHook";
 import { productDataConnect } from "../../../../data_connect/productDataConnect";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
+import { ConfirmSnackbarHookComponent, useConfirmSnackbarHook } from "../../../../hooks/snackbar/useConfirmSnackbarHook";
 
 function PageTitleFieldView({ title }) {
     return (
@@ -32,9 +33,7 @@ const CreateFormComponent = (props) => {
     const [optionDefaultNameCreateModalOpen, setOptionDefaultNameCreateModalOpen] = useState(false);
 
     const {
-        location,
-        navigateUrl,
-        navigatePrevPage
+        navigateUrl
     } = useRouterHook();
 
     const {
@@ -57,6 +56,7 @@ const CreateFormComponent = (props) => {
         options: createOptionDataList,
         onChangeValueOfNameById: onChangeOptionInputValue,
         onActionAddData: onActionAddOptionData,
+        onActionCopyData: onActionCopyOptionData,
         onActionDeleteById: onActionDeleteOptionById,
         onActionUpdateOptions,
         checkCreateFormData: checkProductOptionCreateFormData,
@@ -91,6 +91,14 @@ const CreateFormComponent = (props) => {
     } = useBasicSnackbarHookV2();
 
     const {
+        open: confirmSnackbarOpen,
+        message: confirmSnackbarMessage,
+        confirmAction,
+        onActionOpen: onActionOpenConfirmSnackbar,
+        onActionClose: onActionCloseConfirmSnackbar,
+    } = useConfirmSnackbarHook();
+
+    const {
         __reqUploadImageFile
     } = useImageFileUploaderHook();
 
@@ -99,7 +107,15 @@ const CreateFormComponent = (props) => {
     useEffect(() => {
         async function fetchInit() {
             onActionOpenBackdrop();
-            await reqSearchAllProductCategory();
+            try{
+                await reqSearchAllProductCategory();
+            }catch (err) {
+                let snackbarSetting = {
+                    message: err?.message,
+                    severity: 'error'
+                }
+                onActionOpenSnackbar(snackbarSetting);
+            }
             onActionCloseBackdrop();
         }
 
@@ -114,20 +130,18 @@ const CreateFormComponent = (props) => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
                             let data = {
                                 pathname: `/products`,
-                                state: {
-                                    requestStatus: 'success'
-                                }
                             }
                             navigateUrl(data);
                         }
                     })
                     .catch(err => {
                         let res = err.response;
+                        let message = res?.data.memo;
                         if (res?.status === 500) {
-                            alert('undefined error.');
-                            return;
+                            message = 'undefined error.';
                         }
-                        alert(res?.data.memo);
+        
+                        throw new Error(message);
                     })
             }
         },
@@ -141,9 +155,10 @@ const CreateFormComponent = (props) => {
                 setOptionDefaultNameCreateModalOpen(false);
             },
             cancelCreateProduct: () => {
-                if(window.confirm('취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?')) {
-                    navigatePrevPage();
-                }
+                onActionOpenConfirmSnackbar(
+                    '취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?',
+                    () => () => navigateUrl({ pathname: '/products'})
+                );
             },
             uploadProductImageFile: async (e) => {
                 e.preventDefault();
@@ -212,12 +227,25 @@ const CreateFormComponent = (props) => {
 
                 onActionUpdateOptions(data);
                 onActionCloseBatchRegTooltip(e);
+            },
+            copyOptionData: (e, optionId) => {
+                e.preventDefault();
+
+                let copyData = createOptionDataList.filter(r => r.id === optionId)[0];
+                onActionCopyOptionData(copyData)
+            
+                let snackbarSetting = {
+                    message: '복사되었습니다.',
+                    severity: 'info'
+                }
+                onActionOpenSnackbar(snackbarSetting)
             }
         },
         submit: {
             createProductAndOptions: async (e) => {
                 e.preventDefault();
         
+                onActionOpenBackdrop();
                 try {
                     checkProductCreateFormData();
                     checkProductOptionCreateFormData();
@@ -228,9 +256,7 @@ const CreateFormComponent = (props) => {
                     }
 
                     setButtonDisabled(true);
-                    onActionOpenBackdrop();
                     await __handle.req.createProductAndOptions(body);
-                    onActionCloseBackdrop();
                 } catch (err) {
                     let snackbarSetting = {
                         message: err?.message,
@@ -238,6 +264,7 @@ const CreateFormComponent = (props) => {
                     }
                     onActionOpenSnackbar(snackbarSetting);
                 }
+                onActionCloseBackdrop();
             }
         }
     }
@@ -280,6 +307,7 @@ const CreateFormComponent = (props) => {
 
                         onChangeOptionInputValue={onChangeOptionInputValue}
                         onActionAddOptionData={onActionAddOptionData}
+                        onActionCopyOptionData={__handle.action.copyOptionData}
                         onActionDeleteOption={onActionDeleteOptionById}
                         onChangeBatchRegOptionInputValue={onChangeProductOptionBatchRegInputValue}
                         onActionAddOptionDataListByBatchRegData={__handle.action.addOptionDataListByBatchRegData}
@@ -325,6 +353,18 @@ const CreateFormComponent = (props) => {
                     horizontal={'right'}
                     duration={4000}
                 ></BasicSnackbarHookComponentV2>
+            }
+
+            {/* Snackbar */}
+            {confirmSnackbarOpen &&
+                <ConfirmSnackbarHookComponent
+                    open={confirmSnackbarOpen}
+                    message={confirmSnackbarMessage}
+                    onClose={onActionCloseConfirmSnackbar}
+                    vertical={'top'}
+                    horizontal={'center'}
+                    onConfirm={confirmAction}
+                ></ConfirmSnackbarHookComponent>
             }
         </Container>
     )

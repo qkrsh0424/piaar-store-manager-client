@@ -5,22 +5,21 @@ import { isNumberFormat } from "../../../../../../utils/regexUtils";
 export default function useProductReceiveHook () {
     const [productReceive, setProductReceive] = useState(null);
     
-    const reqCreateProductReceive = async (data, navbarOpen) => {
+    const reqCreateProductReceive = async (data, snackbarOpen) => {
         await productReceiveDataConnect().createBatch(data)
             .then(res => {
                 if(res.status === 200) {
-                    // alert(res.data.memo);
-                    navbarOpen(res.data.memo);
+                    snackbarOpen(res.data.memo);
                 }
             })
             .catch(err => {
                 let res = err.response;
+                let message = res?.data.memo;
                 if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
+                    message = 'undefined error.';
                 }
 
-                alert(res?.data.memo);
+                throw new Error(message);           
             })
     }
 

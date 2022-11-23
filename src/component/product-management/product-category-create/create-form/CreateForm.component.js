@@ -3,6 +3,7 @@ import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdr
 import { useDisabledButtonHook } from "../../../../hooks/button-disabled/useDisabledButtonHook";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
+import { ConfirmSnackbarHookComponent, useConfirmSnackbarHook } from "../../../../hooks/snackbar/useConfirmSnackbarHook";
 import RequiredIcon from "../../../module/icon/RequiredIcon";
 import useProductCategoryHook from "../hooks/useProductCategoryHook";
 import { CategoryInfoInputFieldWrapper, Container, CreateButtonFieldWrapper, PageTitleFieldWrapper } from "./CreateForm.styled"
@@ -10,7 +11,7 @@ import { CategoryInfoInputFieldWrapper, Container, CreateButtonFieldWrapper, Pag
 export default function CreateFormComponent() {
 
     const {
-        navigatePrevPage
+        navigateUrl
     } = useRouterHook();
 
     const {
@@ -37,12 +38,28 @@ export default function CreateFormComponent() {
         onActionClose: onActionCloseSnackbar,
     } = useBasicSnackbarHookV2();
 
+    const {
+        open: confirmSnackbarOpen,
+        message: confirmSnackbarMessage,
+        confirmAction: snackbarConfirmAction,
+        onActionOpen: onActionOpenConfirmSnackbar,
+        onActionClose: onActionCloseConfirmSnackbar,
+    } = useConfirmSnackbarHook();
+
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
     useEffect(() => {
         async function fetchInit() {
             onActionOpenBackdrop();
-            await reqSearchAllProductCategory();
+            try {
+                await reqSearchAllProductCategory();
+            } catch (err) {
+                let snackbarSetting = {
+                    message: err?.message,
+                    severity: 'error'
+                }
+                onActionOpenSnackbar(snackbarSetting);
+            }
             onActionCloseBackdrop();
         }
 
@@ -53,24 +70,24 @@ export default function CreateFormComponent() {
         action: {
             cancelCreateCategory: () => {
                 if(!(createCategoryData && createCategoryData.name)) {
-                    navigatePrevPage();
+                    navigateUrl({ pathname: '/products'})
                     return;
                 }
 
-                if(window.confirm('취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?')) {
-                    navigatePrevPage();
-                }
+                onActionOpenConfirmSnackbar('취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?', 
+                    () => () => navigateUrl({ pathname: '/products'})
+                );
             }
         },
         submit: {
             createProductCategory: async (e) => {
                 e.preventDefault();
 
+                onActionOpenBackdrop();
                 try{
                     checkProductCreateFormData();
 
                     setButtonDisabled(true);
-                    onActionOpenBackdrop();
                     await reqCreateProductCategoryData(() => {
                         let snackbarSetting = {
                             message: '완료되었습니다.',
@@ -80,7 +97,6 @@ export default function CreateFormComponent() {
                         onActionOpenSnackbar(snackbarSetting);
                     });
                     await reqSearchAllProductCategory();
-                    onActionCloseBackdrop();
                 } catch (err) {
                     let snackbarSetting = {
                         message: err?.message,
@@ -88,6 +104,7 @@ export default function CreateFormComponent() {
                     }
                     onActionOpenSnackbar(snackbarSetting);
                 }
+                onActionCloseBackdrop();
             }
         }
     }
@@ -128,6 +145,18 @@ export default function CreateFormComponent() {
                     horizontal={'right'}
                     duration={4000}
                 ></BasicSnackbarHookComponentV2>
+            }
+
+            {/* Snackbar */}
+            {confirmSnackbarOpen &&
+                <ConfirmSnackbarHookComponent
+                    open={confirmSnackbarOpen}
+                    message={confirmSnackbarMessage}
+                    onClose={onActionCloseConfirmSnackbar}
+                    vertical={'top'}
+                    horizontal={'center'}
+                    onConfirm={snackbarConfirmAction}
+                ></ConfirmSnackbarHookComponent>
             }
         </>
     )

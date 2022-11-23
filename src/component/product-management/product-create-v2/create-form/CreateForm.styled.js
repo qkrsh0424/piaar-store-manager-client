@@ -423,7 +423,7 @@ const OptionInfoInputWrapper = styled.div`
         }
     }
 
-    .delete-button-el {
+    .img-button-el {
         position: relative;
         overflow: hidden;
         width: 38px;
@@ -436,8 +436,8 @@ const OptionInfoInputWrapper = styled.div`
         }
     }
 
-    .delete-button-el .delete-button-icon {
-        width:80%;
+    .img-button-el .img-button-icon {
+        width:70%;
         position: absolute;
         top:50%;
         left:50%;

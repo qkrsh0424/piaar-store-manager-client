@@ -20,12 +20,12 @@ export default function useSubOptionCodesHook() {
             })
             .catch(err => {
                 let res = err.response;
+                let message = res?.data.memo;
                 if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
+                    message = 'undefined error.';
                 }
 
-                alert(res?.data.memo);
+                throw new Error(message);
             })
     }
 
@@ -33,12 +33,12 @@ export default function useSubOptionCodesHook() {
         await subOptionCodeDataConnect().deleteOne(id)
             .catch(err => {
                 let res = err.response;
+                let message = res?.data.memo;
                 if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
+                    message = 'undefined error.';
                 }
 
-                alert(res?.data.memo);
+                throw new Error(message);
             })
     }
 
@@ -51,12 +51,12 @@ export default function useSubOptionCodesHook() {
             })
             .catch(err =>{
                 let res = err.response;
-                if(res?.status === 500) {
-                    alert('undefined error.');
-                    return;
+                let message = res?.data.memo;
+                if (res?.status === 500) {
+                    message = 'undefined error.';
                 }
-                
-                alert(res?.data.memo);
+
+                throw new Error(message);
             })
     }
 
@@ -69,21 +69,16 @@ export default function useSubOptionCodesHook() {
             })
             .catch(err => {
                 let res = err.response;
-                if(res?.status === 500) {
-                    alert('undefined error.');
-                    return;
+                let message = res?.data.memo;
+                if (res?.status === 500) {
+                    message = 'undefined error.';
                 }
 
-                alert(res?.data.memo);
+                throw new Error(message);
             })
     }
 
     const onActionAddData = (data) => {
-        if(modifyingSubOption) {
-            alert('수정중인 데이터를 먼저 완료해주세요.');
-            return;
-        }
-
         setModifyingSubOption(data);
     }
 
@@ -112,11 +107,6 @@ export default function useSubOptionCodesHook() {
     }
 
     const onChangeSelectedModifyingData = (subOptionId) => {
-        if(modifyingSubOption) {
-            alert('수정중인 데이터를 먼저 완료해주세요.');
-            return;
-        }
-
         let data = subOptionCodes.filter(r => r.id === subOptionId)[0];
         setModifyingSubOption(data);
     }

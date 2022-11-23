@@ -7,6 +7,8 @@ import SubmitModalComponentV2 from "../../../../module/modal/SubmitModalComponen
 import ListFieldView from "./ListField.view";
 import { ButtonFieldWrapper, InfoFieldWrapper, InputFieldWrapper, TextFieldWrapper } from "./OptionPackageModal.styled";
 import TableFieldView from "./TableField.view";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../../hooks/snackbar/useBasicSnackbarHookV2";
+import { ConfirmSnackbarHookComponent, useConfirmSnackbarHook } from "../../../../../hooks/snackbar/useConfirmSnackbarHook";
 
 function InfoFieldView({ option }) {
     return (
@@ -92,11 +94,35 @@ const OptionPackageModalComponent = (props) => {
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
 
+    const {
+        open: snackbarOpen,
+        message: snackbarMessage,
+        severity: snackbarSeverity,
+        onActionOpen: onActionOpenSnackbar,
+        onActionClose: onActionCloseSnackbar,
+    } = useBasicSnackbarHookV2();
+
+    const {
+        open: confirmSnackbarOpen,
+        message: confirmSnackbarMessage,
+        confirmAction: snackbarConfirmAction,
+        onActionOpen: onActionOpenConfirmSnackbar,
+        onActionClose: onActionCloseConfirmSnackbar,
+    } = useConfirmSnackbarHook();
+
     useEffect(() => {
         async function fetchInit() {
             onActionOpenBackdrop();
-            await reqSearchAllM2OJ();
-            await reqSearchOptionPackages(props.option.id);
+            try {
+                await reqSearchAllM2OJ();
+                await reqSearchOptionPackages(props.option.id);
+            } catch (err) {
+                let snackbarSetting = {
+                    message: err?.message,
+                    severity: 'info'
+                }
+                onActionOpenSnackbar(snackbarSetting);
+            }
             onActionCloseBackdrop();
         }
 
@@ -123,14 +149,22 @@ const OptionPackageModalComponent = (props) => {
                 }
 
                 onActionAddPackageOption(addData);
+            },
+            resetPackageData: (e) => {
+                e.preventDefault();
+                
+                onActionOpenConfirmSnackbar(
+                    '기존 패키지 구성으로 초기화하시겠습니까?\n(현재 변경된 내역은 저장되지 않습니다.)',
+                    () => () => onActionResetOriginOptionPackages()
+                )
             }
         },
         submit: {
             createOptionPackages: async () => {
+                onActionOpenBackdrop();
                 try {
                     checkOptionPackagesSaveForm();
 
-                    onActionOpenBackdrop();
                     await onSubmitCreateOptionPackages(props.option.id, () => {
                         let snackbarSetting = {
                             message: '완료되었습니다.',
@@ -139,8 +173,6 @@ const OptionPackageModalComponent = (props) => {
                         props.onActionOpenSnackbar(snackbarSetting);
                     });
                     await props.reqSearchProductAndOptionList();
-                    onActionCloseBackdrop();
-
                     props.onActionCloseModal();
                 } catch (err) {
                     let snackbarSetting = {
@@ -149,6 +181,7 @@ const OptionPackageModalComponent = (props) => {
                     }
                     props.onActionOpenSnackbar(snackbarSetting);
                 }
+                onActionCloseBackdrop();
             }
         }
     }
@@ -189,7 +222,7 @@ const OptionPackageModalComponent = (props) => {
                                                 }
                                             />
                                             <ButtonFieldView
-                                                onActionReset={onActionResetOriginOptionPackages}
+                                                onActionReset={__handle.action.resetPackageData}
                                             />
                                         </div>
                                         <TableFieldView
@@ -213,6 +246,31 @@ const OptionPackageModalComponent = (props) => {
             <BackdropHookComponent
                 open={backdropOpen}
             />
+
+            {/* Snackbar */}
+            {snackbarOpen &&
+                <BasicSnackbarHookComponentV2
+                    open={snackbarOpen}
+                    message={snackbarMessage}
+                    onClose={onActionCloseSnackbar}
+                    severity={snackbarSeverity}
+                    vertical={'top'}
+                    horizontal={'right'}
+                    duration={4000}
+                ></BasicSnackbarHookComponentV2>
+            }
+
+            {/* Snackbar */}
+            {confirmSnackbarOpen &&
+                <ConfirmSnackbarHookComponent
+                    open={confirmSnackbarOpen}
+                    message={confirmSnackbarMessage}
+                    onClose={onActionCloseConfirmSnackbar}
+                    vertical={'top'}
+                    horizontal={'center'}
+                    onConfirm={snackbarConfirmAction}
+                ></ConfirmSnackbarHookComponent>
+            }
         </>
     )
 }

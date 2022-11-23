@@ -6,27 +6,8 @@ import { Grow } from '@mui/material';
 
 const Container = styled.div`
     ${props => {
-        let severity = props.severity;
-        let bgColor = '#323232';
+        let bgColor = '#455265';
         let color = '#fff'
-
-        switch (severity) {
-            case 'success':
-                bgColor = '#4caf50';
-                break;
-            case 'error':
-                bgColor = '#ff545c';
-                break;
-            case 'warning':
-                bgColor = '#ff9800';
-                break;
-            case 'info':
-                bgColor = '#455265';
-                break;
-            default:
-                bgColor = '#323232';
-                break;
-        }
 
         return css`
             & .MuiSnackbarContent-root{
@@ -34,6 +15,7 @@ const Container = styled.div`
             }
 
             & .css-1eqdgzv-MuiPaper-root-MuiSnackbarContent-root {
+                flex-direction: column;
                 color: ${color};
                 font-size: 16px;
             }
@@ -54,21 +36,18 @@ const Container = styled.div`
  * @param {number} props.duration - [1000, 2000 ...] ms
  * @returns 
  */
-const BasicSnackbarV2 = ({
+const ConfirmSnackbar = ({
     open,
     message,
     onClose,
-    severity,
     vertical,
     horizontal,
-    duration,
+    action
 }) => {
 
     return (
         <>
-            <Container
-                severity={severity || null}
-            >
+            <Container>
                 <Snackbar
                     anchorOrigin={{
                         vertical: vertical || 'top',
@@ -77,9 +56,11 @@ const BasicSnackbarV2 = ({
                     open={open || false}
                     onClose={onClose instanceof Function ? () => onClose() : () => { }}
                     message={message || 'no message'}
-                    autoHideDuration={duration || 4000}
                     key={(vertical || 'top') + (horizontal || 'center')}
-                    // TransitionComponent={(props) => <Grow {...props}/>}
+                    action={action}
+                    TransitionComponent={props => 
+                        <Grow {...props}/>
+                    }
                 />
             </Container>
         </>
@@ -87,4 +68,4 @@ const BasicSnackbarV2 = ({
 
 }
 
-export default BasicSnackbarV2;
+export default ConfirmSnackbar;

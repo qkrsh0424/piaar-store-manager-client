@@ -26,12 +26,12 @@ export default function useOptionPackagesHook() {
             })
             .catch(err => {
                 let res = err.response;
+                let message = res?.data.memo;
                 if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
+                    message = 'undefined error.';
                 }
 
-                alert(res?.data.memo);
+                throw new Error(message);
             })
     }
 
@@ -44,11 +44,12 @@ export default function useOptionPackagesHook() {
             })
             .catch(err => {
                 let res = err.response;
+                let message = res?.data.memo;
                 if (res?.status === 500) {
-                    alert('undefined error.');
-                    return;
+                    message = 'undefined error.';
                 }
-                alert(res?.data.memo);
+
+                throw new Error(message);
             })
     }
 
@@ -79,12 +80,7 @@ export default function useOptionPackagesHook() {
         setOptionPackages(data);
     }
 
-    const onActionResetData = (e) => {
-        e.preventDefault();
-        
-        if(!window.confirm('기존 패키지 구성으로 초기화하시겠습니까?\n(현재 변경된 내역은 저장되지 않습니다.)')) {
-            return;
-        }
+    const onActionResetData = () => {
         setOptionPackages([...originOptionPackages]);
     }
 

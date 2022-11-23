@@ -6,6 +6,8 @@ import useSubOptionCodesHook from "./hooks/useSubOptionCodesHook";
 import { ButtonFieldWrapper, InfoFieldWrapper } from "./SubOptionCodeModal.styled";
 import TableFieldView from "./TableField.view";
 import { v4 as uuidv4 } from 'uuid';
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../../hooks/snackbar/useBasicSnackbarHookV2";
+import { ConfirmSnackbarHookComponent, useConfirmSnackbarHook } from "../../../../../hooks/snackbar/useConfirmSnackbarHook";
 
 function InfoFieldView({ option }) {
     return (
@@ -67,12 +69,36 @@ const SubOptionCodeModalComponent = (props) => {
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
 
+    const {
+        open: snackbarOpen,
+        message: snackbarMessage,
+        severity: snackbarSeverity,
+        onActionOpen: onActionOpenSnackbar,
+        onActionClose: onActionCloseSnackbar,
+    } = useBasicSnackbarHookV2();
+
+    const {
+        open: confirmSnackbarOpen,
+        message: confirmSnackbarMessage,
+        confirmAction: snackbarConfirmAction,
+        onActionOpen: onActionOpenConfirmSnackbar,
+        onActionClose: onActionCloseConfirmSnackbar,
+    } = useConfirmSnackbarHook();
+
     const [buttonDisabled, setButtonDisabled] = useDisabledButtonHook(false);
 
     useEffect(() => {
         async function fetchInit() {
             onActionOpenBackdrop();
-            await reqSearchBatchSubOptionCodes(props.option.id);
+            try {
+                await reqSearchBatchSubOptionCodes(props.option.id);
+            } catch (err) {
+                let snackbarSetting = {
+                    message: err?.message,
+                    severity: 'error'
+                }
+                onActionOpenSnackbar(snackbarSetting);
+            }
             onActionCloseBackdrop();
         }
         
@@ -93,37 +119,57 @@ const SubOptionCodeModalComponent = (props) => {
                     productOptionId: props.option.id
                 }
 
+                if(modifyingSubOption) {
+                    let snackbarSetting = {
+                        message: '수정중인 데이터를 먼저 완료해주세요.',
+                        severity: 'info'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
+                    return;
+                }
                 onActionAddSubOption(data);
+            },
+            changeSelectedModifyingData: (subOptionId) => {
+                if(modifyingSubOption) {
+                    let snackbarSetting = {
+                        message: '수정중인 데이터를 먼저 완료해주세요.',
+                        severity: 'info'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
+                    return;
+                }
+                onChangeSelectedModifyingSubOption(subOptionId);
             }
         },
         submit: {
             createSubOption: async () => {
+                onActionOpenBackdrop();
                 try{
                     checkSubOptionSaveForm();
-
                     setButtonDisabled(true);
 
-                    onActionOpenBackdrop();
                     await reqCreateSubOption();
                     await reqSearchBatchSubOptionCodes(props.option.id);
-                    onActionCloseBackdrop();
                 } catch (err) {
-                    alert(err.message);
+                    let snackbarSetting = {
+                        message: err?.message,
+                        severity: 'error'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
                 }
+                onActionCloseBackdrop();
             },
             modifySubOption: async () => {
+                onActionOpenBackdrop();
                 try{
                     checkSubOptionSaveForm();
-
                     setButtonDisabled(true);
 
                     let savedSubOption = subOptionCodes.filter(r => r.id === modifyingSubOption.id)[0];
 
                     if(JSON.stringify(savedSubOption) !== JSON.stringify(modifyingSubOption)) {
-                        onActionOpenBackdrop();
                         await reqModifySubOption();
                         await reqSearchBatchSubOptionCodes(props.option.id);
-                        onActionCloseBackdrop();
                     }
                     onActionDeleteModifyinSubOption();
                 } catch (err) {
@@ -133,21 +179,35 @@ const SubOptionCodeModalComponent = (props) => {
                     }
                     props.onActionOpenSnackbar(snackbarSetting);
                 }
+                onActionCloseBackdrop();
             },
             deleteSubOption: async (subOptionId) => {
                 if(modifyingSubOption) {
-                    alert('수정중인 데이터를 먼저 완료해주세요.');
+                    let snackbarSetting = {
+                        message: '수정중인 데이터를 먼저 완료해주세요.',
+                        severity: 'info'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
                     return; 
                 }
 
-                if (!window.confirm('삭제하시겠습니까?')) {
-                    return;
-                }
-
-                onActionOpenBackdrop();
-                await reqDeleteSubOption(subOptionId);
-                await reqSearchBatchSubOptionCodes(props.option.id);
-                onActionCloseBackdrop();
+                onActionOpenConfirmSnackbar(
+                    '삭제하시겠습니까?',
+                    () => async () => {
+                        onActionOpenBackdrop();
+                        try {
+                            await reqDeleteSubOption(subOptionId);
+                            await reqSearchBatchSubOptionCodes(props.option.id);
+                        } catch(err) {
+                            let snackbarSetting = {
+                                message: err?.message,
+                                severity: 'error'
+                            }
+                            onActionOpenSnackbar(snackbarSetting);
+                        }
+                        onActionCloseBackdrop();
+                    }
+                )
             }
         }
     }
@@ -193,6 +253,31 @@ const SubOptionCodeModalComponent = (props) => {
             <BackdropHookComponent
                 open={backdropOpen}
             />
+
+            {/* Snackbar */}
+            {snackbarOpen &&
+                <BasicSnackbarHookComponentV2
+                    open={snackbarOpen}
+                    message={snackbarMessage}
+                    onClose={onActionCloseSnackbar}
+                    severity={snackbarSeverity}
+                    vertical={'top'}
+                    horizontal={'right'}
+                    duration={4000}
+                ></BasicSnackbarHookComponentV2>
+            }
+
+            {/* Snackbar */}
+            {confirmSnackbarOpen &&
+                <ConfirmSnackbarHookComponent
+                    open={confirmSnackbarOpen}
+                    message={confirmSnackbarMessage}
+                    onClose={onActionCloseConfirmSnackbar}
+                    vertical={'top'}
+                    horizontal={'center'}
+                    onConfirm={snackbarConfirmAction}
+                ></ConfirmSnackbarHookComponent>
+            }
         </>
     )
 }

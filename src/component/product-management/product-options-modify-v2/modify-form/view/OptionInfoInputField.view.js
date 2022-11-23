@@ -1,6 +1,3 @@
-
-import { useEffect } from "react";
-import { useRef } from "react";
 import RequiredIcon from "../../../../module/icon/RequiredIcon";
 import { BatchRegTooltipWrapper, OptionInfoInputWrapper, TableFieldWrapper } from "../ModifyForm.styled";
 
@@ -166,6 +163,7 @@ export default function OptionInfoInputFieldView(props) {
                             onChangeBatchRegInput={props.onChangeBatchRegInput}
                             onActionConfirmBatchRegInput={props.onActionConfirmBatchRegInput}
                             onActionCloseBatchRegTooltip={props.onActionCloseBatchRegTooltip}
+                            onActionCopyOptionData={props.onActionCopyOptionData}
                         />
                         <div className='table-bottom-box'>
                             <button
@@ -194,10 +192,16 @@ function TableFieldView(props) {
                                 <div>삭제</div>
                             </th>
                             <th scope="col" width='50'>
+                                <div>복사</div>
+                            </th>
+                            <th scope="col" width='50'>
                                 <div>#</div>
                             </th>
                             <th scope="col" width='200'>
-                                <div>옵션명 <RequiredIcon /></div>
+                                <div>
+                                    <span>옵션명</span>
+                                    <RequiredIcon />
+                                </div>
                             </th>
                             <th scope="col" width='200'>
                                 <div>옵션설명</div>
@@ -362,13 +366,29 @@ function TableFieldView(props) {
                                         <div className='button-box'>
                                             <button
                                                 type='button'
-                                                className='delete-button-el'
+                                                className='img-button-el'
                                                 style={{ border: '1px solid #fff', background: '#fff' }}
                                                 onClick={(e) => props.onActionDeleteOption(e, r.id)}
                                             >
                                                 <img
-                                                    className='delete-button-icon'
+                                                    className='img-button-icon'
                                                     src='/assets/icon/delete_default_ff3060.svg'
+                                                    alt=""
+                                                ></img>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className='button-box'>
+                                            <button
+                                                type='button'
+                                                className='img-button-el'
+                                                style={{ border: '1px solid #fff', background: '#fff' }}
+                                                onClick={(e) => props.onActionCopyOptionData(e, r.id)}
+                                            >
+                                                <img
+                                                    className='img-button-icon'
+                                                    src='/assets/icon/copy_default_000000.svg'
                                                     alt=""
                                                 ></img>
                                             </button>

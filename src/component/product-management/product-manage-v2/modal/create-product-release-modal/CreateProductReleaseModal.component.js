@@ -4,6 +4,7 @@ import SubmitModalComponentV2 from "../../../../module/modal/SubmitModalComponen
 import { BatchRegTooltipWrapper, CreateProductReleaseModalFieldWrapper } from "./CreateProductReleaseModal.styled";
 import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
 import ResizableTh from "../../../../module/table/ResizableTh";
+import { ConfirmSnackbarHookComponent, useConfirmSnackbarHook } from "../../../../../hooks/snackbar/useConfirmSnackbarHook";
 
 function BatchRegTooltip({ inputType, name, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
     const confirmInput = (e) => {
@@ -59,6 +60,14 @@ const CreateProductReleaseModalComponent = (props) => {
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
+
+    const {
+        open: confirmSnackbarOpen,
+        message: confirmSnackbarMessage,
+        confirmAction: snackbarConfirmAction,
+        onActionOpen: onActionOpenConfirmSnackbar,
+        onActionClose: onActionCloseConfirmSnackbar,
+    } = useConfirmSnackbarHook();
 
     useEffect(() => {
         if(!props.createReleaseData) {
@@ -129,41 +138,41 @@ const CreateProductReleaseModalComponent = (props) => {
             createProductRelease: async (e) => {
                 e.preventDefault();
 
-                if(!window.confirm('출고등록을 진행하시겠습니까?')) {
-                    return;
-                }
+                onActionOpenConfirmSnackbar(
+                    '출고등록을 진행하시겠습니까?',
+                    () => async () => {
+                        onActionOpenBackdrop();
+                        try {
+                            checkProductReleaseCreateFormData();
 
-                try {
-                    checkProductReleaseCreateFormData();
+                            let data = createReleaseData.filter(r => r.releaseUnit !== 0 && r.releaseUnit !== '0').map(r => {
+                                return {
+                                    releaseUnit: r.releaseUnit,
+                                    memo: r.memo,
+                                    productOptionCid: r.option.cid,
+                                    productOptionId: r.option.id
+                                }
+                            })
 
-                    let data = createReleaseData.filter(r => r.releaseUnit !== 0 && r.releaseUnit !== '0').map(r => {
-                        return {
-                            releaseUnit: r.releaseUnit,
-                            memo: r.memo,
-                            productOptionCid: r.option.cid,
-                            productOptionId: r.option.id
+                            await reqCreateProductRelease(data, (memo) => {
+                                let snackbarSetting = {
+                                    message: memo,
+                                    severity: 'info'
+                                }
+                                props.onActionOpenSnackbar(snackbarSetting);
+                            });
+                            await props.reqSearchProductAndOptionList();
+                            props.onActionCloseModal();
+                        } catch (err) {
+                            let snackbarSetting = {
+                                message: err?.message,
+                                severity: 'error'
+                            }
+                            props.onActionOpenSnackbar(snackbarSetting);
                         }
-                    })
-
-                    onActionOpenBackdrop();
-                    await reqCreateProductRelease(data, (memo) => {
-                        let snackbarSetting = {
-                            message: memo,
-                            severity: 'info'
-                        }
-                        props.onActionOpenSnackbar(snackbarSetting);
-                    });
-                    await props.reqSearchProductAndOptionList();
-                    onActionCloseBackdrop();
-
-                    props.onActionCloseModal();
-                } catch (err) {
-                    let snackbarSetting = {
-                        message: err?.message,
-                        severity: 'error'
+                        onActionCloseBackdrop();
                     }
-                    props.onActionOpenSnackbar(snackbarSetting);
-                }
+                )
             }
         }
     }
@@ -268,9 +277,23 @@ const CreateProductReleaseModalComponent = (props) => {
                 _onSubmit={__handle.submit.createProductRelease}
                 onClose={props.onActionCloseModal}
             />
+
+            {/* Backdrop */}
             <BackdropHookComponent
                 open={backdropOpen}
             />
+
+            {/* Snackbar */}
+            {confirmSnackbarOpen &&
+                <ConfirmSnackbarHookComponent
+                    open={confirmSnackbarOpen}
+                    message={confirmSnackbarMessage}
+                    onClose={onActionCloseConfirmSnackbar}
+                    vertical={'top'}
+                    horizontal={'center'}
+                    onConfirm={snackbarConfirmAction}
+                ></ConfirmSnackbarHookComponent>
+            }
         </>
     )
 }

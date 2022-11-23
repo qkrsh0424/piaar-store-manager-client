@@ -4,6 +4,7 @@ import useProductOptionDefaultNameHook from "../../../hooks/useProductOptionDefa
 import valueUtils from "../../../../../../utils/valueUtils";
 import SubmitModalComponentV2 from "../../../../../module/modal/SubmitModalComponentV2";
 import InputFieldView from "./view/InputField.view";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../../../hooks/snackbar/useBasicSnackbarHookV2";
 
 function InfoFieldView() {
     return (
@@ -18,6 +19,8 @@ function InfoFieldView() {
     )
 }
 
+const OPTION_BATCH_MIN_SIZE = 2;
+
 const CreateOptionDefaultNameModalComponent = (props) => {
     const [separator, setSeparator] = useState(null);
 
@@ -27,6 +30,14 @@ const CreateOptionDefaultNameModalComponent = (props) => {
         onActionAddRow: onActionAddDefaultNameRow,
         onActionDeleteRow: onActionDeleteDefaultNameRow
     } = useProductOptionDefaultNameHook();
+
+    const {
+        open: snackbarOpen,
+        message: snackbarMessage,
+        severity: snackbarSeverity,
+        onActionOpen: onActionOpenSnackbar,
+        onActionClose: onActionCloseSnackbar,
+    } = useBasicSnackbarHookV2();
 
     const __handle = {
         action: {
@@ -54,6 +65,18 @@ const CreateOptionDefaultNameModalComponent = (props) => {
                     }
                 }
                 return data.join(',');
+            },
+            deleteDefaultNameRow: (idx) => {
+                if(optionDefaultNameList?.length <= OPTION_BATCH_MIN_SIZE) {
+                    let snackbarSetting = {
+                        message: '더이상 삭제할 수 없습니다.',
+                        severity: 'error'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
+                    return;
+                }
+
+                onActionDeleteDefaultNameRow(idx);
             }
         },
         submit: {
@@ -61,7 +84,11 @@ const CreateOptionDefaultNameModalComponent = (props) => {
                 e.preventDefault();
 
                 if(separator?.indexOf(',') !== -1) {
-                    alert('옵션명을 구분하는 문자로 (,)는 포함할 수 없습니다.');
+                    let snackbarSetting = {
+                        message: '옵션명을 구분하는 문자로 (,)는 포함할 수 없습니다.',
+                        severity: 'error'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
                     return;
                 }
         
@@ -74,6 +101,7 @@ const CreateOptionDefaultNameModalComponent = (props) => {
     }
 
     return (
+        <>
         <SubmitModalComponentV2
             open={props.modalOpen}
             title={'옵션명 일괄 생성'}
@@ -85,7 +113,7 @@ const CreateOptionDefaultNameModalComponent = (props) => {
                         separator={separator}
 
                         onActionAddDefaultNameRow={onActionAddDefaultNameRow}
-                        onActionDeleteDefaultNameRow={onActionDeleteDefaultNameRow}
+                        onActionDeleteDefaultNameRow={__handle.action.deleteDefaultNameRow}
                         onChangeSeparatorInputValue={__handle.action.changeSeparatorInputValue}
                         onChangeDefaultNameInputValue={onChangeOptionDefaultNameInputValue}
                     />
@@ -96,6 +124,20 @@ const CreateOptionDefaultNameModalComponent = (props) => {
             _onSubmit={__handle.submit.batchOptionDefaultName}
             onClose={props.onActionCloseOptionDefaultNameCreateModal}
         />
+
+        {/* Snackbar */}
+        {snackbarOpen &&
+            <BasicSnackbarHookComponentV2
+                open={snackbarOpen}
+                message={snackbarMessage}
+                onClose={onActionCloseSnackbar}
+                severity={snackbarSeverity}
+                vertical={'top'}
+                horizontal={'right'}
+                duration={4000}
+            ></BasicSnackbarHookComponentV2>
+        }
+        </>
     )
 }
 

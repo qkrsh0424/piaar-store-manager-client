@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { productOptionDataConnect } from "../../../../data_connect/productOptionDataConnect";
-import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { isNumberFormat } from "../../../../utils/regexUtils";
 
 // id 제거
@@ -22,10 +21,6 @@ export default function useProductOptionsHook () {
     const [originOptions, setOriginOptions] = useState([]);
     const [options, setOptions] = useState([]);
 
-    const {
-        navigatePrevPage
-    } = useRouterHook();
-
     const reqSearchBatchByProductId = async (id) => {
         await productOptionDataConnect().searchBatchByProductId(id)
             .then(res => {
@@ -33,6 +28,14 @@ export default function useProductOptionsHook () {
                     setOptions(res.data.data);
                     setOriginOptions(res.data.data);
                 }
+            }).catch(err => {
+                let res = err.response;
+                let message = res?.data.memo;
+                if (res?.status === 500) {
+                    message = 'undefined error.';
+                }
+
+                throw new Error(message);
             })
     }
 
@@ -45,7 +48,12 @@ export default function useProductOptionsHook () {
             })
             .catch(err => {
                 let res = err.response;
-                alert(res?.data?.memo);
+                let message = res?.data.memo;
+                if (res?.status === 500) {
+                    message = 'undefined error.';
+                }
+
+                throw new Error(message);
             })
     }
 
@@ -81,8 +89,18 @@ export default function useProductOptionsHook () {
         setOptions([...options, newData])
     }
 
+    const onActionCopyData = (data) => {
+        let copyData = {
+            ...data,
+            cid: null,
+            id: uuidv4()
+        }
+        setOptions([...options, copyData])
+    }
+
     const onActionDeleteById = (e, optionId) => {
         e.stopPropagation();
+        e.preventDefault();
 
         let updatedOptions = options.filter(r => r.id !== optionId);
         setOptions(updatedOptions);
@@ -128,6 +146,7 @@ export default function useProductOptionsHook () {
         checkCreateFormData,
         reqSearchBatchByProductId,
         reqModifyBatch,
-        onActionResetOriginData
+        onActionResetOriginData,
+        onActionCopyData
     }
 }

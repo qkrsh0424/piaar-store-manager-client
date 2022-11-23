@@ -14,6 +14,7 @@ import useProductHook from "./hooks/useProductHook";
 import { useDisabledButtonHook } from "../../../hooks/button-disabled/useDisabledButtonHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../hooks/snackbar/useBasicSnackbarHookV2";
 import useProductOptionHook from "./hooks/useProductOptionHook";
+import { ConfirmSnackbarHookComponent, useConfirmSnackbarHook } from "../../../hooks/snackbar/useConfirmSnackbarHook";
 
 const Container = styled.div`
     height: 100%;
@@ -65,6 +66,14 @@ const ProductManageComponent = (props) => {
     } = useBasicSnackbarHookV2();
 
     const {
+        open: confirmSnackbarOpen,
+        message: confirmSnackbarMessage,
+        confirmAction: snackbarConfirmAction,
+        onActionOpen: onActionOpenConfirmSnackbar,
+        onActionClose: onActionCloseConfirmSnackbar,
+    } = useConfirmSnackbarHook();
+
+    const {
         reqDeleteOne: reqDeleteProductOne
     } = useProductHook();
 
@@ -77,21 +86,19 @@ const ProductManageComponent = (props) => {
     useEffect(() => {
         async function fetchInit() {
           onActionOpenBackdrop();
-          await __handle.req.searchProductAndOptionList();
+          try{
+            await __handle.req.searchProductAndOptionList();
+          } catch (err) {
+            let snackbarSetting = {
+                message: err?.message,
+                severity: 'error'
+            }
+            onActionOpenSnackbar(snackbarSetting);
+          }
           onActionCloseBackdrop();
         }
   
         fetchInit();
-
-        let requestStatus = location.state?.requestStatus
-
-        if(requestStatus === 'success') {
-            let snackbarSetting = {
-                message: '완료되었습니다.',
-                severity: 'info'
-            }
-            onActionOpenSnackbar(snackbarSetting);
-        }
       }, [location])
 
     const __handle = {
@@ -129,12 +136,12 @@ const ProductManageComponent = (props) => {
                     })
                     .catch(err => {
                         let res = err.response;
+                        let message = res?.data.memo;
                         if (res?.status === 500) {
-                            alert('undefined error.');
-                            return;
+                            message = 'undefined error.';
                         }
-        
-                        alert(res?.data.memo);
+
+                        throw new Error(message);
                     })
             }
         },
@@ -237,36 +244,58 @@ const ProductManageComponent = (props) => {
             deleteProduct: async (e, productId) => {
                 e.stopPropagation();
 
-                if (window.confirm('상품을 삭제하면 하위 데이터들도 모두 삭제됩니다. 정말 삭제하시겠습니까?')) {
-                    setButtonDisabled(true);
-                    onActionOpenBackdrop();
-                    await reqDeleteProductOne(productId, () => {
-                        let snackbarSetting = {
-                            message: '완료되었습니다.',
-                            severity: 'info'
+                onActionOpenConfirmSnackbar(
+                    '상품을 삭제하면 하위 데이터들도 모두 삭제됩니다.',
+                    () => async () => {
+                        setButtonDisabled(true);
+                        onActionOpenBackdrop();
+                        try {
+                            await reqDeleteProductOne(productId, () => {
+                                let snackbarSetting = {
+                                    message: '완료되었습니다.',
+                                    severity: 'info'
+                                }
+                                onActionOpenSnackbar(snackbarSetting);
+                            });
+                            await __handle.req.searchProductAndOptionList();
+                        } catch (err) {
+                            let snackbarSetting = {
+                                message: err.message,
+                                severity: 'error'
+                            }
+                            onActionOpenSnackbar(snackbarSetting);
                         }
-                        onActionOpenSnackbar(snackbarSetting);
-                    });
-                    await __handle.req.searchProductAndOptionList();
-                    onActionCloseBackdrop();
-                }
+                        onActionCloseBackdrop();
+                    }
+                )
             },
             deleteProductOption: async (e, optionId) => {
                 e.stopPropagation();
 
-                if(window.confirm('삭제하시겠습니까?')) {
-                    setButtonDisabled(true);
-                    onActionOpenBackdrop();
-                    await reqDeleteProductOptionOne(optionId, () => {
-                        let snackbarSetting = {
-                            message: '완료되었습니다.',
-                            severity: 'info'
+                onActionOpenConfirmSnackbar(
+                    '삭제하시겠습니까?',
+                    () => async () => {
+                        setButtonDisabled(true);
+                        onActionOpenBackdrop();
+                        try{
+                            await reqDeleteProductOptionOne(optionId, () => {
+                            let snackbarSetting = {
+                                    message: '완료되었습니다.',
+                                    severity: 'info'
+                                }
+                                onActionOpenSnackbar(snackbarSetting);
+                            });
+                            await __handle.req.searchProductAndOptionList();
+                        } catch (err) {
+                            let snackbarSetting = {
+                                message: err?.message,
+                                severity: 'error'
+                            }
+                            onActionOpenSnackbar(snackbarSetting);
                         }
-                        onActionOpenSnackbar(snackbarSetting);
-                    });
-                    await __handle.req.searchProductAndOptionList();
-                    onActionCloseBackdrop();
-                }
+                        onActionCloseBackdrop();
+                    }
+                )
             }
         }
     }
@@ -322,6 +351,18 @@ const ProductManageComponent = (props) => {
                     horizontal={'right'}
                     duration={4000}
                 ></BasicSnackbarHookComponentV2>
+            }
+
+            {/* Snackbar */}
+            {confirmSnackbarOpen &&
+                <ConfirmSnackbarHookComponent
+                    open={confirmSnackbarOpen}
+                    message={confirmSnackbarMessage}
+                    onClose={onActionCloseConfirmSnackbar}
+                    vertical={'top'}
+                    horizontal={'center'}
+                    onConfirm={snackbarConfirmAction}
+                ></ConfirmSnackbarHookComponent>
             }
         </>
     )

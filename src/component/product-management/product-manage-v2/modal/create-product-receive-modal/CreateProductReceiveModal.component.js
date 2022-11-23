@@ -4,7 +4,7 @@ import SubmitModalComponentV2 from "../../../../module/modal/SubmitModalComponen
 import { BatchRegTooltipWrapper, CreateProductReceiveModalFieldWrapper } from "./CreateProductReceiveModal.styled";
 import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
 import ResizableTh from "../../../../module/table/ResizableTh";
-import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../../hooks/snackbar/useBasicSnackbarHookV2";
+import { ConfirmSnackbarHookComponent, useConfirmSnackbarHook } from "../../../../../hooks/snackbar/useConfirmSnackbarHook";
 
 function BatchRegTooltip({ inputType, name, tootipSize, onChangeInputValue, onActionCancel, onActionConfirm }) {
     
@@ -60,6 +60,14 @@ const CreateProductReceiveModalComponent = (props) => {
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
+
+    const {
+        open: confirmSnackbarOpen,
+        message: confirmSnackbarMessage,
+        confirmAction: snackbarConfirmAction,
+        onActionOpen: onActionOpenConfirmSnackbar,
+        onActionClose: onActionCloseConfirmSnackbar,
+    } = useConfirmSnackbarHook();
 
     useEffect(() => {
         if(!props.createReceiveData) {
@@ -130,41 +138,41 @@ const CreateProductReceiveModalComponent = (props) => {
             createProductReceive: async (e) => {
                 e.preventDefault();
 
-                if(!window.confirm('입고등록을 진행하시겠습니까?')) {
-                    return;
-                }
+                onActionOpenConfirmSnackbar(
+                    '입고등록을 진행하시겠습니까?',
+                    () => async () => {
+                        onActionOpenBackdrop();
+                        try {
+                            checkProductReceiveCreateFormData();
 
-                try {
-                    checkProductReceiveCreateFormData();
-                
-                    let data = createReceiveData.map(r => {
-                        return {
-                            receiveUnit: r.receiveUnit,
-                            memo: r.memo,
-                            productOptionCid: r.option.cid,
-                            productOptionId: r.option.id
+                            let data = createReceiveData.map(r => {
+                                return {
+                                    receiveUnit: r.receiveUnit,
+                                    memo: r.memo,
+                                    productOptionCid: r.option.cid,
+                                    productOptionId: r.option.id
+                                }
+                            })
+
+                            await reqCreateProductReceive(data, (memo) => {
+                                let snackbarSetting = {
+                                    message: memo,
+                                    severity: 'info'
+                                }
+                                props.onActionOpenSnackbar(snackbarSetting);
+                            });
+                            await props.reqSearchProductAndOptionList();
+                            props.onActionCloseModal();
+                        } catch (err) {
+                            let snackbarSetting = {
+                                message: err?.message,
+                                severity: 'error'
+                            }
+                            props.onActionOpenSnackbar(snackbarSetting);
                         }
-                    })
-
-                    onActionOpenBackdrop();
-                    await reqCreateProductReceive(data, (memo) => {
-                        let snackbarSetting = {
-                            message: memo,
-                            severity: 'info'
-                        }
-                        props.onActionOpenSnackbar(snackbarSetting);
-                    });
-                    await props.reqSearchProductAndOptionList();
-                    onActionCloseBackdrop();
-
-                    props.onActionCloseModal();
-                } catch (err) {
-                    let snackbarSetting = {
-                        message: err?.message,
-                        severity: 'error'
+                        onActionCloseBackdrop();
                     }
-                    props.onActionOpenSnackbar(snackbarSetting);
-                }
+                )
             }
         }
     }
@@ -270,9 +278,22 @@ const CreateProductReceiveModalComponent = (props) => {
                 onClose={props.onActionCloseModal}
             />
 
+            {/* Backdrop */}
             <BackdropHookComponent
                 open={backdropOpen}
             />
+
+            {/* Snackbar */}
+            {confirmSnackbarOpen &&
+                <ConfirmSnackbarHookComponent
+                    open={confirmSnackbarOpen}
+                    message={confirmSnackbarMessage}
+                    onClose={onActionCloseConfirmSnackbar}
+                    vertical={'top'}
+                    horizontal={'center'}
+                    onConfirm={snackbarConfirmAction}
+                ></ConfirmSnackbarHookComponent>
+            }
         </>
     )
 }
