@@ -1,6 +1,13 @@
 import { SelectorWrapper } from "./Selector.styled";
 
 export default function SelectorFieldView(props) {
+    
+    const confirmInput = (e) => {
+        if(e.key === 'Enter') {
+            props.onActionSearchProduct();
+        }
+    }
+
     return (
         <SelectorWrapper>
             <div className='select-group'>
@@ -30,6 +37,30 @@ export default function SelectorFieldView(props) {
                         )
                     })}
                 </select>
+            </div>
+
+            <div className="flex-item place-items-center">
+                <div>
+                    <input
+                        type='text'
+                        className='input-el'
+                        value={props.searchInput || ''}
+                        onChange={(e) => props.onChangeSearchInput(e)}
+                        onKeyDown={(e) => confirmInput(e)}
+                        placeholder='카테고리 선택 후 상품명을 검색해주세요.'
+                        autoFocus
+                        disabled={props.selectedCategory === 'total'}
+                    />
+                </div>
+
+                <div>
+                    <button
+                        className='button-el'
+                        onClick={() => props.onActionSearchProduct()}
+                    >
+                        조회
+                    </button>
+                </div>
             </div>
         </SelectorWrapper>
     )

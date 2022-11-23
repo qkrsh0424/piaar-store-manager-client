@@ -18,10 +18,10 @@ const SelectorWrapper = styled.div`
 
     .select-item {
         width: 250px;
-        height: 40px;
+        height: 48px;
         padding: 0 10px;
-        border: 1px solid #444;
-        border-radius: 0;
+        border: 1px solid var(--defaultBorderColor);
+        border-radius: 5px;
         font-size: 14px;
         -webkit-appearance: none;
         -moz-appearance: none; 
@@ -30,6 +30,25 @@ const SelectorWrapper = styled.div`
 
         &:focus{
             outline: none;
+        }
+    }
+
+    .input-el {
+        width: 280px;
+        font-size: 14px;
+    }
+
+    .button-el {
+        width: 50px;
+        height: 48px;
+        border: 1px solid var(--defaultBorderColor);
+        background-color: var(--defaultButtonColor);
+        border-radius: 5px;
+        margin: 0 5px;
+        transition: 0.1s;
+
+        :hover {
+            background-color: var(--defaultHoverColor);
         }
     }
 `;

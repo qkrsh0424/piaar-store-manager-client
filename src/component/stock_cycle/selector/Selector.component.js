@@ -3,6 +3,7 @@ import { Container } from "./Selector.styled"
 import SelectorFieldView from "./SelectorField.view";
 
 import { CheckBoxFieldWrapper } from "./Selector.styled";
+import { useState } from "react";
 
 function CheckBoxField({ element, onClick, checked, name}) {
     return (
@@ -26,7 +27,8 @@ function CheckBoxField({ element, onClick, checked, name}) {
 
 const SelectorComponent = (props) => {
     const [productViewList, dispatchProductViewList] = useReducer(productViewListReducer, initialProductViewList);
-    
+    const [searchInput, setSearchInput] = useState(null);
+
     useEffect(() => {
         if(!(props.categoryList && props.productList)) {
             return;
@@ -44,10 +46,12 @@ const SelectorComponent = (props) => {
     }, [props.productList, props.selectedCategory])
 
     const onChangeSelectedCategory = (e) => {
+        setSearchInput(null);
         props._onAction_changeSelectedCategory(e);
     }
 
     const onChangeSelectedProduct = (e) => {
+        setSearchInput(null);
         props._onAction_changeSelectedProduct(e);
     }
 
@@ -63,6 +67,15 @@ const SelectorComponent = (props) => {
         props._onAction_changeShowOutOfStockOption();
     }
 
+    const onChangeSearchInput = (e) => {
+        let value = e.target.value;
+        setSearchInput(value);
+    }
+
+    const onActionSearchProduct = () => {
+        props._onAction_searchProduct(searchInput);
+    }
+
     return (
         <Container>
             <SelectorFieldView
@@ -70,9 +83,12 @@ const SelectorComponent = (props) => {
                 productViewList={productViewList}
                 selectedCategory={props.selectedCategory}
                 selectedProduct={props.selectedProduct}
+                searchInput={searchInput}
 
                 onChangeSelectedCategory={onChangeSelectedCategory}
                 onChangeSelectedProduct={onChangeSelectedProduct}
+                onChangeSearchInput={onChangeSearchInput}
+                onActionSearchProduct={onActionSearchProduct}
             ></SelectorFieldView>
             
             <div className='checkbox-wrapper'>
