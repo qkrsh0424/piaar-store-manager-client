@@ -11,7 +11,6 @@ import { productOptionDataConnect } from '../../data_connect/productOptionDataCo
 import { productDetailDataConnect } from '../../data_connect/productDetailDataConnect';
 import ItemSelectorComponent from './item-selector/ItemSelector.component';
 import DetailTableComponent from './detail-table/DetailTable.component';
-import { optionPackageDataConnect } from '../../data_connect/optionPackageDataConnect';
 
 const Container = styled.div`
     background: linear-gradient(to bottom right,#f0fffa,#839edfad);
@@ -366,19 +365,6 @@ const ProductDetailComponent = () => {
             })
     }
 
-    const __reqSearchOptionPackage = async (optionId) => {
-        await optionPackageDataConnect().searchListByParentOptionId(optionId)
-            .then(res => {
-                if (res.status == 200 && res.data && res.data.message == 'success') {
-                    setOptionPackage(res.data.data);
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-                alert(res?.data?.memo);
-            })
-    }
-
     const _onSubmit_deleteProduct = async (productCid) => {
         await __reqDeleteProduct(productCid);
     }
@@ -441,10 +427,6 @@ const ProductDetailComponent = () => {
         });
     }
 
-    const _onAction_searchOptionPackage = async (optionId) => {
-        await __reqSearchOptionPackage(optionId);
-    }
-
     return (
         <Container>
             <CategorySelectorComponent
@@ -466,7 +448,6 @@ const ProductDetailComponent = () => {
                 _onSubmit_modifyProduct={(modifyProductData) => _onSubmit_modifyProduct(modifyProductData)}
                 _onSubmit_createProductOption={(createOptionData) => _onSubmit_createProductOption(createOptionData)}
                 _onSubmit_modifyProductOption={(modifyOptionData) => _onSubmit_modifyProductOption(modifyOptionData)}
-                _onAction_searchOptionPackage={(optionId) => _onAction_searchOptionPackage(optionId)}
             ></ItemSelectorComponent>
 
             <DetailTableComponent

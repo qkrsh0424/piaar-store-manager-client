@@ -3,8 +3,6 @@ import ConfirmSnackbar from "../../component/module/snackbar/ConfirmSnackbar";
 import styled from "styled-components";
 
 const ButtonBox = styled.div`
-    /* width: 100%; */
-
     .button-el {
         margin-left: 5px;
         width: 50px;

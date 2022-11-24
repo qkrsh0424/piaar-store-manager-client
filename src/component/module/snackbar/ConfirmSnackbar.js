@@ -19,6 +19,10 @@ const Container = styled.div`
                 color: ${color};
                 font-size: 16px;
             }
+
+            & .css-1kr9x0n-MuiSnackbarContent-action {
+                margin-right: 0;
+            }
         `;
     }}
 

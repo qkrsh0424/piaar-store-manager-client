@@ -229,19 +229,6 @@ const ItemSelectorComponent = (props) => {
         setCreateProductOptionModalOpen(false);
     }
 
-    // const onActionOpenModifyProductOptionModal = async () => {
-    //     if (!query.optionCid) {
-    //         alert('옵션을 먼저 선택해주세요.');
-    //         return;
-    //     }
-
-    //     let selectedOption = props.optionViewList.filter(r => r.cid === parseInt(query.optionCid))[0];
-    //     setModifyProductOptionData(selectedOption);
-
-    //     await props._onAction_searchOptionPackage(selectedOption.id);
-    //     setModifyProductOptionModalOpen(true);
-    // }
-
     const onActionOpenModifyProductOptionModal = async () => {
         if (!query.optionCid) {
             alert('옵션을 먼저 선택해주세요.');

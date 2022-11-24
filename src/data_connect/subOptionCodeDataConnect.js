@@ -4,11 +4,6 @@ const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 
 const subOptionCodeDataConnect = () => {
     return {
-        searchListByProductOptionId: async function(optionId) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sub-option-code/${optionId}`,{
-                withCredentials: true
-            })
-        },
         deleteOne: async function (subOptionId) {
             return await axios.delete(`${API_SERVER_ADDRESS}/api/v1/sub-option-code/${subOptionId}`, {
                 withCredentials: true
@@ -24,10 +19,8 @@ const subOptionCodeDataConnect = () => {
                 withCredentials: true
             })
         },
-
-        // [221027] FEAT
         searchBatchByProductOptionId: async function(optionId) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sub-option-code/${optionId}`,{
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sub-option-code/${optionId}`, {
                 withCredentials: true
             })
         },
