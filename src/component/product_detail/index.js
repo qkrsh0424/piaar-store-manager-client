@@ -216,7 +216,7 @@ const ProductDetailComponent = () => {
     }
 
     const __reqSearchProduct = async () => {
-        await productDataConnect().getList()
+        await productDataConnect().searchBatch()
             .then(res => {
                 if (res.status == 200 && res.data && res.data.message == 'success') {
                     setProductList(res.data.data);
