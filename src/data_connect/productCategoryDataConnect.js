@@ -9,7 +9,6 @@ const productCategoryDataConnect = () => {
                 withCredentials:true
             })
         },
-        // 221109 FEAT
         createOne: async function (body) {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/product-category`, body, {
                 withCredentials:true

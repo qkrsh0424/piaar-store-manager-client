@@ -71,7 +71,7 @@ const StockCycleComponent = (props) => {
     }
 
     const __reqSearchProductListFj = async () => {
-        await productDataConnect().searchBatch()
+        await productDataConnect().searchBatchForStockManagementedProduct()
             .then(res => {
                 if (res.status === 200 && res.data && res.data.message == 'success') {
                     setProductList(res.data.data);
