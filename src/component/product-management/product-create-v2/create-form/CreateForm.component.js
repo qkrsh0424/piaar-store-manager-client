@@ -33,7 +33,8 @@ const CreateFormComponent = (props) => {
     const [optionDefaultNameCreateModalOpen, setOptionDefaultNameCreateModalOpen] = useState(false);
 
     const {
-        navigateUrl
+        navigateUrl,
+        navigatePrevPage
     } = useRouterHook();
 
     const {
@@ -128,10 +129,11 @@ const CreateFormComponent = (props) => {
                 await productDataConnect().createProductAndOptions(body)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
-                            let data = {
-                                pathname: `/products`,
-                            }
-                            navigateUrl(data);
+                            // let data = {
+                            //     pathname: `/products`,
+                            // }
+                            // navigateUrl(data);
+                            navigatePrevPage();
                         }
                     })
                     .catch(err => {
@@ -157,7 +159,7 @@ const CreateFormComponent = (props) => {
             cancelCreateProduct: () => {
                 onActionOpenConfirmSnackbar(
                     '취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?',
-                    () => () => navigateUrl({ pathname: '/products'})
+                    () => () => navigatePrevPage()
                 );
             },
             uploadProductImageFile: async (e) => {
@@ -229,11 +231,11 @@ const CreateFormComponent = (props) => {
                 onActionCloseBatchRegTooltip(e);
             },
             copyOptionData: (e, optionId) => {
-                e.preventDefault();
+                e.stopPropagation();
 
                 let copyData = createOptionDataList.filter(r => r.id === optionId)[0];
                 onActionCopyOptionData(copyData)
-            
+                
                 let snackbarSetting = {
                     message: '복사되었습니다.',
                     severity: 'info'
@@ -341,7 +343,7 @@ const CreateFormComponent = (props) => {
             <BackdropHookComponent
                 open={backdropOpen}
             />
-
+            
             {/* Snackbar */}
             {snackbarOpen &&
                 <BasicSnackbarHookComponentV2

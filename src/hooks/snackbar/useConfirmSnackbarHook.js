@@ -90,7 +90,7 @@ const useConfirmSnackbarHook = () => {
         setMessage(message || '');
         setOpen(true);
         
-        if(typeof confirmAction === 'function') {
+        if(confirmAction instanceof Function) {
             setConfirmAction(confirmAction);
         }
     }

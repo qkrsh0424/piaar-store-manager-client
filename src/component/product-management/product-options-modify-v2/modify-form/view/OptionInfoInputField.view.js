@@ -368,7 +368,7 @@ function TableFieldView(props) {
                                                 type='button'
                                                 className='img-button-el'
                                                 style={{ border: '1px solid #fff', background: '#fff' }}
-                                                onClick={(e) => props.onActionDeleteOption(e, r.id)}
+                                                onClick={() => props.onActionDeleteOption(r.id)}
                                             >
                                                 <img
                                                     className='img-button-icon'

@@ -65,9 +65,7 @@ export default function useProductOptionsHook (props) {
         setOptions([...options, copyData])
     }
 
-    const onActionDeleteById = (e, optionId) => {
-        e.stopPropagation();
-        
+    const onActionDeleteById = (optionId) => {
         let updatedOptions = options.filter(r => r.id !== optionId);
         setOptions(updatedOptions);
     }

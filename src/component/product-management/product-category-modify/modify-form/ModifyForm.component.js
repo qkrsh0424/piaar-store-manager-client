@@ -71,23 +71,6 @@ export default function ModifyFormComponent(props) {
                     '취소하면 현재 작업은 저장되지 않습니다. 정말 취소하시겠습니까?',
                     () => () => navigateUrl({ pathname: '/products' })
                 );
-            },
-            deleteProductCategory: (e) => {
-                e.preventDefault();
-
-                if (!selectedCategory) {
-                    let snackbarSetting = {
-                        message: '카테고리를 선택해주세요.',
-                        severity: 'info'
-                    }
-                    onActionOpenSnackbar(snackbarSetting);
-                    return;
-                }
-
-                onActionOpenConfirmSnackbar(
-                    '카테고리를 제거하면 하위 상품들도 함께 제거됩니다.',
-                    () => () => __handle.submit.deleteProductCategory()
-                );
             }
         },
         submit: {
@@ -116,26 +99,42 @@ export default function ModifyFormComponent(props) {
                 }
                 onActionCloseBackdrop();
             },
-            deleteProductCategory: async () => {
-                setButtonDisabled(true);
-                onActionOpenBackdrop();
-                try{
-                    await reqDeleteProductCategoryData(() => {
-                        let snackbarSetting = {
-                            message: '완료되었습니다.',
-                            severity: 'info'
-                        }
-                        onActionOpenSnackbar(snackbarSetting);
-                    });
-                    await reqSearchAllProductCategory();
-                }catch (err) {
+            deleteProductCategory: (e) => {
+                e.stopPropagation();
+
+                if (!selectedCategory) {
                     let snackbarSetting = {
-                        message: err?.message,
-                        severity: 'error'
+                        message: '카테고리를 선택해주세요.',
+                        severity: 'info'
                     }
                     onActionOpenSnackbar(snackbarSetting);
+                    return;
                 }
-                onActionCloseBackdrop();
+
+                onActionOpenConfirmSnackbar(
+                    '카테고리를 제거하면 하위 상품들도 함께 제거됩니다.',
+                    () => async () => {
+                        onActionOpenBackdrop();
+                        try {
+                            setButtonDisabled(true);
+                            await reqDeleteProductCategoryData(() => {
+                                let snackbarSetting = {
+                                    message: '완료되었습니다.',
+                                    severity: 'info'
+                                }
+                                onActionOpenSnackbar(snackbarSetting);
+                            });
+                            await reqSearchAllProductCategory();
+                        } catch (err) {
+                            let snackbarSetting = {
+                                message: err?.message,
+                                severity: 'error'
+                            }
+                            onActionOpenSnackbar(snackbarSetting);
+                        }
+                        onActionCloseBackdrop();
+                    }
+                );
             }
         }
     }
@@ -153,7 +152,7 @@ export default function ModifyFormComponent(props) {
                             modifyCategoryData={modifyCategoryData}
                             onChangeCategoryInputValue={onChangeCategoryInputValue}
                             onChangeSelectedCategory={onChangeSelectedCategory}
-                            onSubmitDeleteProductCategory={__handle.action.deleteProductCategory}
+                            onSubmitDeleteProductCategory={__handle.submit.deleteProductCategory}
                         />
                     }
 
@@ -168,7 +167,7 @@ export default function ModifyFormComponent(props) {
             <BackdropHookComponent
                 open={backdropOpen}
             />
-
+            
             {/* Snackbar */}
             {snackbarOpen &&
                 <BasicSnackbarHookComponentV2

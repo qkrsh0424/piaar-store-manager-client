@@ -89,6 +89,7 @@ const ManageTableComponent = (props) => {
                 }
                 onActionOpenSnackbar(snackBarSetting);
                 navigator.clipboard.writeText(optionCode);
+                e.startPropagation();
             },
             openSnackbar: (snackbarSetting) => {
                 onActionOpenSnackbar(snackbarSetting);

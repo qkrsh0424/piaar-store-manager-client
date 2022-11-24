@@ -25,14 +25,12 @@ import CommuteRecordMain from './component/commute_record/CommuteRecordMain';
 // refactor
 import SalesAnalysisPage from './pages/sales_analysis/SalesAnalysisPage';
 import ProductDetailPage from './pages/product_detail/ProductDetailPage';
-// import ProductCreatePage from './pages/product_create/ProductCreatePage';
 import ExcelTranslatorPage from './pages/excel_translator/ExcelTranslatorPage';
 import ErpManagementOrderUploadPage from './pages/erp/management/order-upload/ErpManagementOrderUploadPage';
 import ErpManagementOrderPage from './pages/erp/management/order/ErpManagementOrderPage';
 import ErpManagementSalesPage from './pages/erp/management/sales/ErpManagementSalesPage';
 import ErpManagementReleaseCompletePage from './pages/erp/management/release-complete/ErpManagementReleaseCompletePage';
 import ErpManagementExcelFormPage from './pages/erp/management/excel/ErpManagementExcelFormPage';
-// import ProductManagePage from './pages/product_manage/ProductManagePage';
 import StockAnalysisPage from './pages/stock_analysis/SalesAnalysisPage';
 import ErpManagementDashboardPage from './pages/erp/management/dashboard/ErpManagementDashboardPage';
 import SalesPerformancePage from './pages/sales_performance/SalesPerformancePage';
@@ -42,9 +40,6 @@ import ErpReturnManagementCollectingPage from './pages/erp/return-management/col
 import ErpReturnManagementCollectedPage from './pages/erp/return-management/collected/ErpReturnManagementCollectedPage';
 import ErpReturnManagementCompletedPage from './pages/erp/return-management/completed/ErpReturnManagementCompletedPage';
 import ErpReturnManagementRejectedPage from './pages/erp/return-management/rejected/ErpReturnManagementRejectedPage';
-// import ProductModifyPage from './pages/product-modify/ProductModifyPage';
-// import ProductOptionsModifyPage from './pages/product-options-modify/OptionsModifyPage';
-// import ProductCategoryCreatePage from './pages/product-category-create/ProductCategoryCreatePage';
 import ProductCreatePage from './pages/product-management/product-create/ProductCreatePage';
 import ProductCategoryCreatePage from './pages/product-management/product-category-create/ProductCategoryCreatePage';
 import ProductManagePage from './pages/product-management/product-manage/ProductManagePage';
@@ -116,16 +111,7 @@ function App(props) {
                                             {/* Login Signup etc.. */}
                                             <Route path='/login' element={<LoginMain />} />
 
-                                            {/* refactor page 5 - /products -> /ex/products */}
-                                            {/* Product Manage */}
-                                            <Route path='/products' element={<ProductManagePage />} />
-
-                                            {/* refactor page 2 - /product-detail -> /ex/product-detail */}
-                                            {/* <Route path='/ex/product-detail' element={<ProductDetailMain />} /> */}
                                             <Route path='/product-detail' element={<ProductDetailPage />} />
-
-                                            {/* OrderManage */}
-                                            {/* <Route path="/order-confirm" element={<OrderConfirmMain />} /> */}
 
                                             <Route path="/waybill" element={<WaybillMain />} />
 
@@ -138,49 +124,10 @@ function App(props) {
                                                 </>
                                             }
 
-                                            {/* Sales Rate */}
-                                            {/* <Route path='/sales-rate/naver' element={<SalesRateNaverMain />} /> */}
-
-                                            {/* refactor page 3 - /product/create -> /ex/product/create */}
-                                            {/* <Route path='/ex/products/create' element={<CreateMain />} /> */}
-                                            <Route path='/products/create' element={<ProductCreatePage />} />
-                                            <Route path='/product-category/create' element={<ProductCategoryCreatePage />} />
-                                            <Route path='/products/modify' element={<ProductModifyPage />} />
-                                            <Route path='/product-options/modify' element={<ProductOptionsModifyPage />} />
-                                            <Route path='/product-category/modify' element={<ProductCategoryModifyPage />} />
-
-                                            {/* Shipment */}
-                                            {/* <Route path='/shipment/packing-list/naver' element={<SPackingListNaverMain />} />
-
-                                            <Route path='/shipment/packing-list/coupang' element={<SPackingListCoupangMain />} /> */}
-
-                                            {/* DeliveryReady - NAVER */}
-                                            {/* <Route path='/delivery-ready/naver' element={<DeliveryReadyUploadNaverMain />} /> */}
-
-                                            {/* DeliveryReady - COUPANG */}
-                                            {/* <Route path='/delivery-ready/coupang' element={<DeliveryReadyUploadCoupangMain />} /> */}
-
-                                            {/* DeliveryReady - PIAAR */}
-                                            {/* <Route path='/delivery-ready/piaar' element={<DeliveryReadyUploadPiaarMain />} /> */}
-
-                                            {/* {(userRdx.userInfo.roles.includes("ROLE_ADMIN") || userRdx.userInfo.roles.includes("ROLE_MANAGER")) &&
-                                                <>
-                                                    <Route path='/delivery-ready/naver/view' element={<DeliveryReadyViewNaverMain />} />
-                                                    <Route path='/delivery-ready/coupang/view' element={<DeliveryReadyViewCoupangMain />} />
-                                                    <Route path='/delivery-ready/piaar/view' element={<DeliveryReadyViewPiaarMain />} />
-                                                </>
-                                            } */}
-
-                                            {/* <Route path='/order-registration/naver' element={<OrderRegistrationNaverMain />} /> */}
-
                                             <Route path='/commute-record' element={<CommuteRecordMain />} />
 
-                                            {/* refactor page 4 - /excel-translator -> /ex/excel-translator */}
-                                            {/* <Route path='/ex/excel-translator' element={<ExcelTranslatorMain />} /> */}
                                             <Route path='/excel-translator' element={<ExcelTranslatorPage />} />
 
-                                            {/* refactor page 1 - /sales-analysis -> /ex/sales-analysis */}
-                                            {/* <Route path='/ex/sales-analysis' element={<SalesAnalysisMain />} /> */}
                                             <Route path='/sales-analysis' element={<SalesAnalysisPage />} />
 
                                             <Route path='/stock-analysis' element={<StockAnalysisPage />} />
@@ -188,6 +135,14 @@ function App(props) {
                                             <Route path='/sales-performance' element={<SalesPerformancePage />} />
 
                                             <Route path='/stock-cycle' element={<StockCyclePage />} />
+
+                                            {/* ProductManagement */}
+                                            <Route path='/products' element={<ProductManagePage />} />
+                                            <Route path='/products/create' element={<ProductCreatePage />} />
+                                            <Route path='/product-category/create' element={<ProductCategoryCreatePage />} />
+                                            <Route path='/products/modify' element={<ProductModifyPage />} />
+                                            <Route path='/product-options/modify' element={<ProductOptionsModifyPage />} />
+                                            <Route path='/product-category/modify' element={<ProductCategoryModifyPage />} />
 
                                             {/* PiaarErpManagement */}
                                             <Route path='/erp/management/dashboard' element={<ErpManagementDashboardPage />} />

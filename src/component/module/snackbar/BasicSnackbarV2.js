@@ -63,7 +63,6 @@ const BasicSnackbarV2 = ({
     horizontal,
     duration,
 }) => {
-
     return (
         <>
             <Container
@@ -79,7 +78,8 @@ const BasicSnackbarV2 = ({
                     message={message || 'no message'}
                     autoHideDuration={duration || 4000}
                     key={(vertical || 'top') + (horizontal || 'center')}
-                    // TransitionComponent={(props) => <Grow {...props}/>}
+                    TransitionComponent={(props) => <Grow {...props}/>}
+                    
                 />
             </Container>
         </>
