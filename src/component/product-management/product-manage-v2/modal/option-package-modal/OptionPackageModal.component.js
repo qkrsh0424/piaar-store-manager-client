@@ -72,7 +72,7 @@ const OptionPackageModalComponent = (props) => {
     const {
         productOptions,
 
-        reqSearchAllM2OJ
+        searchAllRelatedProduct
     } = useProductOptionsSearchHook();
 
     const {
@@ -114,7 +114,7 @@ const OptionPackageModalComponent = (props) => {
         async function fetchInit() {
             onActionOpenBackdrop();
             try {
-                await reqSearchAllM2OJ();
+                await searchAllRelatedProduct();
                 await reqSearchOptionPackages(props.option.id);
             } catch (err) {
                 let snackbarSetting = {

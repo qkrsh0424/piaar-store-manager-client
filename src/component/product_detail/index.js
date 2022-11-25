@@ -352,17 +352,17 @@ const ProductDetailComponent = () => {
     }
 
     const __reqModifyOption = async function (modifyOptionData) {
-        await productOptionDataConnect().putOptionAndPackages(modifyOptionData)
-            .then(res => {
-                if (res.status == 200 && res.data && res.data.message == 'success') {
-                    alert('정상적으로 수정되었습니다.');
-                    setDataChangedTrigger(true);
-                }
-            })
-            .catch(err => {
-                let res = err.response;
-                alert(res?.data?.memo);
-            })
+        // await productOptionDataConnect().putOptionAndPackages(modifyOptionData)
+        //     .then(res => {
+        //         if (res.status == 200 && res.data && res.data.message == 'success') {
+        //             alert('정상적으로 수정되었습니다.');
+        //             setDataChangedTrigger(true);
+        //         }
+        //     })
+        //     .catch(err => {
+        //         let res = err.response;
+        //         alert(res?.data?.memo);
+        //     })
     }
 
     const _onSubmit_deleteProduct = async (productCid) => {
