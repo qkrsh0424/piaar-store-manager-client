@@ -3,49 +3,9 @@ import CommonModalComponent from "../../../../module/modal/CommonModalComponent"
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
 import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
-import { Container, TableFieldWrapper } from "./CheckedOperator.styled";
+import { Container } from "./CheckedOperator.styled";
 import OperatorFieldView from "./OperatorField.view";
-
-function TableFieldView({releaseConfirmItem, selectedMatchCode}) {
-    return (
-        <TableFieldWrapper>
-            <div
-                className='table-box'
-            >
-                <table cellSpacing="0">
-                    <thead>
-                        <tr className='fixed-header'>
-                            <th width='200'><span className='highlight'>{selectedMatchCode === 'optionCode' ? '피아르 옵션코드' : '출고 옵션코드'}</span></th>
-                            <th width='200'>$피아르 상품명</th>
-                            <th width='200'>$피아르 옵션명</th>
-                            <th width='150'>총 출고전환 수량</th>
-                            <th width='150'>$재고수량</th>
-                            <th width='150' style={{color: '#ff4949'}}>[출고 부족 수량]</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {releaseConfirmItem?.map((r, idx) => {
-                            let isOutOfStock = r.optionStockUnit != null && (r.optionStockUnit - r.unit < 0);
-                            return (
-                                <tr
-                                    key={'release-item-idx' + idx}
-                                    className={`${isOutOfStock && 'tr-highlight'}`}
-                                >
-                                    <td>{r[selectedMatchCode]}</td>
-                                    <td>{r.prodDefaultName}</td>
-                                    <td>{r.optionDefaultName}</td>
-                                    <td>{r.unit}</td>
-                                    <td>{r.optionStockUnit}</td>
-                                    <td className={`${isOutOfStock && 'td-highlight'}`}>{isOutOfStock && Math.abs(r.optionStockUnit - r.unit)}</td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
-            </div>
-        </TableFieldWrapper>
-    )
-}
+import ReleaseConfirmFieldView from "./ReleaseConfirmField.view";
 
 const CheckedOperatorComponent = (props) => {
 
@@ -156,32 +116,38 @@ const CheckedOperatorComponent = (props) => {
         onActionCloseOptionCodeModal();
     }
 
-    // 확인모달 창 열기
-    // 출고부족 수량 계산
-    const onActionOpenReleaseConfirmModal = () => {
+    const onActionOpenReleaseConfirmModal = async () => {
         if (props.checkedOrderItemList?.length <= 0) {
             alert('데이터를 먼저 선택해 주세요.');
             return;
         }
+        
+        onActionGetReleaseItem();
+        setReleaseConfirmModalOpen(true);
+    }
 
-        // 출고 부족 수량 계산
-        let matchedCode = new Set(props.checkedOrderItemList?.map(r => r[props.selectedMatchCode]));
-        let releaseItem = [...matchedCode].map(r =>{
+    const onActionCloseReleaseConfirmModal = () => {
+        setReleaseConfirmModalOpen(false);
+    }
+
+    const onActionGetReleaseItem = () => {
+        let releaseItem = [...new Set(props.checkedOrderItemList?.map(r => {
             return {
-                [props.selectedMatchCode]: r,
+                code: r[props.selectedMatchCode],
                 unit: 0
             }
-        })
+        }))];
 
         props.checkedOrderItemList?.forEach(r => {
             releaseItem = releaseItem.map(r2 => {
-                if(r2[props.selectedMatchCode] === r[props.selectedMatchCode]) {
+                if(r2.code === r[props.selectedMatchCode]) {
                     return {
                         ...r2,
                         prodDefaultName: r.prodDefaultName,
                         optionDefaultName: r.optionDefaultName,
                         unit: parseInt(r2.unit) + parseInt(r.unit),
-                        optionStockUnit: r.optionStockUnit
+                        optionStockUnit: r.optionStockUnit,
+                        optionPackageYn: r.optionPackageYn
                     }
                 }else {
                     return r2;
@@ -193,12 +159,6 @@ const CheckedOperatorComponent = (props) => {
             type: 'INIT_DATA',
             payload: releaseItem
         })
-
-        setReleaseConfirmModalOpen(true);
-    }
-
-    const onActionCloseReleaseConfirmModal = () => {
-        setReleaseConfirmModalOpen(false);
     }
 
     const onActionConfirmRelease = () => {
@@ -276,18 +236,11 @@ const CheckedOperatorComponent = (props) => {
                 open={releaseConfirmModalOpen}
                 title={'출고 전환 확인 메세지'}
                 message={
-                    <>
-                        <div className='info-text'>
-                            <div>
-                                <span>* 현재 피아르 상품 & 옵션 매칭 코드는 </span>
-                                <span className='highlight'>{props.selectedMatchCode === 'optionCode' ? '[피아르 옵션코드]' : '[출고 옵션코드]'}</span>
-                                <span>입니다.</span>
-                            </div>
-                            <div>* [출고 부족 수량]을 확인해주세요.</div>
-                        </div>
-                        <TableFieldView releaseConfirmItem={releaseConfirmItem} selectedMatchCode={props.selectedMatchCode}></TableFieldView>
-                        <div>[ {props.checkedOrderItemList?.length || 0} ] 건의 데이터를 출고 전환 하시겠습니까?</div>
-                    </>
+                    <ReleaseConfirmFieldView
+                        selectedMatchCode={props.selectedMatchCode}
+                        releaseConfirmItem={releaseConfirmItem}
+                        checkedOrderItemLength={props.checkedOrderItemList?.length}
+                    />
                 }
                 onConfirm={onActionConfirmRelease}
                 onClose={onActionCloseReleaseConfirmModal}

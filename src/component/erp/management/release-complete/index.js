@@ -168,7 +168,7 @@ const ReleaseCompleteComponent = (props) => {
     }
 
     const __reqSearchProductOptionList = async () => {
-        await productOptionDataConnect().searchList()
+        await productOptionDataConnect().searchAllRelatedProduct()
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchProductOptionList({

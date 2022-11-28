@@ -42,11 +42,11 @@ const productOptionDataConnect = () => {
                 withCredentials: true
             })
         },
-        searchList: async function () {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/list-m2oj`, {
-                withCredentials: true
-            })
-        },
+        // searchList: async function () {
+        //     return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/list-m2oj`, {
+        //         withCredentials: true
+        //     })
+        // },
         searchReleaseLocation: async function () {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/product-option/release-location`, {
                 withCredentials: true

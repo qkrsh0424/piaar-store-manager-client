@@ -265,7 +265,7 @@ const ViewHeaderSettingModalComponent = (props) => {
                 }
 
                 if (window.confirm('선택된 뷰 헤더를 제거하시겠습니까?')) {
-                    props._onAction_deleteSelectedViewHeader(viewHeader.id);
+                    props._onSubmit_deleteSelectedViewHeader(viewHeader.id);
 
                     dispatchViewHeader({
                         type: 'CLEAR'

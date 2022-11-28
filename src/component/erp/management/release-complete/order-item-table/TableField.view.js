@@ -143,7 +143,7 @@ export default function TableFieldView(props) {
                     <tbody>
                         {props.orderItemList?.slice(0, props.viewSize).map((r1, rowIndex) => {
                             let checked = props.isCheckedOne(r1.id)
-                            let isOutOfStock = r1.optionStockUnit !== null && r1.optionStockUnit <= 0;
+                            let isOutOfStock = r1.optionPackageYn === 'n' && r1.optionStockUnit !== null && r1.optionStockUnit <= 0;
                             return (
                                 <tr
                                     key={`row-${rowIndex}`}
@@ -174,6 +174,16 @@ export default function TableFieldView(props) {
                                         } else if (matchedColumnName === 'releaseOptionCode') {
                                             return (
                                                 <td key={`col-${matchedColumnName}`} className='td-highlight' onClick={(e) => props.onActionOpenReleaseOptionCodeModal(e, r1.id)}>{r1[matchedColumnName]}</td>
+                                            )
+                                        } else if (matchedColumnName === 'optionStockUnit') {
+                                            return (
+                                                <td key={`col-${matchedColumnName}`}>
+                                                    {r1.optionPackageYn === 'y' ?
+                                                        '세트상품'
+                                                        :
+                                                        r1[matchedColumnName]
+                                                    }
+                                                </td>
                                             )
                                         }
                                         return (

@@ -25,6 +25,7 @@ import { useSocketConnectLoadingHook, SocketConnectLoadingHookComponent } from '
 import { useBasicSnackbarHook, BasicSnackbarHookComponent } from '../../../../hooks/snackbar/useBasicSnackbarHook';
 import CheckedHeadComponent from './checked-head/CheckedHead.component';
 import { useLocalStorageHook } from '../../../../hooks/local-storage/useLocalStorageHook';
+import { optionPackageDataConnect } from '../../../../data_connect/optionPackageDataConnect';
 
 const Container = styled.div`
     margin-bottom: 100px;
@@ -112,7 +113,7 @@ const SalesComponent = (props) => {
     }
 
     const __reqSearchProductOptionList = async () => {
-        await productOptionDataConnect().searchList()
+        await productOptionDataConnect().searchAllRelatedProduct()
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchProductOptionList({
@@ -374,7 +375,7 @@ const SalesComponent = (props) => {
                 alert(res?.data.memo);
             })
     }
-
+    
     useEffect(() => {
         __reqSearchReleaseLocationOfProductOption();
         __reqSearchViewHeaderList();
@@ -638,7 +639,7 @@ const SalesComponent = (props) => {
     }
 
     // 뷰 헤더 제거 서밋
-    const _onAction_deleteSelectedViewHeader = async (headerId) => {
+    const _onSubmit_deleteSelectedViewHeader = async (headerId) => {
         onActionOpenBackdrop();
         await __reqDeleteSelectedViewHeader(headerId);
         await __reqSearchViewHeaderList();
@@ -762,7 +763,7 @@ const SalesComponent = (props) => {
                     _onSubmit_createViewHeader={_onSubmit_createViewHeader}
                     _onSubmit_modifyViewHeader={_onSubmit_modifyViewHeader}
                     _onAction_closeHeaderSettingModal={_onAction_closeHeaderSettingModal}
-                    _onAction_deleteSelectedViewHeader={_onAction_deleteSelectedViewHeader}
+                    _onSubmit_deleteSelectedViewHeader={_onSubmit_deleteSelectedViewHeader}
                     
                     _onAction_updateDefaultHeader={_onAction_updateDefaultHeader}
                 ></ViewHeaderSettingModalComponent>

@@ -24,7 +24,6 @@ const ControlWrapper = styled.div`
             font-size: 11px;
         }
     }
-
 `;
 
 const TableFieldWrapper = styled.div`
@@ -217,10 +216,22 @@ const ButtonWrapper = styled.div`
     }
 `;
 
+const ReleaseConfirmFieldWrapper = styled.div`
+    .checkbox-group {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 5px;
+        padding: 0 10px;
+        font-size: 12px;
+    }
+`;
+
 export {
     Container,
     OperatorFieldWrapper,
     ControlWrapper,
     ButtonWrapper,
-    TableFieldWrapper
+    TableFieldWrapper,
+    ReleaseConfirmFieldWrapper
 }
