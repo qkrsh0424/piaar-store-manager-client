@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
@@ -14,7 +14,23 @@ const CheckedOperatorComponent = (props) => {
     const [optionCodeModalOpen, setOptionCodeModalOpen] = useState(false);
     const [releaseConfirmModalOpen, setReleaseConfirmModalOpen] = useState(false);
     const [releaseOptionCodeModalOpen, setReleaseOptionCodeModalOpen] = useState(false);
-    const [releaseConfirmItem, dispatchReleaseConfirmItem] = useReducer(releaseConfirmItemReducer, initialReleaseConfirmItem);
+
+    const [releaseTableItem, setReleaseTableItem] = useState(null);
+    const [originReleaseTableItem, setOriginReleaseTableItem] = useState(null);
+    const [releasePackageTableItem, setReleasePackageTableItem] = useState(null);
+    const [checkedPackageItemList, setCheckedPackageItemList] = useState([]);
+
+    useEffect(() => {
+        if(!checkedPackageItemList) {
+            return;
+        }
+
+        if(!releasePackageTableItem) {
+            return;
+        }
+
+        onActionConvertPackageReleaseItemToReleaseTableItem();
+    }, [checkedPackageItemList])
 
     const onActionOpenSalesConfirmModal = () => {
         if (props.checkedOrderItemList?.length <= 0) {
@@ -116,30 +132,46 @@ const CheckedOperatorComponent = (props) => {
         onActionCloseOptionCodeModal();
     }
 
-    const onActionOpenReleaseConfirmModal = async () => {
+    const onActionOpenReleaseConfirmModal = () => {
         if (props.checkedOrderItemList?.length <= 0) {
             alert('데이터를 먼저 선택해 주세요.');
             return;
         }
         
-        onActionGetReleaseItem();
+        // 출고 상품을 패키지상품, 일반상품으로 분리한다
+        onActionCreateReleaseConfirmItem();
         setReleaseConfirmModalOpen(true);
     }
 
     const onActionCloseReleaseConfirmModal = () => {
+        setReleaseTableItem(null);
+        setReleasePackageTableItem(null);
+        setCheckedPackageItemList([]);
+
         setReleaseConfirmModalOpen(false);
     }
 
-    const onActionGetReleaseItem = () => {
-        let releaseItem = [...new Set(props.checkedOrderItemList?.map(r => {
+    const onActionCreateReleaseConfirmItem = () => {
+        let orderItem = props.checkedOrderItemList?.filter(r => r.optionPackageYn === 'n');
+        let packageOrderItem = props.checkedOrderItemList?.filter(r => r.optionPackageYn === 'y');
+
+        // 세트상품과 일반상품의 옵션들로 출고옵션코드별 총 출고전환 수량을 계산한다
+        let items = [...new Set(orderItem?.map(r => r[props.selectedMatchCode]))].map(r => {
             return {
-                code: r[props.selectedMatchCode],
+                code: r,
                 unit: 0
             }
-        }))];
+        });
+        let packageItems = [...new Set(packageOrderItem?.map(r => r[props.selectedMatchCode]))].map(r => {
+            return {
+                code: r,
+                unit: 0
+            }
+        });
 
-        props.checkedOrderItemList?.forEach(r => {
-            releaseItem = releaseItem.map(r2 => {
+        // 일반상품 출고확인 데이터
+        orderItem.forEach(r => {
+            items = items.map(r2 => {
                 if(r2.code === r[props.selectedMatchCode]) {
                     return {
                         ...r2,
@@ -149,16 +181,36 @@ const CheckedOperatorComponent = (props) => {
                         optionStockUnit: r.optionStockUnit,
                         optionPackageYn: r.optionPackageYn
                     }
-                }else {
+                } else {
                     return r2;
                 }
             })
         })
 
-        dispatchReleaseConfirmItem({
-            type: 'INIT_DATA',
-            payload: releaseItem
+        // 패키지상품 출고확인 데이터
+        packageOrderItem.forEach(r => {
+            packageItems = packageItems.map(r2 => {
+                if(r2.code === r[props.selectedMatchCode]) {
+                    return {
+                        ...r2,
+                        prodDefaultName: r.prodDefaultName,
+                        optionDefaultName: r.optionDefaultName,
+                        unit: parseInt(r2.unit) + parseInt(r.unit),
+                        optionStockUnit: r.optionStockUnit,
+                        optionPackageYn: r.optionPackageYn
+                    }
+                } else {
+                    return r2;
+                }
+            })
         })
+
+        setReleaseTableItem([...items]);
+        setOriginReleaseTableItem([...items]);
+        setReleasePackageTableItem([...packageItems])
+
+        // 패키지 옵션들로 구성옵션들의 출고데이터 추출
+        props._onSubmit_searchReleaseConfirmPackageItem([...packageItems]);
     }
 
     const onActionConfirmRelease = () => {
@@ -197,6 +249,82 @@ const CheckedOperatorComponent = (props) => {
         onActionCloseReleaseOptionCodeModal();
     }
 
+    const onActionCheckPackageOrderItem = (e, packageItem) => {
+        e.stopPropagation();
+
+        let data = [...checkedPackageItemList];
+        let selectedCode = packageItem.code;
+        if (checkedPackageItemList.some(r => r.code === selectedCode)) {
+            data = data.filter(r => r.code !== selectedCode);
+            
+        } else {
+            data.push(packageItem);
+        }
+
+        setCheckedPackageItemList(data);
+    }
+
+    const onActionConvertPackageReleaseItemToReleaseTableItem = () => {
+        let originItems = [...originReleaseTableItem];
+
+        let result = [...originItems];
+        if (checkedPackageItemList.length > 0) {
+            let checkedPackageItemCodes = checkedPackageItemList.map(r => r.code);
+            let convertPackageItem = props.packageOptionReleaseItem.filter(r => checkedPackageItemCodes.includes(r.parentOptionCode));
+
+            let packageAndOriginItems = [...convertPackageItem, ...originItems];
+            result = [...new Set(packageAndOriginItems.map(r => r.code))].map(r => {
+                return {
+                    code: r,
+                    unit: 0
+                }
+            });
+
+            packageAndOriginItems.forEach(r => {
+                result = result.map(r2 => {
+                    if (r2.code === r.code) {
+                        return {
+                            ...r2,
+                            prodDefaultName: r.prodDefaultName,
+                            optionDefaultName: r.optionDefaultName,
+                            unit: parseInt(r2.unit) + parseInt(r.unit),
+                            optionStockUnit: r.optionStockUnit,
+                            optionPackageYn: r.optionPackageYn
+                        }
+                    } else {
+                        return r2;
+                    }
+                })
+            })
+        }
+
+        setReleaseTableItem(result)
+    }
+
+    const isCheckedPackageItem = useCallback((code) => {
+        return checkedPackageItemList.some(r => r.code === code);
+    }, [checkedPackageItemList])
+
+    const onActionCheckPackageItemAll = () => {
+        if(isCheckedPackageItemAll()) {
+            setCheckedPackageItemList([]);
+        }else {
+            let data = [...releasePackageTableItem];
+            setCheckedPackageItemList(data);
+        }
+    }
+
+    const isCheckedPackageItemAll = () => {
+        let orderCodeList = [...releasePackageTableItem ?? []];
+        orderCodeList.sort();
+        
+        let checkedCodeList = [...checkedPackageItemList ?? []];
+        checkedCodeList.sort();
+
+        if(orderCodeList.length === 0) return false;
+        return JSON.stringify(orderCodeList) === JSON.stringify(checkedCodeList);
+    }
+
     return (
         <>
             <Container>
@@ -208,7 +336,6 @@ const CheckedOperatorComponent = (props) => {
                     onActionOpenReleaseOptionCodeModal={onActionOpenReleaseOptionCodeModal}
                 ></OperatorFieldView>
             </Container>
-
             {/* Modal */}
             <ConfirmModalComponent
                 open={salesConfirmModalOpen}
@@ -238,8 +365,13 @@ const CheckedOperatorComponent = (props) => {
                 message={
                     <ReleaseConfirmFieldView
                         selectedMatchCode={props.selectedMatchCode}
-                        releaseConfirmItem={releaseConfirmItem}
+                        releaseTableItem={releaseTableItem}
+                        releasePackageTableItem={releasePackageTableItem}
                         checkedOrderItemLength={props.checkedOrderItemList?.length}
+                        onActionCheckPackageOrderItem={onActionCheckPackageOrderItem}
+                        isCheckedPackageItem={isCheckedPackageItem}
+                        isCheckedPackageItemAll={isCheckedPackageItemAll}
+                        onActionCheckPackageItemAll={onActionCheckPackageItemAll}
                     />
                 }
                 onConfirm={onActionConfirmRelease}
@@ -278,15 +410,3 @@ const CheckedOperatorComponent = (props) => {
     );
 }
 export default CheckedOperatorComponent;
-
-const initialReleaseConfirmItem = null;
-
-const releaseConfirmItemReducer = (state, action) => {
-    switch(action.type) {
-        case 'INIT_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialReleaseConfirmItem;
-        default: return initialReleaseConfirmItem;
-    }
-}

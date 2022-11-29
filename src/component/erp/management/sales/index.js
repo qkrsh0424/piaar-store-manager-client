@@ -73,6 +73,8 @@ const SalesComponent = (props) => {
     const [releaseLocation, dispatchReleaseLocation] = useReducer(releaseLocationReducer, initialReleaseLocation);
     const [selectedMatchCode, dispatchSelectedMatchCode] = useReducer(selectedMatchCodeReducer, initialSelectedMatchCode);
     
+    const [packageOptionReleaseItem, setPackageOptionReleaseItem] = useState(null);
+
     const [headerSettingModalOpen, setHeaderSettingModalOpen] = useState(false);
 
     const [defaultHeader, setDefaultHeader] = useLocalStorageHook("defaultHeader", null);
@@ -375,6 +377,24 @@ const SalesComponent = (props) => {
                 alert(res?.data.memo);
             })
     }
+
+    const __reqSearchReleaseConfirmPackageItem = async (data) => {
+        await erpOrderItemDataConnect().searchReleasePackageItem(data)
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    setPackageOptionReleaseItem(res.data.data);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
     
     useEffect(() => {
         __reqSearchReleaseLocationOfProductOption();
@@ -647,6 +667,12 @@ const SalesComponent = (props) => {
         onActionCloseBackdrop();
     }
 
+    const _onSubmit_searchReleaseConfirmPackageItem = async (data) => {
+        onActionOpenBackdrop();
+        await __reqSearchReleaseConfirmPackageItem(data);
+        onActionCloseBackdrop();
+    }
+
     // localStorage 기본 헤더 수정
     const _onAction_updateDefaultHeader = (headerId) => {
         if(!headerId) {
@@ -728,6 +754,7 @@ const SalesComponent = (props) => {
                         productOptionList={productOptionList}
                         downloadExcelList={downloadExcelList}
                         selectedMatchCode={selectedMatchCode}
+                        packageOptionReleaseItem={packageOptionReleaseItem}
 
                         _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
                         _onSubmit_changeSalesYnForOrderItemList={_onSubmit_changeSalesYnForOrderItemList}
@@ -736,6 +763,7 @@ const SalesComponent = (props) => {
                         _onSubmit_changeReleaseOptionCodeForOrderItemListInBatch={_onSubmit_changeReleaseOptionCodeForOrderItemListInBatch}
                         _onSubmit_downloadOrderItemsExcel={_onSubmit_downloadOrderItemsExcel}
                         _onSubmit_changeReleaseYnForOrderItemList={_onSubmit_changeReleaseYnForOrderItemList}
+                        _onSubmit_searchReleaseConfirmPackageItem={_onSubmit_searchReleaseConfirmPackageItem}
                     ></CheckedOperatorComponent>
                     <CheckedOrderItemTableComponent
                         viewHeader={viewHeader}

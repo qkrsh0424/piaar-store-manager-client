@@ -104,6 +104,12 @@ const erpOrderItemDataConnect = () => {
                 responseType: 'blob',
                 withCredentials: true
             })
+        },
+        // 패키지옵션으로 구성된 item을 구성상품으로 변경해 리턴
+        searchReleasePackageItem: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v2/erp-order-items/option-package/release-confirm`, body, {
+                withCredentials: true
+            })
         }
     }
 }

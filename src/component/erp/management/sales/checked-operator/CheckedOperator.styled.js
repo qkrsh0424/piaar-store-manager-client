@@ -27,14 +27,25 @@ const ControlWrapper = styled.div`
 `;
 
 const TableFieldWrapper = styled.div`
-    padding-bottom: 30px;
+    padding: 10px;
 
     @media all and (max-width: 992px){
         padding: 0 10px;
     }
 
+    .table-info {
+        text-align: left;
+        padding: 0 10px;
+        font-size: 12px;
+        margin-top: 10px;
+    }
+
+    .table-label {
+        font-size: 16px;
+    }
+
     .table-box{
-        height: 200px;
+        height: 250px;
         overflow: auto;
         border: 1px solid #e0e0e0;
 
@@ -66,6 +77,11 @@ const TableFieldWrapper = styled.div`
             padding: 10px 5px;
         }
     }
+
+    table tbody .tr-active{
+        background: #2C73D230 !important;
+    }
+
 
     table tbody .tr-highlight{
         background: #ececec;
@@ -217,14 +233,6 @@ const ButtonWrapper = styled.div`
 `;
 
 const ReleaseConfirmFieldWrapper = styled.div`
-    .checkbox-group {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 5px;
-        padding: 0 10px;
-        font-size: 12px;
-    }
 `;
 
 export {
