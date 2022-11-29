@@ -8,6 +8,7 @@ import ReleaseOptionCodeModalComponent from "../release-option-code-modal/Releas
 import WaybillModalComponent from "../waybill-modal/WaybillModal.component";
 import { Container } from "./CheckedOperator.styled";
 import OperatorFieldView from "./OperatorField.view";
+import ReturnRegistrationFormFieldView from "./ReturnRegistrationForm.view";
 
 const CheckedOperatorComponent = (props) => {
     const [salesConfirmModalOpen, setSalesConfirmModalOpen] = useState(false);
@@ -19,6 +20,9 @@ const CheckedOperatorComponent = (props) => {
     const [reflectStockConfirmModalOpen, setReflectStockConfirmModalOpen] = useState(false);
     const [cancelStockConfirmModalOpen, setCancelStockConfirmModalOpen] = useState(false);
     const [releaseListModalOpen, setReleaseListModalOpen] = useState(false);
+    
+    const [returnRegistrationInfo, setReturnRegistrationInfo] = useState(null);
+    const [returnConfirmModalOpen, setReturnConfirmModalOpen] = useState(false);
 
     const [confirmModalInputValue, dispatchConfirmModalInputValue] = useReducer(confirmModalInputValueReducer, initialConfirmModalInputValue);
     
@@ -304,6 +308,77 @@ const CheckedOperatorComponent = (props) => {
         })
     }
 
+    const onActionOpenReturnConfirmModal = (e) => {
+        e.stopPropagation();
+
+        if(props.checkedOrderItemList?.length === 0) {
+            alert('데이터를 먼저 선택해 주세요.');
+            return;
+        }
+
+        if(props.checkedOrderItemList.some(r => r.returnYn === 'y')) {
+            alert('이미 반품등록된 데이터가 포함되었습니다. 다시 시도해주세요.');
+            return;
+        }
+
+        if(props.checkedOrderItemList.some(r => r.stockReflectYn === 'n')) {
+            alert('재고 미반영 데이터가 포함되었습니다. 다시 시도해주세요.');
+            return;
+        }
+
+        let returnInfo = props.checkedOrderItemList.map(r => {
+            return {
+                erpReturnItem: {
+                    courier: r.courier,
+                    transportType: r.transportType,
+                    receiveLocation: r.optionReleaseLocation,
+                    erpOrderItemId: r.id
+                }
+            }
+        });
+
+        setReturnRegistrationInfo(returnInfo);
+        setReturnConfirmModalOpen(true);
+    }
+
+    // const onActionUploadReturnProductImageFile = async (e) => {
+    //     e.preventDefault();
+
+    //     if(e.target.files.length === 0) return;
+
+    //     props.onActionOpenBackdrop();
+    //     let imageInfo = await __reqUploadBatchImageFile(e);
+    //     props.onActionCloseBackdrop();
+
+    //     // TODO :: 반품이미지 등록해야함
+    //     let erpOrderItem = orderItemList.filter(r => r.id === returnRegistrationInfo.erpOrderItemId);
+    //     let optionList = props.productOptionList?.map(r => r.option);
+    //     let optionId = optionList?.filter(r => r.code === erpOrderItem.releaseOptionCode)[0]?.id;
+        
+    //     let addData = imageInfo?.map(info => {
+    //         return {
+    //             id: uuidv4(),
+    //             imageUrl: info.imageUrl,
+    //             imageFileName: info.imageFileName,
+    //             productOptionId: optionId,
+    //             erpReturnItemId: returnRegistrationInfo.erpOrderItemId
+    //         }
+    //     });
+
+    //     let returnInfo = returnRegistrationInfo
+        
+    //     // dispatchReturnProductImageList({
+    //     //     type: 'INIT_DATA',
+    //     //     payload: addData
+    //     // });
+    // }
+
+    const onActionCloseReturnConfirmModal = () => {
+        setReturnConfirmModalOpen(false);
+
+        setReturnRegistrationInfo(null)
+    }
+
     return (
         <>
             <Container>
@@ -318,6 +393,7 @@ const CheckedOperatorComponent = (props) => {
                     onActionOpenCancelStockConfirmModal={onActionOpenCancelStockConfirmModal}
                     onActionOpenReleaseListModal={onActionOpenReleaseListModal}
                     onActionCloseReleaseListModal={onActionCloseReleaseListModal}
+                    onActionOpenReturnConfirmModal={onActionOpenReturnConfirmModal}
                 />
             </Container>
 
@@ -430,6 +506,137 @@ const CheckedOperatorComponent = (props) => {
                     onActionDownloadReleaseItemList={onActionDownloadReleaseItemList}
                 ></ReleaseListModalComponent>
             </CommonModalComponent>
+
+            {/* 반품 처리 서밋 모달 */}
+            <SubmitModalComponent
+                open={returnConfirmModalOpen}
+                title={'반품 접수'}
+                message={
+                    <>
+                        <ReturnRegistrationFormFieldView
+                            returnRegistrationInfo={returnRegistrationInfo}
+                        />
+                        {/* <div className='info-wrapper'>
+                            <div className='info-box'>
+                                <span className='input-title'>반품 택배사</span>
+                                <div className='input-value'>
+                                    <input
+                                        type='text'
+                                        name='courier'
+                                        value={returnRegistrationInfo?.courier || ''}
+                                        onChange={onChangeSelectReturnType}
+                                    />
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <span className='input-title'>반품 배송방식</span>
+                                <div className='input-value'>
+                                    <input
+                                        type='text'
+                                        name='transportType'
+                                        value={returnRegistrationInfo?.transportType || ''}
+                                        onChange={onChangeSelectReturnType}
+                                    />
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <span style={{ color: 'red' }}>* </span>
+                                    <span className='input-title'>반품배송비 입금방식</span>
+                                <div>
+                                    <select
+                                        className='select-item'
+                                        name='deliveryChargeReturnType'
+                                        value={returnRegistrationInfo?.deliveryChargeReturnType || ''}
+                                        onChange={onChangeSelectReturnType}
+                                    >
+                                        <option value=''>선택</option>
+                                        {DEFAULT_DELIVERY_CHARGE_RETURN_TYPE.map((r, idx) => {
+                                            return(
+                                                <option key={'type-idx' + idx} value={r.typeName}>{r.typeName}</option>
+                                            )
+                                        })}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <span className='input-title'>반품 입고지</span>
+                                <div className='input-value'>
+                                    <input
+                                        type='text'
+                                        name='receiveLocation'
+                                        value={returnRegistrationInfo?.receiveLocation || ''}
+                                        onChange={onChangeSelectReturnType}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className='info-wrapper'>
+                            <div className='info-box'>
+                                <div className='input-title'>
+                                    <span style={{ color: 'red' }}>* </span>
+                                    <span className='input-title'>반품 요청사유</span>
+                                </div>
+                                <div>
+                                    <select
+                                        className='select-item'
+                                        name='returnReasonType'
+                                        value={returnRegistrationInfo?.returnReasonType || ''}
+                                        onChange={onChangeSelectReturnType}
+                                    >
+                                        <option value=''>선택</option>
+                                        {props.returnTypeList?.map(r => {
+                                            return (
+                                                <option key={`return-type-idx` + r.cid} value={r.type}>{r.type}</option>
+                                            )
+                                        })}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <div className='input-title'>
+                                    <span className='input-title'>반품 상세사유</span>
+                                </div>
+                                <div>
+                                    <textarea
+                                        className='text-input'
+                                        name='returnReasonDetail'
+                                        onChange={onChangeSelectReturnType}
+                                        value={returnRegistrationInfo?.returnReasonDetail || ''}
+                                        placeholder={`반품요청 상세 사유를 입력해 주세요.\n(300자 이내)`}
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className='info-box'>
+                                <div className='input-title'>
+                                    <span className='input-title'>반품 상품 이미지</span>
+                                </div>
+                                <div className='upload-box'>
+                                    <div>
+                                        <button
+                                            type='button'
+                                            className='button-el'
+                                            onClick={onActionClickReturnProductImageButton}
+                                        >이미지 등록</button>
+                                        <input type="file" accept="image/*"
+                                            id={'rpi_uploader'}
+                                            onClick={(e) => e.target.value = ''}
+                                            onChange={onActionUploadReturnProductImageFile}
+                                            multiple
+                                        />
+                                    </div>
+                                    <span>({returnProductImageList?.length || 0} 개)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>선택된 데이터를 반품 처리 하시겠습니까? </div> */}
+                    </>
+                }
+
+                maxWidth={'md'}
+                // _onSubmit={onActionConfirmReturn}
+                onClose={onActionCloseReturnConfirmModal}
+            />
         </>
     );
 }

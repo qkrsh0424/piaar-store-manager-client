@@ -372,8 +372,8 @@ const OrderItemTableComponent = (props) => {
 
         // erp return item, 반품 상품 이미지 등록
         let data = {
-            erpReturnItemDto: returnRegistrationInfo,
-            imageDtos: returnProductImageList
+            erpReturnItem: returnRegistrationInfo,
+            returnImages: returnProductImageList
         }
 
         // 반품 데이터 생성

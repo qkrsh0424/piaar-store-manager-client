@@ -112,9 +112,14 @@ const ButtonWrapper = styled.div`
     }
 `;
 
+const ReturnRegistrationFormFieldWrapper = styled.div`
+
+`;
+
 export {
     Container,
     OperatorFieldWrapper,
     ControlWrapper,
-    ButtonWrapper
+    ButtonWrapper,
+    ReturnRegistrationFormFieldWrapper
 }

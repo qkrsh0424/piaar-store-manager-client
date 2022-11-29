@@ -93,6 +93,16 @@ export default function OperatorFieldView(props) {
                             <Ripple color={'#e0e0e0'} duration={1000}></Ripple>
                         </button>
                     </div>
+                    <div className='button-box'>
+                        <button
+                            type='button'
+                            className='button-el'
+                            onClick={(e) => props.onActionOpenReturnConfirmModal(e)}
+                        >
+                            반품 접수
+                            <Ripple color={'#e0e0e0'} duration={1000}></Ripple>
+                        </button>
+                    </div>
                 </ButtonWrapper>
             </ControlWrapper>
         </OperatorFieldWrapper>
