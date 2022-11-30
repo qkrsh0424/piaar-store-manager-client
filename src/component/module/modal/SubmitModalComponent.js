@@ -49,7 +49,7 @@ const MessageBox = styled.div`
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding-bottom: 40px;
+        padding-bottom: 20px;
     }
 
     .info-box {

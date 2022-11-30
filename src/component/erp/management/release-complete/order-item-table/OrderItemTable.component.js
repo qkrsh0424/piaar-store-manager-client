@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { dateToYYYYMMDDhhmmssWithInvalid } from "../../../../../utils/dateFormatUtils";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
-import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
 import FixOrderItemModalComponent from "../fix-order-item-modal/FixOrderItemModal.component";
 import { Container, TipFieldWrapper } from "./OrderItemTable.styled";
 import SelectorButtonFieldView from "./SelectorButtonField.view";
 import TableFieldView from "./TableField.view";
-import { v4 as uuidv4 } from 'uuid';
 import SelectorRadioFieldView from "./SelectorRadioField.view";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
 import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
@@ -313,7 +311,8 @@ const OrderItemTableComponent = (props) => {
             courier: data.courier,
             transportType: data.transportType,
             receiveLocation: data.optionReleaseLocation,
-            erpOrderItemId: data.id
+            erpOrderItemId: data.id,
+            deliveryChargeReturnYn: 'n'
         }
         
         dispatchReturnRegistrationInfo({
@@ -395,16 +394,13 @@ const OrderItemTableComponent = (props) => {
         props.onActionCloseBackdrop();
 
         let erpOrderItem = orderItemList.filter(r => r.id === returnRegistrationInfo.erpOrderItemId)[0];
-        let optionList = props.productOptionList?.map(r => r.option);
-        let optionId = optionList?.filter(r => r.code === erpOrderItem.releaseOptionCode)[0]?.id;
+        let optionId = props.productOptionList?.map(r => r.option)?.filter(r => r.code === erpOrderItem.releaseOptionCode)[0]?.id;
         
         let addData = imageInfo?.map(info => {
             return {
-                id: uuidv4(),
                 imageUrl: info.imageUrl,
                 imageFileName: info.imageFileName,
-                productOptionId: optionId,
-                erpReturnItemId: returnRegistrationInfo.erpOrderItemId
+                productOptionId: optionId
             }
         });
         
@@ -535,7 +531,7 @@ const OrderItemTableComponent = (props) => {
                             </div>
                             <div className='info-box'>
                                 <span style={{ color: 'red' }}>* </span>
-                                    <span className='input-title'>반품배송비 입금방식</span>
+                                <span className='input-title'>반품배송비 입금방식</span>
                                 <div>
                                     <select
                                         className='select-item'
@@ -563,8 +559,6 @@ const OrderItemTableComponent = (props) => {
                                     />
                                 </div>
                             </div>
-                        </div>
-                        <div className='info-wrapper'>
                             <div className='info-box'>
                                 <div className='input-title'>
                                     <span style={{ color: 'red' }}>* </span>

@@ -44,6 +44,7 @@ const ElementBox = styled.div`
     text-align: center;
     max-height: 70vh;
     overflow: auto;
+    overflow-x: hidden;
 
     .data-wrapper-group {
         display: flex;

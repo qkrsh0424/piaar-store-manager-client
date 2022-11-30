@@ -1,7 +1,11 @@
 import { useReducer, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
+import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
+import { useImageFileUploaderHook } from "../../../../../hooks/uploader/useImageFileUploaderHook";
 import CommonModalComponent from "../../../../module/modal/CommonModalComponent";
 import ConfirmModalComponent from "../../../../module/modal/ConfirmModalComponent";
 import SubmitModalComponent from "../../../../module/modal/SubmitModalComponent";
+import SubmitModalComponentV2 from "../../../../module/modal/SubmitModalComponentV2";
 import OptionCodeModalComponent from "../option-code-modal/OptionCodeModal.component";
 import ReleaseListModalComponent from "../release-list-modal/ReleaseListModal.component";
 import ReleaseOptionCodeModalComponent from "../release-option-code-modal/ReleaseOptionCodeModal.component";
@@ -26,6 +30,16 @@ const CheckedOperatorComponent = (props) => {
 
     const [confirmModalInputValue, dispatchConfirmModalInputValue] = useReducer(confirmModalInputValueReducer, initialConfirmModalInputValue);
     
+    const {
+        __reqUploadBatchImageFile
+    } = useImageFileUploaderHook();
+
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
+
     const onActionOpenSalesConfirmModal = () => {
         if (props.checkedOrderItemList?.length <= 0) {
             alert('데이터를 먼저 선택해 주세요.');
@@ -332,7 +346,8 @@ const CheckedOperatorComponent = (props) => {
                     courier: r.courier,
                     transportType: r.transportType,
                     receiveLocation: r.optionReleaseLocation,
-                    erpOrderItemId: r.id
+                    erpOrderItemId: r.id,
+                    deliveryChargeReturnYn: 'n'
                 }
             }
         });
@@ -341,42 +356,113 @@ const CheckedOperatorComponent = (props) => {
         setReturnConfirmModalOpen(true);
     }
 
-    // const onActionUploadReturnProductImageFile = async (e) => {
-    //     e.preventDefault();
+    const onActionUploadReturnProductImageFile = async (e, erpOrderItemId) => {
+        e.preventDefault();
 
-    //     if(e.target.files.length === 0) return;
+        if(e.target.files.length === 0) return;
 
-    //     props.onActionOpenBackdrop();
-    //     let imageInfo = await __reqUploadBatchImageFile(e);
-    //     props.onActionCloseBackdrop();
+        onActionOpenBackdrop();
+        let imageInfo = await __reqUploadBatchImageFile(e);
+        onActionCloseBackdrop();
 
-    //     // TODO :: 반품이미지 등록해야함
-    //     let erpOrderItem = orderItemList.filter(r => r.id === returnRegistrationInfo.erpOrderItemId);
-    //     let optionList = props.productOptionList?.map(r => r.option);
-    //     let optionId = optionList?.filter(r => r.code === erpOrderItem.releaseOptionCode)[0]?.id;
-        
-    //     let addData = imageInfo?.map(info => {
-    //         return {
-    //             id: uuidv4(),
-    //             imageUrl: info.imageUrl,
-    //             imageFileName: info.imageFileName,
-    //             productOptionId: optionId,
-    //             erpReturnItemId: returnRegistrationInfo.erpOrderItemId
-    //         }
-    //     });
+        let erpOrderItem = props.checkedOrderItemList?.filter(r => r.id === erpOrderItemId)[0];
+        let optionId = props.productOptionList?.map(r => r.option)?.filter(r => r.code === erpOrderItem.releaseOptionCode)[0]?.id;
 
-    //     let returnInfo = returnRegistrationInfo
-        
-    //     // dispatchReturnProductImageList({
-    //     //     type: 'INIT_DATA',
-    //     //     payload: addData
-    //     // });
-    // }
+        let totalImageInfo = imageInfo?.map(info => {
+            return {
+                imageUrl: info.imageUrl,
+                imageFileName: info.imageFileName,
+                productOptionId: optionId
+            }
+        })
+
+        let addData = returnRegistrationInfo.map(r => {
+            if(r.erpReturnItem.erpOrderItemId === erpOrderItemId) {
+                return {
+                    ...r,
+                    returnImages: totalImageInfo
+                }
+            }else {
+                return r;
+            }
+        })
+
+        setReturnRegistrationInfo([...addData]);
+    }
 
     const onActionCloseReturnConfirmModal = () => {
         setReturnConfirmModalOpen(false);
+    }
 
-        setReturnRegistrationInfo(null)
+    const onChangeReturnItemValue = (e, erpOrderItemId) => {
+        let targetName = e.target.name;
+        let targetValue = e.target.value;
+
+        let data = returnRegistrationInfo.map(r => {
+            if(r.erpReturnItem.erpOrderItemId === erpOrderItemId) {
+                return {
+                    ...r,
+                    erpReturnItem: {
+                        ...r.erpReturnItem,
+                        [targetName]: targetValue
+                    }
+                }
+            }else {
+                return r;
+            }
+        })
+
+        // 입금타입에 따라 입금여부를 세팅
+        if(targetName === 'deliveryChargeReturnType') {
+            let returnYn = (targetValue === '미청구') ? 'y' : 'n';
+
+            data = data.map(r => {
+                if(r.erpReturnItem.erpOrderItemId === erpOrderItemId) {
+                    return {
+                        ...r,
+                        erpReturnItem: {
+                            ...r.erpReturnItem,
+                            deliveryChargeReturnYn: returnYn
+                        }
+                    }
+                }else {
+                    return r;
+                }
+            });
+        }
+
+        setReturnRegistrationInfo([...data]);
+    }
+
+    const onActionConfirmReturn = (e) => {
+        e.preventDefault();
+
+        if(!returnRegistrationInfo) {
+            return;
+        }
+
+        for(let i = 0; i < returnRegistrationInfo.length; i++) {
+            let data = returnRegistrationInfo[i]?.erpReturnItem;
+
+            if(!data) {
+                alert('[' + (i+1) + ']번 항목의 데이터가 올바르지 않습니다.');
+                return;
+            }
+
+            if(!data.deliveryChargeReturnType) {
+                alert('[' + (i+1) + ']번 항목의 반품배송비 입금방식이 미입력되었습니다. 다시 시도해주세요.');
+                return;
+            }
+
+            if(!data.returnReasonType) {
+                alert('[' + (i+1) + ']번 항목의 반품요청 사유가 미입력되었습니다. 다시 시도해주세요.');
+                return;
+            }
+        }
+
+        // 반품 데이터 생성
+        props._onSubmit_createBatchReturnItem(returnRegistrationInfo)
+        onActionCloseReturnConfirmModal();
     }
 
     return (
@@ -508,134 +594,28 @@ const CheckedOperatorComponent = (props) => {
             </CommonModalComponent>
 
             {/* 반품 처리 서밋 모달 */}
-            <SubmitModalComponent
-                open={returnConfirmModalOpen}
-                title={'반품 접수'}
-                message={
-                    <>
-                        <ReturnRegistrationFormFieldView
-                            returnRegistrationInfo={returnRegistrationInfo}
-                        />
-                        {/* <div className='info-wrapper'>
-                            <div className='info-box'>
-                                <span className='input-title'>반품 택배사</span>
-                                <div className='input-value'>
-                                    <input
-                                        type='text'
-                                        name='courier'
-                                        value={returnRegistrationInfo?.courier || ''}
-                                        onChange={onChangeSelectReturnType}
-                                    />
-                                </div>
-                            </div>
-                            <div className='info-box'>
-                                <span className='input-title'>반품 배송방식</span>
-                                <div className='input-value'>
-                                    <input
-                                        type='text'
-                                        name='transportType'
-                                        value={returnRegistrationInfo?.transportType || ''}
-                                        onChange={onChangeSelectReturnType}
-                                    />
-                                </div>
-                            </div>
-                            <div className='info-box'>
-                                <span style={{ color: 'red' }}>* </span>
-                                    <span className='input-title'>반품배송비 입금방식</span>
-                                <div>
-                                    <select
-                                        className='select-item'
-                                        name='deliveryChargeReturnType'
-                                        value={returnRegistrationInfo?.deliveryChargeReturnType || ''}
-                                        onChange={onChangeSelectReturnType}
-                                    >
-                                        <option value=''>선택</option>
-                                        {DEFAULT_DELIVERY_CHARGE_RETURN_TYPE.map((r, idx) => {
-                                            return(
-                                                <option key={'type-idx' + idx} value={r.typeName}>{r.typeName}</option>
-                                            )
-                                        })}
-                                    </select>
-                                </div>
-                            </div>
-                            <div className='info-box'>
-                                <span className='input-title'>반품 입고지</span>
-                                <div className='input-value'>
-                                    <input
-                                        type='text'
-                                        name='receiveLocation'
-                                        value={returnRegistrationInfo?.receiveLocation || ''}
-                                        onChange={onChangeSelectReturnType}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className='info-wrapper'>
-                            <div className='info-box'>
-                                <div className='input-title'>
-                                    <span style={{ color: 'red' }}>* </span>
-                                    <span className='input-title'>반품 요청사유</span>
-                                </div>
-                                <div>
-                                    <select
-                                        className='select-item'
-                                        name='returnReasonType'
-                                        value={returnRegistrationInfo?.returnReasonType || ''}
-                                        onChange={onChangeSelectReturnType}
-                                    >
-                                        <option value=''>선택</option>
-                                        {props.returnTypeList?.map(r => {
-                                            return (
-                                                <option key={`return-type-idx` + r.cid} value={r.type}>{r.type}</option>
-                                            )
-                                        })}
-                                    </select>
-                                </div>
-                            </div>
-                            <div className='info-box'>
-                                <div className='input-title'>
-                                    <span className='input-title'>반품 상세사유</span>
-                                </div>
-                                <div>
-                                    <textarea
-                                        className='text-input'
-                                        name='returnReasonDetail'
-                                        onChange={onChangeSelectReturnType}
-                                        value={returnRegistrationInfo?.returnReasonDetail || ''}
-                                        placeholder={`반품요청 상세 사유를 입력해 주세요.\n(300자 이내)`}
-                                    />
-                                </div>
-                            </div>
-                            
-                            <div className='info-box'>
-                                <div className='input-title'>
-                                    <span className='input-title'>반품 상품 이미지</span>
-                                </div>
-                                <div className='upload-box'>
-                                    <div>
-                                        <button
-                                            type='button'
-                                            className='button-el'
-                                            onClick={onActionClickReturnProductImageButton}
-                                        >이미지 등록</button>
-                                        <input type="file" accept="image/*"
-                                            id={'rpi_uploader'}
-                                            onClick={(e) => e.target.value = ''}
-                                            onChange={onActionUploadReturnProductImageFile}
-                                            multiple
-                                        />
-                                    </div>
-                                    <span>({returnProductImageList?.length || 0} 개)</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div>선택된 데이터를 반품 처리 하시겠습니까? </div> */}
-                    </>
+            <SubmitModalComponentV2
+                 open={returnConfirmModalOpen}
+                 title={'반품 접수'}
+                 element={
+                    <ReturnRegistrationFormFieldView
+                        viewHeader={props.viewHeader}
+                        returnRegistrationInfo={returnRegistrationInfo}
+                        checkedOrderItemList={props.checkedOrderItemList}
+                        returnTypeList={props.returnTypeList}
+                        onActionUploadReturnProductImageFile={onActionUploadReturnProductImageFile}
+                        onChangeReturnItemValue={onChangeReturnItemValue}
+                    />
                 }
+                maxWidth={'lg'}
 
-                maxWidth={'md'}
-                // _onSubmit={onActionConfirmReturn}
+                _onSubmit={onActionConfirmReturn}
                 onClose={onActionCloseReturnConfirmModal}
+            />
+
+            {/* Backdrop */}
+            <BackdropHookComponent
+                open={backdropOpen}
             />
         </>
     );

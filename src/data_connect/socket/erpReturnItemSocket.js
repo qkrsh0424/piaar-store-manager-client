@@ -9,6 +9,11 @@ const erpReturnItemSocket = () => {
                 withCredentials: true
             })
         },
+        createBatch: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items/batch/return-product-image`, body, {
+                withCredentials: true
+            })
+        },
         updateOne: async function (body) {
             return await axios.put(`${API_SERVER_ADDRESS}/ws/v1/erp-return-items`, body, {
                 withCredentials: true

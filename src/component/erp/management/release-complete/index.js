@@ -585,8 +585,40 @@ const ReleaseCompleteComponent = (props) => {
             });
     }
 
+    const _onSubmit_changeBatchReturnYnForOrderItem = async (body) => {
+        await erpOrderItemSocket().changeBatchReturnYn(body)
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            });
+    }
     const __reqCreateReturnItemList = async (body, changeReturnYn) => {
         await erpReturnItemSocket().createOne(body)
+            .then(res => {
+                if (res.status === 200) {
+                    alert('처리되었습니다.');
+                    changeReturnYn();     // erp order item의 returnYn항목 수정
+                    return;
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
+    const __reqCreateBatchReturnItemList = async (body, changeReturnYn) => {
+        await erpReturnItemSocket().createBatch(body)
             .then(res => {
                 if (res.status === 200) {
                     alert('처리되었습니다.');
@@ -946,13 +978,30 @@ const ReleaseCompleteComponent = (props) => {
         onActionOpenBackdrop();
         // 반품 데이터 생성 후, erp order item의 returnYn을 수정
         await __reqCreateReturnItemList(body, async () => {
-            let data = orderItemPage?.content?.filter(r => r.id === body.erpReturnItemDto.erpOrderItemId)[0];
+            let data = orderItemPage?.content?.filter(r => r.id === body.erpReturnItem.erpOrderItemId)[0];
             data = {
                 ...data,
                 returnYn: 'y'
             }
 
             await _onSubmit_changeReturnYnForOrderItem(data);
+        });
+        onActionCloseBackdrop();
+    }
+
+    const _onSubmit_createBatchReturnItem = async (body) => {
+        onActionOpenBackdrop();
+        await __reqCreateBatchReturnItemList(body, async () => {
+            let erpOrderItemIds = body.map(r => r.erpReturnItem.erpOrderItemId);
+            let data = orderItemPage?.content?.filter(r => erpOrderItemIds.includes(r.id));
+            data = data.map(r => {
+                return {
+                    ...r,
+                    returnYn: 'y'
+                }
+            });
+            
+            await _onSubmit_changeBatchReturnYnForOrderItem(data);
         });
         onActionCloseBackdrop();
     }
@@ -1006,6 +1055,7 @@ const ReleaseCompleteComponent = (props) => {
                     checkedOrderItemList={checkedOrderItemList}
                     productOptionList={productOptionList}
                     selectedMatchCode={selectedMatchCode}
+                    returnTypeList={returnTypeList}
 
                     _onAction_releaseCheckedOrderItemListAll={_onAction_releaseCheckedOrderItemListAll}
                     _onSubmit_changeSalesYnForOrderItemList={_onSubmit_changeSalesYnForOrderItemList}
@@ -1018,6 +1068,7 @@ const ReleaseCompleteComponent = (props) => {
                     _onAction_reflectStock={_onAction_reflectStock}
                     _onAction_cancelStock={_onAction_cancelStock}
                     _onAction_downloadReleaseItemList={_onAction_downloadReleaseItemList}
+                    _onSubmit_createBatchReturnItem={_onSubmit_createBatchReturnItem}
                 ></CheckedOperatorComponent>
                 <CheckedOrderItemTableComponent
                     viewHeader={viewHeader}

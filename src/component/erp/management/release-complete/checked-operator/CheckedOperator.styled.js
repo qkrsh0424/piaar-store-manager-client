@@ -113,7 +113,166 @@ const ButtonWrapper = styled.div`
 `;
 
 const ReturnRegistrationFormFieldWrapper = styled.div`
+    padding-bottom: 20px;
+    overflow: auto;
+    margin: 0 25px;
 
+    .info-text {
+        font-size: 16px;
+        display: flex;
+        flex-direction: flex-start;
+        padding: 0 10px 10px 10px;
+    }
+
+    .data-wrapper {
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .modal-content-box{
+        display: flex;
+        place-items: center;
+        gap: 20px;
+    }
+
+    .info-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 0;
+    }
+
+    .info-box {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-title {
+        text-align: left;
+        width: 140px;
+    }
+
+    .text-input {
+        margin: 0 10px;
+        width: 250px;
+        height: 100px;
+        padding: 5px;
+        border: 1px solid #e1e1e1;
+        border-radius: 3px;
+        font-size: 14px;
+        box-sizing: border-box;
+        resize: both;
+    }
+
+    .input-value input {
+        width: 250px;
+        height: 40px;
+        padding: 5px;
+        border: 1px solid #e1e1e1;
+        border-radius: 3px;
+        font-size: 14px;
+    }
+
+    .select-item{
+        margin: 0 10px;
+        width: 250px;
+        height: 45px;
+        padding: 5px;
+        border: 1px solid #e1e1e1;
+        border-radius: 0;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+
+        &:focus{
+            outline: none;
+        }
+
+        @media all and (max-width:992px) {
+            width: 100%;
+            margin: 10px 0 0 0;
+        }
+    }
+
+    .upload-box {
+        width: 250px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        input {
+            display: none;
+        }
+    }
+
+    .button-el {
+        border: 1px solid var(--piaar-main-color);
+        background-color: var(--piaar-main-color);
+        color: white;
+        padding: 5px 10px;
+        font-weight: 600;
+        width: 100%;
+    }
+`;
+
+const TableFieldWrapper = styled.div`
+    overflow: auto;
+    border-bottom: 1px solid var(--defaultBorderColor);
+
+    .table-box{
+        overflow: auto;
+
+        @media only screen and (max-width:768px){
+            font-size: 10px;
+        }
+    }
+
+    table{
+        position:relative;
+        text-align: center;
+        width: fit-content;
+        table-layout: fixed;
+        border: none;
+    }
+
+    table thead tr th{
+        vertical-align: middle !important;
+        text-align: center;
+        background: #f7f7f7;
+        /* border-bottom: 1px solid #c0c0c0; */
+        color: #000;
+        font-weight: 700;
+        padding: 10px;
+        font-size: 12px;
+
+        @media all and (max-width: 992px){
+            font-size: 10px;
+            padding: 10px 5px;
+        }
+    }
+
+    table tbody tr td{
+        padding: 7px 5px;
+        vertical-align: middle !important;
+        text-align: center;
+        font-size: 11px;
+        color: #444;
+        font-weight: 500;
+        line-height: 1.5;
+        word-break: keep-all;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        height: 43px;
+
+        @media all and (max-width: 992px){
+            font-size: 10px;
+        }
+    }
 `;
 
 export {
@@ -121,5 +280,6 @@ export {
     OperatorFieldWrapper,
     ControlWrapper,
     ButtonWrapper,
-    ReturnRegistrationFormFieldWrapper
+    ReturnRegistrationFormFieldWrapper,
+    TableFieldWrapper
 }
