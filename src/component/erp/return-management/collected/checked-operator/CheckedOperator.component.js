@@ -140,8 +140,8 @@ const CheckedOperatorComponent = (props) => {
                 title={'데이터 삭제 확인 메세지'}
                 message={
                     <>
-                        <div>[ {props.checkedReturnItemList?.length || 0} ] 건의 데이터를 <span style={{ color: '#FF605C' }}>영구 삭제</span> 합니다.</div>
-                        <div>삭제된 데이터는 복구되지 않습니다.</div>
+                        <div>[ {props.checkedReturnItemList?.length || 0} ] 건의 데이터를 <span style={{ color: '#FF605C' }}>반품 삭제</span> 합니다.</div>
+                        <div>삭제된 데이터는 반품처리가 취소됩니다.</div>
                         <div>계속 진행 하시겠습니까?</div>
                     </>
                 }
