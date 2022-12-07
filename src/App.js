@@ -132,7 +132,7 @@ function App(props) {
 
                                             <Route path='/stock-analysis' element={<StockAnalysisPage />} />
 
-                                            <Route path='/sales-performance' element={<SalesPerformancePage />} />
+                                            <Route path='/sales-performance/dashboard' element={<SalesPerformancePage />} />
 
                                             <Route path='/stock-cycle' element={<StockCyclePage />} />
 
