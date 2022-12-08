@@ -5,8 +5,8 @@ import { getStartDate, setStartDateOfPeriod } from '../../../utils/dateFormatUti
 import _ from 'lodash';
 import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
-import useSalesPerformanceItemHook from '../hooks/useSalesPerformanceHook';
 import DashboardComponent from './Dashboard.component';
+import useSalesPerformanceItemHook from './hooks/useSalesPerformanceHook';
 
 const Container = styled.div`
     height: 100%;
@@ -32,7 +32,7 @@ function PageTitleFieldView({ title }) {
 let TODAY = new Date("2022-11-17");
 let YESTERDAY = setStartDateOfPeriod(TODAY, 0, 0, -1);
 
-const SalesPerformanceComponentV2 = (props) => {
+const SalesPerformanceDashboardComponent = (props) => {
     
     const {
         location,
@@ -79,7 +79,7 @@ const SalesPerformanceComponentV2 = (props) => {
 
     return (
         <Container navbarOpen={props.navbarOpen}>
-            <PageTitleFieldView title={'판매성과 대시보드'} />
+            <PageTitleFieldView title={'대시보드'} />
 
             <DashboardComponent
                 dashboardData={dashboardData}
@@ -93,4 +93,4 @@ const SalesPerformanceComponentV2 = (props) => {
     )
 }
 
-export default SalesPerformanceComponentV2;
+export default SalesPerformanceDashboardComponent;

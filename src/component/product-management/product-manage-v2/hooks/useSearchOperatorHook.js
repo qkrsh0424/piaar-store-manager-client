@@ -12,7 +12,7 @@ export default function useSearchOperatorHook (props) {
     const {
         query,
         navigateParams,
-        navigateClearParams
+        navigateClearParams,
     } = useRouterHook();
 
     const onChangeCategorySearchQuery = (e) => {

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import DrawerNavbarMain from '../../component/nav/DrawerNavbarMain';
+import DrawerNavbarMain from '../../../component/nav/DrawerNavbarMain';
+import SalesPerformanceDashboardComponent from '../../../component/sales-performance-v2/dashboard';
 // import SalesPerformanceComponent from '../../component/sales_performance';
-import SalesPerformanceComponentV2 from '../../component/sales_performance-v2/dashboard';
-import ManagementNavbar from '../../component/sales_performance-v2/navbar/ManagementNavbar';
+import ManagementNavbar from '../../../component/sales-performance-v2/navbar/ManagementNavbar';
 
 const Container = styled.div`
     position: relative;
@@ -12,7 +12,7 @@ const Container = styled.div`
     background-color: var(--piaar-background-color);
 `;
 
-const SalesPerformancePage = () => {
+const SalesPerformanceDashboardPage = () => {
     const [navbarOpen, setNavbarOpen] = useState(true);
 
     const onActionOpenNavbar = () => {
@@ -33,7 +33,7 @@ const SalesPerformancePage = () => {
                     onActionOpenNavbar={onActionOpenNavbar}
                     onActionCloseNavbar={onActionCloseNavbar}
                 />
-                <SalesPerformanceComponentV2
+                <SalesPerformanceDashboardComponent
                     navbarOpen={navbarOpen}
                 />
             </Container>
@@ -41,4 +41,4 @@ const SalesPerformancePage = () => {
     )
 }
 
-export default SalesPerformancePage;
+export default SalesPerformanceDashboardPage;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { salesPerformanceDataConnect } from "../../../data_connect/salesPerformanceDataConnect";
+import { salesPerformanceDataConnect } from "../../../../data_connect/salesPerformanceDataConnect";
 
 export default function useSalesPerformanceItemHook(props) {
     const [dashboard, setDashboard] = useState(null);

@@ -46,7 +46,7 @@ const DashboardFieldWrapper = styled.div`
     }
 
     .data-title {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         color: #444;
         margin-bottom: 11px;
         text-overflow: ellipsis;
@@ -71,10 +71,12 @@ const DashboardFieldWrapper = styled.div`
     }
 
     .data-content {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         font-weight: 700;
     }
+`;
 
+const TrendInfoFieldWrapper = styled.div`
     .trend-info-box {
         display: flex;
         flex-direction: column;
@@ -95,5 +97,6 @@ const DashboardFieldWrapper = styled.div`
 
 export {
     Container,
-    DashboardFieldWrapper
+    DashboardFieldWrapper,
+    TrendInfoFieldWrapper
 }

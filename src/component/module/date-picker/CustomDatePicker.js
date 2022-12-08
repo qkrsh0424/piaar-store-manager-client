@@ -30,7 +30,7 @@ const ButtonBox = styled.div`
         padding: 5px 0;
         background: white;
         border: 1px solid #e1e1e1;
-        /* border-radius: 5px; */
+        border-radius: 5px;
         cursor: pointer;
     }
 

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import useRouterHook from "../../../hooks/router/useRouterHook";
+import { dateToYYYYMMDD, getStartDateOfMonth } from "../../../utils/dateFormatUtils";
 
 const Container = styled.div`
     .group-box {
@@ -89,9 +90,12 @@ const NavbarBox = styled.div`
     }
 `;
 
+const TODAY = dateToYYYYMMDD(new Date());
+const START_DAY_OF_MONTH = dateToYYYYMMDD(getStartDateOfMonth(TODAY));
+
 const thisRouters = [
     {
-        title: '판매성과',
+        title: '판매성과 요약',
         page: [
             {
                 name: '대시보드',
@@ -103,8 +107,9 @@ const thisRouters = [
         title: '판매성과 상세',
         page: [
             {
-                name: '총 매출액 & 판매건',
-                pathname: ''
+                name: '총 매출액 & 판매 건',
+                pathname: '/sales-performance/total',
+                params: `?startDate=${START_DAY_OF_MONTH}&endDate=${TODAY}`
             },
             {
                 name: '요일별 매출액',
@@ -177,7 +182,7 @@ const ManagementNavbar = (props) => {
                                     return (
                                         <div key={navPage.name} className='link-box'>
                                             <Link
-                                                to={navPage.pathname}
+                                                to={navPage.pathname + (navPage.params || '')}
                                                 replace={true}
                                             >
                                                 <button

@@ -33,7 +33,7 @@ import ErpManagementReleaseCompletePage from './pages/erp/management/release-com
 import ErpManagementExcelFormPage from './pages/erp/management/excel/ErpManagementExcelFormPage';
 import StockAnalysisPage from './pages/stock_analysis/SalesAnalysisPage';
 import ErpManagementDashboardPage from './pages/erp/management/dashboard/ErpManagementDashboardPage';
-import SalesPerformancePage from './pages/sales_performance/SalesPerformancePage';
+import SalesPerformanceDashboardPage from './pages/sales-performance/dashboard/SalesPerformanceDashboardPage';
 import StockCyclePage from './pages/stock_cycle/StockCyclePage';
 import ErpReturnManagementRegistrationPage from './pages/erp/return-management/registration/ErpReturnManagementRegistrationPage';
 import ErpReturnManagementCollectingPage from './pages/erp/return-management/collecting/ErpReturnManagementCollectingPage';
@@ -46,6 +46,7 @@ import ProductManagePage from './pages/product-management/product-manage/Product
 import ProductModifyPage from './pages/product-management/product-modify/ProductModifyPage';
 import ProductOptionsModifyPage from './pages/product-management/product-options-modify/OptionsModifyPage';
 import ProductCategoryModifyPage from './pages/product-management/product-category-modify/ProductCategoryModifyPage';
+import TotalSalesPerformancePage from './pages/sales-performance/total-performance/TotalSalesPerformancePage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -132,7 +133,9 @@ function App(props) {
 
                                             <Route path='/stock-analysis' element={<StockAnalysisPage />} />
 
-                                            <Route path='/sales-performance/dashboard' element={<SalesPerformancePage />} />
+                                            {/* SalesPerformance */}
+                                            <Route path='/sales-performance/dashboard' element={<SalesPerformanceDashboardPage />} />
+                                            <Route path='/sales-performance/total' element={<TotalSalesPerformancePage />} />
 
                                             <Route path='/stock-cycle' element={<StockCyclePage />} />
 
