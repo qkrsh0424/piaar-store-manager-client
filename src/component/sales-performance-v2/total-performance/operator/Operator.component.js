@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { dateToYYYYMMDD, getEndDateOfMonth, getStartDateOfMonth, setStartDateOfPeriod } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getEndDateOfMonth, getStartDateOfMonth, isSearchablePeriod, setStartDateOfPeriod } from "../../../../utils/dateFormatUtils";
 import { Container } from "./Operator.styled";
 import ButtonFieldView from "./view/ButtonField.view";
 import DateButtonFieldView from "./view/DateButtonField.view";
 import DateSelectorFieldView from "./view/DateSelectorField.view";
+
+// 날짜검색 최대기간 90일
+const SEARCHABLE_PERIOD = 90;
 
 export default function OperatorComponent(props) {
     const [startDate, setStartDate] = useState(null);
@@ -84,6 +87,10 @@ export default function OperatorComponent(props) {
     
                     if ((endDate - startDate < 0)) {
                         throw new Error('조회기간을 정확히 선택해 주세요.')
+                    }
+
+                    if (!isSearchablePeriod(startDate, endDate, SEARCHABLE_PERIOD)) {
+                        throw new Error('조회기간은 최대 90일까지 가능합니다.')
                     }
 
                     if (startDate && endDate) {

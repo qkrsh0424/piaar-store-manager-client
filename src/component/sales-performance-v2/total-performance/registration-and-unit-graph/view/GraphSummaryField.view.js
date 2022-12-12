@@ -1,10 +1,10 @@
 import { toPriceUnitFormat } from "../../../../../utils/numberFormatUtils";
-import { GraphSummaryFieldWrapper } from "../PayAmountGraph.styled";
+import { GraphSummaryFieldWrapper } from "../RegistrationAndUnitGraph.styled";
 
 export default function GraphSummaryFieldView (props) {
     return (
         <GraphSummaryFieldWrapper>
-            <div className='title'>[기간별 총 매출액]</div>
+            <div className='title'>[기간별 총 판매건 & 수량]</div>
             <ul>
                 {props.summaryData?.map((r, idx) => {
                     return (

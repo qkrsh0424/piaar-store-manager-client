@@ -92,6 +92,7 @@ const NavbarBox = styled.div`
 
 const TODAY = dateToYYYYMMDD(new Date());
 const START_DAY_OF_MONTH = dateToYYYYMMDD(getStartDateOfMonth(TODAY));
+const DEFAULT_DIMENSION = 'date';
 
 const thisRouters = [
     {
@@ -109,7 +110,7 @@ const thisRouters = [
             {
                 name: '총 매출액 & 판매 건',
                 pathname: '/sales-performance/total',
-                params: `?startDate=${START_DAY_OF_MONTH}&endDate=${TODAY}`
+                params: `?startDate=${START_DAY_OF_MONTH}&endDate=${TODAY}&dimension=${DEFAULT_DIMENSION}`
             },
             {
                 name: '요일별 매출액',

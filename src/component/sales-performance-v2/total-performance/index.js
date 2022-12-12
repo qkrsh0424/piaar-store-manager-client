@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import _ from 'lodash';
 import OperatorComponent from './operator/Operator.component';
 import PayAmountGraphComponent from './pay-amount-graph/PayAmountGraph.component';
+import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/RegistrationAndUnitGraph.component';
 
 const Container = styled.div`
     height: 100%;
@@ -30,13 +31,10 @@ const TotalSalesPerformanceComponent = (props) => {
         <Container navbarOpen={props.navbarOpen}>
             <PageTitleFieldView title={'총 매출액 & 판매건'} />
 
-            <OperatorComponent
-                
-            />
+            <OperatorComponent />
 
-            <PayAmountGraphComponent
-
-            />
+            <PayAmountGraphComponent />
+            <RegistrationAndUnitGraphComponent />
         </Container>
     )
 }

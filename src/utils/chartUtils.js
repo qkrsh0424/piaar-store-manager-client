@@ -8,7 +8,9 @@ function createGraphData(graph) {
             fill: r.fill || false,
             borderColor: r.borderColor || '#eee',
             backgroundColor: r.backgroundColor || '#eee',
-            order: r.order || 0
+            order: r.order || 0,
+            borderWidth: r.borderWidth ?? 1,
+            borderDash: r.borderDash || [0, 0]
         }
     });
 
@@ -24,9 +26,9 @@ function createGraphOption(option) {
         indexAxis: option.indexAxis,
         maintainAspectRatio: option.maintainAspectRatio,
         interaction: option.interaction,
-        maxBarThickness: option.maxBarThickness || 30,
-        lineTension: option.lineTension || 0.3,
-        borderWidth: option.borderWidth || 1,
+        maxBarThickness: option.maxBarThickness || 23,
+        lineTension: option.lineTension ?? 0.3,
+        // borderWidth: option.borderWidth || 1,
         plugins: {
             legend: {
                 position: option.plugins?.legend?.position || 'top',

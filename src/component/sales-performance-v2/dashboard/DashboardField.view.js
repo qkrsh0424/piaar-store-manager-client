@@ -7,7 +7,7 @@ function TrendInfoField ({ dayInfo, trendValue}) {
             <div className='trend-info-box'>
                 <span>{dayInfo}</span>
                 <div style={{ width: '80px' }}>
-                    {trendValue > 0 ?
+                    {trendValue >= 0 ?
                         <div className="trend-info" style={{ color: '#7a7bda' }}>
                             <img
                                 src='/assets/icon/trending_up_fill_7A7BDA.svg'

@@ -11,7 +11,7 @@ function toPriceUnitFormat(price) {
     let priceSize = price?.toString().length;
 
     if(priceSize > 8) {
-        return parseFloat((price / (10 ** 8)).toFixed(1)) + ' 억';
+        return parseFloat((price / (10 ** 8)).toFixed(1)) + ' 억원';
     }else if(priceSize > 7) {
         return parseFloat((price / (10 ** 7)).toFixed(1)) + ' 천만원';
     }else if(priceSize > 6) {
@@ -25,6 +25,15 @@ function toPriceUnitFormat(price) {
 
 // com2에 대한 comp1의 상승 백분율
 function getPercentage(comp1, comp2) {
+    // 유지
+    if(comp1 === comp2) {
+        return 0;
+    }
+
+    // comp2가 0이면 100% 감소
+    if(comp2 === 0) {
+        return -100;
+    }
     return parseFloat(((comp1 - comp2) / comp2) * 100).toFixed(1);
 }
 

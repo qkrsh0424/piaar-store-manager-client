@@ -1,4 +1,4 @@
-import { dateToYYYYMM, dateToYYYYMMDD, getDayName, getWeekNumber } from "./dateFormatUtils";
+import { dateToYYMMDD, dateToYYYYMM, dateToYYYYMMDD, getDayName, getWeekNumber } from "./dateFormatUtils";
 
 class GraphDataset {
     constructor() {
@@ -46,7 +46,7 @@ function getAnalysisDateFormatToViewFormat(dateRange, date) {
     return viewDateFormat;
 }
 
-// 결과 test를 설정. label: 항목명, value: 항목 해당 값, color: 그래프에서 나타내는 색상
+// 결과 text를 설정. label: 항목명, value: 항목 해당 값, color: 그래프에서 나타내는 색상
 function setAnalysisResultText(datasets) {
     // 데이터가 존재하지 않는 경우
     return datasets?.map(r => {
@@ -61,9 +61,14 @@ function setAnalysisResultText(datasets) {
     })
 }
 
+function dateToYYMMDDAndDayName(date) {
+    return dateToYYMMDD(date) + ' (' + getDayName(date) + ')';
+}
+
 export{
     GraphDataset,
     getDateToAnalysisRangeDateFormat,
     getAnalysisDateFormatToViewFormat,
-    setAnalysisResultText
+    setAnalysisResultText,
+    dateToYYMMDDAndDayName
 }

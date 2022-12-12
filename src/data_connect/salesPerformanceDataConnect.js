@@ -15,6 +15,12 @@ const salesPerformanceDataConnect = () => {
                 params,
                 withCredentials: true
             })
+        },
+        searchTotalRegistrationAndUnit: async function (params) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/total/registration-and-unit`, {
+                params,
+                withCredentials: true
+            })
         }
     }
 }

@@ -1,4 +1,4 @@
-import { Container } from "./PayAmountGraph.styled";
+import { Container } from "./RegistrationAndUnitGraph.styled";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import { getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
-import useTotalPayAmountHook from "./hooks/useTotalPayAmountHook";
+import useTotalPayAmountHook from "./hooks/useTotalRegistrationAndUnitHook";
 import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
 // 그래프 색상
@@ -15,10 +15,10 @@ import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../
 // const DEFAULT_GRAPH_BG_2COLOR = ['#B9B4EB', '#908CB8'];
 const DEFAULT_GRAPH_BG_2COLOR = ['#ADA8C3', '#C0C5DC', '#596dd3'];
 
-export default function PayAmountGraphComponent() {
+export default function RegistrationAndUnitGraphComponent() {
     const [searchDimension, setSearchDimension] = useState('date');
-    const [totalPayAmountGraphData, setTotalPayAmountGraphData] = useState(null);
-    const [totalPayAmountGraphOption, setTotalPayAmountGraphOption] = useState(null);
+    const [totalGraphData, setTotalGraphData] = useState(null);
+    const [totalGraphOption, setTotalGraphOption] = useState(null);
     const [summaryData, setSummaryData] = useState(null);
 
     const {
@@ -34,8 +34,8 @@ export default function PayAmountGraphComponent() {
     } = useBackdropHook();
 
     const {
-        totalPayAmount: totalPayAmount,
-        reqSearchTotalPayAmount
+        totalRegistrationAndUnit: totalRegistrationAndUnit,
+        reqSearchTotalRegistrationAndUnit
     } = useTotalPayAmountHook()
 
     useEffect(() => {
@@ -50,7 +50,7 @@ export default function PayAmountGraphComponent() {
                 endDate,
                 dimension
             }
-            await reqSearchTotalPayAmount(params);
+            await reqSearchTotalRegistrationAndUnit(params);
             onActionCloseBackdrop();
         }
 
@@ -62,30 +62,30 @@ export default function PayAmountGraphComponent() {
     }, [location])
 
     useEffect(() => {
-        if(!(totalPayAmount && totalPayAmount.length > 0)) {
+        if(!(totalRegistrationAndUnit && totalRegistrationAndUnit.length > 0)) {
             __handle.action.resetGraphData();
             return;
         }
 
-        __handle.action.createGraphData();
-        __handle.action.createGraphOption();
-    }, [totalPayAmount])
+        // __handle.action.createGraphData();
+        // __handle.action.createGraphOption();
+    }, [totalRegistrationAndUnit])
 
     const __handle = {
         action: {
             resetGraphData: () => {
-                setTotalPayAmountGraphData(null);
-                setTotalPayAmountGraphOption(null);
+                setTotalGraphData(null);
+                setTotalGraphOption(null);
                 setSummaryData(null);
             },
             createGraphData: () => {
                 let salesPayAmountData = [];
                 let orderPayAmountData = [];
                 let graphLabels = [];
-                for(let i = 0; i < totalPayAmount.length; i++) {
-                    salesPayAmountData.push(totalPayAmount[i].salesPayAmount);
-                    orderPayAmountData.push(totalPayAmount[i].orderPayAmount);
-                    graphLabels.push(dateToYYMMDDAndDayName(totalPayAmount[i].datetime));
+                for(let i = 0; i < totalRegistrationAndUnit.length; i++) {
+                    salesPayAmountData.push(totalRegistrationAndUnit[i].salesPayAmount);
+                    orderPayAmountData.push(totalRegistrationAndUnit[i].orderPayAmount);
+                    graphLabels.push(dateToYYMMDDAndDayName(totalRegistrationAndUnit[i].datetime));
                 }
                 
                 let barGraphOfSales = {
@@ -139,7 +139,7 @@ export default function PayAmountGraphComponent() {
                     labels: graphLabels,
                     datasets: [...createdGraphDatasets, ...avgGraphDataset]
                 }
-                setTotalPayAmountGraphData(createdGraph);
+                setTotalGraphData(createdGraph);
 
                 // 총 매출 그래프 요약 데이터 생성
                 let data = setAnalysisResultText(createdGraphDatasets);
@@ -155,7 +155,7 @@ export default function PayAmountGraphComponent() {
                     }
                 }
 
-                setTotalPayAmountGraphOption(option);
+                setTotalGraphOption(option);
             }
         },
         submit: {
@@ -179,8 +179,8 @@ export default function PayAmountGraphComponent() {
                 />
                 <div className='content-box'>
                     <GraphBodyFieldView
-                        totalPayAmountGraphData={totalPayAmountGraphData}
-                        totalPayAmountGraphOption={totalPayAmountGraphOption}
+                        totalGraphData={totalGraphData}
+                        totalGraphOption={totalGraphOption}
                     />
                     <GraphSummaryFieldView
                         summaryData={summaryData}
