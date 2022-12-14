@@ -1,10 +1,10 @@
 import { toPriceUnitFormat } from "../../../../../utils/numberFormatUtils";
-import { GraphSummaryFieldWrapper } from "../RegistrationAndUnitGraph.styled";
+import { GraphSummaryFieldWrapper } from "../PayAmountDayOfWeekGraph.styled";
 
 export default function GraphSummaryFieldView (props) {
     return (
         <GraphSummaryFieldWrapper>
-            <div className='title'>[기간별 총 판매건 & 수량]</div>
+            <div className='title'>[기간별 총 매출액]</div>
             <ul>
                 {props.summaryData?.map((r, idx) => {
                     return (
@@ -13,7 +13,7 @@ export default function GraphSummaryFieldView (props) {
                                 <i className='icon-dot' style={{ backgroundColor: `${r.color}` }}></i>
                                 <span> {r.label} </span>
                             </div>
-                            <div style={{ fontWeight: 700 }}>{(r.value || 0).toLocaleString()} 개</div>
+                            <div style={{ fontWeight: 700 }}>{toPriceUnitFormat(r.value)}</div>
                         </li>
                     )
                 })}

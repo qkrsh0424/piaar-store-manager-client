@@ -11,9 +11,9 @@ export default function GraphSummaryFieldView (props) {
                         <li key={'graph-summary' + idx} className='data-box'>
                             <div className='value-info'>
                                 <i className='icon-dot' style={{ backgroundColor: `${r.color}` }}></i>
-                                <span>{idx + 1}. {r.label} </span>
+                                <span> {r.label} </span>
                             </div>
-                            <div style={{ fontWeight: 700 }}>{toPriceUnitFormat(r.value)} </div>
+                            <div style={{ fontWeight: 700 }}>{toPriceUnitFormat(r.value)}</div>
                         </li>
                     )
                 })}

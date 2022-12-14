@@ -9,18 +9,21 @@ import { getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 import useTotalPayAmountHook from "./hooks/useTotalPayAmountHook";
 import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
-// 그래프 색상
-// const DEFULAT_GRAPH_BG_9COLOR = ['#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
-// 그래프 기본 2가지 색상
-// const DEFAULT_GRAPH_BG_2COLOR = ['#B9B4EB', '#908CB8'];
+// 그래프 기본 3가지 색상 : [주문, 판매, 평균]
 const DEFAULT_GRAPH_BG_2COLOR = ['#ADA8C3', '#C0C5DC', '#596dd3'];
 
 export default function PayAmountGraphComponent() {
     const [searchDimension, setSearchDimension] = useState('date');
+    
+    const [salesPayAmountGraphData, setSalesPayAmountGraphData] = useState(null);
     const [totalPayAmountGraphData, setTotalPayAmountGraphData] = useState(null);
+    
+    const [salesSummaryData, setSalesSummaryData] = useState(null);
+    const [totalSummaryData, setTotalSummaryData] = useState(null);
+    
     const [totalPayAmountGraphOption, setTotalPayAmountGraphOption] = useState(null);
-    const [summaryData, setSummaryData] = useState(null);
-
+    const [checkedSwitch, setCheckedSwitch] = useState(false);
+    
     const {
         location,
         query,
@@ -75,8 +78,12 @@ export default function PayAmountGraphComponent() {
         action: {
             resetGraphData: () => {
                 setTotalPayAmountGraphData(null);
+                setTotalSummaryData(null);
+
+                setSalesPayAmountGraphData(null);
+                setSalesSummaryData(null);
+                
                 setTotalPayAmountGraphOption(null);
-                setSummaryData(null);
             },
             createGraphData: () => {
                 let salesPayAmountData = [];
@@ -108,7 +115,8 @@ export default function PayAmountGraphComponent() {
                     fill: false,
                     borderColor: DEFAULT_GRAPH_BG_2COLOR[0] + '88',
                     backgroundColor: DEFAULT_GRAPH_BG_2COLOR[0] + '88',
-                    order: -1
+                    order: -1,
+                    pointRadius: 2
                 }
 
                 // 판매매출액 7일간 평균 데이터 생성
@@ -130,20 +138,25 @@ export default function PayAmountGraphComponent() {
                     order: -2,
                     borderDash: [3, 3]
                 }
-
-                let createdGraphDatasets = [barGraphOfSales, lineGraphOfOrder];
-                let avgGraphDataset = [lineGraphOfSalesAvg];
                 
-                // 총 매출 그래프 데이터 생성
-                let createdGraph = {
+                // 매출 그래프 데이터 생성
+                let createdSalesGraph = {
                     labels: graphLabels,
-                    datasets: [...createdGraphDatasets, ...avgGraphDataset]
+                    datasets: [barGraphOfSales, lineGraphOfSalesAvg]
                 }
-                setTotalPayAmountGraphData(createdGraph);
+                let createdTotalGraph = {
+                    labels: graphLabels,
+                    datasets: [barGraphOfSales, lineGraphOfOrder, lineGraphOfSalesAvg]
+                }
+                setSalesPayAmountGraphData(createdSalesGraph);
+                setTotalPayAmountGraphData(createdTotalGraph);
 
-                // 총 매출 그래프 요약 데이터 생성
-                let data = setAnalysisResultText(createdGraphDatasets);
-                setSummaryData(data);
+                // 매출 그래프 요약 데이터 생성
+                let salesData = setAnalysisResultText([barGraphOfSales]);
+                let data = setAnalysisResultText([barGraphOfSales, lineGraphOfOrder]);
+                
+                setSalesSummaryData(salesData);
+                setTotalSummaryData(data);
             },
             createGraphOption: () => {
                 let option = {
@@ -156,6 +169,10 @@ export default function PayAmountGraphComponent() {
                 }
 
                 setTotalPayAmountGraphOption(option);
+            },
+            changeSwitch: () => {
+                let checkedValue = checkedSwitch;
+                setCheckedSwitch(!checkedValue);
             }
         },
         submit: {
@@ -174,16 +191,18 @@ export default function PayAmountGraphComponent() {
             <Container>
                 <GraphBoardFieldView
                     searchDimension={searchDimension}
+                    checkedSwitch={checkedSwitch}
 
                     onActionChangeSearchDimension={__handle.submit.changeSearchDimension}
+                    onActionChangeSwitch={__handle.action.changeSwitch}
                 />
                 <div className='content-box'>
                     <GraphBodyFieldView
-                        totalPayAmountGraphData={totalPayAmountGraphData}
+                        totalPayAmountGraphData={checkedSwitch ? totalPayAmountGraphData : salesPayAmountGraphData}
                         totalPayAmountGraphOption={totalPayAmountGraphOption}
                     />
                     <GraphSummaryFieldView
-                        summaryData={summaryData}
+                        summaryData={checkedSwitch ? totalSummaryData : salesSummaryData}
                     />
                 </div>
             </Container>

@@ -47,6 +47,7 @@ import ProductModifyPage from './pages/product-management/product-modify/Product
 import ProductOptionsModifyPage from './pages/product-management/product-options-modify/OptionsModifyPage';
 import ProductCategoryModifyPage from './pages/product-management/product-category-modify/ProductCategoryModifyPage';
 import TotalSalesPerformancePage from './pages/sales-performance/total-performance/TotalSalesPerformancePage';
+import SalesPerformancePageEx from './pages/sales-performance/ex/SalesPerformanceDashboardPage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -132,6 +133,10 @@ function App(props) {
                                             <Route path='/sales-analysis' element={<SalesAnalysisPage />} />
 
                                             <Route path='/stock-analysis' element={<StockAnalysisPage />} />
+
+                                            {/* SalesPerformance Ex */}
+                                            <Route path='/sales-performance' element={<SalesPerformancePageEx />} />
+
 
                                             {/* SalesPerformance */}
                                             <Route path='/sales-performance/dashboard' element={<SalesPerformanceDashboardPage />} />

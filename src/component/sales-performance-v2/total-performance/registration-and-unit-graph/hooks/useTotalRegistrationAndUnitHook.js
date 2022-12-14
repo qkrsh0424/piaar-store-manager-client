@@ -5,10 +5,9 @@ export default function useTotalRegistrationAndUnitHook(props) {
     const [totalRegistrationAndUnit, setTotalRegistrationAndUnit] = useState(null);
 
     const reqSearchTotalRegistrationAndUnit = async (params) => {
-        await salesPerformanceDataConnect().searchTotalRegistrationAndUnit(params)
+        await salesPerformanceDataConnect().searchRegistrationAndUnit(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
-                    console.log(res.data.data);
                     setTotalRegistrationAndUnit(res.data.data);
                 }
             })

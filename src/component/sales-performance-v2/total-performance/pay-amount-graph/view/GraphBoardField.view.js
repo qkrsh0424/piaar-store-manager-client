@@ -1,3 +1,4 @@
+import { FormControlLabel, Switch } from "@mui/material";
 import { GraphBoardFieldWrapper } from "../PayAmountGraph.styled";
 
 export default function GraphBoardFieldView(props) {
@@ -11,33 +12,38 @@ export default function GraphBoardFieldView(props) {
                     <span>일별 조회 시 7일간 평균 차트를 확인할 수 있습니다. </span>
                 </div>
             </div>
-            <div className='dimension-button-box'>
+            <div className='right-el-box'>
                 <div>
-                    <button
-                        className={`button-el ${props.searchDimension === 'date' ? 'checked' : ''}`}
-                        onClick={(e) => props.onActionChangeSearchDimension(e)}
-                        value='date'
-                    >
-                        일
-                    </button>
+                    <FormControlLabel labelPlacement="start" control={<Switch checked={props.checkedSwitch} onChange={() => props.onActionChangeSwitch()}/>} label="주문데이터 표시" />
                 </div>
-                <div>
-                    <button
-                        className={`button-el ${props.searchDimension === 'week' ? 'checked' : ''}`}
-                        onClick={(e) => props.onActionChangeSearchDimension(e)}
-                        value='week'
-                    >
-                        주
-                    </button>
-                </div>
-                <div>
-                    <button
-                        className={`button-el ${props.searchDimension === 'month' ? 'checked' : ''}`}
-                        onClick={(e) => props.onActionChangeSearchDimension(e)}
-                        value='month'
-                    >
-                        월
-                    </button>
+                <div className='dimension-button-box'>
+                    <div>
+                        <button
+                            className={`button-el ${props.searchDimension === 'date' ? 'checked' : ''}`}
+                            onClick={(e) => props.onActionChangeSearchDimension(e)}
+                            value='date'
+                        >
+                            일
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            className={`button-el ${props.searchDimension === 'week' ? 'checked' : ''}`}
+                            onClick={(e) => props.onActionChangeSearchDimension(e)}
+                            value='week'
+                        >
+                            주
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            className={`button-el ${props.searchDimension === 'month' ? 'checked' : ''}`}
+                            onClick={(e) => props.onActionChangeSearchDimension(e)}
+                            value='month'
+                        >
+                            월
+                        </button>
+                    </div>
                 </div>
             </div>
         </GraphBoardFieldWrapper>

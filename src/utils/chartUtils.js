@@ -10,7 +10,8 @@ function createGraphData(graph) {
             backgroundColor: r.backgroundColor || '#eee',
             order: r.order || 0,
             borderWidth: r.borderWidth ?? 1,
-            borderDash: r.borderDash || [0, 0]
+            borderDash: r.borderDash || [0, 0],
+            pointRadius: r.pointRadius ?? 3
         }
     });
 

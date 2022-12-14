@@ -7,7 +7,8 @@ import DashboardFieldView from "./DashboardField.view"
 
 // 이게 서버랑 다르니까 .. 아직 모르것네
 // TODO :: 서버랑 다르니 확인해봐야함
-const TODAY = new Date("2022-11-16");
+// const TODAY = new Date("2022-11-16");
+const TODAY = new Date();
 const YESTERDAY = setStartDateOfPeriod(TODAY, 0, 0, -1);
 const PREV_7DAYS = setStartDateOfPeriod(TODAY, 0, 0, -7);
 const PREV_8DAYS = setStartDateOfPeriod(TODAY, 0, 0, -8);

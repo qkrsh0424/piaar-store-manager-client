@@ -42,7 +42,7 @@ const OrderItemTableComponent = (props) => {
             });
             return;
         }
-
+        
         if (tableScrollRef && tableScrollRef.current) {
             tableScrollRef.current.scrollTop = 0;
         }

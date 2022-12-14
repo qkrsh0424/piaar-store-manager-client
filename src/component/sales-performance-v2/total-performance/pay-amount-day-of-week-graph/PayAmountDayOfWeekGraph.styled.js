@@ -58,7 +58,18 @@ const GraphBoardFieldWrapper = styled.div`
 const GraphBodyFieldWrapper = styled.div`
     min-width: 1000px;
     min-height: 400px;
-    width: 80%;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+
+    .half-type-graph {
+        width: 45%;
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+            flex-direction: column;
+        }
+    }
 
     .graph-wrapper {
         height: 400px;

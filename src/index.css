@@ -70,6 +70,14 @@ input:focus {
     font-weight: 700;
 }
 
+/* material ui - switch button color setting */
+.css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked+.MuiSwitch-track {
+    background-color: var(--piaar-main-color) !important;
+}
+.css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked {
+    color: var(--piaar-main-color) !important;
+}
+
 @media only screen and (max-width:992px){
     .MySideDrawer .MuiPaper-root{
         width:70%;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 const Container = styled.div`
     background-color: white;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 
     .content-box {
         width: 100%;
@@ -29,6 +29,12 @@ const GraphBoardFieldWrapper = styled.div`
 
     .graph-info-text {
         font-size: 14px;
+    }
+
+    .right-el-box {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
     }
 
     .dimension-button-box {
@@ -100,7 +106,8 @@ const GraphSummaryFieldWrapper = styled.div`
     .data-box {
         display: flex;
         align-items: center;
-        justify-content: space-around;
+        justify-content: space-between;
+        padding: 0 20px;
     }
 `;
 

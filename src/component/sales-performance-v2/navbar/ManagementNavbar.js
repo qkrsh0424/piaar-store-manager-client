@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import useRouterHook from "../../../hooks/router/useRouterHook";
-import { dateToYYYYMMDD, getStartDateOfMonth } from "../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getStartDateOfMonth, setStartDateOfPeriod } from "../../../utils/dateFormatUtils";
 
 const Container = styled.div`
     .group-box {
@@ -91,7 +91,8 @@ const NavbarBox = styled.div`
 `;
 
 const TODAY = dateToYYYYMMDD(new Date());
-const START_DAY_OF_MONTH = dateToYYYYMMDD(getStartDateOfMonth(TODAY));
+const PREV_2WEEKS_DATE = dateToYYYYMMDD(setStartDateOfPeriod(TODAY, 0, 0, -13));
+// const START_DAY_OF_MONTH = dateToYYYYMMDD(getStartDateOfMonth(TODAY));
 const DEFAULT_DIMENSION = 'date';
 
 const thisRouters = [
@@ -110,31 +111,25 @@ const thisRouters = [
             {
                 name: '총 매출액 & 판매 건',
                 pathname: '/sales-performance/total',
-                params: `?startDate=${START_DAY_OF_MONTH}&endDate=${TODAY}&dimension=${DEFAULT_DIMENSION}`
+                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}&dimension=${DEFAULT_DIMENSION}`
             },
             {
-                name: '요일별 매출액',
-                pathname: ''
-            }
+                name: '판매스토어별',
+                pathname: '/sales-performance/sales-channel',
+                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}&dimension=${DEFAULT_DIMENSION}`
+            },
+            {
+                name: '카테고리별',
+                pathname: '/sales-performance/product-category',
+                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}&dimension=${DEFAULT_DIMENSION}`
+            },
+            {
+                name: '상품별',
+                pathname: '/sales-performance/product',
+                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}&dimension=${DEFAULT_DIMENSION}`
+            },
         ]
     },
-    // {
-    //     title: '입출고 관리',
-    //     page: [
-    //         {
-    //             name: '입고 등록',
-    //             pathname: '/products/receive'
-    //         },
-    //         {
-    //             name: '출고 등록',
-    //             pathname: '/products/release'
-    //         },
-    //         {
-    //             name: '입출고 현황',
-    //             pathname: '/products/stock-status'
-    //         }
-    //     ]
-    // }
 ]
 
 const ManagementNavbar = (props) => {

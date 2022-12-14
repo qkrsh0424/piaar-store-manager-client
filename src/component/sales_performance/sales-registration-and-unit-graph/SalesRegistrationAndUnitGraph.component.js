@@ -193,7 +193,7 @@ const SalesRegistrationAndUnitGraphComponent = (props) => {
             label: '주문건',
             data: orderData,
             borderColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0] + '88',
-            backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0 + '88']
+            backgroundColor: PIAAR_DEFAUTL_GRAPH_BG_COLOR[0] + '88'
         }
         orderDatasets.push(orderBarGraphDataset);
 

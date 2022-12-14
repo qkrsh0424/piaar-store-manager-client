@@ -9,17 +9,20 @@ import { getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 import useTotalPayAmountHook from "./hooks/useTotalRegistrationAndUnitHook";
 import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
-// 그래프 색상
-// const DEFULAT_GRAPH_BG_9COLOR = ['#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
-// 그래프 기본 2가지 색상
-// const DEFAULT_GRAPH_BG_2COLOR = ['#B9B4EB', '#908CB8'];
-const DEFAULT_GRAPH_BG_2COLOR = ['#ADA8C3', '#C0C5DC', '#596dd3'];
+// 그래프 기본 2가지 색상 : [판매, 주문]
+const DEFAULT_GRAPH_BG_2COLOR = ['#4975A9', '#80A9E1'];
 
 export default function RegistrationAndUnitGraphComponent() {
     const [searchDimension, setSearchDimension] = useState('date');
+    
+    const [salesGraphData, setSalesGraphData] = useState(null);
     const [totalGraphData, setTotalGraphData] = useState(null);
+    
+    const [salesSummaryData, setSalesSummaryData] = useState(null);
+    const [totalSummaryData, setTotalSummaryData] = useState(null);
+    
     const [totalGraphOption, setTotalGraphOption] = useState(null);
-    const [summaryData, setSummaryData] = useState(null);
+    const [checkedSwitch, setCheckedSwitch] = useState(false);
 
     const {
         location,
@@ -67,83 +70,104 @@ export default function RegistrationAndUnitGraphComponent() {
             return;
         }
 
-        // __handle.action.createGraphData();
-        // __handle.action.createGraphOption();
+        __handle.action.createGraphData();
+        __handle.action.createGraphOption();
     }, [totalRegistrationAndUnit])
 
     const __handle = {
         action: {
             resetGraphData: () => {
                 setTotalGraphData(null);
+                setTotalSummaryData(null);
+
+                setSalesGraphData(null);
+                setSalesSummaryData(null);
+                
                 setTotalGraphOption(null);
-                setSummaryData(null);
             },
             createGraphData: () => {
-                let salesPayAmountData = [];
-                let orderPayAmountData = [];
+                let salesRegistrationData = [];
+                let salesUnitData = [];
+                let orderRegistrationData = [];
+                let orderUnitData = [];
                 let graphLabels = [];
                 for(let i = 0; i < totalRegistrationAndUnit.length; i++) {
-                    salesPayAmountData.push(totalRegistrationAndUnit[i].salesPayAmount);
-                    orderPayAmountData.push(totalRegistrationAndUnit[i].orderPayAmount);
                     graphLabels.push(dateToYYMMDDAndDayName(totalRegistrationAndUnit[i].datetime));
+                    
+                    salesRegistrationData.push(totalRegistrationAndUnit[i].salesRegistration);
+                    salesUnitData.push(totalRegistrationAndUnit[i].salesUnit);
+                    orderRegistrationData.push(totalRegistrationAndUnit[i].orderRegistration);
+                    orderUnitData.push(totalRegistrationAndUnit[i].orderUnit);
                 }
                 
-                let barGraphOfSales = {
+                let barGraphOfSalesReg = {
                     ...new GraphDataset().toJSON(),
                     type: 'bar',
-                    label: '판매 매출액',
-                    data: salesPayAmountData,
-                    fill: false,
+                    label: '판매건',
+                    data: salesRegistrationData,
+                    fill: true,
                     borderColor: DEFAULT_GRAPH_BG_2COLOR[1],
                     backgroundColor: DEFAULT_GRAPH_BG_2COLOR[1],
                     borderWidth: 0,
                     order: 0
                 }
 
-                let lineGraphOfOrder = {
+                let barGraphOfSalesUnit = {
+                    ...new GraphDataset().toJSON(),
+                    type: 'bar',
+                    label: '판매수량',
+                    data: salesUnitData,
+                    fill: true,
+                    borderColor: DEFAULT_GRAPH_BG_2COLOR[0],
+                    backgroundColor: DEFAULT_GRAPH_BG_2COLOR[0],
+                    borderWidth: 0,
+                    order: 0
+                }
+
+                let lineGraphOfOrderReg = {
                     ...new GraphDataset().toJSON(),
                     type: 'line',
-                    label: '주문 매출액',
-                    data: orderPayAmountData,
+                    label: '주문건',
+                    data: orderRegistrationData,
+                    fill: false,
+                    borderColor: DEFAULT_GRAPH_BG_2COLOR[1] + '88',
+                    backgroundColor: DEFAULT_GRAPH_BG_2COLOR[1] + '88',
+                    order: -1,
+                    pointRadius: 2
+                }
+
+                let lineGraphOfOrderUnit = {
+                    ...new GraphDataset().toJSON(),
+                    type: 'line',
+                    label: '주문수량',
+                    data: orderUnitData,
                     fill: false,
                     borderColor: DEFAULT_GRAPH_BG_2COLOR[0] + '88',
                     backgroundColor: DEFAULT_GRAPH_BG_2COLOR[0] + '88',
-                    order: -1
+                    order: -1,
+                    pointRadius: 2
                 }
 
-                // 판매매출액 7일간 평균 데이터 생성
-                let salesPayAmountAvgData = [null, null, null, null, null, null];
-                for (let i = 7; i <= salesPayAmountData.length; i++) {
-                    let avg = parseInt(salesPayAmountData.slice(i - 7, i).reduce((a, b) => a + b) / 7);
-                    salesPayAmountAvgData.push(avg);
-                }
-
-                // 판매매출액 7일간 평균 그래프 데이터 생성
-                let lineGraphOfSalesAvg = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'line',
-                    label: '판매 매출액 7일간 평균',
-                    data: salesPayAmountAvgData,
-                    fill: false,
-                    borderColor: DEFAULT_GRAPH_BG_2COLOR[2],
-                    backgroundColor: DEFAULT_GRAPH_BG_2COLOR[2],
-                    order: -2,
-                    borderDash: [3, 3]
-                }
-
-                let createdGraphDatasets = [barGraphOfSales, lineGraphOfOrder];
-                let avgGraphDataset = [lineGraphOfSalesAvg];
+                let createdSalesGraphDatasets = [barGraphOfSalesReg, barGraphOfSalesUnit];
+                let createdOrderGraphDatasets = [lineGraphOfOrderReg, lineGraphOfOrderUnit];
                 
-                // 총 매출 그래프 데이터 생성
+                // 매출 그래프 데이터 생성
+                let createSalesGraph = {
+                    labels: graphLabels,
+                    datasets: createdSalesGraphDatasets
+                }
                 let createdGraph = {
                     labels: graphLabels,
-                    datasets: [...createdGraphDatasets, ...avgGraphDataset]
+                    datasets: [...createdSalesGraphDatasets, ...createdOrderGraphDatasets]
                 }
+                setSalesGraphData(createSalesGraph)
                 setTotalGraphData(createdGraph);
 
-                // 총 매출 그래프 요약 데이터 생성
-                let data = setAnalysisResultText(createdGraphDatasets);
-                setSummaryData(data);
+                // 매출 그래프 요약 데이터 생성
+                let salesData = setAnalysisResultText(createdSalesGraphDatasets)
+                let data = setAnalysisResultText([...createdSalesGraphDatasets, ...createdOrderGraphDatasets]);
+                setSalesSummaryData(salesData)
+                setTotalSummaryData(data);
             },
             createGraphOption: () => {
                 let option = {
@@ -156,6 +180,10 @@ export default function RegistrationAndUnitGraphComponent() {
                 }
 
                 setTotalGraphOption(option);
+            },
+            changeSwitch: () => {
+                let checkedValue = checkedSwitch;
+                setCheckedSwitch(!checkedValue);
             }
         },
         submit: {
@@ -174,16 +202,18 @@ export default function RegistrationAndUnitGraphComponent() {
             <Container>
                 <GraphBoardFieldView
                     searchDimension={searchDimension}
+                    checkedSwitch={checkedSwitch}
 
                     onActionChangeSearchDimension={__handle.submit.changeSearchDimension}
+                    onActionChangeSwitch={__handle.action.changeSwitch}
                 />
                 <div className='content-box'>
                     <GraphBodyFieldView
-                        totalGraphData={totalGraphData}
+                        totalGraphData={checkedSwitch ? totalGraphData : salesGraphData}
                         totalGraphOption={totalGraphOption}
                     />
                     <GraphSummaryFieldView
-                        summaryData={summaryData}
+                        summaryData={checkedSwitch? totalSummaryData : salesSummaryData}
                     />
                 </div>
             </Container>

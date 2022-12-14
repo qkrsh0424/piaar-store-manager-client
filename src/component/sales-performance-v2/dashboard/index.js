@@ -29,7 +29,8 @@ function PageTitleFieldView({ title }) {
     )
 }
 
-let TODAY = new Date("2022-11-17");
+// let TODAY = new Date("2022-11-17");
+let TODAY = new Date();
 let YESTERDAY = setStartDateOfPeriod(TODAY, 0, 0, -1);
 
 const SalesPerformanceDashboardComponent = (props) => {
