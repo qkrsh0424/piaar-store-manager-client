@@ -110,9 +110,9 @@ export default function SummaryTableComponent() {
 
                 totalSumData = {
                     ...totalSumData,
-                    unsalesRegistration: totalSumData.orderRegistration + totalSumData.salesRegistration,
-                    unsalesUnit: totalSumData.orderUnit + totalSumData.salesUnit,
-                    unsalesPayAmount: totalSumData.salesPayAmount + totalSumData.salesPayAmount
+                    unsalesRegistration: totalSumData.orderRegistration - totalSumData.salesRegistration,
+                    unsalesUnit: totalSumData.orderUnit - totalSumData.salesUnit,
+                    unsalesPayAmount: totalSumData.orderPayAmount - totalSumData.salesPayAmount
                 }
 
                 setTotalSummarySumData(totalSumData);

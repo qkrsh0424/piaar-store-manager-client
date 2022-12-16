@@ -9,11 +9,9 @@ import useTotalPayAmountHook from "./hooks/usePayAmountDayOfWeekHook";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
 
 const WEEKLY_AVG_GRAPH_BG_COLOR = '#FFAFCC';
-const WEEKLY_GRAPH_BG_COLOR = ['#D2759F', '#FFCA67', '#FF9D83', '#FC868F', '#D678CD', '#95C477', '#389091', '#D5CABD', '#00C894', '#B9B4EB', '#FF7FAB'];
+const WEEKLY_GRAPH_BG_COLOR = ['#FFBCA2', '#FFCC89', '#FFB2BA', '#F58293', '#D2759F', '#FFCA67', '#A974BC'];
 
 export default function PayAmountDayOfWeekGraphComponent() {
-    const [searchDimension, setSearchDimension] = useState('date');
-    
     const [salesGraphData, setSalesGraphData] = useState(null);
     const [salesWeeklyGraphData, setSalesWeeklyGraphData] = useState(null);
     
@@ -41,12 +39,10 @@ export default function PayAmountDayOfWeekGraphComponent() {
             onActionOpenBackdrop();
             let startDate = query.startDate ? getStartDate(query.startDate) : null;
             let endDate = query.endDate ? getEndDate(query.endDate) : null;
-            let dimension = searchDimension || 'date';
 
             let params = {
                 startDate,
-                endDate,
-                dimension
+                endDate
             }
             await reqSearchPayAmountDayOfWeek(params);
             onActionCloseBackdrop();
@@ -169,6 +165,12 @@ export default function PayAmountDayOfWeekGraphComponent() {
                     })
                 })
 
+                let graphColor = WEEKLY_GRAPH_BG_COLOR;
+                for (let i = WEEKLY_GRAPH_BG_COLOR.length; i < payAmountWeeklyData.length; i++) {
+                    let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
+                    graphColor.push(randomColor);
+                }
+
                 let weeklyDatasets = []
                 payAmountWeeklyData.forEach((r, idx) => {
                     let datasets = new GraphDataset().toJSON();
@@ -178,8 +180,8 @@ export default function PayAmountDayOfWeekGraphComponent() {
                         label: r.key + '주차',
                         data: r.value,
                         fill: true,
-                        borderColor: WEEKLY_GRAPH_BG_COLOR[idx] + 'BB',
-                        backgroundColor: WEEKLY_GRAPH_BG_COLOR[idx] + 'BB'
+                        borderColor: graphColor[idx] + 'BB',
+                        backgroundColor: graphColor[idx] + 'BB'
                     }
                     weeklyDatasets.push(datasets);
                 })
@@ -202,15 +204,6 @@ export default function PayAmountDayOfWeekGraphComponent() {
                 }
 
                 setTotalGraphOption(option);
-            }
-        },
-        submit: {
-            changeSearchDimension: (e) => {
-                let value = e.target.value;
-                setSearchDimension(value);
-
-                query.dimension = value;
-                navigateParams({ replace: true })
             }
         }
     }

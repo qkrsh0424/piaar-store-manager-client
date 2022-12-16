@@ -93,7 +93,6 @@ const NavbarBox = styled.div`
 const TODAY = dateToYYYYMMDD(new Date());
 const PREV_2WEEKS_DATE = dateToYYYYMMDD(setStartDateOfPeriod(TODAY, 0, 0, -13));
 // const START_DAY_OF_MONTH = dateToYYYYMMDD(getStartDateOfMonth(TODAY));
-const DEFAULT_DIMENSION = 'date';
 
 const thisRouters = [
     {
@@ -111,22 +110,22 @@ const thisRouters = [
             {
                 name: '총 매출액 & 판매 건',
                 pathname: '/sales-performance/total',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}&dimension=${DEFAULT_DIMENSION}`
+                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
                 name: '판매스토어별',
                 pathname: '/sales-performance/sales-channel',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}&dimension=${DEFAULT_DIMENSION}`
+                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
                 name: '카테고리별',
                 pathname: '/sales-performance/product-category',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}&dimension=${DEFAULT_DIMENSION}`
+                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
                 name: '상품별',
                 pathname: '/sales-performance/product',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}&dimension=${DEFAULT_DIMENSION}`
+                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
         ]
     },

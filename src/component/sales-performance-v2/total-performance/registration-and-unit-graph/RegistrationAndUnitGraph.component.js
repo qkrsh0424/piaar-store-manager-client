@@ -5,7 +5,7 @@ import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
-import { getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMM, getEndDate, getStartDate, getWeekNumber } from "../../../../utils/dateFormatUtils";
 import useTotalPayAmountHook from "./hooks/useTotalRegistrationAndUnitHook";
 import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
@@ -92,7 +92,13 @@ export default function RegistrationAndUnitGraphComponent() {
                 let orderUnitData = [];
                 let graphLabels = [];
                 for(let i = 0; i < totalRegistrationAndUnit.length; i++) {
-                    graphLabels.push(dateToYYMMDDAndDayName(totalRegistrationAndUnit[i].datetime));
+                    let datetime = dateToYYMMDDAndDayName(totalRegistrationAndUnit[i].datetime);
+                    if(searchDimension === 'week') {
+                        datetime = dateToYYYYMM(totalRegistrationAndUnit[i].datetime) + '-' + getWeekNumber(totalRegistrationAndUnit[i].datetime) + '주차';
+                    }else if(searchDimension === 'month') {
+                        datetime = dateToYYYYMM(totalRegistrationAndUnit[i].datetime);
+                    }
+                    graphLabels.push(datetime);
                     
                     salesRegistrationData.push(totalRegistrationAndUnit[i].salesRegistration);
                     salesUnitData.push(totalRegistrationAndUnit[i].salesUnit);
@@ -187,12 +193,21 @@ export default function RegistrationAndUnitGraphComponent() {
             }
         },
         submit: {
-            changeSearchDimension: (e) => {
+            changeSearchDimension: async (e) => {
                 let value = e.target.value;
                 setSearchDimension(value);
 
-                query.dimension = value;
-                navigateParams({ replace: true })
+                // location 설정?
+                let startDate = query.startDate ? getStartDate(query.startDate) : null;
+                let endDate = query.endDate ? getEndDate(query.endDate) : null;
+                let dimension = value || 'date';
+
+                let params = {
+                    startDate,
+                    endDate,
+                    dimension
+                }
+                await reqSearchTotalRegistrationAndUnit(params);
             }
         }
     }
