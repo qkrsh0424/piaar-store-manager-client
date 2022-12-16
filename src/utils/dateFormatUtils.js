@@ -12,8 +12,8 @@ function getStartDate(date) {
     var d = new Date(date);
     d.setHours(0);
     d.setMinutes(0);
-    d.setSeconds(0);
-    // console.log(d);
+    // d.setSeconds(0);
+    d.setSeconds(1);
     return d;
 }
 
@@ -21,7 +21,7 @@ function getEndDate(date) {
     var d = new Date(date);
     d.setHours(23);
     d.setMinutes(59);
-    d.setSeconds(0);
+    d.setSeconds(59);
     // console.log(d);
     return d;
 }

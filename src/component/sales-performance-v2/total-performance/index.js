@@ -4,7 +4,8 @@ import _ from 'lodash';
 import OperatorComponent from './operator/Operator.component';
 import PayAmountGraphComponent from './pay-amount-graph/PayAmountGraph.component';
 import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/RegistrationAndUnitGraph.component';
-import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountGraphDayOfWeek.component';
+import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
+import SummaryTableComponent from './summary-table/SummaryTable.component';
 
 const Container = styled.div`
     height: 100%;
@@ -37,6 +38,7 @@ const TotalSalesPerformanceComponent = (props) => {
             <PayAmountGraphComponent />
             <RegistrationAndUnitGraphComponent />
             <PayAmountDayOfWeekGraphComponent />
+            <SummaryTableComponent />
         </Container>
     )
 }
