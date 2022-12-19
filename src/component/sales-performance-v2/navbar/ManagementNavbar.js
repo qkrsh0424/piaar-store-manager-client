@@ -113,17 +113,17 @@ const thisRouters = [
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
-                name: '판매스토어별',
+                name: '판매스토어 성과',
                 pathname: '/sales-performance/sales-channel',
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
-                name: '카테고리별',
+                name: '카테고리 성과',
                 pathname: '/sales-performance/product-category',
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
-                name: '상품별',
+                name: '상품 성과',
                 pathname: '/sales-performance/product',
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },

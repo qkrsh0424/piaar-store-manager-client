@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { salesPerformanceDataConnect } from "../../../../../data_connect/salesPerformanceDataConnect";
 
-export default function useTotalPayAmountHook(props) {
-    const [totalPayAmount, setTotalPayAmount] = useState(null);
+export default function useSalesChannelPayAmountHook(props) {
+    const [payAmount, setPayAmount] = useState(null);
 
-    const reqSearchTotalPayAmount = async (params) => {
-        await salesPerformanceDataConnect().searchPayAmount(params)
+    const reqSearchSalesChannelPayAmount = async (params) => {
+        await salesPerformanceDataConnect().searchSalesChannelPayAmount(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
-                    setTotalPayAmount(res.data.data);
+                    console.log(res.data.data);
+                    setPayAmount(res.data.data);
                 }
             })
             .catch(err => {
@@ -23,7 +24,7 @@ export default function useTotalPayAmountHook(props) {
     }
 
     return {
-        totalPayAmount,
-        reqSearchTotalPayAmount
+        payAmount,
+        reqSearchSalesChannelPayAmount
     }
 }

@@ -6,24 +6,23 @@ import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import { dateToYYYYMM, getEndDate, getStartDate, getWeekNumber } from "../../../../utils/dateFormatUtils";
-import useTotalPayAmountHook from "./hooks/useTotalPayAmountHook";
 import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
+import useSalesChannelPayAmountHook from "./hooks/useSalesChannelPayAmountHook";
 
-// 그래프 기본 3가지 색상 : [주문, 판매, 평균]
-const DEFAULT_GRAPH_BG_2COLOR = ['#ADA8C3', '#C0C5DC', '#596dd3'];
+const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
 
-export default function PayAmountGraphComponent() {
+// 판매스토어별 총 매출액은 
+export default function PayAmountGraphComponent(props) {
     const [searchDimension, setSearchDimension] = useState('date');
-    
+
     const [salesPayAmountGraphData, setSalesPayAmountGraphData] = useState(null);
     const [totalPayAmountGraphData, setTotalPayAmountGraphData] = useState(null);
-    
+
     const [salesSummaryData, setSalesSummaryData] = useState(null);
-    const [totalSummaryData, setTotalSummaryData] = useState(null);
-    
-    const [totalPayAmountGraphOption, setTotalPayAmountGraphOption] = useState(null);
+
+    const [payAmountGraphOption, setPayAmountGraphOption] = useState(null);
     const [checkedSwitch, setCheckedSwitch] = useState(false);
-    
+
     const {
         location,
         query,
@@ -37,9 +36,9 @@ export default function PayAmountGraphComponent() {
     } = useBackdropHook();
 
     const {
-        totalPayAmount: totalPayAmount,
-        reqSearchTotalPayAmount
-    } = useTotalPayAmountHook()
+        payAmount: payAmount,
+        reqSearchSalesChannelPayAmount
+    } = useSalesChannelPayAmountHook()
 
     useEffect(() => {
         async function fetchInit() {
@@ -53,11 +52,11 @@ export default function PayAmountGraphComponent() {
                 endDate,
                 dimension
             }
-            await reqSearchTotalPayAmount(params);
+            await reqSearchSalesChannelPayAmount(params);
             onActionCloseBackdrop();
         }
 
-        if(!(query.startDate || query.endDate)) {
+        if (!(query.startDate && query.endDate)) {
             __handle.action.resetGraphData();
             return;
         }
@@ -65,105 +64,147 @@ export default function PayAmountGraphComponent() {
     }, [location])
 
     useEffect(() => {
-        if(!(totalPayAmount && totalPayAmount.length > 0)) {
+        if (!props.salesChannel) {
+            return;
+        }
+
+        if (!(payAmount && payAmount.length > 0)) {
             __handle.action.resetGraphData();
             return;
         }
 
         __handle.action.createGraphData();
         __handle.action.createGraphOption();
-    }, [totalPayAmount])
+    }, [props.salesChannel, payAmount])
 
     const __handle = {
         action: {
             resetGraphData: () => {
                 setTotalPayAmountGraphData(null);
-                setTotalSummaryData(null);
 
                 setSalesPayAmountGraphData(null);
                 setSalesSummaryData(null);
-                
-                setTotalPayAmountGraphOption(null);
+
+                setPayAmountGraphOption(null);
             },
             createGraphData: () => {
                 let salesPayAmountData = [];
                 let orderPayAmountData = [];
+                let salesDatasets = [];
+                let orderDatasets = [];
                 let graphLabels = [];
+                let channel = [...props.salesChannel];
 
-                for(let i = 0; i < totalPayAmount.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(totalPayAmount[i].datetime);
-                    if(searchDimension === 'week') {
-                        datetime = dateToYYYYMM(totalPayAmount[i].datetime) + '-' + getWeekNumber(totalPayAmount[i].datetime) + '주차';
-                    }else if(searchDimension === 'month') {
-                        datetime = dateToYYYYMM(totalPayAmount[i].datetime);
+                for (let i = 0; i < payAmount.length; i++) {
+                    let datetime = dateToYYMMDDAndDayName(payAmount[i].datetime);
+                    if (searchDimension === 'week') {
+                        datetime = dateToYYYYMM(payAmount[i].datetime) + '-' + getWeekNumber(payAmount[i].datetime) + '주차';
+                    } else if (searchDimension === 'month') {
+                        datetime = dateToYYYYMM(payAmount[i].datetime);
                     }
                     graphLabels.push(datetime);
-                    salesPayAmountData.push(totalPayAmount[i].salesPayAmount);
-                    orderPayAmountData.push(totalPayAmount[i].orderPayAmount);
-                }
-                
-                let barGraphOfSales = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'bar',
-                    label: '판매 매출액',
-                    data: salesPayAmountData,
-                    fill: false,
-                    borderColor: DEFAULT_GRAPH_BG_2COLOR[1],
-                    backgroundColor: DEFAULT_GRAPH_BG_2COLOR[1],
-                    borderWidth: 0,
-                    order: 0
                 }
 
-                let lineGraphOfOrder = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'line',
-                    label: '주문 매출액',
-                    data: orderPayAmountData,
-                    fill: false,
-                    borderColor: DEFAULT_GRAPH_BG_2COLOR[0] + '88',
-                    backgroundColor: DEFAULT_GRAPH_BG_2COLOR[0] + '88',
-                    order: -1,
-                    pointRadius: 2
+                channel.forEach(r => {
+                    let salesPayAmount = [];
+                    let orderPayAmount = [];
+
+                    payAmount.forEach(r2 => {
+                        let data = r2.performance?.filter(r3 => r3.salesChannel === r)[0];
+                        
+                        salesPayAmount.push(data?.salesPayAmount || 0);
+                        orderPayAmount.push(data?.orderPayAmount || 0);
+                    })
+
+                    salesPayAmountData.push(salesPayAmount);
+                    orderPayAmountData.push(orderPayAmount);
+                })
+
+                let graphColor = SALES_CHNNAEL_GRAPH_BG_COLOR;
+                for (let i = SALES_CHNNAEL_GRAPH_BG_COLOR.length; i < channel.length; i++) {
+                    let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
+                    graphColor.push(randomColor);
                 }
 
-                // 판매매출액 7일간 평균 데이터 생성
-                let salesPayAmountAvgData = [null, null, null, null, null, null];
-                for (let i = 7; i <= salesPayAmountData.length; i++) {
-                    let avg = parseInt(salesPayAmountData.slice(i - 7, i).reduce((a, b) => a + b) / 7);
-                    salesPayAmountAvgData.push(avg);
+                // 판매 그래프 데이터 세팅
+                if(channel.size === 0) {
+                    let barGraphOfSales = {
+                        ...new GraphDataset().toJSON(),
+                        type: 'bar',
+                        label: '판매 매출액',
+                        data: [],
+                        borderColor: graphColor[0],
+                        backgroundColor: graphColor[0],
+                        borderWidth: 0,
+                        order: 0
+                    }
+                    salesDatasets.push(barGraphOfSales);
+                } else {
+                    channel.forEach((r, idx) => {
+                        let barGraphOfSales = {
+                            ...new GraphDataset().toJSON(),
+                            type: 'bar',
+                            label: r,
+                            data: salesPayAmountData[idx],
+                            borderColor: graphColor[idx],
+                            backgroundColor: graphColor[idx],
+                            borderWidth: 0,
+                            order: 0
+                        }
+                        salesDatasets.push(barGraphOfSales);
+                    })
                 }
 
-                // 판매매출액 7일간 평균 그래프 데이터 생성
-                let lineGraphOfSalesAvg = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'line',
-                    label: '판매 매출액 7일간 평균',
-                    data: salesPayAmountAvgData,
-                    fill: false,
-                    borderColor: DEFAULT_GRAPH_BG_2COLOR[2],
-                    backgroundColor: DEFAULT_GRAPH_BG_2COLOR[2],
-                    order: -2,
-                    borderDash: [3, 3]
+                // 주문 그래프 데이터 세팅
+                if(channel.size === 0) {
+                    let lineGraphOfOrder = {
+                        ...new GraphDataset().toJSON(),
+                        label: '주문 매출액',
+                        data: [],
+                        type: 'line',
+                        fill: false,
+                        borderColor: graphColor[0],
+                        backgroundColor: graphColor[0],
+                        order: -1,
+                        pointRadius: 2
+                    }
+                    orderDatasets.push(lineGraphOfOrder);
+                } else {
+                    channel.forEach((r, idx) => {
+                        let lineGraphOfOrder = {
+                            ...new GraphDataset().toJSON(),
+                            type: 'line',
+                            label: '(주문) ' + r,
+                            fill: false,
+                            data: orderPayAmountData[idx],
+                            borderColor: graphColor[idx] + '88',
+                            backgroundColor: graphColor[idx] + '88',
+                            order: -1,
+                            pointRadius: 2
+                        }
+                        orderDatasets.push(lineGraphOfOrder);
+                    })
                 }
-                
-                // 매출 그래프 데이터 생성
+
+                // // 매출 그래프 데이터 생성
                 let createdSalesGraph = {
                     labels: graphLabels,
-                    datasets: [barGraphOfSales, lineGraphOfSalesAvg]
+                    datasets: salesDatasets
                 }
                 let createdTotalGraph = {
                     labels: graphLabels,
-                    datasets: [barGraphOfSales, lineGraphOfOrder, lineGraphOfSalesAvg]
+                    datasets: [...salesDatasets, ...orderDatasets]
                 }
+
                 setSalesPayAmountGraphData(createdSalesGraph);
                 setTotalPayAmountGraphData(createdTotalGraph);
-
-                // 매출 그래프 요약 데이터 생성
-                let salesData = setAnalysisResultText([barGraphOfSales]);
-                let data = setAnalysisResultText([barGraphOfSales, lineGraphOfOrder]);
                 
+                // // 매출 그래프 요약 데이터 생성
+                let salesData = setAnalysisResultText(salesDatasets);
+
+                // 매출액 내림차순으로 정렬
+                salesData.sort((a, b) => b.value - a.value);
                 setSalesSummaryData(salesData);
-                setTotalSummaryData(data);
             },
             createGraphOption: () => {
                 let option = {
@@ -175,7 +216,7 @@ export default function PayAmountGraphComponent() {
                     }
                 }
 
-                setTotalPayAmountGraphOption(option);
+                setPayAmountGraphOption(option);
             },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;
@@ -196,7 +237,7 @@ export default function PayAmountGraphComponent() {
                     endDate,
                     dimension
                 }
-                await reqSearchTotalPayAmount(params);
+                await reqSearchSalesChannelPayAmount(params);
             }
         }
     }
@@ -214,10 +255,10 @@ export default function PayAmountGraphComponent() {
                 <div className='content-box'>
                     <GraphBodyFieldView
                         totalPayAmountGraphData={checkedSwitch ? totalPayAmountGraphData : salesPayAmountGraphData}
-                        totalPayAmountGraphOption={totalPayAmountGraphOption}
+                        payAmountGraphOption={payAmountGraphOption}
                     />
                     <GraphSummaryFieldView
-                        summaryData={checkedSwitch ? totalSummaryData : salesSummaryData}
+                        summaryData={salesSummaryData}
                     />
                 </div>
             </Container>

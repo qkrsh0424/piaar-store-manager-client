@@ -57,7 +57,7 @@ export default function RegistrationAndUnitGraphComponent() {
             onActionCloseBackdrop();
         }
 
-        if(!(query.startDate || query.endDate)) {
+        if (!(query.startDate && query.endDate)) {
             __handle.action.resetGraphData();
             return;
         }

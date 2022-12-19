@@ -78,6 +78,11 @@ const GraphSummaryFieldWrapper = styled.div`
         height: 50px;
     }
 
+    .sumamry-box {
+        height: 350px;
+        overflow: auto;
+    }
+
     ul {
         list-style: none;
         padding: 10px;

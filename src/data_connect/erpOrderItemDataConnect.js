@@ -110,6 +110,13 @@ const erpOrderItemDataConnect = () => {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v2/erp-order-items/option-package/release-confirm`, body, {
                 withCredentials: true
             })
+        },
+        // 기간내에 erp order item에 등록된 sales channel을 중복없이 조회한다
+        searchSalesChannel: async function (params) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/erp-order-items/sales-channel`, {
+                params,
+                withCredentials: true
+            })
         }
     }
 }
