@@ -92,7 +92,7 @@ export default function PayAmountDayOfWeekGraphComponent() {
                             return {
                                 ...r,
                                 salesPayAmount: r.salesPayAmount + totalPayAmount[i].salesPayAmount,
-                                frequency: r.frequency+1
+                                frequency: r.frequency + 1
                             }
                         }else {
                             return r;

@@ -1,5 +1,5 @@
 import Ripple from "../../../../module/button/Ripple";
-import { ButtonFieldWrapper } from "../ChannelSelector.styled";
+import { ButtonFieldWrapper } from "../SearchOperator.styled";
 
 export default function ButtonFieldView(props) {
     return (

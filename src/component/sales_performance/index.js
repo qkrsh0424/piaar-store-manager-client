@@ -165,7 +165,7 @@ const SalesPerformanceComponent = (props) => {
     }
 
     const __reqSearchProduct = async () => {
-        await productDataConnect().searchBatch()
+        await productDataConnect().searchAll()
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     dispatchProductList({

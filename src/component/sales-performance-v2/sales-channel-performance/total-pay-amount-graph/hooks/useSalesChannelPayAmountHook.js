@@ -8,7 +8,6 @@ export default function useSalesChannelPayAmountHook(props) {
         await salesPerformanceDataConnect().searchSalesChannelPayAmount(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
-                    console.log(res.data.data);
                     setPayAmount(res.data.data);
                 }
             })

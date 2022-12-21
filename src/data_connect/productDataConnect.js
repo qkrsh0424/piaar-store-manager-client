@@ -21,8 +21,8 @@ const productDataConnect = () => {
                 withCredentials: true
             })
         },
-        searchBatch: async function(){
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/products/batch`, {
+        searchAll: async function(){
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/products/all`, {
                 withCredentials: true
             })
         },

@@ -76,13 +76,17 @@ export default function OperatorComponent(props) {
             routeToSearch: (e) => {
                 e.preventDefault();
 
-                try{ 
+                try{
                     if (startDate && !endDate) {
                         throw new Error('종료일 날짜를 선택해 주세요.')
                     }
     
                     if (!startDate && endDate) {
                         throw new Error('시작일 날짜를 선택해 주세요.')
+                    }
+
+                    if(!(startDate && endDate)) {
+                        throw new Error('시작일과 종료일을 선택해 주세요.')
                     }
     
                     if ((endDate - startDate < 0)) {
@@ -109,6 +113,7 @@ export default function OperatorComponent(props) {
                         severity: 'error'
                     }
                     onActionOpenSnackbar(snackbarSetting);
+                    return;
                 }
 
                 navigateParams({ replace: true })

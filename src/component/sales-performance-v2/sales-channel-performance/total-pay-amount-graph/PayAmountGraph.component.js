@@ -7,10 +7,11 @@ import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import { dateToYYYYMM, getEndDate, getStartDate, getWeekNumber } from "../../../../utils/dateFormatUtils";
 import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
+import useSalesChannelPayAmountHook from "./hooks/useSalesChannelPayAmountHook";
 
-const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
+const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
 
-// 판매스토어별 총 매출액
+// 판매스토어별 총 매출액은 
 export default function PayAmountGraphComponent(props) {
     const [searchDimension, setSearchDimension] = useState('date');
 
@@ -28,24 +29,53 @@ export default function PayAmountGraphComponent(props) {
         navigateParams
     } = useRouterHook();
 
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
+
+    const {
+        payAmount: payAmount,
+        reqSearchSalesChannelPayAmount
+    } = useSalesChannelPayAmountHook()
+
     useEffect(() => {
-        __handle.action.resetGraphData();
-    }, [props.salesChannel])
-    
-    useEffect(() => {
-        if (!props.selectedChannel) {
+        async function fetchInit() {
+            onActionOpenBackdrop();
+            let startDate = query.startDate ? getStartDate(query.startDate) : null;
+            let endDate = query.endDate ? getEndDate(query.endDate) : null;
+            let dimension = searchDimension || 'date';
+
+            let params = {
+                startDate,
+                endDate,
+                dimension
+            }
+            await reqSearchSalesChannelPayAmount(params);
+            onActionCloseBackdrop();
+        }
+
+        if (!(query.startDate && query.endDate)) {
             __handle.action.resetGraphData();
             return;
         }
+        fetchInit();
+    }, [location])
 
-        if (!(props.payAmount && props.payAmount.length > 0)) {
+    useEffect(() => {
+        if (!props.salesChannel) {
+            return;
+        }
+
+        if (!(payAmount && payAmount.length > 0)) {
             __handle.action.resetGraphData();
             return;
         }
 
         __handle.action.createGraphData();
         __handle.action.createGraphOption();
-    }, [props.selectedChannel, props.payAmount])
+    }, [props.salesChannel, payAmount])
 
     const __handle = {
         action: {
@@ -63,14 +93,14 @@ export default function PayAmountGraphComponent(props) {
                 let salesDatasets = [];
                 let orderDatasets = [];
                 let graphLabels = [];
-                let channel = [...props.selectedChannel];
+                let channel = [...props.salesChannel];
 
-                for (let i = 0; i < props.payAmount.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(props.payAmount[i].datetime);
+                for (let i = 0; i < payAmount.length; i++) {
+                    let datetime = dateToYYMMDDAndDayName(payAmount[i].datetime);
                     if (searchDimension === 'week') {
-                        datetime = dateToYYYYMM(props.payAmount[i].datetime) + '-' + getWeekNumber(props.payAmount[i].datetime) + '주차';
+                        datetime = dateToYYYYMM(payAmount[i].datetime) + '-' + getWeekNumber(payAmount[i].datetime) + '주차';
                     } else if (searchDimension === 'month') {
-                        datetime = dateToYYYYMM(props.payAmount[i].datetime);
+                        datetime = dateToYYYYMM(payAmount[i].datetime);
                     }
                     graphLabels.push(datetime);
                 }
@@ -79,7 +109,7 @@ export default function PayAmountGraphComponent(props) {
                     let salesPayAmount = [];
                     let orderPayAmount = [];
 
-                    props.payAmount.forEach(r2 => {
+                    payAmount.forEach(r2 => {
                         let data = r2.performance?.filter(r3 => r3.salesChannel === r)[0];
                         
                         salesPayAmount.push(data?.salesPayAmount || 0);
@@ -89,7 +119,7 @@ export default function PayAmountGraphComponent(props) {
                     salesPayAmountData.push(salesPayAmount);
                     orderPayAmountData.push(orderPayAmount);
                 })
-                
+
                 let graphColor = SALES_CHNNAEL_GRAPH_BG_COLOR;
                 for (let i = SALES_CHNNAEL_GRAPH_BG_COLOR.length; i < channel.length; i++) {
                     let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
@@ -156,7 +186,7 @@ export default function PayAmountGraphComponent(props) {
                     })
                 }
 
-                // 매출 그래프 데이터 생성
+                // // 매출 그래프 데이터 생성
                 let createdSalesGraph = {
                     labels: graphLabels,
                     datasets: salesDatasets
@@ -169,7 +199,7 @@ export default function PayAmountGraphComponent(props) {
                 setSalesPayAmountGraphData(createdSalesGraph);
                 setTotalPayAmountGraphData(createdTotalGraph);
                 
-                // 매출 그래프 요약 데이터 생성
+                // // 매출 그래프 요약 데이터 생성
                 let salesData = setAnalysisResultText(salesDatasets);
 
                 // 매출액 내림차순으로 정렬
@@ -201,16 +231,13 @@ export default function PayAmountGraphComponent(props) {
                 let startDate = query.startDate ? getStartDate(query.startDate) : null;
                 let endDate = query.endDate ? getEndDate(query.endDate) : null;
                 let dimension = value || 'date';
-                let channel = props.selectedChannel.join(",");
-    
+
                 let params = {
                     startDate,
                     endDate,
-                    dimension,
-                    channel
+                    dimension
                 }
-
-                props.onActionSearchChannelPayAmount(params);
+                await reqSearchSalesChannelPayAmount(params);
             }
         }
     }
@@ -219,7 +246,6 @@ export default function PayAmountGraphComponent(props) {
         <>
             <Container>
                 <GraphBoardFieldView
-                    selectedChannel={props.selectedChannel}
                     searchDimension={searchDimension}
                     checkedSwitch={checkedSwitch}
 
@@ -236,6 +262,10 @@ export default function PayAmountGraphComponent(props) {
                     />
                 </div>
             </Container>
+
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
         </>
     )
 }
