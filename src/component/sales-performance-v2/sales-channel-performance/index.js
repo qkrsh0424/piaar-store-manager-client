@@ -57,7 +57,8 @@ const SalesChannelPerformanceComponent = (props) => {
         dayOfWeekPayAmount: channelDayOfWeekPayAmount,
         reqSearchPayAmount: reqSearchPayAmountByChannel,
         reqSearchRegistrationAndUnit: reqSearchRegistrationAndUnitByChannel,
-        reqDayOfWeekPayAmount: reqDayOfWeekPayAmountByChannel
+        reqSearchDayOfWeekPayAmount: reqDayOfWeekPayAmountByChannel,
+        reqSearchProductPayAmount: reqSearchProductPayAmountByChannel
     } = useChannelPerformanceHook();
 
     useEffect(() => {
@@ -124,6 +125,11 @@ const SalesChannelPerformanceComponent = (props) => {
             },
             updateSelectedChannel: (selectedChannel) => {
                 setSelectedChannel([...selectedChannel]);
+            },
+            searchChannelProductPayAmount: async (params) => {
+                onActionOpenBackdrop();
+                await reqSearchProductPayAmountByChannel(params);
+                onActionCloseBackdrop();
             }
         }
     }
@@ -170,7 +176,8 @@ const SalesChannelPerformanceComponent = (props) => {
                 />
 
                 <SearchOperatorComponent
-                    
+                    selectedChannel={selectedChannel}
+                    onActionSearchChannelProductPayAmount={__handle.action.searchChannelProductPayAmount}
                 />
             </Container>
 

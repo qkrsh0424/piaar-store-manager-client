@@ -194,7 +194,7 @@ export default function PayAmountGraphComponent(props) {
             }
         },
         submit: {
-            changeSearchDimension: async (e) => {
+            changeSearchDimension: (e) => {
                 let value = e.target.value;
                 setSearchDimension(value);
 

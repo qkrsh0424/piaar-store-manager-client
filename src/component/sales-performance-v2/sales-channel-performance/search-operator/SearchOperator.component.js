@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
+import { getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 import CommonModalComponent from "../../../module/modal/CommonModalComponent";
 import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
 import OptionListModalComponent from "./modal/option-list/OptionListModal.component";
@@ -92,11 +93,32 @@ export default function SearchOperatorComponent(props) {
 
                 __handle.action.closeOptionListModal();
             },
+        },
+        submit: {
+            searchProductPayAmount: (e) => {
+                e.preventDefault();
+
+                let startDate = query.startDate ? getStartDate(query.startDate) : null;
+                let endDate = query.endDate ? getEndDate(query.endDate) : null;
+                let dimension = 'date';
+                let channel = props.selectedChannel.join(",");
+                let optionCode = selectedOption?.code || null;
+    
+                let params = {
+                    startDate,
+                    endDate,
+                    dimension,
+                    channel,
+                    optionCode
+                }
+
+                props.onActionSearchChannelProductPayAmount(params);
+            }
         }
     }
     return (
         <Container>
-            <form>
+            <form onSubmit={(e) => __handle.submit.searchProductPayAmount(e)}>
                 <div className='button-box'>
                     <ProductSearchFieldView
                         selectedProduct={selectedProduct}
@@ -111,6 +133,7 @@ export default function SearchOperatorComponent(props) {
 
 
                 <ButtonFieldView
+
                 />
             </form>
 
