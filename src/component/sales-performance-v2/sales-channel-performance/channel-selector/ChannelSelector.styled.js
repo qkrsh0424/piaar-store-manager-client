@@ -65,21 +65,30 @@ const CheckBoxFieldWrapper = styled.div`
         padding: 20px 0;
         display: grid;
         grid-template-columns: repeat(6, 1fr);
+        place-items: center;
+        grid-gap: 5px;
     }
 
-    .checkbox-group {
-        display: flex;
-        gap: 5px;
-        align-items: center;
+    .button-box {
         transition: 0.1s;
 
         :hover {
             cursor: pointer;
             font-weight: 700;
         }
+    }
 
-        &.checkbox-active {
-            font-weight: 700;
+    .button-el {
+        width: 100px;
+        border: 1px solid var(--defaultBorderColor);
+        background-color: var(--defaultButtonColor);
+        border-radius: 20px;
+        font-size: 14px;
+        
+        &.button-active {
+            border: 1px solid var(--piaar-main-color);
+            background-color: var(--piaar-main-color);
+            color: white;
         }
     }
 `;

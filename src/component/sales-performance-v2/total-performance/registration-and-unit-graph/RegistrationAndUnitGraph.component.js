@@ -4,17 +4,13 @@ import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
-import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import { dateToYYYYMM, getEndDate, getStartDate, getWeekNumber } from "../../../../utils/dateFormatUtils";
-import useTotalPayAmountHook from "./hooks/useTotalRegistrationAndUnitHook";
 import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
 // 그래프 기본 2가지 색상 : [판매, 주문]
 const DEFAULT_GRAPH_BG_2COLOR = ['#4975A9', '#80A9E1'];
 
-export default function RegistrationAndUnitGraphComponent() {
-    const [searchDimension, setSearchDimension] = useState('date');
-    
+export default function RegistrationAndUnitGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);
     const [totalGraphData, setTotalGraphData] = useState(null);
     
@@ -22,57 +18,25 @@ export default function RegistrationAndUnitGraphComponent() {
     const [totalSummaryData, setTotalSummaryData] = useState(null);
     
     const [totalGraphOption, setTotalGraphOption] = useState(null);
-    const [checkedSwitch, setCheckedSwitch] = useState(false);
 
     const {
         location,
-        query,
-        navigateParams
+        query
     } = useRouterHook();
 
-    const {
-        open: backdropOpen,
-        onActionOpen: onActionOpenBackdrop,
-        onActionClose: onActionCloseBackdrop
-    } = useBackdropHook();
-
-    const {
-        totalRegistrationAndUnit: totalRegistrationAndUnit,
-        reqSearchTotalRegistrationAndUnit
-    } = useTotalPayAmountHook()
-
     useEffect(() => {
-        async function fetchInit() {
-            onActionOpenBackdrop();
-            let startDate = query.startDate ? getStartDate(query.startDate) : null;
-            let endDate = query.endDate ? getEndDate(query.endDate) : null;
-            let dimension = searchDimension || 'date';
-
-            let params = {
-                startDate,
-                endDate,
-                dimension
-            }
-            await reqSearchTotalRegistrationAndUnit(params);
-            onActionCloseBackdrop();
-        }
-
-        if (!(query.startDate && query.endDate)) {
-            __handle.action.resetGraphData();
+        if(!props.searchDimension) {
             return;
         }
-        fetchInit();
-    }, [location])
 
-    useEffect(() => {
-        if(!(totalRegistrationAndUnit && totalRegistrationAndUnit.length > 0)) {
+        if(!(props.performance && props.performance.length > 0)) {
             __handle.action.resetGraphData();
             return;
         }
 
         __handle.action.createGraphData();
         __handle.action.createGraphOption();
-    }, [totalRegistrationAndUnit])
+    }, [props.performance, props.searchDimension])
 
     const __handle = {
         action: {
@@ -90,20 +54,30 @@ export default function RegistrationAndUnitGraphComponent() {
                 let salesUnitData = [];
                 let orderRegistrationData = [];
                 let orderUnitData = [];
-                let graphLabels = [];
-                for(let i = 0; i < totalRegistrationAndUnit.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(totalRegistrationAndUnit[i].datetime);
-                    if(searchDimension === 'week') {
-                        datetime = dateToYYYYMM(totalRegistrationAndUnit[i].datetime) + '-' + getWeekNumber(totalRegistrationAndUnit[i].datetime) + '주차';
-                    }else if(searchDimension === 'month') {
-                        datetime = dateToYYYYMM(totalRegistrationAndUnit[i].datetime);
+                let graphLabels = new Set([]);
+
+                for(let i = 0; i < props.performance.length; i++) {
+                    let datetime = dateToYYMMDDAndDayName(props.performance[i].datetime);
+                    if(props.searchDimension === 'week') {
+                        datetime = dateToYYYYMM(props.performance[i].datetime) + '-' + getWeekNumber(props.performance[i].datetime) + '주차';
+                    }else if(props.searchDimension === 'month') {
+                        datetime = dateToYYYYMM(props.performance[i].datetime);
                     }
-                    graphLabels.push(datetime);
+
+                    if(graphLabels.has(datetime)) {
+                        salesRegistrationData[salesRegistrationData.length - 1] += props.performance[i].salesRegistration;
+                        salesUnitData[salesUnitData.length - 1] += props.performance[i].salesUnit;
+                        orderRegistrationData[orderRegistrationData.length - 1] += props.performance[i].orderRegistration;
+                        orderUnitData[orderUnitData.length - 1] += props.performance[i].orderUnit;
+                    }else {
+                        graphLabels.add(datetime);
+
+                        salesRegistrationData.push(props.performance[i].salesRegistration);
+                        salesUnitData.push(props.performance[i].salesUnit);
+                        orderRegistrationData.push(props.performance[i].orderRegistration);
+                        orderUnitData.push(props.performance[i].orderUnit);
+                    }
                     
-                    salesRegistrationData.push(totalRegistrationAndUnit[i].salesRegistration);
-                    salesUnitData.push(totalRegistrationAndUnit[i].salesUnit);
-                    orderRegistrationData.push(totalRegistrationAndUnit[i].orderRegistration);
-                    orderUnitData.push(totalRegistrationAndUnit[i].orderUnit);
                 }
                 
                 let barGraphOfSalesReg = {
@@ -159,11 +133,11 @@ export default function RegistrationAndUnitGraphComponent() {
                 
                 // 매출 그래프 데이터 생성
                 let createSalesGraph = {
-                    labels: graphLabels,
+                    labels: [...graphLabels],
                     datasets: createdSalesGraphDatasets
                 }
                 let createdGraph = {
-                    labels: graphLabels,
+                    labels: [...graphLabels],
                     datasets: [...createdSalesGraphDatasets, ...createdOrderGraphDatasets]
                 }
                 setSalesGraphData(createSalesGraph)
@@ -186,28 +160,6 @@ export default function RegistrationAndUnitGraphComponent() {
                 }
 
                 setTotalGraphOption(option);
-            },
-            changeSwitch: () => {
-                let checkedValue = checkedSwitch;
-                setCheckedSwitch(!checkedValue);
-            }
-        },
-        submit: {
-            changeSearchDimension: async (e) => {
-                let value = e.target.value;
-                setSearchDimension(value);
-
-                // location 설정?
-                let startDate = query.startDate ? getStartDate(query.startDate) : null;
-                let endDate = query.endDate ? getEndDate(query.endDate) : null;
-                let dimension = value || 'date';
-
-                let params = {
-                    startDate,
-                    endDate,
-                    dimension
-                }
-                await reqSearchTotalRegistrationAndUnit(params);
             }
         }
     }
@@ -216,26 +168,19 @@ export default function RegistrationAndUnitGraphComponent() {
         <>
             <Container>
                 <GraphBoardFieldView
-                    searchDimension={searchDimension}
-                    checkedSwitch={checkedSwitch}
-
-                    onActionChangeSearchDimension={__handle.submit.changeSearchDimension}
-                    onActionChangeSwitch={__handle.action.changeSwitch}
+                    searchDimension={props.searchDimension}
+                    checkedSwitch={props.checkedSwitch}
                 />
                 <div className='content-box'>
                     <GraphBodyFieldView
-                        totalGraphData={checkedSwitch ? totalGraphData : salesGraphData}
+                        totalGraphData={props.checkedSwitch ? totalGraphData : salesGraphData}
                         totalGraphOption={totalGraphOption}
                     />
                     <GraphSummaryFieldView
-                        summaryData={checkedSwitch? totalSummaryData : salesSummaryData}
+                        summaryData={props.checkedSwitch? totalSummaryData : salesSummaryData}
                     />
                 </div>
             </Container>
-
-            <BackdropHookComponent
-                open={backdropOpen}
-            />
         </>
     )
 }

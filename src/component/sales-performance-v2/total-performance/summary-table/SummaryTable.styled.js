@@ -10,7 +10,7 @@ const GraphBoardFieldWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--defaultBorderColor);
+    /* border-bottom: 1px solid var(--defaultBorderColor); */
     padding: 20px;
 
     .graph-title {
@@ -58,11 +58,13 @@ const TableFieldWrapper = styled.div`
     }
 
     .fixed-header {
-        background-color: #f5f5f5;
+        /* background-color: #f5f5f5; */
+        background-color: #fff;
         height: 35px;
         position: sticky;
         top: 0;
         z-index:10;
+        box-shadow: 0 -1.5px 0 0 var(--erp-main-color) inset;
     }
 
     table {
@@ -79,8 +81,8 @@ const TableFieldWrapper = styled.div`
     }
 
     table tbody .first-tr {
-        background-color: #2c73d232 !important;
-        font-weight: 600;
+        background-color: #2c73d222 !important;
+        font-weight: 500;
         color: #000;
     }
 

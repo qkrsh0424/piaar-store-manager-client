@@ -10,30 +10,18 @@ const salesPerformanceDataConnect = () => {
                 withCredentials: true
             })
         },
-        searchPayAmount: async function (params) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/total/pay-amount`, {
+        searchTotalPerformance: async function (params) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/total`, {
                 params,
                 withCredentials: true
             })
         },
-        searchRegistrationAndUnit: async function (params) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/total/registration-and-unit`, {
+        searchChannelPerformance: async function (params) {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/channel`, {
                 params,
                 withCredentials: true
             })
-        },
-        searchPayAmountDayOfWeek: async function (params) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/total/pay-amount/day-of-week`, {
-                params,
-                withCredentials: true
-            })
-        },
-        searchSummaryData: async function (params) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/total/summary`, {
-                params,
-                withCredentials: true
-            })
-        },
+        },        
         // 사용하지않는 api - 총 판매스토어 매출액
         searchSalesChannelPayAmount: async function (params) {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/sales-channel/total/pay-amount`, {

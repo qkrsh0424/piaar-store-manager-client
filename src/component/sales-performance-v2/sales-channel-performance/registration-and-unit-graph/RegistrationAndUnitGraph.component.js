@@ -12,8 +12,6 @@ const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB'
 
 // 판매스토어별 총 판매, 주문건 & 수량
 export default function RegistrationAndUnitGraphComponent(props) {
-    const [searchDimension, setSearchDimension] = useState('date');
-
     const [salesRegistrationGraphData, setSalesRegistrationGraphData] = useState(null);
     const [totalRegistrationGraphData, setTotalRegistrationGraphData] = useState(null);
 
@@ -24,7 +22,6 @@ export default function RegistrationAndUnitGraphComponent(props) {
     const [unitSummaryData, setUnitSummaryData] = useState(null);
     
     const [totalGraphOption, setTotalGraphOption] = useState(null);
-    const [checkedSwitch, setCheckedSwitch] = useState(false);
 
     const {
         location,
@@ -76,9 +73,9 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
                 for(let i = 0; i < props.registrationAndUnit.length; i++) {
                     let datetime = dateToYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
-                    if(searchDimension === 'week') {
+                    if(props.searchDimension === 'week') {
                         datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime) + '-' + getWeekNumber(props.registrationAndUnit[i].datetime) + '주차';
-                    }else if(searchDimension === 'month') {
+                    }else if(props.searchDimension === 'month') {
                         datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime);
                     }
                     graphLabels.push(datetime);
@@ -89,7 +86,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     let orderRegistration = [];
 
                     props.registrationAndUnit.forEach(r2 => {
-                        let data = r2.performance?.filter(r3 => r3.salesChannel === r)[0];
+                        let data = r2.performances?.filter(r3 => r3.salesChannel === r)[0];
 
                         salesRegistration.push(data?.salesRegistration || 0);
                         orderRegistration.push(data?.orderRegistration || 0);
@@ -200,9 +197,9 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
                 for(let i = 0; i < props.registrationAndUnit.length; i++) {
                     let datetime = dateToYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
-                    if(searchDimension === 'week') {
+                    if(props.searchDimension === 'week') {
                         datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime) + '-' + getWeekNumber(props.registrationAndUnit[i].datetime) + '주차';
-                    }else if(searchDimension === 'month') {
+                    }else if(props.searchDimension === 'month') {
                         datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime);
                     }
                     graphLabels.push(datetime);
@@ -213,7 +210,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     let orderUnit = [];
 
                     props.registrationAndUnit.forEach(r2 => {
-                        let data = r2.performance?.filter(r3 => r3.salesChannel === r)[0];
+                        let data = r2.performances?.filter(r3 => r3.salesChannel === r)[0];
 
                         salesUnit.push(data?.salesUnit || 0);
                         orderUnit.push(data?.orderUnit || 0);
@@ -325,30 +322,6 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 }
 
                 setTotalGraphOption(option);
-            },
-            changeSwitch: () => {
-                let checkedValue = checkedSwitch;
-                setCheckedSwitch(!checkedValue);
-            }
-        },
-        submit: {
-            changeSearchDimension: (e) => {
-                let value = e.target.value;
-                setSearchDimension(value);
-
-                let startDate = query.startDate ? getStartDate(query.startDate) : null;
-                let endDate = query.endDate ? getEndDate(query.endDate) : null;
-                let dimension = value || 'date';
-                let channel = props.selectedChannel.join(",");
-    
-                let params = {
-                    startDate,
-                    endDate,
-                    dimension,
-                    channel
-                }
-
-                props.onActionSearchChannelRegistrationAndUnit(params);
             }
         }
     }
@@ -356,31 +329,25 @@ export default function RegistrationAndUnitGraphComponent(props) {
     return (
         <>
             <Container>
-                <GraphBoardFieldView
-                    searchDimension={searchDimension}
-                    checkedSwitch={checkedSwitch}
-
-                    onActionChangeSearchDimension={__handle.submit.changeSearchDimension}
-                    onActionChangeSwitch={__handle.action.changeSwitch}
-                />
+                <GraphBoardFieldView />
                 <div className='content-box'>
                     <GraphBodyFieldView
-                        totalGraphData={checkedSwitch ? totalRegistrationGraphData : salesRegistrationGraphData}
+                        totalGraphData={props.checkedSwitch ? totalRegistrationGraphData : salesRegistrationGraphData}
                         totalGraphOption={totalGraphOption}
                     />
                     <GraphSummaryFieldView
                         title={'[스토어별 총 판매건]'}
-                        summaryData={checkedSwitch ? registrationSummaryData?.total : registrationSummaryData?.sales}
+                        summaryData={props.checkedSwitch ? registrationSummaryData?.total : registrationSummaryData?.sales}
                     />
                 </div>
                 <div className='content-box'>
                     <GraphBodyFieldView
-                        totalGraphData={checkedSwitch ? totalUnitGraphData : salesUnitGraphData}
+                        totalGraphData={props.checkedSwitch ? totalUnitGraphData : salesUnitGraphData}
                         totalGraphOption={totalGraphOption}
                     />
                     <GraphSummaryFieldView
                         title={'[스토어별 총 판매수량]'}
-                        summaryData={checkedSwitch ? unitSummaryData?.total : unitSummaryData?.sales}
+                        summaryData={props.checkedSwitch ? unitSummaryData?.total : unitSummaryData?.sales}
                     />
                 </div>
             </Container>

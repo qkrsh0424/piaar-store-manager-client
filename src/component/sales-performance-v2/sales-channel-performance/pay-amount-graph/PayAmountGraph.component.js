@@ -12,7 +12,6 @@ const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB'
 
 // 판매스토어별 총 매출액
 export default function PayAmountGraphComponent(props) {
-    const [searchDimension, setSearchDimension] = useState('date');
 
     const [salesPayAmountGraphData, setSalesPayAmountGraphData] = useState(null);
     const [totalPayAmountGraphData, setTotalPayAmountGraphData] = useState(null);
@@ -20,7 +19,6 @@ export default function PayAmountGraphComponent(props) {
     const [salesSummaryData, setSalesSummaryData] = useState(null);
 
     const [payAmountGraphOption, setPayAmountGraphOption] = useState(null);
-    const [checkedSwitch, setCheckedSwitch] = useState(false);
 
     const {
         location,
@@ -67,9 +65,9 @@ export default function PayAmountGraphComponent(props) {
 
                 for (let i = 0; i < props.payAmount.length; i++) {
                     let datetime = dateToYYMMDDAndDayName(props.payAmount[i].datetime);
-                    if (searchDimension === 'week') {
+                    if (props.searchDimension === 'week') {
                         datetime = dateToYYYYMM(props.payAmount[i].datetime) + '-' + getWeekNumber(props.payAmount[i].datetime) + '주차';
-                    } else if (searchDimension === 'month') {
+                    } else if (props.searchDimension === 'month') {
                         datetime = dateToYYYYMM(props.payAmount[i].datetime);
                     }
                     graphLabels.push(datetime);
@@ -80,7 +78,7 @@ export default function PayAmountGraphComponent(props) {
                     let orderPayAmount = [];
 
                     props.payAmount.forEach(r2 => {
-                        let data = r2.performance?.filter(r3 => r3.salesChannel === r)[0];
+                        let data = r2.performances?.filter(r3 => r3.salesChannel === r)[0];
                         
                         salesPayAmount.push(data?.salesPayAmount || 0);
                         orderPayAmount.push(data?.orderPayAmount || 0);
@@ -187,30 +185,6 @@ export default function PayAmountGraphComponent(props) {
                 }
 
                 setPayAmountGraphOption(option);
-            },
-            changeSwitch: () => {
-                let checkedValue = checkedSwitch;
-                setCheckedSwitch(!checkedValue);
-            }
-        },
-        submit: {
-            changeSearchDimension: (e) => {
-                let value = e.target.value;
-                setSearchDimension(value);
-
-                let startDate = query.startDate ? getStartDate(query.startDate) : null;
-                let endDate = query.endDate ? getEndDate(query.endDate) : null;
-                let dimension = value || 'date';
-                let channel = props.selectedChannel.join(",");
-    
-                let params = {
-                    startDate,
-                    endDate,
-                    dimension,
-                    channel
-                }
-
-                props.onActionSearchChannelPayAmount(params);
             }
         }
     }
@@ -218,17 +192,10 @@ export default function PayAmountGraphComponent(props) {
     return (
         <>
             <Container>
-                <GraphBoardFieldView
-                    selectedChannel={props.selectedChannel}
-                    searchDimension={searchDimension}
-                    checkedSwitch={checkedSwitch}
-
-                    onActionChangeSearchDimension={__handle.submit.changeSearchDimension}
-                    onActionChangeSwitch={__handle.action.changeSwitch}
-                />
+                <GraphBoardFieldView />
                 <div className='content-box'>
                     <GraphBodyFieldView
-                        totalPayAmountGraphData={checkedSwitch ? totalPayAmountGraphData : salesPayAmountGraphData}
+                        totalPayAmountGraphData={props.checkedSwitch ? totalPayAmountGraphData : salesPayAmountGraphData}
                         payAmountGraphOption={payAmountGraphOption}
                     />
                     <GraphSummaryFieldView

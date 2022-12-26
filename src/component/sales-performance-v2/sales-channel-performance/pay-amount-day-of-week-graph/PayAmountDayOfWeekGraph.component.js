@@ -89,7 +89,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     for(let i = 0; i < props.dayOfWeekPayAmount.length; i++) {
                         let day = getDayName(props.dayOfWeekPayAmount[i].datetime);
 
-                        props.dayOfWeekPayAmount[i].performance.forEach(r2 => {
+                        props.dayOfWeekPayAmount[i].performances.forEach(r2 => {
                             if(r2.salesChannel === r.channel) {
                                 channelPayAmountData = channelPayAmountData.map(r3 => {
                                     if(r3.dayName === day) {

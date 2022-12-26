@@ -25,7 +25,7 @@ export default function DateButtonFieldView (props) {
                 <button
                     type='button'
                     className='button-el'
-                    onClick={() => props.onActionSearchDateRange(0, -1, 0)}
+                    onClick={() => props.onActionSearchDateRange(0, 0, -30)}
                 >
                     지난 30일
                 </button>
@@ -34,7 +34,7 @@ export default function DateButtonFieldView (props) {
                 <button
                     type='button'
                     className='button-el'
-                    onClick={() => props.onActionSearchDateRange(0, -3, 0)}
+                    onClick={() => props.onActionSearchDateRange(0, 0, -90)}
                 >
                     지난 90일
                 </button>

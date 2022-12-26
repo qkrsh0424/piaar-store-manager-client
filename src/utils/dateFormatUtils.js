@@ -233,8 +233,8 @@ function isSearchablePeriod(date1, date2, searchablePeriod) {
     var startDate = moment(date1);
     var endDate = moment(date2);
 
-    // diff + 1 <= searchablePeriod
-    if(endDate.diff(startDate, 'days') < searchablePeriod) {
+    // diff <= searchablePeriod
+    if(endDate.diff(startDate, 'days') <= searchablePeriod) {
         return true;
     }
     return false;

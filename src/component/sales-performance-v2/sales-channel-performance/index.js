@@ -9,11 +9,11 @@ import { getEndDate, getStartDate } from '../../../utils/dateFormatUtils';
 import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
 import ChannelSelectorComponent from './channel-selector/ChannelSelector.component';
-import useChannelPerformanceHook from './hooks/useChannelPerformanceHook';
 import PayAmountGraphComponent from './pay-amount-graph/PayAmountGraph.component';
 import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/RegistrationAndUnitGraph.component';
 import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
 import SearchOperatorComponent from './search-operator/SearchOperator.component';
+import useChannelSalesPerformanceHook from '../hooks/useChannelSalesPerformanceHook';
 
 const Container = styled.div`
     height: 100%;
@@ -40,6 +40,9 @@ const SalesChannelPerformanceComponent = (props) => {
     const [salesChannel, setSalesChannel] = useState(null);
     const [selectedChannel, setSelectedChannel] = useState(null);
 
+    const [searchDimension, setSearchDimension] = useState('date');
+    const [checkedSwitch, setCheckedSwitch] = useState(false);
+
     const {
         query,
         location
@@ -52,37 +55,35 @@ const SalesChannelPerformanceComponent = (props) => {
     } = useBackdropHook();
 
     const {
-        payAmount: channelPayAmount,
-        registrationAndUnit: channelRegistrationAndUnit,
-        dayOfWeekPayAmount: channelDayOfWeekPayAmount,
-        reqSearchPayAmount: reqSearchPayAmountByChannel,
-        reqSearchRegistrationAndUnit: reqSearchRegistrationAndUnitByChannel,
-        reqSearchDayOfWeekPayAmount: reqDayOfWeekPayAmountByChannel,
-        reqSearchProductPayAmount: reqSearchProductPayAmountByChannel
-    } = useChannelPerformanceHook();
+        performance,
+        reqSearchChannelPerformance
+    } = useChannelSalesPerformanceHook();
 
     useEffect(() => {
         async function fetchInit() {
             let startDate = query.startDate ? getStartDate(query.startDate) : null;
             let endDate = query.endDate ? getEndDate(query.endDate) : null;
-            let periodType = 'channelOrderDate';
 
             let params = {
                 startDate,
-                endDate,
-                periodType
+                endDate
             }
+
             onActionOpenBackdrop();
-            await __handle.req.searchSalesChannel(params);
+            await reqSearchChannelPerformance(params);
             onActionCloseBackdrop();
         }
 
-        if (!(query.startDate && query.endDate)) {
-            setSalesChannel(null);
-            return;
-        }
         fetchInit();
     }, [location])
+
+    useEffect(() => {
+        if(!performance) {
+            return;
+        }
+
+        __handle.action.initChannel();
+    }, [performance])
 
     const __handle = {
         req: {
@@ -106,30 +107,41 @@ const SalesChannelPerformanceComponent = (props) => {
             },
         },
         action: {
-            searchChannelPerformance: async (params) => {
-                onActionOpenBackdrop();
-                await reqSearchPayAmountByChannel(params);
-                await reqSearchRegistrationAndUnitByChannel(params);
-                await reqDayOfWeekPayAmountByChannel(params);
-                onActionCloseBackdrop();
+            initChannel: () => {
+                let channel = new Set([]);
+                performance.forEach(r => r.performances?.forEach(r2 => {
+                    channel.add(r2.salesChannel);
+                }))
+
+                setSalesChannel([...channel]);
+                setSelectedChannel([...channel]);
             },
-            searchChannelPayAmount: async (params) => {
-                onActionOpenBackdrop();
-                await reqSearchPayAmountByChannel(params);
-                onActionCloseBackdrop();
+            isCheckedOne: (channel) => {
+                return selectedChannel.some(name => name === channel);
             },
-            searchChannelRegistrationAndUnit: async (params) => {
-                onActionOpenBackdrop();
-                await reqSearchRegistrationAndUnitByChannel(params);
-                onActionCloseBackdrop();
+            checkOne: (e, channel) => {
+                e.stopPropagation();
+
+                let data = [...selectedChannel];
+
+                if(selectedChannel.some(name => name === channel)) {
+                    data = data.filter(name => name !== channel);
+                } else {
+                    data.push(channel);
+                }
+                setSelectedChannel(data);
             },
-            updateSelectedChannel: (selectedChannel) => {
-                setSelectedChannel([...selectedChannel]);
+            checkedClear: () => {
+                setSelectedChannel([]);
+                props.onActionUpdateSelectedChannel([]);
             },
-            searchChannelProductPayAmount: async (params) => {
-                onActionOpenBackdrop();
-                await reqSearchProductPayAmountByChannel(params);
-                onActionCloseBackdrop();
+            changeSwitch: () => {
+                let checkedValue = checkedSwitch;
+                setCheckedSwitch(!checkedValue);
+            },
+            changeDimension: (e) => {
+                let value = e.target.value;
+                setSearchDimension(value);
             }
         }
     }
@@ -139,45 +151,41 @@ const SalesChannelPerformanceComponent = (props) => {
             <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'판매스토어 성과'} />
 
-                <OperatorComponent
-
-                />
-
-                {/* <PayAmountGraphComponent
-                    salesChannel={salesChannel}
-                /> */}
+                <OperatorComponent />
 
                 <ChannelSelectorComponent
                     salesChannel={salesChannel}
+                    selectedChannel={selectedChannel}
                     onActionSearchChannelPerformance={__handle.action.searchChannelPerformance}
                     onActionUpdateSelectedChannel={__handle.action.updateSelectedChannel}
+                    onActionIsCheckedOne={__handle.action.isCheckedOne}
+                    onActionCheckOne={__handle.action.checkOne}
                 />
 
                 <PayAmountGraphComponent
                     salesChannel={salesChannel}
                     selectedChannel={selectedChannel}
-                    payAmount={channelPayAmount}
-
-                    onActionSearchChannelPayAmount={__handle.action.searchChannelPayAmount}
+                    searchDimension={searchDimension}
+                    checkedSwitch={checkedSwitch}
+                    payAmount={performance}
                 />
 
                 <RegistrationAndUnitGraphComponent
                     salesChannel={salesChannel}
                     selectedChannel={selectedChannel}
-                    registrationAndUnit={channelRegistrationAndUnit}
-
-                    onActionSearchChannelRegistrationAndUnit={__handle.action.searchChannelRegistrationAndUnit}
+                    searchDimension={searchDimension}
+                    checkedSwitch={checkedSwitch}
+                    registrationAndUnit={performance}
                 />
 
                 <PayAmountDayOfWeekGraphComponent
                     salesChannel={salesChannel}
                     selectedChannel={selectedChannel}
-                    dayOfWeekPayAmount={channelDayOfWeekPayAmount}
+                    dayOfWeekPayAmount={performance}
                 />
 
                 <SearchOperatorComponent
                     selectedChannel={selectedChannel}
-                    onActionSearchChannelProductPayAmount={__handle.action.searchChannelProductPayAmount}
                 />
             </Container>
 

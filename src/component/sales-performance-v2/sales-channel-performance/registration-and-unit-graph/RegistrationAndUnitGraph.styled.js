@@ -75,6 +75,7 @@ const GraphSummaryFieldWrapper = styled.div`
     min-width: 250px;
     width: 20%;
     height: 400px;
+    overflow: auto;
 
     .title {
         font-size: 1.1rem;

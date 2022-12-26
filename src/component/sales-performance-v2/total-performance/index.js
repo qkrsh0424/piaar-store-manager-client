@@ -6,6 +6,12 @@ import PayAmountGraphComponent from './pay-amount-graph/PayAmountGraph.component
 import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/RegistrationAndUnitGraph.component';
 import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
 import SummaryTableComponent from './summary-table/SummaryTable.component';
+import GraphOperatorComponent from './graph-operator/GraphOperator.component';
+import { useEffect, useState } from 'react';
+import useTotalSalesPerformanceHook from './hooks/useTotalSalesPerformanceHook';
+import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
+import { getEndDate, getStartDate } from '../../../utils/dateFormatUtils';
+import useRouterHook from '../../../hooks/router/useRouterHook';
 
 const Container = styled.div`
     height: 100%;
@@ -29,17 +35,95 @@ function PageTitleFieldView({ title }) {
 }
 
 const TotalSalesPerformanceComponent = (props) => {
+    const [searchDimension, setSearchDimension] = useState('date');
+    const [checkedSwitch, setCheckedSwitch] = useState(false);
+
+    const {
+        query
+    } = useRouterHook();
+
+    const {
+        location
+    } = useRouterHook();
+
+    const {
+        performance,
+        reqSearchTotalPerformance
+    } = useTotalSalesPerformanceHook();
+
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
+
+    useEffect(() => {
+        async function fetchInit() {
+            let startDate = query.startDate ? getStartDate(query.startDate) : null;
+            let endDate = query.endDate ? getEndDate(query.endDate) : null;
+
+            let params = {
+                startDate,
+                endDate
+            }
+
+            onActionOpenBackdrop();
+            await reqSearchTotalPerformance(params);
+            onActionCloseBackdrop();
+        }
+
+        fetchInit();
+    }, [location])
+
+    const __handle = {
+        action: {
+            changeSwitch: () => {
+                let checkedValue = checkedSwitch;
+                setCheckedSwitch(!checkedValue);
+            },
+            changeDimension: (e) => {
+                let value = e.target.value;
+                setSearchDimension(value);
+            }
+        }
+    }
+
     return (
-        <Container navbarOpen={props.navbarOpen}>
-            <PageTitleFieldView title={'총 매출액 & 판매건'} />
+        <>
+            <Container navbarOpen={props.navbarOpen}>
+                <PageTitleFieldView title={'총 매출액 & 판매건'} />
 
-            <OperatorComponent />
+                <OperatorComponent />
+                <GraphOperatorComponent
+                    searchDimension={searchDimension}
+                    checkedSwitch={checkedSwitch}
 
-            <PayAmountGraphComponent />
-            <RegistrationAndUnitGraphComponent />
-            <PayAmountDayOfWeekGraphComponent />
-            <SummaryTableComponent />
-        </Container>
+                    onActionChangeSwitch={__handle.action.changeSwitch}
+                    onActionChangeSearchDimension={__handle.action.changeDimension}
+                />
+
+                <PayAmountGraphComponent
+                    searchDimension={searchDimension}
+                    checkedSwitch={checkedSwitch}
+                    performance={performance}
+                />
+                <RegistrationAndUnitGraphComponent
+                    searchDimension={searchDimension}
+                    checkedSwitch={checkedSwitch}
+                    performance={performance}
+                />
+                <PayAmountDayOfWeekGraphComponent
+                    performance={performance}
+                />
+                <SummaryTableComponent
+                    performance={performance}
+                />
+            </Container>
+
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
+        </>
     )
 }
 

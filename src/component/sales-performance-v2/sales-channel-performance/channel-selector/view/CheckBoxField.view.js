@@ -9,20 +9,15 @@ export default function CheckBoxFieldView (props) {
                     return (
                         <div
                             key={'sales-channel-idx' + idx}
-                            className={`checkbox-group ${checked && 'checkbox-active'}`}
+                            className='button-box'
                             onClick={(e) => props.onActionCheckOne(e, r)}
                         >
-                            <div>
-                                <input
-                                    type='checkbox'
-                                    checked={checked}
-                                    onChange={(e) => props.onActionCheckOne(e, r)}
-                                    style={{ cursor: 'pointer' }}
-                                />
-                            </div>
-                            <div>
-                                <span>{r}</span>
-                            </div>
+                            <button
+                                type='button'
+                                className={`button-el ${checked && 'button-active'}`}
+                                checked={checked}
+                                onChange={(e) => props.onActionCheckOne(e, r)}
+                            >{r}</button>
                         </div>
                     )
                 })}

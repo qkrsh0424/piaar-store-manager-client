@@ -3,60 +3,20 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
-import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
-import { dateToYYYYMM, getDayName, getEndDate, getStartDate, getWeekName, getWeekNumber } from "../../../../utils/dateFormatUtils";
-import useTotalPayAmountHook from "./hooks/usePayAmountDayOfWeekHook";
+import { dateToYYYYMM, getDayName, getWeekName, getWeekNumber } from "../../../../utils/dateFormatUtils";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
 
 const WEEKLY_AVG_GRAPH_BG_COLOR = '#FFAFCC';
 const WEEKLY_GRAPH_BG_COLOR = ['#FFBCA2', '#FFCC89', '#FFB2BA', '#F58293', '#D2759F', '#FFCA67', '#A974BC'];
 
-export default function PayAmountDayOfWeekGraphComponent() {
+export default function PayAmountDayOfWeekGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);
     const [salesWeeklyGraphData, setSalesWeeklyGraphData] = useState(null);
     
     const [totalGraphOption, setTotalGraphOption] = useState(null);
-    
-    const {
-        location,
-        query,
-        navigateParams
-    } = useRouterHook();
-
-    const {
-        open: backdropOpen,
-        onActionOpen: onActionOpenBackdrop,
-        onActionClose: onActionCloseBackdrop
-    } = useBackdropHook();
-
-    const {
-        totalPayAmount: totalPayAmount,
-        reqSearchPayAmountDayOfWeek
-    } = useTotalPayAmountHook()
 
     useEffect(() => {
-        async function fetchInit() {
-            onActionOpenBackdrop();
-            let startDate = query.startDate ? getStartDate(query.startDate) : null;
-            let endDate = query.endDate ? getEndDate(query.endDate) : null;
-
-            let params = {
-                startDate,
-                endDate
-            }
-            await reqSearchPayAmountDayOfWeek(params);
-            onActionCloseBackdrop();
-        }
-
-        if (!(query.startDate && query.endDate)) {
-            __handle.action.resetGraphData();
-            return;
-        }
-        fetchInit();
-    }, [location])
-
-    useEffect(() => {
-        if(!(totalPayAmount && totalPayAmount.length > 0)) {
+        if(!(props.performance && props.performance.length > 0)) {
             __handle.action.resetGraphData();
             return;
         }
@@ -64,7 +24,7 @@ export default function PayAmountDayOfWeekGraphComponent() {
         __handle.action.createGraphData();
         __handle.action.createWeeklyGraphData();
         __handle.action.createGraphOption();
-    }, [totalPayAmount])
+    }, [props.performance])
 
     const __handle = {
         action: {
@@ -85,13 +45,13 @@ export default function PayAmountDayOfWeekGraphComponent() {
                 });
 
                 let graphLabels = [];
-                for(let i = 0; i < totalPayAmount.length; i++) {
-                    let day = getDayName(totalPayAmount[i].datetime);
+                for(let i = 0; i < props.performance.length; i++) {
+                    let day = getDayName(props.performance[i].datetime);
                     payAmountData = payAmountData.map(r => {
                         if(r.dayName === day) {
                             return {
                                 ...r,
-                                salesPayAmount: r.salesPayAmount + totalPayAmount[i].salesPayAmount,
+                                salesPayAmount: r.salesPayAmount + props.performance[i].salesPayAmount,
                                 frequency: r.frequency + 1
                             }
                         }else {
@@ -128,7 +88,7 @@ export default function PayAmountDayOfWeekGraphComponent() {
             createWeeklyGraphData: () => {
                 // 주차별 판매 매출액 그래프
                 let week = new Set([]);
-                totalPayAmount.forEach(r => week.add(dateToYYYYMM(r.datetime) + '-' + getWeekNumber(r.datetime)));
+                props.performance.forEach(r => week.add(dateToYYYYMM(r.datetime) + '-' + getWeekNumber(r.datetime)));
 
                 let payAmountWeeklyData = [];
                 let weekValue = {};
@@ -146,7 +106,7 @@ export default function PayAmountDayOfWeekGraphComponent() {
                     }
                 });
             
-                totalPayAmount.forEach(r => {
+                props.performance.forEach(r => {
                     let compareWeek = dateToYYYYMM(r.datetime) + '-' + getWeekNumber(r.datetime);
                     let compareDay = getDayName(r.datetime);
                     
@@ -209,21 +169,15 @@ export default function PayAmountDayOfWeekGraphComponent() {
     }
 
     return (
-        <>
-            <Container>
-                <GraphBoardFieldView />
-                <div className='content-box'>
-                    <GraphBodyFieldView
-                        totalGraphData={salesGraphData}
-                        totalWeeklyGraphData={salesWeeklyGraphData}
-                        totalGraphOption={totalGraphOption}
-                    />
-                </div>
-            </Container>
-
-            <BackdropHookComponent
-                open={backdropOpen}
-            />
-        </>
+        <Container>
+            <GraphBoardFieldView />
+            <div className='content-box'>
+                <GraphBodyFieldView
+                    totalGraphData={salesGraphData}
+                    totalWeeklyGraphData={salesWeeklyGraphData}
+                    totalGraphOption={totalGraphOption}
+                />
+            </div>
+        </Container>
     )
 }
