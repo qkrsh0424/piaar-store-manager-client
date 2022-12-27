@@ -37,14 +37,11 @@ export default function PayAmountGraphComponent(props) {
             resetGraphData: () => {
                 setTotalPayAmountGraphData(null);
                 setTotalSummaryData(null);
-
                 setSalesPayAmountGraphData(null);
                 setSalesSummaryData(null);
-                
                 setTotalPayAmountGraphOption(null);
             },
             createGraphData: () => {
-                let performanceData = [];
                 let salesPayAmountData = [];
                 let orderPayAmountData = [];
                 let graphLabels = new Set([]);

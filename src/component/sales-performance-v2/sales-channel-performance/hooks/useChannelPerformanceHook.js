@@ -8,11 +8,9 @@ export default function useChannelPerformanceHook () {
     const [productPayAmount, setProductPayAmount] = useState(null);
 
     const reqSearchPayAmount = async (params) => {
-        // await salesPerformanceDataConnect().searchPayAmountByChannel(params)
-        await salesPerformanceDataConnect().searchChannelPerformance(params)
+        await salesPerformanceDataConnect().searchPayAmountByChannel(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
-                    console.log(res.data.data);
                     setPayAmount(res.data.data);
                 }
             })

@@ -48,7 +48,8 @@ const TotalSalesPerformanceComponent = (props) => {
 
     const {
         performance,
-        reqSearchTotalPerformance
+        reqSearchTotalPerformance,
+        onActionResetPerformance
     } = useTotalSalesPerformanceHook();
 
     const {
@@ -65,6 +66,11 @@ const TotalSalesPerformanceComponent = (props) => {
             let params = {
                 startDate,
                 endDate
+            }
+
+            if(!(startDate && endDate)) {
+                onActionResetPerformance();
+                return;
             }
 
             onActionOpenBackdrop();

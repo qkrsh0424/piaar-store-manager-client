@@ -14,6 +14,7 @@ import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/Reg
 import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
 import SearchOperatorComponent from './search-operator/SearchOperator.component';
 import useChannelSalesPerformanceHook from '../hooks/useChannelSalesPerformanceHook';
+import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 
 const Container = styled.div`
     height: 100%;
@@ -69,6 +70,11 @@ const SalesChannelPerformanceComponent = (props) => {
                 endDate
             }
 
+            if(!(startDate && endDate)) {
+                __handle.action.clearChannel();
+                return;
+            }
+
             onActionOpenBackdrop();
             await reqSearchChannelPerformance(params);
             onActionCloseBackdrop();
@@ -86,26 +92,6 @@ const SalesChannelPerformanceComponent = (props) => {
     }, [performance])
 
     const __handle = {
-        req: {
-            searchSalesChannel: async (params) => {
-                await erpOrderItemDataConnect().searchSalesChannel(params)
-                    .then(res => {
-                        if (res.status === 200 && res.data.message === 'success') {
-                            let data = [...res.data.data].sort();
-                            setSalesChannel(data);
-                        }
-                    })
-                    .catch(err => {
-                        let res = err.response;
-                        if (res?.status === 500) {
-                            alert('undefined error.');
-                            return;
-                        }
-
-                        alert(res?.data.memo);
-                    })
-            },
-        },
         action: {
             initChannel: () => {
                 let channel = new Set([]);
@@ -142,6 +128,10 @@ const SalesChannelPerformanceComponent = (props) => {
             changeDimension: (e) => {
                 let value = e.target.value;
                 setSearchDimension(value);
+            },
+            clearChannel: () => {
+                setSalesChannel(null);
+                setSelectedChannel(null);
             }
         }
     }
@@ -156,10 +146,16 @@ const SalesChannelPerformanceComponent = (props) => {
                 <ChannelSelectorComponent
                     salesChannel={salesChannel}
                     selectedChannel={selectedChannel}
-                    onActionSearchChannelPerformance={__handle.action.searchChannelPerformance}
-                    onActionUpdateSelectedChannel={__handle.action.updateSelectedChannel}
                     onActionIsCheckedOne={__handle.action.isCheckedOne}
                     onActionCheckOne={__handle.action.checkOne}
+                />
+
+                <GraphOperatorComponent
+                    checkedSwitch={checkedSwitch}
+                    searchDimension={searchDimension}
+
+                    onActionChangeSwitch={__handle.action.changeSwitch}
+                    onActionChangeSearchDimension={__handle.action.changeDimension}
                 />
 
                 <PayAmountGraphComponent

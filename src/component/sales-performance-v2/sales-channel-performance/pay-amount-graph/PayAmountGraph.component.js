@@ -3,9 +3,7 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import useRouterHook from "../../../../hooks/router/useRouterHook";
-import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
-import { dateToYYYYMM, getEndDate, getStartDate, getWeekNumber } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMM, getWeekNumber } from "../../../../utils/dateFormatUtils";
 import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
 const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
@@ -20,12 +18,6 @@ export default function PayAmountGraphComponent(props) {
 
     const [payAmountGraphOption, setPayAmountGraphOption] = useState(null);
 
-    const {
-        location,
-        query,
-        navigateParams
-    } = useRouterHook();
-
     useEffect(() => {
         __handle.action.resetGraphData();
     }, [props.salesChannel])
@@ -36,6 +28,10 @@ export default function PayAmountGraphComponent(props) {
             return;
         }
 
+        if (!props.searchDimension) {
+            return;
+        }
+
         if (!(props.payAmount && props.payAmount.length > 0)) {
             __handle.action.resetGraphData();
             return;
@@ -43,16 +39,14 @@ export default function PayAmountGraphComponent(props) {
 
         __handle.action.createGraphData();
         __handle.action.createGraphOption();
-    }, [props.selectedChannel, props.payAmount])
+    }, [props.selectedChannel, props.payAmount, props.searchDimension])
 
     const __handle = {
         action: {
             resetGraphData: () => {
                 setTotalPayAmountGraphData(null);
-
                 setSalesPayAmountGraphData(null);
                 setSalesSummaryData(null);
-
                 setPayAmountGraphOption(null);
             },
             createGraphData: () => {
@@ -60,7 +54,7 @@ export default function PayAmountGraphComponent(props) {
                 let orderPayAmountData = [];
                 let salesDatasets = [];
                 let orderDatasets = [];
-                let graphLabels = [];
+                let graphLabels = new Set([]);
                 let channel = [...props.selectedChannel];
 
                 for (let i = 0; i < props.payAmount.length; i++) {
@@ -70,19 +64,35 @@ export default function PayAmountGraphComponent(props) {
                     } else if (props.searchDimension === 'month') {
                         datetime = dateToYYYYMM(props.payAmount[i].datetime);
                     }
-                    graphLabels.push(datetime);
+                    graphLabels.add(datetime);
                 }
 
                 channel.forEach(r => {
                     let salesPayAmount = [];
                     let orderPayAmount = [];
+                    let dateValue = new Set([]);
 
-                    props.payAmount.forEach(r2 => {
-                        let data = r2.performances?.filter(r3 => r3.salesChannel === r)[0];
+                    for(let i = 0; i < props.payAmount.length; i++) {
+                        let data = props.payAmount[i];
+                        let datetime = dateToYYMMDDAndDayName(data.datetime);
+                        if (props.searchDimension === 'week') {
+                            datetime = dateToYYYYMM(data.datetime) + '-' + getWeekNumber(data.datetime) + '주차';
+                        } else if (props.searchDimension === 'month') {
+                            datetime = dateToYYYYMM(data.datetime);
+                        }
                         
-                        salesPayAmount.push(data?.salesPayAmount || 0);
-                        orderPayAmount.push(data?.orderPayAmount || 0);
-                    })
+                        let performance = data.performances?.filter(r3 => r3.salesChannel === r)[0];
+                        let salesValue = performance?.salesPayAmount || 0;
+                        let orderValue = performance?.orderPayAmount || 0;
+                        if(dateValue.has(datetime)) {
+                            salesPayAmount[salesPayAmount.length - 1] += salesValue;
+                            orderPayAmount[orderPayAmount.length - 1] += orderValue;
+                        }else {
+                            dateValue.add(datetime);
+                            salesPayAmount.push(salesValue);
+                            orderPayAmount.push(orderValue);
+                        }
+                    }
 
                     salesPayAmountData.push(salesPayAmount);
                     orderPayAmountData.push(orderPayAmount);
@@ -156,11 +166,11 @@ export default function PayAmountGraphComponent(props) {
 
                 // 매출 그래프 데이터 생성
                 let createdSalesGraph = {
-                    labels: graphLabels,
+                    labels: [...graphLabels],
                     datasets: salesDatasets
                 }
                 let createdTotalGraph = {
-                    labels: graphLabels,
+                    labels: [...graphLabels],
                     datasets: [...salesDatasets, ...orderDatasets]
                 }
 

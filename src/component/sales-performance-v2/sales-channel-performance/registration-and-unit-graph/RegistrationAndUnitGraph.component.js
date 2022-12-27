@@ -4,7 +4,7 @@ import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
-import { dateToYYYYMM, getEndDate, getStartDate, getWeekNumber } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMM, getWeekNumber } from "../../../../utils/dateFormatUtils";
 import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
 // const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
@@ -23,12 +23,6 @@ export default function RegistrationAndUnitGraphComponent(props) {
     
     const [totalGraphOption, setTotalGraphOption] = useState(null);
 
-    const {
-        location,
-        query,
-        navigateParams
-    } = useRouterHook();
-
     useEffect(() => {
         __handle.action.resetGraphData();
     }, [props.salesChannel])
@@ -36,6 +30,10 @@ export default function RegistrationAndUnitGraphComponent(props) {
     useEffect(() => {
         if(!props.selectedChannel) {
             __handle.action.resetGraphData();
+            return;
+        }
+
+        if(!props.searchDimension) {
             return;
         }
 
@@ -47,20 +45,17 @@ export default function RegistrationAndUnitGraphComponent(props) {
         __handle.action.createRegistrationGraphData();
         __handle.action.createUnitGraphData();
         __handle.action.createGraphOption();
-    }, [props.selectedChannel, props.registrationAndUnit])
+    }, [props.selectedChannel, props.registrationAndUnit, props.searchDimension])
 
     const __handle = {
         action: {
             resetGraphData: () => {
                 setTotalRegistrationGraphData(null);
                 setTotalUnitGraphData(null);
-                
                 setSalesRegistrationGraphData(null);
                 setSalesUnitGraphData(null);
-                
                 setRegistrationSummaryData(null);
                 setUnitSummaryData(null);
-                
                 setTotalGraphOption(null);
             },
             createRegistrationGraphData: () => {
@@ -68,7 +63,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let orderRegistrationData = [];
                 let salesDatasets = [];
                 let orderDatasets = [];
-                let graphLabels = [];
+                let graphLabels = new Set([]);
                 let channel = [...props.selectedChannel];
 
                 for(let i = 0; i < props.registrationAndUnit.length; i++) {
@@ -78,19 +73,35 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     }else if(props.searchDimension === 'month') {
                         datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime);
                     }
-                    graphLabels.push(datetime);
+                    graphLabels.add(datetime);
                 }
 
                 channel.forEach(r => {
                     let salesRegistration = [];
                     let orderRegistration = [];
+                    let dateValue = new Set([]);
 
-                    props.registrationAndUnit.forEach(r2 => {
-                        let data = r2.performances?.filter(r3 => r3.salesChannel === r)[0];
-
-                        salesRegistration.push(data?.salesRegistration || 0);
-                        orderRegistration.push(data?.orderRegistration || 0);
-                    })
+                    for(let i = 0; i < props.registrationAndUnit.length; i++) {
+                        let data = props.registrationAndUnit[i];
+                        let datetime = dateToYYMMDDAndDayName(data.datetime);
+                        if (props.searchDimension === 'week') {
+                            datetime = dateToYYYYMM(data.datetime) + '-' + getWeekNumber(data.datetime) + '주차';
+                        } else if (props.searchDimension === 'month') {
+                            datetime = dateToYYYYMM(data.datetime);
+                        }
+                        
+                        let performance = data.performances?.filter(r3 => r3.salesChannel === r)[0];
+                        let salesValue = performance?.salesRegistration || 0;
+                        let orderValue = performance?.orderRegistration || 0;
+                        if(dateValue.has(datetime)) {
+                            salesRegistration[salesRegistration.length - 1] += salesValue;
+                            orderRegistration[orderRegistration.length - 1] += orderValue;
+                        }else {
+                            dateValue.add(datetime);
+                            salesRegistration.push(salesValue);
+                            orderRegistration.push(orderValue);
+                        }
+                    }
 
                     salesRegistrationData.push(salesRegistration);
                     orderRegistrationData.push(orderRegistration);
@@ -164,11 +175,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
                 // 매출 그래프 데이터 생성
                 let createSalesGraph = {
-                    labels: graphLabels,
+                    labels: [...graphLabels],
                     datasets: salesDatasets
                 }
                 let createdTotalGraph = {
-                    labels: graphLabels,
+                    labels: [...graphLabels],
                     datasets: [...salesDatasets, ...orderDatasets]
                 }
                 setSalesRegistrationGraphData(createSalesGraph)
@@ -192,7 +203,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let orderUnitData = [];
                 let salesDatasets = [];
                 let orderDatasets = [];
-                let graphLabels = [];
+                let graphLabels = new Set([]);
                 let channel = [...props.selectedChannel];
 
                 for(let i = 0; i < props.registrationAndUnit.length; i++) {
@@ -202,19 +213,35 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     }else if(props.searchDimension === 'month') {
                         datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime);
                     }
-                    graphLabels.push(datetime);
+                    graphLabels.add(datetime);
                 }
 
                 channel.forEach(r => {
                     let salesUnit = [];
                     let orderUnit = [];
+                    let dateValue = new Set([]);
 
-                    props.registrationAndUnit.forEach(r2 => {
-                        let data = r2.performances?.filter(r3 => r3.salesChannel === r)[0];
-
-                        salesUnit.push(data?.salesUnit || 0);
-                        orderUnit.push(data?.orderUnit || 0);
-                    })
+                    for(let i = 0; i < props.registrationAndUnit.length; i++) {
+                        let data = props.registrationAndUnit[i];
+                        let datetime = dateToYYMMDDAndDayName(data.datetime);
+                        if (props.searchDimension === 'week') {
+                            datetime = dateToYYYYMM(data.datetime) + '-' + getWeekNumber(data.datetime) + '주차';
+                        } else if (props.searchDimension === 'month') {
+                            datetime = dateToYYYYMM(data.datetime);
+                        }
+                        
+                        let performance = data.performances?.filter(r3 => r3.salesChannel === r)[0];
+                        let salesValue = performance?.salesUnit || 0;
+                        let orderValue = performance?.orderUnit || 0;
+                        if(dateValue.has(datetime)) {
+                            salesUnit[salesUnit.length - 1] += salesValue;
+                            orderUnit[orderUnit.length - 1] += orderValue;
+                        }else {
+                            dateValue.add(datetime);
+                            salesUnit.push(salesValue);
+                            orderUnit.push(orderValue);
+                        }
+                    }
 
                     salesUnitData.push(salesUnit);
                     orderUnitData.push(orderUnit);
@@ -288,11 +315,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
                 // 매출 그래프 데이터 생성
                 let createSalesGraph = {
-                    labels: graphLabels,
+                    labels: [...graphLabels],
                     datasets: salesDatasets
                 }
                 let createdTotalGraph = {
-                    labels: graphLabels,
+                    labels: [...graphLabels],
                     datasets: [...salesDatasets, ...orderDatasets]
                 }
                 setSalesUnitGraphData(createSalesGraph)

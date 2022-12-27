@@ -84,6 +84,10 @@ export default function OperatorComponent(props) {
                     if (!startDate && endDate) {
                         throw new Error('시작일 날짜를 선택해 주세요.')
                     }
+
+                    if(!(startDate && endDate)) {
+                        throw new Error('시작일과 종료일을 선택해 주세요.')
+                    }
     
                     if ((endDate - startDate < 0)) {
                         throw new Error('조회기간을 정확히 선택해 주세요.')

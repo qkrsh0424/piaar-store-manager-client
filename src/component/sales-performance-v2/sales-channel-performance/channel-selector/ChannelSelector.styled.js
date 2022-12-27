@@ -70,20 +70,20 @@ const CheckBoxFieldWrapper = styled.div`
     }
 
     .button-box {
-        transition: 0.1s;
-
         :hover {
-            cursor: pointer;
-            font-weight: 700;
+            transition: 0.1s;
+            transform: scale(1.02);
         }
     }
-
+    
     .button-el {
+        transition: 0.1s;
         width: 100px;
         border: 1px solid var(--defaultBorderColor);
         background-color: var(--defaultButtonColor);
         border-radius: 20px;
         font-size: 14px;
+        box-shadow: var(--defaultBoxShadow);
         
         &.button-active {
             border: 1px solid var(--piaar-main-color);
