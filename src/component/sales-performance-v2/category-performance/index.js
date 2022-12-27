@@ -7,12 +7,11 @@ import { useEffect } from 'react';
 import { getEndDate, getStartDate } from '../../../utils/dateFormatUtils';
 import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
-import ChannelSelectorComponent from './channel-selector/ChannelSelector.component';
 import PayAmountGraphComponent from './pay-amount-graph/PayAmountGraph.component';
 import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/RegistrationAndUnitGraph.component';
 import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
 import GraphOperatorComponent from './graph-operator/GraphOperator.component';
-import useChannelSalesPerformanceHook from './hooks/useChannelSalesPerformanceHook';
+import useCategorySalesPerformanceHook from './hooks/useCategorySalesPerformanceHook';
 
 const Container = styled.div`
     height: 100%;
@@ -35,7 +34,7 @@ function PageTitleFieldView({ title }) {
     )
 }
 
-const SalesChannelPerformanceComponent = (props) => {
+const CategoryPerformanceComponent = (props) => {
     const [salesChannel, setSalesChannel] = useState(null);
     const [selectedChannel, setSelectedChannel] = useState(null);
 
@@ -56,12 +55,12 @@ const SalesChannelPerformanceComponent = (props) => {
     const {
         performance,
         reqSearchChannelPerformance
-    } = useChannelSalesPerformanceHook();
+    } = useCategorySalesPerformanceHook();
 
     useEffect(() => {
         async function fetchInit() {
-            let startDate = query.startDate ? getStartDate(query.startDate).toJSON() : null;
-            let endDate = query.endDate ? getEndDate(query.endDate).toJSON() : null;
+            let startDate = query.startDate ? getStartDate(query.startDate) : null;
+            let endDate = query.endDate ? getEndDate(query.endDate) : null;
 
             let params = {
                 startDate,
@@ -138,16 +137,9 @@ const SalesChannelPerformanceComponent = (props) => {
     return (
         <>
             <Container navbarOpen={props.navbarOpen}>
-                <PageTitleFieldView title={'판매스토어 성과'} />
+                <PageTitleFieldView title={'카테고리 성과'} />
 
                 <OperatorComponent />
-
-                <ChannelSelectorComponent
-                    salesChannel={salesChannel}
-                    selectedChannel={selectedChannel}
-                    onActionIsCheckedOne={__handle.action.isCheckedOne}
-                    onActionCheckOne={__handle.action.checkOne}
-                />
 
                 <GraphOperatorComponent
                     checkedSwitch={checkedSwitch}
@@ -187,4 +179,4 @@ const SalesChannelPerformanceComponent = (props) => {
     )
 }
 
-export default SalesChannelPerformanceComponent;
+export default CategoryPerformanceComponent;

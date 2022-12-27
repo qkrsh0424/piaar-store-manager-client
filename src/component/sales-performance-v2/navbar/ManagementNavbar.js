@@ -105,30 +105,40 @@ const thisRouters = [
         ]
     },
     {
-        title: '판매성과 상세',
+        title: '전체 판매성과',
         page: [
             {
                 name: '총 매출액 & 판매 건',
                 pathname: '/sales-performance/total',
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
+        ]
+    },
+    {
+        title: '판매스토어 성과',
+        page: [
             {
-                name: '판매스토어 성과',
+                name: '총 매출액 & 판매 건',
                 pathname: '/sales-performance/sales-channel',
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
-                name: '카테고리 성과',
-                pathname: '/sales-performance/product-category',
+                name: '상품별 매출',
+                pathname: '/sales-performance/sales-channel/product',
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
-            },
-            {
-                name: '상품 성과',
-                pathname: '/sales-performance/product',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
-            },
+            }
         ]
     },
+    {
+        title: '카테고리 성과',
+        page: [
+            {
+                name: '총 매출액 & 판매 건',
+                pathname: '/sales-performance/category',
+                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+            }
+        ]
+    }
 ]
 
 const ManagementNavbar = (props) => {

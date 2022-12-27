@@ -8,11 +8,11 @@ import { getEndDate, getStartDate } from '../../../utils/dateFormatUtils';
 import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
 import ChannelSelectorComponent from './channel-selector/ChannelSelector.component';
+import GraphOperatorComponent from './graph-operator/GraphOperator.component';
+import useChannelSalesPerformanceHook from './hooks/useChannelSalesPerformanceHook';
 import PayAmountGraphComponent from './pay-amount-graph/PayAmountGraph.component';
 import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/RegistrationAndUnitGraph.component';
 import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
-import GraphOperatorComponent from './graph-operator/GraphOperator.component';
-import useChannelSalesPerformanceHook from './hooks/useChannelSalesPerformanceHook';
 
 const Container = styled.div`
     height: 100%;
@@ -35,7 +35,7 @@ function PageTitleFieldView({ title }) {
     )
 }
 
-const SalesChannelPerformanceComponent = (props) => {
+const SalesChannelProductPerformanceComponent = (props) => {
     const [salesChannel, setSalesChannel] = useState(null);
     const [selectedChannel, setSelectedChannel] = useState(null);
 
@@ -62,10 +62,12 @@ const SalesChannelPerformanceComponent = (props) => {
         async function fetchInit() {
             let startDate = query.startDate ? getStartDate(query.startDate).toJSON() : null;
             let endDate = query.endDate ? getEndDate(query.endDate).toJSON() : null;
+            let optionCode = query.optionCode || null;
 
             let params = {
                 startDate,
-                endDate
+                endDate,
+                optionCode
             }
 
             if(!(startDate && endDate)) {
@@ -78,6 +80,9 @@ const SalesChannelPerformanceComponent = (props) => {
             onActionCloseBackdrop();
         }
 
+        if(!query.optionCode) {
+            return;
+        }
         fetchInit();
     }, [location])
 
@@ -177,7 +182,7 @@ const SalesChannelPerformanceComponent = (props) => {
                     salesChannel={salesChannel}
                     selectedChannel={selectedChannel}
                     dayOfWeekPayAmount={performance}
-                />
+                />                
             </Container>
 
             <BackdropHookComponent
@@ -187,4 +192,4 @@ const SalesChannelPerformanceComponent = (props) => {
     )
 }
 
-export default SalesChannelPerformanceComponent;
+export default SalesChannelProductPerformanceComponent;
