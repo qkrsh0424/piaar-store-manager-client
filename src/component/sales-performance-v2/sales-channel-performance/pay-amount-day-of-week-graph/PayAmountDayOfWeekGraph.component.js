@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { getDayName, getWeekName } from "../../../../utils/dateFormatUtils";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
 import { Container } from "./PayAmountDayOfWeekGraph.styled";
@@ -10,15 +9,7 @@ const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB'
 
 export default function PayAmountDayOfWeekGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);
-    const [salesWeeklyGraphData, setSalesWeeklyGraphData] = useState(null);
-    
     const [totalGraphOption, setTotalGraphOption] = useState(null);
-    
-    const {
-        location,
-        query,
-        navigateParams
-    } = useRouterHook();
 
     useEffect(() => {
         __handle.action.resetGraphData();
@@ -43,8 +34,6 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
         action: {
             resetGraphData: () => {
                 setSalesGraphData(null);
-                setSalesWeeklyGraphData(null);
-                
                 setTotalGraphOption(null);
             },
             createGraphData: () => {

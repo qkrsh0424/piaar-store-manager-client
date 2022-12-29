@@ -25,10 +25,10 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
     useEffect(() => {
         __handle.action.resetGraphData();
-    }, [props.salesChannel])
+    }, [props.category])
 
     useEffect(() => {
-        if(!props.selectedChannel) {
+        if(!props.selectedCategory) {
             __handle.action.resetGraphData();
             return;
         }
@@ -45,7 +45,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
         __handle.action.createRegistrationGraphData();
         __handle.action.createUnitGraphData();
         __handle.action.createGraphOption();
-    }, [props.selectedChannel, props.registrationAndUnit, props.searchDimension])
+    }, [props.selectedCategory, props.registrationAndUnit, props.searchDimension])
 
     const __handle = {
         action: {
@@ -64,7 +64,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let salesDatasets = [];
                 let orderDatasets = [];
                 let graphLabels = new Set([]);
-                let channel = [...props.selectedChannel];
+                let category = [...props.selectedCategory];
 
                 for(let i = 0; i < props.registrationAndUnit.length; i++) {
                     let datetime = dateToYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
@@ -76,7 +76,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     graphLabels.add(datetime);
                 }
 
-                channel.forEach(r => {
+                category.forEach(r => {
                     let salesRegistration = [];
                     let orderRegistration = [];
                     let dateValue = new Set([]);
@@ -90,7 +90,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                             datetime = dateToYYYYMM(data.datetime);
                         }
                         
-                        let performance = data.performances?.filter(r3 => r3.salesChannel === r)[0];
+                        let performance = data.performances?.filter(r3 => r3.productCategory === r)[0];
                         let salesValue = performance?.salesRegistration || 0;
                         let orderValue = performance?.orderRegistration || 0;
                         if(dateValue.has(datetime)) {
@@ -108,13 +108,13 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 })
                 
                 let graphColor = SALES_CHNNAEL_GRAPH_BG_COLOR;
-                for (let i = SALES_CHNNAEL_GRAPH_BG_COLOR.length; i < channel.length; i++) {
+                for (let i = SALES_CHNNAEL_GRAPH_BG_COLOR.length; i < category.length; i++) {
                     let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
                     graphColor.push(randomColor);
                 }
 
                 // 판매 그래프 데이터 세팅
-                if(channel.size === 0) {
+                if(category.size === 0) {
                     let barGraphOfSales = {
                         ...new GraphDataset().toJSON(),
                         type: 'bar',
@@ -127,7 +127,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     }
                     salesDatasets.push(barGraphOfSales);
                 } else {
-                    channel.forEach((r, idx) => {
+                    category.forEach((r, idx) => {
                         let barGraphOfSales = {
                             ...new GraphDataset().toJSON(),
                             type: 'bar',
@@ -143,7 +143,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 }
 
                 // 주문 그래프 데이터 세팅
-                if(channel.size === 0) {
+                if(category.size === 0) {
                     let lineGraphOfOrder = {
                         ...new GraphDataset().toJSON(),
                         label: '주문 건',
@@ -157,7 +157,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     }
                     orderDatasets.push(lineGraphOfOrder);
                 } else {
-                    channel.forEach((r, idx) => {
+                    category.forEach((r, idx) => {
                         let lineGraphOfOrder = {
                             ...new GraphDataset().toJSON(),
                             type: 'line',
@@ -204,7 +204,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let salesDatasets = [];
                 let orderDatasets = [];
                 let graphLabels = new Set([]);
-                let channel = [...props.selectedChannel];
+                let category = [...props.selectedCategory];
 
                 for(let i = 0; i < props.registrationAndUnit.length; i++) {
                     let datetime = dateToYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
@@ -216,7 +216,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     graphLabels.add(datetime);
                 }
 
-                channel.forEach(r => {
+                category.forEach(r => {
                     let salesUnit = [];
                     let orderUnit = [];
                     let dateValue = new Set([]);
@@ -230,7 +230,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                             datetime = dateToYYYYMM(data.datetime);
                         }
                         
-                        let performance = data.performances?.filter(r3 => r3.salesChannel === r)[0];
+                        let performance = data.performances?.filter(r3 => r3.productCategory === r)[0];
                         let salesValue = performance?.salesUnit || 0;
                         let orderValue = performance?.orderUnit || 0;
                         if(dateValue.has(datetime)) {
@@ -248,13 +248,13 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 })
                 
                 let graphColor = SALES_CHNNAEL_GRAPH_BG_COLOR;
-                for (let i = SALES_CHNNAEL_GRAPH_BG_COLOR.length; i < channel.length; i++) {
+                for (let i = SALES_CHNNAEL_GRAPH_BG_COLOR.length; i < category.length; i++) {
                     let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
                     graphColor.push(randomColor);
                 }
 
                 // 판매 그래프 데이터 세팅
-                if(channel.size === 0) {
+                if(category.size === 0) {
                     let barGraphOfSales = {
                         ...new GraphDataset().toJSON(),
                         type: 'bar',
@@ -267,7 +267,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     }
                     salesDatasets.push(barGraphOfSales);
                 } else {
-                    channel.forEach((r, idx) => {
+                    category.forEach((r, idx) => {
                         let barGraphOfSales = {
                             ...new GraphDataset().toJSON(),
                             type: 'bar',
@@ -283,7 +283,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 }
 
                 // 주문 그래프 데이터 세팅
-                if(channel.size === 0) {
+                if(category.size === 0) {
                     let lineGraphOfOrder = {
                         ...new GraphDataset().toJSON(),
                         label: '주문 수량',
@@ -297,7 +297,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     }
                     orderDatasets.push(lineGraphOfOrder);
                 } else {
-                    channel.forEach((r, idx) => {
+                    category.forEach((r, idx) => {
                         let lineGraphOfOrder = {
                             ...new GraphDataset().toJSON(),
                             type: 'line',

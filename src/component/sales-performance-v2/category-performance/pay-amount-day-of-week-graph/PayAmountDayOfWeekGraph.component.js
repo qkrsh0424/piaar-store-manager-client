@@ -10,22 +10,15 @@ const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB'
 
 export default function PayAmountDayOfWeekGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);
-    const [salesWeeklyGraphData, setSalesWeeklyGraphData] = useState(null);
     
     const [totalGraphOption, setTotalGraphOption] = useState(null);
-    
-    const {
-        location,
-        query,
-        navigateParams
-    } = useRouterHook();
 
     useEffect(() => {
         __handle.action.resetGraphData();
-    }, [props.salesChannel])
+    }, [props.category])
 
     useEffect(() => {
-        if (!props.selectedChannel) {
+        if (!props.selectedCategory) {
             __handle.action.resetGraphData();
             return;
         }
@@ -37,13 +30,12 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
 
         __handle.action.createGraphData();
         __handle.action.createGraphOption();
-    }, [props.selectedChannel, props.dayOfWeekPayAmount])
+    }, [props.selectedCategory, props.dayOfWeekPayAmount])
 
     const __handle = {
         action: {
             resetGraphData: () => {
                 setSalesGraphData(null);
-                setSalesWeeklyGraphData(null);
                 
                 setTotalGraphOption(null);
             },
@@ -51,9 +43,9 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 let salesPayAmountData = [];
                 let salesDatasets = [];
                 let graphLabels = getWeekName();
-                let channel = [...props.selectedChannel];
+                let category = [...props.selectedCategory];
 
-                let channelPayAmount = channel.map(r => {
+                let categoryPayAmount = category.map(r => {
                     let data = getWeekName().map(r2 => {
                         return {
                             dayName: r2,
@@ -63,15 +55,15 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     })
 
                     return {
-                        channel: r,
+                        category: r,
                         payAmountData: data
                     }
                 });
 
                 /**
-                 * channelPayAmount = [
+                 * categoryPayAmount = [
                  *  {
-                 *      channel: A,
+                 *      category: A,
                  *      payAmountData: [
                  *          {dayName: '일', salesPayAmount: -, frequency: -},
                  *          {dayName: '월', salesPayAmount: -. freqiemcy: -},
@@ -83,15 +75,15 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                  *  }
                  * ]
                  */
-                channelPayAmount = channelPayAmount.map(r => {
-                    let channelPayAmountData = [...r.payAmountData];
+                categoryPayAmount = categoryPayAmount.map(r => {
+                    let categoryPayAmountData = [...r.payAmountData];
 
                     for(let i = 0; i < props.dayOfWeekPayAmount.length; i++) {
                         let day = getDayName(props.dayOfWeekPayAmount[i].datetime);
 
                         props.dayOfWeekPayAmount[i].performances.forEach(r2 => {
-                            if(r2.salesChannel === r.channel) {
-                                channelPayAmountData = channelPayAmountData.map(r3 => {
+                            if(r2.productCategory === r.category) {
+                                categoryPayAmountData = categoryPayAmountData.map(r3 => {
                                     if(r3.dayName === day) {
                                         return {
                                             ...r3,
@@ -108,28 +100,28 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
 
                     return {
                         ...r,
-                        payAmountData : channelPayAmountData
+                        payAmountData : categoryPayAmountData
                     }
                 });
 
-                channelPayAmount.forEach(r => {
-                    let channelSalesPayAmountData = [];
+                categoryPayAmount.forEach(r => {
+                    let categorySalesPayAmountData = [];
                     for(let i = 0; i < r.payAmountData.length; i++) {
                         let salesAvg = parseInt((r.payAmountData[i].salesPayAmount) / r.payAmountData[i].frequency);
                     
-                        channelSalesPayAmountData.push(salesAvg);
+                        categorySalesPayAmountData.push(salesAvg);
                     }
 
-                    salesPayAmountData.push(channelSalesPayAmountData);
+                    salesPayAmountData.push(categorySalesPayAmountData);
                 })
 
                 let graphColor = SALES_CHNNAEL_GRAPH_BG_COLOR;
-                for (let i = SALES_CHNNAEL_GRAPH_BG_COLOR.length; i < channel.length; i++) {
+                for (let i = SALES_CHNNAEL_GRAPH_BG_COLOR.length; i < category.length; i++) {
                     let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
                     graphColor.push(randomColor);
                 }
 
-                if(channel.size === 0) {
+                if(category.size === 0) {
                     let barGraphOfSales = {
                         ...new GraphDataset().toJSON(),
                         type: 'bar',
@@ -142,11 +134,11 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     }
                     salesDatasets.push(barGraphOfSales);
                 } else {
-                    channelPayAmount.forEach((r, idx) => {
+                    categoryPayAmount.forEach((r, idx) => {
                         let barGraphOfSales = {
                             ...new GraphDataset().toJSON(),
                             type: 'bar',
-                            label: r.channel,
+                            label: r.category,
                             data: salesPayAmountData[idx],
                             borderColor: graphColor[idx],
                             backgroundColor: graphColor[idx],

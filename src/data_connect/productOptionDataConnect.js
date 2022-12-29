@@ -59,7 +59,7 @@ const productOptionDataConnect = () => {
             })
         },
 
-        // api/v2/product-options
+        // api/v2/product-options/~
         searchAllRelatedProduct: async function () {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product-options/all/product`, {
                 withCredentials: true

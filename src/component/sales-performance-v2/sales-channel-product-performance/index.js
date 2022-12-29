@@ -123,7 +123,7 @@ const SalesChannelProductPerformanceComponent = (props) => {
             },
             checkedClear: () => {
                 setSelectedChannel([]);
-                props.onActionUpdateSelectedChannel([]);
+                // props.onActionUpdateSelectedChannel([]);
             },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;

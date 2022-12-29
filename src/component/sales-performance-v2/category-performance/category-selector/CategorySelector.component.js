@@ -1,14 +1,9 @@
-import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { Container } from "./ChannelSelector.styled";
+import { Container } from "./CategorySelector.styled";
 import CheckBoxFieldView from "./view/CheckBoxField.view";
 import TextFieldView from "./view/TextField.view";
 
-export default function ChannelSelectorComponent(props) {
-    const {
-        query,
-    } = useRouterHook();
-
+export default function CategorySelectorComponent(props) {
     const {
         open: snackbarOpen,
         message: snackbarMessage,
@@ -22,7 +17,7 @@ export default function ChannelSelectorComponent(props) {
             <TextFieldView />
 
             <CheckBoxFieldView
-                salesChannel={props.salesChannel}
+                category={props.category}
                 onActionIsCheckedOne={props.onActionIsCheckedOne}
                 onActionCheckOne={props.onActionCheckOne}
             />

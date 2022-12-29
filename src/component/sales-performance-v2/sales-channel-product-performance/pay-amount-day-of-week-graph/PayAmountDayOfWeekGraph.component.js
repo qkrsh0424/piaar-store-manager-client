@@ -10,8 +10,6 @@ const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB'
 
 export default function PayAmountDayOfWeekGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);
-    const [salesWeeklyGraphData, setSalesWeeklyGraphData] = useState(null);
-    
     const [totalGraphOption, setTotalGraphOption] = useState(null);
     
     const {
@@ -43,8 +41,6 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
         action: {
             resetGraphData: () => {
                 setSalesGraphData(null);
-                setSalesWeeklyGraphData(null);
-                
                 setTotalGraphOption(null);
             },
             createGraphData: () => {

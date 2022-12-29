@@ -12,6 +12,7 @@ import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/Reg
 import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
 import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import useCategorySalesPerformanceHook from './hooks/useCategorySalesPerformanceHook';
+import CategorySelectorComponent from './category-selector/CategorySelector.component';
 
 const Container = styled.div`
     height: 100%;
@@ -35,8 +36,8 @@ function PageTitleFieldView({ title }) {
 }
 
 const CategoryPerformanceComponent = (props) => {
-    const [salesChannel, setSalesChannel] = useState(null);
-    const [selectedChannel, setSelectedChannel] = useState(null);
+    const [category, setCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
     const [searchDimension, setSearchDimension] = useState('date');
     const [checkedSwitch, setCheckedSwitch] = useState(false);
@@ -85,39 +86,40 @@ const CategoryPerformanceComponent = (props) => {
             return;
         }
 
-        __handle.action.initChannel();
+        __handle.action.initCategory();
     }, [performance])
 
     const __handle = {
         action: {
-            initChannel: () => {
-                let channel = new Set([]);
+            initCategory: () => {
+                let category = new Set([]);
+    
                 performance.forEach(r => r.performances?.forEach(r2 => {
-                    channel.add(r2.salesChannel);
+                    category.add(r2.productCategory);
                 }))
 
-                let channelName = [...channel].sort();
-                setSalesChannel(channelName);
-                setSelectedChannel(channelName);
+                let categoryName = [...category].sort();
+                setCategory(categoryName);
+                setSelectedCategory(categoryName);
             },
-            isCheckedOne: (channel) => {
-                return selectedChannel.some(name => name === channel);
+            isCheckedOne: (category) => {
+                return selectedCategory.some(name => name === category);
             },
-            checkOne: (e, channel) => {
+            checkOne: (e, category) => {
                 e.stopPropagation();
 
-                let data = [...selectedChannel];
+                let data = [...selectedCategory];
 
-                if(selectedChannel.some(name => name === channel)) {
-                    data = data.filter(name => name !== channel);
+                if(selectedCategory.some(name => name === category)) {
+                    data = data.filter(name => name !== category);
                 } else {
-                    data.push(channel);
+                    data.push(category);
                 }
-                setSelectedChannel(data);
+                setSelectedCategory(data);
             },
             checkedClear: () => {
-                setSelectedChannel([]);
-                props.onActionUpdateSelectedChannel([]);
+                setSelectedCategory([]);
+                // props.onActionUpdateSelectedCategory([]);
             },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;
@@ -128,8 +130,8 @@ const CategoryPerformanceComponent = (props) => {
                 setSearchDimension(value);
             },
             clearChannel: () => {
-                setSalesChannel(null);
-                setSelectedChannel(null);
+                setCategory(null);
+                setSelectedCategory(null);
             }
         }
     }
@@ -141,6 +143,13 @@ const CategoryPerformanceComponent = (props) => {
 
                 <OperatorComponent />
 
+                <CategorySelectorComponent
+                    category={category}
+                    selectedCategory={selectedCategory}
+                    onActionIsCheckedOne={__handle.action.isCheckedOne}
+                    onActionCheckOne={__handle.action.checkOne}
+                />
+
                 <GraphOperatorComponent
                     checkedSwitch={checkedSwitch}
                     searchDimension={searchDimension}
@@ -150,24 +159,24 @@ const CategoryPerformanceComponent = (props) => {
                 />
 
                 <PayAmountGraphComponent
-                    salesChannel={salesChannel}
-                    selectedChannel={selectedChannel}
+                    category={category}
+                    selectedCategory={selectedCategory}
                     searchDimension={searchDimension}
                     checkedSwitch={checkedSwitch}
                     payAmount={performance}
                 />
 
                 <RegistrationAndUnitGraphComponent
-                    salesChannel={salesChannel}
-                    selectedChannel={selectedChannel}
+                    category={category}
+                    selectedCategory={selectedCategory}
                     searchDimension={searchDimension}
                     checkedSwitch={checkedSwitch}
                     registrationAndUnit={performance}
                 />
 
                 <PayAmountDayOfWeekGraphComponent
-                    salesChannel={salesChannel}
-                    selectedChannel={selectedChannel}
+                    category={category}
+                    selectedCategory={selectedCategory}
                     dayOfWeekPayAmount={performance}
                 />
             </Container>
