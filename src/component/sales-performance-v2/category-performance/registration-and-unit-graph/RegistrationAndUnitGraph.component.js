@@ -90,7 +90,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                             datetime = dateToYYYYMM(data.datetime);
                         }
                         
-                        let performance = data.performances?.filter(r3 => r3.productCategory === r)[0];
+                        let performance = data.performances?.filter(r3 => r3.productCategoryName === r)[0];
                         let salesValue = performance?.salesRegistration || 0;
                         let orderValue = performance?.orderRegistration || 0;
                         if(dateValue.has(datetime)) {
@@ -230,7 +230,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                             datetime = dateToYYYYMM(data.datetime);
                         }
                         
-                        let performance = data.performances?.filter(r3 => r3.productCategory === r)[0];
+                        let performance = data.performances?.filter(r3 => r3.productCategoryName === r)[0];
                         let salesValue = performance?.salesUnit || 0;
                         let orderValue = performance?.orderUnit || 0;
                         if(dateValue.has(datetime)) {

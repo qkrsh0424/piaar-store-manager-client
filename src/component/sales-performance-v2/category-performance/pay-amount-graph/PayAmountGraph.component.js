@@ -81,7 +81,7 @@ export default function PayAmountGraphComponent(props) {
                             datetime = dateToYYYYMM(data.datetime);
                         }
                         
-                        let performance = data.performances?.filter(r3 => r3.productCategory === r)[0];
+                        let performance = data.performances?.filter(r3 => r3.productCategoryName === r)[0];
                         let salesValue = performance?.salesPayAmount || 0;
                         let orderValue = performance?.orderPayAmount || 0;
                         if(dateValue.has(datetime)) {

@@ -95,7 +95,7 @@ const CategoryPerformanceComponent = (props) => {
                 let category = new Set([]);
     
                 performance.forEach(r => r.performances?.forEach(r2 => {
-                    category.add(r2.productCategory);
+                    category.add(r2.productCategoryName);
                 }))
 
                 let categoryName = [...category].sort();

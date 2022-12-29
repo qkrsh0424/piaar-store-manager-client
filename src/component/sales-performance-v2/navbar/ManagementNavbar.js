@@ -136,6 +136,11 @@ const thisRouters = [
                 name: '총 매출액 & 판매 건',
                 pathname: '/sales-performance/category',
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+            },
+            {
+                name: 'BEST 상품',
+                pathname: '/sales-performance/category/best',
+                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             }
         ]
     },

@@ -82,7 +82,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                         let day = getDayName(props.dayOfWeekPayAmount[i].datetime);
 
                         props.dayOfWeekPayAmount[i].performances.forEach(r2 => {
-                            if(r2.productCategory === r.category) {
+                            if(r2.productCategoryName === r.category) {
                                 categoryPayAmountData = categoryPayAmountData.map(r3 => {
                                     if(r3.dayName === day) {
                                         return {
