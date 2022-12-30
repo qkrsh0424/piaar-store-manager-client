@@ -29,6 +29,7 @@ function createGraphOption(option) {
         interaction: option.interaction,
         maxBarThickness: option.maxBarThickness || 23,
         lineTension: option.lineTension ?? 0.3,
+        cutout: option.cutout ?? 30,
         // borderWidth: option.borderWidth || 1,
         plugins: {
             legend: {
