@@ -45,7 +45,8 @@ function createGraphOption(option) {
             }
         },
         onClick: option.onClick,
-        onHover: option.onHover
+        onHover: option.onHover,
+        scales: option.scales
     }
 }
 

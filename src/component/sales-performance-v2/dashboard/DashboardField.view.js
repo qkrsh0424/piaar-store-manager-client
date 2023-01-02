@@ -215,7 +215,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                 />
                                 <TrendInfoField
                                     dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.salesPayAmountTrendByAWeekAgo}
+                                    trendValue={todayData.salesPayAmountTrendByAWeekAgo}
                                 />
                             </div>
                         </div>
@@ -233,7 +233,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                 />
                                 <TrendInfoField
                                     dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.unsalesPayAmountTrendByAWeekAgo}
+                                    trendValue={todayData.unsalesPayAmountTrendByAWeekAgo}
                                 />
                             </div>
                         </div>
@@ -254,7 +254,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                 />
                                 <TrendInfoField
                                     dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.orderRegistrationTrendByAWeekAgo}
+                                    trendValue={todayData.orderRegistrationTrendByAWeekAgo}
                                 />
                             </div>
                         </div>
@@ -272,7 +272,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                 />
                                 <TrendInfoField
                                     dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.salesRegistrationTrendByAWeekAgo}
+                                    trendValue={todayData.salesRegistrationTrendByAWeekAgo}
                                 />
                             </div>
                         </div>
@@ -290,7 +290,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                 />
                                 <TrendInfoField
                                     dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.unsalesRegistrationTrendByAWeekAgo}
+                                    trendValue={todayData.unsalesRegistrationTrendByAWeekAgo}
                                 />
                             </div>
                         </div>
@@ -311,7 +311,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                 />
                                 <TrendInfoField
                                     dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.orderUnitTrendByAWeekAgo}
+                                    trendValue={todayData.orderUnitTrendByAWeekAgo}
                                 />
                             </div>
                         </div>
@@ -329,7 +329,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                 />
                                 <TrendInfoField
                                     dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.salesUnitTrendByAWeekAgo}
+                                    trendValue={todayData.salesUnitTrendByAWeekAgo}
                                 />
                             </div>
                         </div>
@@ -347,7 +347,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                 />
                                 <TrendInfoField
                                     dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.unsalesUnitTrendByAWeekAgo}
+                                    trendValue={todayData.unsalesUnitTrendByAWeekAgo}
                                 />
                             </div>
                         </div>

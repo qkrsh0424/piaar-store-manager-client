@@ -140,7 +140,8 @@ const HomeBody = () => {
                                 <LinkBox>
                                     <CustomLink to='/erp/management/order-upload'>피아르 주문 & 출고 관리</CustomLink>
                                     <CustomLink to='/erp/return-management/registration'>피아르 반품 관리</CustomLink>
-                                    <CustomLink to='/sales-performance/dashboard'>판매 성과</CustomLink>
+                                    <CustomLink to='/sales-performance'>판매 성과</CustomLink>
+                                    <CustomLink to='/sales-performance/dashboard'>N) 판매 성과</CustomLink>
                                 </LinkBox>
                             </GroupBox>
 

@@ -17,7 +17,6 @@ export default function BestCategoryGraphComponent(props) {
     // const [summaryData, setSummaryData] = useState(null);
 
     useEffect(() => {
-        console.log(props.category)
         if (!(props.category && props.category.length > 0)) {
             __handle.action.resetGraphData();
             return;
