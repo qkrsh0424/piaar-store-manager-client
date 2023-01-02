@@ -41,90 +41,139 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
             {yesterdayData &&
                 <div className='vertical-box'>
                     <div className='vertical-box-info'>어제</div>
-                    <div className='data-box'>
-                        <div>
-                            <span className='data-title'>주문 금액</span>
-                            <div className='data-content'>
-                                {toPriceUnitFormat(yesterdayData.orderPayAmount)}
+                    <div className='vertical-group'>
+
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>주문 금액</span>
+                                <div className='data-content'>
+                                    {toPriceUnitFormat(yesterdayData.orderPayAmount)}
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.orderPayAmountTrendByAWeekAgo}
+                                />
                             </div>
                         </div>
-                        <div className='info-box'>
-                            <TrendInfoField
-                                dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                trendValue={yesterdayData.orderPayAmountTrendByAWeekAgo}
-                            />
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>판매 금액</span>
+                                <div className='data-content'>
+                                    {toPriceUnitFormat(yesterdayData.salesPayAmount)}
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.salesPayAmountTrendByAWeekAgo}
+                                />
+                            </div>
+                        </div>
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>미판매 금액</span>
+                                <div className='data-content'>
+                                    {toPriceUnitFormat(yesterdayData.unsalesPayAmount)}
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.unsalesPayAmountTrendByAWeekAgo}
+                                />
+                            </div>
                         </div>
                     </div>
-                    <div className='data-box'>
-                        <div>
-                            <span className='data-title'>판매 금액</span>
-                            <div className='data-content'>
-                                {toPriceUnitFormat(yesterdayData.salesPayAmount)}
+                    
+                    <div className='vertical-group'>
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>주문 건수</span>
+                                <div className='data-content'>
+                                    {yesterdayData.orderRegistration} 건
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.orderRegistrationTrendByAWeekAgo}
+                                />
                             </div>
                         </div>
-                        <div className='info-box'>
-                            <TrendInfoField
-                                dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                trendValue={yesterdayData.salesPayAmountTrendByAWeekAgo}
-                            />
-                        </div>
-                    </div>
-                    <div className='data-box'>
-                        <div>
-                            <span className='data-title'>미판매 금액</span>
-                            <div className='data-content'>
-                                {toPriceUnitFormat(yesterdayData.unsalesPayAmount)}
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>판매 건수</span>
+                                <div className='data-content'>
+                                    {yesterdayData.salesRegistration} 건
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.salesRegistrationTrendByAWeekAgo}
+                                />
                             </div>
                         </div>
-                        <div className='info-box'>
-                            <TrendInfoField
-                                dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                trendValue={yesterdayData.unsalesPayAmountTrendByAWeekAgo}
-                            />
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>미판매 건수</span>
+                                <div className='data-content'>
+                                    {yesterdayData.unsalesRegistration} 건
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.unsalesRegistrationTrendByAWeekAgo}
+                                />
+                            </div>
                         </div>
                     </div>
 
-                    <div className='data-box'>
-                        <div>
-                            <span className='data-title'>주문 건수</span>
-                            <div className='data-content'>
-                                {yesterdayData.orderRegistration} 건
+                    <div className='vertical-group'>
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>주문 수량</span>
+                                <div className='data-content'>
+                                    {yesterdayData.orderUnit} 건
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.orderUnitTrendByAWeekAgo}
+                                />
                             </div>
                         </div>
-                        <div className='info-box'>
-                            <TrendInfoField
-                                dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                trendValue={yesterdayData.orderRegistrationTrendByAWeekAgo}
-                            />
-                        </div>
-                    </div>
-                    <div className='data-box'>
-                        <div>
-                            <span className='data-title'>판매 건수</span>
-                            <div className='data-content'>
-                                {yesterdayData.salesRegistration} 건
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>판매 수량</span>
+                                <div className='data-content'>
+                                    {yesterdayData.salesUnit} 건
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.salesUnitTrendByAWeekAgo}
+                                />
                             </div>
                         </div>
-                        <div className='info-box'>
-                            <TrendInfoField
-                                dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                trendValue={yesterdayData.salesRegistrationTrendByAWeekAgo}
-                            />
-                        </div>
-                    </div>
-
-                    <div className='data-box'>
-                        <div>
-                            <span className='data-title'>미판매 건수</span>
-                            <div className='data-content'>
-                                {yesterdayData.unsalesRegistration} 건
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>미판매 수량</span>
+                                <div className='data-content'>
+                                    {yesterdayData.unsalesUnit} 건
+                                </div>
                             </div>
-                        </div>
-                        <div className='info-box'>
-                            <TrendInfoField
-                                dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                trendValue={yesterdayData.unsalesRegistrationTrendByAWeekAgo}
-                            />
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.unsalesUnitTrendByAWeekAgo}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -134,114 +183,174 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
             {todayData &&
                 <div className='vertical-box'>
                     <div className='vertical-box-info'>오늘</div>
-                    <div className='data-box'>
-                        <div>
-                            <span className='data-title'>주문 금액</span>
-                            <div className='data-content'>
-                                {toPriceUnitFormat(todayData.orderPayAmount)}
+                    <div className='vertical-group'>
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>주문 금액</span>
+                                <div className='data-content'>
+                                    {toPriceUnitFormat(todayData.orderPayAmount)}
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
+                                    trendValue={todayData.orderPayAmountTrendByYesterday}
+                                />
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={todayData.orderPayAmountTrendByAWeekAgo}
+                                />
                             </div>
                         </div>
-                        <div className='info-box'>
-                            <TrendInfoField
-                                dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                trendValue={todayData.orderPayAmountTrendByYesterday}
-                            />
-                            <TrendInfoField
-                                dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                trendValue={todayData.orderPayAmountTrendByAWeekAgo}
-                            />
-                        </div>
-                    </div>
-                    <div className='data-box'>
-                        <div>
-                            <span className='data-title'>판매 금액</span>
-                            <div className='data-content'>
-                                {toPriceUnitFormat(todayData.salesPayAmount)}
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>판매 금액</span>
+                                <div className='data-content'>
+                                    {toPriceUnitFormat(todayData.salesPayAmount)}
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
+                                    trendValue={todayData.salesPayAmountTrendByYesterday}
+                                />
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.salesPayAmountTrendByAWeekAgo}
+                                />
                             </div>
                         </div>
-                        <div className='info-box'>
-                            <TrendInfoField
-                                dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                trendValue={todayData.salesPayAmountTrendByYesterday}
-                            />
-                            <TrendInfoField
-                                dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                trendValue={yesterdayData.salesPayAmountTrendByAWeekAgo}
-                            />
-                        </div>
-                    </div>
-                    <div className='data-box'>
-                        <div>
-                            <span className='data-title'>미판매 금액</span>
-                            <div className='data-content'>
-                                {toPriceUnitFormat(todayData.unsalesPayAmount)}
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>미판매 금액</span>
+                                <div className='data-content'>
+                                    {toPriceUnitFormat(todayData.unsalesPayAmount)}
+                                </div>
                             </div>
-                        </div>
-                        <div className='info-box'>
-                            <TrendInfoField
-                                dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                trendValue={todayData.unsalesPayAmountTrendByYesterday}
-                            />
-                            <TrendInfoField
-                                dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                trendValue={yesterdayData.unsalesPayAmountTrendByAWeekAgo}
-                            />
-                        </div>
-                    </div>
-
-                    <div className='data-box'>
-                        <div>
-                            <span className='data-title'>주문 건수</span>
-                            <div className='data-content'>
-                                {todayData.orderRegistration} 건
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
+                                    trendValue={todayData.unsalesPayAmountTrendByYesterday}
+                                />
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.unsalesPayAmountTrendByAWeekAgo}
+                                />
                             </div>
-                        </div>
-                        <div className='info-box'>
-                            <TrendInfoField
-                                dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                trendValue={todayData.orderRegistrationTrendByYesterday}
-                            />
-                            <TrendInfoField
-                                dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                trendValue={yesterdayData.orderRegistrationTrendByAWeekAgo}
-                            />
-                        </div>
-                    </div>
-                    <div className='data-box'>
-                        <div>
-                            <span className='data-title'>판매 건수</span>
-                            <div className='data-content'>
-                                {todayData.salesRegistration} 건
-                            </div>
-                        </div>
-                        <div className='info-box'>
-                            <TrendInfoField
-                                dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                trendValue={todayData.salesRegistrationTrendByYesterday}
-                            />
-                            <TrendInfoField
-                                dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                trendValue={yesterdayData.salesRegistrationTrendByAWeekAgo}
-                            />
                         </div>
                     </div>
 
-                    <div className='data-box'>
-                        <div>
-                            <span className='data-title'>미판매 건수</span>
-                            <div className='data-content'>
-                                {todayData.unsalesRegistration} 건
+                    <div className='vertical-group'>
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>주문 건수</span>
+                                <div className='data-content'>
+                                    {todayData.orderRegistration} 건
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
+                                    trendValue={todayData.orderRegistrationTrendByYesterday}
+                                />
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.orderRegistrationTrendByAWeekAgo}
+                                />
                             </div>
                         </div>
-                        <div className='info-box'>
-                            <TrendInfoField
-                                dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                trendValue={todayData.unsalesRegistrationTrendByYesterday}
-                            />
-                            <TrendInfoField
-                                dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                trendValue={yesterdayData.unsalesRegistrationTrendByAWeekAgo}
-                            />
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>판매 건수</span>
+                                <div className='data-content'>
+                                    {todayData.salesRegistration} 건
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
+                                    trendValue={todayData.salesRegistrationTrendByYesterday}
+                                />
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.salesRegistrationTrendByAWeekAgo}
+                                />
+                            </div>
+                        </div>
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>미판매 건수</span>
+                                <div className='data-content'>
+                                    {todayData.unsalesRegistration} 건
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
+                                    trendValue={todayData.unsalesRegistrationTrendByYesterday}
+                                />
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.unsalesRegistrationTrendByAWeekAgo}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='vertical-group'>
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>주문 수량</span>
+                                <div className='data-content'>
+                                    {todayData.orderUnit} 건
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
+                                    trendValue={todayData.orderUnitTrendByYesterday}
+                                />
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.orderUnitTrendByAWeekAgo}
+                                />
+                            </div>
+                        </div>
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>판매 수량</span>
+                                <div className='data-content'>
+                                    {todayData.salesUnit} 건
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
+                                    trendValue={todayData.salesUnitTrendByYesterday}
+                                />
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.salesUnitTrendByAWeekAgo}
+                                />
+                            </div>
+                        </div>
+                        <div className='data-box'>
+                            <div>
+                                <span className='data-title'>미판매 수량</span>
+                                <div className='data-content'>
+                                    {todayData.unsalesUnit} 건
+                                </div>
+                            </div>
+                            <div className='info-box'>
+                                <TrendInfoField
+                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
+                                    trendValue={todayData.unsalesUnitTrendByYesterday}
+                                />
+                                <TrendInfoField
+                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
+                                    trendValue={yesterdayData.unsalesUnitTrendByAWeekAgo}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

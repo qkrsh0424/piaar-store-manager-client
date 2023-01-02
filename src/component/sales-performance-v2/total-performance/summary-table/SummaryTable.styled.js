@@ -98,14 +98,13 @@ const TableFieldWrapper = styled.div`
     }
 
     .highlight-td {
-        color: var(--erp-main-color);
         font-weight: 700;
         
-        :hover {
+        /* :hover {
             background-color: #2c73d232;
             color: white;
             cursor: pointer;
-        }
+        } */
     }
 `;
 

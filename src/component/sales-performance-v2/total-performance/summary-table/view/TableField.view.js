@@ -32,7 +32,7 @@ export default function TableFieldView (props) {
                                 <td>전체</td>
                                 <td>전체</td>
                                 <td>{toPriceUnitFormat(props.totalSummarySumData.orderPayAmount)}</td>
-                                <td>{toPriceUnitFormat(props.totalSummarySumData.salesPayAmount)}</td>
+                                <td className='highlight-td' style={{ color: 'var(--erp-main-color)' }}>{toPriceUnitFormat(props.totalSummarySumData.salesPayAmount)}</td>
                                 <td className='highlight-td'>{toPriceUnitFormat(props.totalSummarySumData.unsalesPayAmount)}</td>
                                 <td>{props.totalSummarySumData.salesRegistration} / {props.totalSummarySumData.orderRegistration} 건</td>
                                 <td>{props.totalSummarySumData.salesUnit} / {props.totalSummarySumData.orderUnit} 개</td>
@@ -46,7 +46,7 @@ export default function TableFieldView (props) {
                                     <td>{dateToYYYYMMDD(r.datetime)}</td>
                                     <td>{getDayName(r.datetime)}</td>
                                     <td>{toPriceUnitFormat(r.orderPayAmount)}</td>
-                                    <td>{toPriceUnitFormat(r.salesPayAmount)}</td>
+                                    <td className='highlight-td' style={{ color: 'var(--erp-main-color)' }}>{toPriceUnitFormat(r.salesPayAmount)}</td>
                                     <td className='highlight-td'>{toPriceUnitFormat(r.unsalesPayAmount)}</td>
                                     <td>{r.salesRegistration} / {r.orderRegistration} 건</td>
                                     <td>{r.salesUnit} / {r.orderUnit} 개</td>

@@ -1,4 +1,3 @@
-import { toPriceUnitFormat } from "../../../../../utils/numberFormatUtils";
 import { GraphSummaryFieldWrapper } from "../RegistrationAndUnitGraph.styled";
 
 export default function GraphSummaryFieldView (props) {

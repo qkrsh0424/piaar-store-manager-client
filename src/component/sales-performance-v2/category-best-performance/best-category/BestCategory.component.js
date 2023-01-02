@@ -106,8 +106,17 @@ export default function BestCategoryComponent(props) {
                     plugins: {
                         legend: {
                             position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    var label = tooltipItem?.label || '';
+                                    var value = tooltipItem?.parsed || 0;
+                                    return label + " : " + value + "%";
+                                }
+                            }
                         }
-                    },
+                    }
                 }
 
                 setGraphOption(option);

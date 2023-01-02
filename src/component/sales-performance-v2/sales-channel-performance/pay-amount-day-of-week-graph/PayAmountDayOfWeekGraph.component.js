@@ -171,7 +171,6 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
 
     return (
         <>
-        {console.log(salesGraphData)}
             <Container>
                 <GraphBoardFieldView />
                 <div className='content-box'>

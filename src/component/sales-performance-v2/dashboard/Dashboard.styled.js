@@ -26,9 +26,20 @@ const DashboardFieldWrapper = styled.div`
         padding-bottom: 10px;
         margin-bottom: 20px;
         width: 100%;
+        font-size: 1.2rem;
         color: #444;
         text-align: center;
         font-weight: 700;
+    }
+
+    .vertical-box .vertical-group {
+        width: 100%;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #a2a8b1;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 
     .data-box {
@@ -38,7 +49,6 @@ const DashboardFieldWrapper = styled.div`
         box-shadow: var(--defaultBoxShadow);
         border-radius: 10px;
         background-color: #fff;
-        width: 100%;
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;

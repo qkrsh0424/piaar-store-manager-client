@@ -76,60 +76,8 @@ const GraphBodyFieldWrapper = styled.div`
     }
 `;
 
-const GraphSummaryFieldWrapper = styled.div`
-    min-width: 250px;
-    width: 20%;
-    height: 400px;
-
-    .title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        padding: 10px;
-        text-align: center;
-        height: 50px;
-    }
-
-    .summary-box {
-        height: 350px;
-        overflow: auto;
-    }
-
-    ul {
-        list-style: none;
-        padding: 10px;
-    }
-
-    ul li {
-        height: 38px;
-        margin-bottom: 10px;
-        border-bottom: 1px solid rgb(222, 222, 222);
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
-
-    ul li .icon-dot {
-        position: relative;
-        margin-right: 10px;
-        width: 8px;
-        height: 8px;
-        display: inline-block;
-        border-radius: 50%;
-        vertical-align: middle;
-    }
-
-    .data-box {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 20px;
-    }
-`;
-
 export {
     Container,
     GraphBoardFieldWrapper,
-    GraphBodyFieldWrapper,
-    GraphSummaryFieldWrapper
+    GraphBodyFieldWrapper
 }

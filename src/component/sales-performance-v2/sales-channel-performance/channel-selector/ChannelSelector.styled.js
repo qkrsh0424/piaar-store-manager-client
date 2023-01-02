@@ -62,11 +62,12 @@ const CheckBoxFieldWrapper = styled.div`
     font-size: 16px;
 
     .selector-box {
-        padding: 20px 0;
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        place-items: center;
-        grid-gap: 5px;
+        padding: 15px 10px;
+        align-items: center;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-start
     }
 
     .button-box {
@@ -78,11 +79,12 @@ const CheckBoxFieldWrapper = styled.div`
     
     .button-el {
         transition: 0.1s;
-        width: 100px;
+        width: 120px;
+        height: 30px;
         border: 1px solid var(--defaultBorderColor);
         background-color: var(--defaultButtonColor);
         border-radius: 20px;
-        font-size: 14px;
+        font-size: 16px;
         box-shadow: var(--defaultBoxShadow);
         
         &.button-active {

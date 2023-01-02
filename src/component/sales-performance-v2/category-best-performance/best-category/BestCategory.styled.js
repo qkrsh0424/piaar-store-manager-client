@@ -48,6 +48,10 @@ const GraphBodyFieldWrapper = styled.div`
         }
     }
 
+    .graph-title {
+        font-weight: 600;
+    }
+
     .graph-wrapper {
         height: 200px;
     }

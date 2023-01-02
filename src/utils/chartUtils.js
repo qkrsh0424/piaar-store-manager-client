@@ -11,7 +11,7 @@ function createGraphData(graph) {
             order: r.order || 0,
             borderWidth: r.borderWidth ?? 1,
             borderDash: r.borderDash || [0, 0],
-            pointRadius: r.pointRadius ?? 3
+            pointRadius: r.pointRadius ?? 3,
         }
     });
 
@@ -36,6 +36,11 @@ function createGraphOption(option) {
                 position: option.plugins?.legend?.position || 'top',
                 labels: {
                     boxWidth: 12,
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: option.plugins?.tooltip?.callbacks?.label
                 }
             }
         },

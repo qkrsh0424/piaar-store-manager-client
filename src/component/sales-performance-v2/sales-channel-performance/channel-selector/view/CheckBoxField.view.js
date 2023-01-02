@@ -14,7 +14,7 @@ export default function CheckBoxFieldView (props) {
                         >
                             <button
                                 type='button'
-                                className={`button-el ${checked && 'button-active'}`}
+                                className={`button-el ${checked && 'button-active'} `}
                                 checked={checked}
                                 onChange={(e) => props.onActionCheckOne(e, r)}
                             >{r}</button>

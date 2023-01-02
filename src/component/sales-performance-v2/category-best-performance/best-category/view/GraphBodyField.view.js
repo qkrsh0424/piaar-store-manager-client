@@ -7,6 +7,7 @@ export default function GraphBodyFieldView (props) {
     return (
         <GraphBodyFieldWrapper>
             <div className='half-type-graph graph-wrapper'>
+                <div className='graph-title'>[판매 매출액 비율]</div>
                 {props.payAmountGraphData && props.graphOption &&
                     <Doughnut
                         data={createGraphData(props.payAmountGraphData)}
@@ -15,6 +16,7 @@ export default function GraphBodyFieldView (props) {
                 }
             </div>
             <div className='half-type-graph graph-wrapper'>
+                <div className='graph-title'>[판매 수량 비율]</div>
                 {props.unitGraphData && props.graphOption &&
                     <Doughnut
                         data={createGraphData(props.unitGraphData)}

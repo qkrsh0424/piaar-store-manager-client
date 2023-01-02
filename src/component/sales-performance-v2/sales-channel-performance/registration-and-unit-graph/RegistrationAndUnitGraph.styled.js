@@ -75,7 +75,8 @@ const GraphSummaryFieldWrapper = styled.div`
     min-width: 250px;
     width: 20%;
     height: 400px;
-    overflow: auto;
+    background-color: #fafafa;
+    border-radius: 10px;
 
     .title {
         font-size: 1.1rem;
@@ -85,7 +86,7 @@ const GraphSummaryFieldWrapper = styled.div`
         height: 50px;
     }
 
-    .sumamry-box {
+    .summary-box {
         height: 350px;
         overflow: auto;
     }

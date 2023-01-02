@@ -68,6 +68,11 @@ export default function OperatorComponent(props) {
     useEffect(() => {
         let startDate = query.startDate;
         let endDate = query.endDate;
+
+        if(!(startDate && endDate)) {
+            setSelectedProduct(null);
+            setSelectedOption(null);
+        }
         
         if (startDate) {
             setStartDate(new Date(startDate));
