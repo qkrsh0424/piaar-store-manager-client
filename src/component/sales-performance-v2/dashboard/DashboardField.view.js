@@ -5,7 +5,7 @@ function TrendInfoField ({ dayInfo, trendValue}) {
     return (
         <TrendInfoFieldWrapper>
             <div className='trend-info-box'>
-                <span>{dayInfo}</span>
+                <div>{dayInfo}</div>
                 <div style={{ width: '80px' }}>
                     {trendValue >= 0 ?
                         <div className="trend-info" style={{ color: '#7a7bda' }}>
@@ -15,7 +15,7 @@ function TrendInfoField ({ dayInfo, trendValue}) {
                                 alt=""
                                 loading='lazy'
                             />
-                            <span>{Math.abs(trendValue)}%</span>
+                            <div>{Math.abs(trendValue)}%</div>
                         </div>
                         :
                         <div className="trend-info" style={{ color: '#e56767' }}>
@@ -25,7 +25,7 @@ function TrendInfoField ({ dayInfo, trendValue}) {
                                 alt=""
                                 loading='lazy'
                             />
-                            <span>{Math.abs(trendValue)}%</span>
+                            <div>{Math.abs(trendValue)}%</div>
                         </div>
                     }
                 </div>
@@ -42,10 +42,9 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                 <div className='vertical-box'>
                     <div className='vertical-box-info'>어제</div>
                     <div className='vertical-group'>
-
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>주문 금액</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>주문 금액</div>
                                 <div className='data-content'>
                                     {toPriceUnitFormat(yesterdayData.orderPayAmount)}
                                 </div>
@@ -58,8 +57,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                         </div>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>판매 금액</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>판매 금액</div>
                                 <div className='data-content'>
                                     {toPriceUnitFormat(yesterdayData.salesPayAmount)}
                                 </div>
@@ -72,8 +71,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                         </div>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>미판매 금액</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>미판매 금액</div>
                                 <div className='data-content'>
                                     {toPriceUnitFormat(yesterdayData.unsalesPayAmount)}
                                 </div>
@@ -89,8 +88,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                     
                     <div className='vertical-group'>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>주문 건수</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>주문 건수</div>
                                 <div className='data-content'>
                                     {yesterdayData.orderRegistration} 건
                                 </div>
@@ -103,8 +102,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                         </div>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>판매 건수</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>판매 건수</div>
                                 <div className='data-content'>
                                     {yesterdayData.salesRegistration} 건
                                 </div>
@@ -117,8 +116,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                         </div>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>미판매 건수</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>미판매 건수</div>
                                 <div className='data-content'>
                                     {yesterdayData.unsalesRegistration} 건
                                 </div>
@@ -134,8 +133,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
 
                     <div className='vertical-group'>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>주문 수량</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>주문 수량</div>
                                 <div className='data-content'>
                                     {yesterdayData.orderUnit} 건
                                 </div>
@@ -148,8 +147,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                         </div>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>판매 수량</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>판매 수량</div>
                                 <div className='data-content'>
                                     {yesterdayData.salesUnit} 건
                                 </div>
@@ -162,8 +161,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                         </div>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>미판매 수량</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>미판매 수량</div>
                                 <div className='data-content'>
                                     {yesterdayData.unsalesUnit} 건
                                 </div>
@@ -185,8 +184,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                     <div className='vertical-box-info'>오늘</div>
                     <div className='vertical-group'>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>주문 금액</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>주문 금액</div>
                                 <div className='data-content'>
                                     {toPriceUnitFormat(todayData.orderPayAmount)}
                                 </div>
@@ -203,8 +202,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                         </div>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>판매 금액</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>판매 금액</div>
                                 <div className='data-content'>
                                     {toPriceUnitFormat(todayData.salesPayAmount)}
                                 </div>
@@ -221,8 +220,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                         </div>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>미판매 금액</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>미판매 금액</div>
                                 <div className='data-content'>
                                     {toPriceUnitFormat(todayData.unsalesPayAmount)}
                                 </div>
@@ -242,8 +241,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
 
                     <div className='vertical-group'>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>주문 건수</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>주문 건수</div>
                                 <div className='data-content'>
                                     {todayData.orderRegistration} 건
                                 </div>
@@ -260,8 +259,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                         </div>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>판매 건수</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>판매 건수</div>
                                 <div className='data-content'>
                                     {todayData.salesRegistration} 건
                                 </div>
@@ -278,8 +277,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                         </div>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>미판매 건수</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>미판매 건수</div>
                                 <div className='data-content'>
                                     {todayData.unsalesRegistration} 건
                                 </div>
@@ -299,8 +298,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
 
                     <div className='vertical-group'>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>주문 수량</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>주문 수량</div>
                                 <div className='data-content'>
                                     {todayData.orderUnit} 건
                                 </div>
@@ -317,8 +316,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                         </div>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>판매 수량</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>판매 수량</div>
                                 <div className='data-content'>
                                     {todayData.salesUnit} 건
                                 </div>
@@ -335,8 +334,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                         </div>
                         <div className='data-box'>
-                            <div>
-                                <span className='data-title'>미판매 수량</span>
+                            <div className='data-content-group'>
+                                <div className='data-title'>미판매 수량</div>
                                 <div className='data-content'>
                                     {todayData.unsalesUnit} 건
                                 </div>

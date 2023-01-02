@@ -10,7 +10,7 @@ const GraphBoardFieldWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* border-bottom: 1px solid var(--defaultBorderColor); */
+    border-bottom: 1px solid var(--defaultBorderColor);
     padding: 20px;
 
     .graph-title {
@@ -60,7 +60,7 @@ const TableFieldWrapper = styled.div`
     .fixed-header {
         /* background-color: #f5f5f5; */
         background-color: #fff;
-        height: 35px;
+        height: 40px;
         position: sticky;
         top: 0;
         z-index:10;

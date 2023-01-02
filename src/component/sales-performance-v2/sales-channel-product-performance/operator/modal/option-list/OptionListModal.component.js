@@ -7,7 +7,7 @@ function InputField({ inputValue, onChangeInputValue }) {
             <input
                 type='text'
                 className='input-el'
-                placeholder='상품명을 입력해주세요.'
+                placeholder='옵션명을 입력해주세요.'
                 value={inputValue || ''}
                 onChange={(e) => onChangeInputValue(e)}
             ></input>

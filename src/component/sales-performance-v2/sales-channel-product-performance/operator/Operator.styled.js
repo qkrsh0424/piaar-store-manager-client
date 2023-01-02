@@ -27,10 +27,12 @@ const SearchFieldWrapper = styled.div`
     
     .button-el {
         width: 100%;
-        font-size: 14px;
-        border: 1px solid var(--defaultBorderColor);
-        background-color: var(--defualtButtonColor);
+        padding: 5px 0;
         height: 48px;
+        background: white;
+        border: 1px solid #e1e1e1;
+        border-radius: 5px;
+        /* cursor: pointer; */
     }
 `;
 

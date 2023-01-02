@@ -12,7 +12,7 @@ const Container = styled.div`
         justify-content: space-around;
         align-items: center;
 
-        @media screen and (max-width: 1200px) {
+        @media screen and (max-width: 1280px) {
             flex-direction: column;
         }
     }
@@ -46,7 +46,7 @@ const GraphFieldWrapper = styled.div`
     min-height: 300px;
     width: 100%;
 
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1280px) {
         width: 100%;
     }
 
@@ -151,7 +151,7 @@ const GraphAnalysisResultFieldWrapper = styled.div`
     box-shadow: 0px 0px 7px 3px #eee;
     padding: 10px;
 
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1280px) {
         width: 90%;
         height: 200px;
     }

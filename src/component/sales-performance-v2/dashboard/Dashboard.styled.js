@@ -12,12 +12,21 @@ const DashboardFieldWrapper = styled.div`
     align-items: center;
     width: 100%;
 
+    @media screen and (max-width: 1280px) {
+        flex-direction: column;
+        row-gap: 20px;
+    }
+
     .vertical-box {
         display:flex;
         width: 50%;
         flex-direction: column;
         align-items: center;
-        margin-right: 20px;
+        padding: 0 10px;
+
+        @media screen and (max-width: 1280px) {
+            width: 100%;
+        }
     }
 
     .vertical-box-info {
@@ -39,6 +48,7 @@ const DashboardFieldWrapper = styled.div`
 
         &:last-child {
             margin-bottom: 0;
+            border-bottom: none;
         }
     }
 
@@ -53,6 +63,21 @@ const DashboardFieldWrapper = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        @media screen and (max-width: 1280px) {
+            flex-direction: column;
+            align-items: flex-start;
+            max-height: fit-content;
+        }
+    }
+
+    .data-content-group {
+        @media screen and (max-width: 1280px){
+            width: 100%;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
     }
 
     .data-title {
@@ -69,8 +94,6 @@ const DashboardFieldWrapper = styled.div`
         position: relative;
         display: flex;
         gap: 10px;
-        /* display: inline-block;
-        display: inline-block; */
         font-size: 14px;
         color: #777;
         vertical-align: middle;
@@ -78,6 +101,10 @@ const DashboardFieldWrapper = styled.div`
         overflow: hidden;
         word-break: break-all;
         white-space: nowrap;
+
+        @media screen and (max-width: 1280px) {
+            flex-direction: column;
+        }
     }
 
     .data-content {
@@ -96,12 +123,23 @@ const TrendInfoFieldWrapper = styled.div`
         align-items: center;
         width: 150px;
         height: 50px;
+
+        @media screen and (max-width: 1280px) {
+            height: 30px;
+            width: 200px;
+            flex-direction: row;
+            justify-content: space-around;
+        }
     }
 
     .trend-info {
         display: flex;
         justify-content: space-between;
         font-weight: 700;
+
+        @media screen and (max-width: 1280px) {
+            justify-content: space-evenly;
+        }
     }
 `;
 
