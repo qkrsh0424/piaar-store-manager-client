@@ -1,20 +1,28 @@
 import _ from "lodash";
 import { useEffect, useState } from "react";
-import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
-import { Container } from "./BestCategory.styled";
+import { GraphDataset } from "../../../../utils/graphDataUtils";
+import { Container } from "./BestCategoryGraph.styled";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 
-const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
+// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
+// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#D678CD', '#FF7FAB', '#80A9E1', '#FF9D83', '#B9B4EB', '#FFCA67', '#00C894', '#D5CABD', '#389091'];
+const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
-export default function BestCategoryComponent(props) {
+export default function BestCategoryGraphComponent(props) {
     const [payAmountGraphData, setPayAmountGraphData] = useState(null);
     const [unitGraphData, setUnitGraphData] = useState(null);
     const [graphOption, setGraphOption] = useState(null);
 
-    const [summaryData, setSummaryData] = useState(null);
+    // const [summaryData, setSummaryData] = useState(null);
 
     useEffect(() => {
+        console.log(props.category)
+        if (!(props.category && props.category.length > 0)) {
+            __handle.action.resetGraphData();
+            return;
+        }
+
         if(!(props.performance && props.performance.length > 0)) {
             __handle.action.resetGraphData();
             return;
@@ -22,12 +30,14 @@ export default function BestCategoryComponent(props) {
 
         __handle.action.createGraphData();
         __handle.action.createGraphOption();
-    }, [props.performance])
+    }, [props.category, props.performance])
 
     const __handle = {
         action: {
             resetGraphData: () => {
-
+                setPayAmountGraphData(null);
+                setUnitGraphData(null);
+                setGraphOption(null);
             },
             createGraphData: () => {
                 let graphLabels = [];
@@ -66,8 +76,8 @@ export default function BestCategoryComponent(props) {
                     label: '판매 매출액',
                     data: payAmountData,
                     fill: true,
-                    borderColor: SALES_CHNNAEL_GRAPH_BG_COLOR,
-                    backgroundColor: SALES_CHNNAEL_GRAPH_BG_COLOR,
+                    borderColor: SALES_GRAPH_BG_COLOR,
+                    backgroundColor: SALES_GRAPH_BG_COLOR,
                     tension: 0,
                 }
                 
@@ -77,8 +87,8 @@ export default function BestCategoryComponent(props) {
                     label: '판매 수량',
                     data: unitData,
                     fill: true,
-                    borderColor: SALES_CHNNAEL_GRAPH_BG_COLOR,
-                    backgroundColor: SALES_CHNNAEL_GRAPH_BG_COLOR,
+                    borderColor: SALES_GRAPH_BG_COLOR,
+                    backgroundColor: SALES_GRAPH_BG_COLOR,
                     tension: 0
                 }
 
@@ -95,8 +105,8 @@ export default function BestCategoryComponent(props) {
                 setPayAmountGraphData(createdPayAmountGraph);
                 setUnitGraphData(createdUnitGraph);
 
-                let summary = setAnalysisResultText([payAmountGraphDataset]);
-                setSummaryData(summary);
+                // let summary = setAnalysisResultText([payAmountGraphDataset]);
+                // setSummaryData(summary);
             },
             createGraphOption: () => {
                 let option = {

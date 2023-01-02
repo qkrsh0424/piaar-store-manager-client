@@ -1,7 +1,7 @@
 import 'chart.js/auto';
 import { Doughnut } from 'react-chartjs-2';
 import { createGraphData, createGraphOption } from "../../../../../utils/chartUtils";
-import { GraphBodyFieldWrapper } from "../BestCategory.styled";
+import { GraphBodyFieldWrapper } from "../BestCategoryGraph.styled";
 
 export default function GraphBodyFieldView (props) {
     return (

@@ -9,9 +9,10 @@ const Container = styled.div`
         width: 100%;
         display: flex;
         align-items: center;
-        justify-content: space-around;
+        justify-content: flex-start;
         gap: 10px;
         padding: 20px;
+        overflow: auto;
     }
 `;
 
@@ -29,29 +30,6 @@ const GraphBoardFieldWrapper = styled.div`
 
     .graph-info-text {
         font-size: 14px;
-    }
-
-    .right-el-box {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-    }
-
-    .dimension-button-box {
-        display: flex;
-    }
-
-    .dimension-button-box .button-el {
-        width: 40px;
-        height: 40px;
-        background-color: var(--defaultButtonColor);
-        border: 1px solid var(--defaultBorderColor);
-        
-        &.checked {
-            background-color: #555;
-            border: 1px solid #555;
-            color: white;
-        }
     }
 `;
 
@@ -74,60 +52,8 @@ const GraphBodyFieldWrapper = styled.div`
     }
 `;
 
-const GraphSummaryFieldWrapper = styled.div`
-    min-width: 250px;
-    width: 20%;
-    height: 400px;
-
-    .title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        padding: 10px;
-        text-align: center;
-        height: 50px;
-    }
-
-    .summary-box {
-        height: 350px;
-        overflow: auto;
-    }
-
-    ul {
-        list-style: none;
-        padding: 10px;
-    }
-
-    ul li {
-        height: 38px;
-        margin-bottom: 10px;
-        border-bottom: 1px solid rgb(222, 222, 222);
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
-
-    ul li .icon-dot {
-        position: relative;
-        margin-right: 10px;
-        width: 8px;
-        height: 8px;
-        display: inline-block;
-        border-radius: 50%;
-        vertical-align: middle;
-    }
-
-    .data-box {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 20px;
-    }
-`;
-
 export {
     Container,
     GraphBoardFieldWrapper,
-    GraphBodyFieldWrapper,
-    GraphSummaryFieldWrapper
+    GraphBodyFieldWrapper
 }

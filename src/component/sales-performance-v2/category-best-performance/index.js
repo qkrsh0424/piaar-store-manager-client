@@ -9,8 +9,9 @@ import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
 import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import useCategorySalesPerformanceHook from './hooks/useCategorySalesPerformanceHook';
-import BestCategoryComponent from './best-category/BestCategory.component';
+
 import BestItemGraphComponent from './best-item-graph/BestItemGraph.component';
+import BestCategoryGraphComponent from './best-category-graph/BestCategoryGraph.component';
 
 const Container = styled.div`
     height: 100%;
@@ -151,7 +152,7 @@ const CategoryBestPerformanceComponent = (props) => {
                     onActionChangeSwitch={__handle.action.changeSwitch}
                 />
 
-                <BestCategoryComponent
+                <BestCategoryGraphComponent
                     category={category}
                     performance={performance}
                 />

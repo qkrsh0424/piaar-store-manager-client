@@ -12,6 +12,7 @@ const GraphOperatorFieldWrapper = styled.div`
 
     .button-box {
         display: flex;
+        gap: 3px;
     }
 
     .button-box .button-el {
@@ -19,11 +20,16 @@ const GraphOperatorFieldWrapper = styled.div`
         height: 40px;
         background-color: var(--defaultButtonColor);
         border: 1px solid var(--defaultBorderColor);
+        border-radius: 5px;
         
         &.checked {
-            background-color: #555;
+            background-color: #555 !important;
             border: 1px solid #555;
             color: white;
+        }
+
+        &:hover {
+            background-color: var(--defaultHoverColor);
         }
     }
 `;

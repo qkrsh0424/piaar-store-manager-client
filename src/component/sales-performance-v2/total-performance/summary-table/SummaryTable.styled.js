@@ -4,6 +4,7 @@ const Container = styled.div`
     background-color: white;
     border-radius: 10px;
     margin-bottom: 30px;
+    overflow: auto;
 `;
 
 const GraphBoardFieldWrapper = styled.div`
@@ -52,6 +53,10 @@ const TableFieldWrapper = styled.div`
     overflow: auto;
     text-align: center;
     font-size: 14px;
+
+    @media screen and (max-width: 992px) {
+        font-size: 12px;
+    }
 
     .table-wrapper {
         height: 400px;

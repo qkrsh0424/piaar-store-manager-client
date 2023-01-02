@@ -11,14 +11,10 @@ export default function SummaryTableComponent(props) {
     const [summaryTableData, setSummaryTableData] = useState(null);
     const [totalSummarySumData, setTotalSummarySumData] = useState(null);
 
-    const {
-        location,
-        query
-    } = useRouterHook();
-
     useEffect(() => {
         if(!(props.performance && props.performance.length > 0)) {
             setSummaryTableData(null);
+            setTotalSummarySumData(null);
             return;
         }
 

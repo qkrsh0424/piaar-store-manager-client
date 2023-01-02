@@ -9,9 +9,10 @@ const Container = styled.div`
         width: 100%;
         display: flex;
         align-items: center;
-        justify-content: space-around;
+        justify-content: flex-start;
         gap: 10px;
         padding: 20px;
+        overflow: auto;
     }
 `;
 
@@ -66,11 +67,12 @@ const GraphBodyFieldWrapper = styled.div`
 `;
 
 const GraphSummaryFieldWrapper = styled.div`
-    min-width: 250px;
+    min-width: 280px;
     width: 20%;
     height: 400px;
     background-color: #fafafa;
     border-radius: 10px;
+    border: 1px solid #efefef;
 
     .title {
         font-size: 1.1rem;
@@ -83,6 +85,10 @@ const GraphSummaryFieldWrapper = styled.div`
     .summary-box {
         height: 350px;
         overflow: auto;
+
+        @media screen and (max-width: 992px) {
+            font-size: 14px;
+        }
     }
 
     ul {

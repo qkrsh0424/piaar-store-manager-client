@@ -1,25 +1,14 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-    margin: 20px 0 30px 0;
+    margin: 20px 0 20px 0;
     padding: 20px;
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(219, 221, 226);
     border-radius: 10px;
-
-    .button-field {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 20px;
-    }
 `;
 
 const ButtonFieldWrapper = styled.div`
-    
-    @media all and (max-width:992px) {
-        padding: 0 10px;
-    }
 
     .flex-box{
         display: flex;
@@ -91,6 +80,12 @@ const CheckBoxFieldWrapper = styled.div`
             border: 1px solid var(--piaar-main-color);
             background-color: var(--piaar-main-color);
             color: white;
+        }
+
+        @media screen and (max-width: 992px) {
+            width: 80px;
+            height: 25px;
+            font-size: 12px;
         }
     }
 `;

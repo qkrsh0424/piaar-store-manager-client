@@ -1,23 +1,15 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-    margin: 20px 0 30px 0;
+    margin: 20px 0 20px 0;
     padding: 20px;
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(219, 221, 226);
     border-radius: 10px;
-
-    .button-field {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 20px;
-    }
 `;
 
 const DateSelectorFieldWrapper = styled.div`
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     gap: 5px;
     
@@ -31,10 +23,6 @@ const DateSelectorFieldWrapper = styled.div`
 `;
 
 const ButtonFieldWrapper = styled.div`
-    
-    @media all and (max-width:992px) {
-        padding: 0 10px;
-    }
 
     .flex-box{
         display: flex;
@@ -75,11 +63,17 @@ const ButtonFieldWrapper = styled.div`
 
 const DateButtonFieldWrapper = styled.div`
     display: flex;
+    flex-wrap: wrap;
     gap: 2px;
+    padding: 5px 0;
 
     .button-box {
         width: 120px;
         padding: 4px 2px;
+
+        @media screen and (max-width: 992px) {
+            width: 80px;
+        }
     }
     
     .button-el {
@@ -88,6 +82,17 @@ const DateButtonFieldWrapper = styled.div`
         border-radius: 5px;
         background-color: var(--defaultButtonColor);
         border: 1px solid var(--defaultBorderColor);
+        -webkit-transition: all .1s;
+        transition: all .1s;
+
+        &:hover{
+            transform: scale(1.02);
+        }
+        
+        @media all and (max-width:992px) {
+            margin: 0;
+            font-size: 14px;
+        }
     }
 `;
 

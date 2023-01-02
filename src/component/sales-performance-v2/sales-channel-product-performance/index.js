@@ -80,9 +80,6 @@ const SalesChannelProductPerformanceComponent = (props) => {
             onActionCloseBackdrop();
         }
 
-        if(!query.optionCode) {
-            return;
-        }
         fetchInit();
     }, [location])
 
@@ -120,10 +117,6 @@ const SalesChannelProductPerformanceComponent = (props) => {
                     data.push(channel);
                 }
                 setSelectedChannel(data);
-            },
-            checkedClear: () => {
-                setSelectedChannel([]);
-                // props.onActionUpdateSelectedChannel([]);
             },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;

@@ -6,19 +6,6 @@ const Container = styled.div`
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(219, 221, 226);
     border-radius: 10px;
-
-    .button-field {
-        display: flex;
-        /* align-items: center; */
-        align-items: flex-end;
-        justify-content: space-between;
-        margin-top: 20px;
-
-        @media screen and (max-width: 992px) {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-    }
 `;
 
 const DateSelectorFieldWrapper = styled.div`
@@ -26,7 +13,7 @@ const DateSelectorFieldWrapper = styled.div`
     align-items: center;
     gap: 5px;
     
-    .date-selector-box{
+    .date-selector-box {
         width: 300px;
 
         @media screen and (max-width: 992px) {
@@ -71,16 +58,13 @@ const ButtonFieldWrapper = styled.div`
             font-size: 14px;
         }
     }
-
-    @media screen and (max-width: 992px) {
-        width: 100%;
-    }
 `;
 
 const DateButtonFieldWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: 2px;
+    padding: 5px 0;
 
     .button-box {
         width: 120px;

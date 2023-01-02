@@ -1,4 +1,4 @@
-import { GraphBoardFieldWrapper } from "../BestCategory.styled";
+import { GraphBoardFieldWrapper } from "../BestCategoryGraph.styled";
 
 export default function GraphBoardFieldView(props) {
     return (

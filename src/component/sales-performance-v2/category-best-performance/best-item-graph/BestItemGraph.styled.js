@@ -13,9 +13,10 @@ const GraphFieldWrapper = styled.div`
         width: 100%;
         display: flex;
         align-items: center;
-        justify-content: space-around;
+        justify-content: flex-start;
         gap: 10px;
         padding: 20px;
+        overflow: auto;
     }
 `;
 
@@ -33,29 +34,6 @@ const GraphBoardFieldWrapper = styled.div`
 
     .graph-info-text {
         font-size: 14px;
-    }
-
-    .right-el-box {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-    }
-
-    .dimension-button-box {
-        display: flex;
-    }
-
-    .dimension-button-box .button-el {
-        width: 40px;
-        height: 40px;
-        background-color: var(--defaultButtonColor);
-        border: 1px solid var(--defaultBorderColor);
-        
-        &.checked {
-            background-color: #555;
-            border: 1px solid #555;
-            color: white;
-        }
     }
 `;
 
@@ -76,7 +54,7 @@ const GraphBodyFieldWrapper = styled.div`
     }
 
     .graph-wrapper {
-        height: 400px;
+        height: 380px;
     }
 `;
 

@@ -4,7 +4,9 @@ import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
 
-const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
+// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
+// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#FF7FAB', '#80A9E1', '#D678CD', '#FF9D83', '#B9B4EB', '#FFCA67', '#00C894', '#D5CABD', '#389091'];
+const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
 // 판매스토어별 총 매출액
 export default function BestItemGraphComponent(props) {
@@ -14,7 +16,7 @@ export default function BestItemGraphComponent(props) {
     const [graphOption, setGraphOption] = useState(null);
 
     useEffect(() => {
-        if (!props.category) {
+        if (!(props.category && props.category.length > 0)) {
             __handle.action.resetGraphData();
             return;
         }
@@ -47,8 +49,8 @@ export default function BestItemGraphComponent(props) {
                     graphLabels.push(productLabel);
                 }
 
-                let graphColor = SALES_CHNNAEL_GRAPH_BG_COLOR;
-                for (let i = SALES_CHNNAEL_GRAPH_BG_COLOR.length; i < props.category.length; i++) {
+                let graphColor = SALES_GRAPH_BG_COLOR;
+                for (let i = SALES_GRAPH_BG_COLOR.length; i < props.category.length; i++) {
                     let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
                     graphColor.push(randomColor);
                 }
@@ -102,8 +104,8 @@ export default function BestItemGraphComponent(props) {
                     graphLabels.push(productLabel);
                 }
 
-                let graphColor = SALES_CHNNAEL_GRAPH_BG_COLOR;
-                for (let i = SALES_CHNNAEL_GRAPH_BG_COLOR.length; i < props.category.length; i++) {
+                let graphColor = SALES_GRAPH_BG_COLOR;
+                for (let i = SALES_GRAPH_BG_COLOR.length; i < props.category.length; i++) {
                     let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
                     graphColor.push(randomColor);
                 }

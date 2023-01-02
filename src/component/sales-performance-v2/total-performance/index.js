@@ -100,6 +100,8 @@ const TotalSalesPerformanceComponent = (props) => {
                 <PageTitleFieldView title={'총 매출액 & 판매건'} />
 
                 <OperatorComponent />
+
+                {/* 주문데이터 표시 및 날짜검색 설정 */}
                 <GraphOperatorComponent
                     searchDimension={searchDimension}
                     checkedSwitch={checkedSwitch}

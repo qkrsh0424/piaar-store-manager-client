@@ -9,9 +9,10 @@ const Container = styled.div`
         width: 100%;
         display: flex;
         align-items: center;
-        justify-content: space-around;
+        justify-content: flex-start;
         gap: 10px;
         padding: 20px;
+        overflow: auto;
     }
 `;
 

@@ -6,7 +6,9 @@ import { useEffect, useState } from "react";
 import { dateToYYYYMM, getWeekNumber } from "../../../../utils/dateFormatUtils";
 import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
-const SALES_CHNNAEL_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
+// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
+// const SALES_GRAPH_BG_COLOR = ['#6f98c9', '#ffd5fb', '#ffca9f', '#b2ffa6', '#dcf2ff', '#f9f871', '#e8dbff', '#c4d7a1', '#389091', '#95C477'];
+const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
 // 판매스토어별 총 매출액
 export default function PayAmountGraphComponent(props) {
@@ -98,8 +100,8 @@ export default function PayAmountGraphComponent(props) {
                     orderPayAmountData.push(orderPayAmount);
                 })
                 
-                let graphColor = SALES_CHNNAEL_GRAPH_BG_COLOR;
-                for (let i = SALES_CHNNAEL_GRAPH_BG_COLOR.length; i < category.length; i++) {
+                let graphColor = SALES_GRAPH_BG_COLOR;
+                for (let i = SALES_GRAPH_BG_COLOR.length; i < category.length; i++) {
                     let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
                     graphColor.push(randomColor);
                 }

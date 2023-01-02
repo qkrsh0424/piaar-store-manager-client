@@ -9,9 +9,10 @@ const Container = styled.div`
         width: 100%;
         display: flex;
         align-items: center;
-        justify-content: space-around;
+        justify-content: flex-start;
         gap: 10px;
         padding: 20px;
+        overflow: auto;
     }
 `;
 
@@ -30,29 +31,6 @@ const GraphBoardFieldWrapper = styled.div`
     .graph-info-text {
         font-size: 14px;
     }
-
-    .right-el-box {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-    }
-
-    .dimension-button-box {
-        display: flex;
-    }
-
-    .dimension-button-box .button-el {
-        width: 40px;
-        height: 40px;
-        background-color: var(--defaultButtonColor);
-        border: 1px solid var(--defaultBorderColor);
-        
-        &.checked {
-            background-color: #555;
-            border: 1px solid #555;
-            color: white;
-        }
-    }
 `;
 
 const GraphBodyFieldWrapper = styled.div`
@@ -66,11 +44,11 @@ const GraphBodyFieldWrapper = styled.div`
 `;
 
 const GraphSummaryFieldWrapper = styled.div`
-    min-width: 250px;
-    width: 20%;
+    min-width: 280px;
     height: 400px;
     background-color: #fafafa;
     border-radius: 10px;
+    border: 1px solid #efefef;
 
     .title {
         font-size: 1.1rem;
@@ -83,6 +61,10 @@ const GraphSummaryFieldWrapper = styled.div`
     .summary-box {
         height: 350px;
         overflow: auto;
+
+        @media screen and (max-width: 992px) {
+            font-size: 14px;
+        }
     }
 
     ul {
