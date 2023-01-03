@@ -1,8 +1,6 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-    display: flex;
-    align-items: center;
 `;
 
 const DashboardFieldWrapper = styled.div`
@@ -143,8 +141,57 @@ const TrendInfoFieldWrapper = styled.div`
     }
 `;
 
+const SubPerformanceFieldWrapper = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    font-size: 1.1rem;
+    padding: 0 10px;
+    color: #efefef;
+
+    .box-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        background-color: #465265;
+        box-shadow: var(--defaultBoxShadow);
+        border-radius: 10px;
+        padding: 10px 20px;
+        width: 300px;
+        color: white;
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+        }
+    }
+
+    .title-info {
+        border-left: 3px solid #e7e9ff;
+        padding-left: 10px;
+        margin: 10px 0;
+        font-weight: 700;
+    }
+
+    .data-wrapper {
+        width: 100%;
+    }
+
+    .data-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .group-value {
+        font-size: 1.2rem;
+        /* color: white; */
+        color: #e7e9ff;
+        font-weight: 700;
+    }
+`;
+
 export {
     Container,
     DashboardFieldWrapper,
-    TrendInfoFieldWrapper
+    TrendInfoFieldWrapper,
+    SubPerformanceFieldWrapper
 }

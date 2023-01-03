@@ -20,10 +20,7 @@ const salesPerformanceDataConnect = () => {
         searchChannelPerformance: async function (params) {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/channel`, {
                 params,
-                withCredentials: true,
-                paramsSerializer: params => {
-                    return qs.stringify(params, {arrayFormat: 'brackets'})
-                }
+                withCredentials: true
             })
         },
         searchCategoryPerformance: async function (params) {

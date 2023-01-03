@@ -1,5 +1,5 @@
-import { toPriceUnitFormat } from "../../../utils/numberFormatUtils";
-import { TrendInfoFieldWrapper, DashboardFieldWrapper } from "./Dashboard.styled";
+import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
+import { TrendInfoFieldWrapper, DashboardFieldWrapper } from "../Dashboard.styled";
 
 function TrendInfoField ({ dayInfo, trendValue}) {
     return (
@@ -136,7 +136,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             <div className='data-content-group'>
                                 <div className='data-title'>주문 수량</div>
                                 <div className='data-content'>
-                                    {yesterdayData.orderUnit} 건
+                                    {yesterdayData.orderUnit} 개
                                 </div>
                             </div>
                             <div className='info-box'>
@@ -150,7 +150,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             <div className='data-content-group'>
                                 <div className='data-title'>판매 수량</div>
                                 <div className='data-content'>
-                                    {yesterdayData.salesUnit} 건
+                                    {yesterdayData.salesUnit} 개
                                 </div>
                             </div>
                             <div className='info-box'>
@@ -164,7 +164,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             <div className='data-content-group'>
                                 <div className='data-title'>미판매 수량</div>
                                 <div className='data-content'>
-                                    {yesterdayData.unsalesUnit} 건
+                                    {yesterdayData.unsalesUnit} 개
                                 </div>
                             </div>
                             <div className='info-box'>
@@ -301,7 +301,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             <div className='data-content-group'>
                                 <div className='data-title'>주문 수량</div>
                                 <div className='data-content'>
-                                    {todayData.orderUnit} 건
+                                    {todayData.orderUnit} 개
                                 </div>
                             </div>
                             <div className='info-box'>
@@ -319,7 +319,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             <div className='data-content-group'>
                                 <div className='data-title'>판매 수량</div>
                                 <div className='data-content'>
-                                    {todayData.salesUnit} 건
+                                    {todayData.salesUnit} 개
                                 </div>
                             </div>
                             <div className='info-box'>
@@ -337,7 +337,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             <div className='data-content-group'>
                                 <div className='data-title'>미판매 수량</div>
                                 <div className='data-content'>
-                                    {todayData.unsalesUnit} 건
+                                    {todayData.unsalesUnit} 개
                                 </div>
                             </div>
                             <div className='info-box'>

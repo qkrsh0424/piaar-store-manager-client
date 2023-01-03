@@ -15,9 +15,20 @@ function InputField({ inputValue, onChangeInputValue }) {
     )
 }
 
-function ListField({ options, inputValue, onSubmitConfirm }) {
+function ListField({ options, inputValue, onSubmitConfirm, onSubmitTotalConfirm }) {
     return (
         <ListFieldWrapper>
+            {!inputValue &&
+                <button
+                    className='button-el total-button'
+                    onClick={() => onSubmitTotalConfirm()}
+                >
+                    <HighlightedText
+                        text={`옵션 전체`}
+                        query={inputValue}
+                    />
+                </button>
+            }
             {options?.map(r => {
                 if (r.defaultName.includes(inputValue)) {
                     return (
@@ -70,6 +81,9 @@ export default function OptionListModalComponent (props) {
         submit: {
             confirmSelectedOption: (optionId) => {
                 props.onActionSelectedOption(optionId);
+            },
+            confirmTotalOption: () => {
+                props.onActionTotalOption();
             }
         }
     }
@@ -86,6 +100,7 @@ export default function OptionListModalComponent (props) {
                 inputValue={inputValue}
 
                 onSubmitConfirm={__handle.submit.confirmSelectedOption}
+                onSubmitTotalConfirm={__handle.submit.confirmTotalOption}
             />
         </Container>
     )

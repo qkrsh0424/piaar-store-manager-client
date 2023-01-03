@@ -19,7 +19,7 @@ export default function SearchFieldView(props) {
                     className='button-el'
                     onClick={(e) => props.onActionOpenOptionListModal(e)}
                 >
-                    {props.selectedOption ? props.selectedOption.defaultName : '옵션 선택'}
+                    {props.selectedOption ? props.selectedOption.defaultName : '옵션 전체'}
                 </button>
             </div>
         </SearchFieldWrapper>

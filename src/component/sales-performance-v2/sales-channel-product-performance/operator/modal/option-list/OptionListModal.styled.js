@@ -71,6 +71,10 @@ const ListFieldWrapper = styled.div`
             background: #e1e1e160;
         }
     }
+
+    .total-button {
+        background-color: #f7f7f7;
+    }
 `;
 
 export {

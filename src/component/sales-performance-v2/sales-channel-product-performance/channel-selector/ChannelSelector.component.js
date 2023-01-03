@@ -1,7 +1,5 @@
-import { useEffect } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { getEndDate, getStartDate, isSearchablePeriod } from "../../../../utils/dateFormatUtils";
 import { Container } from "./ChannelSelector.styled";
 import CheckBoxFieldView from "./view/CheckBoxField.view";
 import TextFieldView from "./view/TextField.view";

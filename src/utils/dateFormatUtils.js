@@ -240,6 +240,14 @@ function isSearchablePeriod(date1, date2, searchablePeriod) {
     return false;
 }
 
+function getTimeDiffWithUTC() {
+    var d = new Date();
+    var hourDiff = d.getTimezoneOffset() / 60;
+
+    // hourDiff가 -9라면, utc시간보다 9시간 빠른것
+    return hourDiff * -1;
+}
+
 export {
     diffTimeToHHmmss,
     getStartDate,
@@ -266,5 +274,6 @@ export {
     getStartDateByWeekNumber,
     getEndDateByWeekNumber,
     getDateOfLastSunDay,
-    isSearchablePeriod
+    isSearchablePeriod,
+    getTimeDiffWithUTC
 }

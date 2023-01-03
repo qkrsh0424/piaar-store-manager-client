@@ -1,9 +1,11 @@
+import _ from "lodash";
 import { useState } from "react";
 import { useEffect } from "react";
 import { dateToYYMMDD2, getDayName, setStartDateOfPeriod } from "../../../utils/dateFormatUtils";
 import { getPercentage } from "../../../utils/numberFormatUtils";
 import { Container } from "./Dashboard.styled"
-import DashboardFieldView from "./DashboardField.view"
+import DashboardFieldView from "./view/DashboardField.view"
+import SubPerformanceFieldView from "./view/SubPerformanceField.view";
 
 const TODAY = new Date();
 const YESTERDAY = setStartDateOfPeriod(TODAY, 0, 0, -1);
@@ -13,6 +15,7 @@ const PREV_8DAYS = setStartDateOfPeriod(TODAY, 0, 0, -8);
 export default function DashboardComponent(props) {
     const [todayData, setTodayData] = useState(null);
     const [yesterdayData, setYesterdayData] = useState(null);
+    const [monthAvgData, setMonthAvgData] = useState(null);
 
 
     useEffect(() => {
@@ -22,6 +25,14 @@ export default function DashboardComponent(props) {
 
         __handle.action.initDashboardData();
     }, [props.dashboardData])
+
+    useEffect(() => {
+        if(!(props.performanceData && props.performanceData.length > 0)) {
+            return;
+        }
+
+        __handle.action.initPerformanceData();
+    }, [props.performanceData])
 
     const __handle = {
         action: {
@@ -121,6 +132,20 @@ export default function DashboardComponent(props) {
 
                 setTodayData(updatedTodayData);
                 setYesterdayData(updatedYesterDayData);
+            },
+            initPerformanceData: () => {
+                let data = [...props.performanceData];
+                let payAmount = _.sumBy(data, 'salesPayAmount') / data.length;
+                let registration = Math.round(_.sumBy(data, 'salesRegistration') / data.length);
+                let unit = Math.round(_.sumBy(data, 'salesUnit') / data.length);
+
+                let monthPerformance = {
+                    payAmount,
+                    registration,
+                    unit,
+                }
+
+                setMonthAvgData(monthPerformance);
             }
         }
     }
@@ -130,6 +155,9 @@ export default function DashboardComponent(props) {
             <DashboardFieldView
                 todayData={todayData}
                 yesterdayData={yesterdayData}
+            />
+            <SubPerformanceFieldView
+                monthAvgData={monthAvgData}
             />
         </Container>
     )

@@ -91,6 +91,41 @@ export default function OperatorComponent(props) {
         __handle.action.initProductAndOption();
     }, [productAndOptions])
 
+    useEffect(() => {
+        let productCode = query.productCode;
+        let optionCode = query.optionCode;
+        
+        // 기존에 선택된 상품 & 옵션 데이터
+        let productData = null;
+        let optionsData = null;
+
+        if(!productAndOptions) {
+            return;
+        }
+
+        if(!(productCode && optionCode)) {
+            setSelectedProduct(null);
+            setSelectedOption(null);
+        }
+
+        if(productCode) {
+            productData = productAndOptions.filter(r => r.product.code === productCode)[0].product;
+            optionsData = productAndOptions.filter(r => r.product.code === productCode)?.map(r => r.option);
+
+            setSelectedProduct(productData);
+            setOptions(optionsData);
+        }
+
+        if(optionCode) {
+            if(optionCode.includes(",")) {
+                setSelectedOption(null);
+            }else {
+                let option = optionsData?.filter(r => r.code === optionCode)[0];
+                setSelectedOption(option);
+            }
+        }
+    }, [productAndOptions, query.productCode, query.optionCode])
+
     const __handle = {
         action: {
             changeStartDate: (value) => {
@@ -155,7 +190,12 @@ export default function OperatorComponent(props) {
                 setSelectedOption(option);
 
                 __handle.action.closeOptionListModal();
-            }
+            },
+            updateTotalOption: () => {
+                setSelectedOption(null);
+
+                __handle.action.closeOptionListModal();
+            },
         },
         submit: {
             routeToSearch: (e) => {
@@ -200,10 +240,13 @@ export default function OperatorComponent(props) {
                     if(selectedProduct && selectedOption) {
                         query.optionCode = selectedOption.code;
                     } else if(selectedProduct) {
-                        let optionCodes = options.filter(r => r.productId === selectedProduct.id).map(r => r.code);
+                        let optionCodes = options.map(r => r.code).join(",");
+                        // let optionCodes = options.filter(r => r.productId === selectedProduct.id).map(r => r.code);
                         query.optionCode = optionCodes;
+                        query.productCode = selectedProduct.code;
                     } else {
                         delete query.optionCode;
+                        delete query.productCode;
 
                         setSelectedProduct(null);
                         setSelectedOption(null);
@@ -291,6 +334,7 @@ export default function OperatorComponent(props) {
                     options={options}
 
                     onActionSelectedOption={__handle.action.updateSelectedOption}
+                    onActionTotalOption={__handle.action.updateTotalOption}
                 />
             </CommonModalComponent>
         </Container>

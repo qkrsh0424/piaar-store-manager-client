@@ -4,7 +4,7 @@ import _ from 'lodash';
 import OperatorComponent from './operator/Operator.component';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { getEndDate, getStartDate } from '../../../utils/dateFormatUtils';
+import { getEndDate, getStartDate, getTimeDiffWithUTC } from '../../../utils/dateFormatUtils';
 import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
 import ChannelSelectorComponent from './channel-selector/ChannelSelector.component';
@@ -60,12 +60,14 @@ const SalesChannelPerformanceComponent = (props) => {
 
     useEffect(() => {
         async function fetchInit() {
-            let startDate = query.startDate ? getStartDate(query.startDate).toJSON() : null;
-            let endDate = query.endDate ? getEndDate(query.endDate).toJSON() : null;
+            let startDate = query.startDate ? getStartDate(query.startDate) : null;
+            let endDate = query.endDate ? getEndDate(query.endDate) : null;
+            let utcHourDifference = getTimeDiffWithUTC();
 
             let params = {
                 startDate,
-                endDate
+                endDate,
+                utcHourDifference
             }
 
             if(!(startDate && endDate)) {

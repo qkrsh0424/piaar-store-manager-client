@@ -103,9 +103,6 @@ export default function BestCategoryGraphComponent(props) {
 
                 setPayAmountGraphData(createdPayAmountGraph);
                 setUnitGraphData(createdUnitGraph);
-
-                // let summary = setAnalysisResultText([payAmountGraphDataset]);
-                // setSummaryData(summary);
             },
             createGraphOption: () => {
                 let option = {

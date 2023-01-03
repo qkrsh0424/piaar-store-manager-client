@@ -10,7 +10,7 @@ import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import { useEffect, useState } from 'react';
 import useTotalSalesPerformanceHook from './hooks/useTotalSalesPerformanceHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
-import { getEndDate, getStartDate } from '../../../utils/dateFormatUtils';
+import { getEndDate, getStartDate, getTimeDiffWithUTC } from '../../../utils/dateFormatUtils';
 import useRouterHook from '../../../hooks/router/useRouterHook';
 
 const Container = styled.div`
@@ -62,10 +62,12 @@ const TotalSalesPerformanceComponent = (props) => {
         async function fetchInit() {
             let startDate = query.startDate ? getStartDate(query.startDate) : null;
             let endDate = query.endDate ? getEndDate(query.endDate) : null;
+            let utcHourDifference = getTimeDiffWithUTC();
 
             let params = {
                 startDate,
-                endDate
+                endDate,
+                utcHourDifference
             }
 
             if(!(startDate && endDate)) {

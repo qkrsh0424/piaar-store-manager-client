@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
 
-import { getStartDate, setStartDateOfPeriod } from '../../../utils/dateFormatUtils';
+import { getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, setStartDateOfPeriod } from '../../../utils/dateFormatUtils';
 import _ from 'lodash';
 import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
@@ -49,11 +49,13 @@ const SalesPerformanceDashboardComponent = (props) => {
 
     const {
         dashboard: dashboardData,
-        reqSearchDashboard: reqSearchSalesPerformanceDashboard
+        performance: performanceData,
+        reqSearchDashboard: reqSearchSalesPerformanceDashboard,
+        reqSearchPerformance: reqSearchPerformance
     } = useSalesPerformanceItemHook();
 
     useEffect(() => {
-        async function fetchInit() {
+        async function getDashboardPerformance() {
             // TODO :: 배포 시 new Date() 로 변경
             let prev7DaysOfToday = setStartDateOfPeriod(TODAY, 0, 0, -7);
             let prev7DaysOfYesterDay = setStartDateOfPeriod(YESTERDAY, 0, 0, -7)
@@ -63,11 +65,13 @@ const SalesPerformanceDashboardComponent = (props) => {
             
             let periodType = 'channelOrderDate';
             let matchedCode = 'optionCode';
+            let utcHourDifference = getTimeDiffWithUTC();
 
             let params = {
                 date: searchDate,
                 periodType: periodType,
-                matchedCode: matchedCode
+                matchedCode: matchedCode,
+                utcHourDifference
             }
 
             onActionOpenBackdrop();
@@ -75,7 +79,25 @@ const SalesPerformanceDashboardComponent = (props) => {
             onActionCloseBackdrop();
         }
 
-        fetchInit();
+        // 월별 평균 매출
+        async function getThisMonthPerformance() {
+            let startDate = getStartDateOfMonth(TODAY);
+            let endDate = YESTERDAY > TODAY ? TODAY : YESTERDAY;
+            let utcHourDifference = getTimeDiffWithUTC();
+
+            let params = {
+                startDate,
+                endDate,
+                utcHourDifference
+            }
+
+            onActionOpenBackdrop();
+            await reqSearchPerformance(params);
+            onActionCloseBackdrop();
+        }
+
+        getDashboardPerformance();
+        getThisMonthPerformance();
     }, [location]);
 
     return (
@@ -84,6 +106,7 @@ const SalesPerformanceDashboardComponent = (props) => {
 
             <DashboardComponent
                 dashboardData={dashboardData}
+                performanceData={performanceData}
             />
 
             {/* Backdrop Loading */}
