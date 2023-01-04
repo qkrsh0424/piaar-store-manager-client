@@ -86,7 +86,7 @@ const SearchFieldWrapper = styled.div`
     .option-box .close-box {
         position: absolute;
         right: -5px;
-        top: -7px;
+        top: -5px;
         
         :hover {
             cursor: pointer;

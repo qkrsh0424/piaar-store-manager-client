@@ -44,7 +44,7 @@ export default function SearchFieldView(props) {
                                     </div>
                                     <button
                                         type='button'
-                                        className={`button-el ${optionIdx % 2 === 0 ? '' : 'odd-item'}`}
+                                        className={`button-el ${optionIdx % 2 === 1 ? 'odd-item' : ''}`}
                                         onChange={(e) => props.onActionOptionCheckOne(e, r.option.code)}
                                     >{r.product.defaultName} - {r.option.defaultName}</button>
                                 </div>

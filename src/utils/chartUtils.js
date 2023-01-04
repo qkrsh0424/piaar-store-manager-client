@@ -35,7 +35,7 @@ function createGraphOption(option) {
             legend: {
                 position: option.plugins?.legend?.position || 'top',
                 labels: {
-                    boxWidth: 12,
+                    boxWidth: option.plugins?.lengend?.labels || 12,
                 }
             },
             tooltip: {

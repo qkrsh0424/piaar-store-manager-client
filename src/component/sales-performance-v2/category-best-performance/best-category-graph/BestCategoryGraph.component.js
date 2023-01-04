@@ -111,7 +111,7 @@ export default function BestCategoryGraphComponent(props) {
                     cutout: '40%',
                     plugins: {
                         legend: {
-                            position: 'right'
+                            position: 'right',
                         },
                         tooltip: {
                             callbacks: {
