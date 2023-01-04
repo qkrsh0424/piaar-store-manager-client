@@ -71,6 +71,11 @@ const SearchFieldWrapper = styled.div`
         box-shadow: var(--defaultBoxShadow);
         color: white;
         
+        &.odd-item {
+            background-color: #868e99;
+            border: 1px solid #868e99;
+        }
+
         @media screen and (max-width: 992px) {
             width: 80px;
             height: 25px;

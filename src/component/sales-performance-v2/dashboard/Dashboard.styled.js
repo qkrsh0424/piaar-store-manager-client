@@ -161,7 +161,7 @@ const SubPerformanceFieldWrapper = styled.div`
         box-shadow: var(--defaultBoxShadow);
         border-radius: 10px;
         padding: 10px 20px;
-        width: 300px;
+        width: 270px;
         color: white;
 
         @media screen and (max-width: 992px) {

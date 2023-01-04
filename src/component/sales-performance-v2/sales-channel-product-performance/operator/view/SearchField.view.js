@@ -17,7 +17,14 @@ export default function SearchFieldView(props) {
             <div className='option-box'>
                 <div className='selector-box'>
                     {props.productAndOptions?.map((r, idx) => {
-                        let checked = props.selectedOptionCodes.some(code => code === r.option.code);
+                        let optionIdx = 0;
+                        let checked = props.selectedOptionCodes.some((code, index) => {
+                            if(code === r.option.code) {
+                                optionIdx = index;
+                                return true;
+                            }
+                        })
+                        
                         if(checked) {
                             return (
                                 <div
@@ -26,7 +33,7 @@ export default function SearchFieldView(props) {
                                     onClick={(e) => props.onActionOptionCheckOne(e, r.option.code)}
                                 >
                                     <div className="close-box">
-                                        <div className="close-button-box">
+                                        <div className='close-button-box'>
                                             <img
                                                 src='/assets/icon/close_default_666666.svg'
                                                 style={{ width: '100%', position: 'absolute', right: '0', top: '50%', transform: 'translate(0, -50%)' }}
@@ -37,7 +44,7 @@ export default function SearchFieldView(props) {
                                     </div>
                                     <button
                                         type='button'
-                                        className='button-el'
+                                        className={`button-el ${optionIdx % 2 === 0 ? '' : 'odd-item'}`}
                                         onChange={(e) => props.onActionOptionCheckOne(e, r.option.code)}
                                     >{r.product.defaultName} - {r.option.defaultName}</button>
                                 </div>

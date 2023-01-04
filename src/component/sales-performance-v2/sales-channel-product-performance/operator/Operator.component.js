@@ -99,6 +99,7 @@ export default function OperatorComponent(props) {
 
                 navigateClearParams({ replace: true });
                 props.onActionClearChannel();
+                setSelectedOptionCodes([])
             },
             searchDateRange: (year, month, day) => {
                 let end = new Date();
