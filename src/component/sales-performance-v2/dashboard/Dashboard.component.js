@@ -16,7 +16,7 @@ export default function DashboardComponent(props) {
     const [todayData, setTodayData] = useState(null);
     const [yesterdayData, setYesterdayData] = useState(null);
     const [monthAvgData, setMonthAvgData] = useState(null);
-
+    const [lastMonthAvgData, setLastMonthAvgData] = useState(null);
 
     useEffect(() => {
         if(!(props.dashboardData && props.dashboardData.length > 0)) {
@@ -27,12 +27,17 @@ export default function DashboardComponent(props) {
     }, [props.dashboardData])
 
     useEffect(() => {
-        if(!(props.performanceData && props.performanceData.length > 0)) {
+        if(!(props.performanceData && props.performanceData?.length > 0)) {
+            return;
+        }
+
+        if(!(props.lastMonthPerformanceData && props.lastMonthPerformanceData?.length > 0)) {
             return;
         }
 
         __handle.action.initPerformanceData();
-    }, [props.performanceData])
+        __handle.action.initLastMonthPerformanceData();
+    }, [props.performanceData, props.lastMonthPerformanceData])
 
     const __handle = {
         action: {
@@ -140,12 +145,28 @@ export default function DashboardComponent(props) {
                 let unit = Math.round(_.sumBy(data, 'salesUnit') / data.length);
 
                 let monthPerformance = {
+                    title: '이번달 일일 평균',
                     payAmount,
                     registration,
                     unit,
                 }
 
                 setMonthAvgData(monthPerformance);
+            },
+            initLastMonthPerformanceData: () => {
+                let data = [...props.lastMonthPerformanceData];
+                let payAmount = _.sumBy(data, 'salesPayAmount') / data.length;
+                let registration = Math.round(_.sumBy(data, 'salesRegistration') / data.length);
+                let unit = Math.round(_.sumBy(data, 'salesUnit') / data.length);
+
+                let monthPerformance = {
+                    title: '지난달 일일 평균',
+                    payAmount,
+                    registration,
+                    unit,
+                }
+
+                setLastMonthAvgData(monthPerformance);
             }
         }
     }
@@ -156,9 +177,11 @@ export default function DashboardComponent(props) {
                 todayData={todayData}
                 yesterdayData={yesterdayData}
             />
-            <SubPerformanceFieldView
-                monthAvgData={monthAvgData}
-            />
+            {monthAvgData && lastMonthAvgData &&
+                <SubPerformanceFieldView
+                    monthAvgData={monthAvgData}
+                    lastMonthAvgData={lastMonthAvgData}
+                />}
         </Container>
     )
 }

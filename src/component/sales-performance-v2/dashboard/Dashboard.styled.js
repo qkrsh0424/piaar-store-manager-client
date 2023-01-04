@@ -144,9 +144,14 @@ const TrendInfoFieldWrapper = styled.div`
 const SubPerformanceFieldWrapper = styled.div`
     display: flex;
     justify-content: flex-end;
-    font-size: 1.1rem;
+    gap: 10px;
+    font-size: 1rem;
     padding: 0 10px;
     color: #efefef;
+
+    @media screen and (max-width: 992px) {
+        flex-direction: column;
+    }
 
     .box-wrapper {
         display: flex;
@@ -182,9 +187,7 @@ const SubPerformanceFieldWrapper = styled.div`
     }
 
     .group-value {
-        font-size: 1.2rem;
-        /* color: white; */
-        color: #e7e9ff;
+        /* color: #e7e9ff; */
         font-weight: 700;
     }
 `;

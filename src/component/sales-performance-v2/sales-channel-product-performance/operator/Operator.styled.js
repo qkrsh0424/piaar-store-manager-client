@@ -10,24 +10,92 @@ const Container = styled.div`
 
 const SearchFieldWrapper = styled.div`
     display: flex;
-    align-items: center;
-    gap: 5px;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
 
-    .button-box {
-        width: 300px;
+    .search-box {
+        width: 200px;
 
         @media screen and (max-width: 992px) {
             width: 100%;
         }
     }
     
-    .button-el {
+    .search-box .button-el {
         width: 100%;
         padding: 5px 0;
         height: 48px;
         background: white;
         border: 1px solid #e1e1e1;
         border-radius: 5px;
+    }
+
+    .option-box {
+        flex: 1;
+        background-color: #f7f7f7;
+        overflow: auto;
+        border-radius: 5px;
+        max-height: 150px;
+        border: 1px solid #e1e1e1;
+        padding: 10px;
+    }
+
+    .option-box .selector-box {
+        padding: 0 10px;
+        align-items: center;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        min-height: 48px;        
+    }
+
+    .option-box .button-box {
+        position: relative;
+
+        :hover {
+            transition: 0.1s;
+            transform: scale(1.02);
+        }
+    }
+
+    .option-box .button-el {
+        transition: 0.1s;
+        padding: 0 10px;
+        height: 35px;
+        border-radius: 5px;
+        font-size: 14px;
+        border: 1px solid #6b727d;
+        background-color: #6b727d;
+        box-shadow: var(--defaultBoxShadow);
+        color: white;
+        
+        @media screen and (max-width: 992px) {
+            width: 80px;
+            height: 25px;
+            font-size: 12px;
+        }
+    }
+
+    .option-box .close-box {
+        position: absolute;
+        right: -5px;
+        top: -7px;
+        
+        :hover {
+            cursor: pointer;
+        }
+    }
+
+    .close-button-box {
+        position: relative;
+        background-color: white;
+        border: 0.5px solid var(--defaultBorderColor);
+        box-shadow: var(--defaultBoxShadow);
+        border-radius: 50%;
+        height: 15px;
+        width: 15px;
     }
 `;
 

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
 
-import { getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, setStartDateOfPeriod } from '../../../utils/dateFormatUtils';
+import { getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, setStartDateOfPeriod } from '../../../utils/dateFormatUtils';
 import _ from 'lodash';
 import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
@@ -50,8 +50,10 @@ const SalesPerformanceDashboardComponent = (props) => {
     const {
         dashboard: dashboardData,
         performance: performanceData,
+        lastMonthPerformance: lastMonthPerformanceData,
         reqSearchDashboard: reqSearchSalesPerformanceDashboard,
-        reqSearchPerformance: reqSearchPerformance
+        reqSearchPerformance: reqSearchPerformance,
+        reqSearchLastMonthPerformance: reqSearchLastMonthPerformance
     } = useSalesPerformanceItemHook();
 
     useEffect(() => {
@@ -79,7 +81,7 @@ const SalesPerformanceDashboardComponent = (props) => {
             onActionCloseBackdrop();
         }
 
-        // 월별 평균 매출
+        // 월 성과
         async function getThisMonthPerformance() {
             let startDate = getStartDateOfMonth(TODAY);
             let endDate = YESTERDAY > TODAY ? TODAY : YESTERDAY;
@@ -96,8 +98,27 @@ const SalesPerformanceDashboardComponent = (props) => {
             onActionCloseBackdrop();
         }
 
+        // 지난달 성과
+        async function getLasyMonthPerformance() {
+            let lastMonth = setStartDateOfPeriod(TODAY, 0, -1, 0);
+            let startDate = getStartDateOfMonth(lastMonth);
+            let endDate = getEndDateOfMonth(lastMonth);
+            let utcHourDifference = getTimeDiffWithUTC();
+
+            let params = {
+                startDate,
+                endDate,
+                utcHourDifference
+            }
+
+            onActionOpenBackdrop();
+            await reqSearchLastMonthPerformance(params);
+            onActionCloseBackdrop();
+        }
+
         getDashboardPerformance();
         getThisMonthPerformance();
+        getLasyMonthPerformance();
     }, [location]);
 
     return (
@@ -107,6 +128,7 @@ const SalesPerformanceDashboardComponent = (props) => {
             <DashboardComponent
                 dashboardData={dashboardData}
                 performanceData={performanceData}
+                lastMonthPerformanceData={lastMonthPerformanceData}
             />
 
             {/* Backdrop Loading */}

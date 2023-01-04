@@ -54,7 +54,7 @@ const CategoryBestPerformanceComponent = (props) => {
 
     const {
         performance,
-        reqSearchChannelPerformance
+        reqSearchCategoryPerformance
     } = useCategorySalesPerformanceHook();
 
     useEffect(() => {
@@ -75,7 +75,7 @@ const CategoryBestPerformanceComponent = (props) => {
             }
 
             onActionOpenBackdrop();
-            await reqSearchChannelPerformance(params);
+            await reqSearchCategoryPerformance(params);
             onActionCloseBackdrop();
         }
 

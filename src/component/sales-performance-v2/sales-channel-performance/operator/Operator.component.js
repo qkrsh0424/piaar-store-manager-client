@@ -58,7 +58,7 @@ export default function OperatorComponent(props) {
             },
             searchDateRange: (year, month, day) => {
                 let end = new Date();
-                let start = setStartDateOfPeriod(endDate, year, month, day);
+                let start = setStartDateOfPeriod(end, year, month, day);
                 setStartDate(start);
                 setEndDate(end);
             },

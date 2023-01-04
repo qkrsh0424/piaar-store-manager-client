@@ -1,5 +1,4 @@
 import axios from "axios";
-import qs from "query-string";
 
 const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 
@@ -17,9 +16,9 @@ const salesPerformanceDataConnect = () => {
                 withCredentials: true
             })
         },
-        searchChannelPerformance: async function (params) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/channel`, {
-                params,
+        searchChannelPerformance: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/channel/search`, body, {
+                // params,
                 withCredentials: true
             })
         },

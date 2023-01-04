@@ -64,7 +64,7 @@ const SalesChannelPerformanceComponent = (props) => {
             let endDate = query.endDate ? getEndDate(query.endDate) : null;
             let utcHourDifference = getTimeDiffWithUTC();
 
-            let params = {
+            let body = {
                 startDate,
                 endDate,
                 utcHourDifference
@@ -76,7 +76,7 @@ const SalesChannelPerformanceComponent = (props) => {
             }
 
             onActionOpenBackdrop();
-            await reqSearchChannelPerformance(params);
+            await reqSearchChannelPerformance(body);
             onActionCloseBackdrop();
         }
 

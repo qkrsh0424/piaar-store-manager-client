@@ -4,7 +4,7 @@ import { salesPerformanceDataConnect } from "../../../../data_connect/salesPerfo
 export default function useCategorySalesPerformanceHook(props) {
     const [performance, setPerformance] = useState(null);
 
-    const reqSearchChannelPerformance = async (params) => {
+    const reqSearchCategoryPerformance = async (params) => {
         await salesPerformanceDataConnect().searchCategoryPerformance(params)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
@@ -24,6 +24,6 @@ export default function useCategorySalesPerformanceHook(props) {
 
     return {
         performance,
-        reqSearchChannelPerformance
+        reqSearchCategoryPerformance
     }
 }

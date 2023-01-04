@@ -4,8 +4,8 @@ import { salesPerformanceDataConnect } from "../../../../data_connect/salesPerfo
 export default function useChannelSalesPerformanceHook(props) {
     const [performance, setPerformance] = useState(null);
 
-    const reqSearchChannelPerformance = async (params) => {
-        await salesPerformanceDataConnect().searchChannelPerformance(params)
+    const reqSearchChannelPerformance = async (body) => {
+        await salesPerformanceDataConnect().searchChannelPerformance(body)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     setPerformance(res.data.data);

@@ -3,9 +3,7 @@ import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdr
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
 import { dateToYYYYMMDD, getEndDateOfMonth, getStartDateOfMonth, isSearchablePeriod, setStartDateOfPeriod } from "../../../../utils/dateFormatUtils";
-import CommonModalComponent from "../../../module/modal/CommonModalComponent";
 import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
-import OptionListModalComponent from "./modal/option-list/OptionListModal.component";
 import ProductListModalComponent from "./modal/product-list/ProductListModal.component";
 import { Container } from "./Operator.styled";
 import ButtonFieldView from "./view/ButtonField.view";
@@ -22,12 +20,9 @@ export default function OperatorComponent(props) {
 
     const [products, setProducts] = useState(null);
     const [options, setOptions] = useState(null);
-
-    const [selectedProduct, setSelectedProduct] = useState(null);
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedOptionCodes, setSelectedOptionCodes] = useState([]);
 
     const [productListModalOpen, setProductListModalOpen] = useState(false);
-    const [optionListModalOpen, setOptionListModalOpen] = useState(false);
 
     const {
         location,
@@ -70,8 +65,7 @@ export default function OperatorComponent(props) {
         let endDate = query.endDate;
 
         if(!(startDate && endDate)) {
-            setSelectedProduct(null);
-            setSelectedOption(null);
+            setSelectedOptionCodes([]);
         }
         
         if (startDate) {
@@ -91,41 +85,6 @@ export default function OperatorComponent(props) {
         __handle.action.initProductAndOption();
     }, [productAndOptions])
 
-    useEffect(() => {
-        let productCode = query.productCode;
-        let optionCode = query.optionCode;
-        
-        // 기존에 선택된 상품 & 옵션 데이터
-        let productData = null;
-        let optionsData = null;
-
-        if(!productAndOptions) {
-            return;
-        }
-
-        if(!(productCode && optionCode)) {
-            setSelectedProduct(null);
-            setSelectedOption(null);
-        }
-
-        if(productCode) {
-            productData = productAndOptions.filter(r => r.product.code === productCode)[0].product;
-            optionsData = productAndOptions.filter(r => r.product.code === productCode)?.map(r => r.option);
-
-            setSelectedProduct(productData);
-            setOptions(optionsData);
-        }
-
-        if(optionCode) {
-            if(optionCode.includes(",")) {
-                setSelectedOption(null);
-            }else {
-                let option = optionsData?.filter(r => r.code === optionCode)[0];
-                setSelectedOption(option);
-            }
-        }
-    }, [productAndOptions, query.productCode, query.optionCode])
-
     const __handle = {
         action: {
             changeStartDate: (value) => {
@@ -139,10 +98,12 @@ export default function OperatorComponent(props) {
                 setEndDate(null);
 
                 navigateClearParams({ replace: true });
+                props.onActionClearChannel();
             },
             searchDateRange: (year, month, day) => {
                 let end = new Date();
-                let start = setStartDateOfPeriod(endDate, year, month, day);
+                let start = setStartDateOfPeriod(end, year, month, day);
+
                 setStartDate(start);
                 setEndDate(end);
             },
@@ -151,13 +112,16 @@ export default function OperatorComponent(props) {
                 let searchMonth = new Date(date.setMonth(date.getMonth() + month));
                 let start = getStartDateOfMonth(searchMonth);
                 let end = month === 0 ? new Date() : getEndDateOfMonth(searchMonth);
-        
+
                 setStartDate(start);
                 setEndDate(end);
             },
             initProductAndOption: () => {
                 let productData = [...new Set(productAndOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
                 setProducts(productData);
+
+                let optionData = productAndOptions.map(r => r.option);
+                setOptions(optionData);
             },
             openProductListModal: (e) => {
                 e.preventDefault();
@@ -167,35 +131,23 @@ export default function OperatorComponent(props) {
             closeProductListModal: () => {
                 setProductListModalOpen(false);
             },
-            updateSelectedProduct: (productId) => {
-                let product = products.filter(r => r.id === productId)[0];
-                setSelectedProduct(product);
-
+            selectProduct: (productId) => {
                 let optionData = productAndOptions.filter(r => r.product.id === productId)?.map(r => r.option);
-                setOptions(optionData);
-                setSelectedOption(null);
+                let addOptionCodes = optionData.filter(r => !selectedOptionCodes.includes(r.code)).map(r => r.code);
+                setSelectedOptionCodes([...selectedOptionCodes, ...addOptionCodes]);
+            },
+            checkOne: (e, optionCodes) => {
+                e.stopPropagation();
 
-                __handle.action.closeProductListModal();
-            },
-            openOptionListModal: (e) => {
-                e.preventDefault();
+                let data = [...selectedOptionCodes];
 
-                setOptionListModalOpen(true);
-            },
-            closeOptionListModal: () => {
-                setOptionListModalOpen(false);
-            },
-            updateSelectedOption: (optionId) => {
-                let option = options.filter(r => r.id === optionId)[0];
-                setSelectedOption(option);
-
-                __handle.action.closeOptionListModal();
-            },
-            updateTotalOption: () => {
-                setSelectedOption(null);
-
-                __handle.action.closeOptionListModal();
-            },
+                if(selectedOptionCodes.some(r => r === optionCodes)) {
+                    data = data.filter(r => r !== optionCodes);
+                } else {
+                    data.push(optionCodes);
+                }
+                setSelectedOptionCodes(data);
+            }
         },
         submit: {
             routeToSearch: (e) => {
@@ -222,8 +174,8 @@ export default function OperatorComponent(props) {
                         throw new Error('조회기간은 최대 90일까지 가능합니다.')
                     }
 
-                    if(!selectedProduct) {
-                        throw new Error('조회하려는 상품을 먼저 선택해주세요.')
+                    if(selectedOptionCodes.length === 0) {
+                        throw new Error('조회하려는 상품을 선택해주세요.')
                     }
 
                     if (startDate && endDate) {
@@ -236,21 +188,6 @@ export default function OperatorComponent(props) {
                         setStartDate(null);
                         setEndDate(null);
                     }
-
-                    if(selectedProduct && selectedOption) {
-                        query.optionCode = selectedOption.code;
-                    } else if(selectedProduct) {
-                        let optionCodes = options.map(r => r.code).join(",");
-                        // let optionCodes = options.filter(r => r.productId === selectedProduct.id).map(r => r.code);
-                        query.optionCode = optionCodes;
-                        query.productCode = selectedProduct.code;
-                    } else {
-                        delete query.optionCode;
-                        delete query.productCode;
-
-                        setSelectedProduct(null);
-                        setSelectedOption(null);
-                    }
                 } catch (err) {
                     let snackbarSetting = {
                         message: err?.message,
@@ -261,32 +198,33 @@ export default function OperatorComponent(props) {
                 }
 
                 navigateParams({ replace: true })
+                props.onSubmitSearchPerformance(selectedOptionCodes);
             }
         }
     }
 
     return (
         <Container>
-            <DateSelectorFieldView
-                startDate={startDate}
-                endDate={endDate}
-                onChangeStartDateValue={__handle.action.changeStartDate}
-                onChangeEndDateValue={__handle.action.changeEndDate}
-            />
-            <DateButtonFieldView
-                onActionSearchDateRange={__handle.action.searchDateRange}
-                onActionSearchMonthRange={__handle.action.searchMonthRange}
-            />
-
-            <SearchFieldView
-                selectedProduct={selectedProduct}
-                selectedOption={selectedOption}
-
-                onActionOpenProductListModal={__handle.action.openProductListModal}
-                onActionOpenOptionListModal={__handle.action.openOptionListModal}
-            />
-
             <form onSubmit={(e) => __handle.submit.routeToSearch(e)}>
+                <DateSelectorFieldView
+                    startDate={startDate}
+                    endDate={endDate}
+                    onChangeStartDateValue={__handle.action.changeStartDate}
+                    onChangeEndDateValue={__handle.action.changeEndDate}
+                />
+                <DateButtonFieldView
+                    onActionSearchDateRange={__handle.action.searchDateRange}
+                    onActionSearchMonthRange={__handle.action.searchMonthRange}
+                />
+
+                <SearchFieldView
+                    selectedOptionCodes={selectedOptionCodes}
+                    options={options}
+                    productAndOptions={productAndOptions}
+
+                    onActionOpenProductListModal={__handle.action.openProductListModal}
+                    onActionOptionCheckOne={__handle.action.checkOne}
+                />
                 <ButtonFieldView
                     onActionClearRoute={__handle.action.clearRoute}
                 />
@@ -309,34 +247,15 @@ export default function OperatorComponent(props) {
                 open={backdropOpen}
             />
 
-            {/* 상품선택 모달 */}
-            <CommonModalComponent
-                open={productListModalOpen}
-                maxWidth={'xs'}
-
-                onClose={__handle.action.closeProductListModal}
-            >
+            {productListModalOpen &&
                 <ProductListModalComponent
                     products={products}
+                    modalOpen={productListModalOpen}
 
-                    onActionSelectedProduct={__handle.action.updateSelectedProduct}
+                    onActionSelectedProduct={__handle.action.selectProduct}
+                    onActionCloseModal={__handle.action.closeProductListModal}
                 />
-            </CommonModalComponent>
-            
-            {/* 옵션선택 모달 */}
-            <CommonModalComponent
-                open={optionListModalOpen}
-                maxWidth={'xs'}
-
-                onClose={__handle.action.closeOptionListModal}
-            >
-                <OptionListModalComponent
-                    options={options}
-
-                    onActionSelectedOption={__handle.action.updateSelectedOption}
-                    onActionTotalOption={__handle.action.updateTotalOption}
-                />
-            </CommonModalComponent>
+            }
         </Container>
     )
 }

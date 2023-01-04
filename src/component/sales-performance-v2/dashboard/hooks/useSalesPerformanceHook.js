@@ -4,6 +4,7 @@ import { salesPerformanceDataConnect } from "../../../../data_connect/salesPerfo
 export default function useSalesPerformanceItemHook() {
     const [dashboard, setDashboard] = useState(null);
     const [performance, setPerformance] = useState(null);
+    const [lastMonthPerformance, setLastMonthPerformance] = useState(null);
 
     const reqSearchDashboard = async (params) => {
         await salesPerformanceDataConnect().searchDashboard(params)
@@ -41,10 +42,30 @@ export default function useSalesPerformanceItemHook() {
             })
     }
 
+    const reqSearchLastMonthPerformance = async (params) => {
+        await salesPerformanceDataConnect().searchTotalPerformance(params)
+            .then(res => {
+                if (res.status === 200 && res.data.message === 'success') {
+                    setLastMonthPerformance(res.data.data);
+                }
+            })
+            .catch(err => {
+                let res = err.response;
+                if (res?.status === 500) {
+                    alert('undefined error.');
+                    return;
+                }
+
+                alert(res?.data.memo);
+            })
+    }
+
     return {
         dashboard,
         performance,
+        lastMonthPerformance,
         reqSearchDashboard,
-        reqSearchPerformance
+        reqSearchPerformance,
+        reqSearchLastMonthPerformance
     }
 }

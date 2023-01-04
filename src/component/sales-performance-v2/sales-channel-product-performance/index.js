@@ -59,35 +59,6 @@ const SalesChannelProductPerformanceComponent = (props) => {
     } = useChannelSalesPerformanceHook();
 
     useEffect(() => {
-        async function fetchInit() {
-            let startDate = query.startDate ? getStartDate(query.startDate) : null;
-            let endDate = query.endDate ? getEndDate(query.endDate) : null;
-            let productCode = query.productCode || null;
-            let optionCode = query.optionCode || null;
-            let utcHourDifference = getTimeDiffWithUTC();
-
-            let params = {
-                startDate,
-                endDate,
-                productCode,
-                optionCode,
-                utcHourDifference
-            }
-
-            if(!(startDate && endDate)) {
-                __handle.action.clearChannel();
-                return;
-            }
-
-            onActionOpenBackdrop();
-            await reqSearchChannelPerformance(params);
-            onActionCloseBackdrop();
-        }
-
-        fetchInit();
-    }, [location])
-
-    useEffect(() => {
         if(!performance) {
             return;
         }
@@ -134,6 +105,29 @@ const SalesChannelProductPerformanceComponent = (props) => {
                 setSalesChannel(null);
                 setSelectedChannel(null);
             }
+        },
+        submit: {
+            searchPerformance: async (optionCodes) => {
+                let startDate = query.startDate ? getStartDate(query.startDate) : null;
+                let endDate = query.endDate ? getEndDate(query.endDate) : null;
+                let utcHourDifference = getTimeDiffWithUTC();
+
+                let body = {
+                    startDate,
+                    endDate,
+                    utcHourDifference,
+                    optionCodes
+                }
+
+                if (!(startDate && endDate)) {
+                    __handle.action.clearChannel();
+                    return;
+                }
+
+                onActionOpenBackdrop();
+                await reqSearchChannelPerformance(body);
+                onActionCloseBackdrop();
+            }
         }
     }
 
@@ -142,7 +136,10 @@ const SalesChannelProductPerformanceComponent = (props) => {
             <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'판매스토어 성과'} />
 
-                <OperatorComponent />
+                <OperatorComponent
+                    onActionClearChannel={__handle.action.clearChannel}
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
+                />
 
                 <ChannelSelectorComponent
                     salesChannel={salesChannel}
