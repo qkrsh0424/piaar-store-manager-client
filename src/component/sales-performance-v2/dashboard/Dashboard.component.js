@@ -140,7 +140,7 @@ export default function DashboardComponent(props) {
             },
             initPerformanceData: () => {
                 let data = [...props.performanceData];
-                let payAmount = _.sumBy(data, 'salesPayAmount') / data.length;
+                let payAmount = Math.round(_.sumBy(data, 'salesPayAmount') / data.length);
                 let registration = Math.round(_.sumBy(data, 'salesRegistration') / data.length);
                 let unit = Math.round(_.sumBy(data, 'salesUnit') / data.length);
 
@@ -155,7 +155,7 @@ export default function DashboardComponent(props) {
             },
             initLastMonthPerformanceData: () => {
                 let data = [...props.lastMonthPerformanceData];
-                let payAmount = _.sumBy(data, 'salesPayAmount') / data.length;
+                let payAmount = Math.round(_.sumBy(data, 'salesPayAmount') / data.length);
                 let registration = Math.round(_.sumBy(data, 'salesRegistration') / data.length);
                 let unit = Math.round(_.sumBy(data, 'salesUnit') / data.length);
 

@@ -5,31 +5,28 @@ const API_SERVER_ADDRESS = process.env.REACT_APP_API_HOST;
 const salesPerformanceDataConnect = () => {
     return {
         searchDashboard: async function (body) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/dashboard/search`, body, {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/dashboard`, body, {
                 withCredentials: true
             })
         },
-        searchTotalPerformance: async function (params) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/total`, {
-                params,
+        searchTotalPerformance: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/total`, body, {
                 withCredentials: true
             })
         },
         searchChannelPerformance: async function (body) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/channel/search`, body, {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/channel`, body, {
                 // params,
                 withCredentials: true
             })
         },
-        searchCategoryPerformance: async function (params) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/category`, {
-                params,
+        searchCategoryPerformance: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/category`, body, {
                 withCredentials: true
             })
         },
-        searchCategoryAndProductPerformance: async function (params) {
-            return await axios.get(`${API_SERVER_ADDRESS}/api/v1/sales-performance/category/product`, {
-                params,
+        searchCategoryAndProductPerformance: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/category/product`, body, {
                 withCredentials: true
             })
         }

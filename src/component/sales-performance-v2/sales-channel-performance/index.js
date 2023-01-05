@@ -101,7 +101,9 @@ const SalesChannelPerformanceComponent = (props) => {
 
                 let channelName = [...channel].sort();
                 setSalesChannel(channelName);
-                setSelectedChannel(channelName);
+                
+                // 기본 1개 선택
+                setSelectedChannel([channelName[0]]);
             },
             isCheckedOne: (channel) => {
                 return selectedChannel.some(name => name === channel);

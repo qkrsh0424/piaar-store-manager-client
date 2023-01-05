@@ -83,14 +83,14 @@ const SalesPerformanceDashboardComponent = (props) => {
             let endDate = YESTERDAY > TODAY ? TODAY : YESTERDAY;
             let utcHourDifference = getTimeDiffWithUTC();
 
-            let params = {
+            let body = {
                 startDate,
                 endDate,
                 utcHourDifference
             }
 
             onActionOpenBackdrop();
-            await reqSearchPerformance(params);
+            await reqSearchPerformance(body);
             onActionCloseBackdrop();
         }
 
@@ -101,14 +101,14 @@ const SalesPerformanceDashboardComponent = (props) => {
             let endDate = getEndDateOfMonth(lastMonth);
             let utcHourDifference = getTimeDiffWithUTC();
 
-            let params = {
+            let body = {
                 startDate,
                 endDate,
                 utcHourDifference
             }
 
             onActionOpenBackdrop();
-            await reqSearchLastMonthPerformance(params);
+            await reqSearchLastMonthPerformance(body);
             onActionCloseBackdrop();
         }
 

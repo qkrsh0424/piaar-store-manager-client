@@ -24,8 +24,8 @@ export default function useSalesPerformanceItemHook() {
             })
     }
 
-    const reqSearchPerformance = async (params) => {
-        await salesPerformanceDataConnect().searchTotalPerformance(params)
+    const reqSearchPerformance = async (body) => {
+        await salesPerformanceDataConnect().searchTotalPerformance(body)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     setPerformance(res.data.data);
@@ -42,8 +42,8 @@ export default function useSalesPerformanceItemHook() {
             })
     }
 
-    const reqSearchLastMonthPerformance = async (params) => {
-        await salesPerformanceDataConnect().searchTotalPerformance(params)
+    const reqSearchLastMonthPerformance = async (body) => {
+        await salesPerformanceDataConnect().searchTotalPerformance(body)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     setLastMonthPerformance(res.data.data);

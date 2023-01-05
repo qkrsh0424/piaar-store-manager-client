@@ -64,7 +64,7 @@ const TotalSalesPerformanceComponent = (props) => {
             let endDate = query.endDate ? getEndDate(query.endDate) : null;
             let utcHourDifference = getTimeDiffWithUTC();
 
-            let params = {
+            let body = {
                 startDate,
                 endDate,
                 utcHourDifference
@@ -76,7 +76,7 @@ const TotalSalesPerformanceComponent = (props) => {
             }
 
             onActionOpenBackdrop();
-            await reqSearchTotalPerformance(params);
+            await reqSearchTotalPerformance(body);
             onActionCloseBackdrop();
         }
 

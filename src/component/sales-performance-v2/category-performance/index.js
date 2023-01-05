@@ -64,7 +64,7 @@ const CategoryPerformanceComponent = (props) => {
             let endDate = query.endDate ? getEndDate(query.endDate) : null;
             let utcHourDifference = getTimeDiffWithUTC();
 
-            let params = {
+            let body = {
                 startDate,
                 endDate,
                 utcHourDifference
@@ -76,7 +76,7 @@ const CategoryPerformanceComponent = (props) => {
             }
 
             onActionOpenBackdrop();
-            await reqSearchCategoryPerformance(params);
+            await reqSearchCategoryPerformance(body);
             onActionCloseBackdrop();
         }
 
@@ -102,7 +102,9 @@ const CategoryPerformanceComponent = (props) => {
 
                 let categoryName = [...category].sort();
                 setCategory(categoryName);
-                setSelectedCategory(categoryName);
+                
+                // 기본 1개 선택
+                setSelectedCategory([categoryName[0]]);
             },
             isCheckedOne: (category) => {
                 return selectedCategory.some(name => name === category);

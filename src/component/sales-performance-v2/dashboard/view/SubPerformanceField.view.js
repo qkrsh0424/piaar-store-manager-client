@@ -4,9 +4,9 @@ import { SubPerformanceFieldWrapper } from "../Dashboard.styled";
 export default function SubPerformanceFieldView(props) {
     return (
         <SubPerformanceFieldWrapper>
-            {[props.lastMonthAvgData, props.monthAvgData]?.map(r => {
+            {[props.lastMonthAvgData, props.monthAvgData]?.map((r, idx) => {
                 return (
-                    <div className='box-wrapper'>
+                    <div key={'month-average-data' + idx} className='box-wrapper'>
                         <div className="title-info">{r.title || ''}</div>
                         <div className='data-wrapper'>
                             <div className='data-group'>

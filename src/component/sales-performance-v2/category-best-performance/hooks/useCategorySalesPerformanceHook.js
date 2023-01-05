@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { salesPerformanceDataConnect } from "../../../../data_connect/salesPerformanceDataConnect";
 
-export default function useCategorySalesPerformanceHook(props) {
+export default function useCategorySalesPerformanceHook() {
     const [performance, setPerformance] = useState(null);
 
-    const reqSearchCategoryPerformance = async (params) => {
-        await salesPerformanceDataConnect().searchCategoryAndProductPerformance(params)
+    const reqSearchCategoryPerformance = async (body) => {
+        await salesPerformanceDataConnect().searchCategoryAndProductPerformance(body)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     setPerformance(res.data.data);

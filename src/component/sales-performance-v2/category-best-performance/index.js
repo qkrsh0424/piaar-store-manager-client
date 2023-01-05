@@ -63,7 +63,7 @@ const CategoryBestPerformanceComponent = (props) => {
             let endDate = query.endDate ? getEndDate(query.endDate) : null;
             let utcHourDifference = getTimeDiffWithUTC();
 
-            let params = {
+            let body = {
                 startDate,
                 endDate,
                 utcHourDifference
@@ -75,7 +75,7 @@ const CategoryBestPerformanceComponent = (props) => {
             }
 
             onActionOpenBackdrop();
-            await reqSearchCategoryPerformance(params);
+            await reqSearchCategoryPerformance(body);
             onActionCloseBackdrop();
         }
 
@@ -165,13 +165,6 @@ const CategoryBestPerformanceComponent = (props) => {
                     bestPayAmountItem={categoryBestPayAmountItem}
                     bestUnitItem={categoryBestUnitItem}
                 />
-
-                {/* <RegistrationAndUnitGraphComponent
-                    category={category}
-                    selectedCategory={selectedCategory}
-                    checkedSwitch={checkedSwitch}
-                    registrationAndUnit={performance}
-                /> */}
             </Container>
 
             <BackdropHookComponent
