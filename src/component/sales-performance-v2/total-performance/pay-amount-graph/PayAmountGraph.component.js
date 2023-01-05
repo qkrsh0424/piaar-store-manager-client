@@ -5,6 +5,7 @@ import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
 import { dateToYYYYMM, getWeekNumber } from "../../../../utils/dateFormatUtils";
 import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
+import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
 // 그래프 기본 3가지 색상 : [주문, 판매, 평균]
 const DEFAULT_GRAPH_BG_2COLOR = ['#ADA8C3', '#C0C5DC', '#596dd3'];
@@ -135,6 +136,15 @@ export default function PayAmountGraphComponent(props) {
                     interaction: {
                         mode: 'index',
                         intersect: true,
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: function (value, index, ticks) {
+                                    return toPriceUnitFormat(value);
+                                }
+                            }
+                        }
                     }
                 }
 

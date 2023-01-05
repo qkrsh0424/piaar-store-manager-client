@@ -3,6 +3,7 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
+import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
 // const SALES_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
 // const SALES_GRAPH_BG_COLOR = ['#4975A9', '#FF7FAB', '#80A9E1', '#D678CD', '#FF9D83', '#B9B4EB', '#FFCA67', '#00C894', '#D5CABD', '#389091'];
@@ -13,7 +14,8 @@ export default function BestItemGraphComponent(props) {
     const [payAmountGraphData, setPayAmountGraphData] = useState(null);
     const [unitGraphData, setUnitGraphData] = useState(null);
 
-    const [graphOption, setGraphOption] = useState(null);
+    const [priceGraphOption, setPriceGraphOption] = useState(null);
+    const [unitGraphOption, setUnitGraphOption] = useState(null);
 
     useEffect(() => {
         if (!(props.category && props.category.length > 0)) {
@@ -37,7 +39,8 @@ export default function BestItemGraphComponent(props) {
                 setPayAmountGraphData(null);
                 setUnitGraphData(null);
 
-                setGraphOption(null);
+                setPriceGraphOption(null);
+                setUnitGraphOption(null);
             },
             createPayAmountGraphData: () => {
                 let graphLabels = [];
@@ -150,17 +153,79 @@ export default function BestItemGraphComponent(props) {
                 setUnitGraphData(createdSalesGraph);
             },
             createGraphOption: () => {
-                let option = {
+                let priceOption = {
                     responsive: true,
                     maintainAspectRatio: false,
                     interaction: {
                         mode: 'index',
                         intersect: true,
                     },
-                    indexAxis: 'y'
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            ticks: {
+                                callback: function (value, index, ticks) {
+                                    return toPriceUnitFormat(value);
+                                }
+                            }
+                        },
+                        y: {
+                            // 글자 수 7글자로 제한
+                            afterTickToLabelConversion: function (scaleInstance) {
+                                let ticks = scaleInstance.ticks;
+
+                                let updatedTicks = ticks.map(r => {
+                                    let updatedLabel = r.label
+                                    if(r.label.length > 7) {
+                                        return {
+                                            ...r,
+                                            label : updatedLabel.substring(0, 8) + "..."
+                                        }
+                                    }else {
+                                        return r;
+                                    }
+                                })
+                                
+                                scaleInstance.ticks = updatedTicks;
+                            }
+                        }
+                    }
                 }
 
-                setGraphOption(option);
+                let unitOption = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: true,
+                    },
+                    indexAxis: 'y',
+                    scales: {
+                        y: {
+                            // 글자 수 7글자로 제한
+                            afterTickToLabelConversion: function (scaleInstance) {
+                                let ticks = scaleInstance.ticks;
+
+                                let updatedTicks = ticks.map(r => {
+                                    let updatedLabel = r.label
+                                    if(r.label.length > 7) {
+                                        return {
+                                            ...r,
+                                            label : updatedLabel.substring(0, 8) + "..."
+                                        }
+                                    }else {
+                                        return r;
+                                    }
+                                })
+                                
+                                scaleInstance.ticks = updatedTicks;
+                            }
+                        }
+                    }
+                }
+
+                setPriceGraphOption(priceOption);
+                setUnitGraphOption(unitOption);
             }
         }
     }
@@ -200,7 +265,8 @@ export default function BestItemGraphComponent(props) {
                                     <GraphBodyFieldView
                                         payAmountGraphData={payAmountGraph}
                                         unitGraphData={unitGraph}
-                                        graphOption={graphOption}
+                                        priceGraphOption={priceGraphOption}
+                                        unitGraphOption={unitGraphOption}
                                     />
                                 </div>
                             </GraphFieldWrapper>

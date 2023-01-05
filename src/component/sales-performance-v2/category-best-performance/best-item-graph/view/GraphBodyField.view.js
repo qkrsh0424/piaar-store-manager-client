@@ -7,18 +7,18 @@ export default function GraphBodyFieldView (props) {
     return (
         <GraphBodyFieldWrapper>
             <div className='half-type-graph graph-wrapper'>
-                {props.payAmountGraphData && props.graphOption &&
+                {props.payAmountGraphData && props.priceGraphOption &&
                     <Chart
                         data={createGraphData(props.payAmountGraphData)}
-                        options={createGraphOption(props.graphOption)}
+                        options={createGraphOption(props.priceGraphOption)}
                     />
                 }
             </div>
             <div className='half-type-graph graph-wrapper'>
-                {props.unitGraphData && props.graphOption &&
+                {props.unitGraphData && props.unitGraphOption &&
                     <Chart
                         data={createGraphData(props.unitGraphData)}
-                        options={createGraphOption(props.graphOption)}
+                        options={createGraphOption(props.unitGraphOption)}
                     />
                 }
             </div>

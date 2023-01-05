@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getDayName, getWeekName } from "../../../../utils/dateFormatUtils";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
+import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import { Container } from "./PayAmountDayOfWeekGraph.styled";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
@@ -163,6 +164,15 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     interaction: {
                         mode: 'index',
                         intersect: true,
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: function (value, index, ticks) {
+                                    return toPriceUnitFormat(value);
+                                }
+                            }
+                        }
                     }
                 }
 

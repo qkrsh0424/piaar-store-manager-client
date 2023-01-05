@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { dateToYYYYMM, getDayName, getWeekName, getWeekNumber } from "../../../../utils/dateFormatUtils";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
+import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
 const WEEKLY_AVG_GRAPH_BG_COLOR = '#FFAFCC';
 const WEEKLY_GRAPH_BG_COLOR = ['#FFBCA2', '#FFCC89', '#FFB2BA', '#F58293', '#D2759F', '#FFCA67', '#A974BC'];
@@ -160,6 +161,15 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     interaction: {
                         mode: 'index',
                         intersect: true,
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: function (value, index, ticks) {
+                                    return toPriceUnitFormat(value);
+                                }
+                            }
+                        }
                     }
                 }
 

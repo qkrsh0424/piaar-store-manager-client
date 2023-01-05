@@ -6,8 +6,8 @@ export default function useSalesPerformanceItemHook() {
     const [performance, setPerformance] = useState(null);
     const [lastMonthPerformance, setLastMonthPerformance] = useState(null);
 
-    const reqSearchDashboard = async (params) => {
-        await salesPerformanceDataConnect().searchDashboard(params)
+    const reqSearchDashboard = async (body) => {
+        await salesPerformanceDataConnect().searchDashboard(body)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     setDashboard(res.data.data);

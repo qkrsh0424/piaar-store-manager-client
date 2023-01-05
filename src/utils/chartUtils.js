@@ -22,6 +22,7 @@ function createGraphData(graph) {
 }
 
 function createGraphOption(option) {
+    // console.log(option.plugins?.datalabels)
     return {
         responsive: option.responsive,
         indexAxis: option.indexAxis,
@@ -33,8 +34,10 @@ function createGraphOption(option) {
         // borderWidth: option.borderWidth || 1,
         plugins: {
             legend: {
+                ...option.plugins?.legend,
                 position: option.plugins?.legend?.position || 'top',
                 labels: {
+                    ...option.plugins?.legend?.labels,
                     boxWidth: option.plugins?.lengend?.labels || 12,
                 }
             },

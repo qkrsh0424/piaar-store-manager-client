@@ -63,21 +63,17 @@ const SalesPerformanceDashboardComponent = (props) => {
             let prev7DaysOfYesterDay = setStartDateOfPeriod(YESTERDAY, 0, 0, -7)
         
             let searchDate = [TODAY, YESTERDAY, prev7DaysOfToday, prev7DaysOfYesterDay];
-            searchDate = searchDate.map(r => getStartDate(r).toISOString()).join(",");
+            searchDate = searchDate.map(r => getStartDate(r));
             
-            let periodType = 'channelOrderDate';
-            let matchedCode = 'optionCode';
             let utcHourDifference = getTimeDiffWithUTC();
 
-            let params = {
-                date: searchDate,
-                periodType: periodType,
-                matchedCode: matchedCode,
+            let body = {
+                searchDate,
                 utcHourDifference
             }
 
             onActionOpenBackdrop();
-            await reqSearchSalesPerformanceDashboard(params);
+            await reqSearchSalesPerformanceDashboard(body);
             onActionCloseBackdrop();
         }
 

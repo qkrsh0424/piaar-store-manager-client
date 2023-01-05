@@ -6,6 +6,7 @@ export default function GraphOperatorFieldView (props) {
         <GraphOperatorFieldWrapper>
             <div>
                 <FormControlLabel labelPlacement="start" control={<Switch checked={props.checkedSwitch} onChange={() => props.onActionChangeSwitch()} />} label="주문데이터 표시" />
+                {/* <Switch checked={props.checkedSwitch} onChange={() => props.onActionChangeSwitch()} /> */}
             </div>
             <div className='button-box'>
                 <div>

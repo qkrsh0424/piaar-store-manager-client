@@ -68,8 +68,9 @@ const CheckBoxFieldWrapper = styled.div`
     
     .button-el {
         transition: 0.1s;
-        width: 120px;
-        height: 30px;
+        /* width: 120px; */
+        /* height: 30px; */
+        padding: 2px 25px;
         border: 1px solid var(--defaultBorderColor);
         background-color: var(--defaultButtonColor);
         border-radius: 20px;
