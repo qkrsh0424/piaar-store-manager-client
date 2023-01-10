@@ -42,6 +42,11 @@ function DataBoxField({ performance, totalPayAmount }) {
                                 </div>
                             )
                         })}
+                        {!(performance && performance.length > 0) &&
+                            <div style={{ color: '#666', fontSize: '14px' }}>
+                                <div>스토어 매출 데이터가 존재하지 않습니다.</div>
+                            </div> 
+                        }
                     </div>
                 </div>
             </div>

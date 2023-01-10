@@ -24,7 +24,7 @@ export default function SearchFieldView(props) {
                                 key={'search-box-idx' + idx}
                                 className='box-group'
                             >
-                                <div>
+                                <div style={{ marginBottom: '5px' }}>
                                     <div
                                         className='button-box'
                                         onClick={(e) => props.onActionRemoveProduct(e, r.product.id)}
