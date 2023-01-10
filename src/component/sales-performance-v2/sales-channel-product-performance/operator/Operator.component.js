@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { dateToYYYYMMDD, getEndDateOfMonth, getStartDateOfMonth, isSearchablePeriod, setStartDateOfPeriod } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getEndDateOfMonth, getStartDateOfMonth, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
 import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
 import ProductListModalComponent from "./modal/product-list/ProductListModal.component";
 import { Container } from "./Operator.styled";
@@ -11,16 +11,15 @@ import DateButtonFieldView from "./view/DateButtonField.view";
 import DateSelectorFieldView from "./view/DateSelectorField.view";
 import SearchFieldView from "./view/SearchField.view";
 
-// 날짜검색 최대기간 90일
-const SEARCHABLE_PERIOD = 90;
+// 날짜검색 최대기간 92일
+const SEARCHABLE_PERIOD = 92;
 
 export default function OperatorComponent(props) {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
     const [products, setProducts] = useState(null);
-    const [options, setOptions] = useState(null);
-    const [selectedOptionCodes, setSelectedOptionCodes] = useState([]);
+    const [selectedProductAndOptions, setSelectedProductAndOptions] = useState([]);
 
     const [productListModalOpen, setProductListModalOpen] = useState(false);
 
@@ -65,7 +64,8 @@ export default function OperatorComponent(props) {
         let endDate = query.endDate;
 
         if(!(startDate && endDate)) {
-            setSelectedOptionCodes([]);
+            // setSelectedOptionCodes([]);
+            setSelectedProductAndOptions([]);
         }
         
         if (startDate) {
@@ -99,11 +99,12 @@ export default function OperatorComponent(props) {
 
                 navigateClearParams({ replace: true });
                 props.onActionClearChannel();
-                setSelectedOptionCodes([])
+                // setSelectedOptionCodes([]);
+                setSelectedProductAndOptions([]);
             },
             searchDateRange: (year, month, day) => {
                 let end = new Date();
-                let start = setStartDateOfPeriod(end, year, month, day);
+                let start = setSubtractedDate(end, year, month, day);
 
                 setStartDate(start);
                 setEndDate(end);
@@ -120,9 +121,6 @@ export default function OperatorComponent(props) {
             initProductAndOption: () => {
                 let productData = [...new Set(productAndOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
                 setProducts(productData);
-
-                let optionData = productAndOptions.map(r => r.option);
-                setOptions(optionData);
             },
             openProductListModal: (e) => {
                 e.preventDefault();
@@ -133,26 +131,48 @@ export default function OperatorComponent(props) {
                 setProductListModalOpen(false);
             },
             selectProduct: (productId) => {
-                let optionData = productAndOptions.filter(r => r.product.id === productId)?.map(r => r.option);
-                let addOptionCodes = optionData.filter(r => !selectedOptionCodes.includes(r.code)).map(r => r.code);
-                setSelectedOptionCodes([...selectedOptionCodes, ...addOptionCodes]);
+                let selectedProduct = selectedProductAndOptions.some(r => r.product.id === productId);
+                if(selectedProduct){
+                    return;
+                }
+
+                let product = products.filter(r => r.id === productId)[0];
+                let options = productAndOptions.filter(r => r.product.id === product.id).map(r => r.option);
+                let data = [{
+                    product,
+                    options: options
+                }]
+                
+                setSelectedProductAndOptions([...selectedProductAndOptions, ...data]);
             },
-            checkOne: (e, optionCodes) => {
+            removeOptionOne: (e, optionId) => {
                 e.stopPropagation();
 
-                let data = [...selectedOptionCodes];
+                let updatedProductAndOptions = selectedProductAndOptions.map(r => {
+                    let options = r.options.filter(r2 => r2.id !== optionId);
 
-                if(selectedOptionCodes.some(r => r === optionCodes)) {
-                    data = data.filter(r => r !== optionCodes);
-                } else {
-                    data.push(optionCodes);
-                }
-                setSelectedOptionCodes(data);
+                    return {
+                        ...r,
+                        options
+                    }
+                })
+                // 해당 상품에 대한 옵션이 모두 제거되면 상품도 제거
+                updatedProductAndOptions = updatedProductAndOptions.filter(r => r.options?.length > 0);
+
+                setSelectedProductAndOptions(updatedProductAndOptions);
+            },
+            removeProduct: (e, productId) => {
+                e.stopPropagation();
+
+                let updatedProductAndOptions = selectedProductAndOptions.filter(r => r.product.id !== productId);
+                setSelectedProductAndOptions(updatedProductAndOptions);
             }
         },
         submit: {
             routeToSearch: (e) => {
                 e.preventDefault();
+
+                let searchOptionCodes = [];
 
                 try{
                     if (startDate && !endDate) {
@@ -172,10 +192,10 @@ export default function OperatorComponent(props) {
                     }
 
                     if (!isSearchablePeriod(startDate, endDate, SEARCHABLE_PERIOD)) {
-                        throw new Error('조회기간은 최대 90일까지 가능합니다.')
+                        throw new Error(`조회기간은 최대 ${SEARCHABLE_PERIOD}일까지 가능합니다.`)
                     }
 
-                    if(selectedOptionCodes.length === 0) {
+                    if(selectedProductAndOptions.length === 0) {
                         throw new Error('조회하려는 상품을 선택해주세요.')
                     }
 
@@ -198,8 +218,11 @@ export default function OperatorComponent(props) {
                     return;
                 }
 
+                selectedProductAndOptions.forEach(r => {
+                    r.options.forEach(r2 => searchOptionCodes.push(r2.code));
+                });
+                props.onSubmitSearchPerformance(searchOptionCodes);
                 navigateParams({ replace: true })
-                props.onSubmitSearchPerformance(selectedOptionCodes);
             }
         }
     }
@@ -219,12 +242,13 @@ export default function OperatorComponent(props) {
                 />
 
                 <SearchFieldView
-                    selectedOptionCodes={selectedOptionCodes}
-                    options={options}
+                    products={products}
                     productAndOptions={productAndOptions}
+                    selectedProductAndOptions={selectedProductAndOptions}
 
                     onActionOpenProductListModal={__handle.action.openProductListModal}
-                    onActionOptionCheckOne={__handle.action.checkOne}
+                    onActionRemoveOptionOne={__handle.action.removeOptionOne}
+                    onActionRemoveProduct={__handle.action.removeProduct}
                 />
                 <ButtonFieldView
                     onActionClearRoute={__handle.action.clearRoute}

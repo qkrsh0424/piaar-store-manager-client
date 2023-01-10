@@ -36,11 +36,11 @@ function TrendInfoField ({ dayInfo, trendValue}) {
 
 export default function DashboardFieldView({ todayData, yesterdayData }) {
     return (
+        // TODO :: 여기도 함수만들어서 공통으로 뺄 수 있다
         <DashboardFieldWrapper>
             {/* YESTERDAY PERFORMANCE */}
             {yesterdayData &&
                 <div className='vertical-box'>
-                    <div className='vertical-box-info'>어제</div>
                     <div className='vertical-group'>
                         <div className='data-box'>
                             <div className='data-content-group'>
@@ -181,7 +181,6 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
             {/* TODAY PERFORMANCE */}
             {todayData &&
                 <div className='vertical-box'>
-                    <div className='vertical-box-info'>오늘</div>
                     <div className='vertical-group'>
                         <div className='data-box'>
                             <div className='data-content-group'>

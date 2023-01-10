@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import useRouterHook from "../../../hooks/router/useRouterHook";
-import { dateToYYYYMMDD, getStartDateOfMonth, setStartDateOfPeriod } from "../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getStartDateOfMonth, setSubtractedDate } from "../../../utils/dateFormatUtils";
 
 const Container = styled.div`
     .group-box {
@@ -91,7 +91,7 @@ const NavbarBox = styled.div`
 `;
 
 const TODAY = dateToYYYYMMDD(new Date());
-const PREV_2WEEKS_DATE = dateToYYYYMMDD(setStartDateOfPeriod(TODAY, 0, 0, -13));
+const PREV_2WEEKS_DATE = dateToYYYYMMDD(setSubtractedDate(TODAY, 0, 0, -13));
 // const START_DAY_OF_MONTH = dateToYYYYMMDD(getStartDateOfMonth(TODAY));
 
 const thisRouters = [

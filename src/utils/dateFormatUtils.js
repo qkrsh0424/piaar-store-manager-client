@@ -105,7 +105,15 @@ function dateToYYMMDD2(idate) {
 }
 
 // 기간 설정 시 start값을 직접 설정
-function setStartDateOfPeriod(idate, prevYear, prevMonth, prevDay) {
+// function setStartDateOfPeriod(idate, prevYear, prevMonth, prevDay) {
+//     var date = new Date(idate);
+//     date.setFullYear(date.getFullYear() + prevYear)
+//     date.setMonth(date.getMonth() + prevMonth);
+//     date.setDate(date.getDate() + prevDay);
+//     return new Date(moment(date));
+// }
+
+function setSubtractedDate(idate, prevYear, prevMonth, prevDay) {
     var date = new Date(idate);
     date.setFullYear(date.getFullYear() + prevYear)
     date.setMonth(date.getMonth() + prevMonth);
@@ -258,7 +266,7 @@ export {
     dateToYYYYMMDDhhmmssFile,
     dateToYYMMDDhhmmss,
     dateToYYMMDD,
-    setStartDateOfPeriod,
+    // setStartDateOfPeriod,
     getRemainingDateCount,
     dateToYYYYMMDDhhmmFile,
     dateToYYYYMMDD2,
@@ -275,5 +283,6 @@ export {
     getEndDateByWeekNumber,
     getDateOfLastSunDay,
     isSearchablePeriod,
-    getTimeDiffWithUTC
+    getTimeDiffWithUTC,
+    setSubtractedDate
 }

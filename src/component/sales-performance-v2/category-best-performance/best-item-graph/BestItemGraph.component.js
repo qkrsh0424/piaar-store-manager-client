@@ -176,10 +176,10 @@ export default function BestItemGraphComponent(props) {
 
                                 let updatedTicks = ticks.map(r => {
                                     let updatedLabel = r.label
-                                    if(r.label.length > 7) {
+                                    if(r.label.length > 8) {
                                         return {
                                             ...r,
-                                            label : updatedLabel.substring(0, 8) + "..."
+                                            label : updatedLabel.substring(0, 7) + "..."
                                         }
                                     }else {
                                         return r;
@@ -208,10 +208,10 @@ export default function BestItemGraphComponent(props) {
 
                                 let updatedTicks = ticks.map(r => {
                                     let updatedLabel = r.label
-                                    if(r.label.length > 7) {
+                                    if(r.label.length > 8) {
                                         return {
                                             ...r,
-                                            label : updatedLabel.substring(0, 8) + "..."
+                                            label : updatedLabel.substring(0, 7) + "..."
                                         }
                                     }else {
                                         return r;

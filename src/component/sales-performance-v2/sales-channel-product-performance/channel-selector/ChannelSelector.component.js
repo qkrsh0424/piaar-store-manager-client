@@ -4,8 +4,8 @@ import { Container } from "./ChannelSelector.styled";
 import CheckBoxFieldView from "./view/CheckBoxField.view";
 import TextFieldView from "./view/TextField.view";
 
-// 날짜검색 최대기간 90일
-const SEARCHABLE_PERIOD = 90;
+// 날짜검색 최대기간 92일
+const SEARCHABLE_PERIOD = 92;
 
 export default function ChannelSelectorComponent(props) {
     const {

@@ -53,6 +53,7 @@ export default function PayAmountGraphComponent(props) {
                 let orderPayAmountData = [];
                 let salesDatasets = [];
                 let orderDatasets = [];
+                let salesAvgDatasets = [];
                 let graphLabels = new Set([]);
                 let channel = [...props.selectedChannel];
 
@@ -129,6 +130,29 @@ export default function PayAmountGraphComponent(props) {
                             order: 0
                         }
                         salesDatasets.push(barGraphOfSales);
+
+                        // 판매매출액 7일간 평균 데이터 생성
+                        // 조회된 기간의 시작날짜부터 7일간 null로 채운다
+                        let salesPayAmountAvgData = Array(7).fill(null, 0, 7);
+                        for (let i = 7; i <= salesPayAmountData[idx].length; i++) {
+                            let avg = parseInt(salesPayAmountData[idx].slice(i - 7, i).reduce((a, b) => a + b) / 7);
+                            salesPayAmountAvgData.push(avg);
+                        }
+
+                        // 판매매출액 7일간 평균 그래프 데이터 생성
+                        let lineGraphOfSalesAvg = {
+                            ...new GraphDataset().toJSON(),
+                            type: 'line',
+                            label: r  + ' 7일간 평균',
+                            data: salesPayAmountAvgData,
+                            fill: false,
+                            borderColor: graphColor[idx],
+                            backgroundColor: graphColor[idx],
+                            order: -2,
+                            borderDash: [3, 3]
+                        }
+
+                        salesAvgDatasets.push(lineGraphOfSalesAvg);
                     })
                 }
 
@@ -166,11 +190,11 @@ export default function PayAmountGraphComponent(props) {
                 // 매출 그래프 데이터 생성
                 let createdSalesGraph = {
                     labels: [...graphLabels],
-                    datasets: salesDatasets
+                    datasets: [...salesDatasets, ...salesAvgDatasets]
                 }
                 let createdTotalGraph = {
                     labels: [...graphLabels],
-                    datasets: [...salesDatasets, ...orderDatasets]
+                    datasets: [...salesDatasets, ...orderDatasets, ...salesAvgDatasets]
                 }
 
                 setSalesPayAmountGraphData(createdSalesGraph);

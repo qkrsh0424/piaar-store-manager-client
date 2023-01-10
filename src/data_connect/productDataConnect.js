@@ -40,7 +40,7 @@ const productDataConnect = () => {
             return await axios.put(`${API_SERVER_ADDRESS}/api/v2/products`, body, {
                 withCredentials: true
             })
-        },
+        }
     }
 }
 

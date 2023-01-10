@@ -90,8 +90,8 @@ export default function PayAmountGraphComponent(props) {
                 }
 
                 // 판매매출액 7일간 평균 데이터 생성
-                // TODO :: 변경하기
-                let salesPayAmountAvgData = [null, null, null, null, null, null];
+                // 조회된 기간의 시작날짜부터 7일간 null로 채운다
+                let salesPayAmountAvgData = Array(7).fill(null, 0, 7);
                 for (let i = 7; i <= salesPayAmountData.length; i++) {
                     let avg = parseInt(salesPayAmountData.slice(i - 7, i).reduce((a, b) => a + b) / 7);
                     salesPayAmountAvgData.push(avg);

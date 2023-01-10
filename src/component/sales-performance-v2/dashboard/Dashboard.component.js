@@ -1,22 +1,26 @@
 import _ from "lodash";
 import { useState } from "react";
 import { useEffect } from "react";
-import { dateToYYMMDD2, getDayName, setStartDateOfPeriod } from "../../../utils/dateFormatUtils";
+import { dateToYYMMDD2, getDayName, setSubtractedDate } from "../../../utils/dateFormatUtils";
 import { getPercentage } from "../../../utils/numberFormatUtils";
 import { Container } from "./Dashboard.styled"
+import ChannelPerformanceFieldView from "./view/ChannelPerformanceField.view";
+import ContentTextFieldView from "./view/ContentTextField.view";
 import DashboardFieldView from "./view/DashboardField.view"
 import SubPerformanceFieldView from "./view/SubPerformanceField.view";
 
+// const TODAY = setSubtractedDate(new Date(), 0, -1, 0);
 const TODAY = new Date();
-const YESTERDAY = setStartDateOfPeriod(TODAY, 0, 0, -1);
-const PREV_7DAYS = setStartDateOfPeriod(TODAY, 0, 0, -7);
-const PREV_8DAYS = setStartDateOfPeriod(TODAY, 0, 0, -8);
+const YESTERDAY = setSubtractedDate(TODAY, 0, 0, -1);
+const PREV_7DAYS = setSubtractedDate(TODAY, 0, 0, -7);
+const PREV_8DAYS = setSubtractedDate(TODAY, 0, 0, -8);
 
 export default function DashboardComponent(props) {
     const [todayData, setTodayData] = useState(null);
     const [yesterdayData, setYesterdayData] = useState(null);
     const [monthAvgData, setMonthAvgData] = useState(null);
     const [lastMonthAvgData, setLastMonthAvgData] = useState(null);
+    const [channelPerformanceData, setChannelPerformanceData] = useState(null);
 
     useEffect(() => {
         if(!(props.dashboardData && props.dashboardData.length > 0)) {
@@ -35,9 +39,14 @@ export default function DashboardComponent(props) {
             return;
         }
 
+        if(!(props.channelPerformance && props.channelPerformance.length > 0)) {
+            return;
+        }
+
         __handle.action.initPerformanceData();
         __handle.action.initLastMonthPerformanceData();
-    }, [props.performanceData, props.lastMonthPerformanceData])
+        __handle.action.initChannelPerformanceData();
+    }, [props.performanceData, props.lastMonthPerformanceData, props.channelPerformance])
 
     const __handle = {
         action: {
@@ -167,16 +176,56 @@ export default function DashboardComponent(props) {
                 }
 
                 setLastMonthAvgData(monthPerformance);
+            },
+            initChannelPerformanceData: () => {
+                let data = [];
+                let salesPayAmountSum = 0;
+                let sortedPerformances = [];
+
+                props.channelPerformance?.forEach(r => {
+                    if (dateToYYMMDD2(new Date(r.datetime)) === dateToYYMMDD2(TODAY)) {
+                        salesPayAmountSum = _.sumBy(r.performances, 'salesPayAmount');
+                        sortedPerformances = _.sortBy(r.performances, 'salesPayAmount').reverse();
+
+                        data = {
+                            ...data,
+                            today: sortedPerformances,
+                            todaySalesPayAmount: salesPayAmountSum
+                        }
+                    } else if (dateToYYMMDD2(new Date(r.datetime)) === dateToYYMMDD2(YESTERDAY)) {
+                        salesPayAmountSum = _.sumBy(r.performances, 'salesPayAmount');
+                        sortedPerformances = _.sortBy(r.performances, 'salesPayAmount').reverse();
+                        
+                        data = {
+                            ...data,
+                            yesterday: sortedPerformances,
+                            yesterdaySalesPayAmount: salesPayAmountSum
+                        }
+                    }
+                })
+
+                setChannelPerformanceData(data);
             }
         }
     }
 
     return (
         <Container>
+            <ContentTextFieldView />
+
+            {/* 채널 판매성과 요약*/}
+            {channelPerformanceData &&
+                <ChannelPerformanceFieldView
+                    channelPerformanceData={channelPerformanceData}
+                />
+            }
+
+            {/* 대시보드 */}
             <DashboardFieldView
                 todayData={todayData}
                 yesterdayData={yesterdayData}
             />
+
             {monthAvgData && lastMonthAvgData &&
                 <SubPerformanceFieldView
                     monthAvgData={monthAvgData}

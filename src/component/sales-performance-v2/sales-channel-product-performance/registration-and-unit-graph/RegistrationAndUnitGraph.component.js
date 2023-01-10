@@ -63,6 +63,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let orderRegistrationData = [];
                 let salesDatasets = [];
                 let orderDatasets = [];
+                let salesAvgDatasets = [];
                 let graphLabels = new Set([]);
                 let channel = [...props.selectedChannel];
 
@@ -139,6 +140,29 @@ export default function RegistrationAndUnitGraphComponent(props) {
                             order: 0
                         }
                         salesDatasets.push(barGraphOfSales);
+
+                        // 판매매출액 7일간 평균 데이터 생성
+                        // 조회된 기간의 시작날짜부터 7일간 null로 채운다
+                        let salesRegistartionAvgData = Array(7).fill(null, 0, 7);
+                        for (let i = 7; i <= salesRegistrationData[idx].length; i++) {
+                            let avg = parseInt(salesRegistrationData[idx].slice(i - 7, i).reduce((a, b) => a + b) / 7);
+                            salesRegistartionAvgData.push(avg);
+                        }
+
+                        // 판매매출액 7일간 평균 그래프 데이터 생성
+                        let lineGraphOfSalesAvg = {
+                            ...new GraphDataset().toJSON(),
+                            type: 'line',
+                            label: r  + ' 7일간 평균',
+                            data: salesRegistartionAvgData,
+                            fill: false,
+                            borderColor: graphColor[idx],
+                            backgroundColor: graphColor[idx],
+                            order: -2,
+                            borderDash: [3, 3]
+                        }
+
+                        salesAvgDatasets.push(lineGraphOfSalesAvg);
                     })
                 }
 
@@ -176,11 +200,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 // 매출 그래프 데이터 생성
                 let createSalesGraph = {
                     labels: [...graphLabels],
-                    datasets: salesDatasets
+                    datasets:[...salesDatasets, ...salesAvgDatasets]
                 }
                 let createdTotalGraph = {
                     labels: [...graphLabels],
-                    datasets: [...salesDatasets, ...orderDatasets]
+                    datasets: [...salesDatasets, ...orderDatasets, ...salesAvgDatasets]
                 }
                 setSalesRegistrationGraphData(createSalesGraph)
                 setTotalRegistrationGraphData(createdTotalGraph);
@@ -203,6 +227,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let orderUnitData = [];
                 let salesDatasets = [];
                 let orderDatasets = [];
+                let salesAvgDatasets = [];
                 let graphLabels = new Set([]);
                 let channel = [...props.selectedChannel];
 
@@ -279,6 +304,29 @@ export default function RegistrationAndUnitGraphComponent(props) {
                             order: 0
                         }
                         salesDatasets.push(barGraphOfSales);
+
+                        // 판매매출액 7일간 평균 데이터 생성
+                        // 조회된 기간의 시작날짜부터 7일간 null로 채운다
+                        let salesUnitAvgData = Array(7).fill(null, 0, 7);
+                        for (let i = 7; i <= salesUnitData[idx].length; i++) {
+                            let avg = parseInt(salesUnitData[idx].slice(i - 7, i).reduce((a, b) => a + b) / 7);
+                            salesUnitAvgData.push(avg);
+                        }
+
+                        // 판매매출액 7일간 평균 그래프 데이터 생성
+                        let lineGraphOfSalesAvg = {
+                            ...new GraphDataset().toJSON(),
+                            type: 'line',
+                            label: r  + ' 7일간 평균',
+                            data: salesUnitAvgData,
+                            fill: false,
+                            borderColor: graphColor[idx],
+                            backgroundColor: graphColor[idx],
+                            order: -2,
+                            borderDash: [3, 3]
+                        }
+                        
+                        salesAvgDatasets.push(lineGraphOfSalesAvg);
                     })
                 }
 
@@ -316,11 +364,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 // 매출 그래프 데이터 생성
                 let createSalesGraph = {
                     labels: [...graphLabels],
-                    datasets: salesDatasets
+                    datasets: [...salesDatasets, ...salesAvgDatasets]
                 }
                 let createdTotalGraph = {
                     labels: [...graphLabels],
-                    datasets: [...salesDatasets, ...orderDatasets]
+                    datasets: [...salesDatasets, ...orderDatasets, ...salesAvgDatasets]
                 }
                 setSalesUnitGraphData(createSalesGraph)
                 setTotalUnitGraphData(createdTotalGraph);

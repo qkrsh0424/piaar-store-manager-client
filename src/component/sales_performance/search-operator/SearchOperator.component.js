@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from 'query-string';
-import { dateToYYYYMMDD, getEndDateOfMonth, getStartDateOfMonth, setStartDateOfPeriod } from "../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getEndDateOfMonth, getStartDateOfMonth, setSubtractedDate } from "../../../utils/dateFormatUtils";
 import CommonModalComponent from "../../module/modal/CommonModalComponent";
 import DateRangePickerModalComponent from "../date-range-picker-modal/DateRangePickerModal.component";
 import DateSelectorFieldView from "./DateSelectorField.view";
@@ -50,7 +50,7 @@ const SearchOperatorComponent = (props) => {
 
         // 기본 최근 2주 조회. 이미 조회된 값이 있다면 그 날짜값으로 조회
         let endDate = query.endDate ?? new Date();
-        let startDate = query.startDate ?? setStartDateOfPeriod(endDate, 0, 0, -13);
+        let startDate = query.startDate ?? setSubtractedDate(endDate, 0, 0, -13);
 
         query.startDate = dateToYYYYMMDD(startDate);
         query.endDate = dateToYYYYMMDD(endDate);
@@ -102,7 +102,7 @@ const SearchOperatorComponent = (props) => {
 
     const onActionSelectDataRange = (year, month, day) => {
         let endDate = new Date();
-        let startDate = setStartDateOfPeriod(endDate, year, month, day);
+        let startDate = setSubtractedDate(endDate, year, month, day);
         let dateInfo = { startDate, endDate };
 
         onActionConfirmSelectedDateRange(dateInfo);

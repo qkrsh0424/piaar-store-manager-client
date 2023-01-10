@@ -10,20 +10,29 @@ const Container = styled.div`
 
 const SearchFieldWrapper = styled.div`
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
     gap: 10px;
     padding: 10px 0;
 
     .search-box {
-        width: 200px;
+        display: flex;
+        align-items: flex-end;
 
         @media screen and (max-width: 992px) {
             width: 100%;
         }
     }
+
+    .search-box .search-info {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+    }
     
     .search-box .button-el {
-        width: 100%;
+        width: 200px;
         padding: 5px 0;
         height: 48px;
         background: white;
@@ -31,50 +40,50 @@ const SearchFieldWrapper = styled.div`
         border-radius: 5px;
     }
 
-    .option-box {
+    .selector-box {
         flex: 1;
-        background-color: #f7f7f7;
         overflow: auto;
+        background-color: #f7f7f7;
+        max-height: 200px;
+        min-height: 200px;
         border-radius: 5px;
-        max-height: 150px;
         border: 1px solid #e1e1e1;
+    }
+
+    .box-wrapper {
+        display: flex;
+        gap: 10px;
+        overflow: auto;
+    }
+
+    .box-group {
+        display: flex;
+        flex-direction: column;
+        min-width: 250px;
         padding: 10px;
     }
 
-    .option-box .selector-box {
-        padding: 0 10px;
-        align-items: center;
+    .selector-box .option-search-box {
+        padding: 5px 0;
         display: flex;
+        flex-direction: column;
         gap: 10px;
         flex-wrap: wrap;
+        align-items: stretch;
         justify-content: center;
-        min-height: 48px;        
     }
 
-    .option-box .button-box {
-        position: relative;
-
-        :hover {
-            transition: 0.1s;
-            transform: scale(1.02);
-        }
-    }
-
-    .option-box .button-el {
+    .box-wrapper .button-el {
         transition: 0.1s;
         padding: 0 10px;
-        height: 35px;
+        width: 100%;
         border-radius: 5px;
         font-size: 14px;
         border: 1px solid #6b727d;
         background-color: #6b727d;
         box-shadow: var(--defaultBoxShadow);
         color: white;
-        
-        &.odd-item {
-            background-color: #868e99;
-            border: 1px solid #868e99;
-        }
+        font-weight: 600;
 
         @media screen and (max-width: 992px) {
             width: 80px;
@@ -83,7 +92,34 @@ const SearchFieldWrapper = styled.div`
         }
     }
 
-    .option-box .close-box {
+    .selector-box .button-box {
+        position: relative;
+
+        :hover {
+            transition: 0.1s;
+            transform: scale(1.02);
+        }
+    }
+
+    .option-search-box .button-el {
+        transition: 0.1s;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        border: 1px solid rgb(70, 82, 101);
+        background-color: white;
+        box-shadow: var(--defaultBoxShadow);
+        color: rgb(70, 82, 101);
+        font-weight: 500;
+
+        @media screen and (max-width: 992px) {
+            width: 80px;
+            height: 25px;
+            font-size: 12px;
+        }
+    }
+
+    .selector-box .close-box {
         position: absolute;
         right: -5px;
         top: -5px;

@@ -3,6 +3,116 @@ import styled from "styled-components";
 const Container = styled.div`
 `;
 
+const ContentTextFieldWrapper = styled.div`
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+
+    @media screen and (max-width: 1280px) {
+        display: none;
+    }
+
+    .vertical-box {
+        display:flex;
+        width: 50%;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 10px;
+
+        @media screen and (max-width: 1280px) {
+            width: 100%;
+        }
+    }
+
+    .vertical-box-info {
+        border: none;
+        border-bottom: 2px solid #a2a8b1;
+        padding-bottom: 10px;
+        width: 100%;
+        font-size: 1.2rem;
+        color: #444;
+        text-align: center;
+        font-weight: 700;
+    }
+`;
+
+const ChannelPerformanceFieldWrapper = styled.div`
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    
+    @media screen and (max-width: 1280px) {
+        flex-direction: column;
+        row-gap: 20px;
+    }
+
+    .vertical-box {
+        display:flex;
+        width: 50%;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 10px;
+
+        @media screen and (max-width: 1280px) {
+            width: 100%;
+        }
+    }
+
+    .vertical-box .vertical-group {
+        width: 100%;
+        border-bottom: 1px solid #a2a8b1;
+    }
+    
+    .data-box {
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        min-height: 100px;
+        max-height: 100px;
+        box-shadow: var(--defaultBoxShadow);
+        border-radius: 10px;
+        background-color: #fff;
+        margin-bottom: 20px;
+
+        @media screen and (max-width: 1280px) {
+            flex-direction: column;
+            align-items: flex-start;
+            max-height: fit-content;
+        }
+    }
+
+    .data-title {
+        font-size: 1.1rem;
+        color: #444;
+        margin-bottom: 11px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-break: break-all;
+        white-space: nowrap;
+    }
+    
+    .data-content {
+        overflow: auto;
+        border-left: 1px solid var(--defaultBorderColor);
+        padding: 0 20px;
+    }
+
+    .data-group {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+
+        @media screen and (max-width: 992px) {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+    }
+`;
+
 const DashboardFieldWrapper = styled.div`
     padding: 10px 0;
     display: flex;
@@ -194,6 +304,8 @@ const SubPerformanceFieldWrapper = styled.div`
 
 export {
     Container,
+    ContentTextFieldWrapper,
+    ChannelPerformanceFieldWrapper,
     DashboardFieldWrapper,
     TrendInfoFieldWrapper,
     SubPerformanceFieldWrapper

@@ -4,7 +4,7 @@ import ConditionSearchFieldView from "./ConditionSearchField.view";
 import ConditionSelectorFieldView from "./ConditionSelectorField.view";
 import DateSelectorFieldView from "./DateSelectorField.view";
 import { Container } from "./Operator.styled";
-import { setStartDateOfPeriod } from '../../../utils/dateFormatUtils';
+import { setSubtractedDate } from '../../../utils/dateFormatUtils';
 import DateRangePickerModalComponent from '../date-range-picker-modal/DateRangePickerModal.component';
 import CommonModalComponent from '../../module/modal/CommonModalComponent';
 
@@ -58,7 +58,7 @@ const OperatorComponent = (props) => {
     }, [searchInputValueState]);
 
     const onActionSelectDataRange = async (year, month, day) => {
-        let startDate = setStartDateOfPeriod(new Date(), year, month, day);
+        let startDate = setSubtractedDate(new Date(), year, month, day);
         let endDate = new Date();
         let dateInfo = { startDate, endDate };
 

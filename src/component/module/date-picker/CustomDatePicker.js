@@ -3,9 +3,11 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/esm/locale";
 import { forwardRef, useEffect, useRef, useState } from 'react';
-import { getMonth, getYear } from 'date-fns';
 
 const Container = styled.div`
+    .react-datepicker {
+        height: 450px;
+    }
 
     .react-datepicker__header {
         background:white;

@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 import _ from 'lodash';
-import OperatorComponent from './operator/Operator.component';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { getEndDate, getStartDate, getTimeDiffWithUTC } from '../../../utils/dateFormatUtils';
@@ -13,6 +12,7 @@ import useChannelSalesPerformanceHook from './hooks/useChannelSalesPerformanceHo
 import PayAmountGraphComponent from './pay-amount-graph/PayAmountGraph.component';
 import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/RegistrationAndUnitGraph.component';
 import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
+import OperatorComponent from './operator/Operator.component'
 
 const Container = styled.div`
     height: 100%;
