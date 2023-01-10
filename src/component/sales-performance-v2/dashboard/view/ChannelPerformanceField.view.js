@@ -1,17 +1,19 @@
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
-import { ChannelPerformanceFieldWrapper } from "../Dashboard.styled";
+import { ChannelPerformanceFieldWrapper, ChannelDataBox } from "../Dashboard.styled";
 
 export default function ChannelPerformanceFieldView ({ channelPerformanceData }) {
     return (
         <ChannelPerformanceFieldWrapper>
             {/* 어제 데이터 */}
             <DataBoxField
+                datetime='yesterday'
                 performance={channelPerformanceData.yesterday}
                 totalPayAmount={channelPerformanceData.yesterdaySalesPayAmount}
             />
 
             {/* 오늘 데이터 */}
             <DataBoxField
+                datetime='today'
                 performance={channelPerformanceData.today}
                 totalPayAmount={channelPerformanceData.todaySalesPayAmount}
             />
@@ -19,12 +21,14 @@ export default function ChannelPerformanceFieldView ({ channelPerformanceData })
     )
 }
 
-function DataBoxField({ performance, totalPayAmount }) {
+function DataBoxField({ datetime, performance, totalPayAmount }) {
     return (
         <div className='vertical-box'>
             <div className='vertical-group'>
-                <div className='data-box'>
-                    <div className='data-title'>스토어 판매 매출</div>
+                <ChannelDataBox datetime={datetime}>
+                    <div className='data-title'>
+                        <span>스토어 판매 매출</span>
+                    </div>
                     <div className='data-content'>
                         {performance?.map((r, idx) => {
                             return (
@@ -36,19 +40,14 @@ function DataBoxField({ performance, totalPayAmount }) {
                                         {idx + 1}. {r.salesChannel}
                                     </div>
                                     <div>
-                                        <span style={{ width: '70px', display: 'inline-block' }}>{((r.salesPayAmount / totalPayAmount) * 100).toFixed(1)}% </span>
+                                        <span style={{ width: '70px', display: 'inline-block' }}>{(totalPayAmount !== 0 ? (r.salesPayAmount / totalPayAmount) * 100 : 0).toFixed(1)}% </span>
                                         <span style={{ fontSize: '12px', fontWeight: '400' }}>({toPriceUnitFormat(r.salesPayAmount)})</span>
                                     </div>
                                 </div>
                             )
                         })}
-                        {!(performance && performance.length > 0) &&
-                            <div style={{ color: '#666', fontSize: '14px' }}>
-                                <div>스토어 매출 데이터가 존재하지 않습니다.</div>
-                            </div> 
-                        }
                     </div>
-                </div>
+                </ChannelDataBox>
             </div>
         </div>
     )

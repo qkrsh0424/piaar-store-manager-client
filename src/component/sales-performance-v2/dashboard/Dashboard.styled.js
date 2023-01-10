@@ -4,14 +4,12 @@ const Container = styled.div`
 `;
 
 const ContentTextFieldWrapper = styled.div`
-    padding: 10px 0;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-
-    @media screen and (max-width: 1280px) {
-        display: none;
+    .text-box {
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
     }
 
     .vertical-box {
@@ -22,7 +20,7 @@ const ContentTextFieldWrapper = styled.div`
         padding: 0 10px;
 
         @media screen and (max-width: 1280px) {
-            width: 100%;
+            display: none;
         }
     }
 
@@ -35,6 +33,28 @@ const ContentTextFieldWrapper = styled.div`
         color: #444;
         text-align: center;
         font-weight: 700;
+    }
+
+    .text-icon-box {
+        display: none;
+        
+        @media screen and (max-width: 1280px){
+            display: block;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            gap: 10px;
+        }
+    }
+
+    .icon-box {
+        position: relative;
+        margin-left: 5px;
+        width: 10px;
+        height: 10px;
+        display: inline-block;
+        border-radius: 1px;
+        vertical-align: middle;
     }
 `;
 
@@ -65,23 +85,25 @@ const ChannelPerformanceFieldWrapper = styled.div`
         width: 100%;
         border-bottom: 1px solid #a2a8b1;
     }
-    
-    .data-box {
-        padding: 15px;
-        display: flex;
-        justify-content: space-between;
-        min-height: 100px;
-        max-height: 100px;
-        box-shadow: var(--defaultBoxShadow);
-        border-radius: 10px;
-        background-color: #fff;
-        margin-bottom: 20px;
+`;
 
-        @media screen and (max-width: 1280px) {
-            flex-direction: column;
-            align-items: flex-start;
-            max-height: fit-content;
-        }
+const ChannelDataBox = styled.div`
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    min-height: 100px;
+    max-height: 100px;
+    box-shadow: var(--defaultBoxShadow);
+    border-radius: 10px;
+    background-color: #fff;
+    margin-bottom: 20px;
+
+        
+    @media screen and (max-width: 1280px) {
+        flex-direction: column;
+        align-items: flex-start;
+        max-height: fit-content;
+        border: 1px solid ${props => props.datetime === 'yesterday' ? '#ffae4c' : 'var(--piaar-main-color)'};
     }
 
     .data-title {
@@ -159,24 +181,25 @@ const DashboardFieldWrapper = styled.div`
             border-bottom: none;
         }
     }
+`;
 
-    .data-box {
-        padding: 15px;
-        min-height: 100px;
-        max-height: 100px;
-        box-shadow: var(--defaultBoxShadow);
-        border-radius: 10px;
-        background-color: #fff;
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+const DataBox = styled.div`
+    padding: 15px;
+    min-height: 100px;
+    max-height: 100px;
+    box-shadow: var(--defaultBoxShadow);
+    border-radius: 10px;
+    background-color: #fff;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-        @media screen and (max-width: 1280px) {
-            flex-direction: column;
-            align-items: flex-start;
-            max-height: fit-content;
-        }
+    @media screen and (max-width: 1280px) {
+        flex-direction: column;
+        align-items: flex-start;
+        max-height: fit-content;
+        border: 1px solid ${props => props.datetime === 'yesterday' ? '#ffae4c' : 'var(--piaar-main-color)'};
     }
 
     .data-content-group {
@@ -305,8 +328,10 @@ const SubPerformanceFieldWrapper = styled.div`
 export {
     Container,
     ContentTextFieldWrapper,
+    ChannelDataBox,
     ChannelPerformanceFieldWrapper,
     DashboardFieldWrapper,
+    DataBox,
     TrendInfoFieldWrapper,
     SubPerformanceFieldWrapper
 }

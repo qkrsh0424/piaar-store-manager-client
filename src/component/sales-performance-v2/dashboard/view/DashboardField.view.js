@@ -1,5 +1,5 @@
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
-import { TrendInfoFieldWrapper, DashboardFieldWrapper } from "../Dashboard.styled";
+import { TrendInfoFieldWrapper, DashboardFieldWrapper, DataBox } from "../Dashboard.styled";
 
 function TrendInfoField ({ dayInfo, trendValue}) {
     return (
@@ -42,7 +42,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
             {yesterdayData &&
                 <div className='vertical-box'>
                     <div className='vertical-group'>
-                        <div className='data-box'>
+                        <DataBox datetime='yesterday'>
                             <div className='data-content-group'>
                                 <div className='data-title'>주문 금액</div>
                                 <div className='data-content'>
@@ -55,8 +55,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={yesterdayData.orderPayAmountTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
-                        <div className='data-box'>
+                        </DataBox>
+                        <DataBox datetime='yesterday'>
                             <div className='data-content-group'>
                                 <div className='data-title'>판매 금액</div>
                                 <div className='data-content'>
@@ -69,8 +69,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={yesterdayData.salesPayAmountTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
-                        <div className='data-box'>
+                        </DataBox>
+                        <DataBox datetime='yesterday'>
                             <div className='data-content-group'>
                                 <div className='data-title'>미판매 금액</div>
                                 <div className='data-content'>
@@ -83,11 +83,11 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={yesterdayData.unsalesPayAmountTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
+                        </DataBox>
                     </div>
                     
                     <div className='vertical-group'>
-                        <div className='data-box'>
+                        <DataBox datetime='yesterday'>
                             <div className='data-content-group'>
                                 <div className='data-title'>주문 건수</div>
                                 <div className='data-content'>
@@ -100,8 +100,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={yesterdayData.orderRegistrationTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
-                        <div className='data-box'>
+                        </DataBox>
+                        <DataBox datetime='yesterday'>
                             <div className='data-content-group'>
                                 <div className='data-title'>판매 건수</div>
                                 <div className='data-content'>
@@ -114,8 +114,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={yesterdayData.salesRegistrationTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
-                        <div className='data-box'>
+                        </DataBox>
+                        <DataBox datetime='yesterday'>
                             <div className='data-content-group'>
                                 <div className='data-title'>미판매 건수</div>
                                 <div className='data-content'>
@@ -128,11 +128,11 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={yesterdayData.unsalesRegistrationTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
+                        </DataBox>
                     </div>
 
                     <div className='vertical-group'>
-                        <div className='data-box'>
+                        <DataBox datetime='yesterday'>
                             <div className='data-content-group'>
                                 <div className='data-title'>주문 수량</div>
                                 <div className='data-content'>
@@ -145,8 +145,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={yesterdayData.orderUnitTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
-                        <div className='data-box'>
+                        </DataBox>
+                        <DataBox datetime='yesterday'>
                             <div className='data-content-group'>
                                 <div className='data-title'>판매 수량</div>
                                 <div className='data-content'>
@@ -159,8 +159,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={yesterdayData.salesUnitTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
-                        <div className='data-box'>
+                        </DataBox>
+                        <DataBox datetime='yesterday'>
                             <div className='data-content-group'>
                                 <div className='data-title'>미판매 수량</div>
                                 <div className='data-content'>
@@ -173,7 +173,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={yesterdayData.unsalesUnitTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
+                        </DataBox>
                     </div>
                 </div>
             }
@@ -182,7 +182,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
             {todayData &&
                 <div className='vertical-box'>
                     <div className='vertical-group'>
-                        <div className='data-box'>
+                        <DataBox datetime='today'>
                             <div className='data-content-group'>
                                 <div className='data-title'>주문 금액</div>
                                 <div className='data-content'>
@@ -199,8 +199,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={todayData.orderPayAmountTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
-                        <div className='data-box'>
+                        </DataBox>
+                        <DataBox datetime='today'>
                             <div className='data-content-group'>
                                 <div className='data-title'>판매 금액</div>
                                 <div className='data-content'>
@@ -217,8 +217,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={todayData.salesPayAmountTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
-                        <div className='data-box'>
+                        </DataBox>
+                        <DataBox datetime='today'>
                             <div className='data-content-group'>
                                 <div className='data-title'>미판매 금액</div>
                                 <div className='data-content'>
@@ -235,11 +235,11 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={todayData.unsalesPayAmountTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
+                        </DataBox>
                     </div>
 
                     <div className='vertical-group'>
-                        <div className='data-box'>
+                        <DataBox datetime='today'>
                             <div className='data-content-group'>
                                 <div className='data-title'>주문 건수</div>
                                 <div className='data-content'>
@@ -256,8 +256,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={todayData.orderRegistrationTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
-                        <div className='data-box'>
+                        </DataBox>
+                        <DataBox datetime='today'>
                             <div className='data-content-group'>
                                 <div className='data-title'>판매 건수</div>
                                 <div className='data-content'>
@@ -274,8 +274,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={todayData.salesRegistrationTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
-                        <div className='data-box'>
+                        </DataBox>
+                        <DataBox datetime='today'>
                             <div className='data-content-group'>
                                 <div className='data-title'>미판매 건수</div>
                                 <div className='data-content'>
@@ -292,11 +292,11 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={todayData.unsalesRegistrationTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
+                        </DataBox>
                     </div>
 
                     <div className='vertical-group'>
-                        <div className='data-box'>
+                        <DataBox datetime='today'>
                             <div className='data-content-group'>
                                 <div className='data-title'>주문 수량</div>
                                 <div className='data-content'>
@@ -313,8 +313,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={todayData.orderUnitTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
-                        <div className='data-box'>
+                        </DataBox>
+                        <DataBox datetime='today'>
                             <div className='data-content-group'>
                                 <div className='data-title'>판매 수량</div>
                                 <div className='data-content'>
@@ -331,8 +331,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={todayData.salesUnitTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
-                        <div className='data-box'>
+                        </DataBox>
+                        <DataBox datetime='today'>
                             <div className='data-content-group'>
                                 <div className='data-title'>미판매 수량</div>
                                 <div className='data-content'>
@@ -349,7 +349,7 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                                     trendValue={todayData.unsalesUnitTrendByAWeekAgo}
                                 />
                             </div>
-                        </div>
+                        </DataBox>
                     </div>
                 </div>
             }
