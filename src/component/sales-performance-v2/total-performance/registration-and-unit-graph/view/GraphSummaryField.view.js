@@ -1,4 +1,3 @@
-import { toPriceUnitFormat } from "../../../../../utils/numberFormatUtils";
 import { GraphSummaryFieldWrapper } from "../RegistrationAndUnitGraph.styled";
 
 export default function GraphSummaryFieldView (props) {
@@ -10,11 +9,11 @@ export default function GraphSummaryFieldView (props) {
                     {props.summaryData?.map((r, idx) => {
                         return (
                             <li key={'graph-summary' + idx} className='data-box'>
-                                <div className='value-info'>
+                                <div style={{ wordBreak: 'break-all' }}>
                                     <i className='icon-dot' style={{ backgroundColor: `${r.color}` }}></i>
                                     <span> {r.label} </span>
                                 </div>
-                                <div style={{ fontWeight: 700 }}>{(r.value || 0).toLocaleString()} 개</div>
+                                <div style={{ fontWeight: 700, minWidth: '80px', textAlign: 'right' }}>{(r.value || 0).toLocaleString()} 개</div>
                             </li>
                         )
                     })}

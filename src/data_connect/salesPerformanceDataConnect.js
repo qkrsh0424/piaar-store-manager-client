@@ -29,6 +29,21 @@ const salesPerformanceDataConnect = () => {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/category/product`, body, {
                 withCredentials: true
             })
+        },
+        searchProductPerformance: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/product`, body, {
+                withCredentials: true
+            })
+        },
+        searchBestProductPerformance: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/product/best`, body, {
+                withCredentials: true
+            })
+        },
+        searchBestOptionPerformance: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/product/option/best`, body, {
+                withCredentials: true
+            })
         }
     }
 }

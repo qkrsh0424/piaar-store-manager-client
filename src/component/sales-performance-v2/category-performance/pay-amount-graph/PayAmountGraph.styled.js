@@ -97,6 +97,7 @@ const GraphSummaryFieldWrapper = styled.div`
         align-items: center;
         justify-content: space-between;
         padding: 0 20px;
+        height: auto;
     }
 `;
 

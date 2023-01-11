@@ -153,7 +153,7 @@ const thisRouters = [
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
-                name: 'TOP10 상품 & 옵션',
+                name: 'TOP15 상품 & 옵션',
                 pathname: '/sales-performance/product/best',
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             }

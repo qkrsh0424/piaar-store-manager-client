@@ -72,7 +72,7 @@ export default function BestItemGraphComponent(props) {
                     }
                 })
 
-                let orderPayAmountDatasets = props.bestUnitItem.map((r, idx) => {
+                let orderPayAmountDatasets = props.bestPayAmountItem.map((r, idx) => {
                     let payAmountValues = r.performances.map(r2 => r2.orderPayAmount);
                     return {
                         ...new GraphDataset().toJSON(),

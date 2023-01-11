@@ -52,6 +52,8 @@ import SalesChannelPerformancePage from './pages/sales-performance/sales-channel
 import SalesChannelProductPerformancePage from './pages/sales-performance/sales-channel-product-performance/SalesChannelPerformancePage';
 import CategoryPerformancePage from './pages/sales-performance/category-performance/CategoryPerformancePage';
 import CategoryBestPerformancePage from './pages/sales-performance/category-best-performance/CategoryBestPerformancePage';
+import ProductPerformancePage from './pages/sales-performance/product-performance/ProductPerformancePage';
+import ProductBestPerformancePage from './pages/sales-performance/product-best-performance/ProductBestPerformancePage';
 
 
 const theme = unstable_createMuiStrictModeTheme();
@@ -149,6 +151,8 @@ function App(props) {
                                             <Route path='/sales-performance/sales-channel/product' element={<SalesChannelProductPerformancePage />} />
                                             <Route path='/sales-performance/category' element={<CategoryPerformancePage />} />
                                             <Route path='/sales-performance/category/best' element={<CategoryBestPerformancePage />} />
+                                            <Route path='/sales-performance/product' element={<ProductPerformancePage />} />
+                                            <Route path='/sales-performance/product/best' element={<ProductBestPerformancePage />} />
 
                                             <Route path='/stock-cycle' element={<StockCyclePage />} />
 

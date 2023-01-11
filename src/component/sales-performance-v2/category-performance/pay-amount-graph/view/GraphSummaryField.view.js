@@ -10,12 +10,12 @@ export default function GraphSummaryFieldView (props) {
                     {props.summaryData?.map((r, idx) => {
                         return (
                             <li key={'graph-summary' + idx} className='data-box'>
-                                <div className='value-info'>
+                                <div style={{ wordBreak: 'break-all' }}>
                                     <i className='icon-dot' style={{ backgroundColor: `${r.color}` }}></i>
                                     <span>{idx+1}. </span>
                                     <span> {r.label} </span>
                                 </div>
-                                <div style={{ fontWeight: 700 }}>
+                                <div style={{ fontWeight: 700, minWidth: '80px', textAlign: 'right' }}>
                                     <span>{toPriceUnitFormat(r.value)}</span>
                                 </div>
                             </li>
