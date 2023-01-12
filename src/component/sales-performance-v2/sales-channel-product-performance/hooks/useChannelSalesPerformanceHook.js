@@ -22,8 +22,13 @@ export default function useChannelSalesPerformanceHook(props) {
             })
     }
 
+    const onActionResetPerformance = () => {
+        setPerformance(null);
+    }
+
     return {
         performance,
-        reqSearchChannelPerformance
+        reqSearchChannelPerformance,
+        onActionResetPerformance
     }
 }

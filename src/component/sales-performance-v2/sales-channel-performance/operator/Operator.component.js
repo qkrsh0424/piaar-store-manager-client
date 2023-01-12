@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { dateToYYYYMMDD, getEndDateOfMonth, getStartDateOfMonth, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
+import { getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
 import { Container } from "./Operator.styled";
 import ButtonFieldView from "./view/ButtonField.view";
 import DateButtonFieldView from "./view/DateButtonField.view";
@@ -10,16 +9,12 @@ import DateSelectorFieldView from "./view/DateSelectorField.view";
 // 날짜검색 최대기간 92일
 const SEARCHABLE_PERIOD = 92;
 
-export default function OperatorComponent(props) {
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+const TODAY = new Date();
+const PREV_2WEEKS_DATE = setSubtractedDate(TODAY, 0, 0, -13);
 
-    const {
-        location,
-        query,
-        navigateParams,
-        navigateClearParams
-    } = useRouterHook();
+export default function OperatorComponent(props) {
+    const [startDate, setStartDate] = useState(PREV_2WEEKS_DATE);
+    const [endDate, setEndDate] = useState(TODAY);
 
     const {
         open: snackbarOpen,
@@ -30,17 +25,22 @@ export default function OperatorComponent(props) {
     } = useBasicSnackbarHookV2();
 
     useEffect(() => {
-        let startDate = query.startDate;
-        let endDate = query.endDate;
-        
-        if (startDate) {
-            setStartDate(new Date(startDate));
+        async function fetchInit() {
+            let searchStartDate = getStartDate(startDate);
+            let searchEndDate = getEndDate(endDate);
+            let utcHourDifference = getTimeDiffWithUTC();
+    
+            let body = {
+                startDate: searchStartDate,
+                endDate: searchEndDate,
+                utcHourDifference,
+            }
+            props.onSubmitSearchPerformance(body);
         }
 
-        if (endDate) {
-            setEndDate(new Date(endDate));
-        }
-    }, [query.startDate, query.endDate])
+        fetchInit();
+    }, []);
+
 
     const __handle = {
         action: {
@@ -54,7 +54,7 @@ export default function OperatorComponent(props) {
                 setStartDate(null);
                 setEndDate(null);
 
-                navigateClearParams({ replace: true });
+                props.onActionResetPerformance();
             },
             searchDateRange: (year, month, day) => {
                 let end = new Date();
@@ -96,17 +96,6 @@ export default function OperatorComponent(props) {
                     if (!isSearchablePeriod(startDate, endDate, SEARCHABLE_PERIOD)) {
                         throw new Error(`조회기간은 최대 ${SEARCHABLE_PERIOD}일까지 가능합니다.`)
                     }
-
-                    if (startDate && endDate) {
-                        query.startDate = dateToYYYYMMDD(startDate);
-                        query.endDate = dateToYYYYMMDD(endDate);
-                    } else {
-                        delete query.startDate;
-                        delete query.endDate;
-    
-                        setStartDate(null);
-                        setEndDate(null);
-                    }
                 } catch (err) {
                     let snackbarSetting = {
                         message: err?.message,
@@ -116,7 +105,16 @@ export default function OperatorComponent(props) {
                     return;
                 }
 
-                navigateParams({ replace: true })
+                let searchStartDate = startDate ? getStartDate(startDate) : null;
+                let searchEndDate = endDate ? getEndDate(endDate) : null;
+                let utcHourDifference = getTimeDiffWithUTC();
+
+                let body = {
+                    startDate: searchStartDate,
+                    endDate: searchEndDate,
+                    utcHourDifference,
+                }
+                props.onSubmitSearchPerformance(body);
             }
         }
     }

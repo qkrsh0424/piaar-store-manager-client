@@ -5,9 +5,12 @@ import useRouterHook from "../../../hooks/router/useRouterHook";
 import { getEndDate, getStartDate, getTimeDiffWithUTC } from "../../../utils/dateFormatUtils";
 import BestProductGraphComponent from "./best-product-graph/BestProductGraph.component";
 import GraphOperatorComponent from "./graph-operator/GraphOperator.component";
-import useProductHook from "./hooks/useProductHook";
 import OperatorComponent from "./operator/Operator.component";
 import useProductSalesPerformanceHook from "./hooks/useProductSalesPerformanceHook";
+import BestOptionGraphComponent from "./best-option-graph/BestOptionGraph.component";
+import useOptionSalesPerformanceHook from "./hooks/useOptionSalesPerformanceHook";
+import ProductSelectorComponent from "./product-selector/ProductSelector.component";
+import ProductBestOptionGraphComponent from "./product-best-option-graph/ProductBestOptionGraph.component";
 
 const Container = styled.div`
     height: 100%;
@@ -32,12 +35,8 @@ function PageTitleFieldView({ title }) {
 
 export default function ProductBestPerformanceComponent (props) {
     const [checkedSwitch, setCheckedSwitch] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
-
-    const {
-        query,
-        location
-    } = useRouterHook();
+    const [salesProduct, setSalesProduct] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState([]);
 
     const {
         open: backdropOpen,
@@ -46,81 +45,85 @@ export default function ProductBestPerformanceComponent (props) {
     } = useBackdropHook();
 
     const {
-        productPerformance,
-        optionPerformance,
+        performance: productPerformance,
         reqSearchBestProductPerformance,
-        reqSearchBestOptionPerformance
+        onActionResetProductPerformance
     } = useProductSalesPerformanceHook();
 
     const {
-        products,
-        reqSearchAll: reqSearchAllProduct
-    } = useProductHook();
+        performance: optionPerformance,
+        reqSearchBestOptionPerformance,
+        onActionResetOptionPerformance
+    } = useOptionSalesPerformanceHook();
 
     useEffect(() => {
-        async function fetchInit() {
-            onActionOpenBackdrop();
-            await reqSearchAllProduct();
-            onActionCloseBackdrop();
+        if(!optionPerformance) {
+            return;
         }
 
-        async function fetchInit2() {
-            let startDate = query.startDate ? getStartDate(query.startDate) : null;
-            let endDate = query.endDate ? getEndDate(query.endDate) : null;
-            let utcHourDifference = getTimeDiffWithUTC();
-
-            let body = {
-                startDate,
-                endDate,
-                utcHourDifference
-            }
-
-            onActionOpenBackdrop();
-            await reqSearchBestProductPerformance(body);
-            // await reqSearchBestOptionPerformance(body);
-            onActionCloseBackdrop();
-        }
-
-        fetchInit();
-        fetchInit2();
-    }, [])
+        __handle.action.initProduct();
+    }, [optionPerformance])
 
     const __handle = {
         action: {
+            resetPerformance: () => {
+                setSalesProduct(null);
+                onActionResetProductPerformance();
+                onActionResetOptionPerformance();
+            },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;
                 setCheckedSwitch(!checkedValue);
+            },
+            initProduct: () => {
+                let product = new Set([]);
+                optionPerformance.forEach(r => {
+                    product.add(r.productDefaultName);
+                })
+
+                let productName = [...product].sort();
+                setSalesProduct(productName);
+
+                // 기본 1개 선택
+                setSelectedProduct([productName[0]]);
+            },
+            isCheckedOne: (productName) => {
+                return selectedProduct.some(name => name === productName);
+            },
+            checkOne: (e, productName) => {
+                e.stopPropagation();
+
+                let data = [...selectedProduct];
+
+                if(selectedProduct.some(name => name === productName)) {
+                    data = data.filter(name => name !== productName);
+                } else {
+                    data.push(productName);
+                }
+                setSelectedProduct(data);
+            },
+            resetSelectedProduct: (e) => {
+                e.stopPropagation();
+
+                setSelectedProduct([]);
             }
         },
         submit: {
-            searchPerformance: async (selectedProduct) => {
-                let startDate = query.startDate ? getStartDate(query.startDate) : null;
-                let endDate = query.endDate ? getEndDate(query.endDate) : null;
-                let utcHourDifference = getTimeDiffWithUTC();
-                let productCode = selectedProduct ? selectedProduct.code : null;
-
-                let body = {
-                    startDate,
-                    endDate,
-                    utcHourDifference,
-                    productCode
-                }
-
+            searchPerformance: async (body) => {
                 onActionOpenBackdrop();
-                // await reqSearchProductBestPerformance(body);
+                await reqSearchBestProductPerformance(body);
+                await reqSearchBestOptionPerformance(body);
                 onActionCloseBackdrop();
-                
-                setSelectedProduct(selectedProduct);
             }
         }
     }
 
     return (
         <Container navbarOpen={props.navbarOpen}>
-            <PageTitleFieldView title={'BEST 상품 & 옵션'} />
+            <PageTitleFieldView title={'상품 - BEST 상품 & 옵션'} />
 
             <OperatorComponent
-                products={products}
+                onActionResetPerformance={__handle.action.resetPerformance}
                 onSubmitSearchPerformance={__handle.submit.searchPerformance}
             />
 
@@ -132,14 +135,27 @@ export default function ProductBestPerformanceComponent (props) {
 
             <BestProductGraphComponent
                 checkedSwitch={checkedSwitch}
-                productPerformance={productPerformance}
+                performance={productPerformance}
             />
 
-            {/* <BestOptionGraphComponent
-            /> */}
+            <BestOptionGraphComponent
+                checkedSwitch={checkedSwitch}
+                performance={optionPerformance}
+            />
 
-            {/* <SelectedProductBestOptionGraphComponent
-            /> */}
+            <ProductSelectorComponent
+                salesProduct={salesProduct}
+                // selectedProduct
+                onActionIsCheckedOne={__handle.action.isCheckedOne}
+                onActionCheckOne={__handle.action.checkOne}
+                onActionResetSelectedProduct={__handle.action.resetSelectedProduct}
+            />
+            
+            <ProductBestOptionGraphComponent
+                checkedSwitch={checkedSwitch}
+                selectedProduct={selectedProduct}
+                performance={optionPerformance}
+            />
 
             <BackdropHookComponent
                 open={backdropOpen}

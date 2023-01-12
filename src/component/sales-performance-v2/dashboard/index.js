@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
 
-import { getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, setSubtractedDate } from '../../../utils/dateFormatUtils';
+import { getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, setSubtractedDate } from '../../../utils/dateFormatUtils';
 import _ from 'lodash';
 import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
@@ -29,8 +29,8 @@ function PageTitleFieldView({ title }) {
     )
 }
 
-// const TODAY = setSubtractedDate(new Date(), 0, -1, 0);
-const TODAY = new Date();
+const TODAY = setSubtractedDate(new Date(), 0, -2, 0);
+// const TODAY = new Date();
 const YESTERDAY = setSubtractedDate(TODAY, 0, 0, -1);
 
 const SalesPerformanceDashboardComponent = (props) => {
@@ -58,7 +58,6 @@ const SalesPerformanceDashboardComponent = (props) => {
 
     useEffect(() => {
         async function getDashboardPerformance() {
-            // TODO :: 배포 시 new Date() 로 변경
             let prev7DaysOfToday = setSubtractedDate(TODAY, 0, 0, -7);
             let prev7DaysOfYesterDay = setSubtractedDate(YESTERDAY, 0, 0, -7)
         
@@ -114,8 +113,8 @@ const SalesPerformanceDashboardComponent = (props) => {
 
         // 채널별 판매성과
         async function getChannelPerformance() {
-            let startDate = YESTERDAY;
-            let endDate = TODAY;
+            let startDate = getStartDate(YESTERDAY);
+            let endDate = getEndDate(TODAY);
             let utcHourDifference = getTimeDiffWithUTC();
 
             let body = {

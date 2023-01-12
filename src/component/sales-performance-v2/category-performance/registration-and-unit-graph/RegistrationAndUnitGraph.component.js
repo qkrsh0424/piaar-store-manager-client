@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import { dateToYYYYMM, getWeekNumber } from "../../../../utils/dateFormatUtils";
 import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
-// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
-// const SALES_GRAPH_BG_COLOR = ['#6f98c9', '#ffd5fb', '#ffca9f', '#b2ffa6', '#dcf2ff', '#f9f871', '#e8dbff', '#c4d7a1', '#389091', '#95C477'];
 const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
 // 판매스토어별 총 판매, 주문건 & 수량
@@ -411,7 +409,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                         totalGraphOption={totalGraphOption}
                     />
                     <GraphSummaryFieldView
-                        title={'[스토어별 총 판매건]'}
+                        title={'[카테고리별 총 판매건]'}
                         summaryData={props.checkedSwitch ? registrationSummaryData?.total : registrationSummaryData?.sales}
                     />
                 </div>
@@ -421,7 +419,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                         totalGraphOption={totalGraphOption}
                     />
                     <GraphSummaryFieldView
-                        title={'[스토어별 총 판매수량]'}
+                        title={'[카테고리별 총 판매수량]'}
                         summaryData={props.checkedSwitch ? unitSummaryData?.total : unitSummaryData?.sales}
                     />
                 </div>

@@ -4,8 +4,6 @@ import _ from 'lodash';
 import OperatorComponent from './operator/Operator.component';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { getEndDate, getStartDate, getTimeDiffWithUTC } from '../../../utils/dateFormatUtils';
-import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
 import PayAmountGraphComponent from './pay-amount-graph/PayAmountGraph.component';
 import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/RegistrationAndUnitGraph.component';
@@ -43,11 +41,6 @@ const CategoryPerformanceComponent = (props) => {
     const [checkedSwitch, setCheckedSwitch] = useState(false);
 
     const {
-        query,
-        location
-    } = useRouterHook();
-
-    const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
@@ -55,33 +48,9 @@ const CategoryPerformanceComponent = (props) => {
 
     const {
         performance,
-        reqSearchCategoryPerformance
+        reqSearchCategoryPerformance,
+        onActionResetPerformance
     } = useCategorySalesPerformanceHook();
-
-    useEffect(() => {
-        async function fetchInit() {
-            let startDate = query.startDate ? getStartDate(query.startDate) : null;
-            let endDate = query.endDate ? getEndDate(query.endDate) : null;
-            let utcHourDifference = getTimeDiffWithUTC();
-
-            let body = {
-                startDate,
-                endDate,
-                utcHourDifference
-            }
-
-            if(!(startDate && endDate)) {
-                __handle.action.clearChannel();
-                return;
-            }
-
-            onActionOpenBackdrop();
-            await reqSearchCategoryPerformance(body);
-            onActionCloseBackdrop();
-        }
-
-        fetchInit();
-    }, [location])
 
     useEffect(() => {
         if(!performance) {
@@ -93,6 +62,10 @@ const CategoryPerformanceComponent = (props) => {
 
     const __handle = {
         action: {
+            resetPerformance: () => {
+                onActionResetPerformance();
+                __handle.action.clearCategory();
+            },
             initCategory: () => {
                 let category = new Set([]);
     
@@ -123,7 +96,6 @@ const CategoryPerformanceComponent = (props) => {
             },
             checkedClear: () => {
                 setSelectedCategory([]);
-                // props.onActionUpdateSelectedCategory([]);
             },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;
@@ -133,9 +105,16 @@ const CategoryPerformanceComponent = (props) => {
                 let value = e.target.value;
                 setSearchDimension(value);
             },
-            clearChannel: () => {
+            clearCategory: () => {
                 setCategory(null);
                 setSelectedCategory(null);
+            }
+        },
+        submit: {
+            searchPerformance: async (body) => {
+                onActionOpenBackdrop();
+                await reqSearchCategoryPerformance(body);
+                onActionCloseBackdrop();
             }
         }
     }
@@ -143,9 +122,12 @@ const CategoryPerformanceComponent = (props) => {
     return (
         <>
             <Container navbarOpen={props.navbarOpen}>
-                <PageTitleFieldView title={'카테고리 성과'} />
+                <PageTitleFieldView title={'카테고리 - 총 매출액 & 판매 건'} />
 
-                <OperatorComponent />
+                <OperatorComponent
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
+                    onActionResetPerformance={__handle.action.resetPerformance}
+                />
 
                 <CategorySelectorComponent
                     category={category}

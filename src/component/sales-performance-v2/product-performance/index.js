@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
-import useRouterHook from "../../../hooks/router/useRouterHook";
-import { getEndDate, getStartDate, getTimeDiffWithUTC } from "../../../utils/dateFormatUtils";
 import GraphOperatorComponent from "./graph-operator/GraphOperator.component";
 import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
 import useProductSalesPerformanceHook from "./hooks/useProductSalesPerformanceHook";
@@ -40,11 +38,6 @@ export default function ProductPerformanceComponent (props) {
     const [selectedOptions, setSelectedOptions] = useState(null);
 
     const {
-        query,
-        location
-    } = useRouterHook();
-
-    const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
@@ -52,7 +45,8 @@ export default function ProductPerformanceComponent (props) {
 
     const {
         performance,
-        reqSearchProductPerformance
+        reqSearchProductPerformance,
+        onActionResetPerformance
     } = useProductSalesPerformanceHook();
 
     const {
@@ -72,6 +66,9 @@ export default function ProductPerformanceComponent (props) {
 
     const __handle = {
         action: {
+            resetPerformance: () => {
+                onActionResetPerformance();
+            },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;
                 setCheckedSwitch(!checkedValue);
@@ -86,21 +83,12 @@ export default function ProductPerformanceComponent (props) {
             }
         },
         submit: {
-            searchPerformance: async (optionCodes) => {
-                let startDate = query.startDate ? getStartDate(query.startDate) : null;
-                let endDate = query.endDate ? getEndDate(query.endDate) : null;
-                let utcHourDifference = getTimeDiffWithUTC();
-
-                let body = {
-                    startDate,
-                    endDate,
-                    utcHourDifference,
-                    optionCodes
-                }
-
+            searchPerformance: async (body) => {
                 onActionOpenBackdrop();
                 await reqSearchProductPerformance(body);
                 onActionCloseBackdrop();
+
+                let optionCodes = body.optionCodes;
 
                 let options = productAndOptions.filter(r => optionCodes.includes(r.option.code));
                 setSelectedOptions(options);
@@ -110,10 +98,11 @@ export default function ProductPerformanceComponent (props) {
 
     return (
         <Container navbarOpen={props.navbarOpen}>
-            <PageTitleFieldView title={'상품 성과'} />
+            <PageTitleFieldView title={'상품 - 총 매출액 & 판매 건'} />
 
             <OperatorComponent
                 productAndOptions={productAndOptions}
+                onActionResetPerformance={__handle.action.resetPerformance}
                 onSubmitSearchPerformance={__handle.submit.searchPerformance}
             />
 

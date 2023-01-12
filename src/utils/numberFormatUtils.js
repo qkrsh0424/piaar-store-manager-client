@@ -11,13 +11,13 @@ function toPriceUnitFormat(price) {
     let priceSize = price?.toString().length;
 
     if(priceSize > 8) {
-        return parseFloat((price / (10 ** 8)).toFixed(1)) + ' 억원';
+        return parseFloat((price / (10 ** 8)).toFixed(2)) + ' 억원';
     }else if(priceSize > 7) {
-        return parseFloat((price / (10 ** 7)).toFixed(1)) + ' 천만원';
+        return parseFloat((price / (10 ** 7)).toFixed(2)) + ' 천만원';
     }else if(priceSize > 6) {
-        return parseFloat((price / (10 ** 6)).toFixed(1)) + ' 백만원';
+        return parseFloat((price / (10 ** 6)).toFixed(2)) + ' 백만원';
     }else if(price > 4) {
-        return parseFloat((price / (10 ** 4)).toFixed(1)) + ' 만원';
+        return parseFloat((price / (10 ** 4)).toFixed(2)) + ' 만원';
     }else {
         return price + '원';
     }

@@ -30,7 +30,7 @@ export default function SearchFieldView(props) {
                                         onClick={(e) => props.onActionRemoveProduct(e, r.product.id)}
                                     >
                                         <div className="close-box">
-                                            <div className='close-button-box' style={{ border: '1px solid #ff3060' }}>
+                                            <div className='close-button-box'>
                                                 <img
                                                     src='/assets/icon/close_default_ff3060.svg'
                                                     style={{ width: '100%', position: 'absolute', right: '0', top: '50%', transform: 'translate(0, -50%)' }}

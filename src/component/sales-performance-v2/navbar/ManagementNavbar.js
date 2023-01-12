@@ -109,8 +109,7 @@ const thisRouters = [
         page: [
             {
                 name: '총 매출액 & 판매 건',
-                pathname: '/sales-performance/total',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/total'
             },
         ]
     },
@@ -119,13 +118,11 @@ const thisRouters = [
         page: [
             {
                 name: '총 매출액 & 판매 건',
-                pathname: '/sales-performance/sales-channel',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/sales-channel'
             },
             {
                 name: '상품별 매출',
-                pathname: '/sales-performance/sales-channel/product',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/sales-channel/product'
             }
         ]
     },
@@ -134,13 +131,11 @@ const thisRouters = [
         page: [
             {
                 name: '총 매출액 & 판매 건',
-                pathname: '/sales-performance/category',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/category'
             },
             {
                 name: 'BEST 상품',
-                pathname: '/sales-performance/category/best',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/category/best'
             }
         ]
     },
@@ -149,13 +144,11 @@ const thisRouters = [
         page: [
             {
                 name: '총 매출액 & 판매 건',
-                pathname: '/sales-performance/product',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/product'
             },
             {
-                name: 'TOP15 상품 & 옵션',
-                pathname: '/sales-performance/product/best',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                name: 'BEST 상품 & 옵션',
+                pathname: '/sales-performance/product/best'
             }
         ]
     }

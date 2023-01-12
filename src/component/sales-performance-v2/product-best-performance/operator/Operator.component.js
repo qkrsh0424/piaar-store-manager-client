@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { dateToYYYYMMDD, getEndDateOfMonth, getStartDateOfMonth, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
 import ProductListModalComponent from "./modal/product-list/ProductListModal.component";
 import { Container } from "./Operator.styled";
 import ButtonFieldView from "./view/ButtonField.view";
@@ -13,19 +13,12 @@ import SearchFieldView from "./view/SearchField.view";
 // 날짜검색 최대기간 92일
 const SEARCHABLE_PERIOD = 92;
 
+const TODAY = new Date();
+const PREV_2WEEKS_DATE = setSubtractedDate(TODAY, 0, 0, -13);
+
 export default function OperatorComponent(props) {
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-
-    const [selectedProduct, setSelectedProduct] = useState(null);
-    const [productListModalOpen, setProductListModalOpen] = useState(false);
-
-    const {
-        location,
-        query,
-        navigateParams,
-        navigateClearParams
-    } = useRouterHook();
+    const [startDate, setStartDate] = useState(PREV_2WEEKS_DATE);
+    const [endDate, setEndDate] = useState(TODAY);
 
     const {
         open: backdropOpen,
@@ -42,21 +35,21 @@ export default function OperatorComponent(props) {
     } = useBasicSnackbarHookV2();
 
     useEffect(() => {
-        let startDate = query.startDate;
-        let endDate = query.endDate;
+        async function fetchInit() {
+            let searchStartDate = getStartDate(startDate);
+            let searchEndDate = getEndDate(endDate);
+            let utcHourDifference = getTimeDiffWithUTC();
+    
+            let body = {
+                startDate: searchStartDate,
+                endDate: searchEndDate,
+                utcHourDifference,
+            }
+            props.onSubmitSearchPerformance(body);
+        }
 
-        if(!(startDate && endDate)) {
-            // setSelectedProductAndOptions([]);
-        }
-        
-        if (startDate) {
-            setStartDate(new Date(startDate));
-        }
-
-        if (endDate) {
-            setEndDate(new Date(endDate));
-        }
-    }, [query.startDate, query.endDate])
+        fetchInit();
+    }, []);
 
     const __handle = {
         action: {
@@ -69,11 +62,8 @@ export default function OperatorComponent(props) {
             clearRoute: () => {
                 setStartDate(null);
                 setEndDate(null);
-
-                navigateClearParams({ replace: true });
-                // props.onActionClearChannel();
-                // setSelectedOptionCodes([]);
-                // setSelectedProductAndOptions([]);
+                
+                props.onActionResetPerformance();
             },
             searchDateRange: (year, month, day) => {
                 let end = new Date();
@@ -90,23 +80,6 @@ export default function OperatorComponent(props) {
 
                 setStartDate(start);
                 setEndDate(end);
-            },
-            openProductListModal: (e) => {
-                e.preventDefault();
-
-                setProductListModalOpen(true);
-            },
-            closeProductListModal: () => {
-                setProductListModalOpen(false);
-            },
-            selectProduct: (productId) => {
-                if(productId === 'total') {
-                    setSelectedProduct(null);
-                } else {
-                    let selectedProduct = props.products.filter(r => r.id === productId)[0];
-                    setSelectedProduct(selectedProduct);
-                }
-                __handle.action.closeProductListModal();
             }
         },
         submit: {
@@ -133,17 +106,6 @@ export default function OperatorComponent(props) {
                     if (!isSearchablePeriod(startDate, endDate, SEARCHABLE_PERIOD)) {
                         throw new Error(`조회기간은 최대 ${SEARCHABLE_PERIOD}일까지 가능합니다.`)
                     }
-
-                    if (startDate && endDate) {
-                        query.startDate = dateToYYYYMMDD(startDate);
-                        query.endDate = dateToYYYYMMDD(endDate);
-                    } else {
-                        delete query.startDate;
-                        delete query.endDate;
-    
-                        setStartDate(null);
-                        setEndDate(null);
-                    }
                 } catch (err) {
                     let snackbarSetting = {
                         message: err?.message,
@@ -153,8 +115,16 @@ export default function OperatorComponent(props) {
                     return;
                 }
 
-                props.onSubmitSearchPerformance(selectedProduct);
-                navigateParams({ replace: true })
+                let searchStartDate = startDate ? getStartDate(startDate) : null;
+                let searchEndDate = endDate ? getEndDate(endDate) : null;
+                let utcHourDifference = getTimeDiffWithUTC();
+
+                let body = {
+                    startDate: searchStartDate,
+                    endDate: searchEndDate,
+                    utcHourDifference,
+                }
+                props.onSubmitSearchPerformance(body);
             }
         }
     }
@@ -173,14 +143,6 @@ export default function OperatorComponent(props) {
                     onActionSearchMonthRange={__handle.action.searchMonthRange}
                 />
 
-                <SearchFieldView
-                    products={props.products}
-                    selectedProduct={selectedProduct}
-
-                    onActionOpenProductListModal={__handle.action.openProductListModal}
-                    onActionRemoveOptionOne={__handle.action.removeOptionOne}
-                    onActionRemoveProduct={__handle.action.removeProduct}
-                />
                 <ButtonFieldView
                     onActionClearRoute={__handle.action.clearRoute}
                 />
@@ -202,16 +164,6 @@ export default function OperatorComponent(props) {
             <BackdropHookComponent
                 open={backdropOpen}
             />
-
-            {productListModalOpen &&
-                <ProductListModalComponent
-                    products={props.products}
-                    modalOpen={productListModalOpen}
-
-                    onActionSelectedProduct={__handle.action.selectProduct}
-                    onActionCloseModal={__handle.action.closeProductListModal}
-                />
-            }
         </Container>
     )
 }

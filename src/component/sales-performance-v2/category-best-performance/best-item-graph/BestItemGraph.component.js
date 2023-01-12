@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
-// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
-// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#FF7FAB', '#80A9E1', '#D678CD', '#FF9D83', '#B9B4EB', '#FFCA67', '#00C894', '#D5CABD', '#389091'];
 const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
 // 판매스토어별 총 매출액

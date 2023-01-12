@@ -6,9 +6,6 @@ import { GraphDataset } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import _ from "lodash";
 
-// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
-// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#FF7FAB', '#80A9E1', '#D678CD', '#FF9D83', '#B9B4EB', '#FFCA67', '#00C894', '#D5CABD', '#389091'];
-// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 const DEFAULT_GRAPH_BG_3COLOR = ['#ADA8C3', '#C0C5DC', '#596dd3'];
 
 const BEST_UNIT = 15;
@@ -23,7 +20,7 @@ export default function BestProductGraphComponent(props) {
     const [unitGraphOption, setUnitGraphOption] = useState(null);
 
     useEffect(() => {
-        if (!(props.productPerformance && props.productPerformance.length > 0)) {
+        if (!(props.performance && props.performance.length > 0)) {
             __handle.action.resetGraphData();
             return;
         }
@@ -31,7 +28,7 @@ export default function BestProductGraphComponent(props) {
         __handle.action.createPayAmountGraphData();
         __handle.action.createUnitDate();
         __handle.action.createGraphOption();
-    }, [props.productPerformance])
+    }, [props.performance])
 
     const __handle = {
         action: {
@@ -45,7 +42,7 @@ export default function BestProductGraphComponent(props) {
                 setUnitGraphOption(null);
             },
             createPayAmountGraphData: () => {
-                let bestSalesPayAmount = _.sortBy(props.productPerformance, 'salesPayAmount').reverse().slice(0, BEST_UNIT);
+                let bestSalesPayAmount = _.sortBy(props.performance, 'salesPayAmount').reverse().slice(0, BEST_UNIT);
                 let graphLabels = bestSalesPayAmount.map(r => r.productDefaultName);
 
                 let salesPayAmount = bestSalesPayAmount.map(r => r.salesPayAmount);
@@ -88,7 +85,7 @@ export default function BestProductGraphComponent(props) {
                 setTotalPayAmountGraphData(createdTotalGraph);
             },
             createUnitDate: () => {
-                let bestSalesUnit = _.sortBy(props.productPerformance, 'salesUnit').reverse().slice(0, BEST_UNIT);
+                let bestSalesUnit = _.sortBy(props.performance, 'salesUnit').reverse().slice(0, BEST_UNIT);
                 let graphLabels = bestSalesUnit.map(r => r.productDefaultName);
 
                 let salesUnit = bestSalesUnit.map(r => r.salesUnit);

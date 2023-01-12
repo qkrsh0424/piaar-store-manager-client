@@ -4,7 +4,7 @@ import { GraphSummaryFieldWrapper } from "../PayAmountGraph.styled";
 export default function GraphSummaryFieldView (props) {
     return (
         <GraphSummaryFieldWrapper>
-            <div className='title'>[기간별 총 매출액]</div>
+            <div className='title'>[총 매출액]</div>
             <div className='summary-box'>
                 <ul>
                     {props.summaryData?.map((r, idx) => {

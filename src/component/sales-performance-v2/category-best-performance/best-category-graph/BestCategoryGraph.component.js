@@ -5,8 +5,6 @@ import { Container } from "./BestCategoryGraph.styled";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 
-// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
-// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#D678CD', '#FF7FAB', '#80A9E1', '#FF9D83', '#B9B4EB', '#FFCA67', '#00C894', '#D5CABD', '#389091'];
 const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
 export default function BestCategoryGraphComponent(props) {

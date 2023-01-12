@@ -4,8 +4,6 @@ import _ from 'lodash';
 import OperatorComponent from './operator/Operator.component';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { getEndDate, getStartDate, getTimeDiffWithUTC } from '../../../utils/dateFormatUtils';
-import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
 import ChannelSelectorComponent from './channel-selector/ChannelSelector.component';
 import PayAmountGraphComponent from './pay-amount-graph/PayAmountGraph.component';
@@ -43,11 +41,6 @@ const SalesChannelPerformanceComponent = (props) => {
     const [checkedSwitch, setCheckedSwitch] = useState(false);
 
     const {
-        query,
-        location
-    } = useRouterHook();
-
-    const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
@@ -55,33 +48,9 @@ const SalesChannelPerformanceComponent = (props) => {
 
     const {
         performance,
-        reqSearchChannelPerformance
+        reqSearchChannelPerformance,
+        onActionResetPerformance
     } = useChannelSalesPerformanceHook();
-
-    useEffect(() => {
-        async function fetchInit() {
-            let startDate = query.startDate ? getStartDate(query.startDate) : null;
-            let endDate = query.endDate ? getEndDate(query.endDate) : null;
-            let utcHourDifference = getTimeDiffWithUTC();
-
-            let body = {
-                startDate,
-                endDate,
-                utcHourDifference
-            }
-
-            if(!(startDate && endDate)) {
-                __handle.action.clearChannel();
-                return;
-            }
-
-            onActionOpenBackdrop();
-            await reqSearchChannelPerformance(body);
-            onActionCloseBackdrop();
-        }
-
-        fetchInit();
-    }, [location])
 
     useEffect(() => {
         if(!performance) {
@@ -93,6 +62,10 @@ const SalesChannelPerformanceComponent = (props) => {
 
     const __handle = {
         action: {
+            resetPerformance: () => {
+                onActionResetPerformance();
+                __handle.action.clearChannel();
+            },
             initChannel: () => {
                 let channel = new Set([]);
                 performance.forEach(r => r.performances?.forEach(r2 => {
@@ -132,19 +105,28 @@ const SalesChannelPerformanceComponent = (props) => {
                 setSalesChannel(null);
                 setSelectedChannel(null);
             }
+        },
+        submit: {
+            searchPerformance: async (body) => {
+                onActionOpenBackdrop();
+                await reqSearchChannelPerformance(body);
+                onActionCloseBackdrop();
+            }
         }
     }
 
     return (
         <>
             <Container navbarOpen={props.navbarOpen}>
-                <PageTitleFieldView title={'판매스토어 성과'} />
+                <PageTitleFieldView title={'판매스토어 - 총 매출액 & 판매 건'} />
 
-                <OperatorComponent />
+                <OperatorComponent
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
+                    onActionResetPerformance={__handle.action.resetPerformance}
+                />
 
                 <ChannelSelectorComponent
                     salesChannel={salesChannel}
-                    selectedChannel={selectedChannel}
                     onActionIsCheckedOne={__handle.action.isCheckedOne}
                     onActionCheckOne={__handle.action.checkOne}
                 />

@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import _ from 'lodash';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { getEndDate, getStartDate, getTimeDiffWithUTC } from '../../../utils/dateFormatUtils';
-import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
 import ChannelSelectorComponent from './channel-selector/ChannelSelector.component';
 import GraphOperatorComponent from './graph-operator/GraphOperator.component';
@@ -43,11 +41,6 @@ const SalesChannelProductPerformanceComponent = (props) => {
     const [checkedSwitch, setCheckedSwitch] = useState(false);
 
     const {
-        query,
-        location
-    } = useRouterHook();
-
-    const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
@@ -55,7 +48,8 @@ const SalesChannelProductPerformanceComponent = (props) => {
 
     const {
         performance,
-        reqSearchChannelPerformance
+        reqSearchChannelPerformance,
+        onActionResetPerformance
     } = useChannelSalesPerformanceHook();
 
     useEffect(() => {
@@ -68,6 +62,10 @@ const SalesChannelProductPerformanceComponent = (props) => {
 
     const __handle = {
         action: {
+            resetPerformance: () => {
+                onActionResetPerformance();
+                __handle.action.clearChannel();
+            },
             initChannel: () => {
                 let channel = new Set([]);
                 performance.forEach(r => r.performances?.forEach(r2 => {
@@ -107,23 +105,7 @@ const SalesChannelProductPerformanceComponent = (props) => {
             }
         },
         submit: {
-            searchPerformance: async (optionCodes) => {
-                let startDate = query.startDate ? getStartDate(query.startDate) : null;
-                let endDate = query.endDate ? getEndDate(query.endDate) : null;
-                let utcHourDifference = getTimeDiffWithUTC();
-
-                let body = {
-                    startDate,
-                    endDate,
-                    utcHourDifference,
-                    optionCodes
-                }
-
-                if (!(startDate && endDate)) {
-                    __handle.action.clearChannel();
-                    return;
-                }
-
+            searchPerformance: async (body) => {
                 onActionOpenBackdrop();
                 await reqSearchChannelPerformance(body);
                 onActionCloseBackdrop();
@@ -134,11 +116,12 @@ const SalesChannelProductPerformanceComponent = (props) => {
     return (
         <>
             <Container navbarOpen={props.navbarOpen}>
-                <PageTitleFieldView title={'판매스토어 성과'} />
+                <PageTitleFieldView title={'판매스토어 - 상품별 매출'} />
 
                 <OperatorComponent
                     onActionClearChannel={__handle.action.clearChannel}
                     onSubmitSearchPerformance={__handle.submit.searchPerformance}
+                    onActionResetPerformance={__handle.action.resetPerformance}
                 />
 
                 <ChannelSelectorComponent

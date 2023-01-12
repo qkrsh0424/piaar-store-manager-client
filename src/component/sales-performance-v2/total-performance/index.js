@@ -7,11 +7,9 @@ import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/Reg
 import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
 import SummaryTableComponent from './summary-table/SummaryTable.component';
 import GraphOperatorComponent from './graph-operator/GraphOperator.component';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useTotalSalesPerformanceHook from './hooks/useTotalSalesPerformanceHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
-import { getEndDate, getStartDate, getTimeDiffWithUTC } from '../../../utils/dateFormatUtils';
-import useRouterHook from '../../../hooks/router/useRouterHook';
 
 const Container = styled.div`
     height: 100%;
@@ -39,14 +37,6 @@ const TotalSalesPerformanceComponent = (props) => {
     const [checkedSwitch, setCheckedSwitch] = useState(false);
 
     const {
-        query
-    } = useRouterHook();
-
-    const {
-        location
-    } = useRouterHook();
-
-    const {
         performance,
         reqSearchTotalPerformance,
         onActionResetPerformance
@@ -58,33 +48,11 @@ const TotalSalesPerformanceComponent = (props) => {
         onActionClose: onActionCloseBackdrop
     } = useBackdropHook();
 
-    useEffect(() => {
-        async function fetchInit() {
-            let startDate = query.startDate ? getStartDate(query.startDate) : null;
-            let endDate = query.endDate ? getEndDate(query.endDate) : null;
-            let utcHourDifference = getTimeDiffWithUTC();
-
-            let body = {
-                startDate,
-                endDate,
-                utcHourDifference
-            }
-
-            if(!(startDate && endDate)) {
-                onActionResetPerformance();
-                return;
-            }
-
-            onActionOpenBackdrop();
-            await reqSearchTotalPerformance(body);
-            onActionCloseBackdrop();
-        }
-
-        fetchInit();
-    }, [location])
-
     const __handle = {
         action: {
+            resetPerformance: () => {
+                onActionResetPerformance();
+            },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;
                 setCheckedSwitch(!checkedValue);
@@ -93,15 +61,25 @@ const TotalSalesPerformanceComponent = (props) => {
                 let value = e.target.value;
                 setSearchDimension(value);
             }
+        },
+        submit: {
+            searchPerformance: async (body) => {
+                onActionOpenBackdrop();
+                await reqSearchTotalPerformance(body);
+                onActionCloseBackdrop();
+            }
         }
     }
 
     return (
         <>
             <Container navbarOpen={props.navbarOpen}>
-                <PageTitleFieldView title={'총 매출액 & 판매건'} />
+                <PageTitleFieldView title={'전체 - 총 매출액 & 판매건'} />
 
-                <OperatorComponent />
+                <OperatorComponent
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
+                    onActionResetPerformance={__handle.action.resetPerformance}
+                />
 
                 {/* 주문데이터 표시 및 날짜검색 설정 */}
                 <GraphOperatorComponent

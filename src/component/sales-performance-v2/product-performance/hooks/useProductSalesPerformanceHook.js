@@ -22,8 +22,13 @@ export default function useProductSalesPerformanceHook(props) {
             })
     }
 
+    const onActionResetPerformance = () => {
+        setPerformance(null);
+    }
+
     return {
         performance,
-        reqSearchProductPerformance
+        reqSearchProductPerformance,
+        onActionResetPerformance
     }
 }

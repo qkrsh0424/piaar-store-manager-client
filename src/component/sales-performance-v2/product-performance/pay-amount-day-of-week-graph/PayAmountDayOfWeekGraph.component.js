@@ -6,8 +6,6 @@ import { Container } from "./PayAmountDayOfWeekGraph.styled";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 
-// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1', '#D678CD', '#FF7FAB', '#FF9D83', '#FFCA67', '#B9B4EB', '#00C894', '#D5CABD', '#389091', '#95C477'];
-// const SALES_GRAPH_BG_COLOR = ['#6f98c9', '#ffd5fb', '#ffca9f', '#b2ffa6', '#dcf2ff', '#f9f871', '#e8dbff', '#c4d7a1', '#389091', '#95C477'];
 const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
 export default function PayAmountDayOfWeekGraphComponent(props) {

@@ -54,33 +54,34 @@ const CategoryBestPerformanceComponent = (props) => {
 
     const {
         performance,
-        reqSearchCategoryPerformance
+        reqSearchCategoryPerformance,
+        onActionResetPerformance
     } = useCategorySalesPerformanceHook();
 
-    useEffect(() => {
-        async function fetchInit() {
-            let startDate = query.startDate ? getStartDate(query.startDate) : null;
-            let endDate = query.endDate ? getEndDate(query.endDate) : null;
-            let utcHourDifference = getTimeDiffWithUTC();
+    // useEffect(() => {
+    //     async function fetchInit() {
+    //         let startDate = query.startDate ? getStartDate(query.startDate) : null;
+    //         let endDate = query.endDate ? getEndDate(query.endDate) : null;
+    //         let utcHourDifference = getTimeDiffWithUTC();
 
-            let body = {
-                startDate,
-                endDate,
-                utcHourDifference
-            }
+    //         let body = {
+    //             startDate,
+    //             endDate,
+    //             utcHourDifference
+    //         }
 
-            if(!(startDate && endDate)) {
-                __handle.action.clearCategory();
-                return;
-            }
+    //         if(!(startDate && endDate)) {
+    //             __handle.action.clearCategory();
+    //             return;
+    //         }
 
-            onActionOpenBackdrop();
-            await reqSearchCategoryPerformance(body);
-            onActionCloseBackdrop();
-        }
+    //         onActionOpenBackdrop();
+    //         await reqSearchCategoryPerformance(body);
+    //         onActionCloseBackdrop();
+    //     }
 
-        fetchInit();
-    }, [location])
+    //     fetchInit();
+    // }, [location])
 
     useEffect(() => {
         if(!performance) {
@@ -92,6 +93,10 @@ const CategoryBestPerformanceComponent = (props) => {
 
     const __handle = {
         action: {
+            resetPerformance: () => {
+                onActionResetPerformance();
+                __handle.action.clearCategory();
+            },
             initCategory: () => {
                 let category = new Set([]);
                 let bestPayAmountItem = [];
@@ -138,15 +143,25 @@ const CategoryBestPerformanceComponent = (props) => {
             clearCategory: () => {
                 setCategory(null);
             }
+        },
+        submit: {
+            searchPerformance: async (body) => {
+                onActionOpenBackdrop();
+                await reqSearchCategoryPerformance(body);
+                onActionCloseBackdrop();
+            }
         }
     }
 
     return (
         <>
             <Container navbarOpen={props.navbarOpen}>
-                <PageTitleFieldView title={'카테고리 성과'} />
+                <PageTitleFieldView title={'카테고리 - BEST 상품'} />
 
-                <OperatorComponent />
+                <OperatorComponent
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
+                    onActionResetPerformance={__handle.action.resetPerformance}
+                />
 
                 <GraphOperatorComponent
                     checkedSwitch={checkedSwitch}

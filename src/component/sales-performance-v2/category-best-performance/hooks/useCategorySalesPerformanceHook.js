@@ -22,8 +22,13 @@ export default function useCategorySalesPerformanceHook() {
             })
     }
 
+    const onActionResetPerformance = () => {
+        setPerformance(null);
+    }
+
     return {
         performance,
-        reqSearchCategoryPerformance
+        reqSearchCategoryPerformance,
+        onActionResetPerformance
     }
 }
