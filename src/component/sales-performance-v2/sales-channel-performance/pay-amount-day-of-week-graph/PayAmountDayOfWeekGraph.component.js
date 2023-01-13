@@ -161,7 +161,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     maintainAspectRatio: false,
                     interaction: {
                         mode: 'index',
-                        intersect: true,
+                        intersect: false,
                     },
                     scales: {
                         y: {

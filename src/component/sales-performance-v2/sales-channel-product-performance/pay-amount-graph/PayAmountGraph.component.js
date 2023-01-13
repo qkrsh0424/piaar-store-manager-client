@@ -211,7 +211,7 @@ export default function PayAmountGraphComponent(props) {
                     maintainAspectRatio: false,
                     interaction: {
                         mode: 'index',
-                        intersect: true,
+                        intersect: false,
                     },
                     scales: {
                         y: {

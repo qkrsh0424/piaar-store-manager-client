@@ -182,6 +182,11 @@ function dateToYYYYMM(date) {
     return moment(d).format("YYYY-MM");
 }
 
+function dateToYYYY(date) {
+    var d = new Date(date);
+    return moment(d).format("YYYY");
+}
+
 // function getWeekNumber(date) {
 //     let d = new Date(date);
 //     var currentDate = d.getDate()-1;
@@ -193,11 +198,11 @@ function dateToYYYYMM(date) {
 
 function getWeekNumber(date) {
     let d = new Date(date);
-    let d2 = new Date(date);
     let currentDate = new Date(d.setDate(d.getDate()-1));
-    let startOfMonth = new Date(d2.setDate(1));
+    // let startOfMonth = new Date(d2.setDate(1));
     
-    var weekNum = moment(currentDate).week() - moment(startOfMonth).week() + 1;
+    // var weekNum = moment(currentDate).week() - moment(startOfMonth).week() + 1;
+    var weekNum = moment(currentDate).week();
     return weekNum;
 }
 
@@ -260,6 +265,7 @@ export {
     diffTimeToHHmmss,
     getStartDate,
     getEndDate,
+    dateToYYYY,
     dateToYYYYMMDD,
     dateToYYYYMMDDhhmmss,
     dateToYYYYMMDDhhmmssWithInvalid,

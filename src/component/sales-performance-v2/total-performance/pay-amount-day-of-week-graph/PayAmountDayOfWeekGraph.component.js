@@ -2,8 +2,7 @@ import { Container } from "./PayAmountDayOfWeekGraph.styled";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import useRouterHook from "../../../../hooks/router/useRouterHook";
-import { dateToYYYYMM, getDayName, getWeekName, getWeekNumber } from "../../../../utils/dateFormatUtils";
+import { getDayName, getWeekName, getWeekNumber } from "../../../../utils/dateFormatUtils";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
@@ -89,7 +88,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
             createWeeklyGraphData: () => {
                 // 주차별 판매 매출액 그래프
                 let week = new Set([]);
-                props.performance.forEach(r => week.add(dateToYYYYMM(r.datetime) + '-' + getWeekNumber(r.datetime)));
+                props.performance.forEach(r => week.add(getWeekNumber(r.datetime)));
 
                 let payAmountWeeklyData = [];
                 let weekValue = {};
@@ -108,7 +107,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 });
             
                 props.performance.forEach(r => {
-                    let compareWeek = dateToYYYYMM(r.datetime) + '-' + getWeekNumber(r.datetime);
+                    let compareWeek = getWeekNumber(r.datetime);
                     let compareDay = getDayName(r.datetime);
                     
                     payAmountWeeklyData = payAmountWeeklyData.map(r2 => {
@@ -160,7 +159,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     maintainAspectRatio: false,
                     interaction: {
                         mode: 'index',
-                        intersect: true,
+                        intersect: false,
                     },
                     scales: {
                         y: {

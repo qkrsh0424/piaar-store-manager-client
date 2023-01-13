@@ -171,8 +171,8 @@ export default function BestOptionGraphComponent(props) {
                     responsive: true,
                     maintainAspectRatio: false,
                     interaction: {
-                        mode: 'index',
-                        intersect: true,
+                        mode: 'y',
+                        intersect: false,
                     },
                     indexAxis: 'y',
                     scales: {

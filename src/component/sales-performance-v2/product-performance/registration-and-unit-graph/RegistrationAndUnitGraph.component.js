@@ -697,7 +697,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     maintainAspectRatio: false,
                     interaction: {
                         mode: 'index',
-                        intersect: true,
+                        intersect: false,
                     }
                 }
 
