@@ -25,7 +25,7 @@ const Container = styled.div`
         color: #aaa;
     }
 
-    .link-box .button-active{
+    .link-box .button-active {
         color: #c6c6f7 !important;
         font-weight: 600 !important;
     }
@@ -90,10 +90,6 @@ const NavbarBox = styled.div`
     }
 `;
 
-const TODAY = dateToYYYYMMDD(new Date());
-const PREV_2WEEKS_DATE = dateToYYYYMMDD(setSubtractedDate(TODAY, 0, 0, -13));
-// const START_DAY_OF_MONTH = dateToYYYYMMDD(getStartDateOfMonth(TODAY));
-
 const thisRouters = [
     {
         title: '판매성과 요약',
@@ -149,6 +145,15 @@ const thisRouters = [
             {
                 name: 'BEST 상품 & 옵션',
                 pathname: '/sales-performance/product/best'
+            }
+        ]
+    },
+    {
+        title: '성과 검색',
+        page: [
+            {
+                name: '검색',
+                pathname: '/sales-performance/search'
             }
         ]
     }

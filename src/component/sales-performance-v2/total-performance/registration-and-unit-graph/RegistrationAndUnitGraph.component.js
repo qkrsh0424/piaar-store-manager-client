@@ -59,7 +59,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 for(let i = 0; i < props.performance.length; i++) {
                     let datetime = dateToYYMMDDAndDayName(props.performance[i].datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = dateToYYYYMM(props.performance[i].datetime) + '-' + getWeekNumber(props.performance[i].datetime) + '주차';
+                        datetime = getWeekNumber(props.performance[i].datetime) + '주차';
                     }else if(props.searchDimension === 'month') {
                         datetime = dateToYYYYMM(props.performance[i].datetime);
                     }

@@ -3,8 +3,8 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import { dateToYYYYMM, getWeekNumber } from "../../../../utils/dateFormatUtils";
-import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
+import { dateToYYYYMM, dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getEndDateByWeekNumber, getSearchEndDateByMonth, getSearchEndDateByWeekNumber, getSearchStartDateByMonth, getSearchStartDateByWeekNumber, getStartDate, getStartDateAndEndDateByWeekNumber, getStartDateByWeekNumber, getWeekNumber } from "../../../../utils/dateFormatUtils";
+import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
 // 그래프 기본 3가지 색상 : [주문, 판매, 평균]
@@ -19,6 +19,8 @@ export default function PayAmountGraphComponent(props) {
     
     const [totalPayAmountGraphOption, setTotalPayAmountGraphOption] = useState(null);
 
+    const [graphLabels, setGraphLabels] = useState(null);
+
     useEffect(() => {
         if(!props.searchDimension) {
             return;
@@ -30,8 +32,15 @@ export default function PayAmountGraphComponent(props) {
         }
 
         __handle.action.createGraphData();
-        __handle.action.createGraphOption();
     }, [props.performance, props.searchDimension])
+
+    useEffect(() => {
+        if(!(totalSummaryData && salesSummaryData)) {
+            return;
+        }
+
+        __handle.action.createGraphOption();
+    }, [totalSummaryData, salesSummaryData])
 
     const __handle = {
         action: {
@@ -46,13 +55,20 @@ export default function PayAmountGraphComponent(props) {
                 let salesPayAmountData = [];
                 let orderPayAmountData = [];
                 let graphLabels = new Set([]);
+                let minimumDate = props.performance[0].datetime;
+                let maximumDate = props.performance[props.performance.length - 1].datetime;
 
                 for(let i = 0; i < props.performance.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(props.performance[i].datetime);
+                    let datetime = dateToYYYYMMDDAndDayName(props.performance[i].datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = dateToYYYYMM(props.performance[i].datetime) + '-' + getWeekNumber(props.performance[i].datetime) + '주차';
+                        datetime = getWeekNumber(props.performance[i].datetime) +"주차 (" +
+                        getSearchStartDateByWeekNumber(props.performance[i].datetime, minimumDate) + "~" +
+                        getSearchEndDateByWeekNumber(props.performance[i].datetime, maximumDate) + ")";
                     }else if(props.searchDimension === 'month') {
-                        datetime = dateToYYYYMM(props.performance[i].datetime);
+                        datetime = dateToYYYYMM(props.performance[i].datetime) + " (" +
+                        getSearchStartDateByMonth(props.performance[i].datetime, minimumDate) + "~" +
+                        getSearchEndDateByMonth(props.performance[i].datetime, maximumDate) + ")";
+                        console.log("-----")
                     }
 
                     if(graphLabels.has(datetime)) {
@@ -128,6 +144,7 @@ export default function PayAmountGraphComponent(props) {
                 
                 setSalesSummaryData(salesData);
                 setTotalSummaryData(data);
+                setGraphLabels([...graphLabels]);
             },
             createGraphOption: () => {
                 let option = {
@@ -145,10 +162,30 @@ export default function PayAmountGraphComponent(props) {
                                 }
                             }
                         }
+                    },
+                    onClick: function (e, item) {
+                        __handle.action.setGraphClickOption(e, item);
+                    },
+                    onHover: (e, item) => {
+                        const target = e.native ? e.native.target : e.target;
+                        target.style.cursor = item[0] ? 'pointer' : 'default';
                     }
                 }
 
                 setTotalPayAmountGraphOption(option);
+            },
+            setGraphClickOption: (e, item) => {
+                if(item.length === 0) return;
+                var itemIdx = item[0].index;
+                var label = graphLabels[itemIdx];
+                var date = getDateFormatByGraphDateLabel(label, props.searchDimension);
+
+                let startDate = date.startDate;
+                let endDate = date.endDate;
+                let salesYn = props.checkedSwitch ? 'n' : 'y';
+
+                console.log(startDate);
+                console.log(endDate);
             }
         }
     }

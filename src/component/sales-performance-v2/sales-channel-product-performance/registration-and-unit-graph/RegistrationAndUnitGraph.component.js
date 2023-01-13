@@ -68,7 +68,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 for(let i = 0; i < props.registrationAndUnit.length; i++) {
                     let datetime = dateToYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime) + '-' + getWeekNumber(props.registrationAndUnit[i].datetime) + '주차';
+                        datetime = getWeekNumber(props.registrationAndUnit[i].datetime) + '주차';
                     }else if(props.searchDimension === 'month') {
                         datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime);
                     }
@@ -84,7 +84,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                         let data = props.registrationAndUnit[i];
                         let datetime = dateToYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
-                            datetime = dateToYYYYMM(data.datetime) + '-' + getWeekNumber(data.datetime) + '주차';
+                            datetime = getWeekNumber(data.datetime) + '주차';
                         } else if (props.searchDimension === 'month') {
                             datetime = dateToYYYYMM(data.datetime);
                         }
@@ -232,7 +232,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 for(let i = 0; i < props.registrationAndUnit.length; i++) {
                     let datetime = dateToYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime) + '-' + getWeekNumber(props.registrationAndUnit[i].datetime) + '주차';
+                        datetime = getWeekNumber(props.registrationAndUnit[i].datetime) + '주차';
                     }else if(props.searchDimension === 'month') {
                         datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime);
                     }
@@ -248,7 +248,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                         let data = props.registrationAndUnit[i];
                         let datetime = dateToYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
-                            datetime = dateToYYYYMM(data.datetime) + '-' + getWeekNumber(data.datetime) + '주차';
+                            datetime = getWeekNumber(data.datetime) + '주차';
                         } else if (props.searchDimension === 'month') {
                             datetime = dateToYYYYMM(data.datetime);
                         }

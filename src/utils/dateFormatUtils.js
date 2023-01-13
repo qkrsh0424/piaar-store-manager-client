@@ -206,6 +206,81 @@ function getWeekNumber(date) {
     return weekNum;
 }
 
+function getStartDateAndEndDateByWeekNumber(date) {
+    let d = new Date(date);
+    let currentDate = new Date(d.setDate(d.getDate()-1));
+
+    let startDate = moment(currentDate).startOf('week').toDate();
+    let endDate = moment(currentDate).endOf('week').toDate();
+
+    startDate = new Date(startDate.setDate(startDate.getDate() + 1));
+    endDate = new Date(endDate.setDate(endDate.getDate() + 1));
+    startDate = moment(startDate).format("YYYY.MM.DD");
+    endDate = moment(endDate).format("YYYY.MM.DD");
+
+    return "(" + startDate + "~" + endDate + ")";
+}
+
+function getSearchStartDateByWeekNumber(date, minDate) {
+    let d = new Date(date);
+    let currentDate = new Date(d.setDate(d.getDate()-1));
+    let minD = new Date(minDate);
+    let minimumDate = new Date(minD.setDate(minD.getDate()-1));
+
+    let startDate = moment(currentDate).startOf('week').toDate();
+    if(startDate < minimumDate) {
+        startDate = minimumDate;
+    }
+
+    startDate = new Date(startDate.setDate(startDate.getDate() + 1));
+    startDate = moment(startDate).format("YYYY.MM.DD");
+
+    return startDate;
+}
+
+function getSearchEndDateByWeekNumber(date, maxDate) {
+    let d = new Date(date);
+    let currentDate = new Date(d.setDate(d.getDate()-1));
+    let maxD = new Date(maxDate);
+    let maximumDate = new Date(maxD.setDate(maxD.getDate()-1));
+
+    let endDate = moment(currentDate).endOf('week').toDate();
+    if(endDate > maximumDate) {
+        endDate = maximumDate;
+    }
+
+    endDate = new Date(endDate.setDate(endDate.getDate() + 1));
+    endDate = moment(endDate).format("YYYY.MM.DD");
+
+    return endDate;
+}
+
+function getSearchStartDateByMonth(date, minDate) {
+    let currentDate = new Date(date);
+    let minimumDate = new Date(minDate);
+
+    let startDate = moment(currentDate).startOf('month').toDate();
+    if(startDate < minimumDate) {
+        startDate = minimumDate;
+    }
+
+    startDate = moment(startDate).format("YYYY.MM.DD");
+    return startDate;
+}
+
+function getSearchEndDateByMonth(date, maxDate) {
+    let currentDate = new Date(date);
+    let maximumDate = new Date(maxDate);
+
+    let endDate = moment(currentDate).endOf('month').toDate();
+    if(endDate > maximumDate) {
+        endDate = maximumDate;
+    }
+
+    endDate = moment(endDate).format("YYYY.MM.DD");
+    return endDate;
+}
+
 function getStartDateByWeekNumber(date) {
     var y = date.slice(0, 4);
     var m = date.slice(5, 7)-1;
@@ -261,6 +336,55 @@ function getTimeDiffWithUTC() {
     return hourDiff * -1;
 }
 
+// YY.MM.DD -> date format
+function getDateFormatByGraphDateLabel(label, dimension) {
+    let startDate = new Date();
+    let endDate = new Date();
+
+    if(dimension === 'date') {
+        var year = label.slice(0, 4);
+        var month = label.slice(5, 7);
+        var date = label.slice(8, 10);
+    
+        var d = new Date();
+        d.setFullYear(year);
+        d.setMonth(month - 1);
+        d.setDate(date);
+
+        startDate = d;
+        endDate = d;
+    } else if (dimension === 'week') {
+        var startDateStartIdx = label.indexOf("(");
+        var startDateEndIdx = label.indexOf("~");
+        var endDateEndIdx = label.indexOf(")");
+        var date1 = label.slice(startDateStartIdx+1, startDateEndIdx);
+        var date2 = label.slice(startDateEndIdx+1, endDateEndIdx);
+
+        startDate = new Date(date1);
+        endDate = new Date(date2);
+    } else if (dimension === 'month') {
+        startDate = moment(label).startOf('month').toDate();
+        endDate = moment(label).endOf('month').toDate();
+    }
+
+    startDate = getStartDate(startDate);
+    endDate = getEndDate(endDate);
+
+    return {
+        startDate,
+        endDate
+    };
+}
+
+function dateToYYMMDDAndDayName(date) {
+    return dateToYYMMDD(date) + ' (' + getDayName(date) + ')';
+}
+
+function dateToYYYYMMDDAndDayName(date) {
+    return dateToYYYYMMDD(date) + ' (' + getDayName(date) + ')';
+}
+
+
 export {
     diffTimeToHHmmss,
     getStartDate,
@@ -290,5 +414,13 @@ export {
     getDateOfLastSunDay,
     isSearchablePeriod,
     getTimeDiffWithUTC,
-    setSubtractedDate
+    setSubtractedDate,
+    getDateFormatByGraphDateLabel,
+    getStartDateAndEndDateByWeekNumber,
+    dateToYYMMDDAndDayName,
+    dateToYYYYMMDDAndDayName,
+    getSearchStartDateByWeekNumber,
+    getSearchEndDateByWeekNumber,
+    getSearchStartDateByMonth,
+    getSearchEndDateByMonth
 }

@@ -100,7 +100,7 @@ export default function PayAmountGraphComponent(props) {
                 for (let i = 0; i < payAmountData.length; i++) {
                     let datetime = dateToYYMMDDAndDayName(payAmountData[i].datetime);
                     if (props.searchDimension === 'week') {
-                        datetime = dateToYYYYMM(payAmountData[i].datetime) + '-' + getWeekNumber(payAmountData[i].datetime) + '주차';
+                        datetime = getWeekNumber(payAmountData[i].datetime) + '주차';
                     } else if (props.searchDimension === 'month') {
                         datetime = dateToYYYYMM(payAmountData[i].datetime);
                     }
@@ -116,7 +116,7 @@ export default function PayAmountGraphComponent(props) {
                         let data = payAmountData[i];
                         let datetime = dateToYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
-                            datetime = dateToYYYYMM(data.datetime) + '-' + getWeekNumber(data.datetime) + '주차';
+                            datetime = getWeekNumber(data.datetime) + '주차';
                         } else if (props.searchDimension === 'month') {
                             datetime = dateToYYYYMM(data.datetime);
                         }
@@ -234,7 +234,7 @@ export default function PayAmountGraphComponent(props) {
                 for (let i = 0; i < props.payAmount.length; i++) {
                     let datetime = dateToYYMMDDAndDayName(props.payAmount[i].datetime);
                     if (props.searchDimension === 'week') {
-                        datetime = dateToYYYYMM(props.payAmount[i].datetime) + '-' + getWeekNumber(props.payAmount[i].datetime) + '주차';
+                        datetime = getWeekNumber(props.payAmount[i].datetime) + '주차';
                     } else if (props.searchDimension === 'month') {
                         datetime = dateToYYYYMM(props.payAmount[i].datetime);
                     }
@@ -250,7 +250,7 @@ export default function PayAmountGraphComponent(props) {
                         let data = props.payAmount[i];
                         let datetime = dateToYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
-                            datetime = dateToYYYYMM(data.datetime) + '-' + getWeekNumber(data.datetime) + '주차';
+                            datetime = getWeekNumber(data.datetime) + '주차';
                         } else if (props.searchDimension === 'month') {
                             datetime = dateToYYYYMM(data.datetime);
                         }
