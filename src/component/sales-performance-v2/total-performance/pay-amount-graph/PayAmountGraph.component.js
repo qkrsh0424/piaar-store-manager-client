@@ -3,7 +3,7 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import { dateToYYYYMM, dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getEndDateByWeekNumber, getSearchEndDateByMonth, getSearchEndDateByWeekNumber, getSearchStartDateByMonth, getSearchStartDateByWeekNumber, getStartDate, getStartDateAndEndDateByWeekNumber, getStartDateByWeekNumber, getWeekNumber } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMM, dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getMonthAndSearchDateRange, getSearchEndDateByMonth, getSearchEndDateByWeekNumber, getSearchStartDateByMonth, getSearchStartDateByWeekNumber, getWeekNumber, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
 import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
@@ -61,14 +61,9 @@ export default function PayAmountGraphComponent(props) {
                 for(let i = 0; i < props.performance.length; i++) {
                     let datetime = dateToYYYYMMDDAndDayName(props.performance[i].datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = getWeekNumber(props.performance[i].datetime) +"주차 (" +
-                        getSearchStartDateByWeekNumber(props.performance[i].datetime, minimumDate) + "~" +
-                        getSearchEndDateByWeekNumber(props.performance[i].datetime, maximumDate) + ")";
+                        datetime = getWeekNumberAndSearchDateRange(props.performance[i].datetime, minimumDate, maximumDate);
                     }else if(props.searchDimension === 'month') {
-                        datetime = dateToYYYYMM(props.performance[i].datetime) + " (" +
-                        getSearchStartDateByMonth(props.performance[i].datetime, minimumDate) + "~" +
-                        getSearchEndDateByMonth(props.performance[i].datetime, maximumDate) + ")";
-                        console.log("-----")
+                        datetime = getMonthAndSearchDateRange(props.performance[i].datetime, minimumDate, maximumDate);
                     }
 
                     if(graphLabels.has(datetime)) {

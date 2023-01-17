@@ -3,8 +3,8 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import { dateToYYYYMM, getWeekNumber } from "../../../../utils/dateFormatUtils";
-import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
+import { dateToYYYYMMDDAndDayName, getMonthAndSearchDateRange, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
+import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
 const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
@@ -64,13 +64,15 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let salesAvgDatasets = [];
                 let graphLabels = new Set([]);
                 let channel = [...props.selectedChannel];
+                let minimumDate = props.registrationAndUnit[0].datetime;
+                let maximumDate = props.registrationAndUnit[props.registrationAndUnit.length - 1].datetime;
 
                 for(let i = 0; i < props.registrationAndUnit.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
+                    let datetime = dateToYYYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = getWeekNumber(props.registrationAndUnit[i].datetime) + '주차';
+                        datetime = getWeekNumberAndSearchDateRange(props.registrationAndUnit[i].datetime, minimumDate, maximumDate);
                     }else if(props.searchDimension === 'month') {
-                        datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime);
+                        datetime = getMonthAndSearchDateRange(props.registrationAndUnit[i].datetime, minimumDate, maximumDate);
                     }
                     graphLabels.add(datetime);
                 }
@@ -82,11 +84,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
                     for(let i = 0; i < props.registrationAndUnit.length; i++) {
                         let data = props.registrationAndUnit[i];
-                        let datetime = dateToYYMMDDAndDayName(data.datetime);
+                        let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
-                            datetime = getWeekNumber(data.datetime) + '주차';
+                            datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         } else if (props.searchDimension === 'month') {
-                            datetime = dateToYYYYMM(data.datetime);
+                            datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         }
                         
                         let performance = data.performances?.filter(r3 => r3.salesChannel === r)[0];
@@ -228,13 +230,15 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let salesAvgDatasets = [];
                 let graphLabels = new Set([]);
                 let channel = [...props.selectedChannel];
+                let minimumDate = props.registrationAndUnit[0].datetime;
+                let maximumDate = props.registrationAndUnit[props.registrationAndUnit.length - 1].datetime;
 
                 for(let i = 0; i < props.registrationAndUnit.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
+                    let datetime = dateToYYYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = getWeekNumber(props.registrationAndUnit[i].datetime) + '주차';
+                        datetime = getWeekNumberAndSearchDateRange(props.registrationAndUnit[i].datetime, minimumDate, maximumDate);
                     }else if(props.searchDimension === 'month') {
-                        datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime);
+                        datetime = getMonthAndSearchDateRange(props.registrationAndUnit[i].datetime, minimumDate, maximumDate);
                     }
                     graphLabels.add(datetime);
                 }
@@ -246,11 +250,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
                     for(let i = 0; i < props.registrationAndUnit.length; i++) {
                         let data = props.registrationAndUnit[i];
-                        let datetime = dateToYYMMDDAndDayName(data.datetime);
+                        let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
-                            datetime = getWeekNumber(data.datetime) + '주차';
+                            datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         } else if (props.searchDimension === 'month') {
-                            datetime = dateToYYYYMM(data.datetime);
+                            datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         }
                         
                         let performance = data.performances?.filter(r3 => r3.salesChannel === r)[0];

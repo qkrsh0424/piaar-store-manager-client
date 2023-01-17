@@ -3,8 +3,8 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import { dateToYYYYMM, getWeekNumber } from "../../../../utils/dateFormatUtils";
-import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
+import { dateToYYYYMMDDAndDayName, getMonthAndSearchDateRange, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
+import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
 const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
@@ -68,6 +68,8 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let orderDatasets = [];
                 let graphLabels = new Set([]);
                 let searchProduct = [...new Set(props.selectedOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
+                let minimumDate = props.registrationAndUnit[0].datetime;
+                let maximumDate = props.registrationAndUnit[props.registrationAndUnit.length - 1].datetime;
 
                 // 상품별 판매건 계산
                 let registrationAndUnitData = props.registrationAndUnit.map(r => {
@@ -106,11 +108,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 })
 
                 for(let i = 0; i < registrationAndUnitData.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(registrationAndUnitData[i].datetime);
+                    let datetime = dateToYYYYMMDDAndDayName(registrationAndUnitData[i].datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = getWeekNumber(registrationAndUnitData[i].datetime) + '주차';
+                        datetime = getWeekNumberAndSearchDateRange(registrationAndUnitData[i].datetime, minimumDate, maximumDate);
                     }else if(props.searchDimension === 'month') {
-                        datetime = dateToYYYYMM(registrationAndUnitData[i].datetime);
+                        datetime = getMonthAndSearchDateRange(registrationAndUnitData[i].datetime, minimumDate, maximumDate);
                     }
                     graphLabels.add(datetime);
                 }
@@ -122,11 +124,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
                     for(let i = 0; i < registrationAndUnitData.length; i++) {
                         let data = registrationAndUnitData[i];
-                        let datetime = dateToYYMMDDAndDayName(data.datetime);
+                        let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
-                            datetime = getWeekNumber(data.datetime) + '주차';
+                            datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         } else if (props.searchDimension === 'month') {
-                            datetime = dateToYYYYMM(data.datetime);
+                            datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         }
                         
                         let performance = data.performances?.filter(r3 => r3.productCode === r.code)[0];
@@ -243,13 +245,15 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let salesDatasets = [];
                 let orderDatasets = [];
                 let graphLabels = new Set([]);
+                let minimumDate = props.registrationAndUnit[0].datetime;
+                let maximumDate = props.registrationAndUnit[props.registrationAndUnit.length - 1].datetime;
 
                 for(let i = 0; i < props.registrationAndUnit.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
+                    let datetime = dateToYYYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = getWeekNumber(props.registrationAndUnit[i].datetime) + '주차';
+                        datetime = getWeekNumberAndSearchDateRange(props.registrationAndUnit[i].datetime, minimumDate, maximumDate);
                     }else if(props.searchDimension === 'month') {
-                        datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime);
+                        datetime = getMonthAndSearchDateRange(props.registrationAndUnit[i].datetime, minimumDate, maximumDate);
                     }
                     graphLabels.add(datetime);
                 }
@@ -261,11 +265,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
                     for(let i = 0; i < props.registrationAndUnit.length; i++) {
                         let data = props.registrationAndUnit[i];
-                        let datetime = dateToYYMMDDAndDayName(data.datetime);
+                        let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
-                            datetime = getWeekNumber(data.datetime) + '주차';
+                            datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         } else if (props.searchDimension === 'month') {
-                            datetime = dateToYYYYMM(data.datetime);
+                            datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         }
                         
                         let performance = data.performances?.filter(r3 => r3.optionCode === r.option.code)[0];
@@ -383,6 +387,8 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let orderDatasets = [];
                 let graphLabels = new Set([]);
                 let searchProduct = [...new Set(props.selectedOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
+                let minimumDate = props.registrationAndUnit[0].datetime;
+                let maximumDate = props.registrationAndUnit[props.registrationAndUnit.length - 1].datetime;
 
                 // 상품별 판매수량 계산
                 let registrationAndUnitData = props.registrationAndUnit.map(r => {
@@ -421,11 +427,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 })
 
                 for(let i = 0; i < registrationAndUnitData.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(registrationAndUnitData[i].datetime);
+                    let datetime = dateToYYYYMMDDAndDayName(registrationAndUnitData[i].datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = getWeekNumber(registrationAndUnitData[i].datetime) + '주차';
+                        datetime = getWeekNumberAndSearchDateRange(registrationAndUnitData[i].datetime, minimumDate, maximumDate);
                     }else if(props.searchDimension === 'month') {
-                        datetime = dateToYYYYMM(registrationAndUnitData[i].datetime);
+                        datetime = getMonthAndSearchDateRange(registrationAndUnitData[i].datetime, minimumDate, maximumDate);
                     }
                     graphLabels.add(datetime);
                 }
@@ -437,11 +443,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
                     for(let i = 0; i < registrationAndUnitData.length; i++) {
                         let data = registrationAndUnitData[i];
-                        let datetime = dateToYYMMDDAndDayName(data.datetime);
+                        let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
-                            datetime = getWeekNumber(data.datetime) + '주차';
+                            datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         } else if (props.searchDimension === 'month') {
-                            datetime = dateToYYYYMM(data.datetime);
+                            datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         }
                         
                         let performance = data.performances?.filter(r3 => r3.productCode === r.code)[0];
@@ -558,13 +564,15 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let salesDatasets = [];
                 let orderDatasets = [];
                 let graphLabels = new Set([]);
+                let minimumDate = props.registrationAndUnit[0].datetime;
+                let maximumDate = props.registrationAndUnit[props.registrationAndUnit.length - 1].datetime;
 
                 for(let i = 0; i < props.registrationAndUnit.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
+                    let datetime = dateToYYYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = getWeekNumber(props.registrationAndUnit[i].datetime) + '주차';
+                        datetime = getWeekNumberAndSearchDateRange(props.registrationAndUnit[i].datetime, minimumDate, maximumDate);
                     }else if(props.searchDimension === 'month') {
-                        datetime = dateToYYYYMM(props.registrationAndUnit[i].datetime);
+                        datetime = getMonthAndSearchDateRange(props.registrationAndUnit[i].datetime, minimumDate, maximumDate);
                     }
                     graphLabels.add(datetime);
                 }
@@ -576,11 +584,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
                     for(let i = 0; i < props.registrationAndUnit.length; i++) {
                         let data = props.registrationAndUnit[i];
-                        let datetime = dateToYYMMDDAndDayName(data.datetime);
+                        let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
-                            datetime = getWeekNumber(data.datetime) + '주차';
+                            datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         } else if (props.searchDimension === 'month') {
-                            datetime = dateToYYYYMM(data.datetime);
+                            datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         }
                         
                         let performance = data.performances?.filter(r3 => r3.optionCode === r.option.code)[0];

@@ -4,8 +4,8 @@ import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
-import { dateToYYYYMM, getWeekNumber } from "../../../../utils/dateFormatUtils";
-import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
+import { dateToYYYYMMDDAndDayName, getMonthAndSearchDateRange, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
+import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
 // 그래프 기본 2가지 색상 : [판매, 주문]
 const DEFAULT_GRAPH_BG_2COLOR = ['#4975A9', '#80A9E1'];
@@ -18,11 +18,6 @@ export default function RegistrationAndUnitGraphComponent(props) {
     const [totalSummaryData, setTotalSummaryData] = useState(null);
     
     const [totalGraphOption, setTotalGraphOption] = useState(null);
-
-    const {
-        location,
-        query
-    } = useRouterHook();
 
     useEffect(() => {
         if(!props.searchDimension) {
@@ -55,13 +50,15 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let orderRegistrationData = [];
                 let orderUnitData = [];
                 let graphLabels = new Set([]);
+                let minimumDate = props.performance[0].datetime;
+                let maximumDate = props.performance[props.performance.length - 1].datetime;
 
                 for(let i = 0; i < props.performance.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(props.performance[i].datetime);
+                    let datetime = dateToYYYYMMDDAndDayName(props.performance[i].datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = getWeekNumber(props.performance[i].datetime) + '주차';
+                        datetime = getWeekNumberAndSearchDateRange(props.performance[i].datetime, minimumDate, maximumDate);
                     }else if(props.searchDimension === 'month') {
-                        datetime = dateToYYYYMM(props.performance[i].datetime);
+                        datetime = getMonthAndSearchDateRange(props.performance[i].datetime, minimumDate, maximumDate);
                     }
 
                     if(graphLabels.has(datetime)) {

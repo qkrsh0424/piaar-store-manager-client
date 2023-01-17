@@ -3,8 +3,8 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import { dateToYYYYMM, getWeekNumber } from "../../../../utils/dateFormatUtils";
-import { dateToYYMMDDAndDayName, GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
+import { dateToYYYYMMDDAndDayName, getMonthAndSearchDateRange, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
+import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
 const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
@@ -60,6 +60,8 @@ export default function PayAmountGraphComponent(props) {
                 let orderDatasets = [];
                 let graphLabels = new Set([]);
                 let searchProduct = [...new Set(props.selectedOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
+                let minimumDate = props.payAmount[0].datetime;
+                let maximumDate = props.payAmount[props.payAmount.length - 1].datetime;
 
                 // 상품별 매출액 계산
                 let payAmountData = props.payAmount.map(r => {
@@ -98,11 +100,11 @@ export default function PayAmountGraphComponent(props) {
                 })
                 
                 for (let i = 0; i < payAmountData.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(payAmountData[i].datetime);
-                    if (props.searchDimension === 'week') {
-                        datetime = getWeekNumber(payAmountData[i].datetime) + '주차';
-                    } else if (props.searchDimension === 'month') {
-                        datetime = dateToYYYYMM(payAmountData[i].datetime);
+                    let datetime = dateToYYYYMMDDAndDayName(payAmountData[i].datetime);
+                    if(props.searchDimension === 'week') {
+                        datetime = getWeekNumberAndSearchDateRange(payAmountData[i].datetime, minimumDate, maximumDate);
+                    }else if(props.searchDimension === 'month') {
+                        datetime = getMonthAndSearchDateRange(payAmountData[i].datetime, minimumDate, maximumDate);
                     }
                     graphLabels.add(datetime);
                 }
@@ -114,11 +116,11 @@ export default function PayAmountGraphComponent(props) {
 
                     for (let i = 0; i < payAmountData.length; i++) {
                         let data = payAmountData[i];
-                        let datetime = dateToYYMMDDAndDayName(data.datetime);
+                        let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
-                            datetime = getWeekNumber(data.datetime) + '주차';
+                            datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         } else if (props.searchDimension === 'month') {
-                            datetime = dateToYYYYMM(data.datetime);
+                            datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         }
 
                         let performance = data.performances?.filter(r3 => r3.productCode === r.code)[0];
@@ -230,13 +232,15 @@ export default function PayAmountGraphComponent(props) {
                 let salesDatasets = [];
                 let orderDatasets = [];
                 let graphLabels = new Set([]);
+                let minimumDate = props.payAmount[0].datetime;
+                let maximumDate = props.payAmount[props.payAmount.length - 1].datetime;
 
                 for (let i = 0; i < props.payAmount.length; i++) {
-                    let datetime = dateToYYMMDDAndDayName(props.payAmount[i].datetime);
-                    if (props.searchDimension === 'week') {
-                        datetime = getWeekNumber(props.payAmount[i].datetime) + '주차';
-                    } else if (props.searchDimension === 'month') {
-                        datetime = dateToYYYYMM(props.payAmount[i].datetime);
+                    let datetime = dateToYYYYMMDDAndDayName(props.payAmount[i].datetime);
+                    if(props.searchDimension === 'week') {
+                        datetime = getWeekNumberAndSearchDateRange(props.payAmount[i].datetime, minimumDate, maximumDate);
+                    }else if(props.searchDimension === 'month') {
+                        datetime = getMonthAndSearchDateRange(props.payAmount[i].datetime, minimumDate, maximumDate);
                     }
                     graphLabels.add(datetime);
                 }
@@ -248,11 +252,11 @@ export default function PayAmountGraphComponent(props) {
 
                     for (let i = 0; i < props.payAmount.length; i++) {
                         let data = props.payAmount[i];
-                        let datetime = dateToYYMMDDAndDayName(data.datetime);
+                        let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
-                            datetime = getWeekNumber(data.datetime) + '주차';
+                            datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         } else if (props.searchDimension === 'month') {
-                            datetime = dateToYYYYMM(data.datetime);
+                            datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                         }
 
                         let performance = data.performances?.filter(r3 => r3.optionCode === r.option.code)[0];

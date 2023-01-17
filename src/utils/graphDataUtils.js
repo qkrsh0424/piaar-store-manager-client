@@ -61,19 +61,9 @@ function setAnalysisResultText(datasets) {
     })
 }
 
-function dateToYYMMDDAndDayName(date) {
-    return dateToYYMMDD(date) + ' (' + getDayName(date) + ')';
-}
-
-function dateToYYYYMMDDAndDayName(date) {
-    return dateToYYYYMMDD(date) + ' (' + getDayName(date) + ')';
-}
-
 export{
     GraphDataset,
     getDateToAnalysisRangeDateFormat,
     getAnalysisDateFormatToViewFormat,
-    setAnalysisResultText,
-    dateToYYMMDDAndDayName,
-    dateToYYYYMMDDAndDayName
+    setAnalysisResultText
 }

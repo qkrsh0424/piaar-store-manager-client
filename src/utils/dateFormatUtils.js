@@ -206,21 +206,7 @@ function getWeekNumber(date) {
     return weekNum;
 }
 
-function getStartDateAndEndDateByWeekNumber(date) {
-    let d = new Date(date);
-    let currentDate = new Date(d.setDate(d.getDate()-1));
-
-    let startDate = moment(currentDate).startOf('week').toDate();
-    let endDate = moment(currentDate).endOf('week').toDate();
-
-    startDate = new Date(startDate.setDate(startDate.getDate() + 1));
-    endDate = new Date(endDate.setDate(endDate.getDate() + 1));
-    startDate = moment(startDate).format("YYYY.MM.DD");
-    endDate = moment(endDate).format("YYYY.MM.DD");
-
-    return "(" + startDate + "~" + endDate + ")";
-}
-
+// date의 해당 week 첫번째 일을 구한다. 만약 첫번째 일이 minDate보다 작다면 minDate를 리턴
 function getSearchStartDateByWeekNumber(date, minDate) {
     let d = new Date(date);
     let currentDate = new Date(d.setDate(d.getDate()-1));
@@ -238,6 +224,7 @@ function getSearchStartDateByWeekNumber(date, minDate) {
     return startDate;
 }
 
+// date의 해당 week 마지막 일을 구한다. 만약 마지막 일이 maxDate보다 작다면 maxDate를 리턴
 function getSearchEndDateByWeekNumber(date, maxDate) {
     let d = new Date(date);
     let currentDate = new Date(d.setDate(d.getDate()-1));
@@ -255,6 +242,7 @@ function getSearchEndDateByWeekNumber(date, maxDate) {
     return endDate;
 }
 
+// date의 해당 month 첫번째 일을 구한다. 만약 첫번째 일이 minDate보다 작다면 minDate를 리턴
 function getSearchStartDateByMonth(date, minDate) {
     let currentDate = new Date(date);
     let minimumDate = new Date(minDate);
@@ -268,6 +256,7 @@ function getSearchStartDateByMonth(date, minDate) {
     return startDate;
 }
 
+// date의 해당 month 마지막 일을 구한다. 만약 마지막 일이 maxDate보다 크다면 maxDate를 리턴
 function getSearchEndDateByMonth(date, maxDate) {
     let currentDate = new Date(date);
     let maximumDate = new Date(maxDate);
@@ -376,14 +365,21 @@ function getDateFormatByGraphDateLabel(label, dimension) {
     };
 }
 
-function dateToYYMMDDAndDayName(date) {
-    return dateToYYMMDD(date) + ' (' + getDayName(date) + ')';
-}
-
 function dateToYYYYMMDDAndDayName(date) {
-    return dateToYYYYMMDD(date) + ' (' + getDayName(date) + ')';
+    return moment(date).format("YYYY.MM.DD") + ' (' + getDayName(date) + ')';
 }
 
+function getWeekNumberAndSearchDateRange(date, minDate, maxDate) {
+    return getWeekNumber(date) +"주차 (" +
+        getSearchStartDateByWeekNumber(date, minDate) + "~" +
+        getSearchEndDateByWeekNumber(date, maxDate) + ")";
+}
+
+function getMonthAndSearchDateRange(date, minDate, maxDate) {
+    return dateToYYYYMM(date) + " (" +
+        getSearchStartDateByMonth(date, minDate) + "~" +
+        getSearchEndDateByMonth(date, maxDate) + ")";
+}
 
 export {
     diffTimeToHHmmss,
@@ -416,11 +412,11 @@ export {
     getTimeDiffWithUTC,
     setSubtractedDate,
     getDateFormatByGraphDateLabel,
-    getStartDateAndEndDateByWeekNumber,
-    dateToYYMMDDAndDayName,
     dateToYYYYMMDDAndDayName,
     getSearchStartDateByWeekNumber,
     getSearchEndDateByWeekNumber,
     getSearchStartDateByMonth,
-    getSearchEndDateByMonth
+    getSearchEndDateByMonth,
+    getWeekNumberAndSearchDateRange,
+    getMonthAndSearchDateRange
 }
