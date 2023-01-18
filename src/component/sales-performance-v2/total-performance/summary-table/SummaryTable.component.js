@@ -3,13 +3,16 @@ import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import TableTitleFieldView from "./view/TableTitleField.view";
 import TableFieldView from "./view/TableField.view";
-
-// 그래프 기본 3가지 색상 : [주문, 판매, 평균]
-const DEFAULT_GRAPH_BG_2COLOR = ['#ADA8C3', '#C0C5DC', '#596dd3'];
+import { dateToYYYYMMDD, getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 
 export default function SummaryTableComponent(props) {
     const [summaryTableData, setSummaryTableData] = useState(null);
     const [totalSummarySumData, setTotalSummarySumData] = useState(null);
+
+    const {
+        query,
+        navigateUrl
+    } = useRouterHook();
 
     useEffect(() => {
         if(!(props.performance && props.performance.length > 0)) {
@@ -74,6 +77,58 @@ export default function SummaryTableComponent(props) {
                 }
 
                 setTotalSummarySumData(totalSumData);
+            },
+            searchOrderItem: (e, item) => {
+                e.stopPropagation();
+
+                let startDate = getStartDate(item.datetime);
+                let endDate = getEndDate(item.datetime);
+
+                let data = {
+                    pathname: '/sales-performance/search',
+                    state: {
+                        startDate,
+                        endDate
+                    }
+                }
+
+                navigateUrl(data);
+            },
+            searchSalesItem: (e, item) => {
+                e.stopPropagation();
+
+                let startDate = getStartDate(item.datetime);
+                let endDate = getEndDate(item.datetime);
+                let salesYn = 'y'
+
+                let data = {
+                    pathname: '/sales-performance/search',
+                    state: {
+                        startDate,
+                        endDate,
+                        salesYn
+                    }
+                }
+
+                navigateUrl(data);
+            },
+            searchUnsalesItem: (e, item) => {
+                e.stopPropagation();
+
+                let startDate = getStartDate(item.datetime);
+                let endDate = getEndDate(item.datetime);
+                let salesYn = 'n'
+
+                let data = {
+                    pathname: '/sales-performance/search',
+                    state: {
+                        startDate,
+                        endDate,
+                        salesYn
+                    }
+                }
+
+                navigateUrl(data);
             }
         }
     }
@@ -84,6 +139,11 @@ export default function SummaryTableComponent(props) {
             <TableFieldView
                 totalSummarySumData={totalSummarySumData}
                 summaryTableData={summaryTableData}
+
+                onActionSearchOrderItem={__handle.action.searchOrderItem}
+                onActionSearchSalesItem={__handle.action.searchSalesItem}
+                onActionSearchUnsalesItem={__handle.action.searchUnsalesItem}
+
             />
         </Container>
     )

@@ -35,7 +35,8 @@ export default function OperatorComponent(props) {
                 endDate: searchEndDate,
                 utcHourDifference,
             }
-            props.onSubmitSearchPerformance(body);
+
+            await props.onSubmitSearchPerformance(body);
         }
 
         fetchInit();
@@ -57,6 +58,7 @@ export default function OperatorComponent(props) {
             searchDateRange: (year, month, day) => {
                 let end = new Date();
                 let start = setSubtractedDate(end, year, month, day);
+
                 setStartDate(start);
                 setEndDate(end);
             },
@@ -65,7 +67,7 @@ export default function OperatorComponent(props) {
                 let searchMonth = new Date(date.setMonth(date.getMonth() + month));
                 let start = getStartDateOfMonth(searchMonth);
                 let end = month === 0 ? new Date() : getEndDateOfMonth(searchMonth);
-        
+    
                 setStartDate(start);
                 setEndDate(end);
             }
@@ -112,6 +114,7 @@ export default function OperatorComponent(props) {
                     endDate: searchEndDate,
                     utcHourDifference,
                 }
+
                 props.onSubmitSearchPerformance(body);
             }
         }

@@ -325,24 +325,16 @@ function getTimeDiffWithUTC() {
     return hourDiff * -1;
 }
 
-// YY.MM.DD -> date format
+// graph label -> date format
 function getDateFormatByGraphDateLabel(label, dimension) {
     let startDate = new Date();
     let endDate = new Date();
 
     if(dimension === 'date') {
-        var year = label.slice(0, 4);
-        var month = label.slice(5, 7);
-        var date = label.slice(8, 10);
-    
-        var d = new Date();
-        d.setFullYear(year);
-        d.setMonth(month - 1);
-        d.setDate(date);
-
-        startDate = d;
-        endDate = d;
-    } else if (dimension === 'week') {
+        let date = label.split(" ");
+        startDate = new Date(date[0]);
+        endDate = new Date(date[0]);
+    } else {
         var startDateStartIdx = label.indexOf("(");
         var startDateEndIdx = label.indexOf("~");
         var endDateEndIdx = label.indexOf(")");
@@ -351,10 +343,7 @@ function getDateFormatByGraphDateLabel(label, dimension) {
 
         startDate = new Date(date1);
         endDate = new Date(date2);
-    } else if (dimension === 'month') {
-        startDate = moment(label).startOf('month').toDate();
-        endDate = moment(label).endOf('month').toDate();
-    }
+    } 
 
     startDate = getStartDate(startDate);
     endDate = getEndDate(endDate);

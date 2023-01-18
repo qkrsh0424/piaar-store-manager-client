@@ -31,12 +31,12 @@ export default function TableFieldView (props) {
                                 <td>전체</td>
                                 <td>전체</td>
                                 <td>전체</td>
-                                <td>{toPriceUnitFormat(props.totalSummarySumData.orderPayAmount)}</td>
+                                <td className='highlight-td'>{toPriceUnitFormat(props.totalSummarySumData.orderPayAmount)}</td>
                                 <td className='highlight-td' style={{ color: 'var(--erp-main-color)' }}>{toPriceUnitFormat(props.totalSummarySumData.salesPayAmount)}</td>
                                 <td className='highlight-td'>{toPriceUnitFormat(props.totalSummarySumData.unsalesPayAmount)}</td>
                                 <td>{props.totalSummarySumData.salesRegistration} / {props.totalSummarySumData.orderRegistration} 건</td>
                                 <td>{props.totalSummarySumData.salesUnit} / {props.totalSummarySumData.orderUnit} 개</td>
-                                <td className='highlight-td'>{props.totalSummarySumData.unsalesUnit} 개</td>
+                                <td>{props.totalSummarySumData.unsalesUnit} 개</td>
                             </tr>
                         }
                         {props.summaryTableData?.map((r, idx) => {
@@ -45,12 +45,12 @@ export default function TableFieldView (props) {
                                     <td>{idx+1}</td>
                                     <td>{dateToYYYYMMDD(r.datetime)}</td>
                                     <td>{getDayName(r.datetime)}</td>
-                                    <td>{toPriceUnitFormat(r.orderPayAmount)}</td>
-                                    <td className='highlight-td' style={{ color: 'var(--erp-main-color)' }}>{toPriceUnitFormat(r.salesPayAmount)}</td>
-                                    <td className='highlight-td'>{toPriceUnitFormat(r.unsalesPayAmount)}</td>
+                                    <td className='highlight-td td-hover' onClick={(e) => props.onActionSearchOrderItem(e, r)}>{toPriceUnitFormat(r.orderPayAmount)}</td>
+                                    <td className='highlight-td td-hover' style={{ color: 'var(--erp-main-color)' }} onClick={(e) => props.onActionSearchSalesItem(e, r)}>{toPriceUnitFormat(r.salesPayAmount)}</td>
+                                    <td className='highlight-td td-hover' onClick={(e) => props.onActionSearchUnsalesItem(e, r)}>{toPriceUnitFormat(r.unsalesPayAmount)}</td>
                                     <td>{r.salesRegistration} / {r.orderRegistration} 건</td>
                                     <td>{r.salesUnit} / {r.orderUnit} 개</td>
-                                    <td className='highlight-td'>{r.unsalesUnit} 개</td>
+                                    <td>{r.unsalesUnit} 개</td>
                                 </tr>
                             )
                         })}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { getEndDate, getStartDate, getTimeDiffWithUTC, isSearchablePeriod } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getEndDate, getStartDate, getTimeDiffWithUTC, isSearchablePeriod } from "../../../../utils/dateFormatUtils";
 import { Container } from "./Operator.styled";
 import ButtonFieldView from "./view/ButtonField.view";
 import DateSelectorFieldView from "./view/DateSelectorField.view";
@@ -10,8 +11,15 @@ import SearchFieldView from "./view/SearchField.view";
 const SEARCHABLE_PERIOD = 92;
 
 export default function OperatorComponent(props) {
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [dayIndex, setDayIndex] = useState(null);
+    const [salesYn, setSalesYn] = useState(null);
+
+    const {
+        query,
+        navigateParams
+    } = useRouterHook();
 
     const {
         open: snackbarOpen,
@@ -22,21 +30,20 @@ export default function OperatorComponent(props) {
     } = useBasicSnackbarHookV2();
 
     useEffect(() => {
-        async function fetchInit() {
-            let searchStartDate = getStartDate(startDate);
-            let searchEndDate = getEndDate(endDate);
-            let utcHourDifference = getTimeDiffWithUTC();
-    
-            let body = {
-                startDate: searchStartDate,
-                endDate: searchEndDate,
-                utcHourDifference,
-            }
-            props.onSubmitSearchPerformance(body);
+        if(props.startDate && props.endDate) {
+            setStartDate(props.startDate);
+            setEndDate(props.endDate);
         }
 
-        fetchInit();
-    }, []);
+        if(props.salesYn) {
+            setSalesYn(props.salesYn);
+        }
+
+        if(props.dayIndex) {
+            setDayIndex(props.dayIndex);
+        }
+        
+    }, [props.startDate, props.endDate, props.dayIndex, props.salesYn]);
 
     const __handle = {
         action: {
@@ -50,10 +57,22 @@ export default function OperatorComponent(props) {
                 setStartDate(null);
                 setEndDate(null);
                 props.onActionResetPerformance();
+            },
+            changeDayName: (e) => {
+                let value = e.target.value;
+                setDayIndex(value);
+            },
+            changeSalesYn: (e) => {
+                let value = e.target.value;
+                if(value === ''){ 
+                    setSalesYn(null);
+                }else {
+                    setSalesYn(value);
+                }
             }
         },
         submit: {
-            routeToSearch: (e) => {
+            routeToSearch: async (e) => {
                 e.preventDefault();
 
                 try{
@@ -85,16 +104,18 @@ export default function OperatorComponent(props) {
                     return;
                 }
 
-                let searchStartDate = startDate ? getStartDate(startDate) : null;
-                let searchEndDate = endDate ? getEndDate(endDate) : null;
-                let utcHourDifference = getTimeDiffWithUTC();
-
                 let body = {
-                    startDate: searchStartDate,
-                    endDate: searchEndDate,
-                    utcHourDifference,
+                    startDate: startDate ? getStartDate(startDate) : null,
+                    endDate: endDate ? getEndDate(endDate) : null,
+                    salesYn: salesYn,
+                    dayIndex: dayIndex,
+                    utcHourDifference: getTimeDiffWithUTC()
                 }
-                props.onSubmitSearchPerformance(body);
+
+                delete query.page;
+
+                navigateParams({ replace: true })
+                await props.onSubmitSearchItem(body);
             }
         }
     }
@@ -104,12 +125,15 @@ export default function OperatorComponent(props) {
             <DateSelectorFieldView
                 startDate={startDate}
                 endDate={endDate}
+                dayIndex={dayIndex}
                 onChangeStartDateValue={__handle.action.changeStartDate}
                 onChangeEndDateValue={__handle.action.changeEndDate}
+                onChangeDayNameValue={__handle.action.changeDayName}
             />
             
             <SearchFieldView
-
+                salesYn={salesYn}
+                onChangeSalesYnValue={__handle.action.changeSalesYn}
             />
 
             <form onSubmit={(e) => __handle.submit.routeToSearch(e)}>

@@ -4,7 +4,7 @@ import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
-import { dateToYYYYMMDDAndDayName, getMonthAndSearchDateRange, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getMonthAndSearchDateRange, getStartDate, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
 import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
 // 그래프 기본 2가지 색상 : [판매, 주문]
@@ -18,6 +18,12 @@ export default function RegistrationAndUnitGraphComponent(props) {
     const [totalSummaryData, setTotalSummaryData] = useState(null);
     
     const [totalGraphOption, setTotalGraphOption] = useState(null);
+    const [graphLabels, setGraphLabels] = useState(null);
+
+    const {
+        query,
+        navigateUrl
+    } = useRouterHook();
 
     useEffect(() => {
         if(!props.searchDimension) {
@@ -32,6 +38,14 @@ export default function RegistrationAndUnitGraphComponent(props) {
         __handle.action.createGraphData();
         __handle.action.createGraphOption();
     }, [props.performance, props.searchDimension])
+
+    useEffect(() => {
+        if(!(totalSummaryData && salesSummaryData)) {
+            return;
+        }
+
+        __handle.action.createGraphOption();
+    }, [totalSummaryData, salesSummaryData])
 
     const __handle = {
         action: {
@@ -145,6 +159,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let data = setAnalysisResultText([...createdSalesGraphDatasets, ...createdOrderGraphDatasets]);
                 setSalesSummaryData(salesData)
                 setTotalSummaryData(data);
+                setGraphLabels([...graphLabels]);
             },
             createGraphOption: () => {
                 let option = {
@@ -153,10 +168,37 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     interaction: {
                         mode: 'index',
                         intersect: false,
+                    },
+                    onClick: function (e, item) {
+                        __handle.action.setGraphClickOption(e, item);
+                    },
+                    onHover: (e, item) => {
+                        const target = e.native ? e.native.target : e.target;
+                        target.style.cursor = item[0] ? 'pointer' : 'default';
                     }
                 }
 
                 setTotalGraphOption(option);
+            },
+            setGraphClickOption: (e, item) => {
+                if(item.length === 0) return;
+
+                var itemIdx = item[0].index;
+                var label = graphLabels[itemIdx];
+                var date = getDateFormatByGraphDateLabel(label, props.searchDimension);
+
+                let startDate = getStartDate(date.startDate);
+                let endDate = getEndDate(date.endDate);
+
+                let data = { 
+                    pathname: '/sales-performance/search',
+                    state: {
+                        startDate,
+                        endDate
+                    }
+                }
+
+                navigateUrl(data);
             }
         }
     }

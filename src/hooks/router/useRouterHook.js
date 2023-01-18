@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { createSearchParams, useLocation, useNavigate } from "react-router-dom";
 import qs from 'query-string';
 
 export default function useRouterHook (props) {
@@ -9,8 +9,17 @@ export default function useRouterHook (props) {
     const navigateUrl = (data) => {
         let pathname = data.pathname;
         let state = data.state;
+        
 
-        navigate(pathname, { state });
+        // navigate(pathname, { state });
+
+        navigate({
+            pathname: pathname,
+            search: `?${createSearchParams({...query})}`,
+        },
+        {
+            state
+        })
     }
 
     const navigateParams = (data) => {

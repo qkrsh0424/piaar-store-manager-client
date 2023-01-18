@@ -2,18 +2,25 @@ import { Container } from "./PayAmountDayOfWeekGraph.styled";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import { getDayName, getWeekName, getWeekNumber } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getDayName, getEndDate, getStartDate, getWeekName, getWeekNumber } from "../../../../utils/dateFormatUtils";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
+import useRouterHook from "../../../../hooks/router/useRouterHook";
 
 const WEEKLY_AVG_GRAPH_BG_COLOR = '#FFAFCC';
 const WEEKLY_GRAPH_BG_COLOR = ['#FFBCA2', '#FFCC89', '#FFB2BA', '#F58293', '#D2759F', '#FFCA67', '#A974BC'];
+// const GRAPH_LABELS = getWeekName();
 
 export default function PayAmountDayOfWeekGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);
     const [salesWeeklyGraphData, setSalesWeeklyGraphData] = useState(null);
     
     const [totalGraphOption, setTotalGraphOption] = useState(null);
+
+    const {
+        query,
+        navigateUrl
+    } = useRouterHook();
 
     useEffect(() => {
         if(!(props.performance && props.performance.length > 0)) {
@@ -25,6 +32,14 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
         __handle.action.createWeeklyGraphData();
         __handle.action.createGraphOption();
     }, [props.performance])
+
+    useEffect(() => {
+        if(!(salesGraphData && salesWeeklyGraphData)) {
+            return;
+        }
+
+        __handle.action.createGraphOption();
+    }, [salesGraphData, salesWeeklyGraphData])
 
     const __handle = {
         action: {
@@ -169,10 +184,39 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                                 }
                             }
                         }
+                    },
+                    onClick: function (e, item) {
+                        __handle.action.setGraphClickOption(e, item);
+                    },
+                    onHover: (e, item) => {
+                        const target = e.native ? e.native.target : e.target;
+                        target.style.cursor = item[0] ? 'pointer' : 'default';
                     }
                 }
 
                 setTotalGraphOption(option);
+            },
+            setGraphClickOption: (e, item) => {
+                if(item.length === 0) return;
+
+                var itemIdx = item[0].index;
+
+                // dayIndex : 1-7, SUN-SAT
+                let dayIndex = itemIdx + 1;
+
+                let startDate = getStartDate(props.performance[0].datetime);
+                let endDate = getEndDate(props.performance[props.performance.length - 1].datetime);
+
+                let data = {
+                    pathname: '/sales-performance/search',
+                    state: {
+                        startDate,
+                        endDate,
+                        dayIndex
+                    }
+                }
+
+                navigateUrl(data);
             }
         }
     }

@@ -9,6 +9,10 @@ const Container = styled.div`
 `;
 
 const DateSelectorFieldWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
     .label-item{
         margin: 0 10px;
         font-size: 14px;
@@ -32,6 +36,28 @@ const DateSelectorFieldWrapper = styled.div`
 
         @media screen and (max-width: 992px) {
             width: 100%;
+        }
+    }
+
+    .select-item {
+        width: 80px;
+        height: 50px;
+        padding: 10px;
+        border: 1px solid #e1e1e1;
+        border-radius: 5px;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+
+        &:focus{
+            outline: none;
+        }
+
+        @media all and (max-width:992px) {
+            width: 100%;
+            margin: 10px 0 0 0;
         }
     }
 `;
@@ -62,7 +88,7 @@ const SearchFieldWrapper = styled.div`
     .select-item {
         width: 300px;
         height: 50px;
-        padding: 5px;
+        padding: 10px;
         border: 1px solid #e1e1e1;
         border-radius: 5px;
         font-size: 14px;
@@ -79,6 +105,11 @@ const SearchFieldWrapper = styled.div`
             width: 100%;
             margin: 10px 0 0 0;
         }
+    }
+
+    .input-el {
+        border: 1px solid #e1e1e1;
+        width: 300px;
     }
 `;
 

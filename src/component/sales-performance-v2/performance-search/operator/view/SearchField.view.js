@@ -8,7 +8,10 @@ export default function SearchFieldView (props) {
                     <span>스토어명</span>
                 </div>
                 <div className='search-data'>
-
+                    <input
+                        type='text'
+                        className='input-el'
+                    />
                 </div>
             </div>
 
@@ -17,7 +20,10 @@ export default function SearchFieldView (props) {
                     <span>카테고리명</span>
                 </div>
                 <div className='search-data'>
-
+                    <input
+                        type='text'
+                        className='input-el'
+                    />
                 </div>
             </div>
 
@@ -26,7 +32,10 @@ export default function SearchFieldView (props) {
                     <span>상품명</span>
                 </div>
                 <div className='search-data'>
-
+                    <input
+                        type='text'
+                        className='input-el'
+                    />
                 </div>
             </div>
 
@@ -35,17 +44,25 @@ export default function SearchFieldView (props) {
                     <span>옵션명</span>
                 </div>
                 <div className='search-data'>
-
+                    <input
+                        type='text'
+                        className='input-el'
+                    />
                 </div>
             </div>
 
             <div className='search-column'>
+                <div className='label-item'>
+                    <span>상태</span>
+                </div>
                 <select
                     className='select-item'
+                    value={props.salesYn || ''}
+                    onChange={props.onChangeSalesYnValue}
                 >
-                    <option>주문</option>
-                    <option>판매</option>
-                    <option>미판매</option>
+                    <option value=''>주문</option>
+                    <option value='y'>판매</option>
+                    <option value='n'>미판매</option>
                 </select>
             </div>
         </SearchFieldWrapper>
