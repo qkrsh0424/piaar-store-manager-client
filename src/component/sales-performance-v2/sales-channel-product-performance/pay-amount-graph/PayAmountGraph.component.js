@@ -3,9 +3,10 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import { dateToYYYYMMDDAndDayName, getMonthAndSearchDateRange, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getMonthAndSearchDateRange, getStartDate, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
 import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
+import useRouterHook from "../../../../hooks/router/useRouterHook";
 
 const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
@@ -18,7 +19,12 @@ export default function PayAmountGraphComponent(props) {
     const [salesSummaryData, setSalesSummaryData] = useState(null);
 
     const [payAmountGraphOption, setPayAmountGraphOption] = useState(null);
+    const [graphLabels, setGraphLabels] = useState(null);
     
+    const {
+        navigateUrl
+    } = useRouterHook();
+
     useEffect(() => {
         if (!props.selectedChannel) {
             __handle.action.resetGraphData();
@@ -35,8 +41,15 @@ export default function PayAmountGraphComponent(props) {
         }
 
         __handle.action.createGraphData();
-        __handle.action.createGraphOption();
     }, [props.selectedChannel, props.payAmount, props.searchDimension])
+
+    useEffect(() => {
+        if(!(totalPayAmountGraphData && salesPayAmountGraphData)) {
+            return;
+        }
+
+        __handle.action.createGraphOption();
+    }, [totalPayAmountGraphData, salesPayAmountGraphData])
 
     const __handle = {
         action: {
@@ -199,7 +212,8 @@ export default function PayAmountGraphComponent(props) {
 
                 setSalesPayAmountGraphData(createdSalesGraph);
                 setTotalPayAmountGraphData(createdTotalGraph);
-                
+                setGraphLabels([...graphLabels]);
+
                 // 매출 그래프 요약 데이터 생성
                 let salesData = setAnalysisResultText(salesDatasets);
 
@@ -223,10 +237,41 @@ export default function PayAmountGraphComponent(props) {
                                 }
                             }
                         }
+                    },
+                    onClick: function (e, item) {
+                        __handle.action.setGraphClickOption(e, item);
+                    },
+                    onHover: (e, item) => {
+                        const target = e.native ? e.native.target : e.target;
+                        target.style.cursor = item[0] ? 'pointer' : 'default';
                     }
                 }
 
                 setPayAmountGraphOption(option);
+            },
+            setGraphClickOption: (e, item) => {
+                if(item.length === 0) return;
+
+                var itemIdx = item[0].index;
+                var label = graphLabels[itemIdx];
+                var date = getDateFormatByGraphDateLabel(label, props.searchDimension);
+
+                let startDate = getStartDate(date.startDate);
+                let endDate = getEndDate(date.endDate);
+                let salesChannels = [...props.selectedChannel];
+                let selectedOptions = [...props.selectedProductAndOptions];
+
+                let data = {
+                    pathname: '/sales-performance/search',
+                    state: {
+                        startDate,
+                        endDate,
+                        salesChannels,
+                        selectedOptions
+                    }
+                }
+
+                navigateUrl(data);
             }
         }
     }

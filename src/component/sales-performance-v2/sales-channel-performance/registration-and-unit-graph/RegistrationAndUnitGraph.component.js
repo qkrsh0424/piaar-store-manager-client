@@ -3,8 +3,9 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import { dateToYYYYMMDDAndDayName, getMonthAndSearchDateRange, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getMonthAndSearchDateRange, getStartDate, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
 import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
+import useRouterHook from "../../../../hooks/router/useRouterHook";
 
 const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
@@ -20,6 +21,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
     const [unitSummaryData, setUnitSummaryData] = useState(null);
     
     const [totalGraphOption, setTotalGraphOption] = useState(null);
+    const [graphLabels, setGraphLabels] = useState(null);
+
+    const {
+        navigateUrl
+    } = useRouterHook();
 
     useEffect(() => {
         __handle.action.resetGraphData();
@@ -42,8 +48,15 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
         __handle.action.createRegistrationGraphData();
         __handle.action.createUnitGraphData();
-        __handle.action.createGraphOption();
     }, [props.selectedChannel, props.registrationAndUnit, props.searchDimension])
+
+    useEffect(() => {
+        if(!(totalRegistrationGraphData && totalUnitGraphData)) {
+            return;
+        }
+
+        __handle.action.createGraphOption();
+    }, [totalRegistrationGraphData, totalUnitGraphData])
 
     const __handle = {
         action: {
@@ -208,7 +221,8 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 }
                 setSalesRegistrationGraphData(createSalesGraph)
                 setTotalRegistrationGraphData(createdTotalGraph);
-
+                setGraphLabels([...graphLabels]);
+                
                 // 매출 그래프 요약 데이터 생성
                 let salesData = setAnalysisResultText(salesDatasets)
                 let totalData = setAnalysisResultText([...salesDatasets, ...orderDatasets]);
@@ -395,10 +409,39 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     interaction: {
                         mode: 'index',
                         intersect: false,
+                    },
+                    onClick: function (e, item) {
+                        __handle.action.setGraphClickOption(e, item);
+                    },
+                    onHover: (e, item) => {
+                        const target = e.native ? e.native.target : e.target;
+                        target.style.cursor = item[0] ? 'pointer' : 'default';
                     }
                 }
 
                 setTotalGraphOption(option);
+            },
+            setGraphClickOption: (e, item) => {
+                if(item.length === 0) return;
+
+                var itemIdx = item[0].index;
+                var label = graphLabels[itemIdx];
+                var date = getDateFormatByGraphDateLabel(label, props.searchDimension);
+
+                let startDate = getStartDate(date.startDate);
+                let endDate = getEndDate(date.endDate);
+                let salesChannels = [...props.selectedChannel];
+
+                let data = {
+                    pathname: '/sales-performance/search',
+                    state: {
+                        startDate,
+                        endDate,
+                        salesChannels
+                    }
+                }
+
+                navigateUrl(data);
             }
         }
     }

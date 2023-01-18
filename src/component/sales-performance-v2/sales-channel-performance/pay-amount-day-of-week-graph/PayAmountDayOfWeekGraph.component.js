@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getDayName, getWeekName } from "../../../../utils/dateFormatUtils";
+import useRouterHook from "../../../../hooks/router/useRouterHook";
+import { getDayName, getEndDate, getStartDate, getWeekName } from "../../../../utils/dateFormatUtils";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import { Container } from "./PayAmountDayOfWeekGraph.styled";
@@ -11,6 +12,10 @@ const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f8
 export default function PayAmountDayOfWeekGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);
     const [totalGraphOption, setTotalGraphOption] = useState(null);
+
+    const {
+        navigateUrl
+    } = useRouterHook();
 
     useEffect(() => {
         __handle.action.resetGraphData();
@@ -28,8 +33,15 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
         }
 
         __handle.action.createGraphData();
-        __handle.action.createGraphOption();
     }, [props.selectedChannel, props.dayOfWeekPayAmount])
+
+    useEffect(() => {
+        if(!salesGraphData) {
+            return;
+        }
+
+        __handle.action.createGraphOption();
+    }, [salesGraphData])
 
     const __handle = {
         action: {
@@ -171,10 +183,39 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                                 }
                             }
                         }
+                    },
+                    onClick: function (e, item) {
+                        __handle.action.setGraphClickOption(e, item);
+                    },
+                    onHover: (e, item) => {
+                        const target = e.native ? e.native.target : e.target;
+                        target.style.cursor = item[0] ? 'pointer' : 'default';
                     }
                 }
 
                 setTotalGraphOption(option);
+            },
+            setGraphClickOption: (e, item) => {
+                if(item.length === 0) return;
+
+                var itemIdx = item[0].index;
+                var dayIndex = itemIdx + 1;
+
+                let startDate = getStartDate(props.dayOfWeekPayAmount[0].datetime);
+                let endDate = getEndDate(props.dayOfWeekPayAmount[props.dayOfWeekPayAmount.length - 1].datetime);
+                let salesChannels = [...props.selectedChannel];
+
+                let data = {
+                    pathname: '/sales-performance/search',
+                    state: {
+                        startDate,
+                        endDate,
+                        dayIndex,
+                        salesChannels
+                    }
+                }
+
+                navigateUrl(data);
             }
         }
     }

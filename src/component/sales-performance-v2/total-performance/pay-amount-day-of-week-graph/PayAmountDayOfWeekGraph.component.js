@@ -2,14 +2,13 @@ import { Container } from "./PayAmountDayOfWeekGraph.styled";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import { dateToYYYYMMDD, getDayName, getEndDate, getStartDate, getWeekName, getWeekNumber } from "../../../../utils/dateFormatUtils";
+import { getDayName, getEndDate, getStartDate, getWeekName, getWeekNumber } from "../../../../utils/dateFormatUtils";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 
 const WEEKLY_AVG_GRAPH_BG_COLOR = '#FFAFCC';
 const WEEKLY_GRAPH_BG_COLOR = ['#FFBCA2', '#FFCC89', '#FFB2BA', '#F58293', '#D2759F', '#FFCA67', '#A974BC'];
-// const GRAPH_LABELS = getWeekName();
 
 export default function PayAmountDayOfWeekGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);
@@ -18,7 +17,6 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
     const [totalGraphOption, setTotalGraphOption] = useState(null);
 
     const {
-        query,
         navigateUrl
     } = useRouterHook();
 
@@ -30,7 +28,6 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
 
         __handle.action.createGraphData();
         __handle.action.createWeeklyGraphData();
-        __handle.action.createGraphOption();
     }, [props.performance])
 
     useEffect(() => {

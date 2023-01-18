@@ -189,15 +189,14 @@ export default function OperatorComponent(props) {
                 let searchStartDate = startDate ? getStartDate(startDate) : null;
                 let searchEndDate = endDate ? getEndDate(endDate) : null;
                 let utcHourDifference = getTimeDiffWithUTC();
-                let optionCodes = searchOptionCodes;
 
                 let body = {
                     startDate: searchStartDate,
                     endDate: searchEndDate,
-                    utcHourDifference,
-                    optionCodes
+                    utcHourDifference
                 }
 
+                props.onActionChangeSelectedOption(selectedProductAndOptions);
                 props.onSubmitSearchPerformance(body);
             }
         }

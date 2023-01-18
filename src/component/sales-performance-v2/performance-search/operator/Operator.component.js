@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { dateToYYYYMMDD, getEndDate, getStartDate, getTimeDiffWithUTC, isSearchablePeriod } from "../../../../utils/dateFormatUtils";
+import { getEndDate, getStartDate, getTimeDiffWithUTC, isSearchablePeriod } from "../../../../utils/dateFormatUtils";
 import { Container } from "./Operator.styled";
 import ButtonFieldView from "./view/ButtonField.view";
 import DateSelectorFieldView from "./view/DateSelectorField.view";
@@ -15,6 +15,8 @@ export default function OperatorComponent(props) {
     const [endDate, setEndDate] = useState(null);
     const [dayIndex, setDayIndex] = useState(null);
     const [salesYn, setSalesYn] = useState(null);
+    const [salesChannels, setSalesChannels] = useState(null);
+    const [selectedOptions, setSelectedOptions] = useState(null);
 
     const {
         query,
@@ -42,8 +44,16 @@ export default function OperatorComponent(props) {
         if(props.dayIndex) {
             setDayIndex(props.dayIndex);
         }
+
+        if(props.salesChannels) {
+            setSalesChannels([...props.salesChannels]);
+        }
+
+        if(props.selectedOptions) {
+            setSelectedOptions([...props.selectedOptions])
+        }
         
-    }, [props.startDate, props.endDate, props.dayIndex, props.salesYn]);
+    }, [props.startDate, props.endDate, props.dayIndex, props.salesYn, props.salesChannels, props.selectedOptions]);
 
     const __handle = {
         action: {
@@ -133,6 +143,7 @@ export default function OperatorComponent(props) {
             
             <SearchFieldView
                 salesYn={salesYn}
+                salesChannels={salesChannels}
                 onChangeSalesYnValue={__handle.action.changeSalesYn}
             />
 

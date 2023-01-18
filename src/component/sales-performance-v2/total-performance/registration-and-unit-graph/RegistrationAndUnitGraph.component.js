@@ -36,7 +36,6 @@ export default function RegistrationAndUnitGraphComponent(props) {
         }
 
         __handle.action.createGraphData();
-        __handle.action.createGraphOption();
     }, [props.performance, props.searchDimension])
 
     useEffect(() => {

@@ -40,6 +40,8 @@ const SalesChannelProductPerformanceComponent = (props) => {
     const [searchDimension, setSearchDimension] = useState('date');
     const [checkedSwitch, setCheckedSwitch] = useState(false);
 
+    const [selectedProductAndOptions, setSelectedProductAndOptions] = useState([]);
+
     const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
@@ -102,6 +104,9 @@ const SalesChannelProductPerformanceComponent = (props) => {
             clearChannel: () => {
                 setSalesChannel(null);
                 setSelectedChannel(null);
+            },
+            changeSelectedOption: (data) => {
+                setSelectedProductAndOptions([...data])
             }
         },
         submit: {
@@ -119,9 +124,11 @@ const SalesChannelProductPerformanceComponent = (props) => {
                 <PageTitleFieldView title={'판매스토어 - 상품별 매출'} />
 
                 <OperatorComponent
+                    selectedProductAndOptions={selectedProductAndOptions}
                     onActionClearChannel={__handle.action.clearChannel}
                     onSubmitSearchPerformance={__handle.submit.searchPerformance}
                     onActionResetPerformance={__handle.action.resetPerformance}
+                    onActionChangeSelectedOption={__handle.action.changeSelectedOption}
                 />
 
                 <ChannelSelectorComponent
@@ -145,6 +152,7 @@ const SalesChannelProductPerformanceComponent = (props) => {
                     searchDimension={searchDimension}
                     checkedSwitch={checkedSwitch}
                     payAmount={performance}
+                    selectedProductAndOptions={selectedProductAndOptions}
                 />
 
                 <RegistrationAndUnitGraphComponent

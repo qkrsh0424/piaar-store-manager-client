@@ -51,10 +51,13 @@ function PageTitleFieldView({ title }) {
 }
 
 export default function PerformanceSearchComponent(props) {
+    const [selectedOptions, setSelectedOptions] = useState([]);
+
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [salesYn, setSalesYn] = useState(null);
     const [dayIndex, setDayIndex] = useState(null);
+    const [salesChannels, setSalesChannels] = useState(null);
 
     const {
         location,
@@ -82,11 +85,12 @@ export default function PerformanceSearchComponent(props) {
             let utcHourDifference = getTimeDiffWithUTC();
 
             let body = {
-                startDate : startDate ? getStartDate(startDate) : null,
-                endDate : endDate ? getEndDate(endDate) : null,
+                startDate: startDate ? getStartDate(startDate) : null,
+                endDate: endDate ? getEndDate(endDate) : null,
                 dayIndex,
                 salesYn,
-                utcHourDifference
+                utcHourDifference,
+                salesChannels
             }
 
             let params = {
@@ -128,6 +132,14 @@ export default function PerformanceSearchComponent(props) {
         if (searchState.dayIndex) {
             setDayIndex(searchState.dayIndex);
         }
+
+        if(searchState.salesChannels) {
+            setSalesChannels(searchState.salesChannels);
+        }
+
+        if(searchState.selectedOptions) {
+            setSelectedOptions(searchState.selectedOptions);
+        }
     }, [])
 
     const __handle = {
@@ -137,11 +149,13 @@ export default function PerformanceSearchComponent(props) {
                 let endDate = body.endDate;
                 let salesYn = body.salesYn;
                 let dayIndex = body.dayIndex;
+                let salesChannels = body.salesChannels;
                 
                 setStartDate(startDate);
                 setEndDate(endDate);
                 setSalesYn(salesYn);
                 setDayIndex(dayIndex);
+                setSalesChannels(salesChannels);
             }
         },
         submit: {
@@ -175,6 +189,8 @@ export default function PerformanceSearchComponent(props) {
                 endDate={endDate}
                 salesYn={salesYn}
                 dayIndex={dayIndex}
+                salesChannels={salesChannels}
+                selectedOptions={selectedOptions}
 
                 onActionChangeSearchValue={__handle.action.changeSearchValue}
                 onSubmitSearchItem={__handle.submit.searchItem}

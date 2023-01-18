@@ -7,11 +7,24 @@ export default function SearchFieldView (props) {
                 <div className='label-item'>
                     <span>스토어명</span>
                 </div>
-                <div className='search-data'>
-                    <input
-                        type='text'
-                        className='input-el'
-                    />
+                <div className='search-box'>
+                    <div className='search-data'>
+                        <input
+                            type='text'
+                            className='input-el'
+                        />
+                    </div>
+                    <div className='search-column-box'>
+                        {props.salesChannels?.map((channel, idx) => {
+                            return (
+                                <div key={'search-field-channel-idx' + idx}>
+                                    <button className='button-el'>
+                                        {channel}
+                                    </button>
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
 

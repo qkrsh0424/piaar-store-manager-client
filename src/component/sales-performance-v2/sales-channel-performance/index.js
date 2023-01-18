@@ -11,6 +11,7 @@ import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/Reg
 import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
 import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import useChannelSalesPerformanceHook from './hooks/useChannelSalesPerformanceHook';
+import useRouterHook from '../../../hooks/router/useRouterHook';
 
 const Container = styled.div`
     height: 100%;
@@ -39,6 +40,10 @@ const SalesChannelPerformanceComponent = (props) => {
 
     const [searchDimension, setSearchDimension] = useState('date');
     const [checkedSwitch, setCheckedSwitch] = useState(false);
+
+    const {
+        location
+    } = useRouterHook();
 
     const {
         open: backdropOpen,

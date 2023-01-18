@@ -64,6 +64,29 @@ const DateSelectorFieldWrapper = styled.div`
 
 const SearchFieldWrapper = styled.div`
 
+    .search-box {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-column-box {
+        display: flex;
+        place-content: center;
+        gap: 10px;
+        padding: 0 10px;
+    }
+
+    .search-column-box .button-el {
+        border: 1px solid var(--piaar-main-color);
+        background-color: var(--piaar-main-color);
+        color: white;
+        transition: 0.1s;
+        padding: 2px 25px;
+        border-radius: 20px;
+        font-size: 16px;
+        box-shadow: var(--defaultBoxShadow);
+    }
+
     .search-column {
         padding: 10px 0;
     }

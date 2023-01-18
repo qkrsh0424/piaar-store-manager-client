@@ -3,7 +3,7 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import { dateToYYYYMMDD, dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getMonthAndSearchDateRange, getSearchEndDateByMonth, getSearchEndDateByWeekNumber, getSearchStartDateByMonth, getSearchStartDateByWeekNumber, getStartDate, getWeekNumber, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getMonthAndSearchDateRange, getSearchEndDateByMonth, getSearchEndDateByWeekNumber, getSearchStartDateByMonth, getSearchStartDateByWeekNumber, getStartDate, getWeekNumber, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
 import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
@@ -23,7 +23,6 @@ export default function PayAmountGraphComponent(props) {
     const [graphLabels, setGraphLabels] = useState(null);
 
     const {
-        query,
         navigateUrl
     } = useRouterHook();
 
