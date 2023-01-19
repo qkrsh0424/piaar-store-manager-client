@@ -29,8 +29,8 @@ function PageTitleFieldView({ title }) {
     )
 }
 
-// const TODAY = setSubtractedDate(new Date(), 0, -2, 0);
-const TODAY = new Date();
+const TODAY = setSubtractedDate(new Date(), 0, -2, 0);
+// const TODAY = new Date();
 const YESTERDAY = setSubtractedDate(TODAY, 0, 0, -1);
 
 const SalesPerformanceDashboardComponent = (props) => {

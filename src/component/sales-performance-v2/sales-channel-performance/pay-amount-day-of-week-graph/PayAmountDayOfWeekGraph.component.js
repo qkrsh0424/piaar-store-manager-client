@@ -215,7 +215,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     }
                 }
 
-                navigateUrl(data);
+                // navigateUrl(data);
             }
         }
     }

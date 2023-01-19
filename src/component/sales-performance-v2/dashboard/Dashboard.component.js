@@ -9,8 +9,8 @@ import ContentTextFieldView from "./view/ContentTextField.view";
 import DashboardFieldView from "./view/DashboardField.view"
 import SubPerformanceFieldView from "./view/SubPerformanceField.view";
 
-// const TODAY = setSubtractedDate(new Date(), 0, -2, 0);
-const TODAY = new Date();
+const TODAY = setSubtractedDate(new Date(), 0, -2, 0);
+// const TODAY = new Date();
 const YESTERDAY = setSubtractedDate(TODAY, 0, 0, -1);
 const PREV_7DAYS = setSubtractedDate(TODAY, 0, 0, -7);
 const PREV_8DAYS = setSubtractedDate(TODAY, 0, 0, -8);

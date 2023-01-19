@@ -97,7 +97,6 @@ const ChannelDataBox = styled.div`
     border-radius: 10px;
     background-color: #fff;
     margin-bottom: 20px;
-
         
     @media screen and (max-width: 1280px) {
         flex-direction: column;
@@ -120,6 +119,26 @@ const ChannelDataBox = styled.div`
         overflow: auto;
         border-left: 1px solid var(--defaultBorderColor);
         padding: 0 20px;
+        
+        &::-webkit-scrollbar{
+            background: #e1e1e130;
+            height:3px;
+            width: 5px;
+        }
+
+        &::-webkit-scrollbar-track{
+            border-radius: 10px;
+        }
+        
+        &::-webkit-scrollbar-thumb{
+            background-color: #00000020;
+            border-radius: 10px;
+        }
+
+        @media screen and (max-width: 1280px) {
+            height: 80px;
+            width: 100%;
+        }
     }
 
     .data-group {
@@ -127,7 +146,7 @@ const ChannelDataBox = styled.div`
         align-items: center;
         font-weight: 700;
 
-        @media screen and (max-width: 992px) {
+        @media screen and (max-width: 576px) {
             flex-direction: column;
             align-items: flex-start;
             margin-bottom: 10px;

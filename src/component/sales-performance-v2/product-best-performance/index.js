@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
-import useRouterHook from "../../../hooks/router/useRouterHook";
-import { getEndDate, getStartDate, getTimeDiffWithUTC } from "../../../utils/dateFormatUtils";
 import BestProductGraphComponent from "./best-product-graph/BestProductGraph.component";
 import GraphOperatorComponent from "./graph-operator/GraphOperator.component";
 import OperatorComponent from "./operator/Operator.component";

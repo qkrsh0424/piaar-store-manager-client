@@ -128,7 +128,7 @@ export default function SummaryTableComponent(props) {
                     }
                 }
 
-                navigateUrl(data);
+                // navigateUrl(data);
             }
         }
     }

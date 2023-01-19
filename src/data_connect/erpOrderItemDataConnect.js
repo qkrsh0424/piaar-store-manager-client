@@ -117,13 +117,6 @@ const erpOrderItemDataConnect = () => {
                 params,
                 withCredentials: true
             })
-        },
-        // 판매성과 - 성과 조회 페이지에서 검색되는 item
-        searchPerformance: async function (body, params) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v2/erp-order-items/search/sales-performance`, body, {
-                params: params,
-                withCredentials: true
-            })
         }
     }
 }

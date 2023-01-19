@@ -441,7 +441,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     }
                 }
 
-                navigateUrl(data);
+                // navigateUrl(data);
             }
         }
     }

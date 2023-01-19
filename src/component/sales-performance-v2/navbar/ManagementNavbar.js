@@ -147,15 +147,6 @@ const thisRouters = [
                 pathname: '/sales-performance/product/best'
             }
         ]
-    },
-    {
-        title: '성과 검색',
-        page: [
-            {
-                name: '검색',
-                pathname: '/sales-performance/search'
-            }
-        ]
     }
 ]
 

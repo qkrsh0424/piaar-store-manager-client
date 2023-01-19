@@ -269,7 +269,7 @@ export default function PayAmountGraphComponent(props) {
                     }
                 }
 
-                navigateUrl(data);
+                // navigateUrl(data);
             }
         }
     }
