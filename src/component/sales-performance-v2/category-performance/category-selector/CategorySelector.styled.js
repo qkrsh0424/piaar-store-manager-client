@@ -47,6 +47,22 @@ const ButtonFieldWrapper = styled.div`
     }
 `;
 
+const CheckBoxControlWrapper = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    
+    .button-el {
+        font-size: 14px;
+        border: 1px solid var(--defaultBorderColor);
+        background-color: var(--defaultButtonColor);
+
+        :hover {
+            background-color: var(--defaultHoverColor);
+        }
+    }
+`;
+
 const CheckBoxFieldWrapper = styled.div`
     font-size: 16px;
 
@@ -100,6 +116,7 @@ const TextFieldWrapper = styled.div`
 export {
     Container,
     ButtonFieldWrapper,
+    CheckBoxControlWrapper,
     CheckBoxFieldWrapper,
     TextFieldWrapper
 }

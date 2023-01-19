@@ -98,6 +98,16 @@ const SalesChannelPerformanceComponent = (props) => {
                 }
                 setSelectedChannel(data);
             },
+            checkAll: (e) => {
+                e.stopPropagation();
+
+                setSelectedChannel([...salesChannel]);
+            },
+            checkCancelAll: (e) => {
+                e.stopPropagation();
+
+                setSelectedChannel([]);
+            },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;
                 setCheckedSwitch(!checkedValue);
@@ -132,8 +142,11 @@ const SalesChannelPerformanceComponent = (props) => {
 
                 <ChannelSelectorComponent
                     salesChannel={salesChannel}
+
                     onActionIsCheckedOne={__handle.action.isCheckedOne}
                     onActionCheckOne={__handle.action.checkOne}
+                    onActionCheckAll={__handle.action.checkAll}
+                    onActionCheckCancelAll={__handle.action.checkCancelAll}
                 />
 
                 <GraphOperatorComponent

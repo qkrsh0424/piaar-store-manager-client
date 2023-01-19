@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
 import { getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
 import { Container } from "./Operator.styled";
@@ -13,8 +14,12 @@ const TODAY = new Date();
 const PREV_2WEEKS_DATE = setSubtractedDate(TODAY, 0, 0, -13);
 
 export default function OperatorComponent(props) {
-    const [startDate, setStartDate] = useState(PREV_2WEEKS_DATE);
-    const [endDate, setEndDate] = useState(TODAY);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+
+    const {
+        location
+    } = useRouterHook();
 
     const {
         open: snackbarOpen,
@@ -23,6 +28,10 @@ export default function OperatorComponent(props) {
         onActionOpen: onActionOpenSnackbar,
         onActionClose: onActionCloseSnackbar,
     } = useBasicSnackbarHookV2();
+
+    useEffect(() => {
+        __handle.action.initSearchValue();
+    }, [])
 
     useEffect(() => {
         async function fetchInit() {
@@ -38,11 +47,20 @@ export default function OperatorComponent(props) {
             props.onSubmitSearchPerformance(body);
         }
 
-        fetchInit();
-    }, []);
+        if(startDate && endDate) {
+            fetchInit();
+        }
+    }, [startDate, endDate]);
 
     const __handle = {
         action: {
+            initSearchValue: () => {
+                let startDate = location.state?.startDate ?? PREV_2WEEKS_DATE;
+                let endDate = location.state?.endDate ?? TODAY;
+                
+                setStartDate(startDate);
+                setEndDate(endDate);
+            },
             changeStartDate: (value) => {
                 setStartDate(value);
             },

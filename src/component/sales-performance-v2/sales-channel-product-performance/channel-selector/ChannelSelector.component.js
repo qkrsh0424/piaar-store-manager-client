@@ -1,6 +1,7 @@
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
 import { Container } from "./ChannelSelector.styled";
+import CheckBoxControlView from "./view/CheckBoxControl.view";
 import CheckBoxFieldView from "./view/CheckBoxField.view";
 import TextFieldView from "./view/TextField.view";
 
@@ -23,6 +24,11 @@ export default function ChannelSelectorComponent(props) {
     return (
         <Container>
             <TextFieldView />
+
+            <CheckBoxControlView
+                onActionCheckAll={props.onActionCheckAll}
+                onActionCheckCancelAll={props.onActionCheckCancelAll}
+            />
 
             <CheckBoxFieldView
                 salesChannel={props.salesChannel}

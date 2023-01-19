@@ -77,58 +77,6 @@ export default function SummaryTableComponent(props) {
                 }
 
                 setTotalSummarySumData(totalSumData);
-            },
-            searchOrderItem: (e, item) => {
-                e.stopPropagation();
-
-                let startDate = getStartDate(item.datetime);
-                let endDate = getEndDate(item.datetime);
-
-                let data = {
-                    pathname: '/sales-performance/search',
-                    state: {
-                        startDate,
-                        endDate
-                    }
-                }
-
-                navigateUrl(data);
-            },
-            searchSalesItem: (e, item) => {
-                e.stopPropagation();
-
-                let startDate = getStartDate(item.datetime);
-                let endDate = getEndDate(item.datetime);
-                let salesYn = 'y'
-
-                let data = {
-                    pathname: '/sales-performance/search',
-                    state: {
-                        startDate,
-                        endDate,
-                        salesYn
-                    }
-                }
-
-                navigateUrl(data);
-            },
-            searchUnsalesItem: (e, item) => {
-                e.stopPropagation();
-
-                let startDate = getStartDate(item.datetime);
-                let endDate = getEndDate(item.datetime);
-                let salesYn = 'n'
-
-                let data = {
-                    pathname: '/sales-performance/search',
-                    state: {
-                        startDate,
-                        endDate,
-                        salesYn
-                    }
-                }
-
-                // navigateUrl(data);
             }
         }
     }
@@ -139,11 +87,6 @@ export default function SummaryTableComponent(props) {
             <TableFieldView
                 totalSummarySumData={totalSummarySumData}
                 summaryTableData={summaryTableData}
-
-                onActionSearchOrderItem={__handle.action.searchOrderItem}
-                onActionSearchSalesItem={__handle.action.searchSalesItem}
-                onActionSearchUnsalesItem={__handle.action.searchUnsalesItem}
-
             />
         </Container>
     )

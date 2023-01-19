@@ -94,6 +94,16 @@ const CategoryPerformanceComponent = (props) => {
                 }
                 setSelectedCategory(data);
             },
+            checkAll: (e) => {
+                e.stopPropagation();
+
+                setSelectedCategory([...category]);
+            },
+            checkCancelAll: (e) => {
+                e.stopPropagation();
+
+                setSelectedCategory([]);
+            },
             checkedClear: () => {
                 setSelectedCategory([]);
             },
@@ -134,6 +144,9 @@ const CategoryPerformanceComponent = (props) => {
                     selectedCategory={selectedCategory}
                     onActionIsCheckedOne={__handle.action.isCheckedOne}
                     onActionCheckOne={__handle.action.checkOne}
+
+                    onActionCheckAll={__handle.action.checkAll}
+                    onActionCheckCancelAll={__handle.action.checkCancelAll}
                 />
 
                 <GraphOperatorComponent

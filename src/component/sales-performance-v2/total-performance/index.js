@@ -10,6 +10,7 @@ import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import { useState } from 'react';
 import useTotalSalesPerformanceHook from './hooks/useTotalSalesPerformanceHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
+import DetailSelectorModalComponent from './modal/detail-selector-modal/DetailSelectorModal.component';
 
 const Container = styled.div`
     height: 100%;
@@ -36,6 +37,9 @@ const TotalSalesPerformanceComponent = (props) => {
     const [searchDimension, setSearchDimension] = useState('date');
     const [checkedSwitch, setCheckedSwitch] = useState(false);
 
+    const [detailSelectorModalOpen, setDetailSelectorModalOpen] = useState(false);
+    const [detailSearchValue, setDetailSearchValue] = useState(null);
+
     const {
         performance,
         reqSearchTotalPerformance,
@@ -60,6 +64,13 @@ const TotalSalesPerformanceComponent = (props) => {
             changeDimension: (e) => {
                 let value = e.target.value;
                 setSearchDimension(value);
+            },
+            openDetailSelectorModal: (data) => {
+                setDetailSearchValue(data);
+                setDetailSelectorModalOpen(true);
+            },
+            closeDetailSelectorModal: () => {
+                setDetailSelectorModalOpen(false);
             }
         },
         submit: {
@@ -94,11 +105,15 @@ const TotalSalesPerformanceComponent = (props) => {
                     searchDimension={searchDimension}
                     checkedSwitch={checkedSwitch}
                     performance={performance}
+
+                    onActionOpenDetailSelectorModal={__handle.action.openDetailSelectorModal}
                 />
                 <RegistrationAndUnitGraphComponent
                     searchDimension={searchDimension}
                     checkedSwitch={checkedSwitch}
                     performance={performance}
+
+                    onActionOpenDetailSelectorModal={__handle.action.openDetailSelectorModal}
                 />
                 <PayAmountDayOfWeekGraphComponent
                     performance={performance}
@@ -110,6 +125,13 @@ const TotalSalesPerformanceComponent = (props) => {
 
             <BackdropHookComponent
                 open={backdropOpen}
+            />
+
+            <DetailSelectorModalComponent
+                modalOpen={detailSelectorModalOpen}
+                detailSearchValue={detailSearchValue}
+
+                onActionCloseModal={__handle.action.closeDetailSelectorModal}
             />
         </>
     )

@@ -100,11 +100,16 @@ export default function ProductBestPerformanceComponent (props) {
                 }
                 setSelectedProduct(data);
             },
-            resetSelectedProduct: (e) => {
+            checkAll: (e) => {
+                e.stopPropagation();
+
+                setSelectedProduct([...salesProduct]);
+            },
+            checkCancelAll: (e) => {
                 e.stopPropagation();
 
                 setSelectedProduct([]);
-            }
+            },
         },
         submit: {
             searchPerformance: async (body) => {
@@ -143,10 +148,10 @@ export default function ProductBestPerformanceComponent (props) {
 
             <ProductSelectorComponent
                 salesProduct={salesProduct}
-                // selectedProduct
                 onActionIsCheckedOne={__handle.action.isCheckedOne}
                 onActionCheckOne={__handle.action.checkOne}
-                onActionResetSelectedProduct={__handle.action.resetSelectedProduct}
+                onActionCheckAll={__handle.action.checkAll}
+                onActionCheckCancelAll={__handle.action.checkCancelAll}
             />
             
             <ProductBestOptionGraphComponent

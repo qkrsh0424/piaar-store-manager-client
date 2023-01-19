@@ -20,11 +20,6 @@ export default function RegistrationAndUnitGraphComponent(props) {
     const [totalGraphOption, setTotalGraphOption] = useState(null);
     const [graphLabels, setGraphLabels] = useState(null);
 
-    const {
-        query,
-        navigateUrl
-    } = useRouterHook();
-
     useEffect(() => {
         if(!props.searchDimension) {
             return;
@@ -189,15 +184,12 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let startDate = getStartDate(date.startDate);
                 let endDate = getEndDate(date.endDate);
 
-                let data = { 
-                    pathname: '/sales-performance/search',
-                    state: {
-                        startDate,
-                        endDate
-                    }
+                let detailSearchValue = {
+                    startDate,
+                    endDate
                 }
 
-                // navigateUrl(data);
+                props.onActionOpenDetailSelectorModal(detailSearchValue);
             }
         }
     }
