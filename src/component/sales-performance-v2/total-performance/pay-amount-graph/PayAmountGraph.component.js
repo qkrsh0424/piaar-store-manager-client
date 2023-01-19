@@ -22,10 +22,6 @@ export default function PayAmountGraphComponent(props) {
 
     const [graphLabels, setGraphLabels] = useState(null);
 
-    const {
-        navigateUrl
-    } = useRouterHook();
-
     useEffect(() => {
         if(!props.searchDimension) {
             return;
@@ -189,7 +185,7 @@ export default function PayAmountGraphComponent(props) {
                     endDate
                 }
 
-                props.onActionOpenDetailSelectorModal(detailSearchValue);
+                props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
             }
         }
     }

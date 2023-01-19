@@ -39,33 +39,25 @@ export default function OperatorComponent(props) {
     } = useBasicSnackbarHookV2();
 
     useEffect(() => {
-        __handle.action.initSearchValue();
+        __handle.action.initSearchValueAndSearchPerformance();
     }, [])
-
-    useEffect(() => {
-        async function fetchInit() {
-            let searchStartDate = getStartDate(startDate);
-            let searchEndDate = getEndDate(endDate);
-            let utcHourDifference = getTimeDiffWithUTC();
-    
-            let body = {
-                startDate: searchStartDate,
-                endDate: searchEndDate,
-                utcHourDifference,
-            }
-            props.onSubmitSearchPerformance(body);
-        }
-
-        if(startDate && endDate) {
-            fetchInit();
-        }
-    }, [startDate, endDate]);
 
     const __handle = {
         action: {
-            initSearchValue: () => {
+            initSearchValueAndSearchPerformance: () => {
                 let startDate = location.state?.startDate ?? PREV_2WEEKS_DATE;
                 let endDate = location.state?.endDate ?? TODAY;
+
+                let searchStartDate = getStartDate(startDate);
+                let searchEndDate = getEndDate(endDate);
+                let utcHourDifference = getTimeDiffWithUTC();
+
+                let body = {
+                    startDate: searchStartDate,
+                    endDate: searchEndDate,
+                    utcHourDifference,
+                }
+                props.onSubmitSearchPerformance(body);
 
                 setStartDate(startDate);
                 setEndDate(endDate);

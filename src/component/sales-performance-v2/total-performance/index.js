@@ -10,7 +10,7 @@ import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import { useState } from 'react';
 import useTotalSalesPerformanceHook from './hooks/useTotalSalesPerformanceHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
-import DetailSelectorModalComponent from './modal/detail-selector-modal/DetailSelectorModal.component';
+import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
 
 const Container = styled.div`
     height: 100%;
@@ -37,7 +37,7 @@ const TotalSalesPerformanceComponent = (props) => {
     const [searchDimension, setSearchDimension] = useState('date');
     const [checkedSwitch, setCheckedSwitch] = useState(false);
 
-    const [detailSelectorModalOpen, setDetailSelectorModalOpen] = useState(false);
+    const [detailGraphSelectorModalOpen, setDetailGraphSelectorModalOpen] = useState(false);
     const [detailSearchValue, setDetailSearchValue] = useState(null);
 
     const {
@@ -65,12 +65,12 @@ const TotalSalesPerformanceComponent = (props) => {
                 let value = e.target.value;
                 setSearchDimension(value);
             },
-            openDetailSelectorModal: (data) => {
+            openDetailGraphSelectorModal: (data) => {
                 setDetailSearchValue(data);
-                setDetailSelectorModalOpen(true);
+                setDetailGraphSelectorModalOpen(true);
             },
-            closeDetailSelectorModal: () => {
-                setDetailSelectorModalOpen(false);
+            closeDetailGraphSelectorModal: () => {
+                setDetailGraphSelectorModalOpen(false);
             }
         },
         submit: {
@@ -106,14 +106,14 @@ const TotalSalesPerformanceComponent = (props) => {
                     checkedSwitch={checkedSwitch}
                     performance={performance}
 
-                    onActionOpenDetailSelectorModal={__handle.action.openDetailSelectorModal}
+                    onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
                 <RegistrationAndUnitGraphComponent
                     searchDimension={searchDimension}
                     checkedSwitch={checkedSwitch}
                     performance={performance}
 
-                    onActionOpenDetailSelectorModal={__handle.action.openDetailSelectorModal}
+                    onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
                 <PayAmountDayOfWeekGraphComponent
                     performance={performance}
@@ -127,11 +127,11 @@ const TotalSalesPerformanceComponent = (props) => {
                 open={backdropOpen}
             />
 
-            <DetailSelectorModalComponent
-                modalOpen={detailSelectorModalOpen}
+            <DetailGraphSelectorModalComponent
+                modalOpen={detailGraphSelectorModalOpen}
                 detailSearchValue={detailSearchValue}
 
-                onActionCloseModal={__handle.action.closeDetailSelectorModal}
+                onActionCloseModal={__handle.action.closeDetailGraphSelectorModal}
             />
         </>
     )

@@ -189,7 +189,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     endDate
                 }
 
-                props.onActionOpenDetailSelectorModal(detailSearchValue);
+                props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
             }
         }
     }

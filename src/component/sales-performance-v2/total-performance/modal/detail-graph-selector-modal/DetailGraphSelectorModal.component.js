@@ -1,6 +1,6 @@
 import useRouterHook from "../../../../../hooks/router/useRouterHook";
 import CommonModalComponentV2 from "../../../../module/modal/CommonModalComponentV2";
-import { BoxFieldWrapper } from "./DetailSelectorModal.styled";
+import { BoxFieldWrapper } from "./DetailGraphSelectorModal.styled";
 
 function BoxFieldView({ onActionSelectSalesChannel, onActionSelectCategory, onActionSelectProduct }) {
     return (
@@ -73,7 +73,7 @@ export default function DetailSelectorModalComponent(props) {
         props.modalOpen &&
         <CommonModalComponentV2
             open={props.modalOpen}
-            title={'확인 그래프 선택'}
+            title={'그래프 선택'}
             element={
                 <div>
                     <BoxFieldView

@@ -12,6 +12,7 @@ import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/Pay
 import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import useChannelSalesPerformanceHook from './hooks/useChannelSalesPerformanceHook';
 import useRouterHook from '../../../hooks/router/useRouterHook';
+import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
 
 const Container = styled.div`
     height: 100%;
@@ -40,6 +41,9 @@ const SalesChannelPerformanceComponent = (props) => {
 
     const [searchDimension, setSearchDimension] = useState('date');
     const [checkedSwitch, setCheckedSwitch] = useState(false);
+
+    const [detailGraphSelectorModalOpen, setDetailGraphSelectorModalOpen] = useState(false);
+    const [detailSearchValue, setDetailSearchValue] = useState(null);
 
     const {
         location
@@ -119,6 +123,13 @@ const SalesChannelPerformanceComponent = (props) => {
             clearChannel: () => {
                 setSalesChannel(null);
                 setSelectedChannel(null);
+            },
+            openDetailGraphSelectorModal: (data) => {
+                setDetailSearchValue(data);
+                setDetailGraphSelectorModalOpen(true);
+            },
+            closeDetailGraphSelectorModal: () => {
+                setDetailGraphSelectorModalOpen(false);
             }
         },
         submit: {
@@ -163,6 +174,8 @@ const SalesChannelPerformanceComponent = (props) => {
                     searchDimension={searchDimension}
                     checkedSwitch={checkedSwitch}
                     payAmount={performance}
+
+                    onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
 
                 <RegistrationAndUnitGraphComponent
@@ -182,6 +195,13 @@ const SalesChannelPerformanceComponent = (props) => {
 
             <BackdropHookComponent
                 open={backdropOpen}
+            />
+
+            <DetailGraphSelectorModalComponent
+                modalOpen={detailGraphSelectorModalOpen}
+                detailSearchValue={detailSearchValue}
+
+                onActionCloseModal={__handle.action.closeDetailGraphSelectorModal}
             />
         </>
     )

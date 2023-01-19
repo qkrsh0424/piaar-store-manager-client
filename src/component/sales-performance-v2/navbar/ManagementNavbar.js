@@ -119,6 +119,10 @@ const thisRouters = [
             {
                 name: '상품별 매출',
                 pathname: '/sales-performance/sales-channel/product'
+            },
+            {
+                name: '스토어 BEST 상품',
+                pathname: '/sales-performance/sales-channel/product/best'
             }
         ]
     },
@@ -145,6 +149,10 @@ const thisRouters = [
             {
                 name: 'BEST 상품 & 옵션',
                 pathname: '/sales-performance/product/best'
+            },
+            {
+                name: '상품 성과 상세',
+                pathname: '/sales-performance/product/detail'
             }
         ]
     }
