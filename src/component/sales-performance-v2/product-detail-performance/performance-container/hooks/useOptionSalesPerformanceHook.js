@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { salesPerformanceDataConnect } from "../../../../data_connect/salesPerformanceDataConnect";
+import { salesPerformanceDataConnect } from "../../../../../data_connect/salesPerformanceDataConnect";
 
-export default function useProductSalesPerformanceHook(props) {
+export default function useOptionSalesPerformanceHook(props) {
     const [performance, setPerformance] = useState(null);
 
-    const reqSearchProductPerformance = async (body) => {
-        await salesPerformanceDataConnect().searchProductOptionPerformance(body)
+    const reqSearchChannelBestOptionPerformance = async (body) => {
+        await salesPerformanceDataConnect().searchBestOptionPerformance(body)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     setPerformance(res.data.data);
@@ -28,7 +28,7 @@ export default function useProductSalesPerformanceHook(props) {
 
     return {
         performance,
-        reqSearchProductPerformance,
+        reqSearchChannelBestOptionPerformance,
         onActionResetPerformance
     }
 }

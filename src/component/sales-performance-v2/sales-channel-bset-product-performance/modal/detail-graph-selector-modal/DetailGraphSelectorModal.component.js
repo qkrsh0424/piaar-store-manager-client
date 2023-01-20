@@ -2,15 +2,15 @@ import useRouterHook from "../../../../../hooks/router/useRouterHook";
 import CommonModalComponentV2 from "../../../../module/modal/CommonModalComponentV2";
 import { BoxFieldWrapper } from "./DetailGraphSelectorModal.styled";
 
-function BoxFieldView({ onActionSelectProduct }) {
+function BoxFieldView({ onActionSelectProductDetail }) {
     return (
         <BoxFieldWrapper>
             <div className='button-box'>
                 <button
                     className='button-el'
-                    onClick={() => onActionSelectProduct()}
+                    onClick={() => onActionSelectProductDetail()}
                 >
-                    BEST 상품
+                    상품 상세
                 </button>
             </div>
         </BoxFieldWrapper>
@@ -26,9 +26,9 @@ export default function DetailGraphSelectorModalComponent(props) {
 
     const __handle = {
         action: {
-            selectProduct: () => {
+            selectProductDetail: () => {
                 let data = {
-                    pathname: '/sales-performance/sales-channel/product/best',
+                    pathname: '/sales-performance/product/detail',
                     state: props.detailSearchValue
                 }
 
@@ -45,7 +45,7 @@ export default function DetailGraphSelectorModalComponent(props) {
             element={
                 <div>
                     <BoxFieldView
-                        onActionSelectProduct={__handle.action.selectProduct}
+                        onActionSelectProductDetail={__handle.action.selectProductDetail}
                     />
                 </div>
             }

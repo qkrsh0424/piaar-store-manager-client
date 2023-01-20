@@ -9,6 +9,7 @@ import BestProductGraphComponent from './best-product-graph/BestProductGraph.com
 import useProductSalesPerformanceHook from './hooks/useProductSalesPerformanceHook';
 import useOptionSalesPerformanceHook from './hooks/useOptionSalesPerformanceHook';
 import BestOptionGraphComponent from './best-option-graph/BestOptionGraph.component';
+import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
 
 const Container = styled.div`
     height: 100%;
@@ -39,6 +40,9 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
     const [checkedSwitch, setCheckedSwitch] = useState(false);
 
     const [selectedProductAndOptions, setSelectedProductAndOptions] = useState([]);
+
+    const [detailGraphSelectorModalOpen, setDetailGraphSelectorModalOpen] = useState(false);
+    const [detailSearchValue, setDetailSearchValue] = useState(null);
 
     const {
         open: backdropOpen,
@@ -114,6 +118,19 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
             },
             changeSelectedOption: (data) => {
                 setSelectedProductAndOptions([...data])
+            },
+            updateDetailSearchValue: (data) => {
+                setDetailSearchValue({
+                    ...detailSearchValue,
+                    ...data
+                });
+            },
+            openDetailGraphSelectorModal: (data) => {
+                setDetailSearchValue(data);
+                setDetailGraphSelectorModalOpen(true);
+            },
+            closeDetailGraphSelectorModal: () => {
+                setDetailGraphSelectorModalOpen(false);
             }
         },
         submit: {
@@ -137,6 +154,7 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
                     onSubmitSearchPerformance={__handle.submit.searchPerformance}
                     onActionResetPerformance={__handle.action.resetPerformance}
                     onActionChangeSelectedOption={__handle.action.changeSelectedOption}
+                    onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
                 />
 
                 <GraphOperatorComponent
@@ -150,16 +168,28 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
                 <BestProductGraphComponent
                     checkedSwitch={checkedSwitch}
                     performance={productPerformance}
+                    detailSearchValue={detailSearchValue}
+
+                    onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
 
                 <BestOptionGraphComponent
                     checkedSwitch={checkedSwitch}
                     performance={optionPerformance}
+
+                    onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
             </Container>
 
             <BackdropHookComponent
                 open={backdropOpen}
+            />
+
+            <DetailGraphSelectorModalComponent
+                modalOpen={detailGraphSelectorModalOpen}
+                detailSearchValue={detailSearchValue}
+
+                onActionCloseModal={__handle.action.closeDetailGraphSelectorModal}
             />
         </>
     )
