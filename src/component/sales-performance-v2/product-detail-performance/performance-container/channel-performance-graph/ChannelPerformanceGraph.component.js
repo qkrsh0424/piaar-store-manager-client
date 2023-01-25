@@ -23,13 +23,17 @@ export default function ChannelPerformanceGraphComponent(props) {
             return;
         }
 
+        if(!props.selectedOptions) {
+            return;
+        }
+
         if(!(props.performance && props.performance.length > 0)) {
             __handle.action.resetGraphData();
             return;
         }
 
         __handle.action.createGraphData();
-    }, [props.performance, props.searchDimension])
+    }, [props.performance, props.searchDimension, props.selectedOptions])
 
     useEffect(() => {
         if(!(totalSummaryData && salesSummaryData)) {
@@ -51,8 +55,6 @@ export default function ChannelPerformanceGraphComponent(props) {
             createGraphData: () => {
                 let salesPayAmountData = props.performance.map(r => r.salesPayAmount);
                 let orderPayAmountData = props.performance.map(r => r.orderPayAmount);
-                let salesDatasets = [];
-                let orderDatasets = [];
                 let graphLabels = props.performance.map(r => r.salesChannel);
 
                 let graphColor = SALES_GRAPH_BG_COLOR;

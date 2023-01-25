@@ -26,7 +26,7 @@ function ListField({ products, inputValue, onSubmitConfirm }) {
                         <button
                             key={r.id}
                             className='button-el'
-                            onClick={() => onSubmitConfirm(r.id)}
+                            onClick={() => onSubmitConfirm(r.code)}
                         >
                             <HighlightedText
                                 text={`${r.defaultName}`}
@@ -73,8 +73,8 @@ export default function ProductListModalComponent (props) {
             }
         },
         submit: {
-            confirmSelectedProduct: (productId) => {
-                props.onActionSelectedProduct(productId);
+            confirmSelectedProduct: (productCode) => {
+                props.onActionSelectedProduct(productCode);
             }
         },
     }

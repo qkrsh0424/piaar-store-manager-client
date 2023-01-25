@@ -23,10 +23,6 @@ export default function RegistrationAndUnitGraphComponent(props) {
     const [totalGraphOption, setTotalGraphOption] = useState(null);
     const [graphLabels, setGraphLabels] = useState(null);
 
-    const {
-        navigateUrl
-    } = useRouterHook();
-
     useEffect(() => {
         __handle.action.resetGraphData();
     }, [props.salesChannel])
@@ -432,16 +428,13 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let endDate = getEndDate(date.endDate);
                 let salesChannels = [...props.selectedChannel];
 
-                let data = {
-                    pathname: '/sales-performance/search',
-                    state: {
-                        startDate,
-                        endDate,
-                        salesChannels
-                    }
+                let detailSearchValue = {
+                    startDate,
+                    endDate,
+                    salesChannels
                 }
 
-                // navigateUrl(data);
+                props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
             }
         }
     }

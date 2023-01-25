@@ -22,9 +22,6 @@ export default function OperatorComponent(props) {
     const [startDate, setStartDate] = useState(PREV_2WEEKS_DATE);
     const [endDate, setEndDate] = useState(TODAY);
 
-    const [products, setProducts] = useState(null);
-    const [selectedProduct, setSelectedProduct] = useState(null);
-
     const [productListModalOpen, setProductListModalOpen] = useState(false);
 
     const {
@@ -45,46 +42,30 @@ export default function OperatorComponent(props) {
         onActionClose: onActionCloseSnackbar,
     } = useBasicSnackbarHookV2();
 
-    const {
-        productAndOptions,
-        reqSearchAllRelatedProduct
-    } = useProductAndOptionHook();
-
     useEffect(() => {
-        async function fetchInit() {
-            onActionOpenBackdrop();
-            await reqSearchAllRelatedProduct();
-            onActionCloseBackdrop();
-        }
-
-        fetchInit();
-    }, [])
-
-
-    useEffect(() => {
-        if(!productAndOptions) {
+        if(!props.products) {
             return;
         }
 
-        __handle.action.initProductAndOption();
         __handle.action.initSearchValueAndSearchPerformance();
-    }, [productAndOptions])
+    }, [props.products])
 
     const __handle = {
         action: {
             initSearchValueAndSearchPerformance: () => {
-                let searchProductCode = location.state?.productCode ?? null;
+                let productCode = location.state?.productCode;
 
-                if(!searchProductCode) {
+                if(!productCode) {
                     return;
                 }
-                let selectedProduct = productAndOptions.filter(r => r.product.code === searchProductCode);
+
+                let selectedProduct = props.productAndOptions.filter(r => r.product.code === productCode);
                 let searchOptionCodes = selectedProduct.map(r => r.option.code);
-                
+
                 let startDate = location.state?.startDate ?? PREV_2WEEKS_DATE;
                 let endDate = location.state?.endDate ?? TODAY;
                 let utcHourDifference = getTimeDiffWithUTC();
-                let optionCodes = searchOptionCodes;
+                let optionCodes = searchOptionCodes ?? null;
                 
                 let body = {
                     startDate,
@@ -94,10 +75,10 @@ export default function OperatorComponent(props) {
                 }
                 
                 props.onSubmitSearchPerformance(body);
+                props.onActionChangeSelectedProduct(productCode);
                 
                 setStartDate(startDate);
                 setEndDate(endDate);
-                setSelectedProduct(selectedProduct[0].product);
             },
             changeStartDate: (value) => {
                 setStartDate(value);
@@ -110,7 +91,6 @@ export default function OperatorComponent(props) {
                 setEndDate(null);
 
                 props.onActionResetPerformance();
-                setSelectedProduct(null);
             },
             searchDateRange: (year, month, day) => {
                 let end = new Date();
@@ -128,10 +108,10 @@ export default function OperatorComponent(props) {
                 setStartDate(start);
                 setEndDate(end);
             },
-            initProductAndOption: () => {
-                let productData = [...new Set(productAndOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
-                setProducts(productData);
-            },
+            // initProductAndOption: () => {
+            //     let productData = [...new Set(props.productAndOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
+            //     setProducts(productData);
+            // },
             openProductListModal: (e) => {
                 e.preventDefault();
 
@@ -140,9 +120,8 @@ export default function OperatorComponent(props) {
             closeProductListModal: () => {
                 setProductListModalOpen(false);
             },
-            selectProduct: (productId) => {
-                let product = products.filter(r => r.id === productId)[0];
-                setSelectedProduct(product);
+            selectProduct: (productCode) => {
+                props.onActionChangeSelectedProduct(productCode);
                 __handle.action.closeProductListModal();
             }
         },
@@ -171,7 +150,7 @@ export default function OperatorComponent(props) {
                         throw new Error(`조회기간은 최대 ${SEARCHABLE_PERIOD}일까지 가능합니다.`)
                     }
 
-                    if(!selectedProduct) {
+                    if(!props.selectedProduct) {
                         throw new Error('조회하려는 상품을 선택해주세요.')
                     }
                 } catch (err) {
@@ -183,7 +162,7 @@ export default function OperatorComponent(props) {
                     return;
                 }
 
-                let searchOptionCodes = productAndOptions.filter(r => r.product.id === selectedProduct.id).map(r => r.option.code);
+                let searchOptionCodes = props.productAndOptions.filter(r => r.product.id === props.selectedProduct.id).map(r => r.option.code);
 
                 let searchStartDate = startDate ? getStartDate(startDate) : null;
                 let searchEndDate = endDate ? getEndDate(endDate) : null;
@@ -216,8 +195,8 @@ export default function OperatorComponent(props) {
                 />
 
                 <SearchFieldView
-                    products={products}
-                    selectedProduct={selectedProduct}
+                    products={props.products}
+                    selectedProduct={props.selectedProduct}
 
                     onActionOpenProductListModal={__handle.action.openProductListModal}
                     onActionRemoveOptionOne={__handle.action.removeOptionOne}
@@ -243,7 +222,7 @@ export default function OperatorComponent(props) {
 
             {productListModalOpen &&
                 <ProductListModalComponent
-                    products={products}
+                    products={props.products}
                     modalOpen={productListModalOpen}
 
                     onActionSelectedProduct={__handle.action.selectProduct}

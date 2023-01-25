@@ -25,10 +25,14 @@ export default function BestOptionGraphComponent(props) {
             return;
         }
 
+        if(!props.selectedOptions) {
+            return;
+        }
+
         __handle.action.createPayAmountGraphData();
         __handle.action.createUnitDate();
         __handle.action.createGraphOption();
-    }, [props.performance])
+    }, [props.performance, props.selectedOptions])
 
     const __handle = {
         action: {
@@ -42,7 +46,10 @@ export default function BestOptionGraphComponent(props) {
                 setUnitGraphOption(null);
             },
             createPayAmountGraphData: () => {
-                let bestSalesPayAmount = _.sortBy(props.performance, 'salesPayAmount').reverse().slice(0, BEST_UNIT);
+                let selectedOptionCodes = props.selectedOptions?.map(r => r.code) ?? [];
+                let searchPerformance = props.performance.filter(r => selectedOptionCodes.includes(r.optionCode));
+
+                let bestSalesPayAmount = _.sortBy(searchPerformance, 'salesPayAmount').reverse().slice(0, BEST_UNIT);
                 let graphLabels = bestSalesPayAmount.map(r => r.optionDefaultName);
 
                 let salesPayAmount = bestSalesPayAmount.map(r => r.salesPayAmount);
@@ -85,7 +92,10 @@ export default function BestOptionGraphComponent(props) {
                 setTotalPayAmountGraphData(createdTotalGraph);
             },
             createUnitDate: () => {
-                let bestSalesUnit = _.sortBy(props.performance, 'salesUnit').reverse().slice(0, BEST_UNIT);
+                let selectedOptionCodes = props.selectedOptions?.map(r => r.code) ?? [];
+                let searchPerformance = props.performance.filter(r => selectedOptionCodes.includes(r.optionCode));
+                
+                let bestSalesUnit = _.sortBy(searchPerformance, 'salesUnit').reverse().slice(0, BEST_UNIT);
                 let graphLabels = bestSalesUnit.map(r => r.optionDefaultName);
 
                 let salesUnit = bestSalesUnit.map(r => r.salesUnit);

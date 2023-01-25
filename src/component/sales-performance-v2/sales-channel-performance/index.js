@@ -184,6 +184,8 @@ const SalesChannelPerformanceComponent = (props) => {
                     searchDimension={searchDimension}
                     checkedSwitch={checkedSwitch}
                     registrationAndUnit={performance}
+
+                    onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
 
                 <PayAmountDayOfWeekGraphComponent
