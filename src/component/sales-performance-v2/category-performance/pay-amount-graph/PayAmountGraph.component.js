@@ -3,7 +3,7 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import { dateToYYYYMMDDAndDayName, getMonthAndSearchDateRange, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getMonthAndSearchDateRange, getStartDate, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
 import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
@@ -18,6 +18,7 @@ export default function PayAmountGraphComponent(props) {
     const [salesSummaryData, setSalesSummaryData] = useState(null);
 
     const [payAmountGraphOption, setPayAmountGraphOption] = useState(null);
+    const [graphLabels, setGraphLabels] = useState(null);
 
     useEffect(() => {
         __handle.action.resetGraphData();
@@ -39,8 +40,15 @@ export default function PayAmountGraphComponent(props) {
         }
 
         __handle.action.createGraphData();
-        __handle.action.createGraphOption();
     }, [props.selectedCategory, props.payAmount, props.searchDimension])
+
+    useEffect(() => {
+        if(!(totalPayAmountGraphData && salesPayAmountGraphData)) {
+            return;
+        }
+
+        __handle.action.createGraphOption();
+    }, [totalPayAmountGraphData, salesPayAmountGraphData])
 
     const __handle = {
         action: {
@@ -203,7 +211,8 @@ export default function PayAmountGraphComponent(props) {
 
                 setSalesPayAmountGraphData(createdSalesGraph);
                 setTotalPayAmountGraphData(createdTotalGraph);
-                
+                setGraphLabels([...graphLabels]);
+
                 // 매출 그래프 요약 데이터 생성
                 let salesData = setAnalysisResultText(salesDatasets);
 
@@ -227,10 +236,36 @@ export default function PayAmountGraphComponent(props) {
                                 }
                             }
                         }
+                    },
+                    onClick: function (e, item) {
+                        __handle.action.setGraphClickOption(e, item);
+                    },
+                    onHover: (e, item) => {
+                        const target = e.native ? e.native.target : e.target;
+                        target.style.cursor = item[0] ? 'pointer' : 'default';
                     }
                 }
 
                 setPayAmountGraphOption(option);
+            },
+            setGraphClickOption: (e, item) => {
+                if(item.length === 0) return;
+
+                var itemIdx = item[0].index;
+                var label = graphLabels[itemIdx];
+                var date = getDateFormatByGraphDateLabel(label, props.searchDimension);
+
+                let startDate = getStartDate(date.startDate);
+                let endDate = getEndDate(date.endDate);
+                let productCategory = [...props.selectedCategory];
+
+                let detailSearchValue = {
+                    startDate,
+                    endDate,
+                    productCategory
+                }
+
+                props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
             }
         }
     }

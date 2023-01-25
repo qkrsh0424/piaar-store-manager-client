@@ -32,9 +32,9 @@ function PageTitleFieldView({ title }) {
     )
 }
 
-const SalesChannelBestProductPerformanceComponent = (props) => {
-    const [salesChannel, setSalesChannel] = useState(null);
-    const [selectedChannel, setSelectedChannel] = useState(null);
+const CategoryBestProductPerformanceComponent = (props) => {
+    const [salesCategory, setSalesCategory] = useState(null);
+    const [selectedSalesCategory, setSelectedSalesCategory] = useState(null);
 
     const [searchDimension, setSearchDimension] = useState('date');
     const [checkedSwitch, setCheckedSwitch] = useState(false);
@@ -52,13 +52,13 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
 
     const {
         performance: productPerformance,
-        reqSearchChannelBestProductPerformance,
+        reqSearchCategoryBestProductPerformance,
         onActionResetPerformance
     } = useProductSalesPerformanceHook();
 
     const {
         performance: optionPerformance,
-        reqSearchChannelBestOptionPerformance,
+        reqSearchCategoryBestOptionPerformance,
         onActionResetOptionPerformance
     } = useOptionSalesPerformanceHook();
 
@@ -70,39 +70,39 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
                 __handle.action.clearChannel();
             },
             initChannel: () => {
-                let channel = new Set([]);
+                let category = new Set([]);
                 performance.forEach(r => r.performances?.forEach(r2 => {
-                    channel.add(r2.salesChannel);
+                    category.add(r2.productCategoryName);
                 }))
 
-                let channelName = [...channel].sort();
-                setSalesChannel(channelName);
-                setSelectedChannel([channelName[0]]);
+                let categoryName = [...category].sort();
+                setSalesCategory(categoryName);
+                setSelectedSalesCategory([categoryName[0]]);
             },
-            isCheckedOne: (channel) => {
-                return selectedChannel.some(name => name === channel);
+            isCheckedOne: (category) => {
+                return selectedSalesCategory.some(name => name === category);
             },
-            checkOne: (e, channel) => {
+            checkOne: (e, category) => {
                 e.stopPropagation();
 
-                let data = [...selectedChannel];
+                let data = [...selectedSalesCategory];
 
-                if(selectedChannel.some(name => name === channel)) {
-                    data = data.filter(name => name !== channel);
+                if(selectedSalesCategory.some(name => name === category)) {
+                    data = data.filter(name => name !== category);
                 } else {
-                    data.push(channel);
+                    data.push(category);
                 }
-                setSelectedChannel(data);
+                setSelectedSalesCategory(data);
             },
             checkAll: (e) => {
                 e.stopPropagation();
 
-                setSelectedChannel([...salesChannel]);
+                setSelectedSalesCategory([...salesCategory]);
             },
             checkCancelAll: (e) => {
                 e.stopPropagation();
 
-                setSelectedChannel([]);
+                setSelectedSalesCategory([]);
             },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;
@@ -132,8 +132,8 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
         submit: {
             searchPerformance: async (body) => {
                 onActionOpenBackdrop();
-                await reqSearchChannelBestProductPerformance(body);
-                await reqSearchChannelBestOptionPerformance(body);
+                await reqSearchCategoryBestProductPerformance(body);
+                await reqSearchCategoryBestOptionPerformance(body);
                 onActionCloseBackdrop();
             }
         }
@@ -190,4 +190,4 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
     )
 }
 
-export default SalesChannelBestProductPerformanceComponent;
+export default CategoryBestProductPerformanceComponent;

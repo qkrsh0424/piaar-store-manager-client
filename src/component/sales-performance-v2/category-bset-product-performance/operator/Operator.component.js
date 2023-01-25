@@ -1,16 +1,16 @@
-import _ from "lodash";
 import { useEffect, useState } from "react";
-import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
-import useRouterHook from "../../../../../hooks/router/useRouterHook";
-import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../../utils/dateFormatUtils";
-import useProductAndOptionHook from "../hooks/useProductAndOptionHook";
+import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
+import useRouterHook from "../../../../hooks/router/useRouterHook";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
+import { getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
+import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
 import ProductListModalComponent from "./modal/product-list/ProductListModal.component";
 import { Container } from "./Operator.styled";
 import ButtonFieldView from "./view/ButtonField.view";
+import CategorySelectorFieldView from "./view/CategorySelectorField.view";
+import ChannelSelectorFieldView from "./view/CategorySelectorField.view";
 import DateButtonFieldView from "./view/DateButtonField.view";
 import DateSelectorFieldView from "./view/DateSelectorField.view";
-import SearchFieldView from "./view/SearchField.view";
 
 // 날짜검색 최대기간 92일
 const SEARCHABLE_PERIOD = 92;
@@ -19,11 +19,14 @@ const TODAY = new Date();
 const PREV_2WEEKS_DATE = setSubtractedDate(TODAY, 0, 0, -13);
 
 export default function OperatorComponent(props) {
-    const [startDate, setStartDate] = useState(PREV_2WEEKS_DATE);
-    const [endDate, setEndDate] = useState(TODAY);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+
+    const [salesCategory, setSalesCategory] = useState(null);
+    const [selectedSalesCategory, setSelectedSalesCategory] = useState(null);
 
     const [products, setProducts] = useState(null);
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedProductAndOptions, setSelectedProductAndOptions] = useState([]);
 
     const [productListModalOpen, setProductListModalOpen] = useState(false);
 
@@ -38,17 +41,17 @@ export default function OperatorComponent(props) {
     } = useBackdropHook();
 
     const {
+        productAndOptions,
+        reqSearchAllRelatedProduct
+    } = useProductAndOptionHook();
+
+    const {
         open: snackbarOpen,
         message: snackbarMessage,
         severity: snackbarSeverity,
         onActionOpen: onActionOpenSnackbar,
         onActionClose: onActionCloseSnackbar,
     } = useBasicSnackbarHookV2();
-
-    const {
-        productAndOptions,
-        reqSearchAllRelatedProduct
-    } = useProductAndOptionHook();
 
     useEffect(() => {
         async function fetchInit() {
@@ -58,8 +61,8 @@ export default function OperatorComponent(props) {
         }
 
         fetchInit();
+        __handle.action.initSearchValueAndSearchPerformance();
     }, [])
-
 
     useEffect(() => {
         if(!productAndOptions) {
@@ -67,37 +70,33 @@ export default function OperatorComponent(props) {
         }
 
         __handle.action.initProductAndOption();
-        __handle.action.initSearchValueAndSearchPerformance();
     }, [productAndOptions])
 
     const __handle = {
         action: {
             initSearchValueAndSearchPerformance: () => {
-                let searchProductCode = location.state?.productCode ?? null;
-
-                if(!searchProductCode) {
-                    return;
-                }
-                let selectedProduct = productAndOptions.filter(r => r.product.code === searchProductCode);
-                let searchOptionCodes = selectedProduct.map(r => r.option.code);
-                
                 let startDate = location.state?.startDate ?? PREV_2WEEKS_DATE;
                 let endDate = location.state?.endDate ?? TODAY;
+                let productCategoryNames = location.state?.productCategory ?? null;
+
+                let searchStartDate = getStartDate(startDate);
+                let searchEndDate = getEndDate(endDate);
                 let utcHourDifference = getTimeDiffWithUTC();
-                let optionCodes = searchOptionCodes;
-                
+
                 let body = {
-                    startDate,
-                    endDate,
+                    startDate: searchStartDate,
+                    endDate: searchEndDate,
                     utcHourDifference,
-                    optionCodes
+                    productCategoryNames
                 }
-                
+
+                props.onActionUpdateDetailSearchValue(body);
                 props.onSubmitSearchPerformance(body);
-                
+
                 setStartDate(startDate);
                 setEndDate(endDate);
-                setSelectedProduct(selectedProduct[0].product);
+                setSalesCategory(productCategoryNames);
+                setSelectedSalesCategory(productCategoryNames);
             },
             changeStartDate: (value) => {
                 setStartDate(value);
@@ -110,7 +109,7 @@ export default function OperatorComponent(props) {
                 setEndDate(null);
 
                 props.onActionResetPerformance();
-                setSelectedProduct(null);
+                setSelectedProductAndOptions([]);
             },
             searchDateRange: (year, month, day) => {
                 let end = new Date();
@@ -141,14 +140,63 @@ export default function OperatorComponent(props) {
                 setProductListModalOpen(false);
             },
             selectProduct: (productId) => {
+                let selectedProduct = selectedProductAndOptions.some(r => r.product.id === productId);
+                if(selectedProduct){
+                    return;
+                }
+
                 let product = products.filter(r => r.id === productId)[0];
-                setSelectedProduct(product);
-                __handle.action.closeProductListModal();
-            }
+                let options = productAndOptions.filter(r => r.product.id === product.id).map(r => r.option);
+                let data = [{
+                    product,
+                    options: options
+                }]
+                
+                setSelectedProductAndOptions([...selectedProductAndOptions, ...data]);
+            },
+            removeOptionOne: (e, optionId) => {
+                e.stopPropagation();
+
+                let updatedProductAndOptions = selectedProductAndOptions.map(r => {
+                    let options = r.options.filter(r2 => r2.id !== optionId);
+
+                    return {
+                        ...r,
+                        options
+                    }
+                })
+                // 해당 상품에 대한 옵션이 모두 제거되면 상품도 제거
+                updatedProductAndOptions = updatedProductAndOptions.filter(r => r.options?.length > 0);
+
+                setSelectedProductAndOptions(updatedProductAndOptions);
+            },
+            removeProduct: (e, productId) => {
+                e.stopPropagation();
+
+                let updatedProductAndOptions = selectedProductAndOptions.filter(r => r.product.id !== productId);
+                setSelectedProductAndOptions(updatedProductAndOptions);
+            },
+            isCheckedOne: (category) => {
+                return selectedSalesCategory.some(name => name === category);
+            },
+            checkOne: (e, category) => {
+                e.stopPropagation();
+
+                let data = [...selectedSalesCategory];
+
+                if(selectedSalesCategory.some(name => name === category)) {
+                    data = data.filter(name => name !== category);
+                } else {
+                    data.push(category);
+                }
+                setSelectedSalesCategory(data);
+            },
         },
         submit: {
             routeToSearch: (e) => {
                 e.preventDefault();
+
+                let searchOptionCodes = [];
 
                 try{
                     if (startDate && !endDate) {
@@ -163,16 +211,12 @@ export default function OperatorComponent(props) {
                         throw new Error('시작일과 종료일을 선택해 주세요.')
                     }
     
-                    if ((endDate - startDate < 0)) {
+                    if((endDate - startDate < 0)) {
                         throw new Error('조회기간을 정확히 선택해 주세요.')
                     }
 
-                    if (!isSearchablePeriod(startDate, endDate, SEARCHABLE_PERIOD)) {
+                    if(!isSearchablePeriod(startDate, endDate, SEARCHABLE_PERIOD)) {
                         throw new Error(`조회기간은 최대 ${SEARCHABLE_PERIOD}일까지 가능합니다.`)
-                    }
-
-                    if(!selectedProduct) {
-                        throw new Error('조회하려는 상품을 선택해주세요.')
                     }
                 } catch (err) {
                     let snackbarSetting = {
@@ -183,19 +227,24 @@ export default function OperatorComponent(props) {
                     return;
                 }
 
-                let searchOptionCodes = productAndOptions.filter(r => r.product.id === selectedProduct.id).map(r => r.option.code);
+                selectedProductAndOptions.forEach(r => {
+                    r.options.forEach(r2 => searchOptionCodes.push(r2.code));
+                });
 
                 let searchStartDate = startDate ? getStartDate(startDate) : null;
                 let searchEndDate = endDate ? getEndDate(endDate) : null;
                 let utcHourDifference = getTimeDiffWithUTC();
-                let optionCodes = searchOptionCodes;
+                let productCategoryNames = selectedSalesCategory;
 
                 let body = {
                     startDate: searchStartDate,
                     endDate: searchEndDate,
                     utcHourDifference,
-                    optionCodes
+                    productCategoryNames
                 }
+
+                props.onActionChangeSelectedOption(selectedProductAndOptions);
+                props.onActionUpdateDetailSearchValue(body);
                 props.onSubmitSearchPerformance(body);
             }
         }
@@ -215,14 +264,12 @@ export default function OperatorComponent(props) {
                     onActionSearchMonthRange={__handle.action.searchMonthRange}
                 />
 
-                <SearchFieldView
-                    products={products}
-                    selectedProduct={selectedProduct}
-
-                    onActionOpenProductListModal={__handle.action.openProductListModal}
-                    onActionRemoveOptionOne={__handle.action.removeOptionOne}
-                    onActionRemoveProduct={__handle.action.removeProduct}
+                <CategorySelectorFieldView
+                    salesCategory={salesCategory}
+                    onActionIsCheckedOne={__handle.action.isCheckedOne}
+                    onActionCheckOne={__handle.action.checkOne}
                 />
+
                 <ButtonFieldView
                     onActionClearRoute={__handle.action.clearRoute}
                 />
@@ -241,6 +288,10 @@ export default function OperatorComponent(props) {
                 ></BasicSnackbarHookComponentV2>
             }
 
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
+
             {productListModalOpen &&
                 <ProductListModalComponent
                     products={products}
@@ -250,8 +301,6 @@ export default function OperatorComponent(props) {
                     onActionCloseModal={__handle.action.closeProductListModal}
                 />
             }
-
-            <BackdropHookComponent open={backdropOpen} />
         </Container>
     )
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import BestOptionGraphComponent from "./best-option-graph/BestOptionGraph.component";
@@ -6,7 +6,6 @@ import ChannelPerformanceGraphComponent from "./channel-performance-graph/Channe
 import GraphOperatorComponent from "./graph-operator/GraphOperator.component";
 import useChannelSalesPerformanceHook from "./hooks/useChannelSalesPerformanceHook";
 import useOptionSalesPerformanceHook from "./hooks/useOptionSalesPerformanceHook";
-import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
 import useProductSalesPerformanceHook from "./hooks/useProductSalesPerformanceHook";
 import OperatorComponent from "./operator/Operator.component";
 import PayAmountGraphComponent from "./pay-amount-graph/PayAmountGraph.component";
@@ -60,21 +59,6 @@ export default function PerformanceContainerComponent (props) {
         onActionResetPerformance: onActionResetOptionPerformance
     } = useOptionSalesPerformanceHook();
 
-    const {
-        productAndOptions,
-        reqSearchAllRelatedProduct
-    } = useProductAndOptionHook();
-
-    useEffect(() => {
-        async function fetchInit() {
-            onActionOpenBackdrop();
-            await reqSearchAllRelatedProduct();
-            onActionCloseBackdrop();
-        }
-
-        fetchInit();
-    }, [])
-
     const __handle = {
         action: {
             resetPerformance: () => {
@@ -98,21 +82,15 @@ export default function PerformanceContainerComponent (props) {
                 await reqSearchChannelPerformance(body);
                 await reqSearchChannelBestOptionPerformance(body);
                 onActionCloseBackdrop();
-
-                // let optionCodes = body.optionCodes;
-
-                // let options = productAndOptions.filter(r => optionCodes.includes(r.option.code));
-                // setSelectedOptions(options);
             }
         }
     }
 
     return (
         <Container navbarOpen={props.navbarOpen}>
-            <PageTitleFieldView title={'상품 - 총 매출액 & 판매 건'} />
+            <PageTitleFieldView title={'상품 - 상세 성과'} />
 
             <OperatorComponent
-                productAndOptions={productAndOptions}
                 onActionResetPerformance={__handle.action.resetPerformance}
                 onSubmitSearchPerformance={__handle.submit.searchPerformance}
             />

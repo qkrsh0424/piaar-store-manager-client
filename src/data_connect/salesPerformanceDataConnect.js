@@ -45,12 +45,22 @@ const salesPerformanceDataConnect = () => {
             })
         },
         searchBestOptionPerformance: async function (body) {
-            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/product/option/best`, body, {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/product-option/best`, body, {
                 withCredentials: true
             })
         },
         searchProductChannelPerformance: async function (body) {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/product/channel`, body, {
+                withCredentials: true
+            })
+        },
+        searchCategoryBestProductPerformance: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/category/product/best`, body, {
+                withCredentials: true
+            })
+        },
+        searchCategoryBestOptionPerformance: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/category/product-option/best`, body, {
                 withCredentials: true
             })
         },
