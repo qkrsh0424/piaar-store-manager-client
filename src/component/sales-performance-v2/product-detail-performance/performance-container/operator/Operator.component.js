@@ -19,8 +19,8 @@ const TODAY = new Date();
 const PREV_2WEEKS_DATE = setSubtractedDate(TODAY, 0, 0, -13);
 
 export default function OperatorComponent(props) {
-    const [startDate, setStartDate] = useState(PREV_2WEEKS_DATE);
-    const [endDate, setEndDate] = useState(TODAY);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     const [productListModalOpen, setProductListModalOpen] = useState(false);
 
@@ -55,6 +55,7 @@ export default function OperatorComponent(props) {
             initSearchValueAndSearchPerformance: () => {
                 let productCode = location.state?.productCode;
 
+                // 선택된 상품이 없는 경우
                 if(!productCode) {
                     return;
                 }

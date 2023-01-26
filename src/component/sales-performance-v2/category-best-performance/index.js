@@ -156,7 +156,7 @@ const CategoryBestPerformanceComponent = (props) => {
     return (
         <>
             <Container navbarOpen={props.navbarOpen}>
-                <PageTitleFieldView title={'카테고리 - BEST 상품'} />
+                <PageTitleFieldView title={'카테고리 - BEST 카테고리 상품'} />
 
                 <OperatorComponent
                     onSubmitSearchPerformance={__handle.submit.searchPerformance}

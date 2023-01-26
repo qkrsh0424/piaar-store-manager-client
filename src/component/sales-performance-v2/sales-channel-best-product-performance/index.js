@@ -143,7 +143,7 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
     return (
         <>
             <Container navbarOpen={props.navbarOpen}>
-                <PageTitleFieldView title={'판매스토어 - 상품별 매출'} />
+                <PageTitleFieldView title={'판매스토어 - BEST 상품 & 옵션'} />
 
                 <OperatorComponent
                     selectedProductAndOptions={selectedProductAndOptions}

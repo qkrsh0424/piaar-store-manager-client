@@ -26,10 +26,22 @@ const BoxFieldWrapper = styled.div`
         font-size: 1.2rem;
         border-radius: 10px;
         transition: 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         :hover {
             background-color: var(--defaultHoverColor);
         }
+
+        @media screen and (max-width: 992px) {
+            flex-direction: column;
+        }
+    }
+    
+    .sub-info-text {
+        font-size: 1rem;
+        padding: 0 10px;
     }
 `;
 

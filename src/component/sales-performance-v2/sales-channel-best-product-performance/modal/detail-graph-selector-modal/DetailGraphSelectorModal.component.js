@@ -10,7 +10,8 @@ function BoxFieldView({ onActionSelectProductDetail }) {
                     className='button-el'
                     onClick={() => onActionSelectProductDetail()}
                 >
-                    상품 상세
+                    <span>상품 별</span>
+                    <span className='sub-info-text'>[단일 상품 성과]</span> 
                 </button>
             </div>
         </BoxFieldWrapper>

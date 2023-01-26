@@ -57,6 +57,8 @@ export default function OperatorComponent(props) {
                     endDate: searchEndDate,
                     utcHourDifference,
                 }
+
+                props.onActionUpdateDetailSearchValue(body);
                 props.onSubmitSearchPerformance(body);
 
                 setStartDate(startDate);
@@ -133,6 +135,8 @@ export default function OperatorComponent(props) {
                     endDate: searchEndDate,
                     utcHourDifference,
                 }
+                
+                props.onActionUpdateDetailSearchValue(body);
                 props.onSubmitSearchPerformance(body);
             }
         }

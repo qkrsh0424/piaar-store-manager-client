@@ -25,14 +25,6 @@ const Container = styled.div`
     } */
 `;
 
-function PageTitleFieldView({ title }) {
-    return (
-        <div>
-            <div className='page-title'>{title}</div>
-        </div>
-    )
-}
-
 export default function PerformanceContainerComponent (props) {
     const [searchDimension, setSearchDimension] = useState('date');
     const [checkedSwitch, setCheckedSwitch] = useState(false);
@@ -166,8 +158,6 @@ export default function PerformanceContainerComponent (props) {
 
     return (
         <Container navbarOpen={props.navbarOpen}>
-            <PageTitleFieldView title={'상품 - 상세 성과'} />
-
             <OperatorComponent
                 productAndOptions={productAndOptions}
                 products={products}

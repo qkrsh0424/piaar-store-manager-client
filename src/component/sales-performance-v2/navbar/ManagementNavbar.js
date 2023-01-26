@@ -117,11 +117,11 @@ const thisRouters = [
                 pathname: '/sales-performance/sales-channel'
             },
             {
-                name: '스토어 BEST 상품',
+                name: 'BEST 상품 & 옵션',
                 pathname: '/sales-performance/sales-channel/product/best'
             },
             {
-                name: '상품별 매출',
+                name: '조회 상품 스토어 성과',
                 pathname: '/sales-performance/sales-channel/product'
             },
         ]
@@ -134,11 +134,11 @@ const thisRouters = [
                 pathname: '/sales-performance/category'
             },
             {
-                name: '카테고리 BEST 상품',
+                name: 'BEST 상품 & 옵션',
                 pathname: '/sales-performance/category/product/best'
             },
             {
-                name: 'BEST 상품',
+                name: 'BEST 카테고리 상품',
                 pathname: '/sales-performance/category/best'
             }
         ]
@@ -155,7 +155,7 @@ const thisRouters = [
                 pathname: '/sales-performance/product/best'
             },
             {
-                name: '상세 성과',
+                name: '단일 상품 성과',
                 pathname: '/sales-performance/product/detail'
             }
         ]

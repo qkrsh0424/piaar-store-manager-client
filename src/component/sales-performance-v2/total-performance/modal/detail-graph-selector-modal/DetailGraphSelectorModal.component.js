@@ -10,7 +10,8 @@ function BoxFieldView({ onActionSelectSalesChannel, onActionSelectCategory, onAc
                     className='button-el'
                     onClick={() => onActionSelectSalesChannel()}
                 >
-                    판매스토어 별
+                    <span>판매스토어 별</span>
+                    <span className='sub-info-text'>[총 매출액 & 판매 건]</span>
                 </button>
             </div>
             <div className='button-box'>
@@ -18,7 +19,8 @@ function BoxFieldView({ onActionSelectSalesChannel, onActionSelectCategory, onAc
                     className='button-el'
                     onClick={() => onActionSelectCategory()}
                 >
-                    카테고리 별
+                    <span>카테고리 별</span>
+                    <span className='sub-info-text'>[총 매출액 & 판매 건]</span>
                 </button>
             </div>
             <div className='button-box'>
@@ -26,7 +28,8 @@ function BoxFieldView({ onActionSelectSalesChannel, onActionSelectCategory, onAc
                     className='button-el'
                     onClick={() => onActionSelectProduct()}
                 >
-                    상품 별
+                    <span>상품 별</span>
+                    <span className='sub-info-text'>[BEST 상품 & 옵션]</span> 
                 </button>
             </div>
         </BoxFieldWrapper>

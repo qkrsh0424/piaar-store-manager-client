@@ -10,7 +10,8 @@ function BoxFieldView({ onActionSelectProduct }) {
                     className='button-el'
                     onClick={() => onActionSelectProduct()}
                 >
-                    BEST 상품
+                    <span>판매스토어 별</span>
+                    <span className='sub-info-text'>[BEST 상품 & 옵션]</span> 
                 </button>
             </div>
         </BoxFieldWrapper>

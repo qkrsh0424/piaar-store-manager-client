@@ -86,7 +86,7 @@ const TotalSalesPerformanceComponent = (props) => {
     return (
         <>
             <Container navbarOpen={props.navbarOpen}>
-                <PageTitleFieldView title={'전체 - 총 매출액 & 판매건'} />
+                <PageTitleFieldView title={'전체 - 총 매출액 & 판매 건'} />
 
                 <OperatorComponent
                     onSubmitSearchPerformance={__handle.submit.searchPerformance}
