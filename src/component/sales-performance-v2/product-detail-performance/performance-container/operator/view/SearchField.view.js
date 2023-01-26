@@ -11,9 +11,20 @@ export default function SearchFieldView(props) {
                         className='button-el'
                         onClick={(e) => props.onActionOpenProductListModal(e)}
                     >
-                        <div>{props.selectedProduct ? props.selectedProduct.defaultName : '조회 상품 선택'}</div>
+                        <span>{props.selectedProduct ? props.selectedProduct.defaultName : '조회 상품 선택'}</span>
                     </button>
                 </div>
+                <div className='search-category-info'>
+                    {props.selectedCategory &&
+                        <div
+                            className='category-button-el'
+                            onClick={(e) => props.onActionRouteCategoryPerformancePage(e)}
+                        >
+                            <span>{props.selectedCategory.name} </span>
+                            <span>[총 매출액 & 판매 건] 확인</span>
+                        </div>
+                    }
+                    </div>
             </div>
         </SearchFieldWrapper>
     )

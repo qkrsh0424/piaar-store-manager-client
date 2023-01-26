@@ -65,6 +65,11 @@ const productOptionDataConnect = () => {
                 withCredentials: true
             })
         },
+        searchAllRelatedProductAndProductCategory: async function () {
+            return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product-options/all/product/product-category`, {
+                withCredentials: true
+            })
+        },
         searchBatchByProductId: async function (productId) {
             return await axios.get(`${API_SERVER_ADDRESS}/api/v2/product-options/batch/${productId}`, {
                 withCredentials: true

@@ -152,7 +152,7 @@ export default function ChannelPerformanceGraphComponent(props) {
 
                 setSalesPayAmountGraphData(createdSalesGraph);
                 setTotalPayAmountGraphData(createdTotalGraph);
-                
+
                 // 매출 그래프 요약 데이터 생성
                 let salesData = setAnalysisResultText([barGraphOfSales]);
                 let data = setAnalysisResultText([barGraphOfSales, lineGraphOfOrder]);

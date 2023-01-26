@@ -35,9 +35,11 @@ export default function PerformanceContainerComponent (props) {
     const [options, setOptions] = useState(null);
     const [selectedOptions, setSelectedOptions] = useState(null);
 
+    const [categories, setCategories] = useState(null);
+
     const {
         productAndOptions,
-        reqSearchAllRelatedProduct
+        reqSearchAllRelatedProductAndProductCategory
     } = useProductAndOptionHook();
 
     const {
@@ -67,7 +69,7 @@ export default function PerformanceContainerComponent (props) {
     useEffect(() => {
         async function fetchInit() {
             onActionOpenBackdrop();
-            await reqSearchAllRelatedProduct();
+            await reqSearchAllRelatedProductAndProductCategory();
             onActionCloseBackdrop();
         }
 
@@ -93,8 +95,19 @@ export default function PerformanceContainerComponent (props) {
     const __handle = {
         action: {
             initProduct: () => {
-                let productData = [...new Set(productAndOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
+                let productData = new Set([]);
+                let categoryData = new Set([]);
+
+                productAndOptions.forEach(r => {
+                    productData.add(JSON.stringify(r.product));
+                    categoryData.add(JSON.stringify(r.productCategory));
+                })
+
+                productData = [...productData].map(r => JSON.parse(r));
+                categoryData = [...categoryData].map(r => JSON.parse(r));
+                
                 setProducts(productData);
+                setCategories(categoryData);
             },
             initSelectedOptions: () => {
                 let options = productAndOptions.filter(r => r.product.id === selectedProduct.id).map(r => r.option);
@@ -162,6 +175,7 @@ export default function PerformanceContainerComponent (props) {
                 productAndOptions={productAndOptions}
                 products={products}
                 selectedProduct={selectedProduct}
+                categories={categories}
 
                 onActionResetPerformance={__handle.action.resetPerformance}
                 onSubmitSearchPerformance={__handle.submit.searchPerformance}

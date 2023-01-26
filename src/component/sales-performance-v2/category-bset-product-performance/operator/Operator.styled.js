@@ -143,17 +143,14 @@ const SearchFieldWrapper = styled.div`
 const ChannelSelectorFieldWrapper = styled.div`
     font-size: 16px;
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-start;
     gap: 10px;
     padding: 15px 0;
 
-    /* overflow: auto;
-    background-color: #f7f7f7;
-    max-height: 100px;
-    min-height: 100px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    border: 1px solid #e1e1e1; */
+    @media screen and (max-width: 992px) {
+        flex-direction: column;
+    }
 
     .selector-box-label {
     }

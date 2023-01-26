@@ -4,8 +4,8 @@ import { productOptionDataConnect } from "../../../../../data_connect/productOpt
 export default function useProductAndOptionHook () {
     const [productAndOptions, setProductAndOptions] = useState(null);
 
-    const reqSearchAllRelatedProduct = async () => {
-        await productOptionDataConnect().searchAllRelatedProduct()
+    const reqSearchAllRelatedProductAndProductCategory = async () => {
+        await productOptionDataConnect().searchAllRelatedProductAndProductCategory()
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     setProductAndOptions(res.data.data);
@@ -24,6 +24,6 @@ export default function useProductAndOptionHook () {
 
     return {
         productAndOptions,
-        reqSearchAllRelatedProduct
+        reqSearchAllRelatedProductAndProductCategory
     }
 }

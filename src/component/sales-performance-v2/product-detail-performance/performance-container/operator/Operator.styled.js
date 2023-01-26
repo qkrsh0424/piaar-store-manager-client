@@ -9,14 +9,15 @@ const Container = styled.div`
 `;
 
 const SearchFieldWrapper = styled.div`
-    display: flex;
+    /* display: flex;
     align-items: flex-start;
-    gap: 10px;
+    gap: 10px; */
     padding: 10px 0;
 
     .search-box {
-        display: flex;
+        /* display: flex;
         align-items: flex-end;
+        gap: 10px; */
 
         @media screen and (max-width: 992px) {
             width: 100%;
@@ -60,6 +61,27 @@ const SearchFieldWrapper = styled.div`
         :hover {
             transition: 0.1s;
             transform: scale(1.02);
+        }
+    }
+
+    .search-category-info {
+        padding: 10px 5px 0 5px;
+        display: inline-block;
+    }
+
+    .category-button-el {
+        border: none;
+        color: var(--erp-main-color);
+        text-align: left;
+        text-decoration: underline;
+        text-underline-offset: 5px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.1s;
+
+        &:hover {
+            opacity: 0.6;
         }
     }
 `;

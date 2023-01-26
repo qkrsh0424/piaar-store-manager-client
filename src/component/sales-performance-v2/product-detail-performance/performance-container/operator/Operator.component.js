@@ -1,10 +1,8 @@
 import _ from "lodash";
 import { useEffect, useState } from "react";
-import { BackdropHookComponent, useBackdropHook } from "../../../../../hooks/backdrop/useBackdropHook";
 import useRouterHook from "../../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../../hooks/snackbar/useBasicSnackbarHookV2";
 import { getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../../utils/dateFormatUtils";
-import useProductAndOptionHook from "../hooks/useProductAndOptionHook";
 import ProductListModalComponent from "./modal/product-list/ProductListModal.component";
 import { Container } from "./Operator.styled";
 import ButtonFieldView from "./view/ButtonField.view";
@@ -24,15 +22,12 @@ export default function OperatorComponent(props) {
 
     const [productListModalOpen, setProductListModalOpen] = useState(false);
 
-    const {
-        location
-    } = useRouterHook();
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
     const {
-        open: backdropOpen,
-        onActionOpen: onActionOpenBackdrop,
-        onActionClose: onActionCloseBackdrop
-    } = useBackdropHook();
+        location,
+        navigateUrl
+    } = useRouterHook();
 
     const {
         open: snackbarOpen,
@@ -54,6 +49,11 @@ export default function OperatorComponent(props) {
         action: {
             initSearchValueAndSearchPerformance: () => {
                 let productCode = location.state?.productCode;
+                let startDate = location.state?.startDate ?? PREV_2WEEKS_DATE;
+                let endDate = location.state?.endDate ?? TODAY;
+
+                setStartDate(startDate);
+                setEndDate(endDate);
 
                 // 선택된 상품이 없는 경우
                 if(!productCode) {
@@ -63,8 +63,6 @@ export default function OperatorComponent(props) {
                 let selectedProduct = props.productAndOptions.filter(r => r.product.code === productCode);
                 let searchOptionCodes = selectedProduct.map(r => r.option.code);
 
-                let startDate = location.state?.startDate ?? PREV_2WEEKS_DATE;
-                let endDate = location.state?.endDate ?? TODAY;
                 let utcHourDifference = getTimeDiffWithUTC();
                 let optionCodes = searchOptionCodes ?? null;
                 
@@ -77,9 +75,6 @@ export default function OperatorComponent(props) {
                 
                 props.onSubmitSearchPerformance(body);
                 props.onActionChangeSelectedProduct(productCode);
-                
-                setStartDate(startDate);
-                setEndDate(endDate);
             },
             changeStartDate: (value) => {
                 setStartDate(value);
@@ -109,10 +104,6 @@ export default function OperatorComponent(props) {
                 setStartDate(start);
                 setEndDate(end);
             },
-            // initProductAndOption: () => {
-            //     let productData = [...new Set(props.productAndOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
-            //     setProducts(productData);
-            // },
             openProductListModal: (e) => {
                 e.preventDefault();
 
@@ -124,6 +115,25 @@ export default function OperatorComponent(props) {
             selectProduct: (productCode) => {
                 props.onActionChangeSelectedProduct(productCode);
                 __handle.action.closeProductListModal();
+                setSelectedCategory(null);
+            },
+            routeCategoryPerformancePage: () => {
+                let searchStartDate = getStartDate(startDate);
+                let searchEndDate = getEndDate(endDate);
+                let categoryName = selectedCategory.name ? [selectedCategory.name] : null;
+
+                let detailSearchValue = {
+                    searchStartDate,
+                    searchEndDate,
+                    categoryName
+                }
+
+                let data = {
+                    pathname: '/sales-performance/category',
+                    state: detailSearchValue
+                }
+
+                navigateUrl(data);
             }
         },
         submit: {
@@ -177,6 +187,9 @@ export default function OperatorComponent(props) {
                     optionCodes
                 }
                 props.onSubmitSearchPerformance(body);
+
+                let category = props.categories.filter(r => r.cid === props.selectedProduct.productCategoryCid)[0];
+                setSelectedCategory(category);
             }
         }
     }
@@ -198,10 +211,10 @@ export default function OperatorComponent(props) {
                 <SearchFieldView
                     products={props.products}
                     selectedProduct={props.selectedProduct}
+                    selectedCategory={selectedCategory}
 
                     onActionOpenProductListModal={__handle.action.openProductListModal}
-                    onActionRemoveOptionOne={__handle.action.removeOptionOne}
-                    onActionRemoveProduct={__handle.action.removeProduct}
+                    onActionRouteCategoryPerformancePage={__handle.action.routeCategoryPerformancePage}
                 />
                 <ButtonFieldView
                     onActionClearRoute={__handle.action.clearRoute}
@@ -230,8 +243,6 @@ export default function OperatorComponent(props) {
                     onActionCloseModal={__handle.action.closeProductListModal}
                 />
             }
-
-            <BackdropHookComponent open={backdropOpen} />
         </Container>
     )
 }

@@ -12,6 +12,7 @@ import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import useCategorySalesPerformanceHook from './hooks/useCategorySalesPerformanceHook';
 import CategorySelectorComponent from './category-selector/CategorySelector.component';
 import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
+import useRouterHook from '../../../hooks/router/useRouterHook';
 
 const Container = styled.div`
     height: 100%;
@@ -45,6 +46,10 @@ const CategoryPerformanceComponent = (props) => {
     const [detailSearchValue, setDetailSearchValue] = useState(null);
 
     const {
+        location
+    } = useRouterHook();
+
+    const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
@@ -61,8 +66,12 @@ const CategoryPerformanceComponent = (props) => {
             return;
         }
 
+        if(!location) {
+            return;
+        }
+
         __handle.action.initCategory();
-    }, [performance])
+    }, [performance, location])
 
     const __handle = {
         action: {
@@ -80,8 +89,12 @@ const CategoryPerformanceComponent = (props) => {
                 let categoryName = [...category].sort();
                 setCategory(categoryName);
                 
-                // 기본 1개 선택
-                setSelectedCategory([categoryName[0]]);
+                if(location.state?.categoryName) {
+                    setSelectedCategory(location.state.categoryName);
+                }else {
+                    // 기본 1개 선택
+                    setSelectedCategory([categoryName[0]]);
+                }
             },
             isCheckedOne: (category) => {
                 return selectedCategory.some(name => name === category);
