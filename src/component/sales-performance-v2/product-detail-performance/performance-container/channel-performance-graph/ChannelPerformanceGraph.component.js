@@ -53,12 +53,37 @@ export default function ChannelPerformanceGraphComponent(props) {
                 setTotalPayAmountGraphOption(null);
             },
             createGraphData: () => {
-                let salesPayAmountData = props.performance.map(r => r.salesPayAmount);
-                let orderPayAmountData = props.performance.map(r => r.orderPayAmount);
-                let graphLabels = props.performance.map(r => r.salesChannel);
+                let searchChannelPerformance = [...new Set(props.performance.map(r => r.salesChannel))].map(channel => {
+                    return {
+                        salesChannel: channel,
+                        salesPayAmount: 0,
+                        orderPayAmount: 0
+                    }
+                });
+                let selectedOptionCodes = props.selectedOptions?.map(r => r.code) ?? [];
+                let searchOptionPerformance = props.performance.filter(r => selectedOptionCodes.includes(r.optionCode));
+
+                searchOptionPerformance.forEach(r => {
+                    searchChannelPerformance = searchChannelPerformance.map(channelData => {
+                        if(r.salesChannel === channelData.salesChannel) {
+                            return {
+                                ...channelData,
+                                salesPayAmount: channelData.salesPayAmount + r.salesPayAmount,
+                                orderPayAmount: channelData.orderPayAmount + r.orderPayAmount
+                            }
+                        }else {
+                            return channelData;
+                        }
+                    })
+                })
+
+                let salesPayAmountData = searchChannelPerformance.map(r => r.salesPayAmount);
+                let orderPayAmountData = searchChannelPerformance.map(r => r.orderPayAmount);
+                let graphLabels = searchChannelPerformance.map(r => r.salesChannel);
+                
 
                 let graphColor = SALES_GRAPH_BG_COLOR;
-                for (let i = SALES_GRAPH_BG_COLOR.length; i < props.performance.length; i++) {
+                for (let i = SALES_GRAPH_BG_COLOR.length; i < searchChannelPerformance.length; i++) {
                     let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
                     graphColor.push(randomColor);
                 }

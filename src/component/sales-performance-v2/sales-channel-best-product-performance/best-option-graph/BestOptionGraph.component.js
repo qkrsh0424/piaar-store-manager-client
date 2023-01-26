@@ -1,4 +1,4 @@
-import { Container, GraphFieldWrapper } from "./BestProductGraph.styled";
+import { Container } from "./BestOptionGraph.styled";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
@@ -7,11 +7,11 @@ import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import _ from "lodash";
 import { getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 
-const DEFAULT_GRAPH_BG_3COLOR = ['#ADA8C3', '#C0C5DC', '#596dd3'];
+const DEFAULT_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1'];
 
 const BEST_UNIT = 15;
 // 판매스토어별 총 매출액
-export default function BestProductGraphComponent(props) {
+export default function BestOptionGraphComponent(props) {
     const [salesPayAmountGraphData, setSalesPayAmountGraphData] = useState(null);
     const [totalPayAmountGraphData, setTotalPayAmountGraphData] = useState(null);
     const [salesUnitGraphData, setSalesUnitGraphData] = useState(null);
@@ -20,6 +20,7 @@ export default function BestProductGraphComponent(props) {
     const [priceGraphOption, setPriceGraphOption] = useState(null);
     const [unitGraphOption, setUnitGraphOption] = useState(null);
 
+    // 상품상세에 넘길 graph label
     const [payAmountGraphLabels, setPayAmountGraphLabels] = useState(null);
     const [unitGraphLabels, setUnitGraphLabels] = useState(null);
 
@@ -56,12 +57,13 @@ export default function BestProductGraphComponent(props) {
                 let bestSalesPayAmount = _.sortBy(props.performance, 'salesPayAmount').reverse().slice(0, BEST_UNIT);
                 let graphLabels = [];
                 let productCodeLabels = [];
+
                 bestSalesPayAmount.forEach(r => {
-                    graphLabels.push(r.productDefaultName);
+                    graphLabels.push(r.productDefaultName + " [" + r.optionDefaultName + "]");
                     productCodeLabels.push(r.productCode);
                 });
                 setPayAmountGraphLabels(productCodeLabels);
-    
+
                 let salesPayAmount = bestSalesPayAmount.map(r => r.salesPayAmount);
                 let orderPayAmount = bestSalesPayAmount.map(r => r.orderPayAmount);
 
@@ -70,8 +72,8 @@ export default function BestProductGraphComponent(props) {
                     type: 'bar',
                     label: '판매 매출액',
                     data: salesPayAmount,
-                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[0],
-                    borderColor: DEFAULT_GRAPH_BG_3COLOR[0],
+                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[0],
+                    borderColor: DEFAULT_GRAPH_BG_COLOR[0],
                     borderWidth: 0,
                     order: 0
                 }
@@ -82,8 +84,8 @@ export default function BestProductGraphComponent(props) {
                     label: '(주문) 매출액',
                     data: orderPayAmount,
                     fill: false,
-                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[0] + '88',
-                    borderColor: DEFAULT_GRAPH_BG_3COLOR[0] + '88',
+                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[0] + '88',
+                    borderColor: DEFAULT_GRAPH_BG_COLOR[0] + '88',
                     order: -1,
                     pointRadius: 2
                 }
@@ -105,8 +107,9 @@ export default function BestProductGraphComponent(props) {
                 let bestSalesUnit = _.sortBy(props.performance, 'salesUnit').reverse().slice(0, BEST_UNIT);
                 let graphLabels = [];
                 let productCodeLabels = [];
+
                 bestSalesUnit.forEach(r => {
-                    graphLabels.push(r.productDefaultName);
+                    graphLabels.push(r.productDefaultName + " [" + r.optionDefaultName + "]");
                     productCodeLabels.push(r.productCode);
                 });
                 setUnitGraphLabels(productCodeLabels);
@@ -119,8 +122,8 @@ export default function BestProductGraphComponent(props) {
                     type: 'bar',
                     label: '판매 수량',
                     data: salesUnit,
-                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[1],
-                    borderColor: DEFAULT_GRAPH_BG_3COLOR[1],
+                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[1],
+                    borderColor: DEFAULT_GRAPH_BG_COLOR[1],
                     borderWidth: 0,
                     order: 0
                 }
@@ -131,8 +134,8 @@ export default function BestProductGraphComponent(props) {
                     label: '(주문) 수량',
                     data: orderUnit,
                     fill: false,
-                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[1] + '88',
-                    borderColor: DEFAULT_GRAPH_BG_3COLOR[1] + '88',
+                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[1] + '88',
+                    borderColor: DEFAULT_GRAPH_BG_COLOR[1] + '88',
                     order: -1,
                     pointRadius: 2
                 }

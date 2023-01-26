@@ -126,6 +126,7 @@ const CategoryBestProductPerformanceComponent = (props) => {
                 setDetailGraphSelectorModalOpen(true);
             },
             closeDetailGraphSelectorModal: () => {
+                setDetailSearchValue(null);
                 setDetailGraphSelectorModalOpen(false);
             }
         },
@@ -171,6 +172,7 @@ const CategoryBestProductPerformanceComponent = (props) => {
                 <BestOptionGraphComponent
                     checkedSwitch={checkedSwitch}
                     performance={optionPerformance}
+                    detailSearchValue={detailSearchValue}
 
                     onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />

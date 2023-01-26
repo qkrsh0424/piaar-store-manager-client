@@ -11,7 +11,6 @@ import useProductSalesPerformanceHook from "./hooks/useProductSalesPerformanceHo
 import OperatorComponent from "./operator/Operator.component";
 import PayAmountGraphComponent from "./pay-amount-graph/PayAmountGraph.component";
 import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
-import useRouterHook from "../../../../hooks/router/useRouterHook";
 
 const Container = styled.div`
     /* height: 100%;
@@ -43,10 +42,6 @@ export default function PerformanceContainerComponent (props) {
 
     const [options, setOptions] = useState(null);
     const [selectedOptions, setSelectedOptions] = useState(null);
-
-    const {
-        location
-    } = useRouterHook();
 
     const {
         productAndOptions,
@@ -95,14 +90,6 @@ export default function PerformanceContainerComponent (props) {
         __handle.action.initProduct();
     }, [productAndOptions])
 
-    // useEffect(() => {
-    //     if(!(products)) {
-    //         return;
-    //     }
-
-    //     __handle.action.initSelectedProduct();
-    // }, [products])
-
     useEffect(() => {
         if(!performance) {
             return;
@@ -117,14 +104,6 @@ export default function PerformanceContainerComponent (props) {
                 let productData = [...new Set(productAndOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
                 setProducts(productData);
             },
-            // initSelectedProduct: () => {
-            //     let searchProductCode = location.state?.productCode ?? null;
-
-            //     if(searchProductCode) {
-            //         let product = products.filter(r => r.code === searchProductCode)[0];
-            //         setSelectedProduct(product);
-            //     }
-            // },
             initSelectedOptions: () => {
                 let options = productAndOptions.filter(r => r.product.id === selectedProduct.id).map(r => r.option);
 

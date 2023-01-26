@@ -72,6 +72,8 @@ const CheckBoxFieldWrapper = styled.div`
 
     .selector-box {
         padding: 15px 10px;
+        max-height: 100px;
+        overflow: auto;
         align-items: center;
         display: flex;
         gap: 10px;
@@ -88,8 +90,7 @@ const CheckBoxFieldWrapper = styled.div`
     
     .button-el {
         transition: 0.1s;
-        width: 120px;
-        height: 30px;
+        padding: 2px 20px;
         border: 1px solid var(--defaultBorderColor);
         background-color: var(--defaultButtonColor);
         border-radius: 20px;

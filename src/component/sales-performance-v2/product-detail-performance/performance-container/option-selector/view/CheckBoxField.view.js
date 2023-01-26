@@ -8,7 +8,7 @@ export default function CheckBoxFieldView (props) {
                     let checked = props.onActionIsCheckedOne(r);
                     return (
                         <div
-                            key={'sales-channel-idx' + idx}
+                            key={'option-idx' + idx}
                             className='button-box'
                             onClick={(e) => props.onActionCheckOne(e, r)}
                         >

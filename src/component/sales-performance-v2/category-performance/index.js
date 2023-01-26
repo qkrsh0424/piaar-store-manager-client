@@ -128,6 +128,7 @@ const CategoryPerformanceComponent = (props) => {
                 setDetailGraphSelectorModalOpen(true);
             },
             closeDetailGraphSelectorModal: () => {
+                setDetailSearchValue(null);
                 setDetailGraphSelectorModalOpen(false);
             }
         },

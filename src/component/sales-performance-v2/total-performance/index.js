@@ -70,6 +70,7 @@ const TotalSalesPerformanceComponent = (props) => {
                 setDetailGraphSelectorModalOpen(true);
             },
             closeDetailGraphSelectorModal: () => {
+                setDetailSearchValue(null);
                 setDetailGraphSelectorModalOpen(false);
             }
         },

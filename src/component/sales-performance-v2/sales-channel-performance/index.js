@@ -129,6 +129,7 @@ const SalesChannelPerformanceComponent = (props) => {
                 setDetailGraphSelectorModalOpen(true);
             },
             closeDetailGraphSelectorModal: () => {
+                setDetailSearchValue(null);
                 setDetailGraphSelectorModalOpen(false);
             }
         },
