@@ -63,6 +63,22 @@ const CheckBoxControlWrapper = styled.div`
     }
 `;
 
+const InputFieldWrapper = styled.div`
+    margin-top: 10px;
+    padding: 0 20px;
+
+    .input-el{
+        width: 300px;
+        box-sizing: border-box;
+        border: 1px solid var(--defaultBorderColor);
+        padding: 10px 5px;
+
+        &:focus{
+            outline: none;
+        }
+    }
+`;
+
 const CheckBoxFieldWrapper = styled.div`
     font-size: 16px;
     padding: 10px 0;
@@ -74,6 +90,7 @@ const CheckBoxFieldWrapper = styled.div`
         gap: 10px;
         flex-wrap: wrap;
         justify-content: flex-start;
+        align-content: flex-start;
         overflow: auto;
         max-height: 200px;
         min-height: 200px;
@@ -144,6 +161,7 @@ export {
     Container,
     ButtonFieldWrapper,
     CheckBoxControlWrapper,
+    InputFieldWrapper,
     CheckBoxFieldWrapper,
     TextFieldWrapper
 }
