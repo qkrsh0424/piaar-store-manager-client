@@ -1,25 +1,26 @@
+import { dateToYYYYMMDD, setSubtractedDate } from "../../../../utils/dateFormatUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import { ChannelPerformanceFieldWrapper, ChannelDataBox } from "../Dashboard.styled";
 
 export default function ChannelPerformanceFieldView ({ channelPerformanceData }) {
     return (
         <ChannelPerformanceFieldWrapper>
-            {/* 어제 데이터 */}
             <DataBoxField
                 datetime='yesterday'
-                performance={channelPerformanceData.yesterday}
-                totalPayAmount={channelPerformanceData.yesterdaySalesPayAmount}
+                performance={channelPerformanceData.yesterdayData.channelPayAmount}
+                totalPayAmount={channelPerformanceData.yesterdayData.totalPayAmount}
             />
-
-            {/* 오늘 데이터 */}
             <DataBoxField
                 datetime='today'
-                performance={channelPerformanceData.today}
-                totalPayAmount={channelPerformanceData.todaySalesPayAmount}
+                performance={channelPerformanceData.todayData.channelPayAmount}
+                totalPayAmount={channelPerformanceData.todayData.totalPayAmount}
             />
         </ChannelPerformanceFieldWrapper>
     )
 }
+
+const TODAY = new Date();
+const YESTERDAY = setSubtractedDate(TODAY, 0, 0, -1);
 
 function DataBoxField({ datetime, performance, totalPayAmount }) {
     return (

@@ -1,9 +1,12 @@
 import _ from "lodash";
 import { useState } from "react";
 import { useEffect } from "react";
-import { dateToYYMMDD2, getDayName, setSubtractedDate } from "../../../utils/dateFormatUtils";
-import { getPercentage } from "../../../utils/numberFormatUtils";
+import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
+import useRouterHook from "../../../hooks/router/useRouterHook";
+import { dateToYYYYMMDD, getDayName, getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, setSubtractedDate } from "../../../utils/dateFormatUtils";
+import { getTrendPercentage } from "../../../utils/numberFormatUtils";
 import { Container } from "./Dashboard.styled"
+import useSalesPerformanceItemHook from "./hooks/useSalesPerformanceHook";
 import ChannelPerformanceFieldView from "./view/ChannelPerformanceField.view";
 import ContentTextFieldView from "./view/ContentTextField.view";
 import DashboardFieldView from "./view/DashboardField.view"
@@ -22,136 +25,221 @@ export default function DashboardComponent(props) {
     const [lastMonthAvgData, setLastMonthAvgData] = useState(null);
     const [channelPerformanceData, setChannelPerformanceData] = useState(null);
 
+    const {
+        location,
+    } = useRouterHook();
+
+    const {
+        open: backdropOpen,
+        onActionOpen: onActionOpenBackdrop,
+        onActionClose: onActionCloseBackdrop
+    } = useBackdropHook();
+
+    const {
+        dashboard: dashboardData,
+        performance: performanceData,
+        lastMonthPerformance: lastMonthPerformanceData,
+        channelPerformance: channelPerformance,
+        reqSearchDashboard: reqSearchSalesPerformanceDashboard,
+        reqSearchPerformance: reqSearchPerformance,
+        reqSearchLastMonthPerformance: reqSearchLastMonthPerformance,
+        reqSearchChannelPerformance: reqSearchChannelPerformance
+    } = useSalesPerformanceItemHook();
+
     useEffect(() => {
-        if(!(props.dashboardData && props.dashboardData.length > 0)) {
-            return;
+        // 대시보드 - 오늘, -1일, -7일, -8일
+        async function getDashboardPerformance() {
+            let prev7DaysOfToday = setSubtractedDate(TODAY, 0, 0, -7);
+            let prev7DaysOfYesterDay = setSubtractedDate(YESTERDAY, 0, 0, -7);
+            
+            let searchDate = [TODAY, YESTERDAY, prev7DaysOfToday, prev7DaysOfYesterDay].map(r => getStartDate(r));
+            let utcHourDifference = getTimeDiffWithUTC();
+
+            let body = {
+                searchDate,
+                utcHourDifference
+            }
+
+            onActionOpenBackdrop();
+            await reqSearchSalesPerformanceDashboard(body);
+            onActionCloseBackdrop();
         }
 
-        __handle.action.initDashboardData();
-    }, [props.dashboardData])
+        // 월 성과
+        async function getThisMonthPerformance() {
+            let startDate = getStartDate(getStartDateOfMonth(TODAY));
+            let endDate = YESTERDAY > TODAY ? getEndDate(TODAY) : getEndDate(YESTERDAY);
+            let utcHourDifference = getTimeDiffWithUTC();
+
+            let body = {
+                startDate,
+                endDate,
+                utcHourDifference
+            }
+
+            onActionOpenBackdrop();
+            await reqSearchPerformance(body);
+            onActionCloseBackdrop();
+        }
+
+        // 지난달 성과
+        async function getLastMonthPerformance() {
+            let lastMonth = setSubtractedDate(TODAY, 0, -1, 0);
+            let startDate = getStartDate(getStartDateOfMonth(lastMonth));
+            let endDate = getEndDate(getEndDateOfMonth(lastMonth));
+            let utcHourDifference = getTimeDiffWithUTC();
+
+            let body = {
+                startDate,
+                endDate,
+                utcHourDifference
+            }
+
+            onActionOpenBackdrop();
+            await reqSearchLastMonthPerformance(body);
+            onActionCloseBackdrop();
+        }
+
+        // 채널별 판매성과
+        async function getChannelPerformance() {
+            let startDate = getStartDate(YESTERDAY);
+            let endDate = getEndDate(TODAY);
+            let utcHourDifference = getTimeDiffWithUTC();
+
+            let body = {
+                startDate,
+                endDate,
+                utcHourDifference
+            }
+
+            onActionOpenBackdrop();
+            await reqSearchChannelPerformance(body);
+            onActionCloseBackdrop();
+        }
+
+        getDashboardPerformance();
+        getThisMonthPerformance();
+        getLastMonthPerformance();
+        getChannelPerformance();
+    }, [location]);
 
     useEffect(() => {
-        if(!(props.performanceData && props.performanceData?.length > 0)) {
+        if(!dashboardData) {
             return;
         }
 
-        if(!(props.lastMonthPerformanceData && props.lastMonthPerformanceData?.length > 0)) {
+        if(!performanceData) {
             return;
         }
 
-        if(!(props.channelPerformance && props.channelPerformance.length > 0)) {
+        if(!lastMonthPerformanceData) {
             return;
         }
 
+        if(!channelPerformance) {
+            return;
+        }
+
+        __handle.action.initDashboardData2();
         __handle.action.initPerformanceData();
         __handle.action.initLastMonthPerformanceData();
         __handle.action.initChannelPerformanceData();
-    }, [props.performanceData, props.lastMonthPerformanceData, props.channelPerformance])
+    }, [dashboardData, performanceData, lastMonthPerformanceData, channelPerformance])
 
     const __handle = {
         action: {
-            initDashboardData: () => {
-                let data = {};
+            initDashboardData2: () => {
+                let data = dashboardData.map(r => {
+                    return {
+                        ...r,
+                        unsalesPayAmount: r.orderPayAmount - r.salesPayAmount,
+                        unsalesUnit: r.orderUnit - r.salesUnit,
+                        unsalesRegistration: r.orderRegistration - r.salesRegistration
+                    }
+                })
 
-                props.dashboardData?.forEach(r => {
-                    if (dateToYYMMDD2(new Date(r.datetime)) === dateToYYMMDD2(TODAY)) {
-                        data = {
-                            ...data,
-                            today: {
-                                ...r,
-                                unsalesPayAmount: r.orderPayAmount - r.salesPayAmount,
-                                unsalesUnit: r.orderUnit - r.salesUnit,
-                                unsalesRegistration: r.orderRegistration - r.salesRegistration
-                            }
-                        }
-                    } else if (dateToYYMMDD2(new Date(r.datetime)) === dateToYYMMDD2(YESTERDAY)) {
-                        data = {
-                            ...data,
-                            yesterday: {
-                                ...r,
-                                unsalesPayAmount: r.orderPayAmount - r.salesPayAmount,
-                                unsalesUnit: r.orderUnit - r.salesUnit,
-                                unsalesRegistration: r.orderRegistration - r.salesRegistration
-                            }
-                        }
-                    } else if (dateToYYMMDD2(new Date(r.datetime)) === dateToYYMMDD2(PREV_7DAYS)) {
-                        data = {
-                            ...data,
-                            prev7Days: {
-                                ...r,
-                                unsalesPayAmount: r.orderPayAmount - r.salesPayAmount,
-                                unsalesUnit: r.orderUnit - r.salesUnit,
-                                unsalesRegistration: r.orderRegistration - r.salesRegistration
-                            }
-                        }
-                    } else if (dateToYYMMDD2(new Date(r.datetime)) === dateToYYMMDD2(PREV_8DAYS)) {
-                        data = {
-                            ...data,
-                            prev8Days: {
-                                ...r,
-                                unsalesPayAmount: r.orderPayAmount - r.salesPayAmount,
-                                unsalesUnit: r.orderUnit - r.salesUnit,
-                                unsalesRegistration: r.orderRegistration - r.salesRegistration
-                            }
-                        }
+                let todayData = {};
+                let yesterdayData = {};
+                let prev7DaysData = {};
+                let prev8DaysData = {};
+
+                data.forEach(r => {
+                    switch(r.datetime) {
+                        case dateToYYYYMMDD(TODAY):
+                            todayData = {...r};
+                            return;
+                        case dateToYYYYMMDD(YESTERDAY):
+                            yesterdayData = {...r};
+                            return;
+                        case dateToYYYYMMDD(PREV_7DAYS):
+                            prev7DaysData = {...r};
+                            return;
+                        case dateToYYYYMMDD(PREV_8DAYS):
+                            prev8DaysData = {...r};
+                            return;
                     }
                 });
 
-                let todayData = { ...data.today };
-                let prev7DaysData = { ...data.prev7Days }
-                let yesterdayData = { ...data.yesterday }
-                let prev8DaysData = { ...data.prev8Days }
-
                 // view단에서 보여질 데이터 세팅
                 // 1주일 전과 오늘 & 어제와 오늘 데이터 비교
-                let updatedTodayData = {
+                todayData = {
                     ...todayData,
-                    orderPayAmountTrendByAWeekAgo: getPercentage(todayData.orderPayAmount, prev7DaysData.orderPayAmount),
-                    salesPayAmountTrendByAWeekAgo: getPercentage(todayData.salesPayAmount, prev7DaysData.salesPayAmount),
-                    unsalesPayAmountTrendByAWeekAgo: getPercentage(todayData.unsalesPayAmount, prev7DaysData.unsalesPayAmount),
-                    orderUnitTrendByAWeekAgo: getPercentage(todayData.orderUnit, prev7DaysData.orderUnit),
-                    salesUnitTrendByAWeekAgo: getPercentage(todayData.salesUnit, prev7DaysData.salesUnit),
-                    unsalesUnitTrendByAWeekAgo: getPercentage(todayData.unsalesUnit, prev7DaysData.unsalesUnit),
-                    orderRegistrationTrendByAWeekAgo: getPercentage(todayData.orderRegistration, prev7DaysData.orderRegistration),
-                    salesRegistrationTrendByAWeekAgo: getPercentage(todayData.salesRegistration, prev7DaysData.salesRegistration),
-                    unsalesRegistrationTrendByAWeekAgo: getPercentage(todayData.unsalesRegistration, prev7DaysData.unsalesRegistration),
+                    orderPayAmountTrendByAWeekAgo: getTrendPercentage(todayData.orderPayAmount, prev7DaysData.orderPayAmount),
+                    salesPayAmountTrendByAWeekAgo: getTrendPercentage(todayData.salesPayAmount, prev7DaysData.salesPayAmount),
+                    unsalesPayAmountTrendByAWeekAgo: getTrendPercentage(todayData.unsalesPayAmount, prev7DaysData.unsalesPayAmount),
+                    orderUnitTrendByAWeekAgo: getTrendPercentage(todayData.orderUnit, prev7DaysData.orderUnit),
+                    salesUnitTrendByAWeekAgo: getTrendPercentage(todayData.salesUnit, prev7DaysData.salesUnit),
+                    unsalesUnitTrendByAWeekAgo: getTrendPercentage(todayData.unsalesUnit, prev7DaysData.unsalesUnit),
+                    orderRegistrationTrendByAWeekAgo: getTrendPercentage(todayData.orderRegistration, prev7DaysData.orderRegistration),
+                    salesRegistrationTrendByAWeekAgo: getTrendPercentage(todayData.salesRegistration, prev7DaysData.salesRegistration),
+                    unsalesRegistrationTrendByAWeekAgo: getTrendPercentage(todayData.unsalesRegistration, prev7DaysData.unsalesRegistration),
                     dayNameOfAWeekAgo: getDayName(prev7DaysData.datetime),
 
-                    orderPayAmountTrendByYesterday: getPercentage(todayData.orderPayAmount, yesterdayData.orderPayAmount),
-                    salesPayAmountTrendByYesterday: getPercentage(todayData.salesPayAmount, yesterdayData.salesPayAmount),
-                    unsalesPayAmountTrendByYesterday: getPercentage(todayData.unsalesPayAmount, yesterdayData.unsalesPayAmount),
-                    orderUnitTrendByYesterday: getPercentage(todayData.orderUnit, yesterdayData.orderUnit),
-                    salesUnitTrendByYesterday: getPercentage(todayData.salesUnit, yesterdayData.salesUnit),
-                    unsalesUnitTrendByYesterday: getPercentage(todayData.unsalesUnit, yesterdayData.unsalesUnit),
-                    orderRegistrationTrendByYesterday: getPercentage(todayData.orderRegistration, yesterdayData.orderRegistration),
-                    salesRegistrationTrendByYesterday: getPercentage(todayData.salesRegistration, yesterdayData.salesRegistration),
-                    unsalesRegistrationTrendByYesterday: getPercentage(todayData.unsalesRegistration, yesterdayData.unsalesRegistration),
+                    orderPayAmountTrendByYesterday: getTrendPercentage(todayData.orderPayAmount, yesterdayData.orderPayAmount),
+                    salesPayAmountTrendByYesterday: getTrendPercentage(todayData.salesPayAmount, yesterdayData.salesPayAmount),
+                    unsalesPayAmountTrendByYesterday: getTrendPercentage(todayData.unsalesPayAmount, yesterdayData.unsalesPayAmount),
+                    orderUnitTrendByYesterday: getTrendPercentage(todayData.orderUnit, yesterdayData.orderUnit),
+                    salesUnitTrendByYesterday: getTrendPercentage(todayData.salesUnit, yesterdayData.salesUnit),
+                    unsalesUnitTrendByYesterday: getTrendPercentage(todayData.unsalesUnit, yesterdayData.unsalesUnit),
+                    orderRegistrationTrendByYesterday: getTrendPercentage(todayData.orderRegistration, yesterdayData.orderRegistration),
+                    salesRegistrationTrendByYesterday: getTrendPercentage(todayData.salesRegistration, yesterdayData.salesRegistration),
+                    unsalesRegistrationTrendByYesterday: getTrendPercentage(todayData.unsalesRegistration, yesterdayData.unsalesRegistration),
                     dayNameOfYesterday: getDayName(yesterdayData.datetime),
                 }
 
                 // 어제의 1주일 전과 어제 데이터 비교
-                let updatedYesterDayData = {
+                yesterdayData = {
                     ...yesterdayData,
-                    orderPayAmountTrendByAWeekAgo: getPercentage(yesterdayData.orderPayAmount, prev8DaysData.orderPayAmount),
-                    salesPayAmountTrendByAWeekAgo: getPercentage(yesterdayData.salesPayAmount, prev8DaysData.salesPayAmount),
-                    unsalesPayAmountTrendByAWeekAgo: getPercentage(yesterdayData.unsalesPayAmount, prev8DaysData.unsalesPayAmount),
-                    orderUnitTrendByAWeekAgo: getPercentage(yesterdayData.orderUnit, prev8DaysData.orderUnit),
-                    salesUnitTrendByAWeekAgo: getPercentage(yesterdayData.salesUnit, prev8DaysData.salesUnit),
-                    unsalesUnitTrendByAWeekAgo: getPercentage(yesterdayData.unsalesUnit, prev8DaysData.unsalesUnit),
-                    orderRegistrationTrendByAWeekAgo: getPercentage(yesterdayData.orderRegistration, prev8DaysData.orderRegistration),
-                    salesRegistrationTrendByAWeekAgo: getPercentage(yesterdayData.salesRegistration, prev8DaysData.salesRegistration),
-                    unsalesRegistrationTrendByAWeekAgo: getPercentage(yesterdayData.unsalesRegistration, prev8DaysData.unsalesRegistration),
+                    orderPayAmountTrendByAWeekAgo: getTrendPercentage(yesterdayData.orderPayAmount, prev8DaysData.orderPayAmount),
+                    salesPayAmountTrendByAWeekAgo: getTrendPercentage(yesterdayData.salesPayAmount, prev8DaysData.salesPayAmount),
+                    unsalesPayAmountTrendByAWeekAgo: getTrendPercentage(yesterdayData.unsalesPayAmount, prev8DaysData.unsalesPayAmount),
+                    orderUnitTrendByAWeekAgo: getTrendPercentage(yesterdayData.orderUnit, prev8DaysData.orderUnit),
+                    salesUnitTrendByAWeekAgo: getTrendPercentage(yesterdayData.salesUnit, prev8DaysData.salesUnit),
+                    unsalesUnitTrendByAWeekAgo: getTrendPercentage(yesterdayData.unsalesUnit, prev8DaysData.unsalesUnit),
+                    orderRegistrationTrendByAWeekAgo: getTrendPercentage(yesterdayData.orderRegistration, prev8DaysData.orderRegistration),
+                    salesRegistrationTrendByAWeekAgo: getTrendPercentage(yesterdayData.salesRegistration, prev8DaysData.salesRegistration),
+                    unsalesRegistrationTrendByAWeekAgo: getTrendPercentage(yesterdayData.unsalesRegistration, prev8DaysData.unsalesRegistration),
                     dayNameOfAWeekAgo: getDayName(prev8DaysData.datetime)
                 }
 
-                setTodayData(updatedTodayData);
-                setYesterdayData(updatedYesterDayData);
+                setTodayData(todayData);
+                setYesterdayData(yesterdayData);
             },
             initPerformanceData: () => {
-                let data = [...props.performanceData];
-                let payAmount = Math.round(_.sumBy(data, 'salesPayAmount') / data.length);
-                let registration = Math.round(_.sumBy(data, 'salesRegistration') / data.length);
-                let unit = Math.round(_.sumBy(data, 'salesUnit') / data.length);
+                let data = [...performanceData];
+                let payAmount = 0;
+                let registration = 0;
+                let unit = 0;
+
+                data.forEach(r => {
+                    payAmount += r.salesPayAmount;
+                    registration += r.salesRegistration;
+                    unit += r.salesUnit;
+                })
+
+                payAmount = Math.round(payAmount / data.length);
+                registration = Math.round(registration / data.length);
+                unit = Math.round(unit / data.length);
 
                 let monthPerformance = {
                     title: '이번달 일일 평균',
@@ -163,10 +251,20 @@ export default function DashboardComponent(props) {
                 setMonthAvgData(monthPerformance);
             },
             initLastMonthPerformanceData: () => {
-                let data = [...props.lastMonthPerformanceData];
-                let payAmount = Math.round(_.sumBy(data, 'salesPayAmount') / data.length);
-                let registration = Math.round(_.sumBy(data, 'salesRegistration') / data.length);
-                let unit = Math.round(_.sumBy(data, 'salesUnit') / data.length);
+                let data = [...lastMonthPerformanceData];
+                let payAmount = 0;
+                let registration = 0;
+                let unit = 0;
+
+                data.forEach(r => {
+                    payAmount += r.salesPayAmount;
+                    registration += r.salesRegistration;
+                    unit += r.salesUnit;
+                })
+
+                payAmount = Math.round(payAmount / data.length);
+                registration = Math.round(registration / data.length);
+                unit = Math.round(unit / data.length);
 
                 let monthPerformance = {
                     title: '지난달 일일 평균',
@@ -178,33 +276,36 @@ export default function DashboardComponent(props) {
                 setLastMonthAvgData(monthPerformance);
             },
             initChannelPerformanceData: () => {
-                let data = [];
-                let salesPayAmountSum = 0;
-                let sortedPerformances = [];
+                let data = channelPerformance?.map(r => {
+                    let sortedPerformances = _.sortBy(r.performances, 'salesPayAmount').reverse();
+                    let salesPayAmountSum = 0;
+                    r.performances.forEach(performance => {
+                        salesPayAmountSum += performance.salesPayAmount;
+                    })
 
-                props.channelPerformance?.forEach(r => {
-                    if (dateToYYMMDD2(new Date(r.datetime)) === dateToYYMMDD2(TODAY)) {
-                        salesPayAmountSum = _.sumBy(r.performances, 'salesPayAmount');
-                        sortedPerformances = _.sortBy(r.performances, 'salesPayAmount').reverse();
-
-                        data = {
-                            ...data,
-                            today: sortedPerformances,
-                            todaySalesPayAmount: salesPayAmountSum
-                        }
-                    } else if (dateToYYMMDD2(new Date(r.datetime)) === dateToYYMMDD2(YESTERDAY)) {
-                        salesPayAmountSum = _.sumBy(r.performances, 'salesPayAmount');
-                        sortedPerformances = _.sortBy(r.performances, 'salesPayAmount').reverse();
-                        
-                        data = {
-                            ...data,
-                            yesterday: sortedPerformances,
-                            yesterdaySalesPayAmount: salesPayAmountSum
-                        }
+                    return {
+                        ...r,
+                        channelPayAmount: sortedPerformances,
+                        totalPayAmount: salesPayAmountSum
                     }
                 })
 
-                setChannelPerformanceData(data);
+                let todayData = {};
+                let yesterdayData = {};
+
+                data.forEach(r => {
+                    switch(r.datetime) {
+                        case dateToYYYYMMDD(TODAY):
+                            todayData = {...r};
+                            return;
+                        case dateToYYYYMMDD(YESTERDAY):
+                            yesterdayData = {...r};
+                            return;
+                    }
+                });
+
+
+                setChannelPerformanceData({todayData, yesterdayData});
             }
         }
     }
@@ -230,7 +331,13 @@ export default function DashboardComponent(props) {
                 <SubPerformanceFieldView
                     monthAvgData={monthAvgData}
                     lastMonthAvgData={lastMonthAvgData}
-                />}
+                />
+            }
+
+            {/* Backdrop Loading */}
+            <BackdropHookComponent
+                open={backdropOpen}
+            />
         </Container>
     )
 }

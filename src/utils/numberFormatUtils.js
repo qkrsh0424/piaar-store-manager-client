@@ -24,7 +24,7 @@ function toPriceUnitFormat(price) {
 }
 
 // com2에 대한 comp1의 상승 백분율
-function getPercentage(comp1, comp2) {
+function getTrendPercentage(comp1, comp2) {
     // 유지
     if(comp1 === comp2) {
         return 0;
@@ -41,5 +41,5 @@ export{
     numberWithCommas,
     numberWithCommas2,
     toPriceUnitFormat,
-    getPercentage
+    getTrendPercentage
 }
