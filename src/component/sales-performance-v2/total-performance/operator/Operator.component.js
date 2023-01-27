@@ -129,7 +129,7 @@ export default function OperatorComponent(props) {
                 }
 
                 props.onSubmitSearchPerformance(body);
-                
+
                 query.startDate = dateToYYYYMMDD(startDate);
                 query.endDate = dateToYYYYMMDD(endDate);
                 navigateParams({ replace: true });

@@ -1,14 +1,34 @@
 import styled from "styled-components";
 
 const Container = styled.div`
+    padding: 5px 20px;
 
+    .info-text {
+        padding: 2px;
+        text-align: left;
+    }
+`;
+
+const DateSelectorFieldWrapper = styled.div`
+    padding-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    
+    .date-selector-box {
+        width: 200px;
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+        }
+    }
 `;
 
 const BoxFieldWrapper = styled.div`
     padding-bottom: 30px;
 
     .button-box {
-        width: 90%;
+        width: 100%;
         margin: 0 auto;
         margin-bottom: 10px;
         
@@ -20,8 +40,8 @@ const BoxFieldWrapper = styled.div`
     .button-el {
         width: 100%;
         padding: 10px;
-        border: 1px solid var(--defaultBorderColor);
-        background-color: var(--defaultButtonColor);
+        border: 1px solid #e1e1e1;
+        background-color: white;
         box-shadow: var(--defaultBoxShadow);
         font-size: 1.2rem;
         border-radius: 10px;
@@ -36,16 +56,22 @@ const BoxFieldWrapper = styled.div`
 
         @media screen and (max-width: 992px) {
             flex-direction: column;
+            font-size: 14px;
         }
     }
 
     .sub-info-text {
         font-size: 1rem;
         padding: 0 10px;
+
+        @media screen and (max-width: 992px) {
+            font-size: 12px;
+        }
     }
 `;
 
 export {
     Container,
+    DateSelectorFieldWrapper,
     BoxFieldWrapper
 }
