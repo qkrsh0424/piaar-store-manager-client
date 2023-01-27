@@ -55,7 +55,10 @@ const ErpOrderUploadComponent = (props) => {
 
     useEffect(() => {
         async function uploadExcel(params) {
+            onActionOpenBackdrop();
             await __reqUploadExcelFile(formData, params);
+            onActionCloseBackdrop();
+
         }
 
         if(!excelPassword) {
@@ -64,7 +67,6 @@ const ErpOrderUploadComponent = (props) => {
 
         // 암호화되지 않았다면 바로 엑셀 업로드, 그렇지 않다면 비밀번호 입력 모달 오픈
         if (!excelPassword.isEncrypted) {
-            onActionOpenBackdrop();
             let params = {};
             if (query.headerId) {
                 params = {
@@ -73,7 +75,6 @@ const ErpOrderUploadComponent = (props) => {
                 }
             }
             uploadExcel(params);
-            onActionCloseBackdrop();
         }else {
             setExcelPasswordInputModalOpen(true);
         }
@@ -305,6 +306,7 @@ const ErpOrderUploadComponent = (props) => {
     }
 
     const _onSubmit_uploadExcelFile = async (password) => {
+
         onActionOpenBackdrop();
         let params = {};
         if(excelPassword.isEncrypted) {
