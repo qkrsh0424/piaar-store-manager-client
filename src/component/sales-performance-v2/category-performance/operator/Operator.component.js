@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
 import { Container } from "./Operator.styled";
 import ButtonFieldView from "./view/ButtonField.view";
 import DateButtonFieldView from "./view/DateButtonField.view";
@@ -10,15 +10,14 @@ import DateSelectorFieldView from "./view/DateSelectorField.view";
 // 날짜검색 최대기간 92일
 const SEARCHABLE_PERIOD = 92;
 
-const TODAY = new Date();
-const PREV_2WEEKS_DATE = setSubtractedDate(TODAY, 0, 0, -13);
-
 export default function OperatorComponent(props) {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
     const {
-        location
+        query,
+        location,
+        navigateParams
     } = useRouterHook();
 
     const {
@@ -30,28 +29,36 @@ export default function OperatorComponent(props) {
     } = useBasicSnackbarHookV2();
 
     useEffect(() => {
-        __handle.action.initSearchValueAndSearchPerformance();
+        let date1 = location.state?.startDate ? location.state?.startDate : new Date(query.startDate);
+        let date2 = location.state?.endDate ? location.state?.endDate : new Date(query.endDate);
+
+        setStartDate(date1);
+        setEndDate(date2);
+
+        query.startDate = dateToYYYYMMDD(date1);
+        query.endDate = dateToYYYYMMDD(date2);
+        navigateParams({ replace : true });
+    }, [])
+
+    useEffect(() => {
+        async function fetchInit() {
+            let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
+            let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
+            let utcHourDifference = getTimeDiffWithUTC();
+
+            let body = {
+                startDate: searchStartDate,
+                endDate: searchEndDate,
+                utcHourDifference,
+            }
+            await props.onSubmitSearchPerformance(body);
+        }
+
+        fetchInit();
     }, [])
 
     const __handle = {
         action: {
-            initSearchValueAndSearchPerformance: () => {
-                let startDate = location.state?.startDate ?? PREV_2WEEKS_DATE;
-                let endDate = location.state?.endDate ?? TODAY;
-
-                let searchStartDate = getStartDate(startDate);
-                let searchEndDate = getEndDate(endDate);
-                let utcHourDifference = getTimeDiffWithUTC();
-
-                let body = {
-                    startDate: searchStartDate,
-                    endDate: searchEndDate,
-                    utcHourDifference,
-                }
-                props.onSubmitSearchPerformance(body);
-                setStartDate(startDate);
-                setEndDate(endDate);
-            },
             changeStartDate: (value) => {
                 setStartDate(value);
             },
@@ -122,6 +129,10 @@ export default function OperatorComponent(props) {
                     utcHourDifference,
                 }
                 props.onSubmitSearchPerformance(body);
+
+                query.startDate = dateToYYYYMMDD(startDate);
+                query.endDate = dateToYYYYMMDD(endDate);
+                navigateParams({ replace: true });
             }
         }
     }

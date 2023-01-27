@@ -2,7 +2,7 @@ import _ from "lodash";
 import { useEffect, useState } from "react";
 import useRouterHook from "../../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../../utils/dateFormatUtils";
 import ProductListModalComponent from "./modal/product-list/ProductListModal.component";
 import { Container } from "./Operator.styled";
 import ButtonFieldView from "./view/ButtonField.view";
@@ -13,9 +13,6 @@ import SearchFieldView from "./view/SearchField.view";
 // 날짜검색 최대기간 92일
 const SEARCHABLE_PERIOD = 92;
 
-const TODAY = new Date();
-const PREV_2WEEKS_DATE = setSubtractedDate(TODAY, 0, 0, -13);
-
 export default function OperatorComponent(props) {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -25,8 +22,10 @@ export default function OperatorComponent(props) {
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     const {
+        query,
         location,
-        navigateUrl
+        navigateUrl,
+        navigateParams
     } = useRouterHook();
 
     const {
@@ -38,44 +37,49 @@ export default function OperatorComponent(props) {
     } = useBasicSnackbarHookV2();
 
     useEffect(() => {
+        let date1 = location.state?.startDate ? location.state?.startDate : new Date(query.startDate);
+        let date2 = location.state?.endDate ? location.state?.endDate : new Date(query.endDate);
+
+        setStartDate(date1);
+        setEndDate(date2);
+
+        query.startDate = dateToYYYYMMDD(date1);
+        query.endDate = dateToYYYYMMDD(date2);
+        navigateParams({ replace : true });
+    }, [])
+
+    useEffect(() => {
         if(!props.products) {
             return;
         }
 
-        __handle.action.initSearchValueAndSearchPerformance();
+        async function fetchInit() {
+            let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
+            let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
+            let utcHourDifference = getTimeDiffWithUTC();
+            let productCode = location.state?.productCode;
+
+            let selectedProduct = props.productAndOptions.filter(r => r.product.code === productCode);
+            let searchOptionCodes = selectedProduct.map(r => r.option.code) ?? null;
+
+            let body = {
+                startDate: searchStartDate,
+                endDate: searchEndDate,
+                utcHourDifference,
+                optionCodes: searchOptionCodes
+            }
+
+            props.onActionChangeSelectedProduct(productCode);
+            await props.onSubmitSearchPerformance(body);
+        }
+
+        if(location.state?.productCode) {
+            fetchInit();
+        }
     }, [props.products])
 
     const __handle = {
         action: {
-            initSearchValueAndSearchPerformance: () => {
-                let productCode = location.state?.productCode;
-                let startDate = location.state?.startDate ?? PREV_2WEEKS_DATE;
-                let endDate = location.state?.endDate ?? TODAY;
-
-                setStartDate(startDate);
-                setEndDate(endDate);
-
-                // 선택된 상품이 없는 경우
-                if(!productCode) {
-                    return;
-                }
-
-                let selectedProduct = props.productAndOptions.filter(r => r.product.code === productCode);
-                let searchOptionCodes = selectedProduct.map(r => r.option.code);
-
-                let utcHourDifference = getTimeDiffWithUTC();
-                let optionCodes = searchOptionCodes ?? null;
-                
-                let body = {
-                    startDate,
-                    endDate,
-                    utcHourDifference,
-                    optionCodes
-                }
-                
-                props.onSubmitSearchPerformance(body);
-                props.onActionChangeSelectedProduct(productCode);
-            },
             changeStartDate: (value) => {
                 setStartDate(value);
             },
@@ -187,6 +191,10 @@ export default function OperatorComponent(props) {
                     optionCodes
                 }
                 props.onSubmitSearchPerformance(body);
+
+                query.startDate = dateToYYYYMMDD(startDate);
+                query.endDate = dateToYYYYMMDD(endDate);
+                navigateParams({ replace: true });
 
                 let category = props.categories.filter(r => r.cid === props.selectedProduct.productCategoryCid)[0];
                 setSelectedCategory(category);

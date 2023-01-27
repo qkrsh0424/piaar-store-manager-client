@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
 import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
 import ProductListModalComponent from "./modal/product-list/ProductListModal.component";
 import { Container } from "./Operator.styled";
@@ -13,9 +13,6 @@ import DateSelectorFieldView from "./view/DateSelectorField.view";
 
 // 날짜검색 최대기간 92일
 const SEARCHABLE_PERIOD = 92;
-
-const TODAY = new Date();
-const PREV_2WEEKS_DATE = setSubtractedDate(TODAY, 0, 0, -13);
 
 export default function OperatorComponent(props) {
     const [startDate, setStartDate] = useState(null);
@@ -30,7 +27,9 @@ export default function OperatorComponent(props) {
     const [productListModalOpen, setProductListModalOpen] = useState(false);
 
     const {
-        location
+        query,
+        location,
+        navigateParams
     } = useRouterHook();
 
     const {
@@ -53,14 +52,43 @@ export default function OperatorComponent(props) {
     } = useBasicSnackbarHookV2();
 
     useEffect(() => {
+        let date1 = location.state?.startDate ? location.state?.startDate : new Date(query.startDate);
+        let date2 = location.state?.endDate ? location.state?.endDate : new Date(query.endDate);
+
+        setStartDate(date1);
+        setEndDate(date2);
+
+        query.startDate = dateToYYYYMMDD(date1);
+        query.endDate = dateToYYYYMMDD(date2);
+        navigateParams({ replace : true });
+    }, [])
+
+    useEffect(() => {
         async function fetchInit() {
             onActionOpenBackdrop();
             await reqSearchAllRelatedProduct();
             onActionCloseBackdrop();
         }
 
+        async function searchPerformance() {
+            let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
+            let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
+            let utcHourDifference = getTimeDiffWithUTC();
+            let salesChannels = location.state?.salesChannels ?? null;
+
+            let body = {
+                startDate: searchStartDate,
+                endDate: searchEndDate,
+                utcHourDifference,
+                salesChannels
+            }
+
+            __handle.action.initSearchValue(body);
+            await props.onSubmitSearchPerformance(body);
+        }
+
         fetchInit();
-        __handle.action.initSearchValueAndSearchPerformance();
+        searchPerformance();
     }, [])
 
     useEffect(() => {
@@ -73,29 +101,11 @@ export default function OperatorComponent(props) {
 
     const __handle = {
         action: {
-            initSearchValueAndSearchPerformance: () => {
-                let startDate = location.state?.startDate ?? PREV_2WEEKS_DATE;
-                let endDate = location.state?.endDate ?? TODAY;
-                let salesChannels = location.state?.salesChannels ?? null;
-
-                let searchStartDate = getStartDate(startDate);
-                let searchEndDate = getEndDate(endDate);
-                let utcHourDifference = getTimeDiffWithUTC();
-
-                let body = {
-                    startDate: searchStartDate,
-                    endDate: searchEndDate,
-                    utcHourDifference,
-                    salesChannels
-                }
-
+            initSearchValue: (body) => {
                 props.onActionUpdateDetailSearchValue(body);
-                props.onSubmitSearchPerformance(body);
 
-                setStartDate(startDate);
-                setEndDate(endDate);
-                setSalesChannels(salesChannels);
-                setSelectedChannels(salesChannels);
+                setSalesChannels(body.salesChannels);
+                setSelectedChannels(body.salesChannels);
             },
             changeStartDate: (value) => {
                 setStartDate(value);
@@ -245,6 +255,10 @@ export default function OperatorComponent(props) {
                 props.onActionChangeSelectedOption(selectedProductAndOptions);
                 props.onActionUpdateDetailSearchValue(body);
                 props.onSubmitSearchPerformance(body);
+
+                query.startDate = dateToYYYYMMDD(startDate);
+                query.endDate = dateToYYYYMMDD(endDate);
+                navigateParams({ replace: true });
             }
         }
     }

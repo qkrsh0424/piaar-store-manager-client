@@ -22,6 +22,10 @@ export default function PayAmountGraphComponent(props) {
 
     const [graphLabels, setGraphLabels] = useState(null);
 
+    const {
+        query
+    } = useRouterHook();
+
     useEffect(() => {
         if(!props.searchDimension) {
             return;

@@ -40,6 +40,7 @@ function BoxFieldView({ onActionSelectSalesChannel, onActionSelectCategory, onAc
 export default function DetailSelectorModalComponent(props) {
 
     const {
+        query,
         navigateUrl
     } = useRouterHook();
 
