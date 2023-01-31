@@ -1,8 +1,8 @@
 import { Container } from "./OptionItemTable.styled";
-import GraphBoardFieldView from "./view/GraphBoardField.view";
 import _ from "lodash";
 import TableFieldView from "./view/TableField.view";
 import { useEffect, useState } from "react";
+import TableTitleFieldView from "./view/TableTitleField.view";
 
 // 판매스토어별 총 매출액
 export default function OptionItemTableComponent(props) {
@@ -42,9 +42,6 @@ export default function OptionItemTableComponent(props) {
                 })
 
                 setTableData(tableData);
-            },
-            isSelectedOption: (code) => {
-                return props.selectedOptions.some(r => r.code === code);
             }
         }
     }
@@ -52,12 +49,11 @@ export default function OptionItemTableComponent(props) {
     return (
         <>
             <Container>
-                <GraphBoardFieldView />
+                <TableTitleFieldView />
                 <div className='content-box'>
                     <TableFieldView
                         tableData={tableData}
-
-                        onActionIsSelectedOption={__handle.action.isSelectedOption}
+                        detailSearchValue={props.detailSearchValue}
                     />
                 </div>
             </Container>

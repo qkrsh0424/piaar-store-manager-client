@@ -5,11 +5,9 @@ import BestProductGraphComponent from "./best-product-graph/BestProductGraph.com
 import GraphOperatorComponent from "./graph-operator/GraphOperator.component";
 import OperatorComponent from "./operator/Operator.component";
 import useProductSalesPerformanceHook from "./hooks/useProductSalesPerformanceHook";
-import BestOptionGraphComponent from "./best-option-graph/BestOptionGraph.component";
 import useOptionSalesPerformanceHook from "./hooks/useOptionSalesPerformanceHook";
-import ProductSelectorComponent from "./product-selector/ProductSelector.component";
-import ProductBestOptionGraphComponent from "./product-best-option-graph/ProductBestOptionGraph.component";
 import DetailGraphSelectorModalComponent from "./modal/detail-graph-selector-modal/DetailGraphSelectorModal.component";
+import OptionItemTableComponent from "./option-item-table/OptionItemTable.component";
 
 const Container = styled.div`
     height: 100%;
@@ -34,12 +32,10 @@ function PageTitleFieldView({ title }) {
 
 export default function ProductBestPerformanceComponent (props) {
     const [checkedSwitch, setCheckedSwitch] = useState(false);
-    const [salesProduct, setSalesProduct] = useState(null);
-    const [selectedProduct, setSelectedProduct] = useState([]);
 
     const [detailGraphSelectorModalOpen, setDetailGraphSelectorModalOpen] = useState(false);
     const [detailSearchValue, setDetailSearchValue] = useState(null);
-
+    
     const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
@@ -59,17 +55,25 @@ export default function ProductBestPerformanceComponent (props) {
     } = useOptionSalesPerformanceHook();
 
     useEffect(() => {
-        if(!optionPerformance) {
-            return;
+        async function searchOptionPerformance() {
+            onActionOpenBackdrop();
+            let productCodes = productPerformance?.content.map(r => r.productCode);
+            let body = {
+                ...detailSearchValue,
+                productCodes: productCodes
+            }
+            await reqSearchBestOptionPerformance(body);
+            onActionCloseBackdrop();
         }
 
-        __handle.action.initProduct();
-    }, [optionPerformance])
+        if(productPerformance) {
+            searchOptionPerformance(); 
+        }
+    }, [productPerformance])
 
     const __handle = {
         action: {
             resetPerformance: () => {
-                setSalesProduct(null);
                 onActionResetProductPerformance();
                 onActionResetOptionPerformance();
             },
@@ -77,49 +81,13 @@ export default function ProductBestPerformanceComponent (props) {
                 let checkedValue = checkedSwitch;
                 setCheckedSwitch(!checkedValue);
             },
-            initProduct: () => {
-                let product = new Set([]);
-                optionPerformance.forEach(r => {
-                    product.add(r.productDefaultName);
-                })
-
-                let productName = [...product].sort();
-                setSalesProduct(productName);
-
-                // 기본 1개 선택
-                setSelectedProduct([productName[0]]);
-            },
-            isCheckedOne: (productName) => {
-                return selectedProduct.some(name => name === productName);
-            },
-            checkOne: (e, productName) => {
-                e.stopPropagation();
-
-                let data = [...selectedProduct];
-
-                if(selectedProduct.some(name => name === productName)) {
-                    data = data.filter(name => name !== productName);
-                } else {
-                    data.push(productName);
-                }
-                setSelectedProduct(data);
-            },
-            checkAll: (e) => {
-                e.stopPropagation();
-
-                setSelectedProduct([...salesProduct]);
-            },
-            checkCancelAll: (e) => {
-                e.stopPropagation();
-
-                setSelectedProduct([]);
-            },
             updateDetailSearchValue: (data) => {
                 setDetailSearchValue({
                     ...detailSearchValue,
                     ...data
                 });
             },
+            // TODO :: searchValue update 호출. 분리하기
             openDetailGraphSelectorModal: (data) => {
                 setDetailSearchValue(data);
                 setDetailGraphSelectorModalOpen(true);
@@ -133,7 +101,6 @@ export default function ProductBestPerformanceComponent (props) {
             searchPerformance: async (body) => {
                 onActionOpenBackdrop();
                 await reqSearchBestProductPerformance(body);
-                await reqSearchBestOptionPerformance(body);
                 onActionCloseBackdrop();
             }
         }
@@ -141,9 +108,10 @@ export default function ProductBestPerformanceComponent (props) {
 
     return (
         <Container navbarOpen={props.navbarOpen}>
-            <PageTitleFieldView title={'상품 - BEST 상품 & 옵션'} />
+            <PageTitleFieldView title={'상품 - 상품 순위'} />
 
             <OperatorComponent
+                productPerformance={productPerformance}
                 onActionResetPerformance={__handle.action.resetPerformance}
                 onSubmitSearchPerformance={__handle.submit.searchPerformance}
                 onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
@@ -151,38 +119,25 @@ export default function ProductBestPerformanceComponent (props) {
 
             <GraphOperatorComponent
                 checkedSwitch={checkedSwitch}
+                detailSearchValue={detailSearchValue}
 
                 onActionChangeSwitch={__handle.action.changeSwitch}
+                onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
             />
 
             <BestProductGraphComponent
                 checkedSwitch={checkedSwitch}
-                performance={productPerformance}
+                performance={productPerformance?.content}
                 detailSearchValue={detailSearchValue}
 
                 onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
             />
 
-            <BestOptionGraphComponent
-                checkedSwitch={checkedSwitch}
+            <OptionItemTableComponent
                 performance={optionPerformance}
                 detailSearchValue={detailSearchValue}
 
                 onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
-            />
-
-            <ProductSelectorComponent
-                salesProduct={salesProduct}
-                onActionIsCheckedOne={__handle.action.isCheckedOne}
-                onActionCheckOne={__handle.action.checkOne}
-                onActionCheckAll={__handle.action.checkAll}
-                onActionCheckCancelAll={__handle.action.checkCancelAll}
-            />
-            
-            <ProductBestOptionGraphComponent
-                checkedSwitch={checkedSwitch}
-                selectedProduct={selectedProduct}
-                performance={optionPerformance}
             />
 
             <BackdropHookComponent

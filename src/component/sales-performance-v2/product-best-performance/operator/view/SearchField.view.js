@@ -4,14 +4,25 @@ export default function SearchFieldView(props) {
 
     return (
         <SearchFieldWrapper>
-            <div className='search-box'>
+            <div className='button-box'>
                 <div>
                     <button
                         type='button'
-                        className='button-el'
-                        onClick={(e) => props.onActionOpenProductListModal(e)}
+                        className={`button-el ${props.orderByColumn === 'payAmount' ? 'checked' : ''}`}
+                        onClick={(e) => props.onActionChangeOrderByColumn(e)}
+                        value='payAmount'
                     >
-                        <div>{props.selectedProduct ? props.selectedProduct.defaultName : '상품 전체'}</div>
+                        매출 순
+                    </button>
+                </div>
+                <div>
+                    <button
+                        type='button'
+                        className={`button-el ${props.orderByColumn === 'unit' ? 'checked' : ''}`}
+                        onClick={(e) => props.onActionChangeOrderByColumn(e)}
+                        value='unit'
+                    >
+                        수량 순
                     </button>
                 </div>
             </div>

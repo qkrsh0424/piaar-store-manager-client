@@ -10,19 +10,19 @@ const Container = styled.div`
     }
 `;
 
-const GraphBoardFieldWrapper = styled.div`
+const TableTitleFieldWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--defaultBorderColor);
     padding: 20px;
 
-    .graph-title {
+    .table-title {
         font-size : 1.2rem;
         font-weight: 700;
     }
 
-    .graph-info-text {
+    .table-info-text {
         font-size: 14px;
     }
 
@@ -87,7 +87,7 @@ const TableFieldWrapper = styled.div`
 
     table tbody tr {
         border: 1px solid #eee;
-        /* color: #555; */
+        color: #555;
         transition: 1ms;
     }
     
@@ -114,49 +114,10 @@ const TableFieldWrapper = styled.div`
             font-size: 12px;
         }
     }
-
-    .highlight{
-        display: inline-block;
-        position:relative;
-        font-weight: 700;
-    }
-
-    .highlight:after{
-        content:"";
-        position: absolute;
-        bottom:0;
-        left:0;
-        width: 100%;
-        height: 7px;
-        display: inline-block;
-        background: #b9c2e160;
-    }
-`;
-
-const GraphBodyFieldWrapper = styled.div`
-    min-width: 1000px;
-    min-height: 400px;
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-
-    .half-type-graph {
-        width: 45%;
-
-        @media screen and (max-width: 992px) {
-            width: 100%;
-            flex-direction: column;
-        }
-    }
-
-    .graph-wrapper {
-        height: 380px;
-    }
 `;
 
 export {
     Container,
-    GraphBoardFieldWrapper,
-    GraphBodyFieldWrapper,
+    TableTitleFieldWrapper,
     TableFieldWrapper
 }

@@ -25,7 +25,7 @@ function PageTitleFieldView({ title }) {
 export default function ProductDetailPerformanceComponent (props) {
     return (
         <Container navbarOpen={props.navbarOpen}>
-            <PageTitleFieldView title={'상품 - 상세 성과'} />
+            <PageTitleFieldView title={'상품 - 단일 상품 성과'} />
 
             <PerformanceContainerComponent />
         </Container>

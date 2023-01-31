@@ -8,8 +8,9 @@ import OperatorComponent from './operator/Operator.component'
 import BestProductGraphComponent from './best-product-graph/BestProductGraph.component';
 import useProductSalesPerformanceHook from './hooks/useProductSalesPerformanceHook';
 import useOptionSalesPerformanceHook from './hooks/useOptionSalesPerformanceHook';
-import BestOptionGraphComponent from './best-option-graph/BestOptionGraph.component';
 import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
+import OptionItemTableComponent from './option-item-table/OptionItemTable.component';
+import { useEffect } from 'react';
 
 const Container = styled.div`
     height: 100%;
@@ -33,13 +34,7 @@ function PageTitleFieldView({ title }) {
 }
 
 const CategoryBestProductPerformanceComponent = (props) => {
-    const [salesCategory, setSalesCategory] = useState(null);
-    const [selectedSalesCategory, setSelectedSalesCategory] = useState(null);
-
-    const [searchDimension, setSearchDimension] = useState('date');
     const [checkedSwitch, setCheckedSwitch] = useState(false);
-
-    const [selectedProductAndOptions, setSelectedProductAndOptions] = useState([]);
 
     const [detailGraphSelectorModalOpen, setDetailGraphSelectorModalOpen] = useState(false);
     const [detailSearchValue, setDetailSearchValue] = useState(null);
@@ -53,7 +48,7 @@ const CategoryBestProductPerformanceComponent = (props) => {
     const {
         performance: productPerformance,
         reqSearchCategoryBestProductPerformance,
-        onActionResetPerformance
+        onActionResetProductPerformance
     } = useProductSalesPerformanceHook();
 
     const {
@@ -62,58 +57,32 @@ const CategoryBestProductPerformanceComponent = (props) => {
         onActionResetOptionPerformance
     } = useOptionSalesPerformanceHook();
 
+    useEffect(() => {
+        async function searchOptionPerformance() {
+            onActionOpenBackdrop();
+            let productCodes = productPerformance?.content.map(r => r.productCode);
+            let body = {
+                ...detailSearchValue,
+                productCodes: productCodes
+            }
+            await reqSearchCategoryBestOptionPerformance(body);
+            onActionCloseBackdrop();
+        }
+
+        if(productPerformance) {
+            searchOptionPerformance(); 
+        }
+    }, [productPerformance])
+
     const __handle = {
         action: {
             resetPerformance: () => {
-                onActionResetPerformance();
+                onActionResetProductPerformance();
                 onActionResetOptionPerformance();
-                __handle.action.clearChannel();
-            },
-            initChannel: () => {
-                let category = new Set([]);
-                performance.forEach(r => r.performances?.forEach(r2 => {
-                    category.add(r2.productCategoryName);
-                }))
-
-                let categoryName = [...category].sort();
-                setSalesCategory(categoryName);
-                setSelectedSalesCategory([categoryName[0]]);
-            },
-            isCheckedOne: (category) => {
-                return selectedSalesCategory.some(name => name === category);
-            },
-            checkOne: (e, category) => {
-                e.stopPropagation();
-
-                let data = [...selectedSalesCategory];
-
-                if(selectedSalesCategory.some(name => name === category)) {
-                    data = data.filter(name => name !== category);
-                } else {
-                    data.push(category);
-                }
-                setSelectedSalesCategory(data);
-            },
-            checkAll: (e) => {
-                e.stopPropagation();
-
-                setSelectedSalesCategory([...salesCategory]);
-            },
-            checkCancelAll: (e) => {
-                e.stopPropagation();
-
-                setSelectedSalesCategory([]);
             },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;
                 setCheckedSwitch(!checkedValue);
-            },
-            changeDimension: (e) => {
-                let value = e.target.value;
-                setSearchDimension(value);
-            },
-            changeSelectedOption: (data) => {
-                setSelectedProductAndOptions([...data])
             },
             updateDetailSearchValue: (data) => {
                 setDetailSearchValue({
@@ -134,7 +103,6 @@ const CategoryBestProductPerformanceComponent = (props) => {
             searchPerformance: async (body) => {
                 onActionOpenBackdrop();
                 await reqSearchCategoryBestProductPerformance(body);
-                await reqSearchCategoryBestOptionPerformance(body);
                 onActionCloseBackdrop();
             }
         }
@@ -143,37 +111,33 @@ const CategoryBestProductPerformanceComponent = (props) => {
     return (
         <>
             <Container navbarOpen={props.navbarOpen}>
-                <PageTitleFieldView title={'판매스토어 - BEST 상품 & 옵션'} />
+                <PageTitleFieldView title={'카테고리 - 상품 순위'} />
 
                 <OperatorComponent
-                    selectedProductAndOptions={selectedProductAndOptions}
-                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
+                    productPerformance={productPerformance}
                     onActionResetPerformance={__handle.action.resetPerformance}
-                    onActionChangeSelectedOption={__handle.action.changeSelectedOption}
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
                     onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
                 />
 
                 <GraphOperatorComponent
                     checkedSwitch={checkedSwitch}
-                    searchDimension={searchDimension}
 
                     onActionChangeSwitch={__handle.action.changeSwitch}
-                    onActionChangeSearchDimension={__handle.action.changeDimension}
                 />
 
                 <BestProductGraphComponent
                     checkedSwitch={checkedSwitch}
-                    performance={productPerformance}
+                    performance={productPerformance?.content}
                     detailSearchValue={detailSearchValue}
 
                     onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
 
-                <BestOptionGraphComponent
-                    checkedSwitch={checkedSwitch}
+                <OptionItemTableComponent
                     performance={optionPerformance}
                     detailSearchValue={detailSearchValue}
-
+    
                     onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
             </Container>

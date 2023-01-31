@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
 import { dateToYYYYMMDD, getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
+import GraphDataPagenationComponent from "../graph-data-pagenation/GraphDataPagenation.component";
 import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
-import ProductListModalComponent from "./modal/product-list/ProductListModal.component";
 import { Container } from "./Operator.styled";
 import ButtonFieldView from "./view/ButtonField.view";
 import CategorySelectorFieldView from "./view/CategorySelectorField.view";
-import ChannelSelectorFieldView from "./view/CategorySelectorField.view";
 import DateButtonFieldView from "./view/DateButtonField.view";
 import DateSelectorFieldView from "./view/DateSelectorField.view";
+import SearchFieldView from "./view/SearchField.view";
 
 // 날짜검색 최대기간 92일
 const SEARCHABLE_PERIOD = 92;
@@ -18,26 +17,17 @@ const SEARCHABLE_PERIOD = 92;
 export default function OperatorComponent(props) {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [orderByColumn, setOrderByColumn] = useState('payAmount');
+    const [pageIndex, setPageIndex] = useState(null);
 
     const [salesCategory, setSalesCategory] = useState(null);
     const [selectedSalesCategory, setSelectedSalesCategory] = useState(null);
-
-    const [products, setProducts] = useState(null);
-    const [selectedProductAndOptions, setSelectedProductAndOptions] = useState([]);
-
-    const [productListModalOpen, setProductListModalOpen] = useState(false);
 
     const {
         query,
         location,
         navigateParams
     } = useRouterHook();
-
-    const {
-        open: backdropOpen,
-        onActionOpen: onActionOpenBackdrop,
-        onActionClose: onActionCloseBackdrop
-    } = useBackdropHook();
 
     const {
         productAndOptions,
@@ -66,22 +56,18 @@ export default function OperatorComponent(props) {
 
     useEffect(() => {
         async function fetchInit() {
-            onActionOpenBackdrop();
-            await reqSearchAllRelatedProduct();
-            onActionCloseBackdrop();
-        }
-
-        async function searchPerformance() {
             let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
             let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
             let utcHourDifference = getTimeDiffWithUTC();
             let productCategoryNames = location.state?.productCategory ?? null;
+            let orderByColumn = 'payAmount';
 
             let body = {
                 startDate: searchStartDate,
                 endDate: searchEndDate,
                 utcHourDifference,
-                productCategoryNames
+                productCategoryNames,
+                orderByColumn
             }
 
             __handle.action.initSearchValue(body)
@@ -89,16 +75,15 @@ export default function OperatorComponent(props) {
         }
 
         fetchInit();
-        searchPerformance();
     }, [])
 
     useEffect(() => {
-        if(!productAndOptions) {
+        if(!props.productPerformance) {
             return;
         }
 
-        __handle.action.initProductAndOption();
-    }, [productAndOptions])
+        __handle.action.updatePageIndex();
+    }, [props.productPerformance])
 
     const __handle = {
         action: {
@@ -117,9 +102,10 @@ export default function OperatorComponent(props) {
             clearRoute: () => {
                 setStartDate(null);
                 setEndDate(null);
-
+                setOrderByColumn('payAmount');
+                setSelectedSalesCategory([]);
+                
                 props.onActionResetPerformance();
-                setSelectedProductAndOptions([]);
             },
             searchDateRange: (year, month, day) => {
                 let end = new Date();
@@ -137,54 +123,19 @@ export default function OperatorComponent(props) {
                 setStartDate(start);
                 setEndDate(end);
             },
-            initProductAndOption: () => {
-                let productData = [...new Set(productAndOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
-                setProducts(productData);
+            changeOrderByColumn: (e) => {
+                let value = e.target.value;
+                setOrderByColumn(value);
             },
-            openProductListModal: (e) => {
-                e.preventDefault();
-
-                setProductListModalOpen(true);
+            changePrevPageIndex: () => {
+                setPageIndex(pageIndex - 1);
             },
-            closeProductListModal: () => {
-                setProductListModalOpen(false);
+            changeNextPageIndex: () => {
+                setPageIndex(pageIndex + 1);
             },
-            selectProduct: (productId) => {
-                let selectedProduct = selectedProductAndOptions.some(r => r.product.id === productId);
-                if(selectedProduct){
-                    return;
-                }
-
-                let product = products.filter(r => r.id === productId)[0];
-                let options = productAndOptions.filter(r => r.product.id === product.id).map(r => r.option);
-                let data = [{
-                    product,
-                    options: options
-                }]
-                
-                setSelectedProductAndOptions([...selectedProductAndOptions, ...data]);
-            },
-            removeOptionOne: (e, optionId) => {
-                e.stopPropagation();
-
-                let updatedProductAndOptions = selectedProductAndOptions.map(r => {
-                    let options = r.options.filter(r2 => r2.id !== optionId);
-
-                    return {
-                        ...r,
-                        options
-                    }
-                })
-                // 해당 상품에 대한 옵션이 모두 제거되면 상품도 제거
-                updatedProductAndOptions = updatedProductAndOptions.filter(r => r.options?.length > 0);
-
-                setSelectedProductAndOptions(updatedProductAndOptions);
-            },
-            removeProduct: (e, productId) => {
-                e.stopPropagation();
-
-                let updatedProductAndOptions = selectedProductAndOptions.filter(r => r.product.id !== productId);
-                setSelectedProductAndOptions(updatedProductAndOptions);
+            updatePageIndex: () => {
+                let index = props.productPerformance?.number;
+                setPageIndex(index);
             },
             isCheckedOne: (category) => {
                 return selectedSalesCategory.some(name => name === category);
@@ -198,6 +149,15 @@ export default function OperatorComponent(props) {
                     data = data.filter(name => name !== category);
                 } else {
                     data.push(category);
+                }
+
+                if(data.length === 0) {
+                    let snackbarSetting = {
+                        message: '판매채널은 최소 1개 이상 선택해야 합니다.',
+                        severity: 'error'
+                    }
+                    onActionOpenSnackbar(snackbarSetting);
+                    return;
                 }
                 setSelectedSalesCategory(data);
             },
@@ -237,28 +197,29 @@ export default function OperatorComponent(props) {
                     return;
                 }
 
-                selectedProductAndOptions.forEach(r => {
-                    r.options.forEach(r2 => searchOptionCodes.push(r2.code));
-                });
-
                 let searchStartDate = startDate ? getStartDate(startDate) : null;
                 let searchEndDate = endDate ? getEndDate(endDate) : null;
                 let utcHourDifference = getTimeDiffWithUTC();
                 let productCategoryNames = selectedSalesCategory;
+                let page = pageIndex + 1;
+                let searchOrderByColumn = orderByColumn ?? 'payAmount';
 
                 let body = {
                     startDate: searchStartDate,
                     endDate: searchEndDate,
                     utcHourDifference,
-                    productCategoryNames
+                    productCategoryNames,
+                    page,
+                    orderByColumn: searchOrderByColumn
                 }
 
-                props.onActionChangeSelectedOption(selectedProductAndOptions);
                 props.onActionUpdateDetailSearchValue(body);
                 props.onSubmitSearchPerformance(body);
 
                 query.startDate = dateToYYYYMMDD(startDate);
                 query.endDate = dateToYYYYMMDD(endDate);
+                query.page = pageIndex+1;
+
                 navigateParams({ replace: true });
             }
         }
@@ -284,6 +245,21 @@ export default function OperatorComponent(props) {
                     onActionCheckOne={__handle.action.checkOne}
                 />
 
+                <SearchFieldView
+                    checkedSwitch={props.checkedSwitch}
+                    orderByColumn={orderByColumn}
+
+                    onActionChangeOrderByColumn={__handle.action.changeOrderByColumn}
+                />
+
+                <GraphDataPagenationComponent
+                    salesPayAmountData={props.productPerformance}
+                    pageIndex={pageIndex}
+                    
+                    onChangePrevPageIndex={__handle.action.changePrevPageIndex}
+                    onChangeNextPageIndex={__handle.action.changeNextPageIndex}
+                />
+
                 <ButtonFieldView
                     onActionClearRoute={__handle.action.clearRoute}
                 />
@@ -300,20 +276,6 @@ export default function OperatorComponent(props) {
                     horizontal={'right'}
                     duration={4000}
                 ></BasicSnackbarHookComponentV2>
-            }
-
-            <BackdropHookComponent
-                open={backdropOpen}
-            />
-
-            {productListModalOpen &&
-                <ProductListModalComponent
-                    products={products}
-                    modalOpen={productListModalOpen}
-
-                    onActionSelectedProduct={__handle.action.selectProduct}
-                    onActionCloseModal={__handle.action.closeProductListModal}
-                />
             }
         </Container>
     )

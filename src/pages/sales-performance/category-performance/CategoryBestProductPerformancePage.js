@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import DrawerNavbarMain from '../../../component/nav/DrawerNavbarMain';
-import CategoryBestProductPerformanceComponent from '../../../component/sales-performance-v2/category-best-product-performance-v2';
+import CategoryBestProductPerformanceComponent from '../../../component/sales-performance-v2/category-best-product-performance';
 import ManagementNavbar from '../../../component/sales-performance-v2/navbar/ManagementNavbar';
 
 const Container = styled.div`

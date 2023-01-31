@@ -122,7 +122,7 @@ const thisRouters = [
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
-                name: 'BEST 상품 & 옵션',
+                name: '상품 순위',
                 pathname: '/sales-performance/sales-channel/product/best',
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
@@ -142,7 +142,7 @@ const thisRouters = [
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
-                name: 'BEST 상품 & 옵션',
+                name: '상품 순위',
                 pathname: '/sales-performance/category/product/best',
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
@@ -162,7 +162,7 @@ const thisRouters = [
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
-                name: 'BEST 상품 & 옵션',
+                name: '상품 순위',
                 pathname: '/sales-performance/product/best',
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },

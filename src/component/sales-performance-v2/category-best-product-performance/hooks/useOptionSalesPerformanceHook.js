@@ -5,7 +5,7 @@ export default function useOptionSalesPerformanceHook(props) {
     const [performance, setPerformance] = useState(null);
 
     const reqSearchCategoryBestOptionPerformance = async (body) => {
-        await salesPerformanceDataConnect().searchCategoryBestOptionPerformance(body)
+        await salesPerformanceDataConnect().searchBestOptionPerformance(body)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
                     setPerformance(res.data.data);

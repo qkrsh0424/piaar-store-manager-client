@@ -216,6 +216,7 @@ export default function PerformanceContainerComponent (props) {
 
             <OptionItemTableComponent
                 performance={optionPerformance}
+                selectedOptions={selectedOptions}
             />
 
             <BackdropHookComponent

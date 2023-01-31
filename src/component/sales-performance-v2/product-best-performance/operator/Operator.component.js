@@ -3,20 +3,21 @@ import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdr
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
 import { dateToYYYYMMDD, getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
+import GraphDataPagenationComponent from "../graph-data-pagenation/GraphDataPagenation.component";
 import { Container } from "./Operator.styled";
 import ButtonFieldView from "./view/ButtonField.view";
 import DateButtonFieldView from "./view/DateButtonField.view";
 import DateSelectorFieldView from "./view/DateSelectorField.view";
+import SearchFieldView from "./view/SearchField.view";
 
 // 날짜검색 최대기간 92일
 const SEARCHABLE_PERIOD = 92;
 
-const TODAY = new Date();
-const PREV_2WEEKS_DATE = setSubtractedDate(TODAY, 0, 0, -13);
-
 export default function OperatorComponent(props) {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [orderByColumn, setOrderByColumn] = useState('payAmount');
+    const [pageIndex, setPageIndex] = useState(null);
 
     const{ 
         query,
@@ -50,16 +51,20 @@ export default function OperatorComponent(props) {
         navigateParams({ replace : true });
     }, [])
 
+    
+
     useEffect(() => {
         async function fetchInit() {
             let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
             let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
             let utcHourDifference = getTimeDiffWithUTC();
+            let orderByColumn = 'payAmount';
 
             let body = {
                 startDate: searchStartDate,
                 endDate: searchEndDate,
                 utcHourDifference,
+                orderByColumn
             }
 
             props.onActionUpdateDetailSearchValue(body);
@@ -68,6 +73,14 @@ export default function OperatorComponent(props) {
 
         fetchInit();
     }, [])
+
+    useEffect(() => {
+        if(!props.productPerformance) {
+            return;
+        }
+
+        __handle.action.updatePageIndex();
+    }, [props.productPerformance])
 
     const __handle = {
         action: {
@@ -80,6 +93,8 @@ export default function OperatorComponent(props) {
             clearRoute: () => {
                 setStartDate(null);
                 setEndDate(null);
+                setPageIndex(null);
+                setOrderByColumn('payAmount');
                 
                 props.onActionResetPerformance();
             },
@@ -98,10 +113,24 @@ export default function OperatorComponent(props) {
 
                 setStartDate(start);
                 setEndDate(end);
+            },
+            changeOrderByColumn: (e) => {
+                let value = e.target.value;
+                setOrderByColumn(value);
+            },
+            changePrevPageIndex: () => {
+                setPageIndex(pageIndex - 1);
+            },
+            changeNextPageIndex: () => {
+                setPageIndex(pageIndex + 1);
+            },
+            updatePageIndex: () => {
+                let index = props.productPerformance?.number;
+                setPageIndex(index);
             }
         },
         submit: {
-            routeToSearch: (e) => {
+            routeToSearch: async (e) => {
                 e.preventDefault();
 
                 try{
@@ -136,11 +165,15 @@ export default function OperatorComponent(props) {
                 let searchStartDate = startDate ? getStartDate(startDate) : null;
                 let searchEndDate = endDate ? getEndDate(endDate) : null;
                 let utcHourDifference = getTimeDiffWithUTC();
+                let page = pageIndex + 1;
+                let searchOrderByColumn = orderByColumn ?? 'payAmount';
 
                 let body = {
                     startDate: searchStartDate,
                     endDate: searchEndDate,
                     utcHourDifference,
+                    page,
+                    orderByColumn: searchOrderByColumn
                 }
                 
                 props.onActionUpdateDetailSearchValue(body);
@@ -148,6 +181,8 @@ export default function OperatorComponent(props) {
 
                 query.startDate = dateToYYYYMMDD(startDate);
                 query.endDate = dateToYYYYMMDD(endDate);
+                query.page = pageIndex+1;
+                
                 navigateParams({ replace: true });
             }
         }
@@ -162,15 +197,33 @@ export default function OperatorComponent(props) {
                     onChangeStartDateValue={__handle.action.changeStartDate}
                     onChangeEndDateValue={__handle.action.changeEndDate}
                 />
+                
                 <DateButtonFieldView
                     onActionSearchDateRange={__handle.action.searchDateRange}
                     onActionSearchMonthRange={__handle.action.searchMonthRange}
                 />
 
+                <SearchFieldView
+                    checkedSwitch={props.checkedSwitch}
+                    orderByColumn={orderByColumn}
+
+                    onActionChangeOrderByColumn={__handle.action.changeOrderByColumn}
+                />
+
+                <GraphDataPagenationComponent
+                    salesPayAmountData={props.productPerformance}
+                    pageIndex={pageIndex}
+                    
+                    onChangePrevPageIndex={__handle.action.changePrevPageIndex}
+                    onChangeNextPageIndex={__handle.action.changeNextPageIndex}
+                />
+
                 <ButtonFieldView
                     onActionClearRoute={__handle.action.clearRoute}
                 />
+
             </form>
+            
 
             {/* Snackbar */}
             {snackbarOpen &&

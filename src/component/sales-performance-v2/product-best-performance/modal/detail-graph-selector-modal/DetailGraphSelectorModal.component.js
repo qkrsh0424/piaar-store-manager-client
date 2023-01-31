@@ -70,7 +70,6 @@ export default function DetailGraphSelectorModalComponent(props) {
                     pathname: '/sales-performance/product/detail',
                     state: searchValue
                 }
-
                 navigateUrl(data);
             },
             changeStartDateValue: (value) => {
