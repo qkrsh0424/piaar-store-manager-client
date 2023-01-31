@@ -55,7 +55,7 @@ export default function TableFieldView(props) {
                                                 key={'option-data-idx' + idx2}
                                                 className='item-tr'
                                             >
-                                                <td><span className={isSelectedOption && 'highlight'}>{r2.optionDefaultName}</span></td>
+                                                <td><span className={isSelectedOption ? 'highlight' : ''}>{r2.optionDefaultName}</span></td>
                                                 <td>{toPriceUnitFormat(r2.salesPayAmount)}</td>
                                                 <td>{r2.salesUnit}</td>
                                                 <td>{toPriceUnitFormat(r2.orderPayAmount - r2.salesPayAmount)}</td>

@@ -1,14 +1,14 @@
-import { GraphBoardFieldWrapper } from "../OptionItemTable.styled";
+import { TableTitleFieldWrapper } from "../OptionItemTable.styled";
 
-export default function GraphBoardFieldView(props) {
+export default function TableTitleFieldView(props) {
     return (
-        <GraphBoardFieldWrapper>
+        <TableTitleFieldWrapper>
             <div>
-                <div className='graph-title'>[BEST 옵션 매출 & 수량]</div>
-                <div className='graph-info-text'>
-                    <span>상품 매출 & 수량 그래프에 표시되는 상품에 포함된 모든 옵션의 매출 & 수량이 표시됩니다. </span>
+                <div className='table-title'>[옵션 성과]</div>
+                <div className='table-info-text'>
+                    <span>조회된 상품의 모든 옵션판매 데이터를 표시합니다. </span>
                 </div>
             </div>
-        </GraphBoardFieldWrapper>
+        </TableTitleFieldWrapper>
     )
 }
