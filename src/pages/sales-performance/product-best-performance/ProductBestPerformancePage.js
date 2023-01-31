@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import DrawerNavbarMain from '../../../component/nav/DrawerNavbarMain';
 import ManagementNavbar from '../../../component/sales-performance-v2/navbar/ManagementNavbar';
-import ProductBestPerformanceComponent from '../../../component/sales-performance-v2/product-best-performance';
+import ProductBestPerformanceComponent from '../../../component/sales-performance-v2/product-best-performance-v2';
 
 const Container = styled.div`
     position: relative;

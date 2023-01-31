@@ -1,4 +1,5 @@
-import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
+import { getDayName } from "../../../../utils/dateFormatUtils";
+import { getTrendPercentage, toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import { TrendInfoFieldWrapper, DashboardFieldWrapper, DataBox } from "../Dashboard.styled";
 
 function TrendInfoField ({ dayInfo, trendValue}) {
@@ -34,7 +35,7 @@ function TrendInfoField ({ dayInfo, trendValue}) {
     )
 }
 
-export default function DashboardFieldView({ todayData, yesterdayData }) {
+export default function DashboardFieldView({ todayData, yesterdayData, prev7DaysData, prev8DaysData }) {
     return (
         // TODO :: 여기도 함수만들어서 공통으로 뺄 수 있다
         <DashboardFieldWrapper>
@@ -51,8 +52,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.orderPayAmountTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev8DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(yesterdayData.orderPayAmount, prev8DaysData.orderPayAmount)}
                                 />
                             </div>
                         </DataBox>
@@ -65,8 +66,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.salesPayAmountTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev8DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(yesterdayData.salesPayAmount, prev8DaysData.salesPayAmount)}
                                 />
                             </div>
                         </DataBox>
@@ -79,8 +80,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.unsalesPayAmountTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev8DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(yesterdayData.unsalesPayAmount, prev8DaysData.unsalesPayAmount)}
                                 />
                             </div>
                         </DataBox>
@@ -96,8 +97,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.orderRegistrationTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev8DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(yesterdayData.orderRegistration, prev8DaysData.orderRegistration)}
                                 />
                             </div>
                         </DataBox>
@@ -110,8 +111,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.salesRegistrationTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev8DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(yesterdayData.salesRegistration, prev8DaysData.salesRegistration)}
                                 />
                             </div>
                         </DataBox>
@@ -124,8 +125,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.unsalesRegistrationTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev8DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(yesterdayData.unsalesRegistration, prev8DaysData.unsalesRegistration)}
                                 />
                             </div>
                         </DataBox>
@@ -141,8 +142,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.orderUnitTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev8DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(yesterdayData.orderUnit, prev8DaysData.orderUnit)}
                                 />
                             </div>
                         </DataBox>
@@ -155,8 +156,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.salesUnitTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev8DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(yesterdayData.salesUnit, prev8DaysData.salesUnit)}
                                 />
                             </div>
                         </DataBox>
@@ -169,8 +170,8 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${yesterdayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={yesterdayData.unsalesUnitTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev8DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(yesterdayData.unsalesUnit, prev8DaysData.unsalesUnit)}
                                 />
                             </div>
                         </DataBox>
@@ -191,12 +192,12 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                    trendValue={todayData.orderPayAmountTrendByYesterday}
+                                    dayInfo={`어제 (${getDayName(yesterdayData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.orderPayAmount, yesterdayData.orderPayAmount)}
                                 />
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={todayData.orderPayAmountTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev7DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.orderPayAmount, prev7DaysData.orderPayAmount)}
                                 />
                             </div>
                         </DataBox>
@@ -209,12 +210,12 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                    trendValue={todayData.salesPayAmountTrendByYesterday}
+                                    dayInfo={`어제 (${getDayName(yesterdayData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.salesPayAmount, yesterdayData.salesPayAmount)}
                                 />
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={todayData.salesPayAmountTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev7DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.salesPayAmount, prev7DaysData.salesPayAmount)}
                                 />
                             </div>
                         </DataBox>
@@ -227,12 +228,12 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                    trendValue={todayData.unsalesPayAmountTrendByYesterday}
+                                    dayInfo={`어제 (${getDayName(yesterdayData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.unsalesPayAmount, yesterdayData.unsalesPayAmount)}
                                 />
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={todayData.unsalesPayAmountTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev7DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.unsalesPayAmount, prev7DaysData.unsalesPayAmount)}
                                 />
                             </div>
                         </DataBox>
@@ -248,12 +249,12 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                    trendValue={todayData.orderRegistrationTrendByYesterday}
+                                    dayInfo={`어제 (${getDayName(yesterdayData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.orderRegistration, yesterdayData.orderRegistration)}
                                 />
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={todayData.orderRegistrationTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev7DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.orderRegistration, prev7DaysData.orderRegistration)}
                                 />
                             </div>
                         </DataBox>
@@ -266,12 +267,12 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                    trendValue={todayData.salesRegistrationTrendByYesterday}
+                                    dayInfo={`어제 (${getDayName(yesterdayData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.salesRegistration, yesterdayData.salesRegistration)}
                                 />
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={todayData.salesRegistrationTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev7DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.salesRegistration, prev7DaysData.salesRegistration)}
                                 />
                             </div>
                         </DataBox>
@@ -284,12 +285,12 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                    trendValue={todayData.unsalesRegistrationTrendByYesterday}
+                                    dayInfo={`어제 (${getDayName(yesterdayData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.unsalesRegistration, yesterdayData.unsalesRegistration)}
                                 />
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={todayData.unsalesRegistrationTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev7DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.unsalesRegistration, prev7DaysData.unsalesRegistration)}
                                 />
                             </div>
                         </DataBox>
@@ -305,12 +306,12 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                    trendValue={todayData.orderUnitTrendByYesterday}
+                                    dayInfo={`어제 (${getDayName(yesterdayData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.orderUnit, yesterdayData.orderUnit)}
                                 />
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={todayData.orderUnitTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev7DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.orderUnit, prev7DaysData.orderUnit)}
                                 />
                             </div>
                         </DataBox>
@@ -323,12 +324,12 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                    trendValue={todayData.salesUnitTrendByYesterday}
+                                    dayInfo={`어제 (${getDayName(yesterdayData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.salesUnit, yesterdayData.salesUnit)}
                                 />
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={todayData.salesUnitTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev7DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.salesUnit, prev7DaysData.salesUnit)}
                                 />
                             </div>
                         </DataBox>
@@ -341,12 +342,12 @@ export default function DashboardFieldView({ todayData, yesterdayData }) {
                             </div>
                             <div className='info-box'>
                                 <TrendInfoField
-                                    dayInfo={`어제 (${todayData.dayNameOfYesterday}) 대비`}
-                                    trendValue={todayData.unsalesUnitTrendByYesterday}
+                                    dayInfo={`어제 (${getDayName(yesterdayData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.unsalesUnit, yesterdayData.unsalesUnit)}
                                 />
                                 <TrendInfoField
-                                    dayInfo={`지난주 (${todayData.dayNameOfAWeekAgo}) 대비`}
-                                    trendValue={todayData.unsalesUnitTrendByAWeekAgo}
+                                    dayInfo={`지난주 (${getDayName(prev7DaysData.datetime)}) 대비`}
+                                    trendValue={getTrendPercentage(todayData.unsalesUnit, prev7DaysData.unsalesUnit)}
                                 />
                             </div>
                         </DataBox>

@@ -1,12 +1,7 @@
-import { useEffect } from 'react';
 import styled from 'styled-components';
 
-import { getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, setSubtractedDate } from '../../../utils/dateFormatUtils';
 import _ from 'lodash';
-import useRouterHook from '../../../hooks/router/useRouterHook';
-import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
 import DashboardComponent from './Dashboard.component';
-import useSalesPerformanceItemHook from './hooks/useSalesPerformanceHook';
 
 const Container = styled.div`
     height: 100%;

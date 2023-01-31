@@ -4,7 +4,7 @@ import { salesPerformanceDataConnect } from "../../../../../data_connect/salesPe
 export default function useOptionSalesPerformanceHook(props) {
     const [performance, setPerformance] = useState(null);
 
-    const reqSearchChannelBestOptionPerformance = async (body) => {
+    const reqSearchBestOptionPerformance = async (body) => {
         await salesPerformanceDataConnect().searchBestOptionPerformance(body)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
@@ -28,7 +28,7 @@ export default function useOptionSalesPerformanceHook(props) {
 
     return {
         performance,
-        reqSearchChannelBestOptionPerformance,
+        reqSearchBestOptionPerformance,
         onActionResetPerformance
     }
 }

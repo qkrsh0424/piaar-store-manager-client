@@ -40,7 +40,16 @@ const salesPerformanceDataConnect = () => {
             })
         },
         searchBestProductPerformance: async function (body) {
+            return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/product/best/ex`, body, {
+                withCredentials: true
+            })
+        },
+        searchBestProductPerformance2: async function (body) {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/product/best`, body, {
+                params: {
+                    page: body.page,
+                    size: body.size
+                },
                 withCredentials: true
             })
         },
@@ -54,11 +63,13 @@ const salesPerformanceDataConnect = () => {
                 withCredentials: true
             })
         },
+        // TODO :: 제거
         searchCategoryBestProductPerformance: async function (body) {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/category/product/best`, body, {
                 withCredentials: true
             })
         },
+        // TODO :: 제거
         searchCategoryBestOptionPerformance: async function (body) {
             return await axios.post(`${API_SERVER_ADDRESS}/api/v1/sales-performance/search/category/product-option/best`, body, {
                 withCredentials: true

@@ -276,8 +276,6 @@ export default function BestOptionGraphComponent(props) {
                     productCode
                 }
     
-                console.log(productCode);
-    
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
             }
         }

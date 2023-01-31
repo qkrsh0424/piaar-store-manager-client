@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import OptionSelectorComponent from "./option-selector/OptionSelector.component";
-import BestOptionGraphComponent from "./best-option-graph/BestOptionGraph.component";
 import ChannelPerformanceGraphComponent from "./channel-performance-graph/ChannelPerformanceGraph.component";
 import GraphOperatorComponent from "./graph-operator/GraphOperator.component";
 import useChannelSalesPerformanceHook from "./hooks/useChannelSalesPerformanceHook";
@@ -11,6 +10,7 @@ import useProductSalesPerformanceHook from "./hooks/useProductSalesPerformanceHo
 import OperatorComponent from "./operator/Operator.component";
 import PayAmountGraphComponent from "./pay-amount-graph/PayAmountGraph.component";
 import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
+import OptionItemTableComponent from "./option-item-table/OptionItemTable.component";
 
 const Container = styled.div`
     /* height: 100%;
@@ -62,7 +62,7 @@ export default function PerformanceContainerComponent (props) {
 
     const {
         performance: optionPerformance,
-        reqSearchChannelBestOptionPerformance,
+        reqSearchBestOptionPerformance,
         onActionResetPerformance: onActionResetOptionPerformance
     } = useOptionSalesPerformanceHook();
 
@@ -83,7 +83,7 @@ export default function PerformanceContainerComponent (props) {
 
         __handle.action.initProduct();
     }, [productAndOptions])
-
+    
     useEffect(() => {
         if(!performance) {
             return;
@@ -163,7 +163,7 @@ export default function PerformanceContainerComponent (props) {
                 onActionOpenBackdrop();
                 await reqSearchProductPerformance(body);
                 await reqSearchChannelPerformance(body);
-                await reqSearchChannelBestOptionPerformance(body);
+                await reqSearchBestOptionPerformance(body);
                 onActionCloseBackdrop();
             }
         }
@@ -214,10 +214,8 @@ export default function PerformanceContainerComponent (props) {
                 selectedOptions={selectedOptions}
             />
 
-            <BestOptionGraphComponent
+            <OptionItemTableComponent
                 performance={optionPerformance}
-                checkedSwitch={checkedSwitch}
-                selectedOptions={selectedOptions}
             />
 
             <BackdropHookComponent

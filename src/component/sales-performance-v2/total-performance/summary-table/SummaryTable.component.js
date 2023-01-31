@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import TableTitleFieldView from "./view/TableTitleField.view";
 import TableFieldView from "./view/TableField.view";
-import { dateToYYYYMMDD, getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 
 export default function SummaryTableComponent(props) {
     const [summaryTableData, setSummaryTableData] = useState(null);

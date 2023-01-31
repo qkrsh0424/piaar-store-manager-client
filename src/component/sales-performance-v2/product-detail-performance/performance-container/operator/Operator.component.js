@@ -42,41 +42,36 @@ export default function OperatorComponent(props) {
 
         setStartDate(date1);
         setEndDate(date2);
-
-        query.startDate = dateToYYYYMMDD(date1);
-        query.endDate = dateToYYYYMMDD(date2);
-        navigateParams({ replace : true });
     }, [])
 
     useEffect(() => {
-        if(!props.products) {
-            return;
-        }
-
         async function fetchInit() {
             let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
             let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
             let utcHourDifference = getTimeDiffWithUTC();
-            let productCode = location.state?.productCode;
-
-            let selectedProduct = props.productAndOptions.filter(r => r.product.code === productCode);
-            let searchOptionCodes = selectedProduct.map(r => r.option.code) ?? null;
+            let searchProductCode = location.state?.productCode;
 
             let body = {
                 startDate: searchStartDate,
                 endDate: searchEndDate,
                 utcHourDifference,
-                optionCodes: searchOptionCodes
+                productCodes: [searchProductCode]
             }
 
-            props.onActionChangeSelectedProduct(productCode);
+            props.onActionChangeSelectedProduct(searchProductCode);
             await props.onSubmitSearchPerformance(body);
         }
 
-        if(location.state?.productCode) {
-            fetchInit();
+        if(!props.products) {
+            return;
         }
-    }, [props.products])
+
+        if(!location.state?.productCode) {
+            return;
+        }
+
+        fetchInit();
+    }, [location.state, props.products])
 
     const __handle = {
         action: {
@@ -119,7 +114,7 @@ export default function OperatorComponent(props) {
             selectProduct: (productCode) => {
                 props.onActionChangeSelectedProduct(productCode);
                 __handle.action.closeProductListModal();
-                setSelectedCategory(null);
+                // setSelectedCategory(null);
             },
             routeCategoryPerformancePage: () => {
                 let searchStartDate = getStartDate(startDate);
@@ -177,19 +172,18 @@ export default function OperatorComponent(props) {
                     return;
                 }
 
-                let searchOptionCodes = props.productAndOptions.filter(r => r.product.id === props.selectedProduct.id).map(r => r.option.code);
-
                 let searchStartDate = startDate ? getStartDate(startDate) : null;
                 let searchEndDate = endDate ? getEndDate(endDate) : null;
                 let utcHourDifference = getTimeDiffWithUTC();
-                let optionCodes = searchOptionCodes;
+                let productCodes = [props.selectedProduct?.code];
 
                 let body = {
                     startDate: searchStartDate,
                     endDate: searchEndDate,
                     utcHourDifference,
-                    optionCodes
+                    productCodes
                 }
+
                 props.onSubmitSearchPerformance(body);
 
                 query.startDate = dateToYYYYMMDD(startDate);
