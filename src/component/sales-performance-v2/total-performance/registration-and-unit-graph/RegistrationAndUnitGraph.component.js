@@ -3,8 +3,7 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import useRouterHook from "../../../../hooks/router/useRouterHook";
-import { dateToYYYYMMDD, dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getMonthAndSearchDateRange, getStartDate, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getMonthAndSearchDateRange, getStartDate, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
 import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 
 // 그래프 기본 2가지 색상 : [판매, 주문]
@@ -190,6 +189,17 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 }
 
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
+            },
+            openWholePeroidDetailGraphSelectorModal: () => {
+                let startDate = getStartDate(props.performance[0].datetime);
+                let endDate = getEndDate(props.performance[props.performance.length - 1].datetime);
+
+                let detailSearchValue = {
+                    startDate,
+                    endDate
+                }
+
+                props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
             }
         }
     }
@@ -198,8 +208,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
         <>
             <Container>
                 <GraphBoardFieldView
-                    searchDimension={props.searchDimension}
-                    checkedSwitch={props.checkedSwitch}
+                    onActionOpenDetailGraphSelectorModal={__handle.action.openWholePeroidDetailGraphSelectorModal}
                 />
                 <div className='content-box'>
                     <GraphBodyFieldView

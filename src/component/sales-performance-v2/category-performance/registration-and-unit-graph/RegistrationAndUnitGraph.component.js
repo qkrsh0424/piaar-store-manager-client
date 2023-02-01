@@ -434,6 +434,17 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 }
 
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
+            },
+            openWholePeroidDetailGraphSelectorModal: () => {
+                let startDate = getStartDate(props.registrationAndUnit[0].datetime);
+                let endDate = getEndDate(props.registrationAndUnit[props.registrationAndUnit.length - 1].datetime);
+
+                let detailSearchValue = {
+                    startDate,
+                    endDate
+                }
+
+                props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
             }
         }
     }
@@ -441,7 +452,9 @@ export default function RegistrationAndUnitGraphComponent(props) {
     return (
         <>
             <Container>
-                <GraphBoardFieldView />
+                <GraphBoardFieldView
+                    onActionOpenDetailGraphSelectorModal={__handle.action.openWholePeroidDetailGraphSelectorModal}
+                />
                 <div className='content-box'>
                     <GraphBodyFieldView
                         totalGraphData={props.checkedSwitch ? totalRegistrationGraphData : salesRegistrationGraphData}

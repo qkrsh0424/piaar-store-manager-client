@@ -190,6 +190,17 @@ export default function PayAmountGraphComponent(props) {
                 }
 
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
+            },
+            openWholePeroidDetailGraphSelectorModal: () => {
+                let startDate = getStartDate(props.performance[0].datetime);
+                let endDate = getEndDate(props.performance[props.performance.length - 1].datetime);
+
+                let detailSearchValue = {
+                    startDate,
+                    endDate
+                }
+
+                props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
             }
         }
     }
@@ -197,6 +208,7 @@ export default function PayAmountGraphComponent(props) {
     return (
         <Container>
             <GraphBoardFieldView
+                onActionOpenDetailGraphSelectorModal={__handle.action.openWholePeroidDetailGraphSelectorModal}
             />
             <div className='content-box'>
                 <GraphBodyFieldView

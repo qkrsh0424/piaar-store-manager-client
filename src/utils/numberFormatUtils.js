@@ -19,7 +19,7 @@ function toPriceUnitFormat(price) {
     }else if(price > 4) {
         return parseFloat((price / (10 ** 4)).toFixed(2)) + ' 만원';
     }else {
-        return price + '원';
+        return price + ' 원';
     }
 }
 

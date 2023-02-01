@@ -22,6 +22,7 @@ const GraphBoardFieldWrapper = styled.div`
     align-items: center;
     border-bottom: 1px solid var(--defaultBorderColor);
     padding: 20px;
+    overflow: hidden;
 
     .graph-title {
         font-size : 1.2rem;
@@ -30,6 +31,31 @@ const GraphBoardFieldWrapper = styled.div`
 
     .graph-info-text {
         font-size: 14px;
+    }
+
+    .button-el{
+        overflow: hidden;
+        position: relative;
+        padding: 5px;
+        width: 130px;
+        height: 40px;
+        background: #fff;
+        border: 1px solid var(--defaultBorderColor);
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        -webkit-transition: all .1s;
+        transition: all .1s;
+
+        :hover {
+            background-color: #fafafa;
+        }
+
+        @media all and (max-width:992px) {
+            margin: 0;
+            width: 80px;
+            font-size: 14px;
+        }
     }
 `;
 

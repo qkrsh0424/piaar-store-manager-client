@@ -5,7 +5,6 @@ import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
 import { dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getMonthAndSearchDateRange, getStartDate, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
 import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
-import useRouterHook from "../../../../hooks/router/useRouterHook";
 
 const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
@@ -435,6 +434,17 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 }
 
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
+            },
+            openWholePeroidDetailGraphSelectorModal: () => {
+                let startDate = getStartDate(props.registrationAndUnit[0].datetime);
+                let endDate = getEndDate(props.registrationAndUnit[props.registrationAndUnit.length - 1].datetime);
+
+                let detailSearchValue = {
+                    startDate,
+                    endDate
+                }
+
+                props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
             }
         }
     }
@@ -442,7 +452,9 @@ export default function RegistrationAndUnitGraphComponent(props) {
     return (
         <>
             <Container>
-                <GraphBoardFieldView />
+                <GraphBoardFieldView
+                    onActionOpenDetailGraphSelectorModal={__handle.action.openWholePeroidDetailGraphSelectorModal}
+                />
                 <div className='content-box'>
                     <GraphBodyFieldView
                         totalGraphData={props.checkedSwitch ? totalRegistrationGraphData : salesRegistrationGraphData}

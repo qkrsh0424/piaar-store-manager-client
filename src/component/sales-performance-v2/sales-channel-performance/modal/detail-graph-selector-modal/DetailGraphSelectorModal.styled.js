@@ -2,26 +2,6 @@ import styled from "styled-components";
 
 const Container = styled.div`
     padding: 5px 20px;
-
-    .info-text {
-        padding: 2px;
-        text-align: left;
-    }
-`;
-
-const DateSelectorFieldWrapper = styled.div`
-    padding-bottom: 30px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    
-    .date-selector-box {
-        width: 200px;
-
-        @media screen and (max-width: 992px) {
-            width: 100%;
-        }
-    }
 `;
 
 const BoxFieldWrapper = styled.div`
@@ -72,6 +52,5 @@ const BoxFieldWrapper = styled.div`
 
 export {
     Container,
-    DateSelectorFieldWrapper,
     BoxFieldWrapper
 }

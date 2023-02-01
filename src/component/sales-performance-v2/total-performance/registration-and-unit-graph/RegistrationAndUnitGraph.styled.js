@@ -32,26 +32,28 @@ const GraphBoardFieldWrapper = styled.div`
         font-size: 14px;
     }
 
-    .right-el-box {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-    }
-
-    .dimension-button-box {
-        display: flex;
-    }
-
-    .dimension-button-box .button-el {
-        width: 40px;
+    .button-el{
+        overflow: hidden;
+        position: relative;
+        padding: 5px;
+        width: 130px;
         height: 40px;
-        background-color: var(--defaultButtonColor);
+        background: #fff;
         border: 1px solid var(--defaultBorderColor);
-        
-        &.checked {
-            background-color: #555;
-            border: 1px solid #555;
-            color: white;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        -webkit-transition: all .1s;
+        transition: all .1s;
+
+        :hover {
+            background-color: #fafafa;
+        }
+
+        @media all and (max-width:992px) {
+            margin: 0;
+            width: 80px;
+            font-size: 14px;
         }
     }
 `;

@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getMonthAndSearchDateRange, getStartDate, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
 import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
-import useRouterHook from "../../../../hooks/router/useRouterHook";
 
 const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
@@ -234,6 +233,13 @@ export default function PayAmountGraphComponent(props) {
                             }
                         }
                     },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                fullSize: true
+                            }
+                        }
+                    },
                     onClick: function (e, item) {
                         __handle.action.setGraphClickOption(e, item);
                     },
@@ -263,6 +269,17 @@ export default function PayAmountGraphComponent(props) {
                 }
 
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
+            },
+            openWholePeroidDetailGraphSelectorModal: () => {
+                let startDate = getStartDate(props.payAmount[0].datetime);
+                let endDate = getEndDate(props.payAmount[props.payAmount.length - 1].datetime);
+
+                let detailSearchValue = {
+                    startDate,
+                    endDate
+                }
+
+                props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
             }
         }
     }
@@ -270,7 +287,9 @@ export default function PayAmountGraphComponent(props) {
     return (
         <>
             <Container>
-                <GraphBoardFieldView />
+                <GraphBoardFieldView
+                    onActionOpenDetailGraphSelectorModal={__handle.action.openWholePeroidDetailGraphSelectorModal}
+                />
                 <div className='content-box'>
                     <GraphBodyFieldView
                         totalPayAmountGraphData={props.checkedSwitch ? totalPayAmountGraphData : salesPayAmountGraphData}
