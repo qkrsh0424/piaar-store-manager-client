@@ -31,7 +31,7 @@ function BoxFieldView({ onActionSelectSalesChannel, onActionSelectCategory, onAc
                     onClick={() => onActionSelectProduct()}
                 >
                     <span>상품 별</span>
-                    <span className='sub-info-text'>[BEST 상품 & 옵션]</span> 
+                    <span className='sub-info-text'>[상품 순위]</span> 
                 </button>
             </div>
         </BoxFieldWrapper>

@@ -69,7 +69,7 @@ export default function DashboardComponent(props) {
         // 월 성과
         async function getThisMonthPerformance() {
             let startDate = getStartDate(getStartDateOfMonth(TODAY));
-            let endDate = YESTERDAY > TODAY ? getEndDate(TODAY) : getEndDate(YESTERDAY);
+            let endDate = YESTERDAY.getDate() > TODAY.getDate() ? getEndDate(TODAY) : getEndDate(YESTERDAY);
             let utcHourDifference = getTimeDiffWithUTC();
 
             let body = {
