@@ -68,7 +68,7 @@ const TableFieldWrapper = styled.div`
         height: 40px;
         position: sticky;
         top: 0;
-        z-index:10;
+        z-index:5;
         color: white;
         box-shadow: 0 -1.5px 0 0 #465265 inset;
     }
