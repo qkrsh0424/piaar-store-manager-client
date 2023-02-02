@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-    margin: 20px 0 20px 0;
-    padding: 20px;
-    background-color: rgb(255, 255, 255);
-    border: 1px solid rgb(219, 221, 226);
-    border-radius: 10px;
+    /* margin: 20px 0 20px 0; */
+    padding: 10px;
+    /* background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(219, 221, 226); */
+    /* border-radius: 10px; */
 `;
 
 const SearchFieldWrapper = styled.div`

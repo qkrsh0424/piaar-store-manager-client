@@ -11,6 +11,9 @@ import OperatorComponent from "./operator/Operator.component";
 import PayAmountGraphComponent from "./pay-amount-graph/PayAmountGraph.component";
 import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
 import OptionItemTableComponent from "./option-item-table/OptionItemTable.component";
+import useRouterHook from "../../../../hooks/router/useRouterHook";
+import DateRangeSelectorComponent from "./date-range-selector/DateRangeSelector.component";
+import { getEndDate, getStartDate, getTimeDiffWithUTC } from "../../../../utils/dateFormatUtils";
 
 const Container = styled.div`
     /* height: 100%;
@@ -36,6 +39,11 @@ export default function PerformanceContainerComponent (props) {
     const [selectedOptions, setSelectedOptions] = useState(null);
 
     const [categories, setCategories] = useState(null);
+
+    const {
+        query,
+        location
+    } = useRouterHook();
 
     const {
         productAndOptions,
@@ -75,6 +83,36 @@ export default function PerformanceContainerComponent (props) {
 
         fetchInit();
     }, [])
+
+    useEffect(() => {
+        async function fetchInit() {
+            let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
+            let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
+            let utcHourDifference = getTimeDiffWithUTC();
+            let salesChannels = location.state?.salesChannels ?? null;
+            let productCategoryNames = location.state?.productCategoryNames ?? null;
+            let productCodes = [selectedProduct.code];
+            let orderByColumn = 'payAmount';
+
+            let body = {
+                startDate: searchStartDate,
+                endDate: searchEndDate,
+                utcHourDifference,
+                salesChannels,
+                productCategoryNames,
+                orderByColumn,
+                productCodes
+            }
+            
+            onActionOpenBackdrop();
+            await __handle.submit.searchPerformance(body);
+            onActionCloseBackdrop();
+        }
+
+        if(selectedProduct) {
+            fetchInit();
+        }
+    }, [selectedProduct])
 
     useEffect(() => {
         if(!productAndOptions) {
@@ -160,6 +198,12 @@ export default function PerformanceContainerComponent (props) {
         },
         submit: {
             searchPerformance: async (body) => {
+                let productCodes = body.productCodes;
+
+                if(!(productCodes && productCodes.length > 0)) {
+                    return;
+                }
+                
                 onActionOpenBackdrop();
                 await reqSearchProductPerformance(body);
                 await reqSearchChannelPerformance(body);
@@ -170,49 +214,55 @@ export default function PerformanceContainerComponent (props) {
     }
 
     return (
-        <Container navbarOpen={props.navbarOpen}>
-            <OperatorComponent
-                productAndOptions={productAndOptions}
-                products={products}
-                selectedProduct={selectedProduct}
-                categories={categories}
+        <>
+            <Container navbarOpen={props.navbarOpen}>
+                <OperatorComponent
+                    productAndOptions={productAndOptions}
+                    products={products}
+                    selectedProduct={selectedProduct}
+                    categories={categories}
 
-                onActionResetPerformance={__handle.action.resetPerformance}
-                onSubmitSearchPerformance={__handle.submit.searchPerformance}
-                onActionChangeSelectedProduct={__handle.action.changeSelectedProduct}
-            />
+                    onActionResetPerformance={__handle.action.resetPerformance}
+                    onActionChangeSelectedProduct={__handle.action.changeSelectedProduct}
+                />
 
-            <OptionSelectorComponent
-                options={options}
-                selectedOptions={selectedOptions}
+                <OptionSelectorComponent
+                    options={options}
+                    selectedOptions={selectedOptions}
 
-                onActionIsCheckedOne={__handle.action.isCheckedOne}
-                onActionCheckOne={__handle.action.checkOne}
-                onActionCheckAll={__handle.action.checkAll}
-                onActionCheckCancelAll={__handle.action.checkCancelAll}
-            />
+                    onActionIsCheckedOne={__handle.action.isCheckedOne}
+                    onActionCheckOne={__handle.action.checkOne}
+                    onActionCheckAll={__handle.action.checkAll}
+                    onActionCheckCancelAll={__handle.action.checkCancelAll}
+                />
 
-            <GraphOperatorComponent
-                checkedSwitch={checkedSwitch}
-                searchDimension={searchDimension}
+                <GraphOperatorComponent
+                    checkedSwitch={checkedSwitch}
+                    searchDimension={searchDimension}
 
-                onActionChangeSwitch={__handle.action.changeSwitch}
-                onActionChangeSearchDimension={__handle.action.changeDimension}
-            />
+                    onActionChangeSwitch={__handle.action.changeSwitch}
+                    onActionChangeSearchDimension={__handle.action.changeDimension}
+                />
 
-            <PayAmountGraphComponent
-                performance={performance}
-                searchDimension={searchDimension}
-                checkedSwitch={checkedSwitch}
-                selectedOptions={selectedOptions}
-            />
+                <PayAmountGraphComponent
+                    performance={performance}
+                    searchDimension={searchDimension}
+                    checkedSwitch={checkedSwitch}
+                    selectedOptions={selectedOptions}
+                />
 
-            <ChannelPerformanceGraphComponent
-                performance={channelPerformance}
-                searchDimension={searchDimension}
-                checkedSwitch={checkedSwitch}
-                selectedOptions={selectedOptions}
-            />
+                <ChannelPerformanceGraphComponent
+                    performance={channelPerformance}
+                    searchDimension={searchDimension}
+                    checkedSwitch={checkedSwitch}
+                    selectedOptions={selectedOptions}
+                />
+
+                <DateRangeSelectorComponent
+                    selectedProduct={selectedProduct}
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
+                />
+            </Container>
 
             <OptionItemTableComponent
                 performance={optionPerformance}
@@ -222,6 +272,6 @@ export default function PerformanceContainerComponent (props) {
             <BackdropHookComponent
                 open={backdropOpen}
             />
-        </Container>
+        </>
     )
 }

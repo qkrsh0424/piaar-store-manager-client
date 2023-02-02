@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
 import BestProductGraphComponent from "./best-product-graph/BestProductGraph.component";
 import GraphOperatorComponent from "./graph-operator/GraphOperator.component";
-import OperatorComponent from "./operator/Operator.component";
 import useProductSalesPerformanceHook from "./hooks/useProductSalesPerformanceHook";
 import useOptionSalesPerformanceHook from "./hooks/useOptionSalesPerformanceHook";
 import DetailGraphSelectorModalComponent from "./modal/detail-graph-selector-modal/DetailGraphSelectorModal.component";
@@ -159,23 +158,6 @@ export default function ProductBestPerformanceComponent (props) {
             <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'상품 - 상품 순위'} />
 
-                {/* <OperatorComponent
-                productPerformance={productPerformance}
-                onActionResetPerformance={__handle.action.resetPerformance}
-                onSubmitSearchPerformance={__handle.submit.searchPerformance}
-                onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
-            /> */}
-
-                <GraphDataPagenationComponent
-                    pageOrderByColumn={pageOrderByColumn}
-                    salesPayAmountData={productPerformance}
-                    pageIndex={pageIndex}
-
-                    onChangePrevPageIndex={__handle.action.changePrevPageIndex}
-                    onChangeNextPageIndex={__handle.action.changeNextPageIndex}
-                    onActionChangePageOrderByColumn={__handle.action.changePageOrderByColumn}
-                />
-
                 <GraphOperatorComponent
                     checkedSwitch={checkedSwitch}
 
@@ -188,6 +170,16 @@ export default function ProductBestPerformanceComponent (props) {
                     detailSearchValue={detailSearchValue}
 
                     onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
+                />
+
+                <GraphDataPagenationComponent
+                    pageOrderByColumn={pageOrderByColumn}
+                    salesPayAmountData={productPerformance}
+                    pageIndex={pageIndex}
+
+                    onChangePrevPageIndex={__handle.action.changePrevPageIndex}
+                    onChangeNextPageIndex={__handle.action.changeNextPageIndex}
+                    onActionChangePageOrderByColumn={__handle.action.changePageOrderByColumn}
                 />
 
                 <OptionItemTableComponent

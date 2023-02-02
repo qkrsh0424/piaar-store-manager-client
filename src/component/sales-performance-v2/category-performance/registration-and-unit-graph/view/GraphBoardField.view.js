@@ -16,7 +16,7 @@ export default function GraphBoardFieldView(props) {
                     className='button-el'
                     onClick={() => props.onActionOpenDetailGraphSelectorModal()}
                 >
-                    그래프 분석
+                    <img src='/assets/icon/graph_search_default_000000.svg' width={32}></img>
                     <Ripple color={'#e0e0e0'} duration={1000} />
                 </button>
             </div>

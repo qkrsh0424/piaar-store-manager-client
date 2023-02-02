@@ -63,7 +63,7 @@ export default function DetailGraphSelectorModalComponent(props) {
                     />
                 </Container>
             }
-            maxWidth={'md'}
+            maxWidth={'sm'}
 
             onClose={() => props.onActionCloseModal()}
         />

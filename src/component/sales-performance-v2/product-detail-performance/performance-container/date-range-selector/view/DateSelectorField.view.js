@@ -1,5 +1,5 @@
+import CustomDatePickerV2 from "../../../../../module/date-picker/CustomDatePickerV2";
 import { DateSelectorFieldWrapper } from "../DateRangeSelector.styled";
-import CustomDatePickerV2 from "../../../module/date-picker/CustomDatePickerV2";
 
 export default function DateSelectorFieldView (props) {
     return (

@@ -4,13 +4,14 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
 import GraphOperatorComponent from './graph-operator/GraphOperator.component';
-import OperatorComponent from './operator/Operator.component'
 import BestProductGraphComponent from './best-product-graph/BestProductGraph.component';
 import useProductSalesPerformanceHook from './hooks/useProductSalesPerformanceHook';
 import useOptionSalesPerformanceHook from './hooks/useOptionSalesPerformanceHook';
 import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
 import OptionItemTableComponent from './option-item-table/OptionItemTable.component';
 import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
+import GraphDataPagenationComponent from './graph-data-pagenation/GraphDataPagenation.component';
+import useRouterHook from '../../../hooks/router/useRouterHook';
 
 const Container = styled.div`
     height: 100%;
@@ -23,6 +24,32 @@ const Container = styled.div`
     @media screen and (max-width: 768px) {
         padding-left: 30px !important;
     }
+
+    .search-field {
+        display: flex;
+        align-items: flex-start;
+        padding: 10px 0;
+        font-weight: 700;
+    }
+
+    .item-container {
+        width: 100%;
+        padding: 0 5px;
+        border-radius: 5px;
+        box-shadow: var(--defaultBoxShadow);
+        background-color: white;
+        overflow: auto;
+        max-height: 60px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    .search-field .item-box {
+        padding: 2px 5px;
+        color: var(--erp-main-color);
+    }
 `;
 
 function PageTitleFieldView({ title }) {
@@ -33,11 +60,43 @@ function PageTitleFieldView({ title }) {
     )
 }
 
+function SearchFieldView({ salesChannels }) {
+    return (
+        <div className='search-field'>
+            <div style={{ minWidth: '100px', textAlign: 'center' }}>선택 채널 : </div>
+            <div className='item-container'>
+                {salesChannels?.map((r, idx) => {
+                    return (
+                        <div
+                            key={'slaes-channel-idx' + idx}
+                            className='item-box'
+                        >
+                            <span>{r}</span>
+                        </div>
+                    )
+                })}
+                {!salesChannels &&
+                    <div style={{ color: 'var(--erp-main-color)' }}>전체 스토어</div>
+                }
+            </div>
+        </div>
+    )
+}
+
 const SalesChannelBestProductPerformanceComponent = (props) => {
     const [checkedSwitch, setCheckedSwitch] = useState(false);
 
     const [detailGraphSelectorModalOpen, setDetailGraphSelectorModalOpen] = useState(false);
     const [detailSearchValue, setDetailSearchValue] = useState(null);
+
+    const [pageOrderByColumn, setPageOrderByColumn] = useState('payAmount');
+    const [pageIndex, setPageIndex] = useState(null);
+
+    const [selectedChannels, setSelectedChannels] = useState(null);
+
+    const {
+        location
+    } = useRouterHook();
 
     const {
         open: backdropOpen,
@@ -58,6 +117,17 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
     } = useOptionSalesPerformanceHook();
 
     useEffect(() => {
+        if(!location.state) {
+            return;
+        }
+
+        if(!location.state.salesChannels) {
+            return;
+        }
+        __handle.action.initSalesChannels();
+    }, [])
+
+    useEffect(() => {
         async function searchOptionPerformance() {
             onActionOpenBackdrop();
             let productCodes = productPerformance?.content.map(r => r.productCode);
@@ -70,12 +140,17 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
         }
 
         if(productPerformance) {
-            searchOptionPerformance(); 
+            searchOptionPerformance();
+            __handle.action.updatePageIndex();
         }
     }, [productPerformance])
 
     const __handle = {
         action: {
+            initSalesChannels: () => {
+                let selectedChannels = location.state.salesChannels;
+                setSelectedChannels(selectedChannels);
+            },
             resetPerformance: () => {
                 onActionResetProductPerformance();
                 onActionResetOptionPerformance();
@@ -97,11 +172,53 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
             closeDetailGraphSelectorModal: () => {
                 setDetailSearchValue(null);
                 setDetailGraphSelectorModalOpen(false);
-            }
+            },
+            changePageOrderByColumn: (e) => {
+                let value = e.target.value;
+                let searchValue = {
+                    ...detailSearchValue,
+                    pageOrderByColumn: value,
+                    page: null
+                }
+                
+                setPageOrderByColumn(value);
+                setDetailSearchValue(searchValue);
+               
+                __handle.action.updatePageIndex();
+                __handle.submit.searchPerformance(searchValue);
+            },
+            updatePageIndex: () => {
+                setPageIndex(productPerformance?.number);
+            },
+            changePrevPageIndex: () => {
+                let page = pageIndex - 1;
+                let searchValue = {
+                    ...detailSearchValue,
+                    page: page + 1
+                }
+
+                setPageIndex(page);
+                setDetailSearchValue(searchValue);
+
+                __handle.submit.searchPerformance(searchValue);
+            },
+            changeNextPageIndex: () => {
+                let page = pageIndex + 1;
+                let searchValue = {
+                    ...detailSearchValue,
+                    page: page + 1
+                }
+
+                setPageIndex(page);
+                setDetailSearchValue(searchValue);
+
+                __handle.submit.searchPerformance(searchValue);
+            },
         },
         submit: {
             searchPerformance: async (body) => {
                 onActionOpenBackdrop();
+                __handle.action.updateDetailSearchValue(body);
                 await reqSearchChannelBestProductPerformance(body);
                 onActionCloseBackdrop();
             }
@@ -113,12 +230,7 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
             <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'판매스토어 - 상품 순위'} />
 
-                <OperatorComponent
-                    productPerformance={productPerformance}
-                    onActionResetPerformance={__handle.action.resetPerformance}
-                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
-                    onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
-                />
+                <SearchFieldView salesChannels={selectedChannels} />
 
                 <GraphOperatorComponent
                     checkedSwitch={checkedSwitch}
@@ -132,6 +244,16 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
                     detailSearchValue={detailSearchValue}
 
                     onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
+                />
+
+                <GraphDataPagenationComponent
+                    pageOrderByColumn={pageOrderByColumn}
+                    salesPayAmountData={productPerformance}
+                    pageIndex={pageIndex}
+                    
+                    onChangePrevPageIndex={__handle.action.changePrevPageIndex}
+                    onChangeNextPageIndex={__handle.action.changeNextPageIndex}
+                    onActionChangePageOrderByColumn={__handle.action.changePageOrderByColumn}
                 />
 
                 <OptionItemTableComponent

@@ -36,12 +36,12 @@ const GraphBoardFieldWrapper = styled.div`
     .button-el{
         overflow: hidden;
         position: relative;
-        padding: 5px;
-        width: 130px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
+        padding: 2px;
+        border-radius: 5px;
         background: #fff;
         border: 1px solid var(--defaultBorderColor);
-        border-radius: 5px;
         font-size: 16px;
         cursor: pointer;
         -webkit-transition: all .1s;

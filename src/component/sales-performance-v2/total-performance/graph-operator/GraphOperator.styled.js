@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-
 `;
 
 const GraphOperatorFieldWrapper = styled.div`

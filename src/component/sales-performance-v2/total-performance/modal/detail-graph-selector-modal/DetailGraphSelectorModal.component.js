@@ -38,29 +38,16 @@ function BoxFieldView({ onActionSelectSalesChannel, onActionSelectCategory, onAc
 }
 
 export default function DetailSelectorModalComponent(props) {
-    const [searchValue, setSearchValue] = useState(null);
-
     const {
         navigateUrl
     } = useRouterHook();
 
-    useEffect(() => {
-        if(!props.detailSearchValue) {
-            return;
-        }
-
-        __handle.action.initSearchValue();
-    }, [props.detailSearchValue])
-
     const __handle = {
         action: {
-            initSearchValue: () => {
-                setSearchValue({...props.detailSearchValue});
-            },
             selectSalesChannel: () => {
                 let data = {
                     pathname: '/sales-performance/sales-channel',
-                    state: searchValue
+                    state: props.detailSearchValue
                 }
 
                 navigateUrl(data);
@@ -68,7 +55,7 @@ export default function DetailSelectorModalComponent(props) {
             selectCategory: () => {
                 let data = {
                     pathname: '/sales-performance/category',
-                    state: searchValue
+                    state: props.detailSearchValue
                 }
 
                 navigateUrl(data);
@@ -76,7 +63,7 @@ export default function DetailSelectorModalComponent(props) {
             selectProduct: () => {
                 let data = {
                     pathname: '/sales-performance/product/best',
-                    state: searchValue
+                    state: props.detailSearchValue
                 }
 
                 navigateUrl(data);
@@ -85,7 +72,7 @@ export default function DetailSelectorModalComponent(props) {
     }
 
     return (
-        props.modalOpen && searchValue &&
+        props.modalOpen && props.detailSearchValue &&
         <CommonModalComponentV2
             open={props.modalOpen}
             title={'그래프 선택'}
@@ -98,7 +85,7 @@ export default function DetailSelectorModalComponent(props) {
                     />
                 </Container>
             }
-            maxWidth={'md'}
+            maxWidth={'sm'}
 
             onClose={() => props.onActionCloseModal()}
         />

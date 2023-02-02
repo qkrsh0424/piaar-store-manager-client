@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import useRouterHook from "../../../hooks/router/useRouterHook";
-import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { dateToYYYYMMDD, getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../utils/dateFormatUtils";
-import CommonModalComponentV2 from "../../module/modal/CommonModalComponentV2";
+import useRouterHook from "../../../../../hooks/router/useRouterHook";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../../hooks/snackbar/useBasicSnackbarHookV2";
+import { dateToYYYYMMDD, getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../../utils/dateFormatUtils";
+import CommonModalComponentV2 from "../../../../module/modal/CommonModalComponentV2";
 import { Container } from "./DateRangeSelector.styled";
 import ButtonFieldView from "./view/ButtonField.view";
 import DateButtonFieldView from "./view/DateButtonField.view";
@@ -38,36 +38,6 @@ export default function DateRangeSelectorComponent(props) {
 
         setStartDate(date1);
         setEndDate(date2);
-
-        query.startDate = dateToYYYYMMDD(date1);
-        query.endDate = dateToYYYYMMDD(date2);
-        // navigateParams({ replace : true });
-    }, [])
-    
-    useEffect(() => {
-        async function fetchInit() {
-            let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
-            let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
-            let utcHourDifference = getTimeDiffWithUTC();
-            let salesChannels = location.state?.salesChannels ?? null;
-            let productCategoryNames = location.state?.productCategoryNames ?? null;
-            let productCodes = location.state?.productCode ? [location.state?.productCode] : [];
-            let orderByColumn = 'payAmount';
-
-            let body = {
-                startDate: searchStartDate,
-                endDate: searchEndDate,
-                utcHourDifference,
-                salesChannels,
-                productCategoryNames,
-                orderByColumn,
-                productCodes
-            }
-            
-            await props.onSubmitSearchPerformance(body);
-        }
-
-        fetchInit();
     }, [])
 
     const __handle = {
@@ -123,6 +93,10 @@ export default function DateRangeSelectorComponent(props) {
                     if (!isSearchablePeriod(startDate, endDate, SEARCHABLE_PERIOD)) {
                         throw new Error(`조회기간은 최대 ${SEARCHABLE_PERIOD}일까지 가능합니다.`)
                     }
+
+                    if (!props.selectedProduct) {
+                        throw new Error('조회하려는 상품을 선택해주세요.')
+                    }
                 } catch (err) {
                     let snackbarSetting = {
                         message: err?.message,
@@ -135,11 +109,19 @@ export default function DateRangeSelectorComponent(props) {
                 let searchStartDate = startDate ? getStartDate(startDate) : null;
                 let searchEndDate = endDate ? getEndDate(endDate) : null;
                 let utcHourDifference = getTimeDiffWithUTC();
+                let salesChannels = location.state?.salesChannels ?? null;
+                let productCategoryNames = location.state?.productCategoryNames ?? null;
+                let productCodes = [props.selectedProduct.code];
+                let orderByColumn = 'payAmount';
 
                 let body = {
                     startDate: searchStartDate,
                     endDate: searchEndDate,
                     utcHourDifference,
+                    salesChannels,
+                    productCategoryNames,
+                    orderByColumn,
+                    productCodes
                 }
 
                 props.onSubmitSearchPerformance(body);

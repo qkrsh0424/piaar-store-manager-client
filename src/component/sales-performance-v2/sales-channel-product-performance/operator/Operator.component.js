@@ -1,4 +1,3 @@
-import { getMonth } from "date-fns";
 import { useEffect, useState } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
@@ -210,8 +209,10 @@ export default function OperatorComponent(props) {
                 let body = {
                     startDate: searchStartDate,
                     endDate: searchEndDate,
-                    utcHourDifference
+                    utcHourDifference,
+                    optionCodes: searchOptionCodes
                 }
+
 
                 props.onActionChangeSelectedOption(selectedProductAndOptions);
                 props.onSubmitSearchPerformance(body);

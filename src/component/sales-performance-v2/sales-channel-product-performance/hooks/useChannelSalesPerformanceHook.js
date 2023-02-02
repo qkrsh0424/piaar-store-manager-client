@@ -8,6 +8,7 @@ export default function useChannelSalesPerformanceHook(props) {
         await salesPerformanceDataConnect().searchChannelPerformance(body)
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
+                    console.log(res.data.data);
                     setPerformance(res.data.data);
                 }
             })

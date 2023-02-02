@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 import _ from 'lodash';
-import OperatorComponent from './operator/Operator.component';
 import PayAmountGraphComponent from './pay-amount-graph/PayAmountGraph.component';
 import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/RegistrationAndUnitGraph.component';
 import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
@@ -88,11 +87,6 @@ const TotalSalesPerformanceComponent = (props) => {
         <>
             <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'전체 - 총 매출액 & 판매 건'} />
-
-                {/* <OperatorComponent
-                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
-                    onActionResetPerformance={__handle.action.resetPerformance}
-                /> */}
 
                 {/* 주문데이터 표시 및 날짜검색 설정 */}
                 <GraphOperatorComponent

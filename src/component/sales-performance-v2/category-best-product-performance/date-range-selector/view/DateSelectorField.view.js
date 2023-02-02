@@ -1,11 +1,10 @@
 import { DateSelectorFieldWrapper } from "../DateRangeSelector.styled";
-import CustomDatePickerV2 from "../../../module/date-picker/CustomDatePickerV2";
+import CustomDatePickerV2 from "../../../../module/date-picker/CustomDatePickerV2";
 
 export default function DateSelectorFieldView (props) {
     return (
         <DateSelectorFieldWrapper>
             <div className='date-selector-box'>
-                <div className='date-selector-box-title'>시작일</div>
                 <CustomDatePickerV2
                     valueSize={14}
                     labelSize={12}
@@ -15,7 +14,6 @@ export default function DateSelectorFieldView (props) {
                 ></CustomDatePickerV2>
             </div>
             <div className='date-selector-box'>
-                <div className='date-selector-box-title'>종료일</div>
                 <CustomDatePickerV2
                     valueSize={14}
                     labelSize={12}

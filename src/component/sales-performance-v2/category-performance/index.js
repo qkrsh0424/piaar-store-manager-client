@@ -65,38 +65,41 @@ const CategoryPerformanceComponent = (props) => {
             return;
         }
 
-        if(!location) {
+        __handle.action.initCategory();
+    }, [performance])
+
+    useEffect(() => {
+        if(!location.state) {
             return;
         }
 
-        __handle.action.initCategory();
-    }, [performance, location])
+        __handle.action.initSelectedCategory();
+    }, [location.state])
 
     const __handle = {
         action: {
             initCategory: () => {
                 let category = new Set([]);
-    
                 performance.forEach(r => r.performances?.forEach(r2 => {
                     category.add(r2.productCategoryName);
                 }))
 
                 let categoryName = [...category].sort();
                 setCategory(categoryName);
-                
-                if(location.state?.categoryName) {
-                    setSelectedCategory(location.state.categoryName);
-                }
+            },
+            initSelectedCategory: () => {
+                let category = location.state.productCategoryNames;
+                setSelectedCategory(category);
             },
             isCheckedOne: (category) => {
-                return selectedCategory?.some(name => name === category);
+                return selectedCategory.some(name => name === category);
             },
             checkOne: (e, category) => {
                 e.stopPropagation();
 
                 let data = [...selectedCategory];
 
-                if(selectedCategory?.some(name => name === category)) {
+                if(selectedCategory.some(name => name === category)) {
                     data = data.filter(name => name !== category);
                 } else {
                     data.push(category);
@@ -105,15 +108,10 @@ const CategoryPerformanceComponent = (props) => {
             },
             checkAll: (e) => {
                 e.stopPropagation();
-
                 setSelectedCategory([...category]);
             },
             checkCancelAll: (e) => {
                 e.stopPropagation();
-
-                setSelectedCategory([]);
-            },
-            checkedClear: () => {
                 setSelectedCategory([]);
             },
             changeSwitch: () => {
@@ -150,9 +148,9 @@ const CategoryPerformanceComponent = (props) => {
                 <CategorySelectorComponent
                     category={category}
                     selectedCategory={selectedCategory}
+                    
                     onActionIsCheckedOne={__handle.action.isCheckedOne}
                     onActionCheckOne={__handle.action.checkOne}
-
                     onActionCheckAll={__handle.action.checkAll}
                     onActionCheckCancelAll={__handle.action.checkCancelAll}
                 />

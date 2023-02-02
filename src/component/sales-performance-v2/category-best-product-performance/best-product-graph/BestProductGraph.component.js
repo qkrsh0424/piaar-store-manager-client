@@ -247,12 +247,12 @@ export default function BestProductGraphComponent(props) {
 
                 let startDate = getStartDate(props.detailSearchValue.startDate);
                 let endDate = getEndDate(props.detailSearchValue.endDate);
-                let productCode = label;
+                let productCodes = [label];
 
                 let detailSearchValue = {
                     startDate,
                     endDate,
-                    productCode
+                    productCodes
                 }
 
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
@@ -265,12 +265,12 @@ export default function BestProductGraphComponent(props) {
 
                 let startDate = getStartDate(props.detailSearchValue.startDate);
                 let endDate = getEndDate(props.detailSearchValue.endDate);
-                let productCode = label;
+                let productCodes = [label];
 
                 let detailSearchValue = {
                     startDate,
                     endDate,
-                    productCode
+                    productCodes
                 }
 
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);

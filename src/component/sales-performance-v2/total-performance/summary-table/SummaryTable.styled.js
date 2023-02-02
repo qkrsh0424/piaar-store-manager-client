@@ -49,7 +49,7 @@ const GraphBoardFieldWrapper = styled.div`
 
 const TableFieldWrapper = styled.div`
     min-width: 1000px;
-    min-height: 400px;
+    min-height: 600px;
     overflow: auto;
     text-align: center;
     font-size: 14px;
@@ -59,7 +59,7 @@ const TableFieldWrapper = styled.div`
     }
 
     .table-wrapper {
-        height: 400px;
+        height: 600px;
     }
 
     .fixed-header {
