@@ -12,6 +12,7 @@ import useCategorySalesPerformanceHook from './hooks/useCategorySalesPerformance
 
 import BestItemGraphComponent from './best-item-graph/BestItemGraph.component';
 import BestCategoryGraphComponent from './best-category-graph/BestCategoryGraph.component';
+import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
 
 const Container = styled.div`
     height: 100%;
@@ -158,10 +159,10 @@ const CategoryBestPerformanceComponent = (props) => {
             <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'카테고리 - BEST 카테고리 상품'} />
 
-                <OperatorComponent
+                {/* <OperatorComponent
                     onSubmitSearchPerformance={__handle.submit.searchPerformance}
                     onActionResetPerformance={__handle.action.resetPerformance}
-                />
+                /> */}
 
                 <GraphOperatorComponent
                     checkedSwitch={checkedSwitch}
@@ -179,6 +180,10 @@ const CategoryBestPerformanceComponent = (props) => {
                     checkedSwitch={checkedSwitch}
                     bestPayAmountItem={categoryBestPayAmountItem}
                     bestUnitItem={categoryBestUnitItem}
+                />
+
+                <DateRangeSelectorComponent
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
                 />
             </Container>
 

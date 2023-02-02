@@ -8,6 +8,8 @@ import useProductSalesPerformanceHook from "./hooks/useProductSalesPerformanceHo
 import useOptionSalesPerformanceHook from "./hooks/useOptionSalesPerformanceHook";
 import DetailGraphSelectorModalComponent from "./modal/detail-graph-selector-modal/DetailGraphSelectorModal.component";
 import OptionItemTableComponent from "./option-item-table/OptionItemTable.component";
+import GraphDataPagenationComponent from "./graph-data-pagenation/GraphDataPagenation.component";
+import DateRangeSelectorComponent from "../date-range-selector/DateRangeSelector.component";
 
 const Container = styled.div`
     height: 100%;
@@ -36,6 +38,9 @@ export default function ProductBestPerformanceComponent (props) {
     const [detailGraphSelectorModalOpen, setDetailGraphSelectorModalOpen] = useState(false);
     const [detailSearchValue, setDetailSearchValue] = useState(null);
     
+    const [pageOrderByColumn, setPageOrderByColumn] = useState('payAmount');
+    const [pageIndex, setPageIndex] = useState(null);
+
     const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
@@ -67,7 +72,8 @@ export default function ProductBestPerformanceComponent (props) {
         }
 
         if(productPerformance) {
-            searchOptionPerformance(); 
+            searchOptionPerformance();
+            __handle.action.updatePageIndex();
         }
     }, [productPerformance])
 
@@ -95,11 +101,53 @@ export default function ProductBestPerformanceComponent (props) {
             closeDetailGraphSelectorModal: () => {
                 setDetailSearchValue(null);
                 setDetailGraphSelectorModalOpen(false);
-            }
+            },
+            changePageOrderByColumn: (e) => {
+                let value = e.target.value;
+                let searchValue = {
+                    ...detailSearchValue,
+                    pageOrderByColumn: value,
+                    page: null
+                }
+                
+                setPageOrderByColumn(value);
+                setDetailSearchValue(searchValue);
+               
+                __handle.action.updatePageIndex();
+                __handle.submit.searchPerformance(searchValue);
+            },
+            updatePageIndex: () => {
+                setPageIndex(productPerformance?.number);
+            },
+            changePrevPageIndex: () => {
+                let page = pageIndex - 1;
+                let searchValue = {
+                    ...detailSearchValue,
+                    page: page + 1
+                }
+
+                setPageIndex(page);
+                setDetailSearchValue(searchValue);
+
+                __handle.submit.searchPerformance(searchValue);
+            },
+            changeNextPageIndex: () => {
+                let page = pageIndex + 1;
+                let searchValue = {
+                    ...detailSearchValue,
+                    page: page + 1
+                }
+
+                setPageIndex(page);
+                setDetailSearchValue(searchValue);
+
+                __handle.submit.searchPerformance(searchValue);
+            },
         },
         submit: {
             searchPerformance: async (body) => {
                 onActionOpenBackdrop();
+                __handle.action.updateDetailSearchValue(body);
                 await reqSearchBestProductPerformance(body);
                 onActionCloseBackdrop();
             }
@@ -107,38 +155,52 @@ export default function ProductBestPerformanceComponent (props) {
     }
 
     return (
-        <Container navbarOpen={props.navbarOpen}>
-            <PageTitleFieldView title={'상품 - 상품 순위'} />
+        <>
+            <Container navbarOpen={props.navbarOpen}>
+                <PageTitleFieldView title={'상품 - 상품 순위'} />
 
-            <OperatorComponent
+                {/* <OperatorComponent
                 productPerformance={productPerformance}
                 onActionResetPerformance={__handle.action.resetPerformance}
                 onSubmitSearchPerformance={__handle.submit.searchPerformance}
                 onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
-            />
+            /> */}
 
-            <GraphOperatorComponent
-                checkedSwitch={checkedSwitch}
-                detailSearchValue={detailSearchValue}
+                <GraphDataPagenationComponent
+                    pageOrderByColumn={pageOrderByColumn}
+                    salesPayAmountData={productPerformance}
+                    pageIndex={pageIndex}
 
-                onActionChangeSwitch={__handle.action.changeSwitch}
-                onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
-            />
+                    onChangePrevPageIndex={__handle.action.changePrevPageIndex}
+                    onChangeNextPageIndex={__handle.action.changeNextPageIndex}
+                    onActionChangePageOrderByColumn={__handle.action.changePageOrderByColumn}
+                />
 
-            <BestProductGraphComponent
-                checkedSwitch={checkedSwitch}
-                performance={productPerformance?.content}
-                detailSearchValue={detailSearchValue}
+                <GraphOperatorComponent
+                    checkedSwitch={checkedSwitch}
 
-                onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
-            />
+                    onActionChangeSwitch={__handle.action.changeSwitch}
+                />
 
-            <OptionItemTableComponent
-                performance={optionPerformance}
-                detailSearchValue={detailSearchValue}
+                <BestProductGraphComponent
+                    checkedSwitch={checkedSwitch}
+                    performance={productPerformance?.content}
+                    detailSearchValue={detailSearchValue}
 
-                onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
-            />
+                    onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
+                />
+
+                <OptionItemTableComponent
+                    performance={optionPerformance}
+                    detailSearchValue={detailSearchValue}
+
+                    onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
+                />
+
+                <DateRangeSelectorComponent
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
+                />
+            </Container>
 
             <BackdropHookComponent
                 open={backdropOpen}
@@ -150,6 +212,6 @@ export default function ProductBestPerformanceComponent (props) {
 
                 onActionCloseModal={__handle.action.closeDetailGraphSelectorModal}
             />
-        </Container>
+        </>
     )
 }

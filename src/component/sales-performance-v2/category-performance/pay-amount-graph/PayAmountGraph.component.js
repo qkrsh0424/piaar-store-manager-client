@@ -257,12 +257,12 @@ export default function PayAmountGraphComponent(props) {
 
                 let startDate = getStartDate(date.startDate);
                 let endDate = getEndDate(date.endDate);
-                let productCategory = [...props.selectedCategory];
+                let productCategoryNames = [...props.selectedCategory];
 
                 let detailSearchValue = {
                     startDate,
                     endDate,
-                    productCategory
+                    productCategoryNames
                 }
 
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);

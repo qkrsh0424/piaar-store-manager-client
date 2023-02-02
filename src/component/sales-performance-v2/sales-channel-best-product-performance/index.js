@@ -10,6 +10,7 @@ import useProductSalesPerformanceHook from './hooks/useProductSalesPerformanceHo
 import useOptionSalesPerformanceHook from './hooks/useOptionSalesPerformanceHook';
 import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
 import OptionItemTableComponent from './option-item-table/OptionItemTable.component';
+import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
 
 const Container = styled.div`
     height: 100%;
@@ -138,6 +139,10 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
                     detailSearchValue={detailSearchValue}
     
                     onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
+                />
+
+                <DateRangeSelectorComponent
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
                 />
             </Container>
 

@@ -11,6 +11,7 @@ import { useState } from 'react';
 import useTotalSalesPerformanceHook from './hooks/useTotalSalesPerformanceHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
 import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
+import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
 
 const Container = styled.div`
     height: 100%;
@@ -88,10 +89,10 @@ const TotalSalesPerformanceComponent = (props) => {
             <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'전체 - 총 매출액 & 판매 건'} />
 
-                <OperatorComponent
+                {/* <OperatorComponent
                     onSubmitSearchPerformance={__handle.submit.searchPerformance}
                     onActionResetPerformance={__handle.action.resetPerformance}
-                />
+                /> */}
 
                 {/* 주문데이터 표시 및 날짜검색 설정 */}
                 <GraphOperatorComponent
@@ -122,7 +123,12 @@ const TotalSalesPerformanceComponent = (props) => {
                 <SummaryTableComponent
                     performance={performance}
                 />
+                
+                <DateRangeSelectorComponent
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
+                />
             </Container>
+
 
             <BackdropHookComponent
                 open={backdropOpen}

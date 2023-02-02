@@ -70,19 +70,8 @@ export default function DetailGraphSelectorModalComponent(props) {
                     pathname: '/sales-performance/product/detail',
                     state: searchValue
                 }
+
                 navigateUrl(data);
-            },
-            changeStartDateValue: (value) => {
-                setSearchValue({
-                    ...searchValue,
-                    startDate: value
-                })
-            },
-            changeEndDateValue: (value) => {
-                setSearchValue({
-                    ...searchValue,
-                    endDate: value
-                })
             }
         }
     }
@@ -94,15 +83,6 @@ export default function DetailGraphSelectorModalComponent(props) {
             title={'그래프 선택'}
             element={
                 <Container>
-                    <div className='info-text'>
-                        <span>검색 기간</span>
-                    </div>
-                    <DateSelectorFieldView
-                        startDate={searchValue.startDate}
-                        endDate={searchValue.endDate}
-                        onChangeStartDateValue={__handle.action.changeStartDateValue}
-                        onChangeEndDateValue={__handle.action.changeEndDateValue}
-                    />
                     <BoxFieldView
                         onActionSelectProductDetail={__handle.action.selectProductDetail}
                     />

@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 import _ from 'lodash';
-import OperatorComponent from './operator/Operator.component';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
@@ -11,8 +10,8 @@ import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/Reg
 import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
 import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import useChannelSalesPerformanceHook from './hooks/useChannelSalesPerformanceHook';
-import useRouterHook from '../../../hooks/router/useRouterHook';
 import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
+import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
 
 const Container = styled.div`
     height: 100%;
@@ -37,17 +36,13 @@ function PageTitleFieldView({ title }) {
 
 const SalesChannelPerformanceComponent = (props) => {
     const [salesChannel, setSalesChannel] = useState(null);
-    const [selectedChannel, setSelectedChannel] = useState(null);
+    const [selectedChannel, setSelectedChannel] = useState([]);
 
     const [searchDimension, setSearchDimension] = useState('date');
     const [checkedSwitch, setCheckedSwitch] = useState(false);
 
     const [detailGraphSelectorModalOpen, setDetailGraphSelectorModalOpen] = useState(false);
     const [detailSearchValue, setDetailSearchValue] = useState(null);
-
-    const {
-        location
-    } = useRouterHook();
 
     const {
         open: backdropOpen,
@@ -57,8 +52,7 @@ const SalesChannelPerformanceComponent = (props) => {
 
     const {
         performance,
-        reqSearchChannelPerformance,
-        onActionResetPerformance
+        reqSearchChannelPerformance
     } = useChannelSalesPerformanceHook();
 
     useEffect(() => {
@@ -71,10 +65,6 @@ const SalesChannelPerformanceComponent = (props) => {
 
     const __handle = {
         action: {
-            resetPerformance: () => {
-                onActionResetPerformance();
-                __handle.action.clearChannel();
-            },
             initChannel: () => {
                 let channel = new Set([]);
                 performance.forEach(r => r.performances?.forEach(r2 => {
@@ -83,9 +73,6 @@ const SalesChannelPerformanceComponent = (props) => {
 
                 let channelName = [...channel].sort();
                 setSalesChannel(channelName);
-                
-                // 기본 1개 선택
-                setSelectedChannel([channelName[0]]);
             },
             isCheckedOne: (channel) => {
                 return selectedChannel.some(name => name === channel);
@@ -104,12 +91,10 @@ const SalesChannelPerformanceComponent = (props) => {
             },
             checkAll: (e) => {
                 e.stopPropagation();
-
                 setSelectedChannel([...salesChannel]);
             },
             checkCancelAll: (e) => {
                 e.stopPropagation();
-
                 setSelectedChannel([]);
             },
             changeSwitch: () => {
@@ -119,10 +104,6 @@ const SalesChannelPerformanceComponent = (props) => {
             changeDimension: (e) => {
                 let value = e.target.value;
                 setSearchDimension(value);
-            },
-            clearChannel: () => {
-                setSalesChannel(null);
-                setSelectedChannel(null);
             },
             openDetailGraphSelectorModal: (data) => {
                 setDetailSearchValue(data);
@@ -146,12 +127,6 @@ const SalesChannelPerformanceComponent = (props) => {
         <>
             <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'판매스토어 - 총 매출액 & 판매 건'} />
-
-                <OperatorComponent
-                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
-                    onActionResetPerformance={__handle.action.resetPerformance}
-                />
-
                 <ChannelSelectorComponent
                     salesChannel={salesChannel}
 
@@ -193,6 +168,10 @@ const SalesChannelPerformanceComponent = (props) => {
                     salesChannel={salesChannel}
                     selectedChannel={selectedChannel}
                     dayOfWeekPayAmount={performance}
+                />
+
+                <DateRangeSelectorComponent
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
                 />
             </Container>
 

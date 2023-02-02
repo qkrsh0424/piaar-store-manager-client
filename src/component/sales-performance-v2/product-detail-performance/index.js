@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import PerformanceContainerComponent from "./performance-container";
+import PerformanceContainerComponent from "./performance-container-v2";
 
 const Container = styled.div`
     height: 100%;

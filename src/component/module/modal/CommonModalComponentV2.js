@@ -40,7 +40,7 @@ const TitleBox = styled.div`
 `;
 
 const ElementBox = styled.div`
-    margin: 10px 0 20px 0;
+    /* margin: 10px 0 20px 0; */
     font-size: 14px;
     font-weight: 600;
     text-align: center;

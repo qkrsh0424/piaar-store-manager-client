@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 import _ from 'lodash';
-import OperatorComponent from './operator/Operator.component';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
@@ -13,6 +12,7 @@ import useCategorySalesPerformanceHook from './hooks/useCategorySalesPerformance
 import CategorySelectorComponent from './category-selector/CategorySelector.component';
 import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
 import useRouterHook from '../../../hooks/router/useRouterHook';
+import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
 
 const Container = styled.div`
     height: 100%;
@@ -37,7 +37,7 @@ function PageTitleFieldView({ title }) {
 
 const CategoryPerformanceComponent = (props) => {
     const [category, setCategory] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState([]);
 
     const [searchDimension, setSearchDimension] = useState('date');
     const [checkedSwitch, setCheckedSwitch] = useState(false);
@@ -58,7 +58,6 @@ const CategoryPerformanceComponent = (props) => {
     const {
         performance,
         reqSearchCategoryPerformance,
-        onActionResetPerformance
     } = useCategorySalesPerformanceHook();
 
     useEffect(() => {
@@ -75,10 +74,6 @@ const CategoryPerformanceComponent = (props) => {
 
     const __handle = {
         action: {
-            resetPerformance: () => {
-                onActionResetPerformance();
-                __handle.action.clearCategory();
-            },
             initCategory: () => {
                 let category = new Set([]);
     
@@ -91,20 +86,17 @@ const CategoryPerformanceComponent = (props) => {
                 
                 if(location.state?.categoryName) {
                     setSelectedCategory(location.state.categoryName);
-                }else {
-                    // 기본 1개 선택
-                    setSelectedCategory([categoryName[0]]);
                 }
             },
             isCheckedOne: (category) => {
-                return selectedCategory.some(name => name === category);
+                return selectedCategory?.some(name => name === category);
             },
             checkOne: (e, category) => {
                 e.stopPropagation();
 
                 let data = [...selectedCategory];
 
-                if(selectedCategory.some(name => name === category)) {
+                if(selectedCategory?.some(name => name === category)) {
                     data = data.filter(name => name !== category);
                 } else {
                     data.push(category);
@@ -132,10 +124,6 @@ const CategoryPerformanceComponent = (props) => {
                 let value = e.target.value;
                 setSearchDimension(value);
             },
-            clearCategory: () => {
-                setCategory(null);
-                setSelectedCategory(null);
-            },
             openDetailGraphSelectorModal: (data) => {
                 setDetailSearchValue(data);
                 setDetailGraphSelectorModalOpen(true);
@@ -158,11 +146,6 @@ const CategoryPerformanceComponent = (props) => {
         <>
             <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'카테고리 - 총 매출액 & 판매 건'} />
-
-                <OperatorComponent
-                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
-                    onActionResetPerformance={__handle.action.resetPerformance}
-                />
 
                 <CategorySelectorComponent
                     category={category}
@@ -206,6 +189,10 @@ const CategoryPerformanceComponent = (props) => {
                     category={category}
                     selectedCategory={selectedCategory}
                     dayOfWeekPayAmount={performance}
+                />
+
+                <DateRangeSelectorComponent
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
                 />
             </Container>
 
