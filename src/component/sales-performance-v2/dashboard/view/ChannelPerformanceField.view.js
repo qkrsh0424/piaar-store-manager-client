@@ -1,4 +1,3 @@
-import { dateToYYYYMMDD, setSubtractedDate } from "../../../../utils/dateFormatUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import { ChannelPerformanceFieldWrapper, ChannelDataBox } from "../Dashboard.styled";
 
@@ -18,9 +17,6 @@ export default function ChannelPerformanceFieldView ({ channelPerformanceData })
         </ChannelPerformanceFieldWrapper>
     )
 }
-
-const TODAY = new Date();
-const YESTERDAY = setSubtractedDate(TODAY, 0, 0, -1);
 
 function DataBoxField({ datetime, performance, totalPayAmount }) {
     return (

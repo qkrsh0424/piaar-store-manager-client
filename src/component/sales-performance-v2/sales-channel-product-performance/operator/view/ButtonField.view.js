@@ -17,9 +17,10 @@ export default function ButtonFieldView(props) {
                 </div>
                 <div className='button-box'>
                     <button
-                        type='submit'
+                        type='button'
                         className='button-el'
                         style={{ backgroundColor: 'var(--piaar-main-color)' }}
+                        onClick={() => props.onActionChangeSelectedProductAndOptions()}
                     >
                         조회
                         <Ripple color={'#e0e0e0'} duration={1000}></Ripple>

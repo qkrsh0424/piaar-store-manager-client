@@ -56,7 +56,7 @@ export default function OperatorComponent(props) {
             closeProductListModal: () => {
                 setProductListModalOpen(false);
             },
-            selectProduct: (productCode) => {
+            changeSelectedProduct: (productCode) => {
                 props.onActionChangeSelectedProduct(productCode);
                 __handle.action.closeProductListModal();
             },
@@ -103,7 +103,7 @@ export default function OperatorComponent(props) {
                     products={props.products}
                     modalOpen={productListModalOpen}
 
-                    onActionSelectedProduct={__handle.action.selectProduct}
+                    onActionChangeSelectedProduct={__handle.action.changeSelectedProduct}
                     onActionCloseModal={__handle.action.closeProductListModal}
                 />
             }

@@ -22,8 +22,10 @@ export default function DashboardComponent(props) {
     const [yesterdayData, setYesterdayData] = useState(null);
     const [prev7DaysData, setPrev7DaysData] = useState(null);
     const [prev8DaysData, setPrev8DaysData] = useState(null);
+
     const [monthAvgData, setMonthAvgData] = useState(null);
     const [lastMonthAvgData, setLastMonthAvgData] = useState(null);
+
     const [channelPerformanceData, setChannelPerformanceData] = useState(null);
 
     const {

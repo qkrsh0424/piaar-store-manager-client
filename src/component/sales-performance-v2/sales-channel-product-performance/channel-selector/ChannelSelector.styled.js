@@ -2,18 +2,18 @@ import styled from "styled-components";
 
 const Container = styled.div`
     margin: 20px 0 20px 0;
-    padding: 20px;
-    background-color: rgb(255, 255, 255);
-    border: 1px solid rgb(219, 221, 226);
     border-radius: 10px;
+
+    .selector-wrapper {
+        margin-top: 10px;
+        background-color: #fff;
+        box-shadow: var(--defaultBoxShadow);
+        border-radius: 10px;
+        padding: 10px;
+    }
 `;
 
 const ButtonFieldWrapper = styled.div`
-    
-    @media all and (max-width:992px) {
-        padding: 0 10px;
-    }
-
     .flex-box{
         display: flex;
         flex-wrap: wrap;
@@ -57,8 +57,14 @@ const CheckBoxControlWrapper = styled.div`
     gap: 5px;
     
     .button-el {
-        font-size: 14px;
-        border: 1px solid var(--defaultBorderColor);
+        width: 30px;
+        height: 30px;
+        position: relative;
+        padding: 0;
+
+        border-radius: 3px;
+
+        border: 1px solid #e7e7e7;
         background-color: var(--defaultButtonColor);
 
         :hover {

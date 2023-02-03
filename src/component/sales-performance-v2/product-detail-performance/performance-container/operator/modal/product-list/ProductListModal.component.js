@@ -74,7 +74,7 @@ export default function ProductListModalComponent (props) {
         },
         submit: {
             confirmSelectedProduct: (productCode) => {
-                props.onActionSelectedProduct(productCode);
+                props.onActionChangeSelectedProduct(productCode);
             }
         },
     }

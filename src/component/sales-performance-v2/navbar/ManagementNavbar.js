@@ -127,7 +127,7 @@ const thisRouters = [
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
-                name: '조회 상품 스토어 성과',
+                name: '다중 상품 성과',
                 pathname: '/sales-performance/sales-channel/product',
                 params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },

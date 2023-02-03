@@ -8,7 +8,10 @@ export default function CheckBoxControlView(props) {
                     className='button-el'
                     onClick={(e) => props.onActionCheckAll(e)}
                 >
-                    전체선택
+                    <img
+                        src='/assets/icon/check_all_default_000000.svg'
+                        style={{ width: '25px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                    />
                 </button>
             </div>
             <div>
@@ -16,7 +19,10 @@ export default function CheckBoxControlView(props) {
                     className='button-el'
                     onClick={(e) => props.onActionCheckCancelAll(e)}
                 >
-                    전체해제
+                    <img
+                        src='/assets/icon/check_remove_all_default_000000.svg'
+                        style={{ width: '25px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }}
+                    />
                 </button>
             </div>
         </CheckBoxControlWrapper>

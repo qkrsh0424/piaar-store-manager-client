@@ -11,6 +11,9 @@ import PayAmountGraphComponent from './pay-amount-graph/PayAmountGraph.component
 import RegistrationAndUnitGraphComponent from './registration-and-unit-graph/RegistrationAndUnitGraph.component';
 import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/PayAmountDayOfWeekGraph.component';
 import OperatorComponent from './operator/Operator.component'
+import DateRangeSelectorComponent from './date-range-selector/DateRangeSelector.component';
+import useRouterHook from '../../../hooks/router/useRouterHook';
+import { getEndDate, getStartDate, getTimeDiffWithUTC } from '../../../utils/dateFormatUtils';
 
 const Container = styled.div`
     height: 100%;
@@ -43,6 +46,11 @@ const SalesChannelProductPerformanceComponent = (props) => {
     const [selectedProductAndOptions, setSelectedProductAndOptions] = useState([]);
 
     const {
+        query,
+        location
+    } = useRouterHook();
+
+    const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
@@ -62,11 +70,40 @@ const SalesChannelProductPerformanceComponent = (props) => {
         __handle.action.initChannel();
     }, [performance])
 
+    useEffect(() => {
+        async function fetchInit() {
+            let searchOptionCodes = [];
+            selectedProductAndOptions.forEach(r => {
+                r.options.forEach(r2 => searchOptionCodes.push(r2.code));
+            });
+
+            let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
+            let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
+            let utcHourDifference = getTimeDiffWithUTC();
+            let optionCodes = searchOptionCodes;
+
+            let body = {
+                startDate: searchStartDate,
+                endDate: searchEndDate,
+                utcHourDifference,
+                optionCodes
+            }
+            
+            onActionOpenBackdrop();
+            await reqSearchChannelPerformance(body);
+            onActionCloseBackdrop();
+        }
+
+        if(selectedProductAndOptions?.length > 0) {
+            fetchInit();
+        }
+    }, [selectedProductAndOptions])
+
     const __handle = {
         action: {
             resetPerformance: () => {
                 onActionResetPerformance();
-                __handle.action.clearChannel();
+                __handle.action.clearSearchField();
             },
             initChannel: () => {
                 let channel = new Set([]);
@@ -75,8 +112,9 @@ const SalesChannelProductPerformanceComponent = (props) => {
                 }))
 
                 let channelName = [...channel].sort();
+                let updatedSelectedChannel = channelName.filter(r => selectedChannel?.includes(r));
                 setSalesChannel(channelName);
-                setSelectedChannel([channelName[0]]);
+                setSelectedChannel(updatedSelectedChannel);
             },
             isCheckedOne: (channel) => {
                 return selectedChannel.some(name => name === channel);
@@ -111,9 +149,10 @@ const SalesChannelProductPerformanceComponent = (props) => {
                 let value = e.target.value;
                 setSearchDimension(value);
             },
-            clearChannel: () => {
+            clearSearchField: () => {
                 setSalesChannel(null);
-                setSelectedChannel(null);
+                setSelectedChannel([]);
+                setSelectedProductAndOptions([]);
             },
             changeSelectedOption: (data) => {
                 setSelectedProductAndOptions([...data])
@@ -131,7 +170,7 @@ const SalesChannelProductPerformanceComponent = (props) => {
     return (
         <>
             <Container navbarOpen={props.navbarOpen}>
-                <PageTitleFieldView title={'판매스토어 - 조회 상품 스토어 성과'} />
+                <PageTitleFieldView title={'판매스토어 - 다중 상품 성과'} />
 
                 <OperatorComponent
                     selectedProductAndOptions={selectedProductAndOptions}
@@ -179,7 +218,12 @@ const SalesChannelProductPerformanceComponent = (props) => {
                     salesChannel={salesChannel}
                     selectedChannel={selectedChannel}
                     dayOfWeekPayAmount={performance}
-                />                
+                />
+
+                <DateRangeSelectorComponent
+                    selectedProductAndOptions={selectedProductAndOptions}
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
+                />        
             </Container>
 
             <BackdropHookComponent

@@ -104,9 +104,7 @@ export default function PerformanceContainerComponent (props) {
                 productCodes
             }
             
-            onActionOpenBackdrop();
             await __handle.submit.searchPerformance(body);
-            onActionCloseBackdrop();
         }
 
         if(selectedProduct) {
