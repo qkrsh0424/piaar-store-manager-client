@@ -183,6 +183,7 @@ export default function ProductBestPerformanceComponent (props) {
                 />
 
                 <OptionItemTableComponent
+                    checkedSwitch={checkedSwitch}
                     performance={optionPerformance}
                     detailSearchValue={detailSearchValue}
 

@@ -10,7 +10,7 @@ const Container = styled.div`
     }
 `;
 
-const TableTitleFieldWrapper = styled.div`
+const TableBoardFieldWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -32,15 +32,16 @@ const TableTitleFieldWrapper = styled.div`
         align-items: flex-end;
     }
 
-    .dimension-button-box {
-        display: flex;
-    }
-
-    .dimension-button-box .button-el {
-        width: 40px;
-        height: 40px;
+    .button-el {
+        padding: 5px 10px;
         background-color: var(--defaultButtonColor);
         border: 1px solid var(--defaultBorderColor);
+        border-radius: 5px;
+        transition: 0.2s;
+
+        :hover {
+            background-color: var(--defaultHoverColor);
+        }
         
         &.checked {
             background-color: #555;
@@ -133,8 +134,30 @@ const TableFieldWrapper = styled.div`
     }
 `;
 
+const GraphBodyFieldWrapper = styled.div`
+    min-width: 1000px;
+    min-height: 500px;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+
+    .half-type-graph {
+        width: 45%;
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+            flex-direction: column;
+        }
+    }
+
+    .graph-wrapper {
+        height: 420px;
+    }
+`;
+
 export {
     Container,
-    TableTitleFieldWrapper,
-    TableFieldWrapper
+    TableBoardFieldWrapper,
+    TableFieldWrapper,
+    GraphBodyFieldWrapper
 }

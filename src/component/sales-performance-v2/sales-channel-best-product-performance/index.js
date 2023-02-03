@@ -257,6 +257,7 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
                 />
 
                 <OptionItemTableComponent
+                    checkedSwitch={checkedSwitch}
                     performance={optionPerformance}
                     detailSearchValue={detailSearchValue}
     

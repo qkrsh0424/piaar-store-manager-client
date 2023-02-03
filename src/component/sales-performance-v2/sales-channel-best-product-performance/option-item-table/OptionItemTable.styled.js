@@ -10,7 +10,7 @@ const Container = styled.div`
     }
 `;
 
-const TableTitleFieldWrapper = styled.div`
+const TableBoardFieldWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -26,21 +26,16 @@ const TableTitleFieldWrapper = styled.div`
         font-size: 14px;
     }
 
-    .right-el-box {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-    }
-
-    .dimension-button-box {
-        display: flex;
-    }
-
-    .dimension-button-box .button-el {
-        width: 40px;
-        height: 40px;
+    .button-el {
+        padding: 5px 10px;
         background-color: var(--defaultButtonColor);
         border: 1px solid var(--defaultBorderColor);
+        border-radius: 5px;
+        transition: 0.2s;
+
+        :hover {
+            background-color: var(--defaultHoverColor);
+        }
         
         &.checked {
             background-color: #555;
@@ -133,13 +128,13 @@ const GraphBodyFieldWrapper = styled.div`
     }
 
     .graph-wrapper {
-        height: 380px;
+        height: 1500px;
     }
 `;
 
 export {
     Container,
-    TableTitleFieldWrapper,
+    TableBoardFieldWrapper,
     TableFieldWrapper,
     GraphBodyFieldWrapper
 }
