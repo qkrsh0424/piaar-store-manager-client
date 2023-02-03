@@ -41,7 +41,7 @@ export default function DateRangeSelectorComponent(props) {
 
         query.startDate = dateToYYYYMMDD(date1);
         query.endDate = dateToYYYYMMDD(date2);
-        // navigateParams({ replace : true });
+        navigateParams({ replace: true });
     }, [])
     
     useEffect(() => {

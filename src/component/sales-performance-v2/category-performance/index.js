@@ -92,14 +92,14 @@ const CategoryPerformanceComponent = (props) => {
                 setSelectedCategory(category);
             },
             isCheckedOne: (category) => {
-                return selectedCategory.some(name => name === category);
+                return selectedCategory?.some(name => name === category);
             },
             checkOne: (e, category) => {
                 e.stopPropagation();
 
                 let data = [...selectedCategory];
 
-                if(selectedCategory.some(name => name === category)) {
+                if(selectedCategory?.some(name => name === category)) {
                     data = data.filter(name => name !== category);
                 } else {
                     data.push(category);
