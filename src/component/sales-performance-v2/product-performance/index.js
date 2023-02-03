@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
+import useRouterHook from "../../../hooks/router/useRouterHook";
+import { getEndDate, getStartDate, getTimeDiffWithUTC } from "../../../utils/dateFormatUtils";
+import DateRangeSelectorComponent from "./date-range-selector/DateRangeSelector.component";
 import GraphOperatorComponent from "./graph-operator/GraphOperator.component";
 import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
 import useProductSalesPerformanceHook from "./hooks/useProductSalesPerformanceHook";
@@ -38,6 +41,11 @@ export default function ProductPerformanceComponent (props) {
     const [selectedOptions, setSelectedOptions] = useState(null);
 
     const {
+        query,
+        location
+    } = useRouterHook();
+
+    const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
@@ -64,10 +72,37 @@ export default function ProductPerformanceComponent (props) {
         fetchInit();
     }, [])
 
+    useEffect(() => {
+        async function fetchInit() {
+            let searchOptionCodes = selectedOptions.map(r => r.option.code);
+
+            let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
+            let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
+            let utcHourDifference = getTimeDiffWithUTC();
+            let optionCodes = searchOptionCodes;
+
+            let body = {
+                startDate: searchStartDate,
+                endDate: searchEndDate,
+                utcHourDifference,
+                optionCodes
+            }
+            
+            onActionOpenBackdrop();
+            await reqSearchProductPerformance(body);
+            onActionCloseBackdrop();
+        }
+
+        if(selectedOptions?.length > 0) {
+            fetchInit();
+        }
+    }, [selectedOptions])
+
     const __handle = {
         action: {
             resetPerformance: () => {
                 onActionResetPerformance();
+                __handle.action.clearSearchField();
             },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;
@@ -80,6 +115,20 @@ export default function ProductPerformanceComponent (props) {
             changeSearchDataControl: (e) => {
                 let value = e.target.value;
                 setSearchDataControl(value);
+            },
+            changeSelectedOption: (data) => {
+                let optionCodes = [];
+                data.forEach(r => {
+                    r.options.forEach(r2 => {
+                        optionCodes.push(r2.code);
+                    });
+                })
+
+                let options = productAndOptions.filter(r => optionCodes.includes(r.option.code));
+                setSelectedOptions(options);
+            },
+            clearSearchField: () => {
+                setSelectedOptions([]);
             }
         },
         submit: {
@@ -87,60 +136,62 @@ export default function ProductPerformanceComponent (props) {
                 onActionOpenBackdrop();
                 await reqSearchProductPerformance(body);
                 onActionCloseBackdrop();
-
-                let optionCodes = body.optionCodes;
-
-                let options = productAndOptions.filter(r => optionCodes.includes(r.option.code));
-                setSelectedOptions(options);
             }
         }
     }
 
     return (
-        <Container navbarOpen={props.navbarOpen}>
-            <PageTitleFieldView title={'상품 - 총 매출액 & 판매 건'} />
+        <>
+            <Container navbarOpen={props.navbarOpen}>
+                <PageTitleFieldView title={'상품 - 총 매출액 & 판매 건'} />
 
-            <OperatorComponent
-                productAndOptions={productAndOptions}
-                onActionResetPerformance={__handle.action.resetPerformance}
-                onSubmitSearchPerformance={__handle.submit.searchPerformance}
-            />
+                <OperatorComponent
+                    productAndOptions={productAndOptions}
+                    onActionResetPerformance={__handle.action.resetPerformance}
+                    onActionChangeSelectedOption={__handle.action.changeSelectedOption}
+                />
 
-            <GraphOperatorComponent
-                checkedSwitch={checkedSwitch}
-                searchDimension={searchDimension}
-                searchDataControl={searchDataControl}
+                <GraphOperatorComponent
+                    checkedSwitch={checkedSwitch}
+                    searchDimension={searchDimension}
+                    searchDataControl={searchDataControl}
 
-                onActionChangeSwitch={__handle.action.changeSwitch}
-                onActionChangeSearchDimension={__handle.action.changeDimension}
-                onActionChangeSearchDataControl={__handle.action.changeSearchDataControl}
-            />
+                    onActionChangeSwitch={__handle.action.changeSwitch}
+                    onActionChangeSearchDimension={__handle.action.changeDimension}
+                    onActionChangeSearchDataControl={__handle.action.changeSearchDataControl}
+                />
 
-            <PayAmountGraphComponent
-                selectedOptions={selectedOptions}
-                searchDimension={searchDimension}
-                checkedSwitch={checkedSwitch}
-                searchDataControl={searchDataControl}
-                payAmount={performance}
-            />
+                <PayAmountGraphComponent
+                    selectedOptions={selectedOptions}
+                    searchDimension={searchDimension}
+                    checkedSwitch={checkedSwitch}
+                    searchDataControl={searchDataControl}
+                    payAmount={performance}
+                />
 
-            <RegistrationAndUnitGraphComponent
-                selectedOptions={selectedOptions}
-                searchDimension={searchDimension}
-                checkedSwitch={checkedSwitch}
-                searchDataControl={searchDataControl}
-                registrationAndUnit={performance}
-            />
+                <RegistrationAndUnitGraphComponent
+                    selectedOptions={selectedOptions}
+                    searchDimension={searchDimension}
+                    checkedSwitch={checkedSwitch}
+                    searchDataControl={searchDataControl}
+                    registrationAndUnit={performance}
+                />
 
-            <PayAmountDayOfWeekGraphComponent
-                selectedOptions={selectedOptions}
-                dayOfWeekPayAmount={performance}
-                searchDataControl={searchDataControl}
-            />
+                <PayAmountDayOfWeekGraphComponent
+                    selectedOptions={selectedOptions}
+                    dayOfWeekPayAmount={performance}
+                    searchDataControl={searchDataControl}
+                />
+
+                <DateRangeSelectorComponent
+                    selectedOptions={selectedOptions}
+                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
+                />
+            </Container>
 
             <BackdropHookComponent
                 open={backdropOpen}
             />
-        </Container>
+        </>
     )
 }

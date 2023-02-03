@@ -8,16 +8,18 @@ export default function OptionSelectorComponent(props) {
         <Container>
             <TextFieldView />
 
-            <CheckBoxControlView
-                onActionCheckAll={props.onActionCheckAll}
-                onActionCheckCancelAll={props.onActionCheckCancelAll}
-            />
+            <div className='selector-wrapper'>
+                <CheckBoxControlView
+                    onActionCheckAll={props.onActionCheckAll}
+                    onActionCheckCancelAll={props.onActionCheckCancelAll}
+                />
 
-            <CheckBoxFieldView
-                options={props.options}
-                onActionIsCheckedOne={props.onActionIsCheckedOne}
-                onActionCheckOne={props.onActionCheckOne}
-            />
+                <CheckBoxFieldView
+                    options={props.options}
+                    onActionIsCheckedOne={props.onActionIsCheckedOne}
+                    onActionCheckOne={props.onActionCheckOne}
+                />
+            </div>
         </Container>
     )
 }

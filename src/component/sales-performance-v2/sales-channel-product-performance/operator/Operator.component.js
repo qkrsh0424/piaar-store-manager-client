@@ -111,20 +111,32 @@ export default function OperatorComponent(props) {
     }
 
     return (
-        <Container>
-            <SearchFieldView
-                products={products}
-                productAndOptions={productAndOptions}
-                selectedProductAndOptions={selectedProductAndOptions}
+        <>
+            <Container>
+                <SearchFieldView
+                    products={products}
+                    productAndOptions={productAndOptions}
+                    selectedProductAndOptions={selectedProductAndOptions}
 
-                onActionOpenProductListModal={__handle.action.openProductListModal}
-                onActionRemoveOptionOne={__handle.action.removeOptionOne}
-                onActionRemoveProduct={__handle.action.removeProduct}
-            />
-            <ButtonFieldView
-                onActionClearRoute={__handle.action.clearRoute}
-                onActionChangeSelectedProductAndOptions={__handle.action.changeSelectedProductAndOption}
-            />
+                    onActionOpenProductListModal={__handle.action.openProductListModal}
+                    onActionRemoveOptionOne={__handle.action.removeOptionOne}
+                    onActionRemoveProduct={__handle.action.removeProduct}
+                />
+                <ButtonFieldView
+                    onActionClearRoute={__handle.action.clearRoute}
+                    onActionChangeSelectedProductAndOptions={__handle.action.changeSelectedProductAndOption}
+                />
+            </Container>
+
+            {productListModalOpen &&
+                <ProductListModalComponent
+                    products={products}
+                    modalOpen={productListModalOpen}
+
+                    onActionSelectedProduct={__handle.action.selectProduct}
+                    onActionCloseModal={__handle.action.closeProductListModal}
+                />
+            }
 
             {/* Snackbar */}
             {snackbarOpen &&
@@ -142,16 +154,6 @@ export default function OperatorComponent(props) {
             <BackdropHookComponent
                 open={backdropOpen}
             />
-
-            {productListModalOpen &&
-                <ProductListModalComponent
-                    products={products}
-                    modalOpen={productListModalOpen}
-
-                    onActionSelectedProduct={__handle.action.selectProduct}
-                    onActionCloseModal={__handle.action.closeProductListModal}
-                />
-            }
-        </Container>
+        </>
     )
 }
