@@ -22,7 +22,6 @@ function createGraphData(graph) {
 }
 
 function createGraphOption(option) {
-    // console.log(option.plugins?.datalabels)
     return {
         responsive: option.responsive,
         indexAxis: option.indexAxis,

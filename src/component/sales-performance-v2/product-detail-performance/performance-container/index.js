@@ -260,12 +260,12 @@ export default function PerformanceContainerComponent (props) {
                     selectedProduct={selectedProduct}
                     onSubmitSearchPerformance={__handle.submit.searchPerformance}
                 />
+                
+                <OptionItemTableComponent
+                    performance={optionPerformance}
+                    selectedOptions={selectedOptions}
+                />
             </Container>
-
-            <OptionItemTableComponent
-                performance={optionPerformance}
-                selectedOptions={selectedOptions}
-            />
 
             <BackdropHookComponent
                 open={backdropOpen}

@@ -136,9 +136,10 @@ const TableFieldWrapper = styled.div`
 
 const GraphBodyFieldWrapper = styled.div`
     min-width: 1000px;
-    min-height: 500px;
+    min-height: 350px;
     display: flex;
     justify-content: space-around;
+    align-items: center;
     width: 100%;
 
     .half-type-graph {
@@ -150,8 +151,12 @@ const GraphBodyFieldWrapper = styled.div`
         }
     }
 
+    .graph-title {
+        font-weight: 600;
+    }
+
     .graph-wrapper {
-        height: 420px;
+        height: 250px;
     }
 `;
 

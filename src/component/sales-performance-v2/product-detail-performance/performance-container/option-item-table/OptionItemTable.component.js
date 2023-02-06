@@ -3,11 +3,10 @@ import _ from "lodash";
 import TableFieldView from "./view/TableField.view";
 import { useEffect, useState } from "react";
 import { GraphDataset } from "../../../../../utils/graphDataUtils";
-import { toPriceUnitFormat } from "../../../../../utils/numberFormatUtils";
 import TableBoardFieldView from "./view/TableBoardField.view";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 
-const DEFAULT_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1'];
+const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#389091', '#EEE8A9', '#D5CABD'];
 
 // 판매스토어별 총 매출액
 export default function OptionItemTableComponent(props) {
@@ -15,12 +14,9 @@ export default function OptionItemTableComponent(props) {
     const [viewType, setViewType] = useState('table');
 
     const [salesPayAmountGraphData, setSalesPayAmountGraphData] = useState(null);
-    const [totalPayAmountGraphData, setTotalPayAmountGraphData] = useState(null);
     const [salesUnitGraphData, setSalesUnitGraphData] = useState(null);
-    const [totalUnitGraphData, setTotalUnitGraphData] = useState(null);
 
-    const [priceGraphOption, setPriceGraphOption] = useState(null);
-    const [unitGraphOption, setUnitGraphOption] = useState(null);
+    const [graphOption, setGraphOption] = useState(null);
 
     useEffect(() => {
         if(!props.performance) {
@@ -28,17 +24,9 @@ export default function OptionItemTableComponent(props) {
         }
 
         __handle.action.initTableData();
-        __handle.action.createPayAmountGraphData();
-        __handle.action.createUnitDate();
-    }, [props.performance])
-
-    useEffect(() => {
-        if(!(totalPayAmountGraphData && totalUnitGraphData)) {
-            return;
-        }
-
+        __handle.action.createGraphData();
         __handle.action.createGraphOption();
-    }, [totalPayAmountGraphData, totalUnitGraphData])
+    }, [props.performance])
 
     const __handle = {
         action: {
@@ -74,167 +62,100 @@ export default function OptionItemTableComponent(props) {
                 let value = e.target.value;
                 setViewType(value);
             },
-            createPayAmountGraphData: () => {
-                let graphLabels = props.performance.map(r => r.productDefaultName + " [" + r.optionDefaultName + "]");
+            createGraphData: () => {
+                let payAmountData = [];
+                let unitData = [];
+                let payAmountSum = 0;
+                let unitSum = 0;
+                let worstOptionPayAmountSum = 0;
+                let worstOptionUnitSum = 0;
 
-                let salesPayAmount = props.performance.map(r => r.salesPayAmount);
-                let orderPayAmount = props.performance.map(r => r.orderPayAmount);
+                let salesPerformance = _.sortBy([...props.performance], 'salesPayAmount').reverse();
+                let bestSalesPerformance = salesPerformance.slice(0, 10);
+                let graphLabels = bestSalesPerformance.map((r, idx) => (idx+1) + '. ' + r.optionDefaultName);
+
+                salesPerformance.forEach((r, idx) => {
+                    if(idx >= 10) {
+                        worstOptionPayAmountSum += r.salesPayAmount;
+                        worstOptionUnitSum += r.salesUnit;
+                    }
+                    payAmountSum += r.salesPayAmount;
+                    unitSum += r.salesUnit;
+                });
+
+                bestSalesPerformance.forEach(r => {
+                    let payAmountValue = Math.round(((r.salesPayAmount / payAmountSum) * 100) || 0);
+                    let unitValue = Math.round(((r.salesUnit / unitSum) * 100) || 0);
+
+                    payAmountData.push(payAmountValue);
+                    unitData.push(unitValue)
+                });
+                
+                if(props.performance?.length > 10 && worstOptionPayAmountSum !== 0) {
+                    // best10외의 데이터 추가
+                    graphLabels.push('기타');
+                    payAmountData.push(Math.round(((worstOptionPayAmountSum / payAmountSum) * 100) || 0));
+                    unitData.push(Math.round(((worstOptionUnitSum / unitSum) * 100) || 0));
+                }
 
                 let salesPayAmountDatasets = {
                     ...new GraphDataset().toJSON(),
-                    type: 'bar',
+                    type: 'doughnut',
                     label: '판매 매출액',
-                    data: salesPayAmount,
-                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[0],
-                    borderColor: DEFAULT_GRAPH_BG_COLOR[0],
+                    data: payAmountData,
+                    fill: true,
+                    backgroundColor: SALES_GRAPH_BG_COLOR,
+                    borderColor: SALES_GRAPH_BG_COLOR,
+                    tension: 0
+                }
+                
+                let salesUnitDatasets = {
+                    ...new GraphDataset().toJSON(),
+                    type: 'doughnut',
+                    label: '판매 수량',
+                    data: unitData,
+                    fill: true,
+                    backgroundColor: SALES_GRAPH_BG_COLOR,
+                    borderColor: SALES_GRAPH_BG_COLOR,
                     borderWidth: 0,
                     order: 0
                 }
 
-                let orderPayAmountDatasets = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'line',
-                    label: '(주문) 매출액',
-                    data: orderPayAmount,
-                    fill: false,
-                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[0] + '88',
-                    borderColor: DEFAULT_GRAPH_BG_COLOR[0] + '88',
-                    order: -1,
-                    pointRadius: 2
-                }
-
-                let createdSalesGraph = {
+                let createdPayAmountGraph = {
                     labels: [...graphLabels],
                     datasets: [salesPayAmountDatasets]
                 }
-
-                let createdTotalGraph = {
-                    labels: [...graphLabels],
-                    datasets: [salesPayAmountDatasets, orderPayAmountDatasets]
-                }
                 
-                setSalesPayAmountGraphData(createdSalesGraph);
-                setTotalPayAmountGraphData(createdTotalGraph);
-            },
-            createUnitDate: () => {
-                let graphLabels = props.performance.map(r => r.productDefaultName + " [" + r.optionDefaultName + "]");
-
-
-                let salesUnit = props.performance.map(r => r.salesUnit);
-                let orderUnit = props.performance.map(r => r.orderUnit);
-
-                let salesUnitDatasets = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'bar',
-                    label: '판매 수량',
-                    data: salesUnit,
-                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[1],
-                    borderColor: DEFAULT_GRAPH_BG_COLOR[1],
-                    borderWidth: 0,
-                    order: 0
-                }
-
-                let orderUnitDatasets = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'line',
-                    label: '(주문) 수량',
-                    data: orderUnit,
-                    fill: false,
-                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[1] + '88',
-                    borderColor: DEFAULT_GRAPH_BG_COLOR[1] + '88',
-                    order: -1,
-                    pointRadius: 2
-                }
-
-                let createdSalesGraph = {
+                let createdUnitGraph = {
                     labels: [...graphLabels],
                     datasets: [salesUnitDatasets]
                 }
 
-                let createdTotalGraph = {
-                    labels: [...graphLabels],
-                    datasets: [salesUnitDatasets, orderUnitDatasets]
-                }
-
-                setSalesUnitGraphData(createdSalesGraph);
-                setTotalUnitGraphData(createdTotalGraph);
+                setSalesPayAmountGraphData(createdPayAmountGraph);
+                setSalesUnitGraphData(createdUnitGraph);
             },
             createGraphOption: () => {
-                let priceOption = {
+                let option = {
                     responsive: true,
-                    maxBarThickness: 20,
                     maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'y',
-                        intersect: false,
-                    },
-                    indexAxis: 'y',
-                    scales: {
-                        x: {
-                            ticks: {
-                                callback: function (value, index, ticks) {
-                                    return toPriceUnitFormat(value);
+                    cutout: '40%',
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    var label = tooltipItem?.label || '';
+                                    var value = tooltipItem?.parsed || 0;
+                                    return label + " : " + value + "%";
                                 }
                             }
-                        },
-                        y: {
-                            // 글자 수 7글자로 제한
-                            afterTickToLabelConversion: function (scaleInstance) {
-                                let ticks = scaleInstance.ticks;
-
-                                let updatedTicks = ticks.map(r => {
-                                    let updatedLabel = r.label
-                                    if (r.label.length > 11) {
-                                        return {
-                                            ...r,
-                                            label: updatedLabel.substring(0, 10) + "..."
-                                        }
-                                    } else {
-                                        return r;
-                                    }
-                                })
-
-                                scaleInstance.ticks = updatedTicks;
-                            }
                         }
                     }
                 }
 
-                let unitOption = {
-                    responsive: true,
-                    maxBarThickness: 20,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'y',
-                        intersect: false,
-                    },
-                    indexAxis: 'y',
-                    scales: {
-                        y: {
-                            // 글자 수 7글자로 제한
-                            afterTickToLabelConversion: function (scaleInstance) {
-                                let ticks = scaleInstance.ticks;
-
-                                let updatedTicks = ticks.map(r => {
-                                    let updatedLabel = r.label
-                                    if (r.label.length > 11) {
-                                        return {
-                                            ...r,
-                                            label: updatedLabel.substring(0, 10) + "..."
-                                        }
-                                    } else {
-                                        return r;
-                                    }
-                                })
-
-                                scaleInstance.ticks = updatedTicks;
-                            }
-                        }
-                    }
-                }
-
-                setPriceGraphOption(priceOption);
-                setUnitGraphOption(unitOption);
+                setGraphOption(option);
             }
         }
     }
@@ -258,10 +179,9 @@ export default function OptionItemTableComponent(props) {
 
                     {viewType === 'graph' &&
                         <GraphBodyFieldView
-                            payAmountGraphData={props.checkedSwitch ? totalPayAmountGraphData : salesPayAmountGraphData}
-                            unitGraphData={props.checkedSwitch ? totalUnitGraphData : salesUnitGraphData}
-                            priceGraphOption={priceGraphOption}
-                            unitGraphOption={unitGraphOption}
+                            payAmountGraphData={salesPayAmountGraphData}
+                            unitGraphData={salesUnitGraphData}
+                            graphOption={graphOption}
                         />
                     }
                 </div>

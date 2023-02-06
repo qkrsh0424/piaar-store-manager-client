@@ -6,7 +6,7 @@ export default function TableBoardFieldView(props) {
             <div>
                 <div className='table-title'>[옵션 성과]</div>
                 <div className='table-info-text'>
-                    <span>조회된 상품의 모든 옵션판매 데이터를 표시합니다. </span>
+                    <span>조회된 상품의 모든 옵션판매 데이터를 표시합니다. 그래프로 표시되는 옵션은 최대 10개로 제한됩니다. </span>
                 </div>
             </div>
             <div className='flex-item' style={{ gap: '5px' }}>
