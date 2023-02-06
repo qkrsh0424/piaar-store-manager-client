@@ -14,7 +14,8 @@ export default function OperatorComponent(props) {
     const {
         query,
         location,
-        navigateUrl
+        navigateUrl,
+        updateRouteState
     } = useRouterHook();
 
     const {
@@ -68,11 +69,13 @@ export default function OperatorComponent(props) {
                 let searchStartDate = query.startDate ? getStartDate(query.startDate) : null;
                 let searchEndDate = query.endDate ? getEndDate(query.endDate) : null;
                 let productCategoryNames = selectedCategory.name ? [selectedCategory.name] : null;
+                let productCodes = [props.selectedProduct.code];
 
                 let detailSearchValue = {
                     searchStartDate,
                     searchEndDate,
-                    productCategoryNames
+                    productCategoryNames,
+                    productCodes
                 }
 
                 let data = {
@@ -80,6 +83,7 @@ export default function OperatorComponent(props) {
                     state: detailSearchValue
                 }
 
+                updateRouteState(detailSearchValue);
                 navigateUrl(data);
             }
         }

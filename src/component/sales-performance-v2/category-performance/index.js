@@ -66,15 +66,8 @@ const CategoryPerformanceComponent = (props) => {
         }
 
         __handle.action.initCategory();
-    }, [performance])
-
-    useEffect(() => {
-        if(!location.state) {
-            return;
-        }
-
         __handle.action.initSelectedCategory();
-    }, [location.state])
+    }, [performance])
 
     const __handle = {
         action: {
@@ -88,8 +81,10 @@ const CategoryPerformanceComponent = (props) => {
                 setCategory(categoryName);
             },
             initSelectedCategory: () => {
-                let category = location.state.productCategoryNames;
-                setSelectedCategory(category);
+                let category = location.state?.productCategoryNames;
+                if(category) {
+                    setSelectedCategory(category);
+                }
             },
             isCheckedOne: (category) => {
                 return selectedCategory?.some(name => name === category);

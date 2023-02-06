@@ -21,7 +21,7 @@ export default function DateRangeSelectorComponent(props) {
     const {
         query,
         location,
-        navigateParams
+        navigateParams,
     } = useRouterHook();
 
     const {

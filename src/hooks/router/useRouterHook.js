@@ -9,9 +9,6 @@ export default function useRouterHook (props) {
     const navigateUrl = (data) => {
         let pathname = data.pathname;
         let state = data.state;
-        
-
-        // navigate(pathname, { state });
 
         navigate({
             pathname: pathname,
@@ -31,6 +28,7 @@ export default function useRouterHook (props) {
                 query: { ...query }
             }),
             {
+                state: location.state,
                 replace
             }
         )
@@ -47,25 +45,16 @@ export default function useRouterHook (props) {
         navigate(-1);
     }
 
-    // TODO :: navigateUrl로 사용해보기.
-    // component단에서 query.- 를 설정하고 navigateUrl 호출하기.
-    // const navigateParams = (data) => {
-    //     let params = data.params;
-    //     let replace = data.replace;
-
-    //     navigate(qs.stringifyUrl(
-    //         {
-    //             url: location.pathname,
-    //             query: `?${qs.stringify({
-    //                 ...query,
-    //                 params
-    //             })}`
-    //         }),
-    //         {
-    //             replace
-    //         }
-    //     )
-    // }
+    const updateRouteState = (data) => {
+        navigate({
+            pathname: data.pathname,
+            search: `?${createSearchParams({...query})}`,
+        },
+        {
+            state: data,
+            replace: false
+        })
+    }
 
     return {
         location,
@@ -73,6 +62,7 @@ export default function useRouterHook (props) {
         navigateUrl,
         navigateParams,
         navigateClearParams,
-        navigatePrevPage
+        navigatePrevPage,
+        updateRouteState
     }
 }

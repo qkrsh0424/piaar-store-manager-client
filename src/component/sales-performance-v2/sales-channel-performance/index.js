@@ -12,6 +12,7 @@ import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import useChannelSalesPerformanceHook from './hooks/useChannelSalesPerformanceHook';
 import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
 import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
+import useRouterHook from '../../../hooks/router/useRouterHook';
 
 const Container = styled.div`
     height: 100%;
@@ -45,6 +46,10 @@ const SalesChannelPerformanceComponent = (props) => {
     const [detailSearchValue, setDetailSearchValue] = useState(null);
 
     const {
+        location
+    } = useRouterHook();
+
+    const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
@@ -73,6 +78,11 @@ const SalesChannelPerformanceComponent = (props) => {
 
                 let channelName = [...channel].sort();
                 setSalesChannel(channelName);
+
+                let selectedChannels = location.state?.salesChannels;
+                if(selectedChannels) {
+                    setSelectedChannel(selectedChannels);
+                }
             },
             isCheckedOne: (channel) => {
                 return selectedChannel.some(name => name === channel);

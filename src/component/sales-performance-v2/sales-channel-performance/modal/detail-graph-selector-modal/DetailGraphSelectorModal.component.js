@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useRouterHook from "../../../../../hooks/router/useRouterHook";
 import CommonModalComponentV2 from "../../../../module/modal/CommonModalComponentV2";
 import { BoxFieldWrapper, Container } from "./DetailGraphSelectorModal.styled";
@@ -20,10 +20,11 @@ function BoxFieldView({ onActionSelectProduct }) {
 }
 
 export default function DetailGraphSelectorModalComponent(props) {
-    const [searchValue, setSearchValue] = useState(null);
 
     const {
-        navigateUrl
+        query,
+        navigateUrl,
+        updateRouteState
     } = useRouterHook();
 
     useEffect(() => {
@@ -37,12 +38,18 @@ export default function DetailGraphSelectorModalComponent(props) {
     const __handle = {
         action: {
             initSearchValue: () => {
-                setSearchValue({...props.detailSearchValue});
+                let selectedState = {
+                    ...props.detailSearchValue,
+                    startDate: query.startDate,
+                    endDate: query.endDate
+                };
+
+                updateRouteState(selectedState);
             },
             selectProduct: () => {
                 let data = {
                     pathname: '/sales-performance/sales-channel/product/best',
-                    state: searchValue
+                    state: props.detailSearchValue
                 }
 
                 navigateUrl(data);
@@ -51,7 +58,7 @@ export default function DetailGraphSelectorModalComponent(props) {
     }
 
     return (
-        props.modalOpen && searchValue && 
+        props.modalOpen && props.detailSearchValue && 
         <CommonModalComponentV2
             open={props.modalOpen}
             title={'그래프 선택'}
