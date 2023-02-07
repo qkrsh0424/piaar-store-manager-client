@@ -6,11 +6,11 @@ import { GraphBodyFieldWrapper } from "../PayAmountGraph.styled";
 export default function GraphBodyFieldView (props) {
     return (
         <GraphBodyFieldWrapper>
-            {props.totalPayAmountGraphData && props.payAmountGraphOption &&
+            {props.totalPayAmountGraphData && props.graphOption &&
                 <div className='graph-wrapper'>
                     <Chart
                         data={createGraphData(props.totalPayAmountGraphData)}
-                        options={createGraphOption(props.payAmountGraphOption)}
+                        options={createGraphOption(props.graphOption)}
                     />
                 </div>
             }

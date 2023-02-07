@@ -67,7 +67,6 @@ export default function PayAmountGraphComponent(props) {
                     } else if (props.searchDimension === 'month') {
                         datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                     }
-
                     graphLabels.add(datetime);
                 })
 

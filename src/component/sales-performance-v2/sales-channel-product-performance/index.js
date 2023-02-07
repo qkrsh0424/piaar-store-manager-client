@@ -94,15 +94,20 @@ const SalesChannelProductPerformanceComponent = (props) => {
             onActionCloseBackdrop();
         }
 
-        if(selectedProductAndOptions?.length > 0) {
-            fetchInit();
+        if(!(selectedProductAndOptions && selectedProductAndOptions.length > 0)){
+            __handle.action.resetSalesChannel();
+            onActionResetPerformance();
+            return;
         }
+        
+        fetchInit();
     }, [selectedProductAndOptions])
 
     const __handle = {
         action: {
             resetPerformance: () => {
                 onActionResetPerformance();
+                __handle.action.resetSalesChannel();
                 __handle.action.clearSearchField();
             },
             initChannel: () => {
@@ -112,6 +117,7 @@ const SalesChannelProductPerformanceComponent = (props) => {
                 }))
 
                 let channelName = [...channel].sort();
+                // 이전에 선택된 내역이 있으면 유지
                 let updatedSelectedChannel = channelName.filter(r => selectedChannel?.includes(r));
                 setSalesChannel(channelName);
                 setSelectedChannel(updatedSelectedChannel);
@@ -149,9 +155,11 @@ const SalesChannelProductPerformanceComponent = (props) => {
                 let value = e.target.value;
                 setSearchDimension(value);
             },
-            clearSearchField: () => {
+            resetSalesChannel: () => {
                 setSalesChannel(null);
                 setSelectedChannel([]);
+            },
+            clearSearchField: () => {
                 setSelectedProductAndOptions([]);
             },
             changeSelectedOption: (data) => {

@@ -108,12 +108,6 @@ const CheckBoxFieldWrapper = styled.div`
             background-color: var(--piaar-main-color);
             color: white;
         }
-
-        @media screen and (max-width: 992px) {
-            width: 80px;
-            height: 25px;
-            font-size: 12px;
-        }
     }
 `;
 

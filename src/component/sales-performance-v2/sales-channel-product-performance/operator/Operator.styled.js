@@ -38,6 +38,14 @@ const SearchFieldWrapper = styled.div`
         background: white;
         border: 1px solid #e1e1e1;
         border-radius: 5px;
+        overflow: hidden;
+        position: relative;
+        -webkit-transition: all .1s;
+        transition: all .1s;
+
+        :hover {
+            background-color: var(--defaultHoverColor);
+        }
     }
 
     .selector-box {
@@ -84,12 +92,6 @@ const SearchFieldWrapper = styled.div`
         box-shadow: var(--defaultBoxShadow);
         color: white;
         font-weight: 600;
-
-        @media screen and (max-width: 992px) {
-            width: 80px;
-            height: 25px;
-            font-size: 12px;
-        }
     }
 
     .selector-box .button-box {
@@ -111,12 +113,6 @@ const SearchFieldWrapper = styled.div`
         box-shadow: var(--defaultBoxShadow);
         color: rgb(70, 82, 101);
         font-weight: 500;
-
-        @media screen and (max-width: 992px) {
-            width: 80px;
-            height: 25px;
-            font-size: 12px;
-        }
     }
 
     .selector-box .close-box {
