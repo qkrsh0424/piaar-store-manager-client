@@ -13,11 +13,10 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);
     const [salesWeeklyGraphData, setSalesWeeklyGraphData] = useState(null);
     
-    const [totalGraphOption, setTotalGraphOption] = useState(null);
+    const [graphOption, setGraphOption] = useState(null);
 
     useEffect(() => {
         if(!(props.performance && props.performance.length > 0)) {
-            __handle.action.resetGraphData();
             return;
         }
 
@@ -35,15 +34,12 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
 
     const __handle = {
         action: {
-            resetGraphData: () => {
-                setSalesGraphData(null);
-                setSalesWeeklyGraphData(null);
-                
-                setTotalGraphOption(null);
-            },
             createGraphData: () => {
+                let salesPayAmountData = [];
+                let graphLabels = getWeekName();
+
                 // 요일별 판매 매출액 그래프
-                let payAmountData = getWeekName().map(r => {
+                let payAmountData = graphLabels.map(r => {
                     return {
                         dayName: r,
                         salesPayAmount: 0,
@@ -51,29 +47,25 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     }
                 });
 
-                let graphLabels = [];
-                for(let i = 0; i < props.performance.length; i++) {
-                    let day = getDayName(props.performance[i].datetime);
+                props.performance.forEach(data => {
+                    let day = getDayName(data.datetime);
                     payAmountData = payAmountData.map(r => {
                         if(r.dayName === day) {
                             return {
                                 ...r,
-                                salesPayAmount: r.salesPayAmount + props.performance[i].salesPayAmount,
+                                salesPayAmount: r.salesPayAmount + data.salesPayAmount,
                                 frequency: r.frequency + 1
                             }
                         }else {
                             return r;
                         }
-                    });
-                }
+                    })
+                })
 
-                let salesPayAmountData = [];
-                for(let i = 0; i < payAmountData.length; i++) {
-                    let salesAvg = parseInt((payAmountData[i].salesPayAmount) / payAmountData[i].frequency);
-                    
+                payAmountData.forEach(r => {
+                    let salesAvg = parseInt((r.salesPayAmount) / r.frequency);
                     salesPayAmountData.push(salesAvg);
-                    graphLabels.push(payAmountData[i].dayName);
-                }
+                })
 
                 let barGraphOfSales = {
                     ...new GraphDataset().toJSON(),
@@ -83,6 +75,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     fill: true,
                     borderColor: WEEKLY_AVG_GRAPH_BG_COLOR,
                     backgroundColor: WEEKLY_AVG_GRAPH_BG_COLOR,
+                    borderWidth: 0
                 }
                 
                 // // 매출 그래프 데이터 생성
@@ -93,13 +86,16 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 setSalesGraphData(createdSalesGraph);
             },
             createWeeklyGraphData: () => {
+                let weeklyDatasets = [];
+                let payAmountWeeklyData = [];
+                let graphLabels = getWeekName();
+                let weekValue = {};
+
                 // 주차별 판매 매출액 그래프
                 let week = new Set([]);
                 props.performance.forEach(r => week.add(getWeekNumber(r.datetime)));
 
-                let payAmountWeeklyData = [];
-                let weekValue = {};
-                getWeekName().forEach(r => {
+                graphLabels.forEach(r => {
                     weekValue = {
                         ...weekValue,
                         [r]: 0
@@ -108,17 +104,17 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
 
                 payAmountWeeklyData = [...week].map(r => {
                     return {
-                        key: r,
+                        weekNum: r,
                         value: weekValue
                     }
                 });
-            
+
                 props.performance.forEach(r => {
                     let compareWeek = getWeekNumber(r.datetime);
                     let compareDay = getDayName(r.datetime);
                     
                     payAmountWeeklyData = payAmountWeeklyData.map(r2 => {
-                        if(r2.key === compareWeek) {
+                        if(r2.weekNum === compareWeek) {
                             return {
                                 ...r2,
                                 value: {
@@ -138,24 +134,24 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     graphColor.push(randomColor);
                 }
 
-                let weeklyDatasets = []
                 payAmountWeeklyData.forEach((r, idx) => {
                     let datasets = new GraphDataset().toJSON();
                     datasets = {
                         ...datasets,
                         type: 'bar',
-                        label: r.key + '주차',
+                        label: r.weekNum + '주차',
                         data: r.value,
                         fill: true,
                         borderColor: graphColor[idx] + 'BB',
-                        backgroundColor: graphColor[idx] + 'BB'
+                        backgroundColor: graphColor[idx] + 'BB',
+                        borderWidth: 0
                     }
                     weeklyDatasets.push(datasets);
                 })
 
                 // // 매출 그래프 데이터 생성
                 let createdWeeklySalesGraph = {
-                    labels: getWeekName(),
+                    labels: graphLabels,
                     datasets: weeklyDatasets
                 }
                 setSalesWeeklyGraphData(createdWeeklySalesGraph)
@@ -179,7 +175,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     }
                 }
 
-                setTotalGraphOption(option);
+                setGraphOption(option);
             }
         }
     }
@@ -191,7 +187,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 <GraphBodyFieldView
                     totalGraphData={salesGraphData}
                     totalWeeklyGraphData={salesWeeklyGraphData}
-                    totalGraphOption={totalGraphOption}
+                    graphOption={graphOption}
                 />
             </div>
         </Container>

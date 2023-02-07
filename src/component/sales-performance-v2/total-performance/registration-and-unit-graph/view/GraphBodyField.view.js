@@ -6,11 +6,11 @@ import { GraphBodyFieldWrapper } from "../RegistrationAndUnitGraph.styled";
 export default function GraphBodyFieldView (props) {
     return (
         <GraphBodyFieldWrapper>
-            {props.totalGraphData && props.totalGraphOption &&
+            {props.totalGraphData && props.graphOption &&
                 <div className='graph-wrapper'>
                     <Chart
                         data={createGraphData(props.totalGraphData)}
-                        options={createGraphOption(props.totalGraphOption)}
+                        options={createGraphOption(props.graphOption)}
                     />
                 </div>
             }

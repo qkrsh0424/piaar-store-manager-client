@@ -43,6 +43,13 @@ function DataBoxField({ datetime, performance, totalPayAmount }) {
                                 </div>
                             )
                         })}
+                        {performance.length === 0 && 
+                            <div>
+                                <div style={{ width: '110px' }}>
+                                    판매데이터 없음
+                                </div>
+                            </div>
+                        }
                     </div>
                 </ChannelDataBox>
             </div>

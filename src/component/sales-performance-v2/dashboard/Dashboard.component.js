@@ -50,7 +50,7 @@ export default function DashboardComponent(props) {
     } = useSalesPerformanceItemHook();
 
     useEffect(() => {
-        // 대시보드 - 오늘, -1일, -7일, -8일
+        // 대시보드 - 오늘, 어제, -7일, -8일
         async function getDashboardPerformance() {
             let prev7DaysOfToday = setSubtractedDate(TODAY, 0, 0, -7);
             let prev7DaysOfYesterDay = setSubtractedDate(YESTERDAY, 0, 0, -7);

@@ -88,7 +88,7 @@ const TotalSalesPerformanceComponent = (props) => {
             <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'전체 - 총 매출액 & 판매 건'} />
 
-                {/* 주문데이터 표시 및 날짜검색 설정 */}
+                {/* 주문데이터 표시 및 날짜별 보기 설정 */}
                 <GraphOperatorComponent
                     searchDimension={searchDimension}
                     checkedSwitch={checkedSwitch}

@@ -1,47 +1,24 @@
 import { Container } from "./SummaryTable.styled";
 import { useEffect, useState } from "react";
-import useRouterHook from "../../../../hooks/router/useRouterHook";
 import TableTitleFieldView from "./view/TableTitleField.view";
 import TableFieldView from "./view/TableField.view";
+import _ from "lodash";
 
 export default function SummaryTableComponent(props) {
     const [summaryTableData, setSummaryTableData] = useState(null);
     const [totalSummarySumData, setTotalSummarySumData] = useState(null);
 
-    const {
-        query,
-        navigateUrl
-    } = useRouterHook();
-
     useEffect(() => {
-        if(!(props.performance && props.performance.length > 0)) {
-            setSummaryTableData(null);
-            setTotalSummarySumData(null);
+        if(!props.performance) {
             return;
         }
 
-        __handle.action.createSummaryTableData();
         __handle.action.createTotalSummarySumData();
+        __handle.action.createSummaryTableData();
     }, [props.performance])
 
     const __handle = {
         action: {
-            createSummaryTableData: () => {
-                let data = [...props.performance];
-
-                data = data.map(r => {
-                    return {
-                        ...r,
-                        unsalesRegistration: r.orderRegistration - r.salesRegistration,
-                        unsalesUnit: r.orderUnit - r.salesUnit,
-                        unsalesPayAmount: r.orderPayAmount - r.salesPayAmount
-                    }
-                });
-
-                data = data.sort((a, b) => b.salesPayAmount - a.salesPayAmount);
-
-                setSummaryTableData(data);
-            },
             createTotalSummarySumData: () => {
                 let totalSumData = {
                     datetime: '전체',
@@ -76,6 +53,21 @@ export default function SummaryTableComponent(props) {
                 }
 
                 setTotalSummarySumData(totalSumData);
+            },
+            createSummaryTableData: () => {
+                let tableData = [...props.performance];
+
+                tableData = tableData.map(r => {
+                    return {
+                        ...r,
+                        unsalesRegistration: r.orderRegistration - r.salesRegistration,
+                        unsalesUnit: r.orderUnit - r.salesUnit,
+                        unsalesPayAmount: r.orderPayAmount - r.salesPayAmount
+                    }
+                });
+
+                tableData = _.sortBy(tableData, 'salesPayAmount').reverse();
+                setSummaryTableData(tableData);
             }
         }
     }
