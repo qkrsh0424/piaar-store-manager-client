@@ -12,6 +12,19 @@ const Container = styled.div`
         /* border: 1px solid var(--defaultBorderColor); */
         border: none;
         box-shadow: var(--defaultBoxShadow);
+        width: 100%;
+    }
+
+    .react-datepicker__day-names {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+
+    .react-datepicker__day-names, .react-datepicker__week {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
     }
 
     .react-datepicker__header {
@@ -111,6 +124,7 @@ const CustomDatePickerV2 = (props) => {
                     inline
                     ref={calendar}
                     disabledKeyboardNavigation
+                    wrapperClassName="w-full"
                 >
                 </DatePicker>
             </Container>

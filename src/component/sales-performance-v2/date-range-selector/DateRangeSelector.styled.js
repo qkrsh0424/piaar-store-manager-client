@@ -47,7 +47,6 @@ const DateSelectorFieldWrapper = styled.div`
     .date-selector-box-title {
         font-weight: 700;
         padding: 10px;
-        width: 250px;
         margin: 0 auto;
     }
 `;
