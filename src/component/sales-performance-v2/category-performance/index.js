@@ -183,21 +183,21 @@ const CategoryPerformanceComponent = (props) => {
                     selectedCategory={selectedCategory}
                     dayOfWeekPayAmount={performance}
                 />
-
-                <DateRangeSelectorComponent
-                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
-                />
             </Container>
-
-            <BackdropHookComponent
-                open={backdropOpen}
-            />
 
             <DetailGraphSelectorModalComponent
                 modalOpen={detailGraphSelectorModalOpen}
                 detailSearchValue={detailSearchValue}
 
                 onActionCloseModal={__handle.action.closeDetailGraphSelectorModal}
+            />
+
+            <DateRangeSelectorComponent
+                onSubmitSearchPerformance={__handle.submit.searchPerformance}
+            />
+
+            <BackdropHookComponent
+                open={backdropOpen}
             />
         </>
     )

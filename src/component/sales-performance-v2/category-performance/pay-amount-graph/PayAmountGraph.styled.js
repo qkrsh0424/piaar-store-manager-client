@@ -81,6 +81,7 @@ const GraphBodyFieldWrapper = styled.div`
 
 const GraphSummaryFieldWrapper = styled.div`
     min-width: 280px;
+    width: 20%;
     height: 400px;
     background-color: #fafafa;
     border-radius: 10px;

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import useRouterHook from "../../../../hooks/router/useRouterHook";
 import { getDayName, getWeekName } from "../../../../utils/dateFormatUtils";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
@@ -11,21 +10,15 @@ const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f8
 
 export default function PayAmountDayOfWeekGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);
-    
-    const [totalGraphOption, setTotalGraphOption] = useState(null);
+    const [graphOption, setGraphOption] = useState(null);
 
     useEffect(() => {
-        __handle.action.resetGraphData();
-    }, [props.category])
-
-    useEffect(() => {
-        if (!props.selectedCategory) {
+        if (!(props.selectedCategory && props.selectedCategory.length > 0)) {
             __handle.action.resetGraphData();
             return;
         }
 
-        if(!(props.dayOfWeekPayAmount && props.dayOfWeekPayAmount.length > 0)) {
-            __handle.action.resetGraphData();
+        if(!props.dayOfWeekPayAmount) {
             return;
         }
 
@@ -37,8 +30,6 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
         action: {
             resetGraphData: () => {
                 setSalesGraphData(null);
-                
-                setTotalGraphOption(null);
             },
             createGraphData: () => {
                 let salesPayAmountData = [];
@@ -47,7 +38,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 let category = [...props.selectedCategory];
 
                 let categoryPayAmount = category.map(r => {
-                    let data = getWeekName().map(r2 => {
+                    let data = graphLabels.map(r2 => {
                         return {
                             dayName: r2,
                             salesPayAmount: 0,
@@ -79,10 +70,10 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 categoryPayAmount = categoryPayAmount.map(r => {
                     let categoryPayAmountData = [...r.payAmountData];
 
-                    for(let i = 0; i < props.dayOfWeekPayAmount.length; i++) {
-                        let day = getDayName(props.dayOfWeekPayAmount[i].datetime);
+                    props.dayOfWeekPayAmount.forEach(data => {
+                        let day = getDayName(data.datetime);
 
-                        props.dayOfWeekPayAmount[i].performances.forEach(r2 => {
+                        data.performances.forEach(r2 => {
                             if(r2.productCategoryName === r.category) {
                                 categoryPayAmountData = categoryPayAmountData.map(r3 => {
                                     if(r3.dayName === day) {
@@ -97,7 +88,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                                 });
                             };
                         });
-                    }
+                    })
 
                     return {
                         ...r,
@@ -107,12 +98,11 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
 
                 categoryPayAmount.forEach(r => {
                     let categorySalesPayAmountData = [];
-                    for(let i = 0; i < r.payAmountData.length; i++) {
-                        let salesAvg = parseInt((r.payAmountData[i].salesPayAmount) / r.payAmountData[i].frequency);
-                    
-                        categorySalesPayAmountData.push(salesAvg);
-                    }
 
+                    r.payAmountData.forEach(data => {
+                        let salesAvg = parseInt((data.salesPayAmount) / data.frequency);
+                        categorySalesPayAmountData.push(salesAvg);
+                    })
                     salesPayAmountData.push(categorySalesPayAmountData);
                 })
 
@@ -177,7 +167,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     }
                 }
 
-                setTotalGraphOption(option);
+                setGraphOption(option);
             }
         }
     }
@@ -188,8 +178,8 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 <GraphBoardFieldView />
                 <div className='content-box'>
                     <GraphBodyFieldView
-                        totalGraphData={salesGraphData}
-                        totalGraphOption={totalGraphOption}
+                        salesGraphData={salesGraphData}
+                        graphOption={graphOption}
                     />
                 </div>
             </Container>

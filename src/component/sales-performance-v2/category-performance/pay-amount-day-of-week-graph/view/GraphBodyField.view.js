@@ -7,10 +7,10 @@ export default function GraphBodyFieldView (props) {
     return (
         <GraphBodyFieldWrapper>
             <div className='graph-wrapper'>
-                {props.totalGraphData && props.totalGraphOption &&
+                {props.salesGraphData && props.graphOption &&
                     <Chart
-                        data={createGraphData(props.totalGraphData)}
-                        options={createGraphOption(props.totalGraphOption)}
+                        data={createGraphData(props.salesGraphData)}
+                        options={createGraphOption(props.graphOption)}
                     />
                 }
             </div>

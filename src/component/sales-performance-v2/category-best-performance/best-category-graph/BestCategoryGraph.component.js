@@ -5,7 +5,7 @@ import { Container } from "./BestCategoryGraph.styled";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 
-const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
+const SALES_GRAPH_BG_COLOR = ['#B9B4EB', '#F0B0E8',  '#80A9E1', '#FFAFCC', '#F9F871', '#F1EDFF', '#80A9E1', '#70dbc2', '#D5CABD', '#389091'];
 
 export default function BestCategoryGraphComponent(props) {
     const [payAmountGraphData, setPayAmountGraphData] = useState(null);
@@ -13,13 +13,11 @@ export default function BestCategoryGraphComponent(props) {
     const [graphOption, setGraphOption] = useState(null);
 
     useEffect(() => {
-        if (!(props.category && props.category.length > 0)) {
-            __handle.action.resetGraphData();
+        if (!props.category) {
             return;
         }
 
-        if(!(props.performance && props.performance.length > 0)) {
-            __handle.action.resetGraphData();
+        if(!props.performance) {
             return;
         }
 
@@ -29,11 +27,6 @@ export default function BestCategoryGraphComponent(props) {
 
     const __handle = {
         action: {
-            resetGraphData: () => {
-                setPayAmountGraphData(null);
-                setUnitGraphData(null);
-                setGraphOption(null);
-            },
             createGraphData: () => {
                 let graphLabels = [];
                 let payAmountData = [];
@@ -43,8 +36,12 @@ export default function BestCategoryGraphComponent(props) {
                 let totalUnitSum = 0;
 
                 categoryPerformance = categoryPerformance.map(r => {
-                    let payAmountSum = _.sumBy(r.performances, 'salesPayAmount');
-                    let unitSum = _.sumBy(r.performances, 'salesUnit');
+                    let payAmountSum = 0;
+                    let unitSum = 0;
+                    r.performances.forEach(performance => {
+                        payAmountSum += performance.salesPayAmount;
+                        unitSum += performance.salesUnit;
+                    });
 
                     totalPayAmountSum += payAmountSum;
                     totalUnitSum += unitSum;
@@ -131,7 +128,6 @@ export default function BestCategoryGraphComponent(props) {
             <GraphBoardFieldView
             />
 
-            {/* TODO :: summary data 띄우기 */}
             <div className='content-box'>
                 <GraphBodyFieldView
                     payAmountGraphData={payAmountGraphData}

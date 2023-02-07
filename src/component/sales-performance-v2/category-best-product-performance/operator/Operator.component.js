@@ -17,7 +17,7 @@ const SEARCHABLE_PERIOD = 92;
 export default function OperatorComponent(props) {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [orderByColumn, setOrderByColumn] = useState('payAmount');
+    const [pageOrderByColumn, setPageOrderByColumn] = useState('payAmount');
     const [pageIndex, setPageIndex] = useState(null);
 
     const [salesCategory, setSalesCategory] = useState(null);
@@ -60,14 +60,14 @@ export default function OperatorComponent(props) {
             let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
             let utcHourDifference = getTimeDiffWithUTC();
             let productCategoryNames = location.state?.productCategory ?? null;
-            let orderByColumn = 'payAmount';
+            let pageOrderByColumn = 'payAmount';
 
             let body = {
                 startDate: searchStartDate,
                 endDate: searchEndDate,
                 utcHourDifference,
                 productCategoryNames,
-                orderByColumn
+                pageOrderByColumn
             }
 
             __handle.action.initSearchValue(body)
@@ -102,7 +102,7 @@ export default function OperatorComponent(props) {
             clearRoute: () => {
                 setStartDate(null);
                 setEndDate(null);
-                setOrderByColumn('payAmount');
+                setPageOrderByColumn('payAmount');
                 setSelectedSalesCategory([]);
                 
                 props.onActionResetPerformance();
@@ -125,7 +125,7 @@ export default function OperatorComponent(props) {
             },
             changeOrderByColumn: (e) => {
                 let value = e.target.value;
-                setOrderByColumn(value);
+                setPageOrderByColumn(value);
             },
             changePrevPageIndex: () => {
                 setPageIndex(pageIndex - 1);
@@ -202,7 +202,7 @@ export default function OperatorComponent(props) {
                 let utcHourDifference = getTimeDiffWithUTC();
                 let productCategoryNames = selectedSalesCategory;
                 let page = pageIndex + 1;
-                let searchOrderByColumn = orderByColumn ?? 'payAmount';
+                let searchOrderByColumn = pageOrderByColumn ?? 'payAmount';
 
                 let body = {
                     startDate: searchStartDate,
@@ -210,7 +210,7 @@ export default function OperatorComponent(props) {
                     utcHourDifference,
                     productCategoryNames,
                     page,
-                    orderByColumn: searchOrderByColumn
+                    pageOrderByColumn: searchOrderByColumn
                 }
 
                 props.onActionUpdateDetailSearchValue(body);
@@ -247,7 +247,7 @@ export default function OperatorComponent(props) {
 
                 <SearchFieldView
                     checkedSwitch={props.checkedSwitch}
-                    orderByColumn={orderByColumn}
+                    pageOrderByColumn={pageOrderByColumn}
 
                     onActionChangeOrderByColumn={__handle.action.changeOrderByColumn}
                 />

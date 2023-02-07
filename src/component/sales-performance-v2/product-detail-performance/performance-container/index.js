@@ -92,7 +92,7 @@ export default function PerformanceContainerComponent (props) {
             let salesChannels = location.state?.salesChannels ?? null;
             let productCategoryNames = location.state?.productCategoryNames ?? null;
             let productCodes = [selectedProduct.code];
-            let orderByColumn = 'payAmount';
+            let pageOrderByColumn = 'payAmount';
 
             let body = {
                 startDate: searchStartDate,
@@ -100,7 +100,7 @@ export default function PerformanceContainerComponent (props) {
                 utcHourDifference,
                 salesChannels,
                 productCategoryNames,
-                orderByColumn,
+                pageOrderByColumn,
                 productCodes
             }
             

@@ -1,11 +1,8 @@
 import styled from 'styled-components';
 
 import _ from 'lodash';
-import OperatorComponent from './operator/Operator.component';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { getEndDate, getStartDate, getTimeDiffWithUTC } from '../../../utils/dateFormatUtils';
-import useRouterHook from '../../../hooks/router/useRouterHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
 import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import useCategorySalesPerformanceHook from './hooks/useCategorySalesPerformanceHook';
@@ -43,11 +40,6 @@ const CategoryBestPerformanceComponent = (props) => {
     const [checkedSwitch, setCheckedSwitch] = useState(false);
 
     const {
-        query,
-        location
-    } = useRouterHook();
-
-    const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
@@ -58,31 +50,6 @@ const CategoryBestPerformanceComponent = (props) => {
         reqSearchCategoryPerformance,
         onActionResetPerformance
     } = useCategorySalesPerformanceHook();
-
-    // useEffect(() => {
-    //     async function fetchInit() {
-    //         let startDate = query.startDate ? getStartDate(query.startDate) : null;
-    //         let endDate = query.endDate ? getEndDate(query.endDate) : null;
-    //         let utcHourDifference = getTimeDiffWithUTC();
-
-    //         let body = {
-    //             startDate,
-    //             endDate,
-    //             utcHourDifference
-    //         }
-
-    //         if(!(startDate && endDate)) {
-    //             __handle.action.clearCategory();
-    //             return;
-    //         }
-
-    //         onActionOpenBackdrop();
-    //         await reqSearchCategoryPerformance(body);
-    //         onActionCloseBackdrop();
-    //     }
-
-    //     fetchInit();
-    // }, [location])
 
     useEffect(() => {
         if(!performance) {
@@ -158,11 +125,6 @@ const CategoryBestPerformanceComponent = (props) => {
         <>
             <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'카테고리 - BEST 카테고리 상품'} />
-
-                {/* <OperatorComponent
-                    onSubmitSearchPerformance={__handle.submit.searchPerformance}
-                    onActionResetPerformance={__handle.action.resetPerformance}
-                /> */}
 
                 <GraphOperatorComponent
                     checkedSwitch={checkedSwitch}

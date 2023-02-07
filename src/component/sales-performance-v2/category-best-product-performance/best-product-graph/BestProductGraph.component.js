@@ -9,7 +9,6 @@ import { getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 
 const DEFAULT_GRAPH_BG_3COLOR = ['#ADA8C3', '#C0C5DC', '#596dd3'];
 
-const BEST_UNIT = 15;
 // 판매스토어별 총 매출액
 export default function BestProductGraphComponent(props) {
     const [salesPayAmountGraphData, setSalesPayAmountGraphData] = useState(null);
@@ -24,8 +23,7 @@ export default function BestProductGraphComponent(props) {
     const [unitGraphLabels, setUnitGraphLabels] = useState(null);
 
     useEffect(() => {
-        if (!(props.performance && props.performance.length > 0)) {
-            __handle.action.resetGraphData();
+        if (!props.performance) {
             return;
         }
 
@@ -43,38 +41,19 @@ export default function BestProductGraphComponent(props) {
 
     const __handle = {
         action: {
-            resetGraphData: () => {
-                setSalesPayAmountGraphData(null);
-                setTotalPayAmountGraphData(null);
-                setSalesUnitGraphData(null);
-                setTotalUnitGraphData(null);
-
-                setPriceGraphOption(null);
-                setUnitGraphOption(null);
-            },
             createPayAmountGraphData: () => {
-                let bestSalesPayAmount = _.sortBy(props.performance, 'salesPayAmount').reverse().slice(0, BEST_UNIT);
+                let salesPayAmount = [];
+                let orderPayAmount = [];
                 let graphLabels = [];
                 let productCodeLabels = [];
-                bestSalesPayAmount.forEach(r => {
-                    graphLabels.push(r.productDefaultName);
+
+                props.performance.forEach(r => {
                     productCodeLabels.push(r.productCode);
+                    graphLabels.push(r.productDefaultName);
+                    salesPayAmount.push(r.salesPayAmount);
+                    orderPayAmount.push(r.orderPayAmount);
                 });
                 setPayAmountGraphLabels(productCodeLabels);
-    
-                let salesPayAmount = bestSalesPayAmount.map(r => r.salesPayAmount);
-                let orderPayAmount = bestSalesPayAmount.map(r => r.orderPayAmount);
-
-                let salesPayAmountDatasets = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'bar',
-                    label: '판매 매출액',
-                    data: salesPayAmount,
-                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[0],
-                    borderColor: DEFAULT_GRAPH_BG_3COLOR[0],
-                    borderWidth: 0,
-                    order: 0
-                }
 
                 let orderPayAmountDatasets = {
                     ...new GraphDataset().toJSON(),
@@ -86,6 +65,16 @@ export default function BestProductGraphComponent(props) {
                     borderColor: DEFAULT_GRAPH_BG_3COLOR[0] + '88',
                     order: -1,
                     pointRadius: 2
+                }
+                let salesPayAmountDatasets = {
+                    ...new GraphDataset().toJSON(),
+                    type: 'bar',
+                    label: '판매 매출액',
+                    data: salesPayAmount,
+                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[0],
+                    borderColor: DEFAULT_GRAPH_BG_3COLOR[0],
+                    borderWidth: 0,
+                    order: 0
                 }
 
                 let createdSalesGraph = {
@@ -102,17 +91,18 @@ export default function BestProductGraphComponent(props) {
                 setTotalPayAmountGraphData(createdTotalGraph);
             },
             createUnitDate: () => {
-                let bestSalesUnit = _.sortBy(props.performance, 'salesUnit').reverse().slice(0, BEST_UNIT);
+                let salesUnit = [];
+                let orderUnit = [];
                 let graphLabels = [];
                 let productCodeLabels = [];
-                bestSalesUnit.forEach(r => {
-                    graphLabels.push(r.productDefaultName);
+
+                props.performance.forEach(r => {
                     productCodeLabels.push(r.productCode);
+                    graphLabels.push(r.productDefaultName);
+                    salesUnit.push(r.salesUnit);
+                    orderUnit.push(r.orderUnit);
                 });
                 setUnitGraphLabels(productCodeLabels);
-
-                let salesUnit = bestSalesUnit.map(r => r.salesUnit);
-                let orderUnit = bestSalesUnit.map(r => r.orderUnit);
 
                 let salesUnitDatasets = {
                     ...new GraphDataset().toJSON(),
@@ -124,7 +114,6 @@ export default function BestProductGraphComponent(props) {
                     borderWidth: 0,
                     order: 0
                 }
-
                 let orderUnitDatasets = {
                     ...new GraphDataset().toJSON(),
                     type: 'line',

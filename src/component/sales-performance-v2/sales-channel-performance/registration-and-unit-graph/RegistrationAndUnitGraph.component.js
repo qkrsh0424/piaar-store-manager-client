@@ -58,6 +58,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let salesAvgDatasets =[];
                 let graphLabels = new Set([]);
                 let channel = [...props.selectedChannel];
+                
                 let minimumDate = props.registrationAndUnit[0].datetime;
                 let maximumDate = props.registrationAndUnit.slice(-1)[0].datetime;
 

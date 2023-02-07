@@ -2,11 +2,11 @@ import React from "react";
 import { toPriceUnitFormat } from "../../../../../utils/numberFormatUtils";
 import { TableFieldWrapper } from "../OptionItemTable.styled";
 
-const TableHead = ({ orderByColumn }) => {
+const TableHead = ({ pageOrderByColumn }) => {
     return (
         <thead style={{ borderBottom: 'none' }}>
             <tr>
-                <th className='fixed-header' scope='col' width={70}>{orderByColumn === 'payAmount' ? '매출' : '수량'}</th>
+                <th className='fixed-header' scope='col' width={70}>{pageOrderByColumn === 'payAmount' ? '매출' : '수량'}</th>
                 <th className='fixed-header' scope='col' width={150}>상품명</th>
                 <th className='fixed-header' scope='col' width={200}>옵션명</th>
                 <th className='fixed-header' scope='col' width={150}>판매매출</th>
@@ -24,7 +24,7 @@ export default function TableFieldView(props) {
             <div className='table-wrapper'>
                 <table width='100%'>
                     <TableHead
-                        orderByColumn={props.detailSearchValue?.orderByColumn}
+                        pageOrderByColumn={props.detailSearchValue?.pageOrderByColumn}
                     />
                     <tbody style={{ borderTop: 'none' }}>
                         {props.tableData?.map((r, idx) => {

@@ -7,7 +7,7 @@ export default function SearchFieldView(props) {
                 <div>
                     <button
                         type='button'
-                        className={`button-el ${props.orderByColumn === 'payAmount' ? 'checked' : ''}`}
+                        className={`button-el ${props.pageOrderByColumn === 'payAmount' ? 'checked' : ''}`}
                         onClick={(e) => props.onActionChangeOrderByColumn(e)}
                         value='payAmount'
                     >
@@ -17,7 +17,7 @@ export default function SearchFieldView(props) {
                 <div>
                     <button
                         type='button'
-                        className={`button-el ${props.orderByColumn === 'unit' ? 'checked' : ''}`}
+                        className={`button-el ${props.pageOrderByColumn === 'unit' ? 'checked' : ''}`}
                         onClick={(e) => props.onActionChangeOrderByColumn(e)}
                         value='unit'
                     >

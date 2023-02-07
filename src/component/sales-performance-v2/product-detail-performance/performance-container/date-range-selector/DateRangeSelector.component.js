@@ -112,7 +112,7 @@ export default function DateRangeSelectorComponent(props) {
                 let salesChannels = location.state?.salesChannels ?? null;
                 let productCategoryNames = location.state?.productCategoryNames ?? null;
                 let productCodes = [props.selectedProduct.code];
-                let orderByColumn = 'payAmount';
+                let pageOrderByColumn = 'payAmount';
 
                 let body = {
                     startDate: searchStartDate,
@@ -120,7 +120,7 @@ export default function DateRangeSelectorComponent(props) {
                     utcHourDifference,
                     salesChannels,
                     productCategoryNames,
-                    orderByColumn,
+                    pageOrderByColumn,
                     productCodes
                 }
 
