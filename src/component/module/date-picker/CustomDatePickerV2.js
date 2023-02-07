@@ -2,14 +2,15 @@ import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/esm/locale";
-import { forwardRef, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 const Container = styled.div`
     font-weight: 400;
 
     .react-datepicker {
         /* height: 200px; */
-        border: 1px solid var(--defaultBorderColor);
+        /* border: 1px solid var(--defaultBorderColor); */
+        border: none;
         box-shadow: var(--defaultBoxShadow);
     }
 
@@ -36,6 +37,10 @@ const Container = styled.div`
 
     .react-datepicker__day--keyboard-selected {
         background-color: var(--piaar-main-color);
+    }
+
+    .react-datepicker__month-container {
+        width: 100%;
     }
 `;
 

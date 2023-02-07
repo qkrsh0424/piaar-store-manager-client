@@ -270,10 +270,12 @@ export default function PayAmountGraphComponent(props) {
             openWholePeroidDetailGraphSelectorModal: () => {
                 let startDate = getStartDate(props.payAmount[0].datetime);
                 let endDate = getEndDate(props.payAmount[props.payAmount.length - 1].datetime);
+                let productCategoryNames = [...props.selectedCategory];
 
                 let detailSearchValue = {
                     startDate,
-                    endDate
+                    endDate,
+                    productCategoryNames
                 }
 
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);

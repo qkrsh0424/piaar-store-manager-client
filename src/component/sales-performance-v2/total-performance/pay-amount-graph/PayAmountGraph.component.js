@@ -18,7 +18,6 @@ export default function PayAmountGraphComponent(props) {
     const [totalSummaryData, setTotalSummaryData] = useState(null);
     
     const [graphOption, setGraphOption] = useState(null);
-
     const [graphLabels, setGraphLabels] = useState(null);
 
     useEffect(() => {

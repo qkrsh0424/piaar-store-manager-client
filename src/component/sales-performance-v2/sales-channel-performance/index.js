@@ -36,11 +36,11 @@ function PageTitleFieldView({ title }) {
 }
 
 const SalesChannelPerformanceComponent = (props) => {
-    const [salesChannel, setSalesChannel] = useState(null);
-    const [selectedChannel, setSelectedChannel] = useState([]);
-
     const [searchDimension, setSearchDimension] = useState('date');
     const [checkedSwitch, setCheckedSwitch] = useState(false);
+
+    const [salesChannel, setSalesChannel] = useState(null);
+    const [selectedChannel, setSelectedChannel] = useState([]);
 
     const [detailGraphSelectorModalOpen, setDetailGraphSelectorModalOpen] = useState(false);
     const [detailSearchValue, setDetailSearchValue] = useState(null);
@@ -79,6 +79,7 @@ const SalesChannelPerformanceComponent = (props) => {
                 let channelName = [...channel].sort();
                 setSalesChannel(channelName);
 
+                // 이전에 선택된 내역이 존재한다면
                 let selectedChannels = location.state?.salesChannels;
                 if(selectedChannels) {
                     setSelectedChannel(selectedChannels);

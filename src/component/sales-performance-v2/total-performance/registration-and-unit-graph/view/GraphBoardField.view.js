@@ -10,7 +10,7 @@ export default function GraphBoardFieldView(props) {
                     <span>조회된 기간의 총 판매건과 판매수량이 표시됩니다.</span>
                 </div>
             </div>
-            <div>
+            <div className='flex-item search-btn-box'>
                 <button
                     className='button-el'
                     onClick={() => props.onActionOpenDetailGraphSelectorModal()}

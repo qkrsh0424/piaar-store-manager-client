@@ -17,6 +17,12 @@ const TableBoardFieldWrapper = styled.div`
     border-bottom: 1px solid var(--defaultBorderColor);
     padding: 20px;
 
+    @media screen and (max-width: 992px) {
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
     .table-title {
         font-size : 1.2rem;
         font-weight: 700;
@@ -32,6 +38,11 @@ const TableBoardFieldWrapper = styled.div`
         align-items: flex-end;
     }
 
+    .convert-btn-box {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
     .button-el {
         padding: 5px 10px;
         background-color: var(--defaultButtonColor);

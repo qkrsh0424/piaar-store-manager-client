@@ -27,13 +27,16 @@ const Container = styled.div`
 const DateSelectorFieldWrapper = styled.div`
     padding: 10px 20px;
     display: flex;
-    /* align-items: center; */
     gap: 5px;
-    height: 350px;
+    min-height: 350px;
     overflow: hidden;
+
+    @media screen and (max-width: 992px) {
+        flex-direction: column;
+    }
     
     .date-selector-box {
-        width: 350px;
+        width: 50%;
         position: static;
 
         @media screen and (max-width: 992px) {
@@ -44,18 +47,27 @@ const DateSelectorFieldWrapper = styled.div`
     .date-selector-box-title {
         font-weight: 700;
         padding: 10px;
+        width: 250px;
+        margin: 0 auto;
     }
 `;
 
 const DateButtonFieldWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 10px 20px;
+
+    @media screen and (max-width: 992px) {
+        flex-direction: column;
+    }
 
     .button-box {
         width: 100px;
         padding: 4px 2px;
 
         @media screen and (max-width: 992px) {
-            width: 80px;
+            width: 100%;
         }
     }
     

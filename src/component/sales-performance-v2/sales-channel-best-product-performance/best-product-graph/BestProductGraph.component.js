@@ -23,8 +23,7 @@ export default function BestProductGraphComponent(props) {
     const [unitGraphLabels, setUnitGraphLabels] = useState(null);
 
     useEffect(() => {
-        if (!(props.performance && props.performance.length > 0)) {
-            __handle.action.resetGraphData();
+        if (!props.performance) {
             return;
         }
 
@@ -42,38 +41,19 @@ export default function BestProductGraphComponent(props) {
 
     const __handle = {
         action: {
-            resetGraphData: () => {
-                setSalesPayAmountGraphData(null);
-                setTotalPayAmountGraphData(null);
-                setSalesUnitGraphData(null);
-                setTotalUnitGraphData(null);
-
-                setPriceGraphOption(null);
-                setUnitGraphOption(null);
-            },
             createPayAmountGraphData: () => {
+                let salesPayAmount = [];
+                let orderPayAmount = [];
                 let graphLabels = [];
                 let productCodeLabels = [];
                 
                 props.performance.forEach(r => {
-                    graphLabels.push(r.productDefaultName);
                     productCodeLabels.push(r.productCode);
+                    graphLabels.push(r.productDefaultName);
+                    salesPayAmount.push(r.salesPayAmount);
+                    orderPayAmount.push(r.orderPayAmount);
                 });
                 setPayAmountGraphLabels(productCodeLabels);
-    
-                let salesPayAmount = props.performance.map(r => r.salesPayAmount);
-                let orderPayAmount = props.performance.map(r => r.orderPayAmount);
-
-                let salesPayAmountDatasets = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'bar',
-                    label: '판매 매출액',
-                    data: salesPayAmount,
-                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[0],
-                    borderColor: DEFAULT_GRAPH_BG_3COLOR[0],
-                    borderWidth: 0,
-                    order: 0
-                }
 
                 let orderPayAmountDatasets = {
                     ...new GraphDataset().toJSON(),
@@ -86,42 +66,41 @@ export default function BestProductGraphComponent(props) {
                     order: -1,
                     pointRadius: 2
                 }
+                let salesPayAmountDatasets = {
+                    ...new GraphDataset().toJSON(),
+                    type: 'bar',
+                    label: '판매 매출액',
+                    data: salesPayAmount,
+                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[0],
+                    borderColor: DEFAULT_GRAPH_BG_3COLOR[0],
+                    borderWidth: 0,
+                    order: 0
+                }
 
                 let createdSalesGraph = {
                     labels: [...graphLabels],
                     datasets: [salesPayAmountDatasets]
                 }
-
                 let createdTotalGraph = {
                     labels: [...graphLabels],
                     datasets: [salesPayAmountDatasets, orderPayAmountDatasets]
                 }
-
                 setSalesPayAmountGraphData(createdSalesGraph);
                 setTotalPayAmountGraphData(createdTotalGraph);
             },
             createUnitDate: () => {
+                let salesUnit = [];
+                let orderUnit = [];
                 let graphLabels = [];
                 let productCodeLabels = [];
+                
                 props.performance.forEach(r => {
-                    graphLabels.push(r.productDefaultName);
                     productCodeLabels.push(r.productCode);
+                    graphLabels.push(r.productDefaultName);
+                    salesUnit.push(r.salesUnit);
+                    orderUnit.push(r.orderUnit);
                 });
                 setUnitGraphLabels(productCodeLabels);
-
-                let salesUnit = props.performance.map(r => r.salesUnit);
-                let orderUnit = props.performance.map(r => r.orderUnit);
-
-                let salesUnitDatasets = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'bar',
-                    label: '판매 수량',
-                    data: salesUnit,
-                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[1],
-                    borderColor: DEFAULT_GRAPH_BG_3COLOR[1],
-                    borderWidth: 0,
-                    order: 0
-                }
 
                 let orderUnitDatasets = {
                     ...new GraphDataset().toJSON(),
@@ -134,17 +113,25 @@ export default function BestProductGraphComponent(props) {
                     order: -1,
                     pointRadius: 2
                 }
+                let salesUnitDatasets = {
+                    ...new GraphDataset().toJSON(),
+                    type: 'bar',
+                    label: '판매 수량',
+                    data: salesUnit,
+                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[1],
+                    borderColor: DEFAULT_GRAPH_BG_3COLOR[1],
+                    borderWidth: 0,
+                    order: 0
+                }
 
                 let createdSalesGraph = {
                     labels: [...graphLabels],
                     datasets: [salesUnitDatasets]
                 }
-
                 let createdTotalGraph = {
                     labels: [...graphLabels],
                     datasets: [salesUnitDatasets, orderUnitDatasets]
                 }
-
                 setSalesUnitGraphData(createdSalesGraph);
                 setTotalUnitGraphData(createdTotalGraph);
             },
@@ -166,7 +153,7 @@ export default function BestProductGraphComponent(props) {
                             }
                         },
                         y: {
-                            // 글자 수 7글자로 제한
+                            // label을 7글자로 제한
                             afterTickToLabelConversion: function (scaleInstance) {
                                 let ticks = scaleInstance.ticks;
 
@@ -205,7 +192,7 @@ export default function BestProductGraphComponent(props) {
                     indexAxis: 'y',
                     scales: {
                         y: {
-                            // 글자 수 7글자로 제한
+                            // label을 7글자로 제한
                             afterTickToLabelConversion: function (scaleInstance) {
                                 let ticks = scaleInstance.ticks;
 
@@ -252,7 +239,6 @@ export default function BestProductGraphComponent(props) {
                     endDate,
                     productCodes
                 }
-
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
             },
             setUnitGraphClickOption: (e, item) => {
@@ -270,7 +256,6 @@ export default function BestProductGraphComponent(props) {
                     endDate,
                     productCodes
                 }
-
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
             }
         }

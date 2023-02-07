@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import useRouterHook from "../../../../hooks/router/useRouterHook";
-import { getDayName, getEndDate, getStartDate, getWeekName } from "../../../../utils/dateFormatUtils";
+import { getDayName, getWeekName } from "../../../../utils/dateFormatUtils";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import { Container } from "./PayAmountDayOfWeekGraph.styled";
@@ -11,24 +10,14 @@ const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f8
 
 export default function PayAmountDayOfWeekGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);
-    const [totalGraphOption, setTotalGraphOption] = useState(null);
-
-    const {
-        navigateUrl
-    } = useRouterHook();
-
-    useEffect(() => {
-        __handle.action.resetGraphData();
-    }, [props.salesChannel])
+    const [graphOption, setGraphOption] = useState(null);
 
     useEffect(() => {
         if (!props.selectedChannel) {
-            __handle.action.resetGraphData();
             return;
         }
 
-        if(!(props.dayOfWeekPayAmount && props.dayOfWeekPayAmount.length > 0)) {
-            __handle.action.resetGraphData();
+        if(!props.dayOfWeekPayAmount) {
             return;
         }
 
@@ -45,10 +34,6 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
 
     const __handle = {
         action: {
-            resetGraphData: () => {
-                setSalesGraphData(null);
-                setTotalGraphOption(null);
-            },
             createGraphData: () => {
                 let salesPayAmountData = [];
                 let salesDatasets = [];
@@ -56,7 +41,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 let channel = [...props.selectedChannel];
 
                 let channelPayAmount = channel.map(r => {
-                    let data = getWeekName().map(r2 => {
+                    let data = graphLabels.map(r2 => {
                         return {
                             dayName: r2,
                             salesPayAmount: 0,
@@ -79,19 +64,15 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                  *          {dayName: '월', salesPayAmount: -. freqiemcy: -},
                  *          ...
                  *      ]
-                 *  },
-                 *  {
-                 *      ...
-                 *  }
-                 * ]
+                 *  }, {...}, {...}]
                  */
                 channelPayAmount = channelPayAmount.map(r => {
                     let channelPayAmountData = [...r.payAmountData];
 
-                    for(let i = 0; i < props.dayOfWeekPayAmount.length; i++) {
-                        let day = getDayName(props.dayOfWeekPayAmount[i].datetime);
+                    props.dayOfWeekPayAmount.forEach(data => {
+                        let day = getDayName(data.datetime);
 
-                        props.dayOfWeekPayAmount[i].performances.forEach(r2 => {
+                        data.performances.forEach(r2 => {
                             if(r2.salesChannel === r.channel) {
                                 channelPayAmountData = channelPayAmountData.map(r3 => {
                                     if(r3.dayName === day) {
@@ -106,7 +87,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                                 });
                             };
                         });
-                    }
+                    })
 
                     return {
                         ...r,
@@ -116,12 +97,10 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
 
                 channelPayAmount.forEach(r => {
                     let channelSalesPayAmountData = [];
-                    for(let i = 0; i < r.payAmountData.length; i++) {
-                        let salesAvg = parseInt((r.payAmountData[i].salesPayAmount) / r.payAmountData[i].frequency);
-                    
+                    r.payAmountData.forEach(r2 => {
+                        let salesAvg = parseInt((r2.salesPayAmount) / r2.frequency);
                         channelSalesPayAmountData.push(salesAvg);
-                    }
-
+                    })
                     salesPayAmountData.push(channelSalesPayAmountData);
                 })
 
@@ -183,39 +162,10 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                                 }
                             }
                         }
-                    },
-                    onClick: function (e, item) {
-                        __handle.action.setGraphClickOption(e, item);
-                    },
-                    onHover: (e, item) => {
-                        const target = e.native ? e.native.target : e.target;
-                        target.style.cursor = item[0] ? 'pointer' : 'default';
                     }
                 }
 
-                setTotalGraphOption(option);
-            },
-            setGraphClickOption: (e, item) => {
-                if(item.length === 0) return;
-
-                var itemIdx = item[0].index;
-                var dayIndex = itemIdx + 1;
-
-                let startDate = getStartDate(props.dayOfWeekPayAmount[0].datetime);
-                let endDate = getEndDate(props.dayOfWeekPayAmount[props.dayOfWeekPayAmount.length - 1].datetime);
-                let salesChannels = [...props.selectedChannel];
-
-                let data = {
-                    pathname: '/sales-performance/search',
-                    state: {
-                        startDate,
-                        endDate,
-                        dayIndex,
-                        salesChannels
-                    }
-                }
-
-                // navigateUrl(data);
+                setGraphOption(option);
             }
         }
     }
@@ -227,7 +177,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 <div className='content-box'>
                     <GraphBodyFieldView
                         totalGraphData={salesGraphData}
-                        totalGraphOption={totalGraphOption}
+                        graphOption={graphOption}
                     />
                 </div>
             </Container>

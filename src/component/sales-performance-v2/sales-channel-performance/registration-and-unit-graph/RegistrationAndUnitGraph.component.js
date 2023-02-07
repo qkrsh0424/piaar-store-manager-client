@@ -5,6 +5,7 @@ import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
 import { dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getMonthAndSearchDateRange, getStartDate, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
 import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
+import _ from "lodash";
 
 const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
 
@@ -19,16 +20,11 @@ export default function RegistrationAndUnitGraphComponent(props) {
     const [registrationSummaryData, setRegistrationSummaryData] = useState(null);
     const [unitSummaryData, setUnitSummaryData] = useState(null);
     
-    const [totalGraphOption, setTotalGraphOption] = useState(null);
+    const [graphOption, setGraphOption] = useState(null);
     const [graphLabels, setGraphLabels] = useState(null);
 
     useEffect(() => {
-        __handle.action.resetGraphData();
-    }, [props.salesChannel])
-
-    useEffect(() => {
         if(!props.selectedChannel) {
-            __handle.action.resetGraphData();
             return;
         }
 
@@ -36,8 +32,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
             return;
         }
 
-        if(!(props.registrationAndUnit && props.registrationAndUnit.length > 0)) {
-            __handle.action.resetGraphData();
+        if(!props.registrationAndUnit) {
             return;
         }
 
@@ -55,15 +50,6 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
     const __handle = {
         action: {
-            resetGraphData: () => {
-                setTotalRegistrationGraphData(null);
-                setTotalUnitGraphData(null);
-                setSalesRegistrationGraphData(null);
-                setSalesUnitGraphData(null);
-                setRegistrationSummaryData(null);
-                setUnitSummaryData(null);
-                setTotalGraphOption(null);
-            },
             createRegistrationGraphData: () => {
                 let salesRegistrationData = [];
                 let orderRegistrationData = [];
@@ -73,25 +59,25 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let graphLabels = new Set([]);
                 let channel = [...props.selectedChannel];
                 let minimumDate = props.registrationAndUnit[0].datetime;
-                let maximumDate = props.registrationAndUnit[props.registrationAndUnit.length - 1].datetime;
+                let maximumDate = props.registrationAndUnit.slice(-1)[0].datetime;
 
-                for(let i = 0; i < props.registrationAndUnit.length; i++) {
-                    let datetime = dateToYYYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
+                props.registrationAndUnit.forEach(data => {
+                    let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = getWeekNumberAndSearchDateRange(props.registrationAndUnit[i].datetime, minimumDate, maximumDate);
+                        datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                     }else if(props.searchDimension === 'month') {
-                        datetime = getMonthAndSearchDateRange(props.registrationAndUnit[i].datetime, minimumDate, maximumDate);
+                        datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                     }
+
                     graphLabels.add(datetime);
-                }
+                })
 
                 channel.forEach(r => {
                     let salesRegistration = [];
                     let orderRegistration = [];
                     let dateValue = new Set([]);
 
-                    for(let i = 0; i < props.registrationAndUnit.length; i++) {
-                        let data = props.registrationAndUnit[i];
+                    props.registrationAndUnit.forEach(data => {
                         let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
                             datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
@@ -110,7 +96,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                             salesRegistration.push(salesValue);
                             orderRegistration.push(orderValue);
                         }
-                    }
+                    })
 
                     salesRegistrationData.push(salesRegistration);
                     orderRegistrationData.push(orderRegistration);
@@ -124,6 +110,17 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
                 // 판매 그래프 데이터 세팅
                 if(channel.size === 0) {
+                    let lineGraphOfOrder = {
+                        ...new GraphDataset().toJSON(),
+                        label: '주문 건',
+                        data: [],
+                        type: 'line',
+                        fill: false,
+                        borderColor: graphColor[0],
+                        backgroundColor: graphColor[0],
+                        order: -1,
+                        pointRadius: 2
+                    }
                     let barGraphOfSales = {
                         ...new GraphDataset().toJSON(),
                         type: 'bar',
@@ -134,9 +131,22 @@ export default function RegistrationAndUnitGraphComponent(props) {
                         borderWidth: 0,
                         order: 0
                     }
+
+                    orderDatasets.push(lineGraphOfOrder);
                     salesDatasets.push(barGraphOfSales);
                 } else {
                     channel.forEach((r, idx) => {
+                        let lineGraphOfOrder = {
+                            ...new GraphDataset().toJSON(),
+                            type: 'line',
+                            label: '(주문) ' + r,
+                            fill: false,
+                            data: orderRegistrationData[idx],
+                            borderColor: graphColor[idx] + '88',
+                            backgroundColor: graphColor[idx] + '88',
+                            order: -1,
+                            pointRadius: 2
+                        }
                         let barGraphOfSales = {
                             ...new GraphDataset().toJSON(),
                             type: 'bar',
@@ -148,6 +158,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                             order: 0
                         }
                         salesDatasets.push(barGraphOfSales);
+                        orderDatasets.push(lineGraphOfOrder);
 
                         // 판매매출액 7일간 평균 데이터 생성
                         // 조회된 기간의 시작날짜부터 7일간 null로 채운다
@@ -174,37 +185,6 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     })
                 }
 
-                // 주문 그래프 데이터 세팅
-                if(channel.size === 0) {
-                    let lineGraphOfOrder = {
-                        ...new GraphDataset().toJSON(),
-                        label: '주문 건',
-                        data: [],
-                        type: 'line',
-                        fill: false,
-                        borderColor: graphColor[0],
-                        backgroundColor: graphColor[0],
-                        order: -1,
-                        pointRadius: 2
-                    }
-                    orderDatasets.push(lineGraphOfOrder);
-                } else {
-                    channel.forEach((r, idx) => {
-                        let lineGraphOfOrder = {
-                            ...new GraphDataset().toJSON(),
-                            type: 'line',
-                            label: '(주문) ' + r,
-                            fill: false,
-                            data: orderRegistrationData[idx],
-                            borderColor: graphColor[idx] + '88',
-                            backgroundColor: graphColor[idx] + '88',
-                            order: -1,
-                            pointRadius: 2
-                        }
-                        orderDatasets.push(lineGraphOfOrder);
-                    })
-                }
-
                 // 매출 그래프 데이터 생성
                 let createSalesGraph = {
                     labels: [...graphLabels],
@@ -218,13 +198,13 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 setTotalRegistrationGraphData(createdTotalGraph);
                 setGraphLabels([...graphLabels]);
                 
-                // 매출 그래프 요약 데이터 생성
+                // 요약 데이터 생성
                 let salesData = setAnalysisResultText(salesDatasets)
                 let totalData = setAnalysisResultText([...salesDatasets, ...orderDatasets]);
 
                 // 매출액 내림차순으로 정렬
-                salesData.sort((a, b) => b.value - a.value);
-                totalData.sort((a, b) => b.value - a.value);
+                salesData = _.sortBy(salesData, 'value').reverse();
+                totalData = _.sortBy(totalData, 'value').reverse();
 
                 setRegistrationSummaryData({
                     sales: salesData,
@@ -240,25 +220,24 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let graphLabels = new Set([]);
                 let channel = [...props.selectedChannel];
                 let minimumDate = props.registrationAndUnit[0].datetime;
-                let maximumDate = props.registrationAndUnit[props.registrationAndUnit.length - 1].datetime;
+                let maximumDate = props.registrationAndUnit.slice(-1)[0].datetime;
 
-                for(let i = 0; i < props.registrationAndUnit.length; i++) {
-                    let datetime = dateToYYYYMMDDAndDayName(props.registrationAndUnit[i].datetime);
+                props.registrationAndUnit.forEach(data => {
+                    let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = getWeekNumberAndSearchDateRange(props.registrationAndUnit[i].datetime, minimumDate, maximumDate);
+                        datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                     }else if(props.searchDimension === 'month') {
-                        datetime = getMonthAndSearchDateRange(props.registrationAndUnit[i].datetime, minimumDate, maximumDate);
+                        datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                     }
                     graphLabels.add(datetime);
-                }
+                })
 
                 channel.forEach(r => {
                     let salesUnit = [];
                     let orderUnit = [];
                     let dateValue = new Set([]);
 
-                    for(let i = 0; i < props.registrationAndUnit.length; i++) {
-                        let data = props.registrationAndUnit[i];
+                    props.registrationAndUnit.forEach(data => {
                         let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
                             datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
@@ -277,7 +256,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                             salesUnit.push(salesValue);
                             orderUnit.push(orderValue);
                         }
-                    }
+                    })
 
                     salesUnitData.push(salesUnit);
                     orderUnitData.push(orderUnit);
@@ -291,6 +270,17 @@ export default function RegistrationAndUnitGraphComponent(props) {
 
                 // 판매 그래프 데이터 세팅
                 if(channel.size === 0) {
+                    let lineGraphOfOrder = {
+                        ...new GraphDataset().toJSON(),
+                        label: '주문 수량',
+                        data: [],
+                        type: 'line',
+                        fill: false,
+                        borderColor: graphColor[0],
+                        backgroundColor: graphColor[0],
+                        order: -1,
+                        pointRadius: 2
+                    }
                     let barGraphOfSales = {
                         ...new GraphDataset().toJSON(),
                         type: 'bar',
@@ -301,9 +291,22 @@ export default function RegistrationAndUnitGraphComponent(props) {
                         borderWidth: 0,
                         order: 0
                     }
+
+                    orderDatasets.push(lineGraphOfOrder);
                     salesDatasets.push(barGraphOfSales);
                 } else {
                     channel.forEach((r, idx) => {
+                        let lineGraphOfOrder = {
+                            ...new GraphDataset().toJSON(),
+                            type: 'line',
+                            label: '(주문) ' + r,
+                            fill: false,
+                            data: orderUnitData[idx],
+                            borderColor: graphColor[idx] + '88',
+                            backgroundColor: graphColor[idx] + '88',
+                            order: -1,
+                            pointRadius: 2
+                        }
                         let barGraphOfSales = {
                             ...new GraphDataset().toJSON(),
                             type: 'bar',
@@ -314,6 +317,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                             borderWidth: 0,
                             order: 0
                         }
+                        orderDatasets.push(lineGraphOfOrder);
                         salesDatasets.push(barGraphOfSales);
 
                         // 판매매출액 7일간 평균 데이터 생성
@@ -341,37 +345,6 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     })
                 }
 
-                // 주문 그래프 데이터 세팅
-                if(channel.size === 0) {
-                    let lineGraphOfOrder = {
-                        ...new GraphDataset().toJSON(),
-                        label: '주문 수량',
-                        data: [],
-                        type: 'line',
-                        fill: false,
-                        borderColor: graphColor[0],
-                        backgroundColor: graphColor[0],
-                        order: -1,
-                        pointRadius: 2
-                    }
-                    orderDatasets.push(lineGraphOfOrder);
-                } else {
-                    channel.forEach((r, idx) => {
-                        let lineGraphOfOrder = {
-                            ...new GraphDataset().toJSON(),
-                            type: 'line',
-                            label: '(주문) ' + r,
-                            fill: false,
-                            data: orderUnitData[idx],
-                            borderColor: graphColor[idx] + '88',
-                            backgroundColor: graphColor[idx] + '88',
-                            order: -1,
-                            pointRadius: 2
-                        }
-                        orderDatasets.push(lineGraphOfOrder);
-                    })
-                }
-
                 // 매출 그래프 데이터 생성
                 let createSalesGraph = {
                     labels: [...graphLabels],
@@ -389,8 +362,8 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 let totalData = setAnalysisResultText([...salesDatasets, ...orderDatasets]);
 
                 // 매출액 내림차순으로 정렬
-                salesData.sort((a, b) => b.value - a.value);
-                totalData.sort((a, b) => b.value - a.value);
+                salesData = _.sortBy(salesData, 'value').reverse();
+                totalData = _.sortBy(totalData, 'value').reverse();
 
                 setUnitSummaryData({
                     sales: salesData,
@@ -405,6 +378,15 @@ export default function RegistrationAndUnitGraphComponent(props) {
                         mode: 'index',
                         intersect: false,
                     },
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: function (value, index, ticks) {
+                                    return value;
+                                }
+                            }
+                        }
+                    },
                     onClick: function (e, item) {
                         __handle.action.setGraphClickOption(e, item);
                     },
@@ -414,7 +396,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     }
                 }
 
-                setTotalGraphOption(option);
+                setGraphOption(option);
             },
             setGraphClickOption: (e, item) => {
                 if(item.length === 0) return;
@@ -438,10 +420,12 @@ export default function RegistrationAndUnitGraphComponent(props) {
             openWholePeroidDetailGraphSelectorModal: () => {
                 let startDate = getStartDate(props.registrationAndUnit[0].datetime);
                 let endDate = getEndDate(props.registrationAndUnit[props.registrationAndUnit.length - 1].datetime);
+                let salesChannels = [...props.selectedChannel];
 
                 let detailSearchValue = {
                     startDate,
-                    endDate
+                    endDate,
+                    salesChannels
                 }
 
                 props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
@@ -458,7 +442,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 <div className='content-box'>
                     <GraphBodyFieldView
                         totalGraphData={props.checkedSwitch ? totalRegistrationGraphData : salesRegistrationGraphData}
-                        totalGraphOption={totalGraphOption}
+                        graphOption={graphOption}
                     />
                     <GraphSummaryFieldView
                         title={'[스토어별 총 판매건]'}
@@ -468,7 +452,7 @@ export default function RegistrationAndUnitGraphComponent(props) {
                 <div className='content-box'>
                     <GraphBodyFieldView
                         totalGraphData={props.checkedSwitch ? totalUnitGraphData : salesUnitGraphData}
-                        totalGraphOption={totalGraphOption}
+                        graphOption={graphOption}
                     />
                     <GraphSummaryFieldView
                         title={'[스토어별 총 판매수량]'}

@@ -11,7 +11,7 @@ export default function GraphBoardFieldView(props) {
                     <span>일별 조회 시 7일간 평균 차트를 확인할 수 있습니다. </span>
                 </div>
             </div>
-            <div>
+            <div className='flex-item search-btn-box'>
                 <button
                     className='button-el'
                     onClick={() => props.onActionOpenDetailGraphSelectorModal()}

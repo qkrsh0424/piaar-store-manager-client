@@ -24,6 +24,12 @@ const GraphBoardFieldWrapper = styled.div`
     padding: 20px;
     overflow: hidden;
 
+    @media screen and (max-width: 992px) {
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
     .graph-title {
         font-size : 1.2rem;
         font-weight: 700;
@@ -31,6 +37,11 @@ const GraphBoardFieldWrapper = styled.div`
 
     .graph-info-text {
         font-size: 14px;
+    }
+
+    .search-btn-box {
+        width: 100%;
+        justify-content: flex-end;
     }
 
     .button-el{
@@ -53,7 +64,6 @@ const GraphBoardFieldWrapper = styled.div`
 
         @media all and (max-width:992px) {
             margin: 0;
-            width: 80px;
             font-size: 14px;
         }
     }
