@@ -44,7 +44,7 @@ export default function TableFieldView(props) {
                                         </td>
                                         <td
                                             rowSpan={rowSpanSize}
-                                            style={{ borderRight: '1px solid rgb(224 224 224)', backgroundColor: tdBackgroundColor }}
+                                            style={{ borderRight: '1px solid rgb(224 224 224)' }}
                                         >
                                             {r.productDefaultName}
                                         </td>
@@ -54,6 +54,7 @@ export default function TableFieldView(props) {
                                             <tr
                                                 key={'option-data-idx' + idx2}
                                                 className='item-tr'
+                                                style={{ backgroundColor: tdBackgroundColor + '88' }}
                                             >
                                                 <td>{r2.optionDefaultName}</td>
                                                 <td>{toPriceUnitFormat(r2.salesPayAmount)}</td>

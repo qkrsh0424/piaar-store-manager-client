@@ -41,6 +41,10 @@ const SearchFieldWrapper = styled.div`
         font-weight: 600;
         border-radius: 5px;
         transition: 0.15s;
+        overflow: hidden;
+        position: relative;
+        -webkit-transition: all .1s;
+        transition: all .1s;
 
         :hover {
             background-color: var(--defaultButtonColor);

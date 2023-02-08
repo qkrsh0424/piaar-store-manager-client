@@ -165,8 +165,7 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
                     ...data
                 });
             },
-            openDetailGraphSelectorModal: (data) => {
-                setDetailSearchValue(data);
+            openDetailGraphSelectorModal: () => {
                 setDetailGraphSelectorModalOpen(true);
             },
             closeDetailGraphSelectorModal: () => {
@@ -211,7 +210,6 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
 
                 setPageIndex(page);
                 setDetailSearchValue(searchValue);
-
                 __handle.submit.searchPerformance(searchValue);
             },
         },
@@ -243,6 +241,7 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
                     performance={productPerformance?.content}
                     detailSearchValue={detailSearchValue}
 
+                    onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
                     onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
 
@@ -260,8 +259,6 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
                     checkedSwitch={checkedSwitch}
                     performance={optionPerformance}
                     detailSearchValue={detailSearchValue}
-    
-                    onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
 
                 <DateRangeSelectorComponent

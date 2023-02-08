@@ -7,7 +7,8 @@ import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import _ from "lodash";
 import { getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 
-const DEFAULT_GRAPH_BG_3COLOR = ['#ADA8C3', '#C0C5DC'];
+// const DEFAULT_GRAPH_BG_COLOR = ['#ADA8C3', '#C0C5DC'];
+const DEFAULT_GRAPH_BG_COLOR = ['#9dbce6', '#b9afe0'];
 
 // 판매스토어별 총 매출액
 export default function BestProductGraphComponent(props) {
@@ -61,8 +62,8 @@ export default function BestProductGraphComponent(props) {
                     label: '(주문) 매출액',
                     data: orderPayAmount,
                     fill: false,
-                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[0] + '88',
-                    borderColor: DEFAULT_GRAPH_BG_3COLOR[0] + '88',
+                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[0] + '88',
+                    borderColor: DEFAULT_GRAPH_BG_COLOR[0] + '88',
                     order: -1,
                     pointRadius: 2
                 }
@@ -71,8 +72,8 @@ export default function BestProductGraphComponent(props) {
                     type: 'bar',
                     label: '판매 매출액',
                     data: salesPayAmount,
-                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[0],
-                    borderColor: DEFAULT_GRAPH_BG_3COLOR[0],
+                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[0],
+                    borderColor: DEFAULT_GRAPH_BG_COLOR[0],
                     borderWidth: 0,
                     order: 0
                 }
@@ -108,8 +109,8 @@ export default function BestProductGraphComponent(props) {
                     label: '(주문) 수량',
                     data: orderUnit,
                     fill: false,
-                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[1] + '88',
-                    borderColor: DEFAULT_GRAPH_BG_3COLOR[1] + '88',
+                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[1] + '88',
+                    borderColor: DEFAULT_GRAPH_BG_COLOR[1] + '88',
                     order: -1,
                     pointRadius: 2
                 }
@@ -118,8 +119,8 @@ export default function BestProductGraphComponent(props) {
                     type: 'bar',
                     label: '판매 수량',
                     data: salesUnit,
-                    backgroundColor: DEFAULT_GRAPH_BG_3COLOR[1],
-                    borderColor: DEFAULT_GRAPH_BG_3COLOR[1],
+                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[1],
+                    borderColor: DEFAULT_GRAPH_BG_COLOR[1],
                     borderWidth: 0,
                     order: 0
                 }
@@ -239,7 +240,8 @@ export default function BestProductGraphComponent(props) {
                     endDate,
                     productCodes
                 }
-                props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
+                props.onActionUpdateDetailSearchValue(detailSearchValue);
+                props.onActionOpenDetailGraphSelectorModal();
             },
             setUnitGraphClickOption: (e, item) => {
                 if(item.length === 0) return;
@@ -256,7 +258,8 @@ export default function BestProductGraphComponent(props) {
                     endDate,
                     productCodes
                 }
-                props.onActionOpenDetailGraphSelectorModal(detailSearchValue);
+                props.onActionUpdateDetailSearchValue(detailSearchValue);
+                props.onActionOpenDetailGraphSelectorModal();
             }
         }
     }

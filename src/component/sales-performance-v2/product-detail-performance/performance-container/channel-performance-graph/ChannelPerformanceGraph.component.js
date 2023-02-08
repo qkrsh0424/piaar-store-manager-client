@@ -7,7 +7,7 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 
 // 그래프 기본 3가지 색상 : [주문, 판매, 평균]
-const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
+const SALES_GRAPH_BG_COLOR = ['#B9B4EB', '#F0B0E8',  '#80A9E1', '#FFAFCC', '#F9F871', '#F1EDFF', '#80A9E1', '#70dbc2', '#D5CABD', '#389091'];
 
 export default function ChannelPerformanceGraphComponent(props) {
     const [salesPayAmountGraphData, setSalesPayAmountGraphData] = useState(null);
@@ -16,7 +16,7 @@ export default function ChannelPerformanceGraphComponent(props) {
     const [salesSummaryData, setSalesSummaryData] = useState(null);
     const [totalSummaryData, setTotalSummaryData] = useState(null);
     
-    const [totalPayAmountGraphOption, setTotalPayAmountGraphOption] = useState(null);
+    const [graphOption, setGraphOption] = useState(null);
 
     useEffect(() => {
         if(!props.searchDimension) {
@@ -27,8 +27,7 @@ export default function ChannelPerformanceGraphComponent(props) {
             return;
         }
 
-        if(!(props.performance && props.performance.length > 0)) {
-            __handle.action.resetGraphData();
+        if(!props.performance) {
             return;
         }
 
@@ -45,14 +44,11 @@ export default function ChannelPerformanceGraphComponent(props) {
 
     const __handle = {
         action: {
-            resetGraphData: () => {
-                setTotalPayAmountGraphData(null);
-                setTotalSummaryData(null);
-                setSalesPayAmountGraphData(null);
-                setSalesSummaryData(null);
-                setTotalPayAmountGraphOption(null);
-            },
             createGraphData: () => {
+                let salesPayAmountData = [];
+                let orderPayAmountData = [];
+                let graphLabels = [];
+
                 let searchChannelPerformance = [...new Set(props.performance.map(r => r.salesChannel))].map(channel => {
                     return {
                         salesChannel: channel,
@@ -77,11 +73,12 @@ export default function ChannelPerformanceGraphComponent(props) {
                     })
                 })
 
-                let salesPayAmountData = searchChannelPerformance.map(r => r.salesPayAmount);
-                let orderPayAmountData = searchChannelPerformance.map(r => r.orderPayAmount);
-                let graphLabels = searchChannelPerformance.map(r => r.salesChannel);
+                searchChannelPerformance.forEach(r => {
+                    salesPayAmountData.push(r.salesPayAmount);
+                    orderPayAmountData.push(r.orderPayAmount);
+                    graphLabels.push(r.salesChannel);
+                })
                 
-
                 let graphColor = SALES_GRAPH_BG_COLOR;
                 for (let i = SALES_GRAPH_BG_COLOR.length; i < searchChannelPerformance.length; i++) {
                     let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
@@ -91,30 +88,6 @@ export default function ChannelPerformanceGraphComponent(props) {
                 let barGraphOfSales = {};
                 let lineGraphOfOrder = {};
                 // 판매 그래프 데이터 세팅
-                if(graphLabels.size === 0) {
-                    barGraphOfSales = {
-                        ...new GraphDataset().toJSON(),
-                        type: 'bar',
-                        label: '판매 매출액',
-                        data: [],
-                        borderColor: graphColor,
-                        backgroundColor: graphColor,
-                        borderWidth: 0,
-                        order: 0
-                    }
-                } else {
-                    barGraphOfSales = {
-                        ...new GraphDataset().toJSON(),
-                        type: 'bar',
-                        label: '판매 매출액',
-                        data: salesPayAmountData,
-                        borderColor: graphColor,
-                        backgroundColor: graphColor,
-                        borderWidth: 0,
-                        order: 0
-                    }
-                }
-
                 if(graphLabels.size === 0) {
                     lineGraphOfOrder = {
                         ...new GraphDataset().toJSON(),
@@ -127,12 +100,32 @@ export default function ChannelPerformanceGraphComponent(props) {
                         order: -1,
                         pointRadius: 2
                     }
+                    barGraphOfSales = {
+                        ...new GraphDataset().toJSON(),
+                        type: 'bar',
+                        label: '판매 매출액',
+                        data: [],
+                        borderColor: graphColor,
+                        backgroundColor: graphColor,
+                        borderWidth: 0,
+                        order: 0
+                    }
                 } else {
                     lineGraphOfOrder = {
                         ...new GraphDataset().toJSON(),
                         type: 'line',
                         label: '주문 매출액',
                         data: orderPayAmountData,
+                        borderColor: graphColor,
+                        backgroundColor: graphColor,
+                        borderWidth: 0,
+                        order: 0
+                    }
+                    barGraphOfSales = {
+                        ...new GraphDataset().toJSON(),
+                        type: 'bar',
+                        label: '판매 매출액',
+                        data: salesPayAmountData,
                         borderColor: graphColor,
                         backgroundColor: graphColor,
                         borderWidth: 0,
@@ -179,7 +172,7 @@ export default function ChannelPerformanceGraphComponent(props) {
                     }
                 }
 
-                setTotalPayAmountGraphOption(option);
+                setGraphOption(option);
             }
         }
     }
@@ -190,7 +183,7 @@ export default function ChannelPerformanceGraphComponent(props) {
             <div className='content-box'>
                 <GraphBodyFieldView
                     totalPayAmountGraphData={props.checkedSwitch ? totalPayAmountGraphData : salesPayAmountGraphData}
-                    totalPayAmountGraphOption={totalPayAmountGraphOption}
+                    graphOption={graphOption}
                 />
                 <GraphSummaryFieldView
                     summaryData={props.checkedSwitch ? totalSummaryData : salesSummaryData}

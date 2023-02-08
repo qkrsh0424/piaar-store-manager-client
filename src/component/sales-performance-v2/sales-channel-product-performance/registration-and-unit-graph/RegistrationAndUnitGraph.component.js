@@ -7,7 +7,7 @@ import { dateToYYYYMMDDAndDayName, getMonthAndSearchDateRange, getWeekNumberAndS
 import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 import _ from "lodash";
 
-const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
+const SALES_GRAPH_BG_COLOR = ['#B9B4EB', '#F0B0E8', '#80A9E1', '#FFAFCC', '#F9F871', '#F1EDFF', '#80A9E1', '#70dbc2', '#D5CABD', '#389091'];
 
 // 판매스토어별 총 판매, 주문건 & 수량
 export default function RegistrationAndUnitGraphComponent(props) {

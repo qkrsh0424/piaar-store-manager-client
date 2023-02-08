@@ -7,7 +7,7 @@ import { GraphDataset } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
 const WEEKLY_AVG_GRAPH_BG_COLOR = '#FFAFCC';
-const WEEKLY_GRAPH_BG_COLOR = ['#FFBCA2', '#FFCC89', '#FFB2BA', '#F58293', '#D2759F', '#FFCA67', '#A974BC'];
+const WEEKLY_GRAPH_BG_COLOR = ['#B9B4EB', '#F0B0E8', '#80A9E1', '#FFAFCC', '#F9F871', '#F1EDFF', '#80A9E1', '#70dbc2', '#D5CABD', '#389091'];
 
 export default function PayAmountDayOfWeekGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);

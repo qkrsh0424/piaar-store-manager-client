@@ -33,8 +33,10 @@ const TableBoardFieldWrapper = styled.div`
     }
 
     .convert-btn-box {
-        width: 100%;
-        justify-content: flex-end;
+        @media screen and (max-width: 992px) {
+            width: 100%;
+            justify-content: flex-end;
+        }
     }
 
     .button-el {

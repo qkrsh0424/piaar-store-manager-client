@@ -6,7 +6,7 @@ import { Container } from "./PayAmountDayOfWeekGraph.styled";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 
-const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
+const SALES_GRAPH_BG_COLOR = ['#B9B4EB', '#F0B0E8', '#80A9E1', '#FFAFCC', '#F9F871', '#F1EDFF', '#80A9E1', '#70dbc2', '#D5CABD', '#389091'];
 
 export default function PayAmountDayOfWeekGraphComponent(props) {
     const [salesGraphData, setSalesGraphData] = useState(null);
@@ -14,7 +14,6 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
 
     useEffect(() => {
         if (!props.selectedOptions) {
-            __handle.action.resetGraphData();
             return;
         }
 
@@ -22,7 +21,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
             return;
         }
 
-        if(!(props.dayOfWeekPayAmount && props.dayOfWeekPayAmount.length > 0)) {
+        if(!props.dayOfWeekPayAmount) {
             __handle.action.resetGraphData();
             return;
         }
@@ -48,7 +47,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 let searchProduct = [...new Set(props.selectedOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
 
                 let productPayAmount = searchProduct.map(r => {
-                    let data = getWeekName().map(r2 => {
+                    let data = graphLabels.map(r2 => {
                         return {
                             dayName: r2,
                             salesPayAmount: 0,
@@ -81,13 +80,11 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 productPayAmount = productPayAmount.map(r => {
                     let productPayAmountData = [...r.payAmountData];
 
-                    for(let i = 0; i < props.dayOfWeekPayAmount.length; i++) {
-                        let day = getDayName(props.dayOfWeekPayAmount[i].datetime);
-
-                        props.dayOfWeekPayAmount[i].performances.forEach(r2 => {
+                    props.dayOfWeekPayAmount.forEach(data => {
+                        data.performances.forEach(r2 => {
                             if(r2.productCode === r.productCode) {
                                 productPayAmountData = productPayAmountData.map(r3 => {
-                                    if(r3.dayName === day) {
+                                    if(r3.dayName === getDayName(data.datetime)) {
                                         return {
                                             ...r3,
                                             salesPayAmount: r3.salesPayAmount + r2.salesPayAmount,
@@ -99,7 +96,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                                 });
                             };
                         });
-                    }
+                    })
 
                     return {
                         ...r,
@@ -109,11 +106,10 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
 
                 productPayAmount.forEach(r => {
                     let productSalesPayAmountData = [];
-                    for(let i = 0; i < r.payAmountData.length; i++) {
-                        let salesAvg = parseInt((r.payAmountData[i].salesPayAmount) / r.payAmountData[i].frequency);
-                    
+                    r.payAmountData.forEach(data => {
+                        let salesAvg = parseInt((data.salesPayAmount) / data.frequency);
                         productSalesPayAmountData.push(salesAvg);
-                    }
+                    })
 
                     salesPayAmountData.push(productSalesPayAmountData);
                 })
@@ -166,7 +162,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 let graphLabels = getWeekName();
 
                 let optionPayAmount = props.selectedOptions.map(r => {
-                    let data = getWeekName().map(r2 => {
+                    let data = graphLabels.map(r2 => {
                         return {
                             dayName: r2,
                             salesPayAmount: 0,
@@ -201,13 +197,11 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                 optionPayAmount = optionPayAmount.map(r => {
                     let optionPayAmountData = [...r.payAmountData];
 
-                    for(let i = 0; i < props.dayOfWeekPayAmount.length; i++) {
-                        let day = getDayName(props.dayOfWeekPayAmount[i].datetime);
-
-                        props.dayOfWeekPayAmount[i].performances.forEach(r2 => {
+                    props.dayOfWeekPayAmount.forEach(data => {
+                        data.performances.forEach(r2 => {
                             if(r2.optionCode === r.optionCode) {
                                 optionPayAmountData = optionPayAmountData.map(r3 => {
-                                    if(r3.dayName === day) {
+                                    if(r3.dayName === getDayName(data.datetime)) {
                                         return {
                                             ...r3,
                                             salesPayAmount: r3.salesPayAmount + r2.salesPayAmount,
@@ -219,7 +213,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                                 });
                             };
                         });
-                    }
+                    })
 
                     return {
                         ...r,
@@ -229,11 +223,10 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
 
                 optionPayAmount.forEach(r => {
                     let optionSalesPayAmountData = [];
-                    for(let i = 0; i < r.payAmountData.length; i++) {
-                        let salesAvg = parseInt((r.payAmountData[i].salesPayAmount) / r.payAmountData[i].frequency);
-                    
+                    r.payAmountData.forEach(data => {
+                        let salesAvg = parseInt((data.salesPayAmount) / data.frequency);
                         optionSalesPayAmountData.push(salesAvg);
-                    }
+                    })
 
                     salesPayAmountData.push(optionSalesPayAmountData);
                 })

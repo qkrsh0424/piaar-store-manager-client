@@ -116,13 +116,15 @@ const SalesChannelPerformanceComponent = (props) => {
                 let value = e.target.value;
                 setSearchDimension(value);
             },
-            openDetailGraphSelectorModal: (data) => {
-                setDetailSearchValue(data);
+            openDetailGraphSelectorModal: () => {
                 setDetailGraphSelectorModalOpen(true);
             },
             closeDetailGraphSelectorModal: () => {
                 setDetailSearchValue(null);
                 setDetailGraphSelectorModalOpen(false);
+            },
+            updateDetailSearchValue: (data) => {
+                setDetailSearchValue(data);
             }
         },
         submit: {
@@ -162,6 +164,7 @@ const SalesChannelPerformanceComponent = (props) => {
                     checkedSwitch={checkedSwitch}
                     payAmount={performance}
 
+                    onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
                     onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
 
@@ -172,6 +175,7 @@ const SalesChannelPerformanceComponent = (props) => {
                     checkedSwitch={checkedSwitch}
                     registrationAndUnit={performance}
 
+                    onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
                     onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
 

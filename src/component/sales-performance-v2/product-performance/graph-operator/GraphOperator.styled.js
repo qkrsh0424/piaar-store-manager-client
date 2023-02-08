@@ -11,6 +11,10 @@ const GraphOperatorFieldWrapper = styled.div`
     align-items: flex-end;
     margin-bottom: 20px;
 
+    @media screen and (max-width: 992px) {
+        flex-direction: column;
+    }
+
     .common-box {
         display: flex;
         flex-direction: column;

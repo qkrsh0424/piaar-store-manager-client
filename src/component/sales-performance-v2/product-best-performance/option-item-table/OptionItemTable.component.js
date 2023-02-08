@@ -9,7 +9,6 @@ import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
 const DEFAULT_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1'];
 
-
 // 판매스토어별 총 매출액
 export default function OptionItemTableComponent(props) {
     const [tableData, setTableData] = useState(null);
@@ -74,9 +73,13 @@ export default function OptionItemTableComponent(props) {
             },
             createPayAmountGraphData: () => {
                 let graphLabels = props.performance.map(r => r.productDefaultName + " [" + r.optionDefaultName + "]");
+                let salesPayAmount = [];
+                let orderPayAmount = [];
 
-                let salesPayAmount = props.performance.map(r => r.salesPayAmount);
-                let orderPayAmount = props.performance.map(r => r.orderPayAmount);
+                props.performance.forEach(data => {
+                    salesPayAmount.push(data.salesPayAmount);
+                    orderPayAmount.push(data.orderPayAmount);
+                })
 
                 let salesPayAmountDatasets = {
                     ...new GraphDataset().toJSON(),
@@ -116,10 +119,13 @@ export default function OptionItemTableComponent(props) {
             },
             createUnitDate: () => {
                 let graphLabels = props.performance.map(r => r.productDefaultName + " [" + r.optionDefaultName + "]");
+                let salesUnit = [];
+                let orderUnit = [];
 
-
-                let salesUnit = props.performance.map(r => r.salesUnit);
-                let orderUnit = props.performance.map(r => r.orderUnit);
+                props.performance.forEach(data => {
+                    salesUnit.push(data.salesUnit);
+                    orderUnit.push(data.orderUnit);
+                })
 
                 let salesUnitDatasets = {
                     ...new GraphDataset().toJSON(),

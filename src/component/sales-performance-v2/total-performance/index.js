@@ -65,13 +65,15 @@ const TotalSalesPerformanceComponent = (props) => {
                 let value = e.target.value;
                 setSearchDimension(value);
             },
-            openDetailGraphSelectorModal: (data) => {
-                setDetailSearchValue(data);
+            openDetailGraphSelectorModal: () => {
                 setDetailGraphSelectorModalOpen(true);
             },
             closeDetailGraphSelectorModal: () => {
                 setDetailSearchValue(null);
                 setDetailGraphSelectorModalOpen(false);
+            },
+            updateDetailSearchValue: (data) => {
+                setDetailSearchValue(data);
             }
         },
         submit: {
@@ -102,6 +104,7 @@ const TotalSalesPerformanceComponent = (props) => {
                     checkedSwitch={checkedSwitch}
                     performance={performance}
 
+                    onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
                     onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
                 <RegistrationAndUnitGraphComponent
@@ -109,6 +112,7 @@ const TotalSalesPerformanceComponent = (props) => {
                     checkedSwitch={checkedSwitch}
                     performance={performance}
 
+                    onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
                     onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
                 <PayAmountDayOfWeekGraphComponent

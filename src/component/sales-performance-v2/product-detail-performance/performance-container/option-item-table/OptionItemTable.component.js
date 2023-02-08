@@ -6,7 +6,9 @@ import { GraphDataset } from "../../../../../utils/graphDataUtils";
 import TableBoardFieldView from "./view/TableBoardField.view";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 
-const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#389091', '#EEE8A9', '#D5CABD'];
+// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#389091', '#EEE8A9', '#D5CABD'];
+const SALES_GRAPH_BG_COLOR = ['#B9B4EB', '#F0B0E8',  '#80A9E1', '#FFAFCC', '#F9F871', '#F1EDFF', '#80A9E1', '#70dbc2', '#D5CABD', '#389091'];
+const OPTION_MAX_SIZE = 10;
 
 // 판매스토어별 총 매출액
 export default function OptionItemTableComponent(props) {
@@ -24,9 +26,20 @@ export default function OptionItemTableComponent(props) {
         }
 
         __handle.action.initTableData();
+    }, [props.performance])
+
+    useEffect(() => {
+        if(!props.performance) {
+            return;
+        }
+        
+        if(!props.selectedOptions) {
+            return;
+        }
+
         __handle.action.createGraphData();
         __handle.action.createGraphOption();
-    }, [props.performance])
+    }, [props.performance, props.selectedOptions])
 
     const __handle = {
         action: {
@@ -69,13 +82,16 @@ export default function OptionItemTableComponent(props) {
                 let unitSum = 0;
                 let worstOptionPayAmountSum = 0;
                 let worstOptionUnitSum = 0;
+                let optionCodes = props.selectedOptions.map(r => r.code);
 
-                let salesPerformance = _.sortBy([...props.performance], 'salesPayAmount').reverse();
-                let bestSalesPerformance = salesPerformance.slice(0, 10);
+                // 판매 매출액이 존재하면서 선택된 옵션코드에 포함된다면 그래프에 표시
+                let performances = props.performance.filter(r => optionCodes.includes(r.optionCode) && r.salesPayAmount !== 0);
+                let salesPerformance = _.sortBy(performances, 'salesPayAmount').reverse();
+                let bestSalesPerformance = salesPerformance.slice(0, OPTION_MAX_SIZE);
                 let graphLabels = bestSalesPerformance.map((r, idx) => (idx+1) + '. ' + r.optionDefaultName);
 
                 salesPerformance.forEach((r, idx) => {
-                    if(idx >= 10) {
+                    if(idx >= OPTION_MAX_SIZE) {
                         worstOptionPayAmountSum += r.salesPayAmount;
                         worstOptionUnitSum += r.salesUnit;
                     }
@@ -91,8 +107,8 @@ export default function OptionItemTableComponent(props) {
                     unitData.push(unitValue)
                 });
                 
-                if(props.performance?.length > 10 && worstOptionPayAmountSum !== 0) {
-                    // best10외의 데이터 추가
+                // BEST10 이하 데이터 추가
+                if(performances.length > OPTION_MAX_SIZE && worstOptionPayAmountSum !== 0) {
                     graphLabels.push('기타');
                     payAmountData.push(Math.round(((worstOptionPayAmountSum / payAmountSum) * 100) || 0));
                     unitData.push(Math.round(((worstOptionUnitSum / unitSum) * 100) || 0));

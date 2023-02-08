@@ -9,21 +9,6 @@ const Container = styled.div`
     }
 `;
 
-const DateSelectorFieldWrapper = styled.div`
-    padding-bottom: 30px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    
-    .date-selector-box {
-        width: 200px;
-
-        @media screen and (max-width: 992px) {
-            width: 100%;
-        }
-    }
-`;
-
 const BoxFieldWrapper = styled.div`
     padding-bottom: 30px;
 
@@ -72,6 +57,5 @@ const BoxFieldWrapper = styled.div`
 
 export {
     Container,
-    DateSelectorFieldWrapper,
     BoxFieldWrapper
 }

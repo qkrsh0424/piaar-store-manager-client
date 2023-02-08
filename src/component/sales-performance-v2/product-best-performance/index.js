@@ -92,9 +92,7 @@ export default function ProductBestPerformanceComponent (props) {
                     ...data
                 });
             },
-            // TODO :: searchValue update 호출. 분리하기
-            openDetailGraphSelectorModal: (data) => {
-                setDetailSearchValue(data);
+            openDetailGraphSelectorModal: () => {
                 setDetailGraphSelectorModalOpen(true);
             },
             closeDetailGraphSelectorModal: () => {
@@ -169,6 +167,7 @@ export default function ProductBestPerformanceComponent (props) {
                     performance={productPerformance?.content}
                     detailSearchValue={detailSearchValue}
 
+                    onActionUpdateDetailSearchValue={__handle.action.updateDetailSearchValue}
                     onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
 
@@ -186,8 +185,6 @@ export default function ProductBestPerformanceComponent (props) {
                     checkedSwitch={checkedSwitch}
                     performance={optionPerformance}
                     detailSearchValue={detailSearchValue}
-
-                    onActionOpenDetailGraphSelectorModal={__handle.action.openDetailGraphSelectorModal}
                 />
 
                 <DateRangeSelectorComponent

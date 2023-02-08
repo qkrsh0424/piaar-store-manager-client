@@ -39,7 +39,6 @@ export default function OperatorComponent(props) {
             },
             openProductListModal: (e) => {
                 e.preventDefault();
-
                 setProductListModalOpen(true);
             },
             closeProductListModal: () => {

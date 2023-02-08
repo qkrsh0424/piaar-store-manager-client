@@ -1,3 +1,4 @@
+import Ripple from "../../../../module/button/Ripple";
 import { SearchFieldWrapper } from "../Operator.styled";
 
 export default function SearchFieldView(props) {
@@ -11,7 +12,8 @@ export default function SearchFieldView(props) {
                         className='button-el'
                         onClick={(e) => props.onActionOpenProductListModal(e)}
                     >
-                        <div>조회 상품 추가</div>
+                        조회 상품 추가
+                        <Ripple color={'#e0e0e0'} duration={1000} />
                     </button>
                 </div>
             </div>

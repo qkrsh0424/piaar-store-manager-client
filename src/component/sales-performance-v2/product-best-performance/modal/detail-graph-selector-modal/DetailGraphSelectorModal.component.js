@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import useRouterHook from "../../../../../hooks/router/useRouterHook";
-import CustomDatePicker from "../../../../module/date-picker/CustomDatePicker";
 import CommonModalComponentV2 from "../../../../module/modal/CommonModalComponentV2";
-import { BoxFieldWrapper, Container, DateSelectorFieldWrapper } from "./DetailGraphSelectorModal.styled";
+import { BoxFieldWrapper, Container } from "./DetailGraphSelectorModal.styled";
 
 function BoxFieldView({ onActionSelectProductDetail }) {
     return (
@@ -17,31 +16,6 @@ function BoxFieldView({ onActionSelectProductDetail }) {
                 </button>
             </div>
         </BoxFieldWrapper>
-    )
-}
-
-function DateSelectorFieldView({ startDate, endDate, onChangeStartDateValue, onChangeEndDateValue }) {
-    return (
-        <DateSelectorFieldWrapper>
-            <div className='date-selector-box'>
-                <CustomDatePicker
-                    valueSize={14}
-                    labelSize={12}
-                    label={'시작일'}
-                    selected={startDate}
-                    onChange={value => onChangeStartDateValue(value)}
-                ></CustomDatePicker>
-            </div>
-            <div className='date-selector-box'>
-                <CustomDatePicker
-                    valueSize={14}
-                    labelSize={12}
-                    label={'종료일'}
-                    selected={endDate}
-                    onChange={value => onChangeEndDateValue(value)}
-                ></CustomDatePicker>
-            </div>
-        </DateSelectorFieldWrapper>
     )
 }
 

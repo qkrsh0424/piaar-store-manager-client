@@ -6,18 +6,17 @@ import { useEffect, useState } from "react";
 import { dateToYYYYMMDDAndDayName, getMonthAndSearchDateRange, getWeekNumberAndSearchDateRange } from "../../../../utils/dateFormatUtils";
 import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
+import _ from "lodash";
 
-const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#D5CABD', '#389091'];
+const SALES_GRAPH_BG_COLOR = ['#B9B4EB', '#F0B0E8', '#80A9E1', '#FFAFCC', '#F9F871', '#F1EDFF', '#80A9E1', '#70dbc2', '#D5CABD', '#389091'];
 
 // 판매스토어별 총 매출액
 export default function PayAmountGraphComponent(props) {
-
     const [salesPayAmountGraphData, setSalesPayAmountGraphData] = useState(null);
     const [totalPayAmountGraphData, setTotalPayAmountGraphData] = useState(null);
 
     const [salesSummaryData, setSalesSummaryData] = useState(null);
-
-    const [payAmountGraphOption, setPayAmountGraphOption] = useState(null);
+    const [graphOption, setGraphOption] = useState(null);
     
     useEffect(() => {
         if(!props.selectedOptions) {
@@ -32,7 +31,7 @@ export default function PayAmountGraphComponent(props) {
             return;
         }
 
-        if (!(props.payAmount && props.payAmount.length > 0)) {
+        if (!props.payAmount) {
             __handle.action.resetGraphData();
             return;
         }
@@ -48,10 +47,9 @@ export default function PayAmountGraphComponent(props) {
     const __handle = {
         action: {
             resetGraphData: () => {
-                setTotalPayAmountGraphData(null);
                 setSalesPayAmountGraphData(null);
+                setTotalPayAmountGraphData(null);
                 setSalesSummaryData(null);
-                setPayAmountGraphOption(null);
             },
             createGraphDataByProduct: () => {
                 let salesPayAmountData = [];
@@ -60,14 +58,26 @@ export default function PayAmountGraphComponent(props) {
                 let orderDatasets = [];
                 let graphLabels = new Set([]);
                 let searchProduct = [...new Set(props.selectedOptions.map(r => JSON.stringify(r.product)))].map(r => JSON.parse(r));
+                
+                // 검색날짜 최소, 최대값
                 let minimumDate = props.payAmount[0].datetime;
-                let maximumDate = props.payAmount[props.payAmount.length - 1].datetime;
+                let maximumDate = props.payAmount.slice(-1)[0].datetime;
+
+                props.payAmount.forEach(data => {
+                    let datetime = dateToYYYYMMDDAndDayName(data.datetime);
+                    if(props.searchDimension === 'week') {
+                        datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
+                    }else if(props.searchDimension === 'month') {
+                        datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
+                    }
+                    graphLabels.add(datetime);
+                })
 
                 // 상품별 매출액 계산
                 let payAmountData = props.payAmount.map(r => {
                     let salesPerformances = [];
                     r.performances.forEach(r2 => {
-                        let data = salesPerformances.filter(r3 => r3.productCode === r2.productCode)[0];
+                        let data = salesPerformances?.filter(r3 => r3.productCode === r2.productCode)[0];
 
                         if(data) {
                             salesPerformances = salesPerformances.map(r3 => {
@@ -98,24 +108,14 @@ export default function PayAmountGraphComponent(props) {
                         performances: salesPerformances
                     }
                 })
-                
-                for (let i = 0; i < payAmountData.length; i++) {
-                    let datetime = dateToYYYYMMDDAndDayName(payAmountData[i].datetime);
-                    if(props.searchDimension === 'week') {
-                        datetime = getWeekNumberAndSearchDateRange(payAmountData[i].datetime, minimumDate, maximumDate);
-                    }else if(props.searchDimension === 'month') {
-                        datetime = getMonthAndSearchDateRange(payAmountData[i].datetime, minimumDate, maximumDate);
-                    }
-                    graphLabels.add(datetime);
-                }
+
 
                 searchProduct.forEach(r => {
                     let salesPayAmount = [];
                     let orderPayAmount = [];
                     let dateValue = new Set([]);
 
-                    for (let i = 0; i < payAmountData.length; i++) {
-                        let data = payAmountData[i];
+                    payAmountData.forEach(data => {
                         let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
                             datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
@@ -134,7 +134,7 @@ export default function PayAmountGraphComponent(props) {
                             salesPayAmount.push(salesValue);
                             orderPayAmount.push(orderValue);
                         }
-                    }
+                    })
 
                     salesPayAmountData.push(salesPayAmount);
                     orderPayAmountData.push(orderPayAmount);
@@ -148,35 +148,6 @@ export default function PayAmountGraphComponent(props) {
 
                 // 판매 그래프 데이터 세팅
                 if(searchProduct.size === 0) {
-                    let barGraphOfSales = {
-                        ...new GraphDataset().toJSON(),
-                        type: 'bar',
-                        label: '판매 매출액',
-                        data: [],
-                        borderColor: graphColor[0],
-                        backgroundColor: graphColor[0],
-                        borderWidth: 0,
-                        order: 0
-                    }
-                    salesDatasets.push(barGraphOfSales);
-                } else {
-                    searchProduct.forEach((r, idx) => {
-                        let barGraphOfSales = {
-                            ...new GraphDataset().toJSON(),
-                            type: 'bar',
-                            label: r.defaultName,
-                            data: salesPayAmountData[idx],
-                            borderColor: graphColor[idx],
-                            backgroundColor: graphColor[idx],
-                            borderWidth: 0,
-                            order: 0
-                        }
-                        salesDatasets.push(barGraphOfSales);
-                    })
-                }
-
-                // 주문 그래프 데이터 세팅
-                if(searchProduct.size === 0) {
                     let lineGraphOfOrder = {
                         ...new GraphDataset().toJSON(),
                         label: '주문 매출액',
@@ -188,7 +159,18 @@ export default function PayAmountGraphComponent(props) {
                         order: -1,
                         pointRadius: 2
                     }
+                    let barGraphOfSales = {
+                        ...new GraphDataset().toJSON(),
+                        type: 'bar',
+                        label: '판매 매출액',
+                        data: [],
+                        borderColor: graphColor[0],
+                        backgroundColor: graphColor[0],
+                        borderWidth: 0,
+                        order: 0
+                    }
                     orderDatasets.push(lineGraphOfOrder);
+                    salesDatasets.push(barGraphOfSales);
                 } else {
                     searchProduct.forEach((r, idx) => {
                         let lineGraphOfOrder = {
@@ -202,7 +184,18 @@ export default function PayAmountGraphComponent(props) {
                             order: -1,
                             pointRadius: 2
                         }
+                        let barGraphOfSales = {
+                            ...new GraphDataset().toJSON(),
+                            type: 'bar',
+                            label: r.defaultName,
+                            data: salesPayAmountData[idx],
+                            borderColor: graphColor[idx],
+                            backgroundColor: graphColor[idx],
+                            borderWidth: 0,
+                            order: 0
+                        }
                         orderDatasets.push(lineGraphOfOrder);
+                        salesDatasets.push(barGraphOfSales);
                     })
                 }
 
@@ -219,12 +212,8 @@ export default function PayAmountGraphComponent(props) {
                 setSalesPayAmountGraphData(createdSalesGraph);
                 setTotalPayAmountGraphData(createdTotalGraph);
                 
-                // // 매출 그래프 요약 데이터 생성
-                let salesData = setAnalysisResultText(salesDatasets);
-
-                // // 매출액 내림차순으로 정렬
-                salesData.sort((a, b) => b.value - a.value);
-                setSalesSummaryData(salesData);
+                // 매출 그래프 요약 데이터 생성
+                __handle.action.createSalesSummary(salesDatasets);
             },
             createGraphDataByOption: () => {
                 let salesPayAmountData = [];
@@ -233,25 +222,24 @@ export default function PayAmountGraphComponent(props) {
                 let orderDatasets = [];
                 let graphLabels = new Set([]);
                 let minimumDate = props.payAmount[0].datetime;
-                let maximumDate = props.payAmount[props.payAmount.length - 1].datetime;
+                let maximumDate = props.payAmount.slice(-1)[0].datetime;
 
-                for (let i = 0; i < props.payAmount.length; i++) {
-                    let datetime = dateToYYYYMMDDAndDayName(props.payAmount[i].datetime);
+                props.payAmount.forEach(data => {
+                    let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = getWeekNumberAndSearchDateRange(props.payAmount[i].datetime, minimumDate, maximumDate);
+                        datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                     }else if(props.searchDimension === 'month') {
-                        datetime = getMonthAndSearchDateRange(props.payAmount[i].datetime, minimumDate, maximumDate);
+                        datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                     }
                     graphLabels.add(datetime);
-                }
+                })
 
                 props.selectedOptions.forEach(r => {
                     let salesPayAmount = [];
                     let orderPayAmount = [];
                     let dateValue = new Set([]);
 
-                    for (let i = 0; i < props.payAmount.length; i++) {
-                        let data = props.payAmount[i];
+                    props.payAmount.forEach(data => {
                         let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                         if (props.searchDimension === 'week') {
                             datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
@@ -270,7 +258,7 @@ export default function PayAmountGraphComponent(props) {
                             salesPayAmount.push(salesValue);
                             orderPayAmount.push(orderValue);
                         }
-                    }
+                    })
 
                     salesPayAmountData.push(salesPayAmount);
                     orderPayAmountData.push(orderPayAmount);
@@ -284,36 +272,6 @@ export default function PayAmountGraphComponent(props) {
 
                 // 판매 그래프 데이터 세팅
                 if(props.selectedOptions.size === 0) {
-                    let barGraphOfSales = {
-                        ...new GraphDataset().toJSON(),
-                        type: 'bar',
-                        label: '판매 매출액',
-                        data: [],
-                        borderColor: graphColor[0],
-                        backgroundColor: graphColor[0],
-                        borderWidth: 0,
-                        order: 0
-                    }
-                    salesDatasets.push(barGraphOfSales);
-                } else {
-                    props.selectedOptions.forEach((r, idx) => {
-                        let label = props.searchDataControl === 'option' ? r.product.defaultName + " ["+ r.option.defaultName + "]" : r.product.defaultName
-                        let barGraphOfSales = {
-                            ...new GraphDataset().toJSON(),
-                            type: 'bar',
-                            label: label,
-                            data: salesPayAmountData[idx],
-                            borderColor: graphColor[idx],
-                            backgroundColor: graphColor[idx],
-                            borderWidth: 0,
-                            order: 0
-                        }
-                        salesDatasets.push(barGraphOfSales);
-                    })
-                }
-
-                // 주문 그래프 데이터 세팅
-                if(props.selectedOptions.size === 0) {
                     let lineGraphOfOrder = {
                         ...new GraphDataset().toJSON(),
                         label: '주문 매출액',
@@ -325,7 +283,18 @@ export default function PayAmountGraphComponent(props) {
                         order: -1,
                         pointRadius: 2
                     }
+                    let barGraphOfSales = {
+                        ...new GraphDataset().toJSON(),
+                        type: 'bar',
+                        label: '판매 매출액',
+                        data: [],
+                        borderColor: graphColor[0],
+                        backgroundColor: graphColor[0],
+                        borderWidth: 0,
+                        order: 0
+                    }
                     orderDatasets.push(lineGraphOfOrder);
+                    salesDatasets.push(barGraphOfSales);
                 } else {
                     props.selectedOptions.forEach((r, idx) => {
                         let label = props.searchDataControl === 'option' ? r.product.defaultName + " ["+ r.option.defaultName + "]" : r.product.defaultName
@@ -340,7 +309,18 @@ export default function PayAmountGraphComponent(props) {
                             order: -1,
                             pointRadius: 2
                         }
+                        let barGraphOfSales = {
+                            ...new GraphDataset().toJSON(),
+                            type: 'bar',
+                            label: label,
+                            data: salesPayAmountData[idx],
+                            borderColor: graphColor[idx],
+                            backgroundColor: graphColor[idx],
+                            borderWidth: 0,
+                            order: 0
+                        }
                         orderDatasets.push(lineGraphOfOrder);
+                        salesDatasets.push(barGraphOfSales);
                     })
                 }
 
@@ -358,10 +338,13 @@ export default function PayAmountGraphComponent(props) {
                 setTotalPayAmountGraphData(createdTotalGraph);
                 
                 // // 매출 그래프 요약 데이터 생성
-                let salesData = setAnalysisResultText(salesDatasets);
+                __handle.action.createSalesSummary(salesDatasets);
+            },
+            createSalesSummary: (data) => {
+                let salesData = setAnalysisResultText(data);
 
-                // // 매출액 내림차순으로 정렬
-                salesData.sort((a, b) => b.value - a.value);
+                // 매출액 내림차순으로 정렬
+                salesData = _.sortBy(salesData, 'value').reverse();
                 setSalesSummaryData(salesData);
             },
             createGraphOption: () => {
@@ -383,7 +366,7 @@ export default function PayAmountGraphComponent(props) {
                     }
                 }
 
-                setPayAmountGraphOption(option);
+                setGraphOption(option);
             }
         }
     }
@@ -395,7 +378,7 @@ export default function PayAmountGraphComponent(props) {
                 <div className='content-box'>
                     <GraphBodyFieldView
                         totalPayAmountGraphData={props.checkedSwitch ? totalPayAmountGraphData : salesPayAmountGraphData}
-                        payAmountGraphOption={payAmountGraphOption}
+                        graphOption={graphOption}
                     />
                     <GraphSummaryFieldView
                         summaryData={salesSummaryData}

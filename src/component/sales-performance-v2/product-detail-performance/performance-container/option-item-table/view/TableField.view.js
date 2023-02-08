@@ -26,13 +26,12 @@ export default function TableFieldView(props) {
                     <TableHead />
                     <tbody style={{ borderTop: 'none' }}>
                         {props.tableData?.map((r, idx) => {
-                            let tdBackgroundColor = (idx % 2 === 1) ? '#f7f7f7' : '#ffffff';
                             let rowSpanSize = r.performance.length + 1;
 
                             return (
                                 <React.Fragment key={idx}>
                                     <tr
-                                        style={{ fontWeight: '600', backgroundColor: tdBackgroundColor, borderBottom: '1px solid rgb(224 224 224)' }}
+                                        style={{ fontWeight: '600', borderBottom: '1px solid rgb(224 224 224)' }}
                                         className='rowSpan'
                                     >
                                         <td
@@ -42,7 +41,7 @@ export default function TableFieldView(props) {
                                         </td>
                                         <td
                                             rowSpan={rowSpanSize}
-                                            style={{ borderRight: '1px solid rgb(224 224 224)', backgroundColor: tdBackgroundColor }}
+                                            style={{ borderRight: '1px solid rgb(224 224 224)' }}
                                         >
                                             {r.productDefaultName}
                                         </td>

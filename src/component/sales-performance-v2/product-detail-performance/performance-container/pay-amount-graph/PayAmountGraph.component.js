@@ -18,7 +18,7 @@ export default function PayAmountGraphComponent(props) {
     const [salesSummaryData, setSalesSummaryData] = useState(null);
     const [totalSummaryData, setTotalSummaryData] = useState(null);
     
-    const [totalPayAmountGraphOption, setTotalPayAmountGraphOption] = useState(null);
+    const [graphOption, setGraphOption] = useState(null);
 
     useEffect(() => {
         if(!props.searchDimension) {
@@ -29,8 +29,7 @@ export default function PayAmountGraphComponent(props) {
             return;
         }
 
-        if(!(props.performance && props.performance.length > 0)) {
-            __handle.action.resetGraphData();
+        if(!props.performance) {
             return;
         }
 
@@ -47,25 +46,24 @@ export default function PayAmountGraphComponent(props) {
 
     const __handle = {
         action: {
-            resetGraphData: () => {
-                setTotalPayAmountGraphData(null);
-                setTotalSummaryData(null);
-                setSalesPayAmountGraphData(null);
-                setSalesSummaryData(null);
-                setTotalPayAmountGraphOption(null);
-            },
             createGraphData: () => {
                 let salesPayAmountData = [];
                 let orderPayAmountData = [];
                 let graphLabels = new Set([]);
+
                 let minimumDate = props.performance[0].datetime;
-                let maximumDate = props.performance[props.performance.length - 1].datetime;
+                let maximumDate = props.performance.slice(-1)[0].datetime;
                 let selectedOptionCodes = props.selectedOptions?.map(r => r.code) ?? [];
 
                 let searchPerformance = props.performance.map(r => {
+                    let salesPayAmount = 0;
+                    let orderPayAmount = 0;
                     let searchData = r.performances.filter(r => selectedOptionCodes.includes(r.optionCode));
-                    let salesPayAmount = _.sumBy(searchData, 'salesPayAmount');
-                    let orderPayAmount = _.sumBy(searchData, 'orderPayAmount');
+
+                    searchData.forEach(data => {
+                        salesPayAmount += data.salesPayAmount;
+                        orderPayAmount += data.orderPayAmount;
+                    })
 
                     return {
                         datetime: r.datetime,
@@ -74,22 +72,34 @@ export default function PayAmountGraphComponent(props) {
                     }
                 });
 
-                for(let i = 0; i < searchPerformance.length; i++) {
-                    let datetime = dateToYYYYMMDDAndDayName(searchPerformance[i].datetime);
+                searchPerformance.forEach(data => {
+                    let datetime = dateToYYYYMMDDAndDayName(data.datetime);
                     if(props.searchDimension === 'week') {
-                        datetime = getWeekNumberAndSearchDateRange(searchPerformance[i].datetime, minimumDate, maximumDate);
+                        datetime = getWeekNumberAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                     }else if(props.searchDimension === 'month') {
-                        datetime = getMonthAndSearchDateRange(searchPerformance[i].datetime, minimumDate, maximumDate);
+                        datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                     }
 
                     if(graphLabels.has(datetime)) {
-                        salesPayAmountData[salesPayAmountData.length - 1] += searchPerformance[i].salesPayAmount;
-                        orderPayAmountData[orderPayAmountData.length - 1] += searchPerformance[i].orderPayAmount;
+                        salesPayAmountData[salesPayAmountData.length - 1] += data.salesPayAmount;
+                        orderPayAmountData[orderPayAmountData.length - 1] += data.orderPayAmount;
                     }else {
                         graphLabels.add(datetime);
-                        salesPayAmountData.push(searchPerformance[i].salesPayAmount);
-                        orderPayAmountData.push(searchPerformance[i].orderPayAmount);
+                        salesPayAmountData.push(data.salesPayAmount);
+                        orderPayAmountData.push(data.orderPayAmount);
                     }
+                })
+
+                let lineGraphOfOrder = {
+                    ...new GraphDataset().toJSON(),
+                    type: 'line',
+                    label: '주문 매출액',
+                    data: orderPayAmountData,
+                    fill: false,
+                    borderColor: DEFAULT_GRAPH_BG_2COLOR[0] + '88',
+                    backgroundColor: DEFAULT_GRAPH_BG_2COLOR[0] + '88',
+                    order: -1,
+                    pointRadius: 2
                 }
 
                 let barGraphOfSales = {
@@ -102,18 +112,6 @@ export default function PayAmountGraphComponent(props) {
                     backgroundColor: DEFAULT_GRAPH_BG_2COLOR[1],
                     borderWidth: 0,
                     order: 0
-                }
-
-                let lineGraphOfOrder = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'line',
-                    label: '주문 매출액',
-                    data: orderPayAmountData,
-                    fill: false,
-                    borderColor: DEFAULT_GRAPH_BG_2COLOR[0] + '88',
-                    backgroundColor: DEFAULT_GRAPH_BG_2COLOR[0] + '88',
-                    order: -1,
-                    pointRadius: 2
                 }
 
                 // 판매매출액 7일간 평균 데이터 생성
@@ -150,11 +148,16 @@ export default function PayAmountGraphComponent(props) {
                 setTotalPayAmountGraphData(createdTotalGraph);
 
                 // 매출 그래프 요약 데이터 생성
-                let salesData = setAnalysisResultText([barGraphOfSales]);
-                let data = setAnalysisResultText([barGraphOfSales, lineGraphOfOrder]);
-                
+                __handle.action.createSalesSummary([barGraphOfSales]);
+                __handle.action.createTotalSummary([barGraphOfSales, lineGraphOfOrder]);
+            },
+            createSalesSummary: (data) => {
+                let salesData = setAnalysisResultText(data);
                 setSalesSummaryData(salesData);
-                setTotalSummaryData(data);
+            },
+            createTotalSummary: (data) => {
+                let totalData = setAnalysisResultText(data);
+                setTotalSummaryData(totalData);
             },
             createGraphOption: () => {
                 let option = {
@@ -175,7 +178,7 @@ export default function PayAmountGraphComponent(props) {
                     }
                 }
 
-                setTotalPayAmountGraphOption(option);
+                setGraphOption(option);
             }
         }
     }
@@ -187,7 +190,7 @@ export default function PayAmountGraphComponent(props) {
             <div className='content-box'>
                 <GraphBodyFieldView
                     totalPayAmountGraphData={props.checkedSwitch ? totalPayAmountGraphData : salesPayAmountGraphData}
-                    totalPayAmountGraphOption={totalPayAmountGraphOption}
+                    graphOption={graphOption}
                 />
                 <GraphSummaryFieldView
                     summaryData={props.checkedSwitch ? totalSummaryData : salesSummaryData}
