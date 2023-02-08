@@ -9,6 +9,7 @@ import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
 const DEFAULT_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1'];
 
+
 // 판매스토어별 총 매출액
 export default function OptionItemTableComponent(props) {
     const [tableData, setTableData] = useState(null);

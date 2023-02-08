@@ -181,6 +181,10 @@ const ManagementNavbar = (props) => {
         location
     } = useRouterHook();
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
+
     return (
         <Container>
             <NavbarBox>

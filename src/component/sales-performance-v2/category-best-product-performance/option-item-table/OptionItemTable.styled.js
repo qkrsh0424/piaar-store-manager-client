@@ -130,6 +130,7 @@ const GraphBodyFieldWrapper = styled.div`
     display: flex;
     justify-content: space-around;
     width: 100%;
+    padding: 30px 0;
 
     .half-type-graph {
         width: 45%;
@@ -141,7 +142,7 @@ const GraphBodyFieldWrapper = styled.div`
     }
 
     .graph-wrapper {
-        height: 1500px;
+        height: 3500px;
     }
 `;
 

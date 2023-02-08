@@ -68,8 +68,8 @@ export default function BestCategoryGraphComponent(props) {
                     label: '판매 매출액',
                     data: payAmountData,
                     fill: true,
-                    borderColor: SALES_GRAPH_BG_COLOR,
                     backgroundColor: SALES_GRAPH_BG_COLOR,
+                    borderColor: '#fff',
                     tension: 0,
                 }
                 
@@ -79,8 +79,8 @@ export default function BestCategoryGraphComponent(props) {
                     label: '판매 수량',
                     data: unitData,
                     fill: true,
-                    borderColor: SALES_GRAPH_BG_COLOR,
                     backgroundColor: SALES_GRAPH_BG_COLOR,
+                    borderColor: '#fff',
                     tension: 0
                 }
 

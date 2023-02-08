@@ -149,7 +149,7 @@ const TableFieldWrapper = styled.div`
 
 const GraphBodyFieldWrapper = styled.div`
     min-width: 1000px;
-    min-height: 350px;
+    min-height: 400px;
     display: flex;
     justify-content: space-around;
     align-items: center;
