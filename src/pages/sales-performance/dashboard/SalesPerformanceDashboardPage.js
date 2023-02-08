@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DrawerNavbarMain from '../../../component/nav/DrawerNavbarMain';
 import SalesPerformanceDashboardComponent from '../../../component/sales-performance-v2/dashboard';
 // import SalesPerformanceComponent from '../../component/sales_performance';
 import ManagementNavbar from '../../../component/sales-performance-v2/navbar/ManagementNavbar';
+import useRouterHook from '../../../hooks/router/useRouterHook';
 
 const Container = styled.div`
     position: relative;

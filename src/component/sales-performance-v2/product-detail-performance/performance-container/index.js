@@ -196,12 +196,6 @@ export default function PerformanceContainerComponent (props) {
         },
         submit: {
             searchPerformance: async (body) => {
-                let productCodes = body.productCodes;
-
-                if(!(productCodes && productCodes.length > 0)) {
-                    return;
-                }
-                
                 onActionOpenBackdrop();
                 await reqSearchProductPerformance(body);
                 await reqSearchChannelPerformance(body);

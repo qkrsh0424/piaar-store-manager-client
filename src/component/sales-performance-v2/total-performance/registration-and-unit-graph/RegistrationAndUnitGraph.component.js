@@ -176,7 +176,9 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     startDate,
                     endDate
                 }
-                props.onActionOpenDetailGraphSelectorModal(searchValue);
+
+                props.onActionUpdateDetailSearchValue(searchValue);
+                props.onActionOpenDetailGraphSelectorModal();
             },
             openWholePeroidDetailGraphSelectorModal: () => {
                 let startDate = getStartDate(props.performance[0].datetime);
@@ -186,7 +188,8 @@ export default function RegistrationAndUnitGraphComponent(props) {
                     startDate,
                     endDate
                 }
-                props.onActionOpenDetailGraphSelectorModal(searchValue);
+                props.onActionUpdateDetailSearchValue(searchValue);
+                props.onActionOpenDetailGraphSelectorModal();
             }
         }
     }

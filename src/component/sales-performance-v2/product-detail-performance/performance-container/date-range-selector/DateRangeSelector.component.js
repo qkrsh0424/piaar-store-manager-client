@@ -33,12 +33,16 @@ export default function DateRangeSelectorComponent(props) {
     } = useBasicSnackbarHookV2();
 
     useEffect(() => {
+        if(!datePickerModalOpen) {
+            return;
+        }
+
         let date1 = location.state?.startDate ? location.state?.startDate : new Date(query.startDate);
         let date2 = location.state?.endDate ? location.state?.endDate : new Date(query.endDate);
 
         setStartDate(date1);
         setEndDate(date2);
-    }, [])
+    }, [datePickerModalOpen])
 
     const __handle = {
         action: {
