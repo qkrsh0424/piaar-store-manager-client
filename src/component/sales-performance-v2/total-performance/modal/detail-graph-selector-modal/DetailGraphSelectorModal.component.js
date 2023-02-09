@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import useRouterHook from "../../../../../hooks/router/useRouterHook";
+import { dateToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
 import CommonModalComponentV2 from "../../../../module/modal/CommonModalComponentV2";
-import { BoxFieldWrapper, Container, DateSelectorFieldWrapper } from "./DetailGraphSelectorModal.styled";
+import { BoxFieldWrapper, Container } from "./DetailGraphSelectorModal.styled";
 
 function BoxFieldView({ onActionSelectSalesChannel, onActionSelectCategory, onActionSelectProduct }) {
     return (
@@ -39,33 +39,46 @@ function BoxFieldView({ onActionSelectSalesChannel, onActionSelectCategory, onAc
 
 export default function DetailSelectorModalComponent(props) {
     const {
+        query,
         navigateUrl
     } = useRouterHook();
 
     const __handle = {
         action: {
             selectSalesChannel: () => {
+                let searchValue = props.detailSearchValue;
+
                 let data = {
                     pathname: '/sales-performance/sales-channel',
-                    state: props.detailSearchValue
+                    state: searchValue
                 }
 
+                query.startDate = dateToYYYYMMDD(searchValue.startDate);
+                query.endDate = dateToYYYYMMDD(searchValue.endDate);
                 navigateUrl(data);
             },
             selectCategory: () => {
+                let searchValue = props.detailSearchValue;
+
                 let data = {
                     pathname: '/sales-performance/category',
-                    state: props.detailSearchValue
+                    state: searchValue
                 }
 
+                query.startDate = dateToYYYYMMDD(searchValue.startDate);
+                query.endDate = dateToYYYYMMDD(searchValue.endDate);
                 navigateUrl(data);
             },
             selectProduct: () => {
+                let searchValue = props.detailSearchValue;
+
                 let data = {
                     pathname: '/sales-performance/product/best',
-                    state: props.detailSearchValue
+                    state: searchValue
                 }
 
+                query.startDate = dateToYYYYMMDD(searchValue.startDate);
+                query.endDate = dateToYYYYMMDD(searchValue.endDate);
                 navigateUrl(data);
             }
         }

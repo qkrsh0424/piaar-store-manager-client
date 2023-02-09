@@ -40,17 +40,13 @@ export default function DateRangeSelectorComponent(props) {
         let date1 = setSubtractedDate(new Date(), 0, 0, -13);
         let date2 = new Date();
         
-        if(location.state?.startDate && location.state?.endDate) {
-            date1 = location.state.startDate;
-            date2 = location.state.endDate;
-        }else if(query.startDate && query.endDate) {
+        if(query.startDate && query.endDate) {
             date1 = new Date(query.startDate);
             date2 = new Date(query.endDate);
         }
 
-        // query.startDate = dateToYYYYMMDD(date1);
-        // query.endDate = dateToYYYYMMDD(date2);
-        // navigateParams({ replace : true });
+        setStartDate(date1);
+        setEndDate(date2);
     }, [datePickerModalOpen])
     
     useEffect(() => {
@@ -83,10 +79,6 @@ export default function DateRangeSelectorComponent(props) {
             }
             
             await props.onSubmitSearchPerformance(body);
-
-            query.startDate = dateToYYYYMMDD(searchStartDate);
-            query.endDate = dateToYYYYMMDD(searchEndDate);
-            navigateParams({ replace: true });
         }
 
         fetchInit();

@@ -39,11 +39,8 @@ export default function DateRangeSelectorComponent(props) {
 
         let date1 = setSubtractedDate(new Date(), 0, 0, -13);
         let date2 = new Date();
-        
-        if(location.state?.startDate && location.state?.endDate) {
-            date1 = location.state.startDate;
-            date2 = location.state.endDate;
-        }else if(query.startDate && query.endDate) {
+
+        if(query.startDate && query.endDate) {
             date1 = new Date(query.startDate);
             date2 = new Date(query.endDate);
         }

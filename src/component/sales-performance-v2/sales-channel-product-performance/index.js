@@ -102,10 +102,6 @@ const SalesChannelProductPerformanceComponent = (props) => {
             onActionOpenBackdrop();
             await reqSearchChannelPerformance(body);
             onActionCloseBackdrop();
-
-            query.startDate = dateToYYYYMMDD(searchStartDate);
-            query.endDate = dateToYYYYMMDD(searchEndDate);
-            navigateParams({ replace: true });
         }
 
         if(!(selectedProductAndOptions && selectedProductAndOptions.length > 0)){

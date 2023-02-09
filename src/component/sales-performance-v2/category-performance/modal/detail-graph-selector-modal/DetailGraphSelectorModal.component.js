@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useRouterHook from "../../../../../hooks/router/useRouterHook";
+import { dateToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
 import CustomDatePicker from "../../../../module/date-picker/CustomDatePicker";
 import CommonModalComponentV2 from "../../../../module/modal/CommonModalComponentV2";
 import { BoxFieldWrapper, Container } from "./DetailGraphSelectorModal.styled";
@@ -47,11 +48,15 @@ export default function DetailGraphSelectorModalComponent(props) {
                 updateRouteState(selectedState);
             },
             selectProduct: () => {
+                let searchValue = props.detailSearchValue;
+
                 let data = {
                     pathname: '/sales-performance/category/product/best',
-                    state: props.detailSearchValue
+                    state: searchValue
                 }
 
+                query.startDate = dateToYYYYMMDD(searchValue.startDate);
+                query.endDate = dateToYYYYMMDD(searchValue.endDate);
                 navigateUrl(data);
             }
         }

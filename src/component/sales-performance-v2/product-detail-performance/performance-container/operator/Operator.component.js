@@ -37,7 +37,7 @@ export default function OperatorComponent(props) {
 
         let productCodes = location.state?.productCodes[0];
         props.onActionChangeSelectedProduct(productCodes);
-    }, [location.state, props.products])
+    }, [props.products])
 
     useEffect(() => {
         if(!props.selectedProduct) {

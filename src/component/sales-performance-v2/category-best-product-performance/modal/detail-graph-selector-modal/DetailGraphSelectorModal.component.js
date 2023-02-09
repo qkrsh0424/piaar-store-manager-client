@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import useRouterHook from "../../../../../hooks/router/useRouterHook";
+import { dateToYYYYMMDD } from "../../../../../utils/dateFormatUtils";
 import CommonModalComponentV2 from "../../../../module/modal/CommonModalComponentV2";
 import { BoxFieldWrapper, Container } from "./DetailGraphSelectorModal.styled";
 
@@ -20,31 +20,23 @@ function BoxFieldView({ onActionSelectProductDetail }) {
 }
 
 export default function DetailGraphSelectorModalComponent(props) {
-    const [searchValue, setSearchValue] = useState(null);
-
     const {
+        query,
         navigateUrl
     } = useRouterHook();
 
-    useEffect(() => {
-        if(!props.detailSearchValue) {
-            return;
-        }
-
-        __handle.action.initSearchValue();
-    }, [props.detailSearchValue])
-
     const __handle = {
         action: {
-            initSearchValue: () => {
-                setSearchValue({...props.detailSearchValue});
-            },
             selectProductDetail: () => {
+                let searchValue = props.detailSearchValue;
+
                 let data = {
                     pathname: '/sales-performance/product/detail',
                     state: searchValue
                 }
 
+                query.startDate = dateToYYYYMMDD(searchValue.startDate);
+                query.endDate = dateToYYYYMMDD(searchValue.endDate);
                 navigateUrl(data);
             }
         }
