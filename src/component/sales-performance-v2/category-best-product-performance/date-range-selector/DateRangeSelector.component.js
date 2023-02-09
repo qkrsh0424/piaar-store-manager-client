@@ -37,21 +37,35 @@ export default function DateRangeSelectorComponent(props) {
             return;
         }
 
-        let date1 = location.state?.startDate ? location.state?.startDate : new Date(query.startDate);
-        let date2 = location.state?.endDate ? location.state?.endDate : new Date(query.endDate);
+        let date1 = setSubtractedDate(new Date(), 0, 0, -13);
+        let date2 = new Date();
+        
+        if(location.state?.startDate && location.state?.endDate) {
+            date1 = location.state.startDate;
+            date2 = location.state.endDate;
+        }else if(query.startDate && query.endDate) {
+            date1 = new Date(query.startDate);
+            date2 = new Date(query.endDate);
+        }
 
-        setStartDate(date1);
-        setEndDate(date2);
-
-        query.startDate = dateToYYYYMMDD(date1);
-        query.endDate = dateToYYYYMMDD(date2);
-        navigateParams({ replace : true });
+        // query.startDate = dateToYYYYMMDD(date1);
+        // query.endDate = dateToYYYYMMDD(date2);
+        // navigateParams({ replace : true });
     }, [datePickerModalOpen])
     
     useEffect(() => {
         async function fetchInit() {
-            let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
-            let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
+            let searchStartDate = setSubtractedDate(new Date(), 0, 0, -13);
+            let searchEndDate = new Date();
+
+            if (location.state?.startDate && location.state?.endDate) {
+                searchStartDate = location.state.startDate;
+                searchEndDate = location.state.endDate;
+            } else if (query.startDate && query.endDate) {
+                searchStartDate = new Date(query.startDate);
+                searchEndDate = new Date(query.endDate);
+            }
+
             let utcHourDifference = getTimeDiffWithUTC();
             let salesChannels = location.state?.salesChannels ?? null;
             let productCategoryNames = location.state?.productCategoryNames ?? null;
@@ -59,8 +73,8 @@ export default function DateRangeSelectorComponent(props) {
             let pageOrderByColumn = 'payAmount';
 
             let body = {
-                startDate: searchStartDate,
-                endDate: searchEndDate,
+                startDate: getStartDate(searchStartDate),
+                endDate: getEndDate(searchEndDate),
                 utcHourDifference,
                 salesChannels,
                 productCategoryNames,
@@ -69,6 +83,10 @@ export default function DateRangeSelectorComponent(props) {
             }
             
             await props.onSubmitSearchPerformance(body);
+
+            query.startDate = dateToYYYYMMDD(searchStartDate);
+            query.endDate = dateToYYYYMMDD(searchEndDate);
+            navigateParams({ replace: true });
         }
 
         fetchInit();

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BackdropHookComponent, useBackdropHook } from "../../../hooks/backdrop/useBackdropHook";
 import useRouterHook from "../../../hooks/router/useRouterHook";
-import { getEndDate, getStartDate, getTimeDiffWithUTC } from "../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getEndDate, getStartDate, getTimeDiffWithUTC, setSubtractedDate } from "../../../utils/dateFormatUtils";
 import DateRangeSelectorComponent from "./date-range-selector/DateRangeSelector.component";
 import GraphOperatorComponent from "./graph-operator/GraphOperator.component";
 import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
@@ -42,7 +42,8 @@ export default function ProductPerformanceComponent (props) {
 
     const {
         query,
-        location
+        location,
+        navigateParams
     } = useRouterHook();
 
     const {
@@ -75,15 +76,23 @@ export default function ProductPerformanceComponent (props) {
     useEffect(() => {
         async function fetchInit() {
             let searchOptionCodes = selectedOptions.map(r => r.option.code);
+            let searchStartDate = setSubtractedDate(new Date(), 0, 0, -13);
+            let searchEndDate = new Date();
 
-            let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
-            let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
+            if (location.state?.startDate && location.state?.endDate) {
+                searchStartDate = location.state.startDate;
+                searchEndDate = location.state.endDate;
+            } else if (query.startDate && query.endDate) {
+                searchStartDate = new Date(query.startDate);
+                searchEndDate = new Date(query.endDate);
+            }
+
             let utcHourDifference = getTimeDiffWithUTC();
             let optionCodes = searchOptionCodes;
 
             let body = {
-                startDate: searchStartDate,
-                endDate: searchEndDate,
+                startDate: getStartDate(searchStartDate),
+                endDate: getEndDate(searchEndDate),
                 utcHourDifference,
                 optionCodes
             }
@@ -91,6 +100,10 @@ export default function ProductPerformanceComponent (props) {
             onActionOpenBackdrop();
             await reqSearchProductPerformance(body);
             onActionCloseBackdrop();
+
+            query.startDate = dateToYYYYMMDD(searchStartDate);
+            query.endDate = dateToYYYYMMDD(searchEndDate);
+            navigateParams({ replace: true });
         }
 
         if(selectedOptions?.length > 0) {

@@ -91,8 +91,8 @@ const NavbarBox = styled.div`
     }
 `;
 
-const TODAY = dateToYYYYMMDD(new Date());
-const PREV_2WEEKS_DATE = dateToYYYYMMDD(setSubtractedDate(TODAY, 0, 0, -13));
+// const TODAY = dateToYYYYMMDD(new Date());
+// const PREV_2WEEKS_DATE = dateToYYYYMMDD(setSubtractedDate(TODAY, 0, 0, -13));
 
 const thisRouters = [
     {
@@ -110,7 +110,7 @@ const thisRouters = [
             {
                 name: '총 매출액 & 판매 건',
                 pathname: '/sales-performance/total',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
         ]
     },
@@ -120,17 +120,17 @@ const thisRouters = [
             {
                 name: '총 매출액 & 판매 건',
                 pathname: '/sales-performance/sales-channel',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
                 name: '상품 순위',
                 pathname: '/sales-performance/sales-channel/product/best',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
                 name: '다중 상품 성과',
                 pathname: '/sales-performance/sales-channel/product',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
         ]
     },
@@ -140,17 +140,17 @@ const thisRouters = [
             {
                 name: '총 매출액 & 판매 건',
                 pathname: '/sales-performance/category',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
                 name: '상품 순위',
                 pathname: '/sales-performance/category/product/best',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
                 name: 'BEST 카테고리 상품',
                 pathname: '/sales-performance/category/best',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             }
         ]
     },
@@ -160,17 +160,17 @@ const thisRouters = [
             {
                 name: '총 매출액 & 판매 건',
                 pathname: '/sales-performance/product',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
                 name: '상품 순위',
                 pathname: '/sales-performance/product/best',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             },
             {
                 name: '단일 상품 성과',
                 pathname: '/sales-performance/product/detail',
-                params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
             }
         ]
     }
@@ -226,7 +226,8 @@ const ManagementNavbar = (props) => {
                                     return (
                                         <div key={navPage.name} className='link-box'>
                                             <Link
-                                                to={navPage.pathname + (navPage.params || '')}
+                                                // to={navPage.pathname + (navPage.params || '')}
+                                                to={navPage.pathname + (location.search || '')}
                                                 replace={true}
                                             >
                                                 <button

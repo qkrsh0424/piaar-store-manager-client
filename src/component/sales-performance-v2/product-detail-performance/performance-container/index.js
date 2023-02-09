@@ -13,7 +13,7 @@ import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
 import OptionItemTableComponent from "./option-item-table/OptionItemTable.component";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import DateRangeSelectorComponent from "./date-range-selector/DateRangeSelector.component";
-import { getEndDate, getStartDate, getTimeDiffWithUTC } from "../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDD, getEndDate, getStartDate, getTimeDiffWithUTC, setSubtractedDate } from "../../../../utils/dateFormatUtils";
 
 const Container = styled.div`
     /* height: 100%;
@@ -42,7 +42,8 @@ export default function PerformanceContainerComponent (props) {
 
     const {
         query,
-        location
+        location,
+        navigateParams
     } = useRouterHook();
 
     const {
@@ -86,8 +87,17 @@ export default function PerformanceContainerComponent (props) {
 
     useEffect(() => {
         async function fetchInit() {
-            let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
-            let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
+            let searchStartDate = setSubtractedDate(new Date(), 0, 0, -13);
+            let searchEndDate = new Date();
+
+            if (location.state?.startDate && location.state?.endDate) {
+                searchStartDate = location.state.startDate;
+                searchEndDate = location.state.endDate;
+            } else if (query.startDate && query.endDate) {
+                searchStartDate = new Date(query.startDate);
+                searchEndDate = new Date(query.endDate);
+            }
+
             let utcHourDifference = getTimeDiffWithUTC();
             let salesChannels = location.state?.salesChannels ?? null;
             let productCategoryNames = location.state?.productCategoryNames ?? null;
@@ -95,8 +105,8 @@ export default function PerformanceContainerComponent (props) {
             let pageOrderByColumn = 'payAmount';
 
             let body = {
-                startDate: searchStartDate,
-                endDate: searchEndDate,
+                startDate: getStartDate(searchStartDate),
+                endDate: getEndDate(searchEndDate),
                 utcHourDifference,
                 salesChannels,
                 productCategoryNames,
@@ -105,6 +115,9 @@ export default function PerformanceContainerComponent (props) {
             }
             
             await __handle.submit.searchPerformance(body);
+            query.startDate = dateToYYYYMMDD(searchStartDate);
+            query.endDate = dateToYYYYMMDD(searchEndDate);
+            navigateParams({ replace: true });
         }
 
         if(selectedProduct) {

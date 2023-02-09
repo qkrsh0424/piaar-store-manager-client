@@ -37,8 +37,16 @@ export default function DateRangeSelectorComponent(props) {
             return;
         }
 
-        let date1 = location.state?.startDate ? location.state?.startDate : new Date(query.startDate);
-        let date2 = location.state?.endDate ? location.state?.endDate : new Date(query.endDate);
+        let date1 = setSubtractedDate(new Date(), 0, 0, -13);
+        let date2 = new Date();
+        
+        if(location.state?.startDate && location.state?.endDate) {
+            date1 = location.state.startDate;
+            date2 = location.state.endDate;
+        }else if(query.startDate && query.endDate) {
+            date1 = new Date(query.startDate);
+            date2 = new Date(query.endDate);
+        }
 
         setStartDate(date1);
         setEndDate(date2);

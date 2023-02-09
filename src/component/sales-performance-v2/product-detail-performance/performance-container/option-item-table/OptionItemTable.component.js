@@ -32,8 +32,9 @@ export default function OptionItemTableComponent(props) {
         if(!props.performance) {
             return;
         }
-        
-        if(!props.selectedOptions) {
+
+        if(!(props.selectedOptions && props.selectedOptions.length > 0)) {
+            __handle.action.resetGraphData();
             return;
         }
 
@@ -43,6 +44,10 @@ export default function OptionItemTableComponent(props) {
 
     const __handle = {
         action: {
+            resetGraphData: () => {
+                setSalesPayAmountGraphData(null);
+                setSalesUnitGraphData(null);
+            },
             initTableData: () => {
                 let tableData = [...new Set(props.performance.map(r => JSON.stringify({
                     productCode: r.productCode,

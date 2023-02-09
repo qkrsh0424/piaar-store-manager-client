@@ -13,7 +13,7 @@ import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/Pay
 import OperatorComponent from './operator/Operator.component'
 import DateRangeSelectorComponent from './date-range-selector/DateRangeSelector.component';
 import useRouterHook from '../../../hooks/router/useRouterHook';
-import { getEndDate, getStartDate, getTimeDiffWithUTC } from '../../../utils/dateFormatUtils';
+import { dateToYYYYMMDD, getEndDate, getStartDate, getTimeDiffWithUTC, setSubtractedDate } from '../../../utils/dateFormatUtils';
 
 const Container = styled.div`
     height: 100%;
@@ -47,7 +47,8 @@ const SalesChannelProductPerformanceComponent = (props) => {
 
     const {
         query,
-        location
+        location,
+        navigateParams
     } = useRouterHook();
 
     const {
@@ -77,14 +78,23 @@ const SalesChannelProductPerformanceComponent = (props) => {
                 r.options.forEach(r2 => searchOptionCodes.push(r2.code));
             });
 
-            let searchStartDate = location.state?.startDate ? getStartDate(location.state?.startDate) : getStartDate(query.startDate);
-            let searchEndDate = location.state?.endDate ? getEndDate(location.state?.endDate) : getEndDate(query.endDate);
+            let searchStartDate = setSubtractedDate(new Date(), 0, 0, -13);
+            let searchEndDate = new Date();
+
+            if (location.state?.startDate && location.state?.endDate) {
+                searchStartDate = location.state.startDate;
+                searchEndDate = location.state.endDate;
+            } else if (query.startDate && query.endDate) {
+                searchStartDate = new Date(query.startDate);
+                searchEndDate = new Date(query.endDate);
+            }
+
             let utcHourDifference = getTimeDiffWithUTC();
             let optionCodes = searchOptionCodes;
 
             let body = {
-                startDate: searchStartDate,
-                endDate: searchEndDate,
+                startDate: getStartDate(searchStartDate),
+                endDate: getEndDate(searchEndDate),
                 utcHourDifference,
                 optionCodes
             }
@@ -92,6 +102,10 @@ const SalesChannelProductPerformanceComponent = (props) => {
             onActionOpenBackdrop();
             await reqSearchChannelPerformance(body);
             onActionCloseBackdrop();
+
+            query.startDate = dateToYYYYMMDD(searchStartDate);
+            query.endDate = dateToYYYYMMDD(searchEndDate);
+            navigateParams({ replace: true });
         }
 
         if(!(selectedProductAndOptions && selectedProductAndOptions.length > 0)){
