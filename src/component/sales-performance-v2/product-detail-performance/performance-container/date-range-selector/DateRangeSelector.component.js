@@ -117,18 +117,18 @@ export default function DateRangeSelectorComponent(props) {
                 let searchStartDate = startDate ? getStartDate(startDate) : null;
                 let searchEndDate = endDate ? getEndDate(endDate) : null;
                 let utcHourDifference = getTimeDiffWithUTC();
-                let salesChannels = location.state?.salesChannels ?? null;
-                let productCategoryNames = location.state?.productCategoryNames ?? null;
+                // let salesChannels = location.state?.salesChannels ?? null;
+                // let productCategoryNames = location.state?.productCategoryNames ?? null;
                 let productCodes = [props.selectedProduct.code];
-                let pageOrderByColumn = 'payAmount';
+                // let pageOrderByColumn = 'payAmount';
 
                 let body = {
                     startDate: searchStartDate,
                     endDate: searchEndDate,
                     utcHourDifference,
-                    salesChannels,
-                    productCategoryNames,
-                    pageOrderByColumn,
+                    // salesChannels,
+                    // productCategoryNames,
+                    // pageOrderByColumn,
                     productCodes
                 }
 
