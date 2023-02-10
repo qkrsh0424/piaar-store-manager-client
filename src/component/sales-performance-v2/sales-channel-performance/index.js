@@ -60,17 +60,29 @@ const SalesChannelPerformanceComponent = (props) => {
         reqSearchChannelPerformance
     } = useChannelSalesPerformanceHook();
 
+    // 페이지 이동 후 다시 되돌아왔을 때 초기화
+    useEffect(() => {
+        __handle.action.initChannel();
+    }, [])
+
     useEffect(() => {
         if(!performance) {
             return;
         }
 
-        __handle.action.initChannel();
+        __handle.action.updateChannel();
     }, [performance])
 
     const __handle = {
         action: {
             initChannel: () => {
+                let selectedData = location.state?.salesChannels;
+        
+                if(selectedData) {
+                    setSelectedChannel(selectedData);
+                }
+            },
+            updateChannel: () => {
                 let channel = new Set([]);
                 performance.forEach(r => r.performances?.forEach(r2 => {
                     channel.add(r2.salesChannel);
@@ -79,11 +91,9 @@ const SalesChannelPerformanceComponent = (props) => {
                 let channelName = [...channel].sort();
                 setSalesChannel(channelName);
 
-                // 이전에 선택된 내역이 존재한다면
-                let selectedChannels = location.state?.salesChannels;
-                if(selectedChannels) {
-                    setSelectedChannel(selectedChannels);
-                }
+                // 이전에 선택된 스토어는 미리 선택
+                let data = selectedChannel.filter(channel => channelName.includes(channel));
+                setSelectedChannel(data);
             },
             isCheckedOne: (channel) => {
                 return selectedChannel.some(name => name === channel);

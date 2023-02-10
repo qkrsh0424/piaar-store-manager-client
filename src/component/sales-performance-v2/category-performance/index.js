@@ -60,18 +60,29 @@ const CategoryPerformanceComponent = (props) => {
         reqSearchCategoryPerformance,
     } = useCategorySalesPerformanceHook();
 
+    // 페이지 이동 후 다시 되돌아왔을 때 초기화
+    useEffect(() => {
+        __handle.action.initCategory();
+    }, [])
+
     useEffect(() => {
         if(!performance) {
             return;
         }
 
-        __handle.action.initCategory();
-        __handle.action.initSelectedCategory();
+        __handle.action.updateCategory();
     }, [performance])
 
     const __handle = {
         action: {
             initCategory: () => {
+                let selectedData = location.state?.productCategoryNames;
+        
+                if(selectedData) {
+                    setSelectedCategory(selectedData);
+                }
+            },
+            updateCategory: () => {
                 let category = new Set([]);
                 performance.forEach(r => r.performances?.forEach(r2 => {
                     category.add(r2.productCategoryName);
@@ -79,12 +90,10 @@ const CategoryPerformanceComponent = (props) => {
 
                 let categoryName = [...category].sort();
                 setCategory(categoryName);
-            },
-            initSelectedCategory: () => {
-                let category = location.state?.productCategoryNames;
-                if(category) {
-                    setSelectedCategory(category);
-                }
+
+                // 이전에 선택된 카테고리는 미리 선택
+                let data = selectedCategory.filter(category => categoryName.includes(category));
+                setSelectedCategory(data);
             },
             isCheckedOne: (category) => {
                 return selectedCategory?.some(name => name === category);

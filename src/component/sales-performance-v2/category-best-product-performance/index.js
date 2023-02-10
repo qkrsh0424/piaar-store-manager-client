@@ -76,7 +76,7 @@ function SearchFieldView({ productCategoryNames }) {
                         </div>
                     )
                 })}
-                {!productCategoryNames &&
+                {!(productCategoryNames && productCategoryNames.length > 0) && 
                     <div style={{ color: 'var(--erp-main-color)' }}>전체 카테고리</div>
                 }
             </div>
@@ -96,7 +96,8 @@ const CategoryBestProductPerformanceComponent = (props) => {
     const [selectedCategoryNames, setSelectedCategoryNames] = useState(null);
     
     const {
-        location
+        location,
+        navigateUrl
     } = useRouterHook();
 
     const {
@@ -119,10 +120,18 @@ const CategoryBestProductPerformanceComponent = (props) => {
 
     useEffect(() => {
         if(!location.state) {
+            alert('카테고리별 상품 순위를 확인하기 위해 카테고리를 먼저 선택해주세요.\n[카테고리 총 매출액 & 판매 건] 페이지로 이동합니다.');
+            navigateUrl({
+                pathname: '/sales-performance/category'
+            });
             return;
         }
 
-        if(!location.state.productCategoryNames) {
+        if(!(location.state.productCategoryNames && location.state.productCategoryNames.length > 0)) {
+            alert('카테고리별 상품 순위를 확인하기 위해 카테고리를 먼저 선택해주세요.\n[카테고리 총 매출액 & 판매 건] 페이지로 이동합니다.');
+            navigateUrl({
+                pathname: '/sales-performance/category'
+            });
             return;
         }
         __handle.action.initProductCategoryNames();

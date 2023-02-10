@@ -1,38 +1,12 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-    /* margin: 20px 0 20px 0; */
-    padding: 10px;
-    /* background-color: rgb(255, 255, 255);
-    border: 1px solid rgb(219, 221, 226); */
-    /* border-radius: 10px; */
 `;
 
 const SearchFieldWrapper = styled.div`
-    /* display: flex;
-    align-items: flex-start;
-    gap: 10px; */
     padding: 10px 0;
-
-    .search-box {
-        /* display: flex;
-        align-items: flex-end;
-        gap: 10px; */
-
-        @media screen and (max-width: 992px) {
-            width: 100%;
-        }
-    }
-
-    .search-box .search-info {
-        padding: 10px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 14px;
-    }
     
-    .search-box .button-el {
+    .button-el {
         width: 300px;
         padding: 5px 0;
         height: 48px;
@@ -51,31 +25,14 @@ const SearchFieldWrapper = styled.div`
         }
     }
 
-    .selector-box {
-        flex: 1;
-        overflow: auto;
-        background-color: #f7f7f7;
-        border-radius: 5px;
-        border: 1px solid #e1e1e1;
-    }
-
-    .selector-box .button-box {
-        position: relative;
-
-        :hover {
-            transition: 0.1s;
-            transform: scale(1.02);
-        }
-    }
-
     .search-category-info {
-        padding: 10px 5px 0 5px;
-        display: inline-block;
+        padding: 5px;
+        min-height: 30px;
     }
 
     .category-button-el {
         border: none;
-        color: var(--erp-main-color);
+        color: #7071da;
         text-align: left;
         text-decoration: underline;
         text-underline-offset: 5px;
@@ -87,6 +44,30 @@ const SearchFieldWrapper = styled.div`
         &:hover {
             opacity: 0.6;
         }
+    }
+
+    .image-wrapper {
+        width: 200px;
+        height: 100%;
+        padding: 10px 0 ;
+    }
+
+    .image-box {
+        position: relative;
+        padding-bottom: 100%;
+        box-shadow: var(--defaultBoxShadow);
+    }
+
+    .image-box img {
+        position: absolute;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        -webkit-transition: .5s;
+        transition: .5s;
+        border: 1px solid #f1f1f1;
+        border-radius: 8px;
     }
 `;
 

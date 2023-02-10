@@ -75,7 +75,7 @@ function SearchFieldView({ salesChannels }) {
                         </div>
                     )
                 })}
-                {!salesChannels &&
+                {!(salesChannels && salesChannels.length > 0) &&
                     <div style={{ color: 'var(--erp-main-color)' }}>전체 스토어</div>
                 }
             </div>
@@ -95,7 +95,8 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
     const [selectedChannels, setSelectedChannels] = useState(null);
 
     const {
-        location
+        location,
+        navigateUrl
     } = useRouterHook();
 
     const {
@@ -117,11 +118,19 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
     } = useOptionSalesPerformanceHook();
 
     useEffect(() => {
-        if(!location.state) {
+        if (!location.state) {
+            alert('스토어별 상품 순위를 확인하기 위해 스토어를 먼저 선택해주세요.\n[판매스토어 총 매출액 & 판매 건] 페이지로 이동합니다.');
+            navigateUrl({
+                pathname: '/sales-performance/sales-channel'
+            });
             return;
         }
 
-        if(!location.state.salesChannels) {
+        if (!(location.state.salesChannels && location.state.salesChannels.length > 0)) {
+            alert('스토어별 상품 순위를 확인하기 위해 스토어를 먼저 선택해주세요.\n[판매스토어 총 매출액 & 판매 건] 페이지로 이동합니다.');
+            navigateUrl({
+                pathname: '/sales-performance/sales-channel'
+            });
             return;
         }
         __handle.action.initSalesChannels();
