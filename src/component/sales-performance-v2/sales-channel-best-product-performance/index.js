@@ -140,10 +140,15 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
         async function searchOptionPerformance() {
             onActionOpenBackdrop();
             let productCodes = productPerformance?.content.map(r => r.productCode);
+
             let body = {
-                ...detailSearchValue,
-                productCodes: productCodes
+                startDate: detailSearchValue.startDate,
+                endDate: detailSearchValue.endDate,
+                utcHourDifference: detailSearchValue.utcHourDifference,
+                productCodes: productCodes,
+                salesChannels: detailSearchValue.salesChannels
             }
+
             await reqSearchChannelBestOptionPerformance(body);
             onActionCloseBackdrop();
         }
@@ -223,7 +228,16 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
             },
         },
         submit: {
-            searchPerformance: async (body) => {
+            searchPerformance: async (data) => {
+                let body = {
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                    utcHourDifference: data.utcHourDifference,
+                    salesChannels: data.salesChannels,
+                    pageOrderByColumn: data.pageOrderByColumn,
+                    page: data.page
+                }
+
                 onActionOpenBackdrop();
                 __handle.action.updateDetailSearchValue(body);
                 await reqSearchChannelBestProductPerformance(body);

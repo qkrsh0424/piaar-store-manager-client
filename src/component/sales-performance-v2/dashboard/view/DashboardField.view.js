@@ -9,9 +9,9 @@ function TrendInfoField ({ dayInfo, trendValue}) {
                 <div>{dayInfo}</div>
                 <div style={{ width: '80px' }}>
                     {trendValue >= 0 ?
-                        <div className="trend-info" style={{ color: '#7a7bda' }}>
+                        <div className="trend-info" style={{ color: '#e56767' }}>
                             <img
-                                src='/assets/icon/trending_up_fill_7A7BDA.svg'
+                                src='/assets/icon/trending_up_fill_E56767.svg'
                                 style={{ width: '20px' }}
                                 alt=""
                                 loading='lazy'
@@ -19,9 +19,9 @@ function TrendInfoField ({ dayInfo, trendValue}) {
                             <div>{Math.abs(trendValue)}%</div>
                         </div>
                         :
-                        <div className="trend-info" style={{ color: '#e56767' }}>
+                        <div className="trend-info" style={{ color: '#7a7bda' }}>
                             <img
-                                src='/assets/icon/trending_down_fill_E56767.svg'
+                                src='/assets/icon/trending_down_fill_7A7BDA.svg'
                                 style={{ width: '20px' }}
                                 alt=""
                                 loading='lazy'

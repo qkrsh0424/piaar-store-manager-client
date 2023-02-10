@@ -9,8 +9,8 @@ import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import { useState } from 'react';
 import useTotalSalesPerformanceHook from './hooks/useTotalSalesPerformanceHook';
 import { BackdropHookComponent, useBackdropHook } from '../../../hooks/backdrop/useBackdropHook';
-import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
 import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
+import DetailGraphSelectorModalComponent from '../sales-channel-best-product-performance/modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
 
 const Container = styled.div`
     height: 100%;
@@ -73,7 +73,13 @@ const TotalSalesPerformanceComponent = (props) => {
             }
         },
         submit: {
-            searchPerformance: async (body) => {
+            searchPerformance: async (data) => {
+                let body = {
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                    utcHourDifference: data.utcHourDifference,
+                }
+
                 onActionOpenBackdrop();
                 await reqSearchTotalPerformance(body);
                 onActionCloseBackdrop();

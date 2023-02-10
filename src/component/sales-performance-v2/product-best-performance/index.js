@@ -62,10 +62,14 @@ export default function ProductBestPerformanceComponent (props) {
         async function searchOptionPerformance() {
             onActionOpenBackdrop();
             let productCodes = productPerformance?.content.map(r => r.productCode);
+            
             let body = {
-                ...detailSearchValue,
+                startDate: detailSearchValue.startDate,
+                endDate: detailSearchValue.endDate,
+                utcHourDifference: detailSearchValue.utcHourDifference,
                 productCodes: productCodes
             }
+
             await reqSearchBestOptionPerformance(body);
             onActionCloseBackdrop();
         }
@@ -142,7 +146,15 @@ export default function ProductBestPerformanceComponent (props) {
             },
         },
         submit: {
-            searchPerformance: async (body) => {
+            searchPerformance: async (data) => {
+                let body = {
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                    utcHourDifference: data.utcHourDifference,
+                    pageOrderByColumn: data.pageOrderByColumn,
+                    page: data.page
+                }
+
                 onActionOpenBackdrop();
                 __handle.action.updateDetailSearchValue(body);
                 await reqSearchBestProductPerformance(body);

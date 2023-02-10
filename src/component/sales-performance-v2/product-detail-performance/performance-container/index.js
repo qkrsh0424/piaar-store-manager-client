@@ -208,7 +208,14 @@ export default function PerformanceContainerComponent (props) {
             }
         },
         submit: {
-            searchPerformance: async (body) => {
+            searchPerformance: async (data) => {
+                let body = {
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                    utcHourDifference: data.utcHourDifference,
+                    productCodes: data.productCodes
+                }
+
                 onActionOpenBackdrop();
                 await reqSearchProductPerformance(body);
                 await reqSearchChannelPerformance(body);

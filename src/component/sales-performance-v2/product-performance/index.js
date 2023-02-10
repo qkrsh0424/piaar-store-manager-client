@@ -142,7 +142,14 @@ export default function ProductPerformanceComponent (props) {
             }
         },
         submit: {
-            searchPerformance: async (body) => {
+            searchPerformance: async (data) => {
+                let body = {
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                    utcHourDifference: data.utcHourDifference,
+                    optionCodes: data.optionCodes
+                }
+
                 onActionOpenBackdrop();
                 await reqSearchProductPerformance(body);
                 onActionCloseBackdrop();

@@ -138,7 +138,13 @@ const SalesChannelPerformanceComponent = (props) => {
             }
         },
         submit: {
-            searchPerformance: async (body) => {
+            searchPerformance: async (data) => {
+                let body = {
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                    utcHourDifference: data.utcHourDifference,
+                }
+
                 onActionOpenBackdrop();
                 await reqSearchChannelPerformance(body);
                 onActionCloseBackdrop();
