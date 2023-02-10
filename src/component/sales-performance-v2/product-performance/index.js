@@ -79,10 +79,7 @@ export default function ProductPerformanceComponent (props) {
             let searchStartDate = setSubtractedDate(new Date(), 0, 0, -13);
             let searchEndDate = new Date();
 
-            if (location.state?.startDate && location.state?.endDate) {
-                searchStartDate = location.state.startDate;
-                searchEndDate = location.state.endDate;
-            } else if (query.startDate && query.endDate) {
+            if(query.startDate && query.endDate) {
                 searchStartDate = new Date(query.startDate);
                 searchEndDate = new Date(query.endDate);
             }

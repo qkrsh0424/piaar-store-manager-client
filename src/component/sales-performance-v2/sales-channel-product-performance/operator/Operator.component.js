@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { BackdropHookComponent, useBackdropHook } from "../../../../hooks/backdrop/useBackdropHook";
-import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
 import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
 import ProductListModalComponent from "./modal/product-list/ProductListModal.component";
 import { Container } from "./Operator.styled";
@@ -23,14 +22,6 @@ export default function OperatorComponent(props) {
         productAndOptions,
         reqSearchAllRelatedProduct
     } = useProductAndOptionHook();
-
-    const {
-        open: snackbarOpen,
-        message: snackbarMessage,
-        severity: snackbarSeverity,
-        onActionOpen: onActionOpenSnackbar,
-        onActionClose: onActionCloseSnackbar,
-    } = useBasicSnackbarHookV2();
     
     useEffect(() => {
         async function fetchInit() {
@@ -136,19 +127,6 @@ export default function OperatorComponent(props) {
                     onActionSelectedProduct={__handle.action.selectProduct}
                     onActionCloseModal={__handle.action.closeProductListModal}
                 />
-            }
-
-            {/* Snackbar */}
-            {snackbarOpen &&
-                <BasicSnackbarHookComponentV2
-                    open={snackbarOpen}
-                    message={snackbarMessage}
-                    onClose={onActionCloseSnackbar}
-                    severity={snackbarSeverity}
-                    vertical={'top'}
-                    horizontal={'right'}
-                    duration={4000}
-                ></BasicSnackbarHookComponentV2>
             }
 
             <BackdropHookComponent

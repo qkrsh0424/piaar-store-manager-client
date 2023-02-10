@@ -106,7 +106,7 @@ export default function PayAmountGraphComponent(props) {
                     graphColor.push(randomColor);
                 }
 
-                // 판매 그래프 데이터 세팅
+                // 그래프 데이터 세팅
                 if(channel.size === 0) {
                     let lineGraphOfOrder = {
                         ...new GraphDataset().toJSON(),
@@ -265,7 +265,7 @@ export default function PayAmountGraphComponent(props) {
             },
             openWholePeroidDetailGraphSelectorModal: () => {
                 let startDate = getStartDate(props.payAmount[0].datetime);
-                let endDate = getEndDate(props.payAmount[props.payAmount.length - 1].datetime);
+                let endDate = getEndDate(props.payAmount.slice(-1)[0].datetime);
                 let salesChannels = [...props.selectedChannel];
 
                 let detailSearchValue = {

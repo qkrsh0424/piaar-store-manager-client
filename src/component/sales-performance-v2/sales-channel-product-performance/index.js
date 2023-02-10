@@ -13,7 +13,7 @@ import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/Pay
 import OperatorComponent from './operator/Operator.component'
 import DateRangeSelectorComponent from './date-range-selector/DateRangeSelector.component';
 import useRouterHook from '../../../hooks/router/useRouterHook';
-import { dateToYYYYMMDD, getEndDate, getStartDate, getTimeDiffWithUTC, setSubtractedDate } from '../../../utils/dateFormatUtils';
+import { getEndDate, getStartDate, getTimeDiffWithUTC, setSubtractedDate } from '../../../utils/dateFormatUtils';
 
 const Container = styled.div`
     height: 100%;
@@ -46,9 +46,7 @@ const SalesChannelProductPerformanceComponent = (props) => {
     const [selectedProductAndOptions, setSelectedProductAndOptions] = useState([]);
 
     const {
-        query,
-        location,
-        navigateParams
+        query
     } = useRouterHook();
 
     const {
@@ -80,11 +78,8 @@ const SalesChannelProductPerformanceComponent = (props) => {
 
             let searchStartDate = setSubtractedDate(new Date(), 0, 0, -13);
             let searchEndDate = new Date();
-
-            if (location.state?.startDate && location.state?.endDate) {
-                searchStartDate = location.state.startDate;
-                searchEndDate = location.state.endDate;
-            } else if (query.startDate && query.endDate) {
+            
+            if (query.startDate && query.endDate) {
                 searchStartDate = new Date(query.startDate);
                 searchEndDate = new Date(query.endDate);
             }

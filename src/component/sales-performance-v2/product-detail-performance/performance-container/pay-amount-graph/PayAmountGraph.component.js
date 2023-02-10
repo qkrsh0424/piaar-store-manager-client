@@ -3,7 +3,7 @@ import GraphBodyFieldView from "./view/GraphBodyField.view";
 import GraphSummaryFieldView from "./view/GraphSummaryField.view";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import { useEffect, useState } from "react";
-import { dateToYYYYMMDDAndDayName, getDateFormatByGraphDateLabel, getEndDate, getMonthAndSearchDateRange,getStartDate, getWeekNumber, getWeekNumberAndSearchDateRange } from "../../../../../utils/dateFormatUtils";
+import { dateToYYYYMMDDAndDayName, getMonthAndSearchDateRange, getWeekNumberAndSearchDateRange } from "../../../../../utils/dateFormatUtils";
 import { GraphDataset, setAnalysisResultText } from "../../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../../utils/numberFormatUtils";
 import _ from "lodash";

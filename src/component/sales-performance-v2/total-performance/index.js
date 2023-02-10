@@ -42,8 +42,7 @@ const TotalSalesPerformanceComponent = (props) => {
 
     const {
         performance,
-        reqSearchTotalPerformance,
-        onActionResetPerformance
+        reqSearchTotalPerformance
     } = useTotalSalesPerformanceHook();
 
     const {
@@ -54,9 +53,6 @@ const TotalSalesPerformanceComponent = (props) => {
 
     const __handle = {
         action: {
-            resetPerformance: () => {
-                onActionResetPerformance();
-            },
             changeSwitch: () => {
                 let checkedValue = checkedSwitch;
                 setCheckedSwitch(!checkedValue);

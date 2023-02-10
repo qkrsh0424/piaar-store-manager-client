@@ -60,6 +60,7 @@ export default function PayAmountGraphComponent(props) {
                 let salesAvgDatasets = [];
                 let graphLabels = new Set([]);
                 let channel = [...props.selectedChannel];
+                
                 let minimumDate = props.payAmount[0].datetime;
                 let maximumDate = props.payAmount.slice(-1)[0].datetime;
 

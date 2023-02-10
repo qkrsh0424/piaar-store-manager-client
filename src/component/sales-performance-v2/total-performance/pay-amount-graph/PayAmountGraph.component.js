@@ -160,7 +160,6 @@ export default function PayAmountGraphComponent(props) {
                         target.style.cursor = item[0] ? 'pointer' : 'default';
                     }
                 }
-
                 setGraphOption(option);
             },
             setGraphClickOption: (e, item) => {
@@ -177,7 +176,6 @@ export default function PayAmountGraphComponent(props) {
                     startDate,
                     endDate
                 }
-                
                 props.onActionUpdateDetailSearchValue(searchValue);
                 props.onActionOpenDetailGraphSelectorModal();
             },

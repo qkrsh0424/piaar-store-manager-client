@@ -22,13 +22,8 @@ export default function useTotalSalesPerformanceHook() {
             })
     }
 
-    const onActionResetPerformance = () => {
-        setPerformance(null);
-    }
-
     return {
         performance,
-        reqSearchTotalPerformance,
-        onActionResetPerformance
+        reqSearchTotalPerformance
     }
 }

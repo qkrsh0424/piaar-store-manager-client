@@ -150,6 +150,7 @@ const SalesChannelPerformanceComponent = (props) => {
         <>
             <Container navbarOpen={props.navbarOpen}>
                 <PageTitleFieldView title={'판매스토어 - 총 매출액 & 판매 건'} />
+
                 <ChannelSelectorComponent
                     salesChannel={salesChannel}
 

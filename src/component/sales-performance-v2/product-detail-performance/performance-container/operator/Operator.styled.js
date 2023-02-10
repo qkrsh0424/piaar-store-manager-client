@@ -51,13 +51,12 @@ const SearchFieldWrapper = styled.div`
         height: 100%;
         padding: 10px 0 ;
     }
-
+    
     .image-box {
         position: relative;
         padding-bottom: 100%;
-        box-shadow: var(--defaultBoxShadow);
     }
-
+    
     .image-box img {
         position: absolute;
         object-fit: cover;
@@ -66,8 +65,9 @@ const SearchFieldWrapper = styled.div`
         left: 0;
         -webkit-transition: .5s;
         transition: .5s;
-        border: 1px solid #f1f1f1;
+        border: 1px solid var(--defaultBorderColor);
         border-radius: 8px;
+        box-shadow: var(--defaultBoxShadow);
     }
 `;
 

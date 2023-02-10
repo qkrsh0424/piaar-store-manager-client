@@ -78,7 +78,7 @@ export default function PayAmountDayOfWeekGraphComponent(props) {
                     borderWidth: 0
                 }
                 
-                // // 매출 그래프 데이터 생성
+                // 매출 그래프 데이터 생성
                 let createdSalesGraph = {
                     labels: graphLabels,
                     datasets: [barGraphOfSales]
