@@ -19,6 +19,7 @@ const ErpManagementExcelFormV2 = (props) => {
         await erpDownloadExcelHeaderDataConnect().searchList()
             .then(res => {
                 if (res.status === 200 && res.data.message === 'success') {
+                    console.log(res.data.data);
                     dispatchHeaderList({
                         type: 'SET_DATA',
                         payload: res.data.data

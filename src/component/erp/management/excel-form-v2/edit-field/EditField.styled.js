@@ -428,6 +428,17 @@ const DownloadFormWrapper = styled.div`
         font-size: 14px;
     }
 
+    .title-wrapper {
+        padding: 0 10px;
+    }
+
+    .title-wrapper .input-el {
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        width: 300px;
+        font-size: 16px;
+    }
+
     .body-wrapper{
         margin-top: 10px;
         padding:0 10px;
@@ -435,6 +446,7 @@ const DownloadFormWrapper = styled.div`
 
     .list-wrapper{
         border: 1px solid #e0e0e0;
+        border-radius: 5px;
         overflow: auto;
         width:100%;
         /* min-height: 300px; */
@@ -559,7 +571,7 @@ const DownloadFormWrapper = styled.div`
             z-index: 11;
             transition: .3s;
             outline: none;
-            transform: scale(1.2);
+            transform: scale(1.1);
         }
     }
 

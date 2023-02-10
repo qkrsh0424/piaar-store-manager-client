@@ -648,6 +648,15 @@ function DownloadFormView({
 }) {
     return (
         <DownloadFormWrapper>
+            <div className='title-wrapper'>
+                <input
+                    type='text'
+                    name='title'
+                    className='input-el'
+                    value={updateHeader.title || ''}
+                    onChange={(e) => onChangeValueOfName(e)}
+                />
+            </div>
             <div className='body-wrapper'>
                 <div className='list-wrapper'>
                     {valueUtils.isEmptyValues(updateHeader?.headerDetail?.details) &&
