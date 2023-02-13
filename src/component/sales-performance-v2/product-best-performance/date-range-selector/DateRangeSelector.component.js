@@ -62,8 +62,7 @@ export default function DateRangeSelectorComponent(props) {
                 startDate: getStartDate(searchStartDate),
                 endDate: getEndDate(searchEndDate),
                 utcHourDifference: getTimeDiffWithUTC(),
-                pageOrderByColumn: 'payAmount',
-                page: 0
+                pageOrderByColumn: 'payAmount'
             }
             
             await props.onSubmitSearchPerformance(body);
@@ -142,8 +141,7 @@ export default function DateRangeSelectorComponent(props) {
                     startDate: getStartDate(startDate),
                     endDate: getEndDate(endDate),
                     utcHourDifference: getTimeDiffWithUTC(),
-                    pageOrderByColumn: props.detailSearchValue?.pageOrderByColumn ?? null,
-                    page: 0
+                    pageOrderByColumn: props.detailSearchValue?.pageOrderByColumn ?? null
                 }
 
                 props.onSubmitSearchPerformance(body);
