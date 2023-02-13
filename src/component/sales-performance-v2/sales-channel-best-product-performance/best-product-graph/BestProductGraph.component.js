@@ -7,8 +7,8 @@ import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import _ from "lodash";
 import { getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 
-// const DEFAULT_GRAPH_BG_COLOR = ['#ADA8C3', '#C0C5DC'];
 const DEFAULT_GRAPH_BG_COLOR = ['#9dbce6', '#b9afe0'];
+const DEFAULT_ORDER_GRAPH_BG_COLOR = ['#6787AE', '#837BA9'];
 
 // 판매스토어별 총 매출액
 export default function BestProductGraphComponent(props) {
@@ -62,8 +62,8 @@ export default function BestProductGraphComponent(props) {
                     label: '(주문) 매출액',
                     data: orderPayAmount,
                     fill: false,
-                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[0] + '88',
-                    borderColor: DEFAULT_GRAPH_BG_COLOR[0] + '88',
+                    backgroundColor: DEFAULT_ORDER_GRAPH_BG_COLOR[0] + '88',
+                    borderColor: DEFAULT_ORDER_GRAPH_BG_COLOR[0] + '88',
                     order: -1,
                     pointRadius: 2
                 }
@@ -109,8 +109,8 @@ export default function BestProductGraphComponent(props) {
                     label: '(주문) 수량',
                     data: orderUnit,
                     fill: false,
-                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[1] + '88',
-                    borderColor: DEFAULT_GRAPH_BG_COLOR[1] + '88',
+                    backgroundColor: DEFAULT_ORDER_GRAPH_BG_COLOR[1] + '88',
+                    borderColor: DEFAULT_ORDER_GRAPH_BG_COLOR[1] + '88',
                     order: -1,
                     pointRadius: 2
                 }

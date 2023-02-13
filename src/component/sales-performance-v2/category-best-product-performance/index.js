@@ -10,7 +10,7 @@ import useOptionSalesPerformanceHook from './hooks/useOptionSalesPerformanceHook
 import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
 import OptionItemTableComponent from './option-item-table/OptionItemTable.component';
 import { useEffect } from 'react';
-import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
+import DateRangeSelectorComponent from './date-range-selector/DateRangeSelector.component';
 import GraphDataPagenationComponent from './graph-data-pagenation/GraphDataPagenation.component';
 import useRouterHook from '../../../hooks/router/useRouterHook';
 
@@ -139,7 +139,6 @@ const CategoryBestProductPerformanceComponent = (props) => {
 
     useEffect(() => {
         async function searchOptionPerformance() {
-            onActionOpenBackdrop();
             let productCodes = productPerformance?.content.map(r => r.productCode);
 
             let body = {
@@ -149,7 +148,8 @@ const CategoryBestProductPerformanceComponent = (props) => {
                 productCategoryNames: detailSearchValue.productCategoryNames,
                 productCodes: productCodes
             }
-
+            
+            onActionOpenBackdrop();
             await reqSearchCategoryBestOptionPerformance(body);
             onActionCloseBackdrop();
         }
@@ -230,16 +230,7 @@ const CategoryBestProductPerformanceComponent = (props) => {
             },
         },
         submit: {
-            searchPerformance: async (data) => {
-                let body = {
-                    startDate: data.startDate,
-                    endDate: data.endDate,
-                    utcHourDifference: data.utcHourDifference,
-                    productCategoryNames: data.productCategoryNames,
-                    pageOrderByColumn: data.pageOrderByColumn,
-                    page: data.page
-                }
-
+            searchPerformance: async (body) => {
                 onActionOpenBackdrop();
                 __handle.action.updateDetailSearchValue(body);
                 await reqSearchCategoryBestProductPerformance(body);
@@ -287,6 +278,7 @@ const CategoryBestProductPerformanceComponent = (props) => {
                 />
 
                 <DateRangeSelectorComponent
+                    detailSearchValue={detailSearchValue}
                     onSubmitSearchPerformance={__handle.submit.searchPerformance}
                 />
             </Container>

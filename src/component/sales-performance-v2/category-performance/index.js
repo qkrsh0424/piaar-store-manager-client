@@ -12,7 +12,7 @@ import useCategorySalesPerformanceHook from './hooks/useCategorySalesPerformance
 import CategorySelectorComponent from './category-selector/CategorySelector.component';
 import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
 import useRouterHook from '../../../hooks/router/useRouterHook';
-import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
+import DateRangeSelectorComponent from './date-range-selector/DateRangeSelector.component';
 
 const Container = styled.div`
     height: 100%;
@@ -138,13 +138,7 @@ const CategoryPerformanceComponent = (props) => {
             }
         },
         submit: {
-            searchPerformance: async (data) => {
-                let body = {
-                    startDate: data.startDate,
-                    endDate: data.endDate,
-                    utcHourDifference: data.utcHourDifference,
-                }
-                
+            searchPerformance: async (body) => {
                 onActionOpenBackdrop();
                 await reqSearchCategoryPerformance(body);
                 onActionCloseBackdrop();

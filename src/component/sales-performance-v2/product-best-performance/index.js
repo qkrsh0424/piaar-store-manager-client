@@ -8,7 +8,7 @@ import useOptionSalesPerformanceHook from "./hooks/useOptionSalesPerformanceHook
 import DetailGraphSelectorModalComponent from "./modal/detail-graph-selector-modal/DetailGraphSelectorModal.component";
 import OptionItemTableComponent from "./option-item-table/OptionItemTable.component";
 import GraphDataPagenationComponent from "./graph-data-pagenation/GraphDataPagenation.component";
-import DateRangeSelectorComponent from "../date-range-selector/DateRangeSelector.component";
+import DateRangeSelectorComponent from "./date-range-selector/DateRangeSelector.component";
 
 const Container = styled.div`
     height: 100%;
@@ -60,7 +60,6 @@ export default function ProductBestPerformanceComponent (props) {
 
     useEffect(() => {
         async function searchOptionPerformance() {
-            onActionOpenBackdrop();
             let productCodes = productPerformance?.content.map(r => r.productCode);
             
             let body = {
@@ -70,6 +69,7 @@ export default function ProductBestPerformanceComponent (props) {
                 productCodes: productCodes
             }
 
+            onActionOpenBackdrop();
             await reqSearchBestOptionPerformance(body);
             onActionCloseBackdrop();
         }
@@ -146,15 +146,7 @@ export default function ProductBestPerformanceComponent (props) {
             },
         },
         submit: {
-            searchPerformance: async (data) => {
-                let body = {
-                    startDate: data.startDate,
-                    endDate: data.endDate,
-                    utcHourDifference: data.utcHourDifference,
-                    pageOrderByColumn: data.pageOrderByColumn,
-                    page: data.page
-                }
-
+            searchPerformance: async (body) => {
                 onActionOpenBackdrop();
                 __handle.action.updateDetailSearchValue(body);
                 await reqSearchBestProductPerformance(body);
@@ -200,6 +192,7 @@ export default function ProductBestPerformanceComponent (props) {
                 />
 
                 <DateRangeSelectorComponent
+                    detailSearchValue={detailSearchValue}
                     onSubmitSearchPerformance={__handle.submit.searchPerformance}
                 />
             </Container>

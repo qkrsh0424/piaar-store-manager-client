@@ -28,7 +28,7 @@ const DateSelectorFieldWrapper = styled.div`
     padding: 10px 20px;
     display: flex;
     gap: 5px;
-    min-height: 350px;
+    min-height: 360px;
     overflow: hidden;
 
     @media screen and (max-width: 992px) {

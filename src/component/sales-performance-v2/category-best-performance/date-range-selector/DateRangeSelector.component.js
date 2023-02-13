@@ -20,6 +20,7 @@ export default function DateRangeSelectorComponent(props) {
 
     const {
         query,
+        location,
         navigateParams
     } = useRouterHook();
 
@@ -30,7 +31,7 @@ export default function DateRangeSelectorComponent(props) {
         onActionOpen: onActionOpenSnackbar,
         onActionClose: onActionCloseSnackbar,
     } = useBasicSnackbarHookV2();
-
+    
     useEffect(() => {
         if(!datePickerModalOpen) {
             return;
@@ -39,7 +40,7 @@ export default function DateRangeSelectorComponent(props) {
         let date1 = setSubtractedDate(new Date(), 0, 0, -13);
         let date2 = new Date();
         
-        if(query.startDate && query.endDate) {
+       if(query.startDate && query.endDate) {
             date1 = new Date(query.startDate);
             date2 = new Date(query.endDate);
         }
@@ -47,6 +48,38 @@ export default function DateRangeSelectorComponent(props) {
         setStartDate(date1);
         setEndDate(date2);
     }, [datePickerModalOpen])
+    
+    useEffect(() => {
+        async function fetchInit() {
+            let searchStartDate = setSubtractedDate(new Date(), 0, 0, -13);
+            let searchEndDate = new Date();
+
+            if (query.startDate && query.endDate) {
+                searchStartDate = new Date(query.startDate);
+                searchEndDate = new Date(query.endDate);
+            }
+
+            let utcHourDifference = getTimeDiffWithUTC();
+            let salesChannels = location.state?.salesChannels ?? null;
+            let productCategoryNames = location.state?.productCategoryNames ?? null;
+            let productCodes = location.state?.productCode ? [location.state?.productCode] : [];
+            let pageOrderByColumn = 'payAmount';
+
+            let body = {
+                startDate: getStartDate(searchStartDate),
+                endDate: getEndDate(searchEndDate),
+                utcHourDifference,
+                salesChannels,
+                productCategoryNames,
+                pageOrderByColumn,
+                productCodes
+            }
+            
+            await props.onSubmitSearchPerformance(body);
+        }
+
+        fetchInit();
+    }, [])
 
     const __handle = {
         action: {
@@ -101,15 +134,6 @@ export default function DateRangeSelectorComponent(props) {
                     if (!isSearchablePeriod(startDate, endDate, SEARCHABLE_PERIOD)) {
                         throw new Error(`조회기간은 최대 ${SEARCHABLE_PERIOD}일까지 가능합니다.`)
                     }
-
-                    if (!(props.selectedOptions?.length > 0)) {
-                        throw new Error('조회하려는 상품을 선택해주세요.')
-                    }
-
-                    // startDate, endDate 파라미터 세팅
-                    query.startDate = dateToYYYYMMDD(startDate);
-                    query.endDate = dateToYYYYMMDD(endDate);
-                    navigateParams({ replace: true });
                 } catch (err) {
                     let snackbarSetting = {
                         message: err?.message,
@@ -119,17 +143,22 @@ export default function DateRangeSelectorComponent(props) {
                     return;
                 }
 
-                let searchOptionCodes = props.selectedOptions.map(r => r.option.code);
+                let searchStartDate = startDate ? getStartDate(startDate) : null;
+                let searchEndDate = endDate ? getEndDate(endDate) : null;
+                let utcHourDifference = getTimeDiffWithUTC();
 
                 let body = {
-                    startDate: getStartDate(startDate),
-                    endDate: getEndDate(endDate),
-                    utcHourDifference: getTimeDiffWithUTC(),
-                    optionCodes: searchOptionCodes
+                    startDate: searchStartDate,
+                    endDate: searchEndDate,
+                    utcHourDifference,
                 }
 
                 props.onSubmitSearchPerformance(body);
                 __handle.action.closeDatePickerModal();
+
+                query.startDate = dateToYYYYMMDD(startDate);
+                query.endDate = dateToYYYYMMDD(endDate);
+                navigateParams({ replace: true });
             }
         }
     }

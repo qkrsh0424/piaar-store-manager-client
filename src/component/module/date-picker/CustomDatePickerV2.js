@@ -83,33 +83,6 @@ const ButtonBox = styled.div`
 const CustomDatePickerV2 = (props) => {
     const calendar = useRef(null);
 
-    const [currentDate, setCurrentDate] = useState();
-
-    const cancelDatePicker = () => {
-        calendar.current.setOpen(false);
-    };
-
-    const openDatePicker = () => {
-        calendar.current.setOpen(true);
-    };
-
-    const closeDatePicker = () => {
-        // setCurrentDate(startDate);
-        calendar.current.setOpen(false);
-    };
-
-    // const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
-    //     <ButtonBox
-    //         valueSize={props.valueSize}
-    //         labelSize={props.labelSize}
-    //     >
-    //         <button className="button-item" onClick={onClick} ref={ref}>
-    //             <div className='button-label'>{props.label || ''}</div>
-    //             <div className='button-value'>{value || '날짜를 선택해 주세요.'}</div>
-    //         </button>
-    //     </ButtonBox>
-    // ));
-
     return (
         <>
             <Container>

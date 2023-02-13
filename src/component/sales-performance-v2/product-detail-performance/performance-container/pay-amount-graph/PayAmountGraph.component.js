@@ -9,7 +9,7 @@ import { toPriceUnitFormat } from "../../../../../utils/numberFormatUtils";
 import _ from "lodash";
 
 // 그래프 기본 3가지 색상 : [주문, 판매, 평균]
-const DEFAULT_GRAPH_BG_2COLOR = ['#ADA8C3', '#C0C5DC', '#596dd3'];
+const DEFAULT_GRAPH_BG_2COLOR = ['#94AAD7', '#9CCBEB', '#7BB1C1'];
 
 export default function PayAmountGraphComponent(props) {
     const [salesPayAmountGraphData, setSalesPayAmountGraphData] = useState(null);

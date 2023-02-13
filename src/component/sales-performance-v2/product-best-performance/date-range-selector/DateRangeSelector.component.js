@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import useRouterHook from "../../../hooks/router/useRouterHook";
-import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../hooks/snackbar/useBasicSnackbarHookV2";
-import { dateToYYYYMMDD, getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../utils/dateFormatUtils";
-import CommonModalComponentV2 from "../../module/modal/CommonModalComponentV2";
+import useRouterHook from "../../../../hooks/router/useRouterHook";
+import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../hooks/snackbar/useBasicSnackbarHookV2";
+import { dateToYYYYMMDD, getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../utils/dateFormatUtils";
+import CommonModalComponentV2 from "../../../module/modal/CommonModalComponentV2";
 import { Container } from "./DateRangeSelector.styled";
 import ButtonFieldView from "./view/ButtonField.view";
 import DateButtonFieldView from "./view/DateButtonField.view";
@@ -20,7 +20,6 @@ export default function DateRangeSelectorComponent(props) {
 
     const {
         query,
-        location,
         navigateParams
     } = useRouterHook();
 
@@ -59,20 +58,12 @@ export default function DateRangeSelectorComponent(props) {
                 searchEndDate = new Date(query.endDate);
             }
 
-            let utcHourDifference = getTimeDiffWithUTC();
-            let salesChannels = location.state?.salesChannels ?? null;
-            let productCategoryNames = location.state?.productCategoryNames ?? null;
-            let productCodes = location.state?.productCode ? [location.state?.productCode] : [];
-            let pageOrderByColumn = 'payAmount';
-
             let body = {
                 startDate: getStartDate(searchStartDate),
                 endDate: getEndDate(searchEndDate),
-                utcHourDifference,
-                salesChannels,
-                productCategoryNames,
-                pageOrderByColumn,
-                productCodes
+                utcHourDifference: getTimeDiffWithUTC(),
+                pageOrderByColumn: 'payAmount',
+                page: 0
             }
             
             await props.onSubmitSearchPerformance(body);
@@ -134,6 +125,10 @@ export default function DateRangeSelectorComponent(props) {
                     if (!isSearchablePeriod(startDate, endDate, SEARCHABLE_PERIOD)) {
                         throw new Error(`조회기간은 최대 ${SEARCHABLE_PERIOD}일까지 가능합니다.`)
                     }
+
+                    query.startDate = dateToYYYYMMDD(startDate);
+                    query.endDate = dateToYYYYMMDD(endDate);
+                    navigateParams({ replace: true });
                 } catch (err) {
                     let snackbarSetting = {
                         message: err?.message,
@@ -143,22 +138,16 @@ export default function DateRangeSelectorComponent(props) {
                     return;
                 }
 
-                let searchStartDate = startDate ? getStartDate(startDate) : null;
-                let searchEndDate = endDate ? getEndDate(endDate) : null;
-                let utcHourDifference = getTimeDiffWithUTC();
-
                 let body = {
-                    startDate: searchStartDate,
-                    endDate: searchEndDate,
-                    utcHourDifference,
+                    startDate: getStartDate(startDate),
+                    endDate: getEndDate(endDate),
+                    utcHourDifference: getTimeDiffWithUTC(),
+                    pageOrderByColumn: props.detailSearchValue?.pageOrderByColumn ?? null,
+                    page: 0
                 }
 
                 props.onSubmitSearchPerformance(body);
                 __handle.action.closeDatePickerModal();
-
-                query.startDate = dateToYYYYMMDD(startDate);
-                query.endDate = dateToYYYYMMDD(endDate);
-                navigateParams({ replace: true });
             }
         }
     }

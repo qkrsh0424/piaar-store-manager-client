@@ -153,8 +153,8 @@ export default function RegistrationAndUnitGraphComponent(props) {
                             type: 'bar',
                             label: r,
                             data: salesRegistrationData[idx],
-                            borderColor: graphColor[idx],
-                            backgroundColor: graphColor[idx],
+                            borderColor: graphColor[idx] + 'BB',
+                            backgroundColor: graphColor[idx] + 'BB',
                             borderWidth: 0,
                             order: 0
                         }
@@ -313,8 +313,8 @@ export default function RegistrationAndUnitGraphComponent(props) {
                             type: 'bar',
                             label: r,
                             data: salesUnitData[idx],
-                            borderColor: graphColor[idx],
-                            backgroundColor: graphColor[idx],
+                            borderColor: graphColor[idx] + 'BB',
+                            backgroundColor: graphColor[idx] + 'BB',
                             borderWidth: 0,
                             order: 0
                         }

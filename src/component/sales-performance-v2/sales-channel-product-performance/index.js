@@ -84,14 +84,11 @@ const SalesChannelProductPerformanceComponent = (props) => {
                 searchEndDate = new Date(query.endDate);
             }
 
-            let utcHourDifference = getTimeDiffWithUTC();
-            let optionCodes = searchOptionCodes;
-
             let body = {
                 startDate: getStartDate(searchStartDate),
                 endDate: getEndDate(searchEndDate),
-                utcHourDifference,
-                optionCodes
+                utcHourDifference: getTimeDiffWithUTC(),
+                optionCodes: searchOptionCodes
             }
             
             onActionOpenBackdrop();
@@ -172,14 +169,7 @@ const SalesChannelProductPerformanceComponent = (props) => {
             }
         },
         submit: {
-            searchPerformance: async (data) => {
-                let body = {
-                    startDate: data.startDate,
-                    endDate: data.endDate,
-                    utcHourDifference: data.utcHourDifference,
-                    optionCodes: data.optionCodes
-                }
-
+            searchPerformance: async (body) => {
                 onActionOpenBackdrop();
                 await reqSearchChannelPerformance(body);
                 onActionCloseBackdrop();

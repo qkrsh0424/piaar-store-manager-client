@@ -16,16 +16,6 @@ import DateRangeSelectorComponent from "./date-range-selector/DateRangeSelector.
 import { dateToYYYYMMDD, getEndDate, getStartDate, getTimeDiffWithUTC, setSubtractedDate } from "../../../../utils/dateFormatUtils";
 
 const Container = styled.div`
-    /* height: 100%;
-    padding: 60px 30px 150px 230px;
-    margin: 0 auto;
-    transition: all 0.5s;
-
-    padding-left: ${props=> !props.navbarOpen && '30px'};
-
-    @media screen and (max-width: 768px) {
-        padding-left: 30px !important;
-    } */
 `;
 
 export default function PerformanceContainerComponent (props) {
@@ -90,34 +80,19 @@ export default function PerformanceContainerComponent (props) {
             let searchStartDate = setSubtractedDate(new Date(), 0, 0, -13);
             let searchEndDate = new Date();
 
-            if (location.state?.startDate && location.state?.endDate) {
-                searchStartDate = location.state.startDate;
-                searchEndDate = location.state.endDate;
-            } else if (query.startDate && query.endDate) {
+            if (query.startDate && query.endDate) {
                 searchStartDate = new Date(query.startDate);
                 searchEndDate = new Date(query.endDate);
             }
 
-            let utcHourDifference = getTimeDiffWithUTC();
-            let salesChannels = location.state?.salesChannels ?? null;
-            let productCategoryNames = location.state?.productCategoryNames ?? null;
-            let productCodes = [selectedProduct.code];
-            let pageOrderByColumn = 'payAmount';
-
             let body = {
                 startDate: getStartDate(searchStartDate),
                 endDate: getEndDate(searchEndDate),
-                utcHourDifference,
-                salesChannels,
-                productCategoryNames,
-                pageOrderByColumn,
-                productCodes
+                utcHourDifference: getTimeDiffWithUTC(),
+                productCodes: [selectedProduct.code]
             }
             
             await __handle.submit.searchPerformance(body);
-            query.startDate = dateToYYYYMMDD(searchStartDate);
-            query.endDate = dateToYYYYMMDD(searchEndDate);
-            navigateParams({ replace: true });
         }
 
         if(selectedProduct) {
@@ -208,14 +183,7 @@ export default function PerformanceContainerComponent (props) {
             }
         },
         submit: {
-            searchPerformance: async (data) => {
-                let body = {
-                    startDate: data.startDate,
-                    endDate: data.endDate,
-                    utcHourDifference: data.utcHourDifference,
-                    productCodes: data.productCodes
-                }
-
+            searchPerformance: async (body) => {
                 onActionOpenBackdrop();
                 await reqSearchProductPerformance(body);
                 await reqSearchChannelPerformance(body);

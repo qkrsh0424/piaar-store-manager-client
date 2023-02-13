@@ -9,7 +9,7 @@ import useCategorySalesPerformanceHook from './hooks/useCategorySalesPerformance
 
 import BestItemGraphComponent from './best-item-graph/BestItemGraph.component';
 import BestCategoryGraphComponent from './best-category-graph/BestCategoryGraph.component';
-import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
+import DateRangeSelectorComponent from './date-range-selector/DateRangeSelector.component';
 
 const Container = styled.div`
     height: 100%;

@@ -150,8 +150,8 @@ export default function PayAmountGraphComponent(props) {
                             type: 'bar',
                             label: r,
                             data: salesPayAmountData[idx],
-                            borderColor: graphColor[idx],
-                            backgroundColor: graphColor[idx],
+                            borderColor: graphColor[idx] + 'BB',
+                            backgroundColor: graphColor[idx] + 'BB',
                             borderWidth: 0,
                             order: 0
                         }

@@ -138,8 +138,8 @@ export default function PayAmountGraphComponent(props) {
                             ...new GraphDataset().toJSON(),
                             type: 'line',
                             label: '(주문) ' + r,
-                            fill: false,
                             data: orderPayAmountData[idx],
+                            fill: false,
                             borderColor: graphColor[idx] + '88',
                             backgroundColor: graphColor[idx] + '88',
                             order: -1,
@@ -149,9 +149,10 @@ export default function PayAmountGraphComponent(props) {
                             ...new GraphDataset().toJSON(),
                             type: 'bar',
                             label: r,
+                            fill: false,
                             data: salesPayAmountData[idx],
-                            borderColor: graphColor[idx],
-                            backgroundColor: graphColor[idx],
+                            borderColor: graphColor[idx] + 'BB',
+                            backgroundColor: graphColor[idx] + 'BB',
                             borderWidth: 0,
                             order: 0
                         }

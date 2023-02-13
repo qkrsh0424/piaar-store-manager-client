@@ -8,6 +8,7 @@ import _ from "lodash";
 import { getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 
 const DEFAULT_GRAPH_BG_COLOR = ['#9dbce6', '#b9afe0'];
+const DEFAULT_ORDER_GRAPH_BG_COLOR = ['#6787AE', '#837BA9'];
 
 // 판매스토어별 총 매출액
 export default function BestProductGraphComponent(props) {
@@ -55,6 +56,17 @@ export default function BestProductGraphComponent(props) {
                 });
                 setPayAmountGraphLabels(productCodeLabels);
 
+                let orderPayAmountDatasets = {
+                    ...new GraphDataset().toJSON(),
+                    type: 'line',
+                    label: '(주문) 매출액',
+                    data: orderPayAmount,
+                    fill: false,
+                    backgroundColor: DEFAULT_ORDER_GRAPH_BG_COLOR[0] + '88',
+                    borderColor: DEFAULT_ORDER_GRAPH_BG_COLOR[0] + '88',
+                    order: -1,
+                    pointRadius: 2
+                }
                 let salesPayAmountDatasets = {
                     ...new GraphDataset().toJSON(),
                     type: 'bar',
@@ -64,18 +76,6 @@ export default function BestProductGraphComponent(props) {
                     borderColor: DEFAULT_GRAPH_BG_COLOR[0],
                     borderWidth: 0,
                     order: 0
-                }
-
-                let orderPayAmountDatasets = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'line',
-                    label: '(주문) 매출액',
-                    data: orderPayAmount,
-                    fill: false,
-                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[0] + '88',
-                    borderColor: DEFAULT_GRAPH_BG_COLOR[0] + '88',
-                    order: -1,
-                    pointRadius: 2
                 }
 
                 let createdSalesGraph = {
@@ -105,6 +105,17 @@ export default function BestProductGraphComponent(props) {
                 });
                 setUnitGraphLabels(productCodeLabels);
 
+                let orderUnitDatasets = {
+                    ...new GraphDataset().toJSON(),
+                    type: 'line',
+                    label: '(주문) 수량',
+                    data: orderUnit,
+                    fill: false,
+                    backgroundColor: DEFAULT_ORDER_GRAPH_BG_COLOR[1] + '88',
+                    borderColor: DEFAULT_ORDER_GRAPH_BG_COLOR[1] + '88',
+                    order: -1,
+                    pointRadius: 2
+                }
                 let salesUnitDatasets = {
                     ...new GraphDataset().toJSON(),
                     type: 'bar',
@@ -114,18 +125,6 @@ export default function BestProductGraphComponent(props) {
                     borderColor: DEFAULT_GRAPH_BG_COLOR[1],
                     borderWidth: 0,
                     order: 0
-                }
-
-                let orderUnitDatasets = {
-                    ...new GraphDataset().toJSON(),
-                    type: 'line',
-                    label: '(주문) 수량',
-                    data: orderUnit,
-                    fill: false,
-                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[1] + '88',
-                    borderColor: DEFAULT_GRAPH_BG_COLOR[1] + '88',
-                    order: -1,
-                    pointRadius: 2
                 }
 
                 let createdSalesGraph = {

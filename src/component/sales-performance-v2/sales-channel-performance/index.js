@@ -11,7 +11,7 @@ import PayAmountDayOfWeekGraphComponent from './pay-amount-day-of-week-graph/Pay
 import GraphOperatorComponent from './graph-operator/GraphOperator.component';
 import useChannelSalesPerformanceHook from './hooks/useChannelSalesPerformanceHook';
 import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
-import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
+import DateRangeSelectorComponent from './date-range-selector/DateRangeSelector.component';
 import useRouterHook from '../../../hooks/router/useRouterHook';
 
 const Container = styled.div`
@@ -138,13 +138,7 @@ const SalesChannelPerformanceComponent = (props) => {
             }
         },
         submit: {
-            searchPerformance: async (data) => {
-                let body = {
-                    startDate: data.startDate,
-                    endDate: data.endDate,
-                    utcHourDifference: data.utcHourDifference,
-                }
-
+            searchPerformance: async (body) => {
                 onActionOpenBackdrop();
                 await reqSearchChannelPerformance(body);
                 onActionCloseBackdrop();

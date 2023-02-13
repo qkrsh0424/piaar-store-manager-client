@@ -9,7 +9,7 @@ import useProductSalesPerformanceHook from './hooks/useProductSalesPerformanceHo
 import useOptionSalesPerformanceHook from './hooks/useOptionSalesPerformanceHook';
 import DetailGraphSelectorModalComponent from './modal/detail-graph-selector-modal/DetailGraphSelectorModal.component';
 import OptionItemTableComponent from './option-item-table/OptionItemTable.component';
-import DateRangeSelectorComponent from '../date-range-selector/DateRangeSelector.component';
+import DateRangeSelectorComponent from './date-range-selector/DateRangeSelector.component';
 import GraphDataPagenationComponent from './graph-data-pagenation/GraphDataPagenation.component';
 import useRouterHook from '../../../hooks/router/useRouterHook';
 
@@ -138,7 +138,6 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
 
     useEffect(() => {
         async function searchOptionPerformance() {
-            onActionOpenBackdrop();
             let productCodes = productPerformance?.content.map(r => r.productCode);
 
             let body = {
@@ -148,7 +147,8 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
                 productCodes: productCodes,
                 salesChannels: detailSearchValue.salesChannels
             }
-
+            
+            onActionOpenBackdrop();
             await reqSearchChannelBestOptionPerformance(body);
             onActionCloseBackdrop();
         }
@@ -228,16 +228,7 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
             },
         },
         submit: {
-            searchPerformance: async (data) => {
-                let body = {
-                    startDate: data.startDate,
-                    endDate: data.endDate,
-                    utcHourDifference: data.utcHourDifference,
-                    salesChannels: data.salesChannels,
-                    pageOrderByColumn: data.pageOrderByColumn,
-                    page: data.page
-                }
-
+            searchPerformance: async (body) => {
                 onActionOpenBackdrop();
                 __handle.action.updateDetailSearchValue(body);
                 await reqSearchChannelBestProductPerformance(body);
@@ -285,6 +276,7 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
                 />
 
                 <DateRangeSelectorComponent
+                    detailSearchValue={detailSearchValue}
                     onSubmitSearchPerformance={__handle.submit.searchPerformance}
                 />
             </Container>

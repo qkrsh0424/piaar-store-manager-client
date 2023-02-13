@@ -20,7 +20,6 @@ export default function DateRangeSelectorComponent(props) {
 
     const {
         query,
-        location,
         navigateParams,
     } = useRouterHook();
 
@@ -105,6 +104,10 @@ export default function DateRangeSelectorComponent(props) {
                     if (!props.selectedProduct) {
                         throw new Error('조회하려는 상품을 선택해주세요.')
                     }
+
+                    query.startDate = dateToYYYYMMDD(startDate);
+                    query.endDate = dateToYYYYMMDD(endDate);
+                    navigateParams({ replace: true });
                 } catch (err) {
                     let snackbarSetting = {
                         message: err?.message,
@@ -114,24 +117,15 @@ export default function DateRangeSelectorComponent(props) {
                     return;
                 }
 
-                let searchStartDate = startDate ? getStartDate(startDate) : null;
-                let searchEndDate = endDate ? getEndDate(endDate) : null;
-                let utcHourDifference = getTimeDiffWithUTC();
-                let productCodes = [props.selectedProduct.code];
-
                 let body = {
-                    startDate: searchStartDate,
-                    endDate: searchEndDate,
-                    utcHourDifference,
-                    productCodes
+                    startDate: getStartDate(startDate) ,
+                    endDate: getEndDate(endDate),
+                    utcHourDifference: getTimeDiffWithUTC(),
+                    productCodes: [props.selectedProduct.code]
                 }
 
                 props.onSubmitSearchPerformance(body);
                 __handle.action.closeDatePickerModal();
-
-                query.startDate = dateToYYYYMMDD(startDate);
-                query.endDate = dateToYYYYMMDD(endDate);
-                navigateParams({ replace: true });
             }
         }
     }

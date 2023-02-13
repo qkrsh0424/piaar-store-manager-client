@@ -45,7 +45,7 @@ export default function BestItemGraphComponent(props) {
                 
                 for(let i  = 0; i < props.category.length; i++) {
                     let categoryItem = props.bestPayAmountItem.filter(r => r.categoryName === props.category[i])[0];
-                    let productLabel = categoryItem.performances.map(r => r.productName);
+                    let productLabel = categoryItem.performances.map(r => r.productDefaultName);
 
                     graphLabels.push(productLabel);
                 }
@@ -55,20 +55,6 @@ export default function BestItemGraphComponent(props) {
                     let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
                     graphColor.push(randomColor);
                 }
-
-                let salesPayAmountDatasets = props.bestPayAmountItem.map((r, idx) => {
-                    let payAmountValues = r.performances.map(r2 => r2.salesPayAmount);
-                    return {
-                        ...new GraphDataset().toJSON(),
-                        type: 'bar',
-                        label: '판매 매출액',
-                        data: payAmountValues,
-                        backgroundColor: graphColor[idx],
-                        borderColor: graphColor[idx],
-                        borderWidth: 0,
-                        order: 0
-                    }
-                })
 
                 let orderPayAmountDatasets = props.bestPayAmountItem.map((r, idx) => {
                     let payAmountValues = r.performances.map(r2 => r2.orderPayAmount);
@@ -83,6 +69,19 @@ export default function BestItemGraphComponent(props) {
                         order: -1,
                         pointRadius: 2
                     }  
+                })
+                let salesPayAmountDatasets = props.bestPayAmountItem.map((r, idx) => {
+                    let payAmountValues = r.performances.map(r2 => r2.salesPayAmount);
+                    return {
+                        ...new GraphDataset().toJSON(),
+                        type: 'bar',
+                        label: '판매 매출액',
+                        data: payAmountValues,
+                        backgroundColor: graphColor[idx] + 'BB',
+                        borderColor: graphColor[idx] + 'BB',
+                        borderWidth: 0,
+                        order: 0
+                    }
                 })
 
                 let createdSalesGraph = {
@@ -100,7 +99,7 @@ export default function BestItemGraphComponent(props) {
                 
                 for(let i  = 0; i < props.category.length; i++) {
                     let categoryItem = props.bestUnitItem.filter(r => r.categoryName === props.category[i])[0];
-                    let productLabel = categoryItem.performances.map(r => r.productName);
+                    let productLabel = categoryItem.performances.map(r => r.productDefaultName);
 
                     graphLabels.push(productLabel);
                 }
@@ -110,20 +109,6 @@ export default function BestItemGraphComponent(props) {
                     let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
                     graphColor.push(randomColor);
                 }
-
-                let salesUnitDatasets = props.bestUnitItem.map((r, idx) => {
-                    let unitValues = r.performances.map(r2 => r2.salesUnit);
-                    return {
-                        ...new GraphDataset().toJSON(),
-                        type: 'bar',
-                        label: '판매 수량',
-                        data: unitValues,
-                        backgroundColor: graphColor[idx],
-                        borderColor: graphColor[idx],
-                        borderWidth: 0,
-                        order: 0
-                    }
-                })
 
                 let orderUnitDatasets = props.bestUnitItem.map((r, idx) => {
                     let unitValues = r.performances.map(r2 => r2.orderUnit);
@@ -138,6 +123,19 @@ export default function BestItemGraphComponent(props) {
                         order: -1,
                         pointRadius: 2
                     }  
+                })
+                let salesUnitDatasets = props.bestUnitItem.map((r, idx) => {
+                    let unitValues = r.performances.map(r2 => r2.salesUnit);
+                    return {
+                        ...new GraphDataset().toJSON(),
+                        type: 'bar',
+                        label: '판매 수량',
+                        data: unitValues,
+                        backgroundColor: graphColor[idx] + 'BB',
+                        borderColor: graphColor[idx] + 'BB',
+                        borderWidth: 0,
+                        order: 0
+                    }
                 })
 
                 let createdSalesGraph = {
