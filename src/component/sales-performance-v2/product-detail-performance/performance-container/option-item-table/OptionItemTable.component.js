@@ -171,6 +171,19 @@ export default function OptionItemTableComponent(props) {
                                     return label + " : " + value + "%";
                                 }
                             }
+                        },
+                        datalabels: {
+                            formatter:function(value, context){
+                                if(value <= 5) {
+                                    return "";
+                                }
+                                return value + "%";
+                            },
+                            font: {
+                                size: '14',
+                                weight: '700',
+                            },
+                            color: 'white'
                         }
                     }
                 }
