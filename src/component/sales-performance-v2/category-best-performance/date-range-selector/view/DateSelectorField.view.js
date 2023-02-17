@@ -11,6 +11,7 @@ export default function DateSelectorFieldView (props) {
                     labelSize={12}
                     label={'시작일'}
                     selected={props.startDate}
+                    pickerModeIndex={props.pickerModeIndex}
                     onChange={value => props.onChangeStartDateValue(value)}
                 ></CustomDatePickerV2>
             </div>
@@ -21,6 +22,7 @@ export default function DateSelectorFieldView (props) {
                     labelSize={12}
                     label={'종료일'}
                     selected={props.endDate}
+                    pickerModeIndex={props.pickerModeIndex}
                     onChange={value => props.onChangeEndDateValue(value)}
                 ></CustomDatePickerV2>
             </div>

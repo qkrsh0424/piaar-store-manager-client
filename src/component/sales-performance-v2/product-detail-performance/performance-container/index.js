@@ -13,7 +13,7 @@ import useProductAndOptionHook from "./hooks/useProductAndOptionHook";
 import OptionItemTableComponent from "./option-item-table/OptionItemTable.component";
 import useRouterHook from "../../../../hooks/router/useRouterHook";
 import DateRangeSelectorComponent from "./date-range-selector/DateRangeSelector.component";
-import { dateToYYYYMMDD, getEndDate, getStartDate, getTimeDiffWithUTC, setSubtractedDate } from "../../../../utils/dateFormatUtils";
+import { getEndDate, getStartDate, getTimeDiffWithUTC, setSubtractedDate } from "../../../../utils/dateFormatUtils";
 
 const Container = styled.div`
 `;
@@ -32,8 +32,6 @@ export default function PerformanceContainerComponent (props) {
 
     const {
         query,
-        location,
-        navigateParams
     } = useRouterHook();
 
     const {

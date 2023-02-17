@@ -5,7 +5,7 @@ import { Container } from "./BestCategoryGraph.styled";
 import GraphBoardFieldView from "./view/GraphBoardField.view";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 
-const SALES_GRAPH_BG_COLOR = ['#B9B4EB', '#F0B0E8', '#80A9E1', '#FFAFCC', '#F9F871', '#F1EDFF', '#EEE8A9', '#70dbc2', '#D5CABD', '#389091'];
+const SALES_GRAPH_BG_COLOR = ['#35848F', '#689CB5', '#9CB5D3', '#CECEEB', '#F3CAF2', '#FFC4DE', '#FFC8B4', '#FFDB86'];
 
 export default function BestCategoryGraphComponent(props) {
     const [payAmountGraphData, setPayAmountGraphData] = useState(null);
@@ -53,6 +53,7 @@ export default function BestCategoryGraphComponent(props) {
                     };
                 })
 
+                categoryPerformance = _.sortBy(categoryPerformance, 'payAmount').reverse();
                 categoryPerformance.forEach(r => {
                     let payAmountValue = Math.round(((r.payAmount / totalPayAmountSum) * 100) || 0);
                     let unitValue = Math.round(((r.unit / totalUnitSum) * 100) || 0);
@@ -62,13 +63,19 @@ export default function BestCategoryGraphComponent(props) {
                     unitData.push(unitValue)
                 });
 
+                let graphColor = SALES_GRAPH_BG_COLOR;
+                for (let i = SALES_GRAPH_BG_COLOR.length; i < graphLabels.length; i++) {
+                    let randomColor = `#${Math.round(Math.random() * 0xFFFFFF).toString(16)}`;
+                    graphColor.push(randomColor);
+                }
+
                 let payAmountGraphDataset = {
                     ...new GraphDataset().toJSON(),
                     type: 'doughnut',
                     label: '판매 매출액',
                     data: payAmountData,
                     fill: true,
-                    backgroundColor: SALES_GRAPH_BG_COLOR,
+                    backgroundColor: graphColor,
                     borderColor: '#fff',
                     tension: 0,
                 }
@@ -79,7 +86,7 @@ export default function BestCategoryGraphComponent(props) {
                     label: '판매 수량',
                     data: unitData,
                     fill: true,
-                    backgroundColor: SALES_GRAPH_BG_COLOR,
+                    backgroundColor: graphColor,
                     borderColor: '#fff',
                     tension: 0
                 }
@@ -117,7 +124,7 @@ export default function BestCategoryGraphComponent(props) {
                         },
                         datalabels: {
                             formatter:function(value, context){
-                                if(value <= 5) {
+                                if(value < 5) {
                                     return "";
                                 }
                                 return value + "%";

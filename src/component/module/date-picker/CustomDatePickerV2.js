@@ -52,6 +52,21 @@ const Container = styled.div`
         background-color: var(--piaar-main-color);
     }
 
+    .react-datepicker__month-text--keyboard-selected {
+        background-color: var(--piaar-main-color);
+
+        :hover {
+            background-color: var(--piaar-main-color);
+        }
+    }
+
+    .react-datepicker__month-wrapper {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
     .react-datepicker__month-container {
         width: 100%;
     }
@@ -88,11 +103,10 @@ const CustomDatePickerV2 = (props) => {
             <Container>
                 <DatePicker
                     locale={ko}
-                    dateFormat="yyyy-MM-dd"
+                    dateFormat={'yyyy-MM-dd'}
                     selected={props.selected || null}
                     onChange={props.onChange}
-                    // customInput={<ExampleCustomInput />}
-                    // withPortal
+                    showMonthYearPicker={props.pickerModeIndex === 1}
                     shouldCloseOnSelect={false}
                     inline
                     ref={calendar}

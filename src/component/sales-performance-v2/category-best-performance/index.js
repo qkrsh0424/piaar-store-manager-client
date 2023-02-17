@@ -113,12 +113,7 @@ const CategoryBestPerformanceComponent = (props) => {
             }
         },
         submit: {
-            searchPerformance: async (data) => {
-                let body = {
-                    startDate: data.startDate,
-                    endDate: data.endDate,
-                    utcHourDifference: data.utcHourDifference
-                }
+            searchPerformance: async (body) => {
                 onActionOpenBackdrop();
                 await reqSearchCategoryPerformance(body);
                 onActionCloseBackdrop();

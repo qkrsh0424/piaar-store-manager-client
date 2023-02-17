@@ -6,14 +6,13 @@ import { GraphDataset } from "../../../../../utils/graphDataUtils";
 import TableBoardFieldView from "./view/TableBoardField.view";
 import GraphBodyFieldView from "./view/GraphBodyField.view";
 
-// const SALES_GRAPH_BG_COLOR = ['#4975A9', '#ffca9f', '#FF7FAB', '#80A9E1', '#f9f871', '#D678CD', '#B9B4EB', '#70dbc2', '#389091', '#EEE8A9', '#D5CABD'];
-const SALES_GRAPH_BG_COLOR = ['#B9B4EB', '#F0B0E8', '#80A9E1', '#FFAFCC', '#F9F871', '#F1EDFF', '#EEE8A9', '#70dbc2', '#D5CABD', '#389091', '#A2ACBD'];
+const SALES_GRAPH_BG_COLOR = ['#007162', '#00895F', '#59A061', '#96B56C', '#CCCA80', '#EEE8A9', '#86E5B3', '#61EBE4', '#7CF6C2', '#B5FB97', '#E0E0E0'];
 const OPTION_MAX_SIZE = 10;
 
 // 판매스토어별 총 매출액
 export default function OptionItemTableComponent(props) {
     const [tableData, setTableData] = useState(null);
-    const [viewType, setViewType] = useState('table');
+    const [viewType, setViewType] = useState('graph');
 
     const [salesPayAmountGraphData, setSalesPayAmountGraphData] = useState(null);
     const [salesUnitGraphData, setSalesUnitGraphData] = useState(null);
@@ -174,7 +173,7 @@ export default function OptionItemTableComponent(props) {
                         },
                         datalabels: {
                             formatter:function(value, context){
-                                if(value <= 5) {
+                                if(value < 5) {
                                     return "";
                                 }
                                 return value + "%";

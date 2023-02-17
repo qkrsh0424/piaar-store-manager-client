@@ -9,6 +9,17 @@ import ButtonFieldView from "./view/ButtonField.view";
 import DateButtonFieldView from "./view/DateButtonField.view";
 import DateSelectorFieldView from "./view/DateSelectorField.view";
 
+const DATE_PICKER_MODE = [
+    {
+        mode: 'date',
+        name: '일'
+    },
+    {
+        mode: 'month',
+        name: '월'
+    }
+]
+
 // 날짜검색 최대기간 1년
 const SEARCHABLE_PERIOD = 365;
 
@@ -17,6 +28,8 @@ export default function DateRangeSelectorComponent(props) {
 
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+
+    const [pickerModeIndex, setPickerModeIndex] = useState(0);
 
     const {
         query,
@@ -50,12 +63,21 @@ export default function DateRangeSelectorComponent(props) {
     const __handle = {
         action: {
             changeStartDate: (value) => {
-                setStartDate(value);
+                let start = value;
+                if(pickerModeIndex === 1) {
+                    start = getStartDateOfMonth(value);
+                }
+                setStartDate(start);
             },
             changeEndDate: (value) => {
-                setEndDate(value);
+                let end = value;
+                if(pickerModeIndex === 1) {
+                    end = getEndDateOfMonth(value);
+                }
+                setEndDate(end);
             },
             openDatePickerModal: () => {
+                setPickerModeIndex(0);
                 setDatePickerModalOpen(true);
             },
             closeDatePickerModal: () => {
@@ -77,9 +99,23 @@ export default function DateRangeSelectorComponent(props) {
                 setStartDate(start);
                 setEndDate(end);
             },
+            changePickerMode: () => {
+                let index = (parseInt(pickerModeIndex) + 1) % DATE_PICKER_MODE.length;
+                setPickerModeIndex(index);
+
+                let start = startDate;
+                let end = endDate;
+
+                if(pickerModeIndex === 1) {
+                    start = getStartDateOfMonth(start);
+                    end = getEndDateOfMonth(end);
+                }
+                setStartDate(start);
+                setEndDate(end);
+            },
             routeToSearch: (e) => {
                 e.preventDefault();
-
+                
                 try{
                     if (startDate && !endDate) {
                         throw new Error('종료일 날짜를 선택해 주세요.')
@@ -146,10 +182,22 @@ export default function DateRangeSelectorComponent(props) {
                     open={datePickerModalOpen}
                     element={
                         <Container>
+                            <div className='select-box'>
+                                <div>
+                                    <button
+                                        type='button'
+                                        className='button-el'
+                                        onClick={() => __handle.action.changePickerMode()}
+                                    >
+                                        {DATE_PICKER_MODE[pickerModeIndex].name} 검색
+                                    </button>
+                                </div>
+                            </div>
                             <div>
                                 <DateSelectorFieldView
                                     startDate={startDate}
                                     endDate={endDate}
+                                    pickerModeIndex={pickerModeIndex}
                                     onChangeStartDateValue={__handle.action.changeStartDate}
                                     onChangeEndDateValue={__handle.action.changeEndDate}
                                 />

@@ -9,6 +9,17 @@ import ButtonFieldView from "./view/ButtonField.view";
 import DateButtonFieldView from "./view/DateButtonField.view";
 import DateSelectorFieldView from "./view/DateSelectorField.view";
 
+const DATE_PICKER_MODE = [
+    {
+        mode: 'date',
+        name: '일'
+    },
+    {
+        mode: 'month',
+        name: '월'
+    }
+]
+
 // 날짜검색 최대기간 1년
 const SEARCHABLE_PERIOD = 365;
 
@@ -17,6 +28,8 @@ export default function DateRangeSelectorComponent(props) {
 
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+
+    const [pickerModeIndex, setPickerModeIndex] = useState(0);
 
     const {
         query,
@@ -84,12 +97,21 @@ export default function DateRangeSelectorComponent(props) {
     const __handle = {
         action: {
             changeStartDate: (value) => {
-                setStartDate(value);
+                let start = value;
+                if(pickerModeIndex === 1) {
+                    start = getStartDateOfMonth(value);
+                }
+                setStartDate(start);
             },
             changeEndDate: (value) => {
-                setEndDate(value);
+                let end = value;
+                if(pickerModeIndex === 1) {
+                    end = getEndDateOfMonth(value);
+                }
+                setEndDate(end);
             },
             openDatePickerModal: () => {
+                setPickerModeIndex(0);
                 setDatePickerModalOpen(true);
             },
             closeDatePickerModal: () => {
@@ -108,6 +130,20 @@ export default function DateRangeSelectorComponent(props) {
                 let start = getStartDateOfMonth(searchMonth);
                 let end = month === 0 ? new Date() : getEndDateOfMonth(searchMonth);
     
+                setStartDate(start);
+                setEndDate(end);
+            },
+            changePickerMode: () => {
+                let index = (parseInt(pickerModeIndex) + 1) % DATE_PICKER_MODE.length;
+                setPickerModeIndex(index);
+
+                let start = startDate;
+                let end = endDate;
+
+                if(pickerModeIndex === 1) {
+                    start = getStartDateOfMonth(start);
+                    end = getEndDateOfMonth(end);
+                }
                 setStartDate(start);
                 setEndDate(end);
             },
@@ -134,6 +170,11 @@ export default function DateRangeSelectorComponent(props) {
                     if (!isSearchablePeriod(startDate, endDate, SEARCHABLE_PERIOD)) {
                         throw new Error(`조회기간은 최대 ${SEARCHABLE_PERIOD}일까지 가능합니다.`)
                     }
+
+                    // 파라미터 날짜값 세팅
+                    query.startDate = dateToYYYYMMDD(startDate);
+                    query.endDate = dateToYYYYMMDD(endDate);
+                    navigateParams({ replace: true });
                 } catch (err) {
                     let snackbarSetting = {
                         message: err?.message,
@@ -143,22 +184,14 @@ export default function DateRangeSelectorComponent(props) {
                     return;
                 }
 
-                let searchStartDate = startDate ? getStartDate(startDate) : null;
-                let searchEndDate = endDate ? getEndDate(endDate) : null;
-                let utcHourDifference = getTimeDiffWithUTC();
-
                 let body = {
-                    startDate: searchStartDate,
-                    endDate: searchEndDate,
-                    utcHourDifference,
+                    startDate: getStartDate(startDate),
+                    endDate: getEndDate(endDate),
+                    utcHourDifference: getTimeDiffWithUTC(),
                 }
 
                 props.onSubmitSearchPerformance(body);
                 __handle.action.closeDatePickerModal();
-
-                query.startDate = dateToYYYYMMDD(startDate);
-                query.endDate = dateToYYYYMMDD(endDate);
-                navigateParams({ replace: true });
             }
         }
     }
@@ -179,10 +212,22 @@ export default function DateRangeSelectorComponent(props) {
                     open={datePickerModalOpen}
                     element={
                         <Container>
+                            <div className='select-box'>
+                                <div>
+                                    <button
+                                        type='button'
+                                        className='button-el'
+                                        onClick={() => __handle.action.changePickerMode()}
+                                    >
+                                        {DATE_PICKER_MODE[pickerModeIndex].name} 검색
+                                    </button>
+                                </div>
+                            </div>
                             <div>
                                 <DateSelectorFieldView
                                     startDate={startDate}
                                     endDate={endDate}
+                                    pickerModeIndex={pickerModeIndex}
                                     onChangeStartDateValue={__handle.action.changeStartDate}
                                     onChangeEndDateValue={__handle.action.changeEndDate}
                                 />

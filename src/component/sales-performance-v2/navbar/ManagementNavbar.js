@@ -1,8 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import useRouterHook from "../../../hooks/router/useRouterHook";
-import { dateToYYYYMMDD, getStartDateOfMonth, setSubtractedDate } from "../../../utils/dateFormatUtils";
 
 const Container = styled.div`
     .group-box {
@@ -91,9 +90,6 @@ const NavbarBox = styled.div`
     }
 `;
 
-// const TODAY = dateToYYYYMMDD(new Date());
-// const PREV_2WEEKS_DATE = dateToYYYYMMDD(setSubtractedDate(TODAY, 0, 0, -13));
-
 const thisRouters = [
     {
         title: '판매성과 요약',
@@ -109,8 +105,7 @@ const thisRouters = [
         page: [
             {
                 name: '총 매출액 & 판매 건',
-                pathname: '/sales-performance/total',
-                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/total'
             },
         ]
     },
@@ -119,18 +114,15 @@ const thisRouters = [
         page: [
             {
                 name: '총 매출액 & 판매 건',
-                pathname: '/sales-performance/sales-channel',
-                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/sales-channel'
             },
             {
                 name: '상품 순위',
-                pathname: '/sales-performance/sales-channel/product/best',
-                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/sales-channel/product/best'
             },
             {
                 name: '다중 상품 성과',
-                pathname: '/sales-performance/sales-channel/product',
-                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/sales-channel/product'
             },
         ]
     },
@@ -139,18 +131,15 @@ const thisRouters = [
         page: [
             {
                 name: '총 매출액 & 판매 건',
-                pathname: '/sales-performance/category',
-                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/category'
             },
             {
                 name: '상품 순위',
-                pathname: '/sales-performance/category/product/best',
-                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/category/product/best'
             },
             {
                 name: 'BEST 카테고리 상품',
-                pathname: '/sales-performance/category/best',
-                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/category/best'
             }
         ]
     },
@@ -159,18 +148,15 @@ const thisRouters = [
         page: [
             {
                 name: '총 매출액 & 판매 건',
-                pathname: '/sales-performance/product',
-                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/product'
             },
             {
                 name: '상품 순위',
-                pathname: '/sales-performance/product/best',
-                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/product/best'
             },
             {
                 name: '단일 상품 성과',
-                pathname: '/sales-performance/product/detail',
-                // params: `?startDate=${PREV_2WEEKS_DATE}&endDate=${TODAY}`
+                pathname: '/sales-performance/product/detail'
             }
         ]
     }
@@ -226,7 +212,6 @@ const ManagementNavbar = (props) => {
                                     return (
                                         <div key={navPage.name} className='link-box'>
                                             <Link
-                                                // to={navPage.pathname + (navPage.params || '')}
                                                 to={navPage.pathname + (location.search || '')}
                                                 replace={true}
                                             >

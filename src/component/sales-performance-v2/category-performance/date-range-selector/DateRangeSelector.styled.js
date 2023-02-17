@@ -4,6 +4,27 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    
+    .select-box {
+        padding: 10px 20px;
+        padding-bottom: 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .select-box .button-el {
+        background-color: #fff;
+        border: 1px solid var(--defaultBorderColor);
+        width: 80px;
+        height: 40px;
+        font-weight: 600;
+        border-radius: 5px;
+        transition: 0.2s;
+
+        &:hover {
+            background-color: var(--defaultHoverColor);
+        }
+    }
 
     .common-calendar .button-el {
         position: fixed;
