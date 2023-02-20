@@ -8,7 +8,7 @@ import { GraphDataset, setAnalysisResultText } from "../../../../utils/graphData
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import _ from "lodash";
 
-const SALES_GRAPH_BG_COLOR = ['#B9B4EB', '#F0B0E8', '#80A9E1', '#FFAFCC', '#F9F871', '#F1EDFF', '#EEE8A9', '#70dbc2', '#D5CABD', '#389091'];
+const SALES_GRAPH_BG_COLOR = ['#35848F', '#6CDCBA', '#9CB5D3', '#CECEEB', '#F3CAF2', '#47CDBF', '#FFC8B4', '#FFDB86'];
 
 // 판매스토어별 총 매출액
 export default function PayAmountGraphComponent(props) {
