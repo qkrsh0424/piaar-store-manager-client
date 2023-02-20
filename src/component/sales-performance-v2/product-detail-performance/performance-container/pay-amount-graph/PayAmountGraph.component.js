@@ -9,7 +9,8 @@ import { toPriceUnitFormat } from "../../../../../utils/numberFormatUtils";
 import _ from "lodash";
 
 // 그래프 기본 3가지 색상 : [주문, 판매, 평균]
-const DEFAULT_GRAPH_BG_2COLOR = ['#94AAD7', '#9CCBEB', '#7BB1C1'];
+const DEFAULT_GRAPH_BG_COLOR = ['#C49165', '#FFC799', '#FF8667'];
+
 
 export default function PayAmountGraphComponent(props) {
     const [salesPayAmountGraphData, setSalesPayAmountGraphData] = useState(null);
@@ -96,8 +97,8 @@ export default function PayAmountGraphComponent(props) {
                     label: '주문 매출액',
                     data: orderPayAmountData,
                     fill: false,
-                    borderColor: DEFAULT_GRAPH_BG_2COLOR[0] + '88',
-                    backgroundColor: DEFAULT_GRAPH_BG_2COLOR[0] + '88',
+                    borderColor: DEFAULT_GRAPH_BG_COLOR[0] + '88',
+                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[0] + '88',
                     order: -1,
                     pointRadius: 2
                 }
@@ -108,8 +109,8 @@ export default function PayAmountGraphComponent(props) {
                     label: '판매 매출액',
                     data: salesPayAmountData,
                     fill: false,
-                    borderColor: DEFAULT_GRAPH_BG_2COLOR[1],
-                    backgroundColor: DEFAULT_GRAPH_BG_2COLOR[1],
+                    borderColor: DEFAULT_GRAPH_BG_COLOR[1],
+                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[1],
                     borderWidth: 0,
                     order: 0
                 }
@@ -129,8 +130,8 @@ export default function PayAmountGraphComponent(props) {
                     label: '판매 매출액 7일간 평균',
                     data: salesPayAmountAvgData,
                     fill: false,
-                    borderColor: DEFAULT_GRAPH_BG_2COLOR[2],
-                    backgroundColor: DEFAULT_GRAPH_BG_2COLOR[2],
+                    borderColor: DEFAULT_GRAPH_BG_COLOR[2],
+                    backgroundColor: DEFAULT_GRAPH_BG_COLOR[2],
                     order: -2,
                     borderDash: [3, 3]
                 }

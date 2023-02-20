@@ -7,7 +7,7 @@ import TableBoardFieldView from "./view/TableBoardField.view";
 import { GraphDataset } from "../../../../utils/graphDataUtils";
 import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 
-const DEFAULT_GRAPH_BG_COLOR = ['#4975A9', '#80A9E1'];
+const DEFAULT_GRAPH_BG_COLOR = ['#67D9BD', '#CAF583'];
 
 // 판매스토어별 총 매출액
 export default function OptionItemTableComponent(props) {

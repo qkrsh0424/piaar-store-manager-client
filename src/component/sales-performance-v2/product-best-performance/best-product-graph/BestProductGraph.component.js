@@ -7,8 +7,8 @@ import { toPriceUnitFormat } from "../../../../utils/numberFormatUtils";
 import _ from "lodash";
 import { getEndDate, getStartDate } from "../../../../utils/dateFormatUtils";
 
-const DEFAULT_GRAPH_BG_COLOR = ['#67AFB9', '#9CD7E1'];
-const DEFAULT_ORDER_GRAPH_BG_COLOR = ['#35848F', '#6EB9C5'];
+const DEFAULT_GRAPH_BG_COLOR = ['#FFE1A8', '#FFC799'];
+const DEFAULT_ORDER_GRAPH_BG_COLOR = ['#FFCA65', '#FFB070'];
 
 // 판매스토어별 총 매출액
 export default function BestProductGraphComponent(props) {
