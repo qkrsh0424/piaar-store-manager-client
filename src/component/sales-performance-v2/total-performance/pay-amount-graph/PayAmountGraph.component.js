@@ -59,9 +59,14 @@ export default function PayAmountGraphComponent(props) {
                         datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                     }
 
-                    graphLabels.add(datetime);
-                    salesPayAmountData.push(data.salesPayAmount);
-                    orderPayAmountData.push(data.orderPayAmount);
+                    if(graphLabels.has(datetime)) {
+                        salesPayAmountData[salesPayAmountData.length - 1] += data.salesPayAmount;
+                        orderPayAmountData[orderPayAmountData.length - 1] += data.orderPayAmount;
+                    }else {
+                        graphLabels.add(datetime);
+                        salesPayAmountData.push(data.salesPayAmount);
+                        orderPayAmountData.push(data.orderPayAmount);
+                    }
                 })
 
                 let lineGraphOfOrder = {

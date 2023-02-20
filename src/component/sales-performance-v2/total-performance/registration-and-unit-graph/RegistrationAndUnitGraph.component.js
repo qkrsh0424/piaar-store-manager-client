@@ -60,11 +60,18 @@ export default function RegistrationAndUnitGraphComponent(props) {
                         datetime = getMonthAndSearchDateRange(data.datetime, minimumDate, maximumDate);
                     }
 
-                    graphLabels.add(datetime);
-                    salesRegistrationData.push(data.salesRegistration);
-                    salesUnitData.push(data.salesUnit);
-                    orderRegistrationData.push(data.orderRegistration);
-                    orderUnitData.push(data.orderUnit);
+                    if(graphLabels.has(datetime)) {
+                        salesRegistrationData[salesRegistrationData.length - 1] += data.salesRegistration;
+                        orderRegistrationData[orderRegistrationData.length - 1] += data.orderRegistration;
+                        salesUnitData[salesUnitData.length - 1] += data.salesUnit;
+                        orderUnitData[orderUnitData.length - 1] += data.orderUnit;
+                    }else {
+                        graphLabels.add(datetime);
+                        salesRegistrationData.push(data.salesRegistration);
+                        orderRegistrationData.push(data.orderRegistration);
+                        salesUnitData.push(data.salesUnit);
+                        orderUnitData.push(data.orderUnit);
+                    }
                 })
                 
                 let lineGraphOfOrderReg = {
