@@ -96,6 +96,7 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
 
     const {
         location,
+        query,
         navigateUrl
     } = useRouterHook();
 
@@ -139,13 +140,15 @@ const SalesChannelBestProductPerformanceComponent = (props) => {
     useEffect(() => {
         async function searchOptionPerformance() {
             let productCodes = productPerformance?.content.map(r => r.productCode);
+            let periodType = query.periodType ?? 'registration';
 
             let body = {
                 startDate: detailSearchValue.startDate,
                 endDate: detailSearchValue.endDate,
                 utcHourDifference: detailSearchValue.utcHourDifference,
                 productCodes: productCodes,
-                salesChannels: detailSearchValue.salesChannels
+                salesChannels: detailSearchValue.salesChannels,
+                periodType
             }
             
             onActionOpenBackdrop();

@@ -58,6 +58,23 @@ const ContentTextFieldWrapper = styled.div`
     }
 `;
 
+const SearchFieldWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    padding: 10px;
+
+    .button-el {
+        width: 100px;
+        padding: 5px;
+        background-color: #455265;
+        border: 1px solid #455265;
+        color: white;
+        border-radius: 5px;
+    }
+`;
+
 const ChannelPerformanceFieldWrapper = styled.div`
     padding: 10px 0;
     display: flex;
@@ -346,6 +363,7 @@ const SubPerformanceFieldWrapper = styled.div`
 
 export {
     Container,
+    SearchFieldWrapper,
     ContentTextFieldWrapper,
     ChannelDataBox,
     ChannelPerformanceFieldWrapper,

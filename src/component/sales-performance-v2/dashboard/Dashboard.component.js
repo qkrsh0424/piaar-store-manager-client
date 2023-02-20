@@ -9,6 +9,7 @@ import useSalesPerformanceItemHook from "./hooks/useSalesPerformanceHook";
 import ChannelPerformanceFieldView from "./view/ChannelPerformanceField.view";
 import ContentTextFieldView from "./view/ContentTextField.view";
 import DashboardFieldView from "./view/DashboardField.view"
+import SearchFieldView from "./view/SearchField.view";
 import SubPerformanceFieldView from "./view/SubPerformanceField.view";
 
 const TODAY = new Date();
@@ -26,9 +27,13 @@ export default function DashboardComponent(props) {
     const [lastMonthAvgData, setLastMonthAvgData] = useState(null);
 
     const [channelPerformanceData, setChannelPerformanceData] = useState(null);
+    
+    const [periodType, setPeriodType] = useState('registration');
 
     const {
         location,
+        query,
+        navigateParams
     } = useRouterHook();
 
     const {
@@ -56,10 +61,12 @@ export default function DashboardComponent(props) {
             
             let searchDate = [TODAY, YESTERDAY, prev7DaysOfToday, prev7DaysOfYesterDay].map(r => getStartDate(r));
             let utcHourDifference = getTimeDiffWithUTC();
+            let searchPeriodType = query.periodType ?? 'registration';
 
             let body = {
                 searchDate,
-                utcHourDifference
+                utcHourDifference,
+                periodType: searchPeriodType
             }
 
             onActionOpenBackdrop();
@@ -72,11 +79,13 @@ export default function DashboardComponent(props) {
             let startDate = getStartDate(getStartDateOfMonth(TODAY));
             let endDate = YESTERDAY.getDate() > TODAY.getDate() ? getEndDate(TODAY) : getEndDate(YESTERDAY);
             let utcHourDifference = getTimeDiffWithUTC();
+            let searchPeriodType = query.periodType ?? 'registration';
 
             let body = {
                 startDate,
                 endDate,
-                utcHourDifference
+                utcHourDifference,
+                periodType: searchPeriodType
             }
 
             onActionOpenBackdrop();
@@ -90,11 +99,13 @@ export default function DashboardComponent(props) {
             let startDate = getStartDate(getStartDateOfMonth(lastMonth));
             let endDate = getEndDate(getEndDateOfMonth(lastMonth));
             let utcHourDifference = getTimeDiffWithUTC();
+            let searchPeriodType = query.periodType ?? 'registration';
 
             let body = {
                 startDate,
                 endDate,
-                utcHourDifference
+                utcHourDifference,
+                periodType: searchPeriodType
             }
 
             onActionOpenBackdrop();
@@ -107,16 +118,23 @@ export default function DashboardComponent(props) {
             let startDate = getStartDate(YESTERDAY);
             let endDate = getEndDate(TODAY);
             let utcHourDifference = getTimeDiffWithUTC();
+            let searchPeriodType = query.periodType ?? 'registration';
 
             let body = {
                 startDate,
                 endDate,
-                utcHourDifference
+                utcHourDifference,
+                periodType: searchPeriodType
             }
 
             onActionOpenBackdrop();
             await reqSearchChannelPerformance(body);
             onActionCloseBackdrop();
+        }
+
+        if(query.periodType) {
+            let searchPeriodType = query.periodType;
+            setPeriodType(searchPeriodType);
         }
 
         getDashboardPerformance();
@@ -261,12 +279,25 @@ export default function DashboardComponent(props) {
 
 
                 setChannelPerformanceData({todayData, yesterdayData});
+            },
+            changePeriodType: (e) => {
+                let value = e.target.value;
+                let changeValue = value === 'registration' ? 'channelOrderDate' : 'registration';
+                setPeriodType(changeValue);
+                
+                query.periodType = changeValue;
+                navigateParams({ replace: true })
             }
         }
     }
 
     return (
         <Container>
+            <SearchFieldView
+                periodType={periodType}
+                onChangePeriodType={__handle.action.changePeriodType}
+            />
+
             <ContentTextFieldView />
 
             {/* 채널 판매성과 요약*/}

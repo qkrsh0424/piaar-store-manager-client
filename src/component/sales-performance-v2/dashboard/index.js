@@ -25,7 +25,6 @@ function PageTitleFieldView({ title }) {
 }
 
 const SalesPerformanceDashboardComponent = (props) => {
-
     return (
         <Container navbarOpen={props.navbarOpen}>
             <PageTitleFieldView title={'대시보드'} />

@@ -9,6 +9,7 @@ import DetailGraphSelectorModalComponent from "./modal/detail-graph-selector-mod
 import OptionItemTableComponent from "./option-item-table/OptionItemTable.component";
 import GraphDataPagenationComponent from "./graph-data-pagenation/GraphDataPagenation.component";
 import DateRangeSelectorComponent from "./date-range-selector/DateRangeSelector.component";
+import useRouterHook from "../../../hooks/router/useRouterHook";
 
 const Container = styled.div`
     height: 100%;
@@ -41,6 +42,10 @@ export default function ProductBestPerformanceComponent (props) {
     const [pageIndex, setPageIndex] = useState(null);
 
     const {
+        query
+    } = useRouterHook();
+
+    const {
         open: backdropOpen,
         onActionOpen: onActionOpenBackdrop,
         onActionClose: onActionCloseBackdrop
@@ -61,12 +66,14 @@ export default function ProductBestPerformanceComponent (props) {
     useEffect(() => {
         async function searchOptionPerformance() {
             let productCodes = productPerformance?.content.map(r => r.productCode);
+            let periodType = query.periodType ?? 'registration';
             
             let body = {
                 startDate: detailSearchValue.startDate,
                 endDate: detailSearchValue.endDate,
                 utcHourDifference: detailSearchValue.utcHourDifference,
-                productCodes: productCodes
+                productCodes: productCodes,
+                periodType
             }
 
             onActionOpenBackdrop();

@@ -77,6 +77,7 @@ export default function PerformanceContainerComponent (props) {
         async function fetchInit() {
             let searchStartDate = setSubtractedDate(new Date(), 0, 0, -13);
             let searchEndDate = new Date();
+            let periodType = query.periodType ?? 'registration';
 
             if (query.startDate && query.endDate) {
                 searchStartDate = new Date(query.startDate);
@@ -87,7 +88,8 @@ export default function PerformanceContainerComponent (props) {
                 startDate: getStartDate(searchStartDate),
                 endDate: getEndDate(searchEndDate),
                 utcHourDifference: getTimeDiffWithUTC(),
-                productCodes: [selectedProduct.code]
+                productCodes: [selectedProduct.code],
+                periodType
             }
             
             await __handle.submit.searchPerformance(body);

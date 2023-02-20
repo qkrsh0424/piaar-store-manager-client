@@ -3,11 +3,13 @@ import { useState } from "react";
 import useRouterHook from "../../../../../hooks/router/useRouterHook";
 import { BasicSnackbarHookComponentV2, useBasicSnackbarHookV2 } from "../../../../../hooks/snackbar/useBasicSnackbarHookV2";
 import { dateToYYYYMMDD, getEndDate, getEndDateOfMonth, getStartDate, getStartDateOfMonth, getTimeDiffWithUTC, isSearchablePeriod, setSubtractedDate } from "../../../../../utils/dateFormatUtils";
+import Ripple from "../../../../module/button/Ripple";
 import CommonModalComponentV2 from "../../../../module/modal/CommonModalComponentV2";
 import { Container } from "./DateRangeSelector.styled";
 import ButtonFieldView from "./view/ButtonField.view";
 import DateButtonFieldView from "./view/DateButtonField.view";
 import DateSelectorFieldView from "./view/DateSelectorField.view";
+import SearchFieldView from "./view/SearchField.view";
 
 const DATE_PICKER_MODE = [
     {
@@ -30,6 +32,7 @@ export default function DateRangeSelectorComponent(props) {
     const [endDate, setEndDate] = useState(null);
 
     const [pickerModeIndex, setPickerModeIndex] = useState(0);
+    const [periodType, setPeriodType] = useState('registration');
 
     const {
         query,
@@ -56,6 +59,12 @@ export default function DateRangeSelectorComponent(props) {
             date1 = new Date(query.startDate);
             date2 = new Date(query.endDate);
         }
+
+        if(query.periodType) {
+            let searchPeriodType = query.periodType;
+            setPeriodType(searchPeriodType);
+        }
+
         setStartDate(date1);
         setEndDate(date2);
     }, [datePickerModalOpen])
@@ -113,10 +122,18 @@ export default function DateRangeSelectorComponent(props) {
                 setStartDate(start);
                 setEndDate(end);
             },
+            changePeriodType: (e) => {
+                let value = e.target.value;
+                setPeriodType(value);
+            },
             routeToSearch: (e) => {
                 e.preventDefault();
                 
                 try{
+                    if(!periodType) {
+                        throw new Error('날짜 검색 기준이 선택되지 않았습니다.')
+                    }
+
                     if (startDate && !endDate) {
                         throw new Error('종료일 날짜를 선택해 주세요.')
                     }
@@ -143,6 +160,7 @@ export default function DateRangeSelectorComponent(props) {
 
                     query.startDate = dateToYYYYMMDD(startDate);
                     query.endDate = dateToYYYYMMDD(endDate);
+                    query.periodType = periodType;
                     navigateParams({ replace: true });
                 } catch (err) {
                     let snackbarSetting = {
@@ -157,7 +175,8 @@ export default function DateRangeSelectorComponent(props) {
                     startDate: getStartDate(startDate) ,
                     endDate: getEndDate(endDate),
                     utcHourDifference: getTimeDiffWithUTC(),
-                    productCodes: [props.selectedProduct.code]
+                    productCodes: [props.selectedProduct.code],
+                    periodType
                 }
 
                 props.onSubmitSearchPerformance(body);
@@ -183,6 +202,10 @@ export default function DateRangeSelectorComponent(props) {
                     element={
                         <Container>
                             <div className='select-box'>
+                                <SearchFieldView
+                                    periodType={periodType}
+                                    onChangePeriodType={__handle.action.changePeriodType}    
+                                />
                                 <div>
                                     <button
                                         type='button'
@@ -190,6 +213,7 @@ export default function DateRangeSelectorComponent(props) {
                                         onClick={() => __handle.action.changePickerMode()}
                                     >
                                         {DATE_PICKER_MODE[pickerModeIndex].name} 검색
+                                        <Ripple color={'#e0e0e0'} duration={1000} />
                                     </button>
                                 </div>
                             </div>

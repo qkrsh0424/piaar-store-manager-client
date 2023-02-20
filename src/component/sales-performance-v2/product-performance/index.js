@@ -78,6 +78,7 @@ export default function ProductPerformanceComponent (props) {
             let searchOptionCodes = selectedOptions.map(r => r.option.code);
             let searchStartDate = setSubtractedDate(new Date(), 0, 0, -13);
             let searchEndDate = new Date();
+            let periodType = query.periodType;
 
             if(query.startDate && query.endDate) {
                 searchStartDate = new Date(query.startDate);
@@ -91,16 +92,17 @@ export default function ProductPerformanceComponent (props) {
                 startDate: getStartDate(searchStartDate),
                 endDate: getEndDate(searchEndDate),
                 utcHourDifference,
-                optionCodes
+                optionCodes,
+                periodType
             }
             
             onActionOpenBackdrop();
             await reqSearchProductPerformance(body);
             onActionCloseBackdrop();
 
-            query.startDate = dateToYYYYMMDD(searchStartDate);
-            query.endDate = dateToYYYYMMDD(searchEndDate);
-            navigateParams({ replace: true });
+            // query.startDate = dateToYYYYMMDD(searchStartDate);
+            // query.endDate = dateToYYYYMMDD(searchEndDate);
+            // navigateParams({ replace: true });
         }
 
         if(selectedOptions?.length > 0) {

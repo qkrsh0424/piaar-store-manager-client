@@ -9,20 +9,39 @@ const Container = styled.div`
         padding: 10px 20px;
         padding-bottom: 0;
         display: flex;
-        justify-content: flex-end;
+        align-items: center;
+        justify-content: space-between;
+
+        @media screen and (max-width: 992px) {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
     }
 
     .select-box .button-el {
         background-color: #fff;
-        border: 1px solid var(--defaultBorderColor);
-        width: 80px;
+        border: 1px solid #e0e0e0;
+        width: 100%;
         height: 40px;
         font-weight: 600;
         border-radius: 5px;
-        transition: 0.2s;
+        overflow: hidden;
+        position: relative;
+        -webkit-transition: all .1s;
+        transition: all .1s;
 
         &:hover {
             background-color: var(--defaultHoverColor);
+        }
+    }
+    
+
+    .select-box .button-box {
+        width: 80px;
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
         }
     }
     
@@ -41,6 +60,32 @@ const Container = styled.div`
 
         &:hover {
             transform: scale(1.1);
+        }
+    }
+`;
+
+const SearchFieldWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+
+    .select-item {
+        width: 200px;
+        height: 40px;
+        padding: 5px;
+        border: 1px solid #e0e0e0;
+        border-bottom: none;
+        border-radius: 5px;
+        font-size: 14px;
+        -webkit-appearance: none;
+        -moz-appearance: none; 
+        appearance: none;
+        background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
+        background-color: white;
+        
+        &:focus{
+            outline: none;
         }
     }
 `;
@@ -133,6 +178,7 @@ const ButtonFieldWrapper = styled.div`
 
 export {
     Container,
+    SearchFieldWrapper,
     DateSelectorFieldWrapper,
     DateButtonFieldWrapper,
     ButtonFieldWrapper
