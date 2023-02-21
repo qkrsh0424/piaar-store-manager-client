@@ -24,6 +24,13 @@ function BatchRegTooltip({ inputType, name, tootipSize, onChangeInputValue, onAc
                     onKeyDown={(e) => confirmInput(e)}
                     onChange={(e) => onChangeInputValue(e)}
                     autoFocus
+                    onWheel={inputType === 'number' ?
+                        (e) => {
+                            e.target.blur();
+                            setTimeout(() => { e.target.focus() }, 0)
+                        }
+                        :
+                        null}
                 />
                 <div className='button-box'>
                     <button className='button-el' onClick={() => onActionCancel()}>
@@ -259,10 +266,26 @@ const CreateProductReleaseModalComponent = (props) => {
                                                     }
                                                 </td>
                                                 <td>
-                                                    <input className='input-el' type='text' name='memo' value={r.memo} onChange={(e) => onChangeProductReleaseInputValue(e, idx)} />
+                                                    <input
+                                                        className='input-el'
+                                                        type='text'
+                                                        name='memo'
+                                                        value={r.memo}
+                                                        onChange={(e) => onChangeProductReleaseInputValue(e, idx)}
+                                                    />
                                                 </td>
                                                 <td>
-                                                    <input className='input-el' type='number' name='releaseUnit' value={r.releaseUnit} onChange={(e) => onChangeProductReleaseInputValue(e, idx)} />
+                                                    <input
+                                                        className='input-el'
+                                                        type='number'
+                                                        name='releaseUnit'
+                                                        value={r.releaseUnit}
+                                                        onChange={(e) => onChangeProductReleaseInputValue(e, idx)}
+                                                        onWheel={(e) => {
+                                                            e.target.blur();
+                                                            setTimeout(() => {e.target.focus()}, 0)
+                                                        }}
+                                                    />
                                                 </td>
                                             </tr>
                                         )

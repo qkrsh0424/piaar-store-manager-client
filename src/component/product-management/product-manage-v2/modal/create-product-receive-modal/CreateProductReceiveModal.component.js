@@ -24,6 +24,14 @@ function BatchRegTooltip({ inputType, name, tootipSize, onChangeInputValue, onAc
                     onKeyDown={(e) => confirmInput(e)}
                     onChange={(e) => onChangeInputValue(e)}
                     autoFocus
+                    onWheel={inputType === 'number' ?
+                        (e) => {
+                            e.target.blur();
+                            setTimeout(() => { e.target.focus() }, 0)
+                        }
+                        :
+                        null
+                    }
                 />
                 <div className='button-box'>
                     <button className='button-el' onClick={() => onActionCancel()}>
@@ -259,10 +267,26 @@ const CreateProductReceiveModalComponent = (props) => {
                                                     }
                                                 </td>
                                                 <td>
-                                                    <input className='input-el' type='text' name='memo' value={r.memo} onChange={(e) => onChangeProductReceiveInputValue(e, idx)} />
+                                                    <input
+                                                        className='input-el'
+                                                        type='text'
+                                                        name='memo'
+                                                        value={r.memo}
+                                                        onChange={(e) => onChangeProductReceiveInputValue(e, idx)}    
+                                                    />
                                                 </td>
                                                 <td>
-                                                    <input className='input-el' type='number' name='receiveUnit' value={r.receiveUnit} onChange={(e) => onChangeProductReceiveInputValue(e, idx)} />
+                                                    <input
+                                                        className='input-el'
+                                                        type='number'
+                                                        name='receiveUnit'
+                                                        value={r.receiveUnit}
+                                                        onChange={(e) => onChangeProductReceiveInputValue(e, idx)}
+                                                        onWheel={(e) => {
+                                                            e.target.blur();
+                                                            setTimeout(() => {e.target.focus()}, 0)
+                                                        }}
+                                                    />
                                                 </td>
                                             </tr>
                                         )

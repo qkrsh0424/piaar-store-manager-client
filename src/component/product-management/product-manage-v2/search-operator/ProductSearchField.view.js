@@ -25,6 +25,7 @@ export default function ProductSearchFieldView(props) {
                         value={props.productSearchQuery || ''}
                         onChange={props.onChangeProductSearchQuery}
                         placeholder='입력해주세요.'
+                        autoFocus
                     ></input>
                 }
             </div>

@@ -33,7 +33,6 @@ const CreateFormComponent = (props) => {
     const [optionDefaultNameCreateModalOpen, setOptionDefaultNameCreateModalOpen] = useState(false);
 
     const {
-        navigateUrl,
         navigatePrevPage
     } = useRouterHook();
 
