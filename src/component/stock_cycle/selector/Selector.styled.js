@@ -32,13 +32,15 @@ const SelectorWrapper = styled.div`
             outline: none;
         }
     }
-
+    
     .input-el {
         width: 280px;
         font-size: 14px;
+        /* position: absolute; */
+        z-index: 12;
     }
 
-    .button-el {
+    .button-box .button-el {
         width: 50px;
         height: 48px;
         border: 1px solid var(--defaultBorderColor);
@@ -74,8 +76,62 @@ const CheckBoxFieldWrapper = styled.div`
     }
 `;
 
+const ListFieldWrapper = styled.div`
+    position: absolute;
+    max-height: 200px;
+    width: 280px;
+    overflow: auto;
+    background-color: #f7f7f7;
+    box-shadow: var(--defaultBoxShadow);
+    z-index: 11;
+    padding: 10px;
+    transform: translateY(2px);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 12px;
+
+    .control-button-item{
+        width: 100%;
+        padding: 10px 0;
+        font-size: 14px;
+        font-weight: 500;
+        background: white;
+        border: 1px solid #00000000;
+        cursor: pointer;
+
+        &:hover{
+            background:#e1e1e160;
+        }
+
+        &:disabled{
+            cursor: not-allowed;
+        }
+    }
+
+    .highlight{
+        font-weight : bold; 
+        color:#FF0000;
+    }
+
+    .button-el{
+        width: 100%;
+        text-align: left;
+        background-color: inherit;
+        border: none;
+        cursor: pointer;
+        transition: 0.1s;
+
+        &:hover{
+            background: #e1e1e160;
+        }
+    }
+`;
+
 export {
     Container,
     SelectorWrapper,
-    CheckBoxFieldWrapper
+    CheckBoxFieldWrapper,
+    ListFieldWrapper
 }

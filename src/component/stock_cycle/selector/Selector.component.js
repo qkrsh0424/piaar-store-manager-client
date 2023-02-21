@@ -74,6 +74,16 @@ const SelectorComponent = (props) => {
 
     const onActionSearchProduct = () => {
         props._onAction_searchProduct(searchInput);
+        onActionResetSearchInput();
+    }
+
+    const onActionResetSearchInput = () => {
+        setSearchInput(null);
+    }
+
+    const onActionConfirmSelectedProduct = (value) => {
+        props._onAction_searchProduct(value);
+        onActionResetSearchInput();
     }
 
     return (
@@ -89,6 +99,8 @@ const SelectorComponent = (props) => {
                 onChangeSelectedProduct={onChangeSelectedProduct}
                 onChangeSearchInput={onChangeSearchInput}
                 onActionSearchProduct={onActionSearchProduct}
+                onActionResetSearchInput={onActionResetSearchInput}
+                onActionConfirmSelectedProduct={onActionConfirmSelectedProduct}
             ></SelectorFieldView>
             
             <div className='checkbox-wrapper'>

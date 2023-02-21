@@ -21,9 +21,9 @@ const Container = styled.div`
         font-weight: 700;
         text-align: center;
         padding: 7px 0;
-        border: 1px solid #e4e4e4;
-        color: 444;
-        background-color: #e4e4e4;
+        border: 1px solid #455265;
+        color: white;
+        background-color: #455265;
         border-radius: 5px 5px 0 0;
     }
 

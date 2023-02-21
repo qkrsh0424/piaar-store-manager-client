@@ -27,7 +27,6 @@ function TextInfoFieldView({ element }) {
 }
 
 const CYCLE_TOTAL_WEEK = 8;
-// const CYCLE_VIEW_WEEK = 4;
 const CYCLE_VIEW_WEEK = 8;
 const CYCLE_AVERAGE_WEEK = 4;
 const STOCK_CYCLE_MINIMUM = 3;

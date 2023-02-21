@@ -1,4 +1,47 @@
-import { SelectorWrapper } from "./Selector.styled";
+import { ListFieldWrapper, SelectorWrapper } from "./Selector.styled";
+
+function ListField({ products, inputValue, onSubmitConfirm }) {
+    return (
+        <ListFieldWrapper>
+            {products?.map(r => {
+                if (r.product.defaultName.includes(inputValue)) {
+                    return (
+                        <button
+                            key={r.id}
+                            className='button-el'
+                            onClick={() => onSubmitConfirm(r.product.defaultName)}
+                        >
+                            <HighlightedText
+                                text={`${r.product.defaultName}`}
+                                query={inputValue}
+                            />
+                        </button>
+                    )
+                }
+            })}
+        </ListFieldWrapper>
+    )
+}
+
+function HighlightedText({ text, query }) {
+    if (query !== '' && text.includes(query)) {
+        const parts = text.split(new RegExp(`(${query})`, 'gi'));
+
+        return (
+            <>
+                {parts.map((part, index) =>
+                    part.toLowerCase() === query.toLowerCase() ? (
+                        <mark key={index}>{part}</mark>
+                    ) : (
+                        part
+                    ),
+                )}
+            </>
+        );
+    }
+
+    return text;
+};
 
 export default function SelectorFieldView(props) {
     
@@ -40,20 +83,30 @@ export default function SelectorFieldView(props) {
             </div>
 
             <div className="flex-item place-items-center">
-                <div>
-                    <input
-                        type='text'
-                        className='input-el'
-                        value={props.searchInput || ''}
-                        onChange={(e) => props.onChangeSearchInput(e)}
-                        onKeyDown={(e) => confirmInput(e)}
-                        placeholder='카테고리 선택 후 상품명을 검색해주세요.'
-                        autoFocus
-                        disabled={props.selectedCategory === 'total'}
-                    />
+                <div style={{ position: 'static' }}>
+                    <div className='input-box'>
+                        <input
+                            type='text'
+                            className='input-el'
+                            value={props.searchInput || ''}
+                            onChange={(e) => props.onChangeSearchInput(e)}
+                            onKeyDown={(e) => confirmInput(e)}
+                            placeholder='카테고리 선택 후 상품명을 검색해주세요.'
+                            autoFocus
+                            disabled={props.selectedCategory === 'total'}
+                        />
+                    </div>
+                    {props.searchInput &&
+                        <ListField
+                            products={props.productViewList}
+                            inputValue={props.searchInput}
+
+                            onSubmitConfirm={props.onActionConfirmSelectedProduct}
+                        />
+                    }
                 </div>
 
-                <div>
+                <div className='button-box'>
                     <button
                         className='button-el'
                         onClick={() => props.onActionSearchProduct()}
