@@ -169,7 +169,7 @@ const OrderItemTableComponent = (props) => {
         }
 
         if (!fixTargetItem.unit || fixTargetItem.unit <= 0 || isNaN(fixTargetItem.unit)) {
-            alert('[수량]  은 필수 항목이며, 1 이상의 숫자값만 허용됩니다.');
+            alert('[수량] 은 필수 항목이며, 1 이상의 숫자값만 허용됩니다.');
             return;
         }
 
@@ -187,6 +187,7 @@ const OrderItemTableComponent = (props) => {
             alert('[주소] 는 필수 입력 값 입니다.');
             return;
         }
+
         props._onSubmit_updateErpOrderItemOne(fixTargetItem);
         onActionCloseFixItemModal();
     }

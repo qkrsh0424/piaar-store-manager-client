@@ -116,10 +116,10 @@ const thisRouters = [
                 name: '총 매출액 & 판매 건',
                 pathname: '/sales-performance/sales-channel'
             },
-            {
-                name: '상품 순위',
-                pathname: '/sales-performance/sales-channel/product/best'
-            },
+            // {
+            //     name: '상품 순위',
+            //     pathname: '/sales-performance/sales-channel/product/best'
+            // },
             {
                 name: '다중 상품 성과',
                 pathname: '/sales-performance/sales-channel/product'
@@ -133,10 +133,10 @@ const thisRouters = [
                 name: '총 매출액 & 판매 건',
                 pathname: '/sales-performance/category'
             },
-            {
-                name: '상품 순위',
-                pathname: '/sales-performance/category/product/best'
-            },
+            // {
+            //     name: '상품 순위',
+            //     pathname: '/sales-performance/category/product/best'
+            // },
             {
                 name: 'BEST 카테고리 상품',
                 pathname: '/sales-performance/category/best'
