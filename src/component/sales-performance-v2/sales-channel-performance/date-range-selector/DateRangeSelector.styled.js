@@ -9,13 +9,20 @@ const Container = styled.div`
         padding: 10px 20px;
         padding-bottom: 0;
         display: flex;
+        align-items: center;
         justify-content: space-between;
+        gap: 3px;
+        width: 60%;
+
+        @media screen and (max-width: 992px) {
+            width: 100%;
+        }
     }
 
     .select-box .button-el {
         background-color: #fff;
         border: 1px solid #e0e0e0;
-        width: 80px;
+        width: 100%;
         height: 40px;
         font-weight: 600;
         border-radius: 5px;
@@ -28,7 +35,12 @@ const Container = styled.div`
             background-color: var(--defaultHoverColor);
         }
     }
+    
 
+    .select-box .button-box {
+        width: 80px;
+    }
+    
     .common-calendar .button-el {
         position: fixed;
         background-color: var(--piaar-main-color);
@@ -49,13 +61,10 @@ const Container = styled.div`
 `;
 
 const SearchFieldWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 5px;
+    flex: 1;
 
     .select-item {
-        width: 200px;
+        width: 100%;
         height: 40px;
         padding: 5px;
         border: 1px solid #e0e0e0;
@@ -67,22 +76,18 @@ const SearchFieldWrapper = styled.div`
         appearance: none;
         background:url('/assets/icon/down_arrow_gray_icon.png') no-repeat right 5px center;
         background-color: white;
-
+        
         &:focus{
             outline: none;
-        }
-
-        @media all and (max-width:992px) {
-            width: 100%;
         }
     }
 `;
 
 const DateSelectorFieldWrapper = styled.div`
-    padding: 10px 20px;
+    padding: 30px 20px;
     display: flex;
     gap: 5px;
-    min-height: 360px;
+    min-height: 400px;
     overflow: hidden;
 
     @media screen and (max-width: 992px) {

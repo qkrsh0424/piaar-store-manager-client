@@ -86,7 +86,7 @@ export default function DateRangeSelectorComponent(props) {
                 utcHourDifference: getTimeDiffWithUTC(),
                 periodType
             }
-            
+
             await props.onSubmitSearchPerformance(body);
         }
 
@@ -225,7 +225,7 @@ export default function DateRangeSelectorComponent(props) {
                             <div className='select-box'>
                                 <SearchFieldView
                                     periodType={periodType}
-                                    onChangePeriodType={__handle.action.changePeriodType}    
+                                    onChangePeriodType={__handle.action.changePeriodType}
                                 />
                                 <div className='button-box'>
                                     <button

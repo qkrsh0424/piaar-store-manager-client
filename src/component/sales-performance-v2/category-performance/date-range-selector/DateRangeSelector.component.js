@@ -73,7 +73,7 @@ export default function DateRangeSelectorComponent(props) {
         async function fetchInit() {
             let searchStartDate = setSubtractedDate(new Date(), 0, 0, -13);
             let searchEndDate = new Date();
-            let periodType = query.periodType;
+            let periodType = query.periodType ?? 'registration';
 
             if (query.startDate && query.endDate) {
                 searchStartDate = new Date(query.startDate);

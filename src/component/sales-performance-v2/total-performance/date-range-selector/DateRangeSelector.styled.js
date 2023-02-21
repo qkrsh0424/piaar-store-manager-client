@@ -11,11 +11,11 @@ const Container = styled.div`
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 3px;
+        width: 60%;
 
         @media screen and (max-width: 992px) {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 5px;
+            width: 100%;
         }
     }
 
@@ -39,10 +39,6 @@ const Container = styled.div`
 
     .select-box .button-box {
         width: 80px;
-
-        @media screen and (max-width: 992px) {
-            width: 100%;
-        }
     }
     
     .common-calendar .button-el {
@@ -65,13 +61,10 @@ const Container = styled.div`
 `;
 
 const SearchFieldWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 5px;
+    flex: 1;
 
     .select-item {
-        width: 200px;
+        width: 100%;
         height: 40px;
         padding: 5px;
         border: 1px solid #e0e0e0;
@@ -91,10 +84,10 @@ const SearchFieldWrapper = styled.div`
 `;
 
 const DateSelectorFieldWrapper = styled.div`
-    padding: 10px 20px;
+    padding: 30px 20px;
     display: flex;
     gap: 5px;
-    min-height: 360px;
+    min-height: 400px;
     overflow: hidden;
 
     @media screen and (max-width: 992px) {
