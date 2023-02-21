@@ -9,23 +9,23 @@ const AnalysisGraphFieldView = (props) => {
                 <div className='chart-group'>
                     <div>
                         <div className='chart-title'>
-                            <span>1. 상품 재고자산 TOP{props.bestItemUnit}</span>
+                            <span>1. 상품 재고자산 WORST{props.bestItemUnit}</span>
                         </div>
                         <div className='graph-wrapper'>
                             <Doughnut
                                 data={createGraphData(props.productAnalysisGraphData.property)}
-                                options={createGraphOption(props.graphOption)}
+                                options={createGraphOption(props.propertyGraphOption)}
                             />
                         </div>
                     </div>
                     <div>
                         <div className='chart-title'>
-                            <span>2. 상품 재고수량 TOP{props.bestItemUnit}</span>
+                            <span>2. 상품 재고수량 WORST{props.bestItemUnit}</span>
                         </div>
                         <div className='graph-wrapper'>
                             <Doughnut
                                 data={createGraphData(props.productAnalysisGraphData.unit)}
-                                options={createGraphOption(props.graphOption)}
+                                options={createGraphOption(props.unitGraphOption)}
                             />
                         </div>
                     </div>
@@ -35,23 +35,23 @@ const AnalysisGraphFieldView = (props) => {
                 <div className='chart-group'>
                     <div>
                         <div className='chart-title'>
-                            <span>3. 옵션 재고자산 TOP{props.bestItemUnit}</span>
+                            <span>3. 옵션 재고자산 WORST{props.bestItemUnit}</span>
                         </div>
                         <div className='graph-wrapper'>
                             <Doughnut
                                 data={createGraphData(props.optionAnalysisGraphData.property)}
-                                options={createGraphOption(props.graphOption)}
+                                options={createGraphOption(props.propertyGraphOption)}
                             />
                         </div>
                     </div>
                     <div>
                         <div className='chart-title'>
-                            <span>4. 옵션 재고수량 TOP{props.bestItemUnit}</span>
+                            <span>4. 옵션 재고수량 WORST{props.bestItemUnit}</span>
                         </div>
                         <div className='graph-wrapper'>
                             <Doughnut
                                 data={createGraphData(props.optionAnalysisGraphData.unit)}
-                                options={createGraphOption(props.graphOption)}
+                                options={createGraphOption(props.unitGraphOption)}
                             />
                         </div>
                     </div>

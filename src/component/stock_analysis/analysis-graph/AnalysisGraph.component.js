@@ -1,12 +1,13 @@
 import _ from "lodash";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { GraphDataset } from "../../../utils/graphDataUtils";
+import { toPriceUnitFormat } from "../../../utils/numberFormatUtils";
 import { Container, TitleFieldWrapper } from "./AnalysisGraph.styled";
 import AnalysisGraphFieldView from "./AnalysisGraphField.view";
 
 const CHART_BG_COLOR = ['#5D5A83BB', '#B9B4EBBB', '#908CB8BB', '#F1EDFFBB', '#ACA9BBBB'];
 
-const BEST_ITEM_INDEX = 5;
+const ITEM_MAX_SIZE = 5;
 
 
 function TitleField({ element }) {
@@ -18,7 +19,8 @@ function TitleField({ element }) {
 }
 
 const AnalysisGraphComponent = (props) => {
-    const [graphOption, dispatchGraphOption] = useReducer(graphOptionReducer, initialGraphOption);
+    const [unitGraphOption, setUnitGraphOption] = useState(null);
+    const [propertyGraphOption, setPropertyGraphOption] = useState(null);
 
     const [optionAnalysisGraphData, dispatchOptionAnalysisGraphData] = useReducer(optionAnalysisGraphDataReducer, initialOptionAnalysisGraphData);
     const [productAnalysisGraphData, dispatchProductAnalysisGraphData] = useReducer(productAnalysisGraphDataReducer, initialProductAnalysisGraphData);
@@ -28,24 +30,57 @@ const AnalysisGraphComponent = (props) => {
             return;
         }
 
-        let gOption = {
+        let propertyOption = {
             responsive: true,
             maintainAspectRatio: false,
             interaction: {
                 mode: 'index',
                 intersect: true,
             },
+            cutout: '40%',
             plugins: {
                 legend: {
                     position: 'right'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            var label = tooltipItem?.label || '';
+                            var value = tooltipItem?.parsed || 0;
+                            return label + " : " + toPriceUnitFormat(value);
+                        }
+                    }
                 }
-            },
+            }
         }
 
-        dispatchGraphOption({
-            type: 'INIT_DATA',
-            payload: gOption
-        })
+        let unitOption = {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: true,
+            },
+            cutout: '40%',
+            plugins: {
+                legend: {
+                    position: 'right'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            var label = tooltipItem?.label || '';
+                            var value = tooltipItem?.parsed || 0;
+                            return label + " : " + value + '개';
+                        }
+                    }
+                }
+            }
+        }
+
+        setUnitGraphOption(unitOption);
+        setPropertyGraphOption(propertyOption);
+
         onActionCreateOptionStockAnalysisGraphData();
         onActionCreateProductStockAnalysisGraphData();
     }, [props.stockAnalysisViewList])
@@ -56,11 +91,8 @@ const AnalysisGraphComponent = (props) => {
         let propertyDatasets = [];
         let unitDatasets = [];
 
-        let worstPropertyStockItem = _.sortBy(stockItems, 'stockProperty').reverse();
-        worstPropertyStockItem = worstPropertyStockItem.slice(0, BEST_ITEM_INDEX);
-        
-        let worstUnitStockItem = _.sortBy(stockItems, 'stockSumUnit').reverse();
-        worstUnitStockItem = worstUnitStockItem.slice(0, BEST_ITEM_INDEX);
+        let worstPropertyStockItem = _.sortBy(stockItems, 'stockProperty').reverse().slice(0, ITEM_MAX_SIZE);
+        let worstUnitStockItem = _.sortBy(stockItems, 'stockSumUnit').reverse().slice(0, ITEM_MAX_SIZE);
 
         let propertyLabel = worstPropertyStockItem.map(r => r.product.defaultName + " " + r.option.defaultName);
         let propertyValues = worstPropertyStockItem.map(r => r.stockProperty);
@@ -132,7 +164,6 @@ const AnalysisGraphComponent = (props) => {
             }
         });
 
-
         stockItems.forEach(r => {
             let productId = r.product?.defaultName || '미지정'
             analysis = analysis.map(r2 => {
@@ -153,8 +184,8 @@ const AnalysisGraphComponent = (props) => {
         propertyItems.sort((a, b) => b.property - a.property);
         unitItems.sort((a, b) => b.unit - a.unit);
 
-        propertyItems = propertyItems.slice(0, BEST_ITEM_INDEX);
-        unitItems = unitItems.slice(0, BEST_ITEM_INDEX);
+        propertyItems = propertyItems.slice(0, ITEM_MAX_SIZE);
+        unitItems = unitItems.slice(0, ITEM_MAX_SIZE);
 
         // 상품 재고자산, 재고수량 그래프 dataset 생성
         let propertyLabel = propertyItems.map(r => r.key);
@@ -212,8 +243,9 @@ const AnalysisGraphComponent = (props) => {
             <AnalysisGraphFieldView
                 productAnalysisGraphData={productAnalysisGraphData}
                 optionAnalysisGraphData={optionAnalysisGraphData}
-                graphOption={graphOption}
-                bestItemUnit={BEST_ITEM_INDEX}
+                unitGraphOption={unitGraphOption}
+                propertyGraphOption={propertyGraphOption}
+                bestItemUnit={ITEM_MAX_SIZE}
             ></AnalysisGraphFieldView>
         </Container>
     )
@@ -223,7 +255,6 @@ export default AnalysisGraphComponent;
 
 const initialOptionAnalysisGraphData = null;
 const initialProductAnalysisGraphData = null;
-const initialGraphOption = null;
 
 const optionAnalysisGraphDataReducer = (state, action) => {
     switch (action.type) {
@@ -242,17 +273,6 @@ const productAnalysisGraphDataReducer = (state, action) => {
             return action.payload;
         case 'CLEAR':
             return initialProductAnalysisGraphData;
-        default:
-            return state;
-    }
-}
-
-const graphOptionReducer = (state, action) => {
-    switch (action.type) {
-        case 'INIT_DATA':
-            return action.payload;
-        case 'CLEAR':
-            return initialGraphOption;
         default:
             return state;
     }
