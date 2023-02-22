@@ -190,7 +190,6 @@ const StockCycleComponent = (props) => {
             alert('카테고리를 먼저 선택해주세요.');
             return;
         }
-
         let product = productList.filter(r => (r.product?.defaultName).includes(searchValue));
         let productIds = product.map(r => r.id);
         let cycle = [...stockCycle];

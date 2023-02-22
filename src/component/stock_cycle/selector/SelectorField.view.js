@@ -46,7 +46,8 @@ function HighlightedText({ text, query }) {
 export default function SelectorFieldView(props) {
     
     const confirmInput = (e) => {
-        if(e.key === 'Enter') {
+        // if(e.key === 'Enter') {
+        if(e.keyCode === 13) {
             props.onActionSearchProduct();
         }
     }
