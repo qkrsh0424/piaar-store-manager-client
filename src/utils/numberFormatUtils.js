@@ -32,7 +32,7 @@ function getTrendPercentage(comp1, comp2) {
 
     // comp2가 0이면 100% 감소
     if(comp2 === 0) {
-        return -100;
+        return 100;
     }
     return parseFloat(((comp1 - comp2) / comp2) * 100).toFixed(1);
 }
