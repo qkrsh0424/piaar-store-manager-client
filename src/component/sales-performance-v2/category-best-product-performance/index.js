@@ -96,6 +96,7 @@ const CategoryBestProductPerformanceComponent = (props) => {
     const [selectedCategoryNames, setSelectedCategoryNames] = useState(null);
     
     const {
+        query,
         location,
         navigateUrl
     } = useRouterHook();
@@ -140,13 +141,15 @@ const CategoryBestProductPerformanceComponent = (props) => {
     useEffect(() => {
         async function searchOptionPerformance() {
             let productCodes = productPerformance?.content.map(r => r.productCode);
+            let periodType = query.periodType ?? 'registration';
 
             let body = {
                 startDate: detailSearchValue.startDate,
                 endDate: detailSearchValue.endDate,
                 utcHourDifference: detailSearchValue.utcHourDifference,
                 productCategoryNames: detailSearchValue.productCategoryNames,
-                productCodes: productCodes
+                productCodes: productCodes,
+                periodType
             }
             
             onActionOpenBackdrop();
