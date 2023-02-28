@@ -30,7 +30,7 @@ function getTrendPercentage(comp1, comp2) {
         return 0;
     }
 
-    // comp2가 0이면 100% 감소
+    // comp2가 0이면 comp1은 100% 증가
     if(comp2 === 0) {
         return 100;
     }

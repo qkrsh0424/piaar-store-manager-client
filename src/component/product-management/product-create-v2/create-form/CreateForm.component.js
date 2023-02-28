@@ -33,7 +33,8 @@ const CreateFormComponent = (props) => {
     const [optionDefaultNameCreateModalOpen, setOptionDefaultNameCreateModalOpen] = useState(false);
 
     const {
-        navigatePrevPage
+        navigatePrevPage,
+        navigateUrl
     } = useRouterHook();
 
     const {
@@ -128,11 +129,7 @@ const CreateFormComponent = (props) => {
                 await productDataConnect().createProductAndOptions(body)
                     .then(res => {
                         if (res.status === 200 && res.data && res.data.message === 'success') {
-                            // let data = {
-                            //     pathname: `/products`,
-                            // }
-                            // navigateUrl(data);
-                            navigatePrevPage();
+                            navigateUrl({ pathname: '/products' });
                         }
                     })
                     .catch(err => {
