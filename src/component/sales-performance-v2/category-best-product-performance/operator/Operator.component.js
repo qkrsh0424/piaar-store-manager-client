@@ -116,9 +116,8 @@ export default function OperatorComponent(props) {
             },
             searchMonthRange: (month) => {
                 let date = new Date();
-                let searchMonth = new Date(date.setMonth(date.getMonth() + month));
-                let start = getStartDateOfMonth(searchMonth);
-                let end = month === 0 ? new Date() : getEndDateOfMonth(searchMonth);
+                let start = new Date(date.getFullYear(), date.getMonth() + month, 1);
+                let end = month === 0 ? new Date() : new Date(date.getFullYear(), date.getMonth() + (month+1), 0);
 
                 setStartDate(start);
                 setEndDate(end);
